@@ -19,8 +19,9 @@ export const practitionerViewsCaseDetailWithPublicOrder = test => {
       state: test.getState(),
     });
 
-    const publicallyAvailableOrderDocketEntry =
-      formattedCase.formattedDocketEntries.find(d => d.eventCode === 'O');
+    const publicallyAvailableOrderDocketEntry = formattedCase.formattedDocketEntries.find(
+      d => d.eventCode === 'O',
+    );
 
     expect(publicallyAvailableOrderDocketEntry.showLinkToDocument).toBeTruthy();
   });

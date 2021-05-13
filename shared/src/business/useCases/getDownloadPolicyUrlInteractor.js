@@ -106,8 +106,9 @@ exports.getDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } =
-    getUserRoles(user);
+  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } = getUserRoles(
+    user,
+  );
 
   const caseData = await applicationContext
     .getPersistenceGateway()
@@ -160,8 +161,9 @@ exports.getDownloadPolicyUrlInteractor = async (
         );
       }
 
-      const documentIsAvailable =
-        documentMeetsAgeRequirements(docketEntryEntity);
+      const documentIsAvailable = documentMeetsAgeRequirements(
+        docketEntryEntity,
+      );
 
       const selectedIsStin =
         docketEntryEntity.documentType ===

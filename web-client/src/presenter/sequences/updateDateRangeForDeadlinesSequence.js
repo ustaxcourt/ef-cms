@@ -11,8 +11,8 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDateRangeForDeadlinesAction } from '../actions/CaseDeadline/updateDateRangeForDeadlinesAction';
 import { validateSearchDeadlinesAction } from '../actions/CaseDeadline/validateSearchDeadlinesAction';
 
-export const updateDateRangeForDeadlinesSequence =
-  showProgressSequenceDecorator([
+export const updateDateRangeForDeadlinesSequence = showProgressSequenceDecorator(
+  [
     validateSearchDeadlinesAction,
     {
       error: [
@@ -30,4 +30,5 @@ export const updateDateRangeForDeadlinesSequence =
         setCaseDeadlinesAction,
       ],
     },
-  ]);
+  ],
+);

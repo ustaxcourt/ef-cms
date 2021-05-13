@@ -10,8 +10,8 @@ import { setupPetitionerContactInformationFormAction } from '../actions/setupPet
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditPetitionerInformationInternalSequence =
-  showProgressSequenceDecorator([
+export const gotoEditPetitionerInformationInternalSequence = showProgressSequenceDecorator(
+  [
     clearAlertsAction,
     clearErrorAlertsAction,
     setCurrentPageAction('Interstitial'),
@@ -25,4 +25,5 @@ export const gotoEditPetitionerInformationInternalSequence =
       yes: [getUserPendingEmailAction, setUserPendingEmailAction],
     },
     setCurrentPageAction('EditPetitionerInformationInternal'),
-  ]);
+  ],
+);

@@ -73,8 +73,11 @@ exports.completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
-    entryMetadata;
+  const {
+    docketEntryId,
+    docketNumber,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -277,7 +280,9 @@ exports.completeDocketEntryQCInteractor = async (
         useTempBucket: true,
       });
 
-      const { url } = await applicationContext
+      const {
+        url,
+      } = await applicationContext
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
