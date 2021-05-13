@@ -71,12 +71,15 @@ exports.filePetitionInteractor = async (
     );
   }
 
-  const [ownershipDisclosureFileId, petitionFileId, stinFileId] =
-    await Promise.all([
-      ownershipDisclosureFileUpload,
-      petitionFileUpload,
-      stinFileUpload,
-    ]);
+  const [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ] = await Promise.all([
+    ownershipDisclosureFileUpload,
+    petitionFileUpload,
+    stinFileUpload,
+  ]);
 
   const caseDetail = await applicationContext
     .getUseCases()

@@ -9,7 +9,9 @@ const setPdfToDisplay = async (
   store,
 ) => {
   if (!formattedAttachment.archived) {
-    const { url } = await applicationContext
+    const {
+      url,
+    } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,

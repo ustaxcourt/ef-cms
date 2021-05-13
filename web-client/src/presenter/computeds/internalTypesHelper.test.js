@@ -259,10 +259,9 @@ describe('internalTypesHelper', () => {
         state: {},
       });
 
-      const miscellaneousLodgedType =
-        result.internalDocumentTypesForSelectSorted.find(
-          d => d.eventCode === LODGED_EVENT_CODE,
-        );
+      const miscellaneousLodgedType = result.internalDocumentTypesForSelectSorted.find(
+        d => d.eventCode === LODGED_EVENT_CODE,
+      );
 
       expect(miscellaneousLodgedType).toBeUndefined();
     });

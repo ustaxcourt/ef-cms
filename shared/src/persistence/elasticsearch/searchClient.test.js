@@ -97,7 +97,8 @@ const matchesResults = {
                   section: { S: 'privatePractitioner' },
                   serviceIndicator: { S: 'Electronic' },
                   sk: {
-                    S: 'privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728',
+                    S:
+                      'privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728',
                   },
                   userId: { S: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728' },
                 },

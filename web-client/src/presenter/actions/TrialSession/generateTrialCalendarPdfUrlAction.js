@@ -12,7 +12,9 @@ export const generateTrialCalendarPdfUrlAction = async ({
 }) => {
   const trialSession = get(state.trialSession);
 
-  const { url } = await applicationContext
+  const {
+    url,
+  } = await applicationContext
     .getUseCases()
     .generateTrialCalendarPdfInteractor({
       applicationContext,

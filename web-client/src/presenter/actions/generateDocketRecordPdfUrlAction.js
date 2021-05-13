@@ -19,7 +19,9 @@ export const generateDocketRecordPdfUrlAction = async ({
 
   const { shouldIncludePartyDetail } = props;
 
-  const { url } = await applicationContext
+  const {
+    url,
+  } = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,

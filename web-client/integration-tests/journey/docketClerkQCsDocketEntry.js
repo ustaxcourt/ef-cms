@@ -20,8 +20,9 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
       caseDetailFormatted.formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
-    const { docketEntryId } =
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index];
+    const {
+      docketEntryId,
+    } = caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
@@ -39,10 +40,9 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
       },
     );
 
-    const selectedDocument =
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
-        document => document.docketEntryId === docketEntryId,
-      );
+    const selectedDocument = caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
+      document => document.docketEntryId === docketEntryId,
+    );
 
     expect(selectedDocument.qcWorkItemsCompleted).toEqual(true);
   });

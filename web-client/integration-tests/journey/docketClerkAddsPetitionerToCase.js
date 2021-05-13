@@ -3,9 +3,8 @@ import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPetitionerToCase = test => {
   return it('docket clerk adds new petitioner to case', async () => {
-    const petitionersBeforeAdding = test.getState(
-      'caseDetail.petitioners',
-    ).length;
+    const petitionersBeforeAdding = test.getState('caseDetail.petitioners')
+      .length;
 
     await test.runSequence('gotoAddPetitionerToCaseSequence', {
       docketNumber: test.docketNumber,

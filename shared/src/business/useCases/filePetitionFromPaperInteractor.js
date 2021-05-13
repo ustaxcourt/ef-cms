@@ -88,8 +88,7 @@ exports.filePetitionFromPaperInteractor = async (
 
   return await applicationContext.getUseCases().createCaseFromPaperInteractor({
     applicationContext,
-    applicationForWaiverOfFilingFeeFileId:
-      await applicationForWaiverOfFilingFeeUpload,
+    applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
     ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
     petitionFileId: await petitionFileUpload,
     petitionMetadata,

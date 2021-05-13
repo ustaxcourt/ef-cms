@@ -73,12 +73,13 @@ joiValidationDecorator(
   {},
 );
 
-PrivatePractitioner.prototype.getRepresentingPrimary =
-  function getRepresentingPrimary(caseEntity) {
-    return this.representing.find(
-      r => r === caseEntity.getContactPrimary().contactId,
-    );
-  };
+PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingPrimary(
+  caseEntity,
+) {
+  return this.representing.find(
+    r => r === caseEntity.getContactPrimary().contactId,
+  );
+};
 
 PrivatePractitioner.prototype.isRepresenting = function isRepresenting(
   petitionerContactId,
@@ -86,14 +87,15 @@ PrivatePractitioner.prototype.isRepresenting = function isRepresenting(
   return this.representing.includes(petitionerContactId);
 };
 
-PrivatePractitioner.prototype.getRepresentingSecondary =
-  function getRepresentingSecondary(caseEntity) {
-    const contactSecondary = caseEntity.getContactSecondary();
-    return (
-      contactSecondary &&
-      this.representing.find(r => r === contactSecondary.contactId)
-    );
-  };
+PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(
+  caseEntity,
+) {
+  const contactSecondary = caseEntity.getContactSecondary();
+  return (
+    contactSecondary &&
+    this.representing.find(r => r === contactSecondary.contactId)
+  );
+};
 
 module.exports = {
   PrivatePractitioner: validEntityDecorator(PrivatePractitioner),

@@ -75,10 +75,9 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
       },
     );
 
-    const updatedOrderDocument =
-      caseDetailFormatted.formattedDocketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
