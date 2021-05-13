@@ -53,15 +53,17 @@ exports.generateChangeOfAddress = async ({
     });
 
   let completedCases = 0;
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: `${websocketMessagePrefix}_contact_update_progress`,
-      completedCases,
-      totalCases: docketNumbers.length,
-    },
-    userId: requestUserId || user.userId,
-  });
+  if (docketNumbers.length > 0) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: `${websocketMessagePrefix}_contact_update_progress`,
+        completedCases,
+        totalCases: docketNumbers.length,
+      },
+      userId: requestUserId || user.userId,
+    });
+  }
 
   const updatedCases = [];
 
