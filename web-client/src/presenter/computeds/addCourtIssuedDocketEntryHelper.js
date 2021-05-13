@@ -26,9 +26,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     value: type.eventCode,
   }));
 
-  const petitioners = [
-    applicationContext.getUtilities().getContactPrimary(caseDetail),
-  ];
+  const { petitioners } = caseDetail;
 
   const contactSecondary = applicationContext
     .getUtilities()
