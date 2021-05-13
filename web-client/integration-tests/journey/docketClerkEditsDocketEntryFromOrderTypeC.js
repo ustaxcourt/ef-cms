@@ -14,7 +14,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = helper.formattedDraftDocuments.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -63,9 +63,10 @@ export const docketClerkEditsDocketEntryFromOrderTypeC = (
       state: test.getState(),
     });
 
-    const updatedOrderDocument = helper.formattedDraftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
+    const updatedOrderDocument =
+      helper.formattedDocketEntriesOnDocketRecord.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
 
     expect(updatedOrderDocument).toMatchObject({
       docketNumbers: '123-45',

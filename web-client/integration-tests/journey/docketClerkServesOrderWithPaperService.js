@@ -14,7 +14,7 @@ export const docketClerkServesOrderWithPaperService = (
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = helper.formattedDraftDocuments.find(
+    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 

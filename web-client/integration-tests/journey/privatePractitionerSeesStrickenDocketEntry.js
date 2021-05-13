@@ -1,11 +1,11 @@
 import { applicationContext } from '../../src/applicationContext';
 import { contactPrimaryFromState } from '../helpers';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
   applicationContext,
 );
 
@@ -22,7 +22,7 @@ export const privatePractitionerSeesStrickenDocketEntry = (
     expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(
-      formattedCaseDetail,
+      formattedDocketEntries,
       {
         state: test.getState(),
       },
