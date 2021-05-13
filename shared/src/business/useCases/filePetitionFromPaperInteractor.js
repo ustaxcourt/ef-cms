@@ -4,20 +4,22 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetitionFromPaperInteractor = async ({
+exports.filePetitionFromPaperInteractor = async (
   applicationContext,
-  applicationForWaiverOfFilingFeeFile,
-  applicationForWaiverOfFilingFeeUploadProgress,
-  ownershipDisclosureFile,
-  ownershipDisclosureUploadProgress,
-  petitionFile,
-  petitionMetadata,
-  petitionUploadProgress,
-  requestForPlaceOfTrialFile,
-  requestForPlaceOfTrialUploadProgress,
-  stinFile,
-  stinUploadProgress,
-}) => {
+  {
+    applicationForWaiverOfFilingFeeFile,
+    applicationForWaiverOfFilingFeeUploadProgress,
+    ownershipDisclosureFile,
+    ownershipDisclosureUploadProgress,
+    petitionFile,
+    petitionMetadata,
+    petitionUploadProgress,
+    requestForPlaceOfTrialFile,
+    requestForPlaceOfTrialUploadProgress,
+    stinFile,
+    stinUploadProgress,
+  },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.START_PAPER_CASE)) {
