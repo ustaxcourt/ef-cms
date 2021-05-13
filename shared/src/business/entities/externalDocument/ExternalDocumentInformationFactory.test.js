@@ -22,6 +22,7 @@ describe('ExternalDocumentInformationFactory', () => {
         category: 'Application',
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
+        filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
         scenario: 'Standard',
       };
     });
@@ -85,6 +86,7 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc = {
           category: 'Motion',
           documentType: 'Motion for Continuance',
+          filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
         };
       });
 
@@ -93,6 +95,7 @@ describe('ExternalDocumentInformationFactory', () => {
           VALIDATION_ERROR_MESSAGES.objections,
         );
         baseDoc.objections = OBJECTIONS_OPTIONS_MAP.YES;
+
         expect(errors().objections).toEqual(undefined);
       });
 
@@ -101,6 +104,7 @@ describe('ExternalDocumentInformationFactory', () => {
           category: 'Miscellaneous',
           documentType: 'Amended',
           eventCode: 'AMAT',
+          filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
           previousDocument: {
             documentType: 'Motion for Continuance',
           },
@@ -118,6 +122,7 @@ describe('ExternalDocumentInformationFactory', () => {
           category: 'Miscellaneous',
           documentType: 'Amended',
           eventCode: 'AMAT',
+          filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
           previousDocument: {
             documentType: 'Answer',
           },
@@ -326,6 +331,7 @@ describe('ExternalDocumentInformationFactory', () => {
               {
                 attachments: false,
                 certificateOfService: false,
+                filers: ['28374b33-b487-4dba-884d-070817465b68'],
               },
             ];
           });
@@ -411,24 +417,22 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require one of [partyPrimary, partySecondary, partyIrsPractitioner] to be selected', () => {
-      expect(errors().partyPrimary).toEqual(
-        VALIDATION_ERROR_MESSAGES.partyPrimary,
-      );
+    it('should require one of [filers, partyIrsPractitioner] to be selected', () => {
+      baseDoc.filers = [];
+      expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
       baseDoc.partyIrsPractitioner = true;
-      expect(errors().partyPrimary).toEqual(undefined);
+      expect(errors().filers).toEqual(undefined);
     });
 
     describe('Consolidated Case filing to multiple cases', () => {
       beforeEach(() => {
         baseDoc.casesParties = {};
         baseDoc.selectedCases = ['101-19', '102-19'];
+        baseDoc.filers = [];
       });
 
       it('should require a party per case or partyIrsPractitioner to be selected', () => {
-        expect(errors().partyPrimary).toEqual(
-          VALIDATION_ERROR_MESSAGES.partyPrimary,
-        );
+        expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
       });
 
       describe('IRS Practitioner Selected', () => {
@@ -437,35 +441,19 @@ describe('ExternalDocumentInformationFactory', () => {
         });
 
         it('should allow having only an irsPractitioner as a party to all cases', () => {
-          expect(errors().partyPrimary).toEqual(undefined);
-        });
-      });
-
-      describe('Party per case Selected', () => {
-        beforeEach(() => {
-          baseDoc.casesParties = {
-            '101-19': { partyPrimary: true },
-            '102-19': { partySecondary: true },
-          };
-        });
-
-        it('should allow having a party to all cases', () => {
-          expect(errors().partyPrimary).toEqual(undefined);
+          expect(errors().filers).toEqual(undefined);
         });
       });
 
       describe('Party per selected case not selected', () => {
         beforeEach(() => {
           baseDoc.casesParties = {
-            '101-19': { partyPrimary: true },
-            '103-19': { partySecondary: true },
+            '101-19': { filers: ['s234234-dfsdlkj'] },
           };
         });
 
         it('should not allow having a insufficient account of parties to all cases', () => {
-          expect(errors().partyPrimary).toEqual(
-            VALIDATION_ERROR_MESSAGES.partyPrimary,
-          );
+          expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
         });
       });
     });
