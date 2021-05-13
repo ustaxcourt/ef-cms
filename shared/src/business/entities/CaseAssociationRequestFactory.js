@@ -88,6 +88,11 @@ function CaseAssociationRequestFactory(rawProps) {
       const petitionerNamesArray = [...this.filers];
       console.log(this.filers);
 
+      // to do: get petitioners
+      // const petitionersArray = this.filers.map(
+      //   contactId => petitioners.find(p => p.contactId === contactId).name,
+      // );
+
       if (petitionerNamesArray.length > 1) {
         petitionerNames = 'Petrs. ';
       } else {
@@ -121,9 +126,8 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schemaOptionalItems = {
     attachments: joi.boolean().required(),
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
-      'now',
-    ).required(),
+    certificateOfServiceDate:
+      JoiValidationConstants.ISO_DATE.max('now').required(),
     filers: joi.array().items(joi.string().required()).required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: JoiValidationConstants.STRING.valid(

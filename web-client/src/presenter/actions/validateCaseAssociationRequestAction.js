@@ -21,7 +21,9 @@ export const validateCaseAssociationRequestAction = ({
 
   // TODO: refactor into action?
   const filers = Object.keys(caseAssociationRequest.filersMap)
-    .map(name => (caseAssociationRequest.filersMap[name] ? name : null))
+    .map(contactId =>
+      caseAssociationRequest.filersMap[contactId] ? contactId : null,
+    )
     .filter(Boolean);
 
   caseAssociationRequest.filers = filers;
