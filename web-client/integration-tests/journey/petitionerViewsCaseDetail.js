@@ -43,10 +43,9 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
       expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
-    const rqtDocument =
-      docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
-        entry => entry.eventCode === 'RQT',
-      );
+    const rqtDocument = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.eventCode === 'RQT',
+    );
     expect(rqtDocument).toBeTruthy();
 
     expect(caseDetail.preferredTrialCity).toEqual('Seattle, Washington');
