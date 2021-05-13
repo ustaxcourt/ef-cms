@@ -118,8 +118,9 @@ const userValidation = {
       'Whether the contact information for the user is being updated.',
     ),
   pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
-  pendingEmailVerificationToken:
-    JoiValidationConstants.UUID.allow(null).optional(),
+  pendingEmailVerificationToken: JoiValidationConstants.UUID.allow(
+    null,
+  ).optional(),
   section: JoiValidationConstants.STRING.optional(),
   token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),

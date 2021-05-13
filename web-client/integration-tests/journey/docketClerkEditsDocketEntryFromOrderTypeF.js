@@ -92,10 +92,9 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
       },
     );
 
-    const updatedOrderDocument =
-      caseDetailFormatted.formattedDocketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      );
+    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
 
     expect(updatedOrderDocument).toMatchObject({
       documentTitle:

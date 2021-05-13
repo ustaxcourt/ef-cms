@@ -5,8 +5,10 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
-    applicationContext.getConstants();
+  const {
+    INTERNAL_CATEGORY_MAP,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
 
   const partyValidationError =
     validationErrors &&

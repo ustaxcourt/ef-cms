@@ -25,8 +25,9 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Application';
     const categoryIdx = 0;
 
-    const { category, documentType } =
-      DOCUMENT_EXTERNAL_CATEGORIES_MAP[categoryKey][categoryIdx];
+    const { category, documentType } = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
+      categoryKey
+    ][categoryIdx];
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
@@ -48,8 +49,9 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Motion';
     const categoryIdx = 22;
 
-    const { category, documentType } =
-      DOCUMENT_EXTERNAL_CATEGORIES_MAP[categoryKey][categoryIdx];
+    const { category, documentType } = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
+      categoryKey
+    ][categoryIdx];
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {

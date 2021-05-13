@@ -6,8 +6,9 @@ import { submitCourtIssuedDocketEntryAction } from './submitCourtIssuedDocketEnt
 describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
-    applicationContext.getConstants();
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  } = applicationContext.getConstants();
 
   it('should call the interactor for filing a court-issued docket entry', async () => {
     await runAction(submitCourtIssuedDocketEntryAction, {
