@@ -13,21 +13,10 @@ export const validateCaseAssociationRequestAction = ({
   applicationContext,
   get,
   path,
-  store,
 }) => {
   const caseAssociationRequest = {
     ...get(state.form),
   };
-
-  // TODO: refactor into action?
-  const filers = Object.keys(caseAssociationRequest.filersMap)
-    .map(contactId =>
-      caseAssociationRequest.filersMap[contactId] ? contactId : null,
-    )
-    .filter(Boolean);
-
-  caseAssociationRequest.filers = filers;
-  store.set(state.form.filers, filers);
 
   // TODO: FIX ERRORS
   const errors = applicationContext
