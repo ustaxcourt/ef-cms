@@ -17,8 +17,8 @@ const requestAccessHelper = withAppContextDecorator(
 );
 
 const filersMap = {
-  '4e53fade-4966-4efe-8b01-0cb5f587eb47': false,
-  '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': true,
+  '4e53fade-4966-4efe-8b01-0cb5f587eb47': true,
+  '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': false,
   '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
 };
 
@@ -180,5 +180,41 @@ describe('requestAccessHelper', () => {
     };
     const result = runCompute(requestAccessHelper, { state });
     expect(result.showFilingNotIncludes).toEqual(false);
+  });
+
+  describe.skip('representingPartiesNames', () => {
+    beforeEach(() => {
+      state.form = {
+        filersMap: {
+          '4e53fade-4966-4efe-8b01-0cb5f587eb47': true,
+          '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': false,
+          '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
+        },
+      };
+
+      state.caseDetail = {
+        petitioners: [
+          {
+            contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
+            name: 'bob',
+          },
+          {
+            contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
+            name: 'sally',
+          },
+          {
+            contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
+            name: 'rick',
+          },
+        ],
+      };
+    });
+
+    it('should be set to the names of all petitioners being represented', () => {
+      const { representingPartiesNames } = runCompute(requestAccessHelper, {
+        state,
+      });
+      expect(representingPartiesNames).toEqual(['bob', 'rick']);
+    });
   });
 });
