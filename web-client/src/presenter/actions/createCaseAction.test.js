@@ -93,7 +93,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -194,7 +194,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -230,7 +230,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
