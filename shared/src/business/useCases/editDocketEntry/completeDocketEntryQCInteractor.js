@@ -73,8 +73,11 @@ exports.completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
-    entryMetadata;
+  const {
+    docketEntryId,
+    docketNumber,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -274,7 +277,9 @@ exports.completeDocketEntryQCInteractor = async (
         useTempBucket: true,
       });
 
-      const { url } = await applicationContext
+      const {
+        url,
+      } = await applicationContext
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
@@ -304,7 +309,7 @@ exports.completeDocketEntryQCInteractor = async (
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
