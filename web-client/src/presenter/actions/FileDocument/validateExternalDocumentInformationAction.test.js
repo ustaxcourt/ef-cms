@@ -4,8 +4,9 @@ import { runAction } from 'cerebral/test';
 import { validateExternalDocumentInformationAction } from './validateExternalDocumentInformationAction';
 
 describe('validateExternalDocumentInformationAction', () => {
-  const { validateExternalDocumentInformationInteractor } =
-    applicationContext.getUseCases();
+  const {
+    validateExternalDocumentInformationInteractor,
+  } = applicationContext.getUseCases();
 
   let successStub;
   let errorStub;

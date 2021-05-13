@@ -20,7 +20,9 @@ export const setViewerDraftDocumentToDisplayAction = async ({
 
   store.set(state.viewerDraftDocumentToDisplay, viewerDraftDocumentToDisplay);
   if (viewerDraftDocumentToDisplay) {
-    const { url } = await applicationContext
+    const {
+      url,
+    } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor({
         applicationContext,

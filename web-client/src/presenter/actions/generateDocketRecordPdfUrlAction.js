@@ -19,14 +19,14 @@ export const generateDocketRecordPdfUrlAction = async ({
 
   const { shouldIncludePartyDetail } = props;
 
-  const { url } = await applicationContext
-    .getUseCases()
-    .generateDocketRecordPdfInteractor({
-      applicationContext,
-      docketNumber: caseDetail.docketNumber,
-      docketRecordSort,
-      includePartyDetail: shouldIncludePartyDetail,
-    });
+  const {
+    url,
+  } = await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
+    applicationContext,
+    docketNumber: caseDetail.docketNumber,
+    docketRecordSort,
+    includePartyDetail: shouldIncludePartyDetail,
+  });
 
   return { pdfUrl: url };
 };

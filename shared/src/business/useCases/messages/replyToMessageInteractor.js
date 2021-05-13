@@ -43,10 +43,13 @@ const replyToMessage = async (
     parentMessageId,
   });
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const {
+    caseCaption,
+    docketNumberWithSuffix,
+    status,
+  } = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const fromUser = await applicationContext
     .getPersistenceGateway()

@@ -22,14 +22,14 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  const { url } = await applicationContext
-    .getUseCases()
-    .getDocumentDownloadUrlInteractor({
-      applicationContext,
-      docketNumber,
-      isPublic,
-      key: docketEntryId,
-    });
+  const {
+    url,
+  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
+    applicationContext,
+    docketNumber,
+    isPublic,
+    key: docketEntryId,
+  });
 
   if (isForIFrame) {
     store.set(state.iframeSrc, url);
