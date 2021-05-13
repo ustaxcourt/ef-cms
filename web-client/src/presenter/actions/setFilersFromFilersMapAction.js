@@ -12,6 +12,5 @@ export const setFilersFromFilersMapAction = ({ get, store }) => {
     .map(contactId => (form.filersMap[contactId] ? contactId : null))
     .filter(Boolean);
 
-  form.filers = filers;
   store.set(state.form.filers, filers);
 };
