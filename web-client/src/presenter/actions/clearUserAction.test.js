@@ -35,11 +35,11 @@ describe('clearUserAction', () => {
       applicationContext.getUseCases().removeItemInteractor,
     ).toHaveBeenCalledTimes(2);
     expect(
-      applicationContext.getUseCases().removeItemInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().removeItemInteractor.mock.calls[0][1]
         .key,
     ).toBe('user');
     expect(
-      applicationContext.getUseCases().removeItemInteractor.mock.calls[1][0]
+      applicationContext.getUseCases().removeItemInteractor.mock.calls[1][1]
         .key,
     ).toBe('token');
   });
