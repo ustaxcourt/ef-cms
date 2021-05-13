@@ -255,7 +255,11 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     const petitionersArray = this.filers.map(
       contactId => petitioners.find(p => p.contactId === contactId).name,
     );
-    partiesArray.push(`Petr. ${petitionersArray.join(' & ')}`);
+    if (petitionersArray.length === 1) {
+      partiesArray.push(`Petr. ${petitionersArray[0]}`);
+    } else if (petitionersArray.length > 1) {
+      partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
+    }
 
     const filedByArray = [];
     if (partiesArray.length) {
