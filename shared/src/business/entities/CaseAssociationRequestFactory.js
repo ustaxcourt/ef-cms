@@ -85,10 +85,6 @@ function CaseAssociationRequestFactory(rawProps) {
     if (rawProps.partyIrsPractitioner) {
       petitionerNames = 'Respondent';
     } else {
-      // const petitionerNamesArray = [...this.filers];
-      // console.log(this.filers);
-
-      // to do: get petitioners
       const petitionerNamesArray = this.filers.map(
         contactId => petitioners.find(p => p.contactId === contactId).name,
       );
