@@ -170,6 +170,25 @@ describe('generateChangeOfAddress', () => {
     });
   });
 
+  it('should NOT send a notification to the user if they have no associated cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValueOnce([]);
+
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '234 Main St',
+      },
+      user: {},
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should calculate the number of pages in the generated change of address pdf', async () => {
     const mockNumberOfPages = 999;
     applicationContext
