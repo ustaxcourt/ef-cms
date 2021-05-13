@@ -49,10 +49,6 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);

@@ -2,10 +2,6 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkQCsDocketEntry = (test, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     let {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);

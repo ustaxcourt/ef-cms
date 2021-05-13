@@ -44,10 +44,6 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       docketEntry: { documentTitle: 'Notice of Change of Address' },
     });
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     let {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);
