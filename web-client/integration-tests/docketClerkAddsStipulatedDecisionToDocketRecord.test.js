@@ -4,14 +4,12 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-const formattedDocketEntries = withAppContextDecorator(
-  formattedDocketEntriesComputed,
-);
+import {
+  getFormattedDocketEntriesForTest,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -52,10 +50,10 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    const helper = runCompute(formattedDocketEntries, {
-      state: test.getState(),
-    });
-    const stipulatedDecisionDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
     );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
@@ -66,10 +64,10 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
-    const helper = runCompute(formattedDocketEntries, {
-      state: test.getState(),
-    });
-    const stipulatedDecisionDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
     );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);

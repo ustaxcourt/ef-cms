@@ -1,20 +1,18 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeE = (
   test,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type E`, async () => {
-    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    let {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -78,11 +76,11 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
+    ({
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test));
 
-    const updatedOrderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
