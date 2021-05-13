@@ -14,6 +14,7 @@ import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDoc
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -27,6 +28,7 @@ import { validateDocumentAction } from '../actions/EditDocketRecordEntry/validat
 
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
+  setFilersFromFilersMapAction,
   computeFilingFormDateAction,
   computeCertificateOfServiceFormDateAction,
   getComputedFormDateFactoryAction(null),
