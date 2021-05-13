@@ -24,7 +24,7 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test));
 
-    const selectedDocument = formattedDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord.find(
+    const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
 
