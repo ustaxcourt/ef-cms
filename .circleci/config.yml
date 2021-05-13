@@ -716,7 +716,7 @@ jobs:
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream.sh"
+               --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream-trigger.sh"
             fi
       - run:
           name: Run Migration
@@ -755,7 +755,7 @@ jobs:
                 -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                 -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                 -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream.sh"
+                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
 
   smoketests:
