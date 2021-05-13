@@ -97,7 +97,7 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
 
     const {
       formattedPendingDocketEntriesOnDocketRecord,
-    } = getFormattedDocketEntriesForTest(test);
+    } = await getFormattedDocketEntriesForTest(test);
 
     test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 
