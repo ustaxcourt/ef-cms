@@ -107,6 +107,7 @@ exports.computeCoordinates = computeCoordinates;
 /**
  * generateSignedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {number} providers.pageIndex // Zero based index of the page to get the signature
  * @param {Uint8Array} providers.pdfData // Uint8Array containing the pdf data to modify
@@ -116,15 +117,10 @@ exports.computeCoordinates = computeCoordinates;
  * @param {object} providers.sigTextData // Signature text data including the name and title
  * @returns {ByteArray} PDF data after signature is added
  */
-exports.generateSignedDocumentInteractor = async ({
+exports.generateSignedDocumentInteractor = async (
   applicationContext,
-  pageIndex,
-  pdfData,
-  posX,
-  posY,
-  scale = 1,
-  sigTextData,
-}) => {
+  { pageIndex, pdfData, posX, posY, scale = 1, sigTextData },
+) => {
   const {
     degrees,
     PDFDocument,

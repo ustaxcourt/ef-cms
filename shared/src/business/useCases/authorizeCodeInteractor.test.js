@@ -17,7 +17,7 @@ describe('authorizeCodeInteractor', () => {
       },
     });
 
-    const response = await authorizeCodeInteractor({ applicationContext });
+    const response = await authorizeCodeInteractor(applicationContext, {});
 
     expect(response).toEqual({
       refreshToken: 'abc',
