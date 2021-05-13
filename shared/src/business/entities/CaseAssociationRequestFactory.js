@@ -44,8 +44,7 @@ function CaseAssociationRequestFactory(rawProps) {
     this.partyPrivatePractitioner = rawPropsParam.partyPrivatePractitioner;
     this.partyIrsPractitioner = rawPropsParam.partyIrsPractitioner;
     this.primaryDocumentFile = rawPropsParam.primaryDocumentFile;
-    this.representingPrimary = rawPropsParam.representingPrimary;
-    this.representingSecondary = rawPropsParam.representingSecondary;
+    this.filers = rawPropsParam.filers || [];
     this.scenario = rawPropsParam.scenario;
     this.supportingDocuments = rawPropsParam.supportingDocuments;
 
@@ -81,21 +80,14 @@ function CaseAssociationRequestFactory(rawProps) {
     'Substitution of Counsel',
   ].includes(rawProps.documentType);
 
-  entityConstructor.prototype.getDocumentTitle = function (
-    contactPrimaryName,
-    contactSecondaryName,
-  ) {
+  entityConstructor.prototype.getDocumentTitle = function () {
     let petitionerNames;
     if (rawProps.partyIrsPractitioner) {
       petitionerNames = 'Respondent';
     } else {
       const petitionerNamesArray = [];
-      if (rawProps.representingPrimary) {
-        petitionerNamesArray.push(contactPrimaryName);
-      }
-      if (rawProps.representingSecondary) {
-        petitionerNamesArray.push(contactSecondaryName);
-      }
+      petitionerNamesArray.push.apply(this.filers);
+
       if (petitionerNamesArray.length > 1) {
         petitionerNames = 'Petrs. ';
       } else {
@@ -131,12 +123,11 @@ function CaseAssociationRequestFactory(rawProps) {
     attachments: joi.boolean().required(),
     certificateOfServiceDate:
       JoiValidationConstants.ISO_DATE.max('now').required(),
+    filers: joi.array().items(joi.string().required()).required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: JoiValidationConstants.STRING.valid(
       ...OBJECTIONS_OPTIONS,
     ).required(),
-    representingPrimary: joi.boolean().invalid(false).required(),
-    representingSecondary: joi.boolean().invalid(false).required(),
     supportingDocuments: joi.array().optional(), // validated with SupportingDocumentInformationFactory
   };
 
@@ -160,12 +151,8 @@ function CaseAssociationRequestFactory(rawProps) {
     makeRequired('hasSupportingDocuments');
   }
 
-  if (
-    rawProps.representingPrimary !== true &&
-    rawProps.representingSecondary !== true &&
-    rawProps.partyIrsPractitioner !== true
-  ) {
-    makeRequired('representingPrimary');
+  if (rawProps.filers?.length === 0 && rawProps.partyIrsPractitioner !== true) {
+    makeRequired('filers');
   }
 
   joiValidationDecorator(
@@ -181,8 +168,7 @@ CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
   documentTitleTemplate: 'Select a document',
   eventCode: 'Select a document',
-  representingPrimary: 'Select a party',
-  representingSecondary: 'Select a party',
+  filers: 'Select a party',
   scenario: 'Select a document',
 };
 

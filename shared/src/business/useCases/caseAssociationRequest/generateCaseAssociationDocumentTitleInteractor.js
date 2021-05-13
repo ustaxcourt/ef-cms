@@ -15,15 +15,10 @@ const {
 exports.generateCaseAssociationDocumentTitleInteractor = ({
   applicationContext,
   caseAssociationRequest,
-  contactPrimaryName,
-  contactSecondaryName,
 }) => {
   const caseAssociation = CaseAssociationRequestFactory(
     caseAssociationRequest,
     { applicationContext },
   );
-  return caseAssociation.getDocumentTitle(
-    contactPrimaryName,
-    contactSecondaryName,
-  );
+  return caseAssociation.getDocumentTitle();
 };

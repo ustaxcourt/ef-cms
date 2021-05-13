@@ -17,6 +17,7 @@ export const validateDocketEntryAction = ({
 }) => {
   const entryMetadata = get(state.form);
 
+  // TODO: refactor into action?
   store.set(
     state.form.filers,
     Object.keys(entryMetadata.filersMap)

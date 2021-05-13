@@ -14,20 +14,12 @@ export const generateCaseAssociationTitleAction = ({
   store,
 }) => {
   const caseAssociationRequest = get(state.form);
-  const contactPrimaryName = applicationContext
-    .getUtilities()
-    .getContactPrimary(get(state.caseDetail)).name;
-  const contactSecondaryName = applicationContext
-    .getUtilities()
-    .getContactSecondary(get(state.caseDetail))?.name;
 
   let documentTitle = applicationContext
     .getUseCases()
     .generateCaseAssociationDocumentTitleInteractor({
       applicationContext,
       caseAssociationRequest,
-      contactPrimaryName,
-      contactSecondaryName,
     });
   store.set(state.form.documentTitle, documentTitle);
 
