@@ -125,8 +125,12 @@ exports.generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
-  const { degrees, PDFDocument, rgb, StandardFonts } =
-    await applicationContext.getPdfLib();
+  const {
+    degrees,
+    PDFDocument,
+    rgb,
+    StandardFonts,
+  } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
@@ -159,22 +163,28 @@ exports.generateSignedDocumentInteractor = async ({
   const shouldRotateSignature = rotationAngle !== 0;
   const rotateSignatureDegrees = degrees(rotationAngle);
 
-  const { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY } =
-    computeCoordinates({
-      boxHeight,
-      boxWidth,
-      cropBoxCoordinates: exports.getCropBoxCoordinates(page),
-      lineHeight,
-      nameTextWidth,
-      pageHeight,
-      pageRotation: rotationAngle,
-      pageWidth,
-      posX,
-      posY,
-      scale,
-      textHeight,
-      titleTextWidth,
-    });
+  const {
+    rectangleX,
+    rectangleY,
+    sigNameX,
+    sigNameY,
+    sigTitleX,
+    sigTitleY,
+  } = computeCoordinates({
+    boxHeight,
+    boxWidth,
+    cropBoxCoordinates: exports.getCropBoxCoordinates(page),
+    lineHeight,
+    nameTextWidth,
+    pageHeight,
+    pageRotation: rotationAngle,
+    pageWidth,
+    posX,
+    posY,
+    scale,
+    textHeight,
+    titleTextWidth,
+  });
 
   const rotate = shouldRotateSignature ? rotateSignatureDegrees : degrees(0);
 

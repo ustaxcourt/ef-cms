@@ -79,8 +79,12 @@ exports.addServedStampToDocument = async ({
       .formatNow('MM/DD/YY')}`;
   }
 
-  const { degrees, PDFDocument, rgb, StandardFonts } =
-    await applicationContext.getPdfLib();
+  const {
+    degrees,
+    PDFDocument,
+    rgb,
+    StandardFonts,
+  } = await applicationContext.getPdfLib();
 
   const scale = 1;
   const pdfDoc = await PDFDocument.load(pdfData);
