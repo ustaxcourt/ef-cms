@@ -60,9 +60,6 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);

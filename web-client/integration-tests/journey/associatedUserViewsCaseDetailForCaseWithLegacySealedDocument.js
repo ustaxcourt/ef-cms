@@ -9,21 +9,20 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test => {
   return it('associated user views case detail for a case with a legacy sealed document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);
+
     const legacySealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === test.docketEntryId,
     );
 
     expect(legacySealedDocketEntry.showLinkToDocument).toBeFalsy();
+
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+
     expect(formattedCase.contactPrimary).toMatchObject({
       address1: expect.anything(),
       contactId: expect.anything(),

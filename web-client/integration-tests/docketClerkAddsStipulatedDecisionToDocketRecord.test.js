@@ -47,9 +47,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views Stipulated Decision on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);
@@ -61,9 +58,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   loginAs(test, 'privatePractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);

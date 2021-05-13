@@ -54,10 +54,6 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
       documentTitle: 'Order',
     });
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
       test,
     );

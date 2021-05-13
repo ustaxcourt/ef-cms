@@ -2,10 +2,6 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkChecksDocketEntryEditLink = (test, data = {}) => {
   return it('Docket Clerk checks docket entry edit link', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
     const {
       formattedDocketEntriesOnDocketRecord,
     } = await getFormattedDocketEntriesForTest(test);
