@@ -71,7 +71,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
 
     const {
       formattedPendingDocketEntriesOnDocketRecord,
-    } = getFormattedDocketEntriesForTest(test);
+    } = await getFormattedDocketEntriesForTest(test);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });
