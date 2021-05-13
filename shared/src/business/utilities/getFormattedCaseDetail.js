@@ -157,11 +157,13 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
-  formattedEntry.isAvailableToUser =
-    documentMeetsAgeRequirements(formattedEntry);
+  formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
+    formattedEntry,
+  );
 
-  formattedEntry.filingsAndProceedings =
-    getFilingsAndProceedings(formattedEntry);
+  formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
+    formattedEntry,
+  );
 
   if (!formattedEntry.descriptionDisplay) {
     formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
@@ -340,7 +342,7 @@ const formatCase = (applicationContext, caseDetail) => {
     );
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
-
+    console.log('----formattedDocketEntries', result.formattedDocketEntries);
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
       entry => applicationContext.getUtilities().isPending(entry),
     );
@@ -418,8 +420,9 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   if (result.privatePractitioners) {
-    result.privatePractitioners =
-      result.privatePractitioners.map(formatCounsel);
+    result.privatePractitioners = result.privatePractitioners.map(
+      formatCounsel,
+    );
   }
 
   result.createdAtFormatted = applicationContext

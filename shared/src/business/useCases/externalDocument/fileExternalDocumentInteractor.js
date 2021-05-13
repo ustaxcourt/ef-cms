@@ -109,6 +109,8 @@ exports.fileExternalDocumentInteractor = async (
 
   for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
     if (docketEntryId && metadata) {
+      console.log(baseMetadata.filedBy);
+      console.log(metadata.filedBy);
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
