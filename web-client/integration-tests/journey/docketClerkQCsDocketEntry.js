@@ -1,38 +1,30 @@
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkQCsDocketEntry = (test, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
-    const lastIndex = helper.formattedDocketEntriesOnDocketRecord.length - 1;
+    const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
-    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[
-      data.index
-    ];
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[data.index];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: helper.docketNumber,
+      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
     await test.runSequence('completeDocketEntryQCSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
+    ({
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test));
 
-    const selectedDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
 

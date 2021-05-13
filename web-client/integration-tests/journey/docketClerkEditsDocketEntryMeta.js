@@ -1,11 +1,5 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedDocketEntries = withAppContextDecorator(
-  formattedDocketEntriesComputed,
-);
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
   return it('docket clerk edits docket entry meta', async () => {
@@ -101,13 +95,13 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
 
     expect(pendingDocketEntry.pending).toEqual(true);
 
-    const helper = runCompute(formattedDocketEntries, {
-      state: test.getState(),
-    });
+    const {
+      formattedPendingDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
     test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 
-    expect(helper.formattedPendingDocketEntriesOnDocketRecord).toEqual(
+    expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: pendingDocketEntry.docketEntryId,
