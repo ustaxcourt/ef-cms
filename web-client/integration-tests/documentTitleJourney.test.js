@@ -160,13 +160,15 @@ describe('Document title journey', () => {
       docketNumber: test.docketNumber,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     const documentToSelect = {
       category: 'Miscellaneous',
       documentTitle: '[First, Second, etc.] Amendment to [anything]',
       documentType: 'Amendment [anything]',
       eventCode: 'ADMT',
+      filers: [contactPrimary.contactId],
       ordinalValue: 'First',
-      partyPrimary: true,
       primaryDocumentFile: fakeFile,
       scenario: 'Nonstandard F',
     };
