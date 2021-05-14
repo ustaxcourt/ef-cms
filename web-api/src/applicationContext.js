@@ -697,6 +697,9 @@ const {
 const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
+// const {
+//   getWorkItemMappingsByDocketNumber,
+// } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
