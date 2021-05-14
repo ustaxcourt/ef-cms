@@ -7,8 +7,11 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
-const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } =
-  applicationContext.getConstants();
+const {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} = applicationContext.getConstants();
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   test,

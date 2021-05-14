@@ -4,16 +4,18 @@ const {
 } = require('../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../errors/errors');
 
-exports.filePetitionInteractor = async ({
+exports.filePetitionInteractor = async (
   applicationContext,
-  ownershipDisclosureFile,
-  ownershipDisclosureUploadProgress,
-  petitionFile,
-  petitionMetadata,
-  petitionUploadProgress,
-  stinFile,
-  stinUploadProgress,
-}) => {
+  {
+    ownershipDisclosureFile,
+    ownershipDisclosureUploadProgress,
+    petitionFile,
+    petitionMetadata,
+    petitionUploadProgress,
+    stinFile,
+    stinUploadProgress,
+  },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.PETITION)) {
@@ -69,17 +71,19 @@ exports.filePetitionInteractor = async ({
     );
   }
 
-  const [ownershipDisclosureFileId, petitionFileId, stinFileId] =
-    await Promise.all([
-      ownershipDisclosureFileUpload,
-      petitionFileUpload,
-      stinFileUpload,
-    ]);
+  const [
+    ownershipDisclosureFileId,
+    petitionFileId,
+    stinFileId,
+  ] = await Promise.all([
+    ownershipDisclosureFileUpload,
+    petitionFileUpload,
+    stinFileUpload,
+  ]);
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .createCaseInteractor({
-      applicationContext,
+    .createCaseInteractor(applicationContext, {
       ownershipDisclosureFileId,
       petitionFileId,
       petitionMetadata,

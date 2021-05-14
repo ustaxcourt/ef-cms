@@ -5,11 +5,12 @@ import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/set
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { updateDeleteUserCaseNotePropsFromModalStateAction } from '../actions/TrialSessionWorkingCopy/updateDeleteUserCaseNotePropsFromModalStateAction';
 
-export const deleteJudgesCaseNoteFromCaseDetailSequence =
-  showProgressSequenceDecorator([
+export const deleteJudgesCaseNoteFromCaseDetailSequence = showProgressSequenceDecorator(
+  [
     updateDeleteUserCaseNotePropsFromModalStateAction,
     deleteUserCaseNoteAction,
     setJudgesCaseNoteOnCaseDetailAction,
     clearModalAction,
     clearModalStateAction,
-  ]);
+  ],
+);

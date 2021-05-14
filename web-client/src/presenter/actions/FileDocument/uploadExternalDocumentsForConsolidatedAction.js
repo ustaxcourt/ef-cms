@@ -47,7 +47,10 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
   const progressFunctions = setupPercentDone(documentFiles, store);
 
   try {
-    const { caseDetail: cases, docketEntryIdsAdded } = await applicationContext
+    const {
+      caseDetail: cases,
+      docketEntryIdsAdded,
+    } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor({
         applicationContext,
@@ -59,11 +62,12 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
       });
 
     for (let docketEntryId of docketEntryIdsAdded) {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId,
-        docketNumber,
-      });
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber,
+        });
     }
 
     return path.success({
