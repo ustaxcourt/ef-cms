@@ -80,13 +80,12 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
-  //gotta test THIS!!!
   let filingPartiesNames;
   if (form.filersMap) {
     filingPartiesNames = Object.entries(form.filersMap)
       .filter(([, isChecked]) => isChecked)
       .map(
-        filerContactId =>
+        ([filerContactId]) =>
           caseDetail.petitioners.find(
             petitioner => petitioner.contactId === filerContactId,
           )?.name,
