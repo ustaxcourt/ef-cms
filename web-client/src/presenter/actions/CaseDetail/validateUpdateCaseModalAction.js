@@ -16,8 +16,9 @@ export const validateUpdateCaseModalAction = ({
   path,
 }) => {
   const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
-  const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
-    applicationContext.getConstants();
+  const {
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
+  } = applicationContext.getConstants();
 
   let errors = {};
   if (

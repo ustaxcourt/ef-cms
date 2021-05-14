@@ -1,29 +1,18 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardB = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard B scenario', async () => {
-    let caseDetailFormatted;
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
 
-    const docketEntriesBefore =
-      caseDetailFormatted.formattedDocketEntries.length;
+    const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
     await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
@@ -64,24 +53,20 @@ export const docketClerkEditsDocketEntryNonstandardB = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test));
 
-    const docketEntriesAfter =
-      caseDetailFormatted.formattedDocketEntries.length;
+    const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 
     expect(docketEntriesBefore).toEqual(docketEntriesAfter);
 
-    const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
+    const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay: 'Objection Some free text',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({

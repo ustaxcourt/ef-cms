@@ -34,7 +34,7 @@ const PartiesInformationContentHeader = connect(
             <h2>{title}</h2>
           </div>
 
-          {caseInformationHelper.isInternalUser && (
+          {caseInformationHelper.showAddCounsel && (
             <>
               <div className="grid-col-2">
                 <div className="text-right">
@@ -95,19 +95,19 @@ const PartiesInformationContentHeader = connect(
                   </form>
                 </FormGroup>
               </div>
-              {caseInformationHelper.showAddPartyButton && (
-                <div className="grid-col-2">
-                  <Button
-                    link
-                    className="float-right margin-right-0"
-                    href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
-                    icon="plus-circle"
-                  >
-                    Add Party
-                  </Button>
-                </div>
-              )}
             </>
+          )}
+          {caseInformationHelper.showAddPartyButton && (
+            <div className="grid-col-2">
+              <Button
+                link
+                className="float-right margin-right-0"
+                href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
+                icon="plus-circle"
+              >
+                Add Party
+              </Button>
+            </div>
           )}
         </div>
       </>

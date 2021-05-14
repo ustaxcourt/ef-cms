@@ -6,12 +6,13 @@ import { removeCaseDetailPendingItemAction } from '../actions/PendingItems/remov
 import { setCaseAction } from '../actions/setCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removeCaseDetailPendingItemSequence =
-  showProgressSequenceDecorator([
+export const removeCaseDetailPendingItemSequence = showProgressSequenceDecorator(
+  [
     primePropsFromModalStateAction,
     primePropsFromCaseDetailAction,
     removeCaseDetailPendingItemAction,
     setCaseAction,
     clearModalAction,
     clearModalStateAction,
-  ]);
+  ],
+);

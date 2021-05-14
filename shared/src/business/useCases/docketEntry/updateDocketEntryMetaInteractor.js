@@ -34,8 +34,7 @@ const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-exports.shouldGenerateCoversheetForDocketEntry =
-  shouldGenerateCoversheetForDocketEntry;
+exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
 /**
  *
  * @param {object} applicationContext the application context
@@ -119,14 +118,12 @@ exports.updateDocketEntryMetaInteractor = async (
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
-  const entryRequiresCoverSheet =
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      editableFields.eventCode,
-    );
-  const originalEntryDoesNotRequireCoversheet =
-    !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      originalDocketEntry.eventCode,
-    );
+  const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+    editableFields.eventCode,
+  );
+  const originalEntryDoesNotRequireCoversheet = !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+    originalDocketEntry.eventCode,
+  );
 
   const shouldAddNewCoverSheet =
     originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
