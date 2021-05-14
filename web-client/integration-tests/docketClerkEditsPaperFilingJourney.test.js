@@ -39,7 +39,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'dateReceived',
       'eventCode',
       'documentType',
-      'partyPrimary',
+      'filers',
     ];
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual(
