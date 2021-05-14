@@ -7,6 +7,7 @@ import { getCaseAction } from '../../actions/getCaseAction';
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
+import { setFilersFromFilersMapForModalAction } from '../../actions/setFilersFromFilersMapForModalAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
@@ -16,6 +17,7 @@ import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociat
 export const associatePrivatePractitionerWithCaseSequence = showProgressSequenceDecorator(
   [
     startShowValidationAction,
+    setFilersFromFilersMapForModalAction,
     validateAddPrivatePractitionerAction,
     {
       error: [setValidationErrorsAction],
