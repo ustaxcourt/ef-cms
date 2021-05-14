@@ -29,11 +29,12 @@ export const removeScannedPdfAction = async ({
   const isFileAttached = get(state.form.isFileAttached);
 
   if (isFileAttached) {
-    applicationContext.getUseCases().removePdfFromDocketEntryInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    applicationContext
+      .getUseCases()
+      .removePdfFromDocketEntryInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
 
     store.set(state.form.isFileAttached, false);
   }

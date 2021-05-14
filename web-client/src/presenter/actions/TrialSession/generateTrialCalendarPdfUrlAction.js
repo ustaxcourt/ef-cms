@@ -16,8 +16,7 @@ export const generateTrialCalendarPdfUrlAction = async ({
     url,
   } = await applicationContext
     .getUseCases()
-    .generateTrialCalendarPdfInteractor({
-      applicationContext,
+    .generateTrialCalendarPdfInteractor(applicationContext, {
       trialSessionId: trialSession.trialSessionId,
     });
 

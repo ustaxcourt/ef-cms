@@ -7,8 +7,7 @@ const {
 
 describe('validateEditPetitionerCounselInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateEditPetitionerCounselInteractor({
-      applicationContext,
+    const errors = validateEditPetitionerCounselInteractor(applicationContext, {
       practitioner: {},
     });
 
@@ -16,8 +15,7 @@ describe('validateEditPetitionerCounselInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateEditPetitionerCounselInteractor({
-      applicationContext,
+    const errors = validateEditPetitionerCounselInteractor(applicationContext, {
       practitioner: { representingPrimary: true },
     });
 

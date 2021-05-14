@@ -10,10 +10,12 @@ const {
 
 describe('validateExternalDocumentInformationInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateExternalDocumentInformationInteractor({
+    const errors = validateExternalDocumentInformationInteractor(
       applicationContext,
-      documentMetadata: {},
-    });
+      {
+        documentMetadata: {},
+      },
+    );
 
     expect(errors).toEqual({
       certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
@@ -24,16 +26,18 @@ describe('validateExternalDocumentInformationInteractor', () => {
   });
 
   it('returns no errors when all fields are defined', () => {
-    const errors = validateExternalDocumentInformationInteractor({
+    const errors = validateExternalDocumentInformationInteractor(
       applicationContext,
-      documentMetadata: {
-        attachments: false,
-        certificateOfService: false,
-        hasSupportingDocuments: false,
-        partyPrimary: true,
-        primaryDocumentFile: { file: 'yes!' },
+      {
+        documentMetadata: {
+          attachments: false,
+          certificateOfService: false,
+          hasSupportingDocuments: false,
+          partyPrimary: true,
+          primaryDocumentFile: { file: 'yes!' },
+        },
       },
-    });
+    );
 
     expect(errors).toEqual(null);
   });

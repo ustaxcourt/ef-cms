@@ -5,15 +5,15 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 /**
  * validatePetitionerInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.contactInfo the contactInfo to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionerInteractor = ({
+exports.validatePetitionerInteractor = (
   applicationContext,
-  contactInfo,
-}) => {
+  { contactInfo },
+) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
   }).getFormattedValidationErrors();

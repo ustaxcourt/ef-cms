@@ -69,7 +69,7 @@ describe('setTokenAction,', () => {
     });
 
     expect(
-      applicationContext.getUseCases().setItemInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().setItemInteractor.mock.calls[0][1],
     ).toMatchObject({
       key: 'token',
       value: mockToken,

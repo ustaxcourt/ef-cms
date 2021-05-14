@@ -16,8 +16,7 @@ export const setTrialSessionCalendarAction = async ({
 
   const trialSession = await applicationContext
     .getUseCases()
-    .setTrialSessionCalendarInteractor({
-      applicationContext,
+    .setTrialSessionCalendarInteractor(applicationContext, {
       trialSessionId,
     });
 

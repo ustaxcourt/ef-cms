@@ -36,22 +36,21 @@ describe('getPendingEmailsOnCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[0][0].userId,
+        .calls[0][1].userId,
     ).toBe(mockUserId);
 
     expect(
       applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[1][0].userId,
+        .calls[1][1].userId,
     ).toBe(mockSecondUserId);
 
     expect(
       applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[2][0].userId,
+        .calls[2][1].userId,
     ).toBe(mockThirdUserId);
-
     expect(
       applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[3][0].userId,
+        .calls[3][1].userId,
     ).toBe(mockFourthUserId);
   });
 

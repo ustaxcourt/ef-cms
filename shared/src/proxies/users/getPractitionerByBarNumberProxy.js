@@ -8,10 +8,10 @@ const { get } = require('../requests');
  * @param {string} params.barNumber the bar number for the practitioner to fetch
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPractitionerByBarNumberInteractor = ({
+exports.getPractitionerByBarNumberInteractor = (
   applicationContext,
-  barNumber,
-}) => {
+  { barNumber },
+) => {
   return get({
     applicationContext,
     endpoint: `/practitioners/${barNumber}`,

@@ -12,8 +12,7 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 describe('validateDocketEntryInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
-    const errors = validateDocketEntryInteractor({
-      applicationContext,
+    const errors = validateDocketEntryInteractor(applicationContext, {
       entryMetadata: {},
     });
 
@@ -26,8 +25,7 @@ describe('validateDocketEntryInteractor', () => {
   });
 
   it('returns no errors when valid docket entry is passed through', () => {
-    const errors = validateDocketEntryInteractor({
-      applicationContext,
+    const errors = validateDocketEntryInteractor(applicationContext, {
       entryMetadata: {
         category: 'Answer',
         dateReceived: '1987-08-06T07:53:09.001Z',

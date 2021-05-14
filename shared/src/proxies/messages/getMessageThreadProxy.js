@@ -3,15 +3,15 @@ const { get } = require('../requests');
 /**
  * getMessageThreadInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getMessageThreadInteractor = ({
+exports.getMessageThreadInteractor = (
   applicationContext,
-  parentMessageId,
-}) => {
+  { parentMessageId },
+) => {
   return get({
     applicationContext,
     endpoint: `/messages/${parentMessageId}`,

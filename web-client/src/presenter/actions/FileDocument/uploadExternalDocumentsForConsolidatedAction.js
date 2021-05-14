@@ -52,8 +52,7 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
       docketEntryIdsAdded,
     } = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor({
-        applicationContext,
+      .uploadExternalDocumentsInteractor(applicationContext, {
         docketNumbersForFiling: selectedCases,
         documentFiles,
         documentMetadata,

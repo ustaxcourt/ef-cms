@@ -3,15 +3,15 @@ const { NewPractitioner } = require('../../entities/NewPractitioner');
 /**
  * validatePractitionerInteractor
  *
- * @param {object} params params
- * @param {object} params.applicationContext the application context
- * @param {object} params.practitioner metadata
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.practitioner metadata
  * @returns {object} errors
  */
-exports.validateAddPractitionerInteractor = ({
+exports.validateAddPractitionerInteractor = (
   applicationContext,
-  practitioner,
-}) => {
+  { practitioner },
+) => {
   const errors = new NewPractitioner(practitioner, {
     applicationContext,
   }).getFormattedValidationErrors();

@@ -21,8 +21,7 @@ export const generatePrintableFilingReceiptAction = async ({
 
   const filingReceiptUrl = await applicationContext
     .getUseCases()
-    .generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    .generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber,
       documentsFiled,
     });
