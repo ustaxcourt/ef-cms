@@ -127,55 +127,32 @@ export const AddPrivatePractitionerModal = connect(
               <legend id="representing-legend">
                 Who is this counsel representing?
               </legend>
-              <div className="usa-checkbox">
-                <input
-                  aria-describedby="representing-legend"
-                  checked={modal.representingPrimary || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name="representingPrimary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateModalValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label  inline-block"
-                  htmlFor="party-primary"
-                >
-                  {formattedCaseDetail.contactPrimary.name}
-                </label>
-              </div>
 
-              {formattedCaseDetail.contactSecondary &&
-                formattedCaseDetail.contactSecondary.name && (
-                  <div className="usa-checkbox">
-                    <input
-                      aria-describedby="representing-legend"
-                      checked={modal.representingSecondary || false}
-                      className="usa-checkbox__input"
-                      id="party-secondary"
-                      name="representingSecondary"
-                      type="checkbox"
-                      onChange={e => {
-                        updateModalValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label inline-block"
-                      htmlFor="party-secondary"
-                    >
-                      {formattedCaseDetail.contactSecondary.name}
-                    </label>
-                  </div>
-                )}
+              {formattedCaseDetail.petitioners.map(petitioner => (
+                <div className="usa-checkbox" key={petitioner.contactId}>
+                  <input
+                    aria-describedby="representing-legend"
+                    checked={modal.filersMap[petitioner.contactId] || false}
+                    className="usa-checkbox__input"
+                    id={`filing-${petitioner.contactId}`}
+                    name={`filersMap.${petitioner.contactId}`}
+                    type="checkbox"
+                    onChange={e => {
+                      updateModalValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label  inline-block"
+                    htmlFor="party-primary"
+                  >
+                    {formattedCaseDetail.contactPrimary.name}
+                  </label>
+                </div>
+              ))}
             </fieldset>
           </FormGroup>
 
