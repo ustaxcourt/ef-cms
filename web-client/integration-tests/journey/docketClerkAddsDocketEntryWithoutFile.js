@@ -1,6 +1,9 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { contactPrimaryFromState } from '../helpers';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -85,5 +88,16 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
     });
 
     expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+
+    test.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.documentTitle === 'Administrative Record',
+    );
+
+    expect(test.docketRecordEntry.index).toBeFalsy();
   });
 };
