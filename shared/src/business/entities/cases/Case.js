@@ -1203,10 +1203,7 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
 };
 
 Case.prototype.getPetitionDocketEntry = function () {
-  return this.docketEntries.find(
-    docketEntry =>
-      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
+  return getPetitionDocketEntry(this);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1430,9 +1427,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
-  const petitionDocketEntry = (caseRaw.docketEntries || []).find(
-    doc => doc.documentType === 'Petition',
-  );
+  const petitionDocketEntry = getPetitionDocketEntry(caseRaw);
 
   const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
 
@@ -2075,9 +2070,22 @@ const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
+const caseHasServedPetition = rawCase => {
+  const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+  return petitionDocketEntry && isServed(petitionDocketEntry);
+};
+
+const getPetitionDocketEntry = rawCase => {
+  return (rawCase.docketEntries || []).find(
+    docketEntry =>
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
