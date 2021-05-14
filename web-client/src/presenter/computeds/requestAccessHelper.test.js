@@ -182,7 +182,7 @@ describe('requestAccessHelper', () => {
     expect(result.showFilingNotIncludes).toEqual(false);
   });
 
-  describe.skip('representingPartiesNames', () => {
+  describe('representingPartiesNames', () => {
     beforeEach(() => {
       state.form = {
         filersMap: {
