@@ -116,11 +116,6 @@ exports.fileExternalDocumentInteractor = async (
           docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
-          partyPrimary:
-            baseMetadata.partyPrimary || documentMetadata.representingPrimary,
-          partySecondary:
-            baseMetadata.partySecondary ||
-            documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
         },
