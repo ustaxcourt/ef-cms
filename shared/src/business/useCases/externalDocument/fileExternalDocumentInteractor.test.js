@@ -46,6 +46,8 @@ describe('fileExternalDocumentInteractor', () => {
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -105,6 +107,27 @@ describe('fileExternalDocumentInteractor', () => {
     await expect(
       fileExternalDocumentInteractor(applicationContext, {
         documentMetadata: {},
+      }),
+    ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw an error when trying to file a document on a case that does not have a served petition', async () => {
+    caseRecord.docketEntries.find(
+      d => d.documentType === 'Petition',
+    ).servedAt = undefined;
+
+    const documentMetadata = {
+      docketNumber: caseRecord.docketNumber,
+      documentTitle: 'Memorandum in Support',
+      documentType: 'Memorandum in Support',
+      eventCode: 'A',
+      filedBy: 'Test Petitioner',
+      primaryDocumentId: mockDocketEntryId,
+    };
+
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata,
       }),
     ).rejects.toThrow('Unauthorized');
   });
