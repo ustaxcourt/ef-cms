@@ -14,6 +14,7 @@ describe('gotoDocketEntryQcSequence', () => {
     documentTitle: 'Partial Administrative Record',
     documentType: 'Partial Administrative Record',
     eventCode: 'PARD',
+    filers: [],
     filingDate: '2019-04-19T17:29:13.120Z',
     isFileAttached: true,
     isOnDocketRecord: true,
