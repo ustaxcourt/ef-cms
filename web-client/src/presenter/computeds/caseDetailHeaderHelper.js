@@ -57,8 +57,14 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showCaseDetailHeaderMenu = !isExternalUser;
 
+  const caseHasServedPetition = applicationContext
+    .getUtilities()
+    .caseHasServedPetition(caseDetail);
+
   const showFileDocumentButton =
-    permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
+    permissions.FILE_EXTERNAL_DOCUMENT &&
+    userAssociatedWithCase &&
+    caseHasServedPetition;
 
   const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
 

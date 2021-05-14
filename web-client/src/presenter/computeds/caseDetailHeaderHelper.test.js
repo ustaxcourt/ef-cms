@@ -424,10 +424,14 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showSealedCaseBanner).toEqual(true);
   });
 
-  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
+  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission, the user is associated with the case, and the petition has been served', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: {
+          docketEntries: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -442,7 +446,11 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: {
+          docketEntries: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
@@ -457,13 +465,34 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [] },
+        caseDetail: {
+          docketEntries: [
+            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+          ],
+        },
         currentPage: 'CaseDetail',
         form: {},
         permissions: {
           FILE_EXTERNAL_DOCUMENT: true,
         },
         screenMetadata: { isAssociated: false },
+      },
+    });
+    expect(result.showFileDocumentButton).toEqual(false);
+  });
+
+  it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case but the petition is not served', () => {
+    const result = runCompute(caseDetailHeaderHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [{ documentType: 'Petition' }],
+        },
+        currentPage: 'CaseDetail',
+        form: {},
+        permissions: {
+          FILE_EXTERNAL_DOCUMENT: true,
+        },
+        screenMetadata: { isAssociated: true },
       },
     });
     expect(result.showFileDocumentButton).toEqual(false);
