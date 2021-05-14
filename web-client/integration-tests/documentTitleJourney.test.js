@@ -1,5 +1,10 @@
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from '../src/presenter/computeds/completeDocumentTypeSectionHelper';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
@@ -79,8 +84,10 @@ describe('Document title journey', () => {
       value: fakeFile,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

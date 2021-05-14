@@ -28,13 +28,6 @@ export const petitionerFilesANonstardardDDocumentForCase = (test, fakeFile) => {
       });
     }
 
-    const contactPrimary = contactPrimaryFromState(test);
-
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
-
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
       value: false,
@@ -82,6 +75,13 @@ export const petitionerFilesANonstardardDDocumentForCase = (test, fakeFile) => {
 
     runCompute(withAppContextDecorator(formattedCaseDetail), {
       state: test.getState(),
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');

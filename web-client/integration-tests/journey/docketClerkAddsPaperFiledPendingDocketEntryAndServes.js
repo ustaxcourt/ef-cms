@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   test,
@@ -45,8 +46,10 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
