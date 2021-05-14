@@ -1,11 +1,12 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getFormattedDocketEntry } from './formattedCaseDetail';
+import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
 describe('getFormattedDocketEntry', () => {
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
-    applicationContext.getConstants();
+  const {
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  } = applicationContext.getConstants();
 
   const simpleDocketEntry = simpleDocketEntries[0];
 

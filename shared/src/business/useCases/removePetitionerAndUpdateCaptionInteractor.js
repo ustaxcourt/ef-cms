@@ -55,8 +55,9 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     caseEntity.getPetitionerById(contactId).contactType ===
     CONTACT_TYPES.primary;
 
-  const practitioners =
-    caseEntity.getPractitionersRepresenting(petitionerContactId);
+  const practitioners = caseEntity.getPractitionersRepresenting(
+    petitionerContactId,
+  );
   for (const practitioner of practitioners) {
     if (
       practitioner.isRepresenting(petitionerContactId) &&

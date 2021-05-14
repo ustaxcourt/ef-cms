@@ -53,8 +53,9 @@ describe('validateSetForHearingAction', () => {
   });
 
   it('should call path.error with an error message and not call path.success if the calendar note is not valid', async () => {
-    presenter.providers.applicationContext.getUseCases().validateHearingNoteInteractor =
-      jest.fn().mockReturnValue({
+    presenter.providers.applicationContext.getUseCases().validateHearingNoteInteractor = jest
+      .fn()
+      .mockReturnValue({
         note: 'That would be invalid, man.',
       });
 

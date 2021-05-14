@@ -89,9 +89,9 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
-    const { data } =
-      applicationContext.getDocumentGenerators()
-        .standingPretrialOrderForSmallCase.mock.calls[0][0];
+    const {
+      data,
+    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
 
     expect(data.docketNumberWithSuffix).toEqual('234-56S');
   });
@@ -103,9 +103,9 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
-    const { data } =
-      applicationContext.getDocumentGenerators()
-        .standingPretrialOrderForSmallCase.mock.calls[0][0];
+    const {
+      data,
+    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
 
     expect(data.trialInfo.formattedStartDateWithDayOfWeek).toEqual(
       'Sunday, August 25, 2019',

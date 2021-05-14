@@ -300,8 +300,9 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    const { caseToUpdate } =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const {
+      caseToUpdate,
+    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     expect(getContactPrimary(caseToUpdate).address2).toBeUndefined();
   });
 
@@ -324,8 +325,9 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+    const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+      d => d.eventCode === 'NCA',
+    );
 
     expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
   });
@@ -417,9 +419,8 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    const updatedPetitioners =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners;
+    const updatedPetitioners = applicationContext.getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
 
     const updatedContactSecondary = updatedPetitioners.find(
       p => p.contactType === CONTACT_TYPES.secondary,
@@ -574,8 +575,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -611,8 +613,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -645,8 +648,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
       expect(
         applicationContext.getPersistenceGateway()
           .saveWorkItemAndAddToSectionInbox,
@@ -678,8 +682,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -713,8 +718,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -748,8 +754,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -786,8 +793,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()
@@ -833,8 +841,9 @@ describe('updatePetitionerInformationInteractor', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
+      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
+        d => d.eventCode === 'NCA',
+      );
 
       expect(
         applicationContext.getPersistenceGateway()

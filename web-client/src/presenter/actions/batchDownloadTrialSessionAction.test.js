@@ -5,8 +5,9 @@ import { runAction } from 'cerebral/test';
 
 presenter.providers.applicationContext = applicationContext;
 
-const { batchDownloadTrialSessionInteractor } =
-  applicationContext.getUseCases();
+const {
+  batchDownloadTrialSessionInteractor,
+} = applicationContext.getUseCases();
 const pathSuccessStub = jest.fn();
 const pathErrorStub = jest.fn();
 

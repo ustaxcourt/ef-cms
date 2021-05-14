@@ -3017,6 +3017,8 @@
     "filingDate": "2018-03-01T00:01:00.000Z",
     "isMinuteEntry": false,
     "pending": false,
+    "servedAt": "2018-03-01T00:01:00.000Z",
+    "servedParties": [{"name": "Test Petitioner", "email": "petitioner@example.com"}],
     "isDraft": false,
     "index": 1,
     "isFileAttached": true,
