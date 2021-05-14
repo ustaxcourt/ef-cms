@@ -28,11 +28,11 @@ export const submitEditPetitionerCounselSequence = [
         success: [
           setAlertSuccessAction,
           clearModalAction,
-          clearFormAction,
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
           navigateToCaseDetailCaseInformationActionFactory('parties'),
+          clearFormAction,
         ],
       },
     ]),
