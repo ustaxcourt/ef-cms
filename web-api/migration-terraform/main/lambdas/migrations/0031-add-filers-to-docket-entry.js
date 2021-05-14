@@ -14,7 +14,11 @@ const applicationContext = createApplicationContext({});
 const migrateItems = async (items, documentClient) => {
   const itemsAfter = [];
   for (const item of items) {
-    if (item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|')) {
+    if (
+      item.pk.startsWith('case|') &&
+      item.sk.startsWith('docket-entry|') &&
+      !item.filers
+    ) {
       const filers = [];
 
       const fullCase = await documentClient
@@ -51,6 +55,7 @@ const migrateItems = async (items, documentClient) => {
 
       new DocketEntry(item, {
         applicationContext,
+        petitioners: caseRecord.petitioners,
       }).validate();
 
       itemsAfter.push(item);

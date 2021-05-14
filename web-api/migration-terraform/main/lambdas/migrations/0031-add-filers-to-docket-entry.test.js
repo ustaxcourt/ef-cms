@@ -31,6 +31,7 @@ describe('migrateItems', () => {
   beforeEach(() => {
     mockCaseItem = {
       ...MOCK_CASE,
+      docketEntries: [mockDocketEntry],
       petitioners: [
         ...MOCK_CASE.petitioners,
         {
@@ -79,7 +80,7 @@ describe('migrateItems', () => {
   });
 
   it('should add the primary petitioner contactId to the filers array when partyPrimary is true', async () => {
-    const items = [mockDocketEntry];
+    const items = [{ ...mockDocketEntry }];
 
     const results = await migrateItems(items, documentClient);
 
@@ -110,5 +111,17 @@ describe('migrateItems', () => {
     const results = await migrateItems(items, documentClient);
 
     expect(results[0].filers).toEqual([]);
+  });
+
+  it('should not modify the filers array if already present on the docket entry', async () => {
+    const mockFilers = ['3daf5975-e5c5-486a-afc1-719181177ccc'];
+
+    const items = [
+      { ...mockDocketEntry, filers: mockFilers, partyPrimary: undefined },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers).toEqual(mockFilers);
   });
 });
