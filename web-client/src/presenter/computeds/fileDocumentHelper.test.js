@@ -193,7 +193,7 @@ describe('fileDocumentHelper', () => {
   });
 
   it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { partyPrimary: 'You did something bad.' };
+    state.validationErrors = { filers: 'You did something bad.' };
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
@@ -487,5 +487,41 @@ describe('fileDocumentHelper', () => {
       { docketNumber: '101-19' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  describe('filingPartiesNames', () => {
+    beforeEach(() => {
+      state.form = {
+        filersMap: {
+          '4e53fade-4966-4efe-8b01-0cb5f587eb47': true,
+          '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': false,
+          '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
+        },
+      };
+
+      state.caseDetail = {
+        petitioners: [
+          {
+            contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
+            name: 'bob',
+          },
+          {
+            contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
+            name: 'sally',
+          },
+          {
+            contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
+            name: 'rick',
+          },
+        ],
+      };
+    });
+
+    it('should be set to the names of all filing petitioners', () => {
+      const { filingPartiesNames } = runCompute(fileDocumentHelper, {
+        state,
+      });
+      expect(filingPartiesNames).toEqual(['bob', 'rick']);
+    });
   });
 });
