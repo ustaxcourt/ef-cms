@@ -1,4 +1,3 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -7,34 +6,20 @@ import { setDefaultFileDocumentFormValuesAction } from './setDefaultFileDocument
 describe('setDefaultFileDocumentFormValuesAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('sets form.partyPrimary to true if the user is a petitioner', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
+  it('sets up the form with default values', async () => {
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
-        form: {
-          partyPrimary: false,
-        },
+        form: {},
       },
     });
-
-    expect(result.state.form.partyPrimary).toEqual(true);
-  });
-  it('does not set form.partyPrimary if the user is not a petitioner', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.privatePractitioner,
+    expect(result.state.form).toEqual({
+      attachments: false,
+      certificateOfService: false,
+      filersMap: {},
+      hasSecondarySupportingDocuments: false,
+      hasSupportingDocuments: false,
+      practitioner: [],
     });
-    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
-      modules: { presenter },
-      state: {
-        form: {
-          partyPrimary: false,
-        },
-      },
-    });
-
-    expect(result.state.form.partyPrimary).toEqual(false);
   });
 });

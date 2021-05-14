@@ -7,7 +7,6 @@ import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatusModalAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
@@ -15,7 +14,6 @@ import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExt
 import { uploadExternalDocumentsForConsolidatedAction } from '../actions/FileDocument/uploadExternalDocumentsForConsolidatedAction';
 
 const onSuccess = [
-  setFilersFromFilersMapAction,
   submitRespondentCaseAssociationRequestAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
