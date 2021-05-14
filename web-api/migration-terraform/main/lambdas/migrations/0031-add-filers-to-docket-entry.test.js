@@ -1,5 +1,9 @@
 const {
+  CONTACT_TYPES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
   getContactPrimary,
+  getContactSecondary,
 } = require('../../../../../shared/src/business/entities/cases/Case');
 const { migrateItems } = require('./0031-add-filers-to-docket-entry');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
@@ -27,6 +31,14 @@ describe('migrateItems', () => {
   beforeEach(() => {
     mockCaseItem = {
       ...MOCK_CASE,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '7acfa199-c297-46b8-9371-2dc1470a5b26',
+          contactType: CONTACT_TYPES.secondary,
+        },
+      ],
       pk: 'case|999-99',
       sk: 'case|999-99',
     };
@@ -71,16 +83,32 @@ describe('migrateItems', () => {
 
     const results = await migrateItems(items, documentClient);
 
-    expect(results[0].filers).toEqual([getContactPrimary(MOCK_CASE).contactId]);
+    expect(results[0].filers[0]).toEqual(
+      getContactPrimary(mockCaseItem).contactId,
+    );
     expect(results[0].partyPrimary).toBeUndefined();
   });
 
   it('should add the secondary petitioner contactId to the filers array when partySecondary is true', async () => {
-    const items = [{ ...mockDocketEntry }];
+    const items = [
+      { ...mockDocketEntry, partyPrimary: true, partySecondary: true },
+    ];
 
     const results = await migrateItems(items, documentClient);
 
-    expect(results[0].filers).toEqual([getContactPrimary(MOCK_CASE).contactId]);
-    expect(results[0].partyPrimary).toBeUndefined();
+    expect(results[0].filers[1]).toEqual(
+      getContactSecondary(mockCaseItem).contactId,
+    );
+    expect(results[0].partySecondary).toBeUndefined();
+  });
+
+  it('should not add to the filers array if no partyPrimary or partySecondary', async () => {
+    const items = [
+      { ...mockDocketEntry, partyPrimary: false, partySecondary: false },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers).toEqual([]);
   });
 });
