@@ -42,7 +42,7 @@ const migrateItems = async (items, documentClient) => {
       }
 
       if (item.partySecondary) {
-        const contactSecondaryId = getContactSecondary(fullCase).contactId;
+        const contactSecondaryId = getContactSecondary(caseRecord).contactId;
         filers.push(contactSecondaryId);
         item.partySecondary = undefined;
       }
