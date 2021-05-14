@@ -1,7 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -9,9 +8,10 @@ const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
 export const petitionerViewsCaseDetail = (test, overrides = {}) => {
   return it('petitioner views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+
     const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
@@ -19,12 +19,6 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     const caseDetail = test.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-    const docketEntriesFormatted = runCompute(
-      withAppContextDecorator(formattedDocketEntries),
       {
         state: test.getState(),
       },
@@ -39,11 +33,11 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     expect(caseDetail.docketEntries.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(docketEntriesFormatted.formattedDocketEntriesOnDocketRecord).toEqual(
+    expect(formattedDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
-    const rqtDocument = docketEntriesFormatted.formattedDocketEntriesOnDocketRecord.find(
+    const rqtDocument = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'RQT',
     );
     expect(rqtDocument).toBeTruthy();

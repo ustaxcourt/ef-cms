@@ -1,7 +1,10 @@
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+  refreshElasticsearchIndex,
+} from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -41,25 +44,21 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       docketEntry: { documentTitle: 'Notice of Change of Address' },
     });
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    let helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
-    const lastIndex = helper.formattedDocketEntriesOnDocketRecord.length - 1;
+    const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     noticeOfChangeOfAddressQCItem.index =
       noticeOfChangeOfAddressQCItem.index || lastIndex;
 
-    const { docketEntryId } = helper.formattedDocketEntriesOnDocketRecord[
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[
       noticeOfChangeOfAddressQCItem.index
     ];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: helper.docketNumber,
+      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
     const addDocketEntryHelper = withAppContextDecorator(
@@ -76,11 +75,11 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
+    ({
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test));
 
-    const selectedDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
 

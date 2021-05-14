@@ -1,10 +1,4 @@
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedDocketEntries = withAppContextDecorator(
-  formattedDocketEntriesComputed,
-);
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const irsSuperuserSearchForUnservedCase = test => {
   return it('irsSuperuser searches for an unserved case by docket number from dashboard', async () => {
@@ -12,11 +6,11 @@ export const irsSuperuserSearchForUnservedCase = test => {
     test.setState('header.searchTerm', test.docketNumber);
     await test.runSequence('submitCaseSearchSequence');
 
-    const helper = runCompute(formattedDocketEntries, {
-      state: test.getState(),
-    });
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    const petitionDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
+    const petitionDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Petition',
     );
     expect(test.getState('currentPage')).toEqual('CaseDetail');
