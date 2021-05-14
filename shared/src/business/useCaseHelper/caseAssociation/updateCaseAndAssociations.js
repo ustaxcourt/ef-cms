@@ -231,6 +231,116 @@ const updatePrivatePractitioners = ({
 };
 
 /**
+ * Identifies work item entries which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCaseWorkItems = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const workItemUpdates = [];
+
+  const workItemsRequireUpdate =
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.trialDate !== caseToUpdate.trialDate ||
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
+    oldCase.caseIsInProgress !== caseToUpdate.caseIsInProgress;
+
+  if (!workItemsRequireUpdate) {
+    return workItemUpdates;
+  }
+
+  const workItemMappings = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemMappingsByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  const updateWorkItemRecords = (updatedCase, previousCase, workItemId) => {
+    const workItemRequests = [];
+    if (previousCase.status !== updatedCase.status) {
+      workItemRequests.push(
+        applicationContext.getPersistenceGateway().updateWorkItemCaseStatus({
+          applicationContext,
+          caseStatus: updatedCase.status,
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.caseCaption !== updatedCase.caseCaption) {
+      workItemRequests.push(
+        applicationContext.getPersistenceGateway().updateWorkItemCaseTitle({
+          applicationContext,
+          caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
+      workItemRequests.push(
+        applicationContext
+          .getPersistenceGateway()
+          .updateWorkItemDocketNumberSuffix({
+            applicationContext,
+            docketNumberSuffix: updatedCase.docketNumberSuffix || null,
+            workItemId,
+          }),
+      );
+    }
+    if (previousCase.trialDate !== updatedCase.trialDate) {
+      workItemRequests.push(
+        applicationContext.getPersistenceGateway().updateWorkItemTrialDate({
+          applicationContext,
+          trialDate: updatedCase.trialDate || null,
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
+      workItemRequests.push(
+        applicationContext
+          .getPersistenceGateway()
+          .updateWorkItemAssociatedJudge({
+            applicationContext,
+            associatedJudge: updatedCase.associatedJudge,
+            workItemId,
+          }),
+      );
+    }
+    if (previousCase.inProgress !== updatedCase.inProgress) {
+      workItemRequests.push(
+        applicationContext
+          .getPersistenceGateway()
+          .updateWorkItemCaseIsInProgress({
+            applicationContext,
+            caseIsInProgress: updatedCase.inProgress,
+            workItemId,
+          }),
+      );
+    }
+    return workItemRequests;
+  };
+
+  for (let mapping of workItemMappings) {
+    const [, workItemId] = mapping.sk.split('|');
+    workItemUpdates.push(
+      ...updateWorkItemRecords(caseToUpdate, oldCase, workItemId),
+    );
+  }
+
+  return workItemUpdates;
+};
+
+/**
  * updateCaseAndAssociations
  *
  * @param {object} providers the providers object
@@ -261,6 +371,7 @@ exports.updateCaseAndAssociations = async ({
 
   const RELATED_CASE_OPERATIONS = [
     updateCaseDocketEntries,
+    updateCaseWorkItems,
     updateCorrespondence,
     updateHearings,
     updateIrsPractitioners,

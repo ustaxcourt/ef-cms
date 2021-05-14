@@ -146,7 +146,7 @@ describe('updateCase', () => {
     });
   });
 
-  it('updates fields on work items', async () => {
+  it.skip('updates fields on work items', async () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {
@@ -275,7 +275,7 @@ describe('updateCase', () => {
     });
   });
 
-  it('does not update work items if work item fields are unchanged', async () => {
+  it.skip('does not update work items if work item fields are unchanged', async () => {
     await updateCase({
       applicationContext,
       caseToUpdate: {

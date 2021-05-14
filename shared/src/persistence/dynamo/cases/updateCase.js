@@ -3,24 +3,27 @@ const {
   getCaseDeadlinesByDocketNumber,
 } = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
 
-const {
-  updateWorkItemAssociatedJudge,
-} = require('../workitems/updateWorkItemAssociatedJudge');
-const {
-  updateWorkItemCaseIsInProgress,
-} = require('../workitems/updateWorkItemCaseIsInProgress');
-const {
-  updateWorkItemCaseStatus,
-} = require('../workitems/updateWorkItemCaseStatus');
-const {
-  updateWorkItemCaseTitle,
-} = require('../workitems/updateWorkItemCaseTitle');
-const {
-  updateWorkItemDocketNumberSuffix,
-} = require('../workitems/updateWorkItemDocketNumberSuffix');
-const {
-  updateWorkItemTrialDate,
-} = require('../workitems/updateWorkItemTrialDate');
+// const {
+//   getWorkItemMappingsByDocketNumber,
+// } = require('../workitems/getWorkItemMappingsByDocketNumber');
+// const {
+//   updateWorkItemAssociatedJudge,
+// } = require('../workitems/updateWorkItemAssociatedJudge');
+// const {
+//   updateWorkItemCaseIsInProgress,
+// } = require('../workitems/updateWorkItemCaseIsInProgress');
+// const {
+//   updateWorkItemCaseStatus,
+// } = require('../workitems/updateWorkItemCaseStatus');
+// const {
+//   updateWorkItemCaseTitle,
+// } = require('../workitems/updateWorkItemCaseTitle');
+// const {
+//   updateWorkItemDocketNumberSuffix,
+// } = require('../workitems/updateWorkItemDocketNumberSuffix');
+// const {
+//   updateWorkItemTrialDate,
+// } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
@@ -70,94 +73,6 @@ const updateUserCaseMappings = ({
  */
 exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   const requests = [];
-
-  if (
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
-    oldCase.caseIsInProgress !== caseToUpdate.caseIsInProgress
-  ) {
-    const workItemMappings = await client.query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${caseToUpdate.docketNumber}`,
-        ':prefix': 'work-item',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      applicationContext,
-    });
-
-    const updateWorkItemRecords = (updatedCase, previousCase, workItemId) => {
-      const workItemRequests = [];
-      if (previousCase.status !== updatedCase.status) {
-        workItemRequests.push(
-          updateWorkItemCaseStatus({
-            applicationContext,
-            caseStatus: updatedCase.status,
-            workItemId,
-          }),
-        );
-      }
-      if (previousCase.caseCaption !== updatedCase.caseCaption) {
-        workItemRequests.push(
-          updateWorkItemCaseTitle({
-            applicationContext,
-            caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
-            workItemId,
-          }),
-        );
-      }
-      if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
-        workItemRequests.push(
-          updateWorkItemDocketNumberSuffix({
-            applicationContext,
-            docketNumberSuffix: updatedCase.docketNumberSuffix || null,
-            workItemId,
-          }),
-        );
-      }
-      if (previousCase.trialDate !== updatedCase.trialDate) {
-        workItemRequests.push(
-          updateWorkItemTrialDate({
-            applicationContext,
-            trialDate: updatedCase.trialDate || null,
-            workItemId,
-          }),
-        );
-      }
-      if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
-        workItemRequests.push(
-          updateWorkItemAssociatedJudge({
-            applicationContext,
-            associatedJudge: updatedCase.associatedJudge,
-            workItemId,
-          }),
-        );
-      }
-      if (previousCase.inProgress !== updatedCase.inProgress) {
-        workItemRequests.push(
-          updateWorkItemCaseIsInProgress({
-            applicationContext,
-            caseIsInProgress: updatedCase.inProgress,
-            workItemId,
-          }),
-        );
-      }
-      return workItemRequests;
-    };
-
-    for (let mapping of workItemMappings) {
-      const [, workItemId] = mapping.sk.split('|');
-      requests.push(
-        ...updateWorkItemRecords(caseToUpdate, oldCase, workItemId),
-      );
-    }
-  }
 
   if (
     oldCase.status !== caseToUpdate.status ||
