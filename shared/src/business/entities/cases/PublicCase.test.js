@@ -11,11 +11,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
-const {
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('./Case');
+const { getContactSecondary } = require('./Case');
 const { isPrivateDocument, PublicCase } = require('./PublicCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
@@ -530,70 +526,6 @@ describe('PublicCase', () => {
         ]),
       );
       expect(entity.irsPractitioners).toBeTruthy();
-    });
-
-    // is this relevant anymore now that we are looping through all petitioners when
-    // creating new PublicContact?
-    it.skip('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-
-      const entity = new PublicCase(
-        {
-          caseCaption: 'testing',
-          contactPrimary: {},
-          contactSecondary: {},
-          createdAt: '2020-01-02T03:30:45.007Z',
-          docketEntries: [{}],
-          docketNumber: '102-20',
-          docketNumberSuffix: null,
-          docketNumberWithSuffix: null,
-          petitioners: [
-            {
-              contactId: mockContactId,
-              contactType: CONTACT_TYPES.primary,
-            },
-            {
-              address1: '42 Lamb Sauce Blvd',
-              city: 'Nashville',
-              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
-              contactType: CONTACT_TYPES.otherFiler,
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'testUser@example.com',
-              isAddressSealed: false,
-              name: 'Gordon Ramsay',
-              otherFilerType: 'Intervenor',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-              title: 'Intervenor',
-            },
-            {
-              additionalName: 'Guy Fieri',
-              address1: '453 Electric Ave',
-              city: 'Philadelphia',
-              contactId: mockContactIdSecond,
-              contactType: CONTACT_TYPES.otherPetitioner,
-              countryType: 'domestic',
-              email: 'mayorofflavortown@example.com',
-              name: 'Guy Fieri',
-              phone: '1234567890',
-              postalCode: '99999',
-              serviceIndicator: 'None',
-              state: 'PA',
-              title: 'Petitioner',
-            },
-          ],
-          receivedAt: '2020-01-05T03:30:45.007Z',
-        },
-        { applicationContext },
-      );
-
-      expect(getOtherFilers(entity)).toEqual([]);
-      expect(getOtherPetitioners(entity)).toEqual([]);
-      expect(entity.irsPractitioners).toBeUndefined();
     });
 
     it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
