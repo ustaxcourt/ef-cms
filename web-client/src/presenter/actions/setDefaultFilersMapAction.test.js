@@ -1,15 +1,12 @@
 import { runAction } from 'cerebral/test';
-import { setDefaultFormForAddDeficiencySatisticsAction } from './setDefaultFormForAddDeficiencySatisticsAction';
+import { setDefaultFilersMapAction } from './setDefaultFilersMapAction';
 
-describe('setDefaultFormForAddDeficiencySatisticsAction', () => {
-  it('sets state.form.yearOrPeriod to Year as the default value', async () => {
-    const { state } = await runAction(
-      setDefaultFormForAddDeficiencySatisticsAction,
-      {
-        state: {},
-      },
-    );
+describe('setDefaultFilersMapAction', () => {
+  it('sets state.form.filersMap to empty object as the default value', async () => {
+    const { state } = await runAction(setDefaultFilersMapAction, {
+      state: {},
+    });
 
-    expect(state.form.yearOrPeriod).toBe('Year');
+    expect(state.form.filersMap).toEqual({});
   });
 });

@@ -12,6 +12,8 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
 }) => {
+  // todo: get filers from form to pass into the interactor below
+  // check in ui that still works
   const docketNumber = get(state.caseDetail.docketNumber);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();

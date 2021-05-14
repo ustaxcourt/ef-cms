@@ -9,7 +9,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/caseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultFilersMapsAction } from '../actions/setDefaultFilersMapsAction';
+import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -19,7 +19,7 @@ const gotoFileDocument = [
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
-  setDefaultFilersMapsAction,
+  setDefaultFilersMapAction,
   getCaseAction,
   setCaseAction,
   setWizardStepAction('SelectDocumentType'),
