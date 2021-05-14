@@ -102,15 +102,14 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
-  const filersMap = Object.keys(form.filersMap);
-  console.log(representingPartiesNames);
-  //gotta test THIS!!!
-  const representingPartiesNames = filersMap.map(
-    filerContactId =>
-      caseDetail.petitioners.find(
-        petitioner => petitioner.contactId === filerContactId,
-      ).name,
-  );
+  const representingPartiesNames = Object.entries(form.filersMap)
+    .filter(([, isChecked]) => isChecked)
+    .map(
+      ([contactId]) =>
+        caseDetail.petitioners.find(
+          petitioner => petitioner.contactId === contactId,
+        ).name,
+    );
 
   let exported = {
     certificateOfServiceDateFormatted,
