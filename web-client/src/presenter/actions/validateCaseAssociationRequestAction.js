@@ -18,7 +18,6 @@ export const validateCaseAssociationRequestAction = ({
     ...get(state.form),
   };
 
-  // TODO: FIX ERRORS
   const errors = applicationContext
     .getUseCases()
     .validateCaseAssociationRequestInteractor({

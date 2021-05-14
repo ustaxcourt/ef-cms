@@ -43,39 +43,31 @@ export const setDocketEntryMetaFormForEditAction = ({
 
   store.set(state.docketRecordIndex, docketRecordIndex);
 
-  if (documentDetail) {
-    documentDetail.filersMap = {};
-    documentDetail.filers.forEach(
-      filer => (documentDetail.filersMap[filer] = true),
-    );
+  documentDetail.filersMap = {};
+  documentDetail.filers.forEach(
+    filer => (documentDetail.filersMap[filer] = true),
+  );
 
-    documentDetail.servedPartiesCode =
-      documentDetail.servedPartiesCode ||
-      applicationContext
-        .getUtilities()
-        .getServedPartiesCode(documentDetail.servedParties);
+  documentDetail.servedPartiesCode =
+    documentDetail.servedPartiesCode ||
+    applicationContext
+      .getUtilities()
+      .getServedPartiesCode(documentDetail.servedParties);
 
-    store.set(state.form, {
-      ...documentDetail,
-      lodged: !!documentDetail.lodged,
-      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
-      ...deconstructDateWrapper(
-        documentDetail.certificateOfServiceDate,
-        'certificateOfService',
-      ),
-      ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
-      ...deconstructDateWrapper(documentDetail.date),
-    });
+  store.set(state.form, {
+    ...documentDetail,
+    lodged: !!documentDetail.lodged,
+    ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
+    ...deconstructDateWrapper(
+      documentDetail.certificateOfServiceDate,
+      'certificateOfService',
+    ),
+    ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
+    ...deconstructDateWrapper(documentDetail.date),
+  });
 
-    return {
-      key: 'initEventCode',
-      value: documentDetail.eventCode,
-    };
-  } else {
-    // TODO: is this a dead path?
-    store.set(state.form, {
-      ...documentDetail,
-      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
-    });
-  }
+  return {
+    key: 'initEventCode',
+    value: documentDetail.eventCode,
+  };
 };
