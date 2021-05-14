@@ -106,7 +106,7 @@ In this comprehensive study, Flexion UX Designers performed a usability study wi
 
 [IRS Attorney Research Plan](https://docs.google.com/document/d/15CU2XKH2VRDXo8CtostShtK3DixRqis8RyF0oyDSehc/edit?usp=sharing)
 
-[Core System Usability Testing - Findings](https://drive.google.com/open?id=1dRmjUKiWYvdZAgxsXNvnXT_JGm8_H_PQey_u7oEIsVM)
+[Core System Usability Testing - Findings](https://docs.google.com/presentation/d/1AK5_1L7hdrarOxXo12nuSezJbCukPMh_/edit#slide=id.p1)
 
 ## Petitioner Usability Testing (October 2019)
 In this study, Flexion UX Designers performed a usability study with potential petitioners to test the petitioner dashboard and file a petition flow.

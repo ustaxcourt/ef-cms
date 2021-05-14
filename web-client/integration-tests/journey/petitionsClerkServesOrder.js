@@ -1,16 +1,13 @@
-import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const petitionsClerkServesOrder = test => {
   return it('Petitions Clerk serves the order', async () => {
-    const helper = runCompute(withAppContextDecorator(formattedDocketEntries), {
-      state: test.getState(),
-    });
-
     const { docketEntryId } = test;
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    const orderDocument = helper.formattedDocketEntriesOnDocketRecord.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
