@@ -67,7 +67,7 @@ export const EditPetitionerCounsel = connect(
 
               <FormGroup
                 className="margin-bottom-0"
-                errorText={validationErrors && validationErrors.filers}
+                errorText={validationErrors && validationErrors.representing}
                 id={'practitioner-representing'}
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
@@ -104,16 +104,17 @@ export const EditPetitionerCounsel = connect(
                     </div>
                   ))}
                 </fieldset>
-                <div className="margin-top-2">
-                  <ServiceIndicatorRadios
-                    bind={'form'}
-                    getValidationError={() =>
-                      validationErrors && validationErrors.serviceIndicator
-                    }
-                    validateSequence={validateEditPetitionerCounselSequence}
-                  />
-                </div>
               </FormGroup>
+
+              <div className="margin-top-2">
+                <ServiceIndicatorRadios
+                  bind={'form'}
+                  getValidationError={() =>
+                    validationErrors && validationErrors.serviceIndicator
+                  }
+                  validateSequence={validateEditPetitionerCounselSequence}
+                />
+              </div>
             </div>
           </div>
 

@@ -15,7 +15,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 function AddPrivatePractitionerFactory() {}
 
 AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
-  filers: 'Select a represented party',
+  representing: 'Select a represented party',
   serviceIndicator: [
     {
       contains: 'must be one of',
@@ -40,7 +40,7 @@ AddPrivatePractitionerFactory.get = metadata => {
   entityConstructor.prototype.init = function init(rawProps) {
     Object.assign(this, {
       email: rawProps.user?.email,
-      filers: rawProps.filers,
+      representing: rawProps.representing,
       serviceIndicator: rawProps.serviceIndicator,
       user: rawProps.user,
     });
@@ -48,7 +48,7 @@ AddPrivatePractitionerFactory.get = metadata => {
 
   const schema = {
     email: JoiValidationConstants.STRING.optional(),
-    filers: joi.array().items(joi.string().required()).required(),
+    representing: joi.array().items(joi.string().required()).required(),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),

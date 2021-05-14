@@ -2,7 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setPetitionerCounselFormAction } from '../actions/caseAssociation/setPetitionerCounselFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
@@ -13,6 +12,5 @@ export const gotoEditPetitionerCounselSequence = [
   getCaseAction,
   setCaseAction,
   setPetitionerCounselFormAction,
-  setDefaultFilersMapAction,
   setCurrentPageAction('EditPetitionerCounsel'),
 ];

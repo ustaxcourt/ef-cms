@@ -9,27 +9,23 @@ describe('EditPetitionerCounselFactory', () => {
     it('should have error messages for missing fields', () => {
       const entity = EditPetitionerCounselFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: errorMessages.representingPrimary,
+        representing: errorMessages.representing,
       });
     });
 
-    it('should be valid if either representingPrimary or representingSecondary is present and true', () => {
+    it('should be valid if either representing has at least one entry', () => {
       let entity = EditPetitionerCounselFactory.get({
-        representingPrimary: true,
-      });
-      expect(entity.getFormattedValidationErrors()).toEqual(null);
-      entity = EditPetitionerCounselFactory.get({
-        representingSecondary: true,
+        representing: ['02323349-87fe-4d29-91fe-8dd6916d2fda'],
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should not be valid if representingPrimary is false and representingSecondary is not present', () => {
+    it('should not be valid if representing is empty', () => {
       const entity = EditPetitionerCounselFactory.get({
-        representingPrimary: false,
+        representing: [],
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representingPrimary: errorMessages.representingPrimary,
+        representing: errorMessages.representing,
       });
     });
   });

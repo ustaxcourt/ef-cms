@@ -12,7 +12,7 @@ describe('AddPrivatePractitionerFactory', () => {
     it('should have error messages for missing fields', () => {
       const entity = AddPrivatePractitionerFactory.get({});
       expect(entity.getFormattedValidationErrors()).toEqual({
-        filers: errorMessages.filers,
+        representing: errorMessages.representing,
         serviceIndicator: errorMessages.serviceIndicator[1],
         user: errorMessages.user,
       });
@@ -20,27 +20,27 @@ describe('AddPrivatePractitionerFactory', () => {
 
     it('should be valid when all fields are present', () => {
       const entity = AddPrivatePractitionerFactory.get({
-        filers: [mockContactId],
+        representing: [mockContactId],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
-    it('should not be valid if filers is empty', () => {
+    it('should not be valid if representing is empty', () => {
       const entity = AddPrivatePractitionerFactory.get({
-        filers: [],
+        representing: [],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        filers: errorMessages.filers,
+        representing: errorMessages.representing,
       });
     });
 
     it('should not be valid if no email is given and the service preference is electronic', () => {
       const entity = AddPrivatePractitionerFactory.get({
-        filers: [mockContactId],
+        representing: [mockContactId],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });

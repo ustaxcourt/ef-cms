@@ -122,7 +122,7 @@ export const AddPrivatePractitionerModal = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.filers}>
+          <FormGroup errorText={validationErrors.representing}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="representing-legend">
                 Who is this counsel representing?
