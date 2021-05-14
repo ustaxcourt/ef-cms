@@ -15,8 +15,10 @@ export const validatePetitionerInformationFormAction = ({
   get,
   path,
 }) => {
-  const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const {
+    SERVICE_INDICATOR_ERROR,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const { contactPrimary, contactSecondary, partyType } = get(state.form);
 

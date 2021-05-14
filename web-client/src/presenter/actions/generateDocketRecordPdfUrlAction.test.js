@@ -63,7 +63,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][0].includePartyDetail,
+        .calls[0][1].includePartyDetail,
     ).toEqual(true);
   });
 
@@ -92,7 +92,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][0].includePartyDetail,
+        .calls[0][1].includePartyDetail,
     ).toEqual(false);
   });
 });

@@ -17,8 +17,7 @@ export const addPetitionerToCaseAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .addPetitionerToCaseInteractor({
-      applicationContext,
+    .addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: contact.caseCaption,
       contact,
       docketNumber,
