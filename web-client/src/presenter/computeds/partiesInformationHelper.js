@@ -21,6 +21,16 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
 
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
@@ -81,14 +91,25 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
+    let externalType = null;
+
+    if (petitioner.contactId === contactPrimary.contactId) {
+      externalType = 'primary';
+    } else if (contactSecondary?.contactId === petitioner.contactId) {
+      externalType = 'secondary';
+    }
+
+    const editPetitionerLink = isExternalUser
+      ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+      : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
+
     return {
       ...petitioner,
       canEditPetitioner,
+      editPetitionerLink,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
-      showExternalHeader: applicationContext
-        .getUtilities()
-        .isExternalUser(user.role),
+      showExternalHeader: isExternalUser,
     };
   });
 
