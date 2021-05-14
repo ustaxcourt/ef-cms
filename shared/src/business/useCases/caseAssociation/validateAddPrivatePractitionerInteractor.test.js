@@ -8,10 +8,12 @@ const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('validateAddPrivatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty add practitioner', () => {
-    const errors = validateAddPrivatePractitionerInteractor({
+    const errors = validateAddPrivatePractitionerInteractor(
       applicationContext,
-      counsel: {},
-    });
+      {
+        counsel: {},
+      },
+    );
 
     expect(Object.keys(errors)).toEqual([
       'serviceIndicator',
@@ -21,14 +23,16 @@ describe('validateAddPrivatePractitionerInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddPrivatePractitionerInteractor({
+    const errors = validateAddPrivatePractitionerInteractor(
       applicationContext,
-      counsel: {
-        representingPrimary: true,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        user: {},
+      {
+        counsel: {
+          representingPrimary: true,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          user: {},
+        },
       },
-    });
+    );
 
     expect(errors).toEqual(null);
   });

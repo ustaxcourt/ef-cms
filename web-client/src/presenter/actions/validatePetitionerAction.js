@@ -26,10 +26,11 @@ export const validatePetitionerAction = ({
   const caseDetail = get(state.caseDetail);
 
   let errors =
-    applicationContext.getUseCases().validatePetitionerInteractor({
-      applicationContext,
-      contactInfo: contact,
-    }) || {};
+    applicationContext
+      .getUseCases()
+      .validatePetitionerInteractor(applicationContext, {
+        contactInfo: contact,
+      }) || {};
 
   const caseContact = applicationContext
     .getUtilities()

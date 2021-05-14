@@ -25,6 +25,7 @@ describe('validateEditPetitionerCounselAction', () => {
     applicationContext
       .getUseCases()
       .validateEditPetitionerCounselInteractor.mockReturnValue(null);
+
     await runAction(validateEditPetitionerCounselAction, {
       modules: {
         presenter,

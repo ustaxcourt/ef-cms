@@ -4,15 +4,15 @@ const { get } = require('./requests');
 /**
  * opinionAdvancedSearchInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.searchParams the search params
  * @returns {Promise<*>} the promise of the api call
  */
-exports.opinionAdvancedSearchInteractor = ({
+exports.opinionAdvancedSearchInteractor = (
   applicationContext,
-  searchParams,
-}) => {
+  { searchParams },
+) => {
   const queryString = querystring.stringify(searchParams);
 
   return get({

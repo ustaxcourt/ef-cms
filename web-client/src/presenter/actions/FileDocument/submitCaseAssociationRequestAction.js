@@ -47,8 +47,7 @@ export const submitCaseAssociationRequestAction = async ({
   if (documentWithImmediateAssociation) {
     await applicationContext
       .getUseCases()
-      .submitCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
         representingPrimary: documentMetadata.representingPrimary,
         representingSecondary: documentMetadata.representingSecondary,

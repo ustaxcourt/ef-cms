@@ -41,8 +41,7 @@ export const updatePetitionDetailsAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .updatePetitionDetailsInteractor({
-      applicationContext,
+    .updatePetitionDetailsInteractor(applicationContext, {
       docketNumber,
       petitionDetails: {
         ...form,

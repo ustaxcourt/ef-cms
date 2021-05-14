@@ -513,8 +513,10 @@ const allUseCases = {
   validateUserContactInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
-  virusScanPdfInteractor: args =>
-    process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
+  virusScanPdfInteractor: (applicationContext, args) =>
+    process.env.SKIP_VIRUS_SCAN
+      ? null
+      : virusScanPdfInteractor(applicationContext, args),
 };
 tryCatchDecorator(allUseCases);
 
