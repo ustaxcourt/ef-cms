@@ -1,6 +1,9 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  OTHER_FILER_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
@@ -504,24 +507,31 @@ describe('fileDocumentHelper', () => {
           {
             contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
             name: 'bob',
+            otherFilerType: undefined,
           },
           {
             contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
             name: 'sally',
+            otherFilerType: OTHER_FILER_TYPES[1],
           },
           {
             contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
             name: 'rick',
+            otherFilerType: OTHER_FILER_TYPES[0],
           },
         ],
       };
     });
 
-    it('should be set to the names of all filing petitioners', () => {
-      const { filingPartiesNames } = runCompute(fileDocumentHelper, {
+    it('should be set to the names of all filing petitioners and their titles', () => {
+      const { formattedFilingParties } = runCompute(fileDocumentHelper, {
         state,
       });
-      expect(filingPartiesNames).toEqual(['bob', 'rick']);
+
+      expect(formattedFilingParties).toEqual([
+        'bob, Petitioner',
+        `rick, ${OTHER_FILER_TYPES[0]}`,
+      ]);
     });
   });
 });

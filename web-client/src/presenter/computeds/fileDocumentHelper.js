@@ -82,22 +82,28 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
-  let filingPartiesNames;
+  let formattedFilingParties;
   if (form.filersMap) {
-    filingPartiesNames = Object.entries(form.filersMap)
+    formattedFilingParties = Object.entries(form.filersMap)
       .filter(([, isChecked]) => isChecked)
-      .map(
-        ([filerContactId]) =>
-          caseDetail.petitioners.find(
-            petitioner => petitioner.contactId === filerContactId,
-          )?.name,
-      );
+      .map(([filerContactId]) => {
+        const foundPetitioner = caseDetail.petitioners.find(
+          petitioner => petitioner.contactId === filerContactId,
+        );
+
+        if (foundPetitioner) {
+          const petitionerTitle = foundPetitioner.otherFilerType
+            ? foundPetitioner.otherFilerType
+            : 'Petitioner';
+          return `${foundPetitioner.name}, ${petitionerTitle}`;
+        }
+      });
   }
 
   const exported = {
     certificateOfServiceDateFormatted,
-    filingPartiesNames,
     formattedDocketNumbers,
+    formattedFilingParties,
     formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',

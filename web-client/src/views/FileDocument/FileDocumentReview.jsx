@@ -164,24 +164,24 @@ export const FileDocumentReview = connect(
           <div className="tablet:grid-col-6 margin-bottom-1">
             {fileDocumentHelper.secondarySupportingDocuments[idx]
               .showFilingIncludes && (
-              <div className="margin-bottom-0">
-                <label className="usa-label" htmlFor="filing-includes">
-                  Document includes
+                <div className="margin-bottom-0">
+                  <label className="usa-label" htmlFor="filing-includes">
+                    Document includes
                 </label>
-                <ul className="ustc-unstyled-list without-margins">
-                  {item.certificateOfService && (
-                    <li>
-                      Certificate of Service{' '}
-                      {
-                        fileDocumentHelper.secondarySupportingDocuments[idx]
-                          .certificateOfServiceDateFormatted
-                      }
-                    </li>
-                  )}
-                  {item.attachments && <li>Attachment(s)</li>}
-                </ul>
-              </div>
-            )}
+                  <ul className="ustc-unstyled-list without-margins">
+                    {item.certificateOfService && (
+                      <li>
+                        Certificate of Service{' '}
+                        {
+                          fileDocumentHelper.secondarySupportingDocuments[idx]
+                            .certificateOfServiceDateFormatted
+                        }
+                      </li>
+                    )}
+                    {item.attachments && <li>Attachment(s)</li>}
+                  </ul>
+                </div>
+              )}
           </div>
         </div>
       ));
@@ -298,9 +298,11 @@ export const FileDocumentReview = connect(
                             Filing parties
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
-                            {fileDocumentHelper.filingPartiesNames.map(name => (
-                              <li key={name}>{name}, Petitioner</li>
-                            ))}
+                            {fileDocumentHelper.formattedFilingParties.map(
+                              party => (
+                                <li key={party}>{party}</li>
+                              ),
+                            )}
                             {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>
                         </div>
