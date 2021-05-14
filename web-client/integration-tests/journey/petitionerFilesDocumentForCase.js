@@ -132,16 +132,16 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
-    console.log('do we have filersmap?!!!!', test.getState('form'));
-
     const contactPrimary = contactPrimaryFromState(test);
-    expect(test.getState('form.filersMap')).toEqual([
-      {
-        [contactPrimary.contactId]: true,
-      },
-    ]);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
+
+    expect(test.getState('form.filers')).toEqual([contactPrimary.contactId]);
 
     expect(test.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,
