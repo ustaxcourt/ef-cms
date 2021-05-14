@@ -6,10 +6,7 @@ const { post } = require('../requests');
  * @param {object} params the params object
  * @param {object} params.applicationContext the application context
  * @param {string} params.docketNumber the docket number of the case
- * @param {boolean} params.representingPrimary whether the practitioner is
- * representing the primary contact
- * @param {boolean} params.representingSecondary whether the practitioner is
- * representing the secondary contact
+ * @param {Array} params.filers the contact ids the private practitioner is representing
  * @param {string} params.userId the user id
  * @param {string} params.serviceIndicator the service indicator for the petitioner counsel (electronic, paper, none)
  * @returns {Promise<*>} the promise of the api call
@@ -17,8 +14,7 @@ const { post } = require('../requests');
 exports.associatePrivatePractitionerWithCaseInteractor = ({
   applicationContext,
   docketNumber,
-  representingPrimary,
-  representingSecondary,
+  filers,
   serviceIndicator,
   userId,
 }) => {
@@ -26,8 +22,7 @@ exports.associatePrivatePractitionerWithCaseInteractor = ({
     applicationContext,
     body: {
       docketNumber,
-      representingPrimary,
-      representingSecondary,
+      filers,
       serviceIndicator,
       userId,
     },
