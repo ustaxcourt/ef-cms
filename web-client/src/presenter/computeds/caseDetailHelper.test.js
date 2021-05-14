@@ -525,7 +525,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the case contains a served docket entry', () => {
+  it('should not show petition processing alert if user is an external user and the case contains a served petition', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -545,7 +545,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed docket entry', () => {
+  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed petition', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -554,7 +554,7 @@ describe('case detail computed', () => {
       state: {
         ...getBaseState(user),
         caseDetail: {
-          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+          docketEntries: [{ documentType: 'Petition', isLegacyServed: true }],
         },
         currentPage: 'CaseDetailExternal',
         form: {},
@@ -563,7 +563,28 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should show petition processing alert if user is an external user and the case does not contain any served docket entries', () => {
+  it('should show petition processing alert if user is an external user and the petition is not served', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [
+            { documentType: 'Petition' },
+            { documentType: 'Answer', isLegacyServed: true },
+          ],
+        },
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showPetitionProcessingAlert).toEqual(true);
+  });
+
+  it('should show petition processing alert if user is an external user and the case contains a served docket entry but the petition is not served', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
