@@ -1,5 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -131,7 +132,14 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
-    expect(test.getState('form.partyPrimary')).toEqual(true);
+    console.log('do we have filersmap?!!!!', test.getState('form'));
+
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(test.getState('form.filersMap')).toEqual([
+      {
+        [contactPrimary.contactId]: true,
+      },
+    ]);
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
