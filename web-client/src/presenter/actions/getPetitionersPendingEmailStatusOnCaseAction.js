@@ -15,15 +15,17 @@ export const getPetitionersPendingEmailStatusOnCaseAction = async ({
 
   const { petitioners } = get(state.caseDetail);
 
-  for (let petitioner of petitioners) {
-    const pendingEmail = await applicationContext
-      .getUseCases()
-      .getUserPendingEmailStatusInteractor({
-        applicationContext,
-        userId: petitioner.contactId,
-      });
+  if (petitioners) {
+    for (let petitioner of petitioners) {
+      const pendingEmail = await applicationContext
+        .getUseCases()
+        .getUserPendingEmailStatusInteractor({
+          applicationContext,
+          userId: petitioner.contactId,
+        });
 
-    pendingEmails[petitioner.contactId] = pendingEmail;
+      pendingEmails[petitioner.contactId] = pendingEmail;
+    }
   }
 
   return { pendingEmails };
