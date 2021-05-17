@@ -1418,6 +1418,22 @@
               type: "array"
               flags: 
                 presence: "optional"
+              items: 
+                - 
+                  type: "string"
+                  flags: 
+                    presence: "required"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
             filingDate: 
               type: "date"
               flags: 

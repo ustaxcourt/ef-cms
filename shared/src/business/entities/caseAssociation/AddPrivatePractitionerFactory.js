@@ -48,7 +48,10 @@ AddPrivatePractitionerFactory.get = metadata => {
 
   const schema = {
     email: JoiValidationConstants.STRING.optional(),
-    representing: joi.array().items(joi.string().required()).required(),
+    representing: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
