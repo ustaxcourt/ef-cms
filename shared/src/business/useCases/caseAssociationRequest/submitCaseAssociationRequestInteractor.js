@@ -47,7 +47,7 @@ exports.submitCaseAssociationRequestInteractor = async (
     return await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber,
-      filers,
+      representing: filers,
       user,
     });
   } else if (isIrsPractitioner) {
