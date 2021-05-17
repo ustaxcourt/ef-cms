@@ -147,11 +147,11 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     const contactPrimary = contactPrimaryFromState(test);
     const contactSecondary = contactSecondaryFromState(test);
     await test.runSequence('updateModalValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateModalValueSequence', {
-      key: `filersMap.${contactSecondary.contactId}`,
+      key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 

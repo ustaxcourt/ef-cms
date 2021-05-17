@@ -20,16 +20,16 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
     const contactSecondary = contactSecondaryFromState(test);
 
     expect(
-      test.getState(`form.filersMap.${contactPrimary.contactId}`),
+      test.getState(`form.representingMap.${contactPrimary.contactId}`),
     ).toBeFalsy();
     expect(
-      test.getState(`form.filersMap.${contactSecondary.contactId}`),
+      test.getState(`form.representingMap.${contactSecondary.contactId}`),
     ).toBeTruthy();
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
 
     await test.runSequence('updateFormValueSequence', {
-      key: `filersMap.${contactSecondary.contactId}`,
+      key: `representingMap.${contactSecondary.contactId}`,
       value: false,
     });
 
@@ -40,11 +40,11 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
-      key: `filersMap.${contactSecondary.contactId}`,
+      key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
