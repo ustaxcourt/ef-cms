@@ -285,6 +285,13 @@ const updateCaseWorkItems = async ({
         }),
       );
     }
+
+    console.log(
+      '-----------',
+      previousCase.docketNumberSuffix,
+      updatedCase.docketNumberSuffix,
+    );
+
     if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
       workItemRequests.push(
         applicationContext

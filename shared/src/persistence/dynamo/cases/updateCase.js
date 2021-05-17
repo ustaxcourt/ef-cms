@@ -2,28 +2,6 @@ const client = require('../../dynamodbClientService');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
-
-// const {
-//   getWorkItemMappingsByDocketNumber,
-// } = require('../workitems/getWorkItemMappingsByDocketNumber');
-// const {
-//   updateWorkItemAssociatedJudge,
-// } = require('../workitems/updateWorkItemAssociatedJudge');
-// const {
-//   updateWorkItemCaseIsInProgress,
-// } = require('../workitems/updateWorkItemCaseIsInProgress');
-// const {
-//   updateWorkItemCaseStatus,
-// } = require('../workitems/updateWorkItemCaseStatus');
-// const {
-//   updateWorkItemCaseTitle,
-// } = require('../workitems/updateWorkItemCaseTitle');
-// const {
-//   updateWorkItemDocketNumberSuffix,
-// } = require('../workitems/updateWorkItemDocketNumberSuffix');
-// const {
-//   updateWorkItemTrialDate,
-// } = require('../workitems/updateWorkItemTrialDate');
 const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
