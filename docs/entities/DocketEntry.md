@@ -1321,8 +1321,6 @@
       items: 
         - 
           type: "string"
-          flags: 
-            presence: "required"
           rules: 
             - 
               name: "min"
