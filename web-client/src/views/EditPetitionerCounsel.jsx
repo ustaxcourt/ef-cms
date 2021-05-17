@@ -14,7 +14,7 @@ import React from 'react';
 
 export const EditPetitionerCounsel = connect(
   {
-    caseDetailContactHelper: state.caseDetailContactHelper,
+    caseDetail: state.caseDetail,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -31,7 +31,7 @@ export const EditPetitionerCounsel = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionerCounsel({
-    caseDetailContactHelper,
+    caseDetail,
     form,
     formCancelToggleCancelSequence,
     openRemovePetitionerCounselModalSequence,
@@ -67,9 +67,7 @@ export const EditPetitionerCounsel = connect(
 
               <FormGroup
                 className="margin-bottom-0"
-                errorText={
-                  validationErrors && validationErrors.representingPrimary
-                }
+                errorText={validationErrors && validationErrors.representing}
                 id={'practitioner-representing'}
               >
                 <fieldset className="usa-fieldset margin-bottom-0">
@@ -79,67 +77,44 @@ export const EditPetitionerCounsel = connect(
                   >
                     Representing
                   </legend>
-                  <div className="usa-checkbox">
-                    <input
-                      aria-describedby={'practitioner-representing-legend'}
-                      checked={form.representingPrimary || false}
-                      className="usa-checkbox__input"
-                      id={'representing-primary'}
-                      name={'representingPrimary'}
-                      type="checkbox"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                        validateEditPetitionerCounselSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label inline-block"
-                      htmlFor={'representing-primary'}
-                    >
-                      {caseDetailContactHelper.contactPrimary.name}
-                    </label>
-                  </div>
 
-                  {caseDetailContactHelper.contactSecondary &&
-                    caseDetailContactHelper.contactSecondary.name && (
-                      <div className="usa-checkbox">
-                        <input
-                          aria-describedby={'practitioner-representing-legend'}
-                          checked={form.representingSecondary || false}
-                          className="usa-checkbox__input"
-                          id={'representing-secondary'}
-                          name={'representingSecondary'}
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                            validateEditPetitionerCounselSequence();
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label inline-block"
-                          htmlFor={'representing-secondary'}
-                        >
-                          {caseDetailContactHelper.contactSecondary.name}
-                        </label>
-                      </div>
-                    )}
+                  {caseDetail.petitioners.map(petitioner => (
+                    <div className="usa-checkbox" key={petitioner.contactId}>
+                      <input
+                        aria-describedby="representing-legend"
+                        checked={form.filersMap[petitioner.contactId] || false}
+                        className="usa-checkbox__input"
+                        id={`filing-${petitioner.contactId}`}
+                        name={`filersMap.${petitioner.contactId}`}
+                        type="checkbox"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                          validateEditPetitionerCounselSequence();
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label  inline-block"
+                        htmlFor={`filing-${petitioner.contactId}`}
+                      >
+                        {petitioner.name}
+                      </label>
+                    </div>
+                  ))}
                 </fieldset>
-                <div className="margin-top-2">
-                  <ServiceIndicatorRadios
-                    bind={'form'}
-                    getValidationError={() =>
-                      validationErrors && validationErrors.serviceIndicator
-                    }
-                    validateSequence={validateEditPetitionerCounselSequence}
-                  />
-                </div>
               </FormGroup>
+
+              <div className="margin-top-2">
+                <ServiceIndicatorRadios
+                  bind={'form'}
+                  getValidationError={() =>
+                    validationErrors && validationErrors.serviceIndicator
+                  }
+                  validateSequence={validateEditPetitionerCounselSequence}
+                />
+              </div>
             </div>
           </div>
 

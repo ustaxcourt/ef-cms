@@ -8,16 +8,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.props the cerebral props
- * @param {object} providers.applicationContext the applicationContext
  * @returns {object} props object
  */
 
-export const setPetitionerCounselFormAction = ({
-  applicationContext,
-  get,
-  props,
-  store,
-}) => {
+export const setPetitionerCounselFormAction = ({ get, props, store }) => {
   const caseDetail = get(state.caseDetail);
   const { barNumber } = props;
 
@@ -26,23 +20,10 @@ export const setPetitionerCounselFormAction = ({
     practitioner => practitioner.barNumber === barNumber,
   );
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail);
-
-  privatePractitioner.representingPrimary = !!privatePractitioner.representing.find(
-    r => r === contactPrimary.contactId,
-  );
-
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(caseDetail);
-
-  privatePractitioner.representingSecondary =
-    !!contactSecondary &&
-    !!privatePractitioner.representing.find(
-      r => r === contactSecondary.contactId,
-    );
-
   store.set(state.form, privatePractitioner);
+  const filersMap = {};
+  privatePractitioner.representing.forEach(contactId => {
+    filersMap[contactId] = true;
+  });
+  store.set(state.form.filersMap, filersMap);
 };

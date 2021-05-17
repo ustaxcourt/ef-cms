@@ -1,5 +1,12 @@
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+  uploadPetition,
+  wait,
+} from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
-import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
 const test = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
@@ -32,7 +39,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'dateReceived',
       'eventCode',
       'documentType',
-      'partyPrimary',
+      'filers',
     ];
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual(
@@ -72,8 +79,10 @@ describe('Docket Clerk edits a paper filing journey', () => {
       value: 'Little Rock, AR',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

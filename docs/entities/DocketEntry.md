@@ -1314,6 +1314,10 @@
             allow: 
               - ""
               - null
+    filers: 
+      type: "array"
+      flags: 
+        presence: "optional"
     filingDate: 
       type: "date"
       flags: 
@@ -1636,16 +1640,6 @@
       type: "boolean"
       flags: 
         presence: "optional"
-    partyPrimary: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Use the primary contact to compose the filedBy text."
-    partySecondary: 
-      type: "boolean"
-      flags: 
-        presence: "optional"
-        description: "Use the secondary contact to compose the filedBy text."
     pending: 
       type: "boolean"
       flags: 

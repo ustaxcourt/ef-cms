@@ -90,9 +90,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     'Motion to Substitute Parties and Change Caption',
   ].includes(documentType);
 
-  const partyValidationError =
-    validationErrors.representingPrimary ||
-    validationErrors.representingSecondary;
+  const partyValidationError = validationErrors.filers;
 
   const showFilingIncludes =
     form.certificateOfService || (documentWithAttachments && form.attachments);
@@ -104,6 +102,15 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
+  const representingPartiesNames = Object.entries(form.filersMap)
+    .filter(([, isChecked]) => isChecked)
+    .map(
+      ([contactId]) =>
+        caseDetail.petitioners.find(
+          petitioner => petitioner.contactId === contactId,
+        ).name,
+    );
+
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
@@ -112,6 +119,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documents,
     documentsForSelect,
     partyValidationError,
+    representingPartiesNames,
     showFilingIncludes,
     showFilingNotIncludes,
     showPartiesRepresenting,

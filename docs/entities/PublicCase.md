@@ -800,6 +800,21 @@
         - 
           type: "object"
           keys: 
+            contactId: 
+              type: "string"
+              flags: 
+                presence: "required"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "guid"
+                  args: 
+                    options: 
+                      version: 
+                        - "uuidv4"
             contactType: 
               type: "string"
               flags: 
