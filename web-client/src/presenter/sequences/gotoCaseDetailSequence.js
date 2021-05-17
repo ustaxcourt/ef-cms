@@ -56,6 +56,12 @@ const gotoCaseDetailInternal = [
 const gotoCaseDetailExternal = [
   getCaseAssociationAction,
   setCaseAssociationAction,
+  setCurrentPageAction('CaseDetail'),
+];
+
+const gotoCaseDetailExternalPractitioners = [
+  getCaseAssociationAction,
+  setCaseAssociationAction,
   getPetitionersPendingEmailStatusOnCaseAction,
   setPetitionersPendingEmailStatusOnCaseAction,
   setCurrentPageAction('CaseDetail'),
@@ -99,13 +105,12 @@ export const gotoCaseDetailSequence = [
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
-      [
-        USER_ROLES.petitioner,
-        USER_ROLES.privatePractitioner,
-        USER_ROLES.irsPractitioner,
-        USER_ROLES.irsSuperuser,
-      ],
+      [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
       gotoCaseDetailExternal,
+    ),
+    ...takePathForRoles(
+      [USER_ROLES.privatePractitioner, USER_ROLES.irsPractitioner],
+      gotoCaseDetailExternalPractitioners,
     ),
     chambers: gotoCaseDetailInternalWithNotes,
     judge: gotoCaseDetailInternalWithNotes,
