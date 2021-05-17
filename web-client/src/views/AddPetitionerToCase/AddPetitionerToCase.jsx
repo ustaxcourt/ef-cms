@@ -79,7 +79,7 @@ export const AddPetitionerToCase = connect(
               </select>
             </FormGroup>
 
-            <FormGroup errorText={validationErrors.name}>
+            <FormGroup errorText={validationErrors && validationErrors.name}>
               <label className="usa-label" htmlFor="name">
                 <span>Name</span>
               </label>
@@ -100,7 +100,9 @@ export const AddPetitionerToCase = connect(
               />
             </FormGroup>
 
-            <FormGroup errorText={validationErrors.additionalName}>
+            <FormGroup
+              errorText={validationErrors && validationErrors.additionalName}
+            >
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
