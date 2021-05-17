@@ -684,6 +684,7 @@ jobs:
             ENV=$(./get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
@@ -706,6 +707,18 @@ jobs:
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
+          name: Disable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "ENV=${ENV}" \
+               --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream-trigger.sh"
+            fi
+      - run:
           name: Run Migration
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -722,6 +735,7 @@ jobs:
             fi
       - run:
           name: Wait for SQS Queue to Empty
+          no_output_timeout: 5h
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
@@ -730,6 +744,18 @@ jobs:
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+            fi
+      - run:
+          name: Enable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+                -e "ENV=${ENV}" \
+                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
 
   smoketests:
