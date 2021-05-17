@@ -22,10 +22,8 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
 
-  const formattedPrivatePractitioners = (
-    caseDetail.privatePractitioners || []
-  ).map(practitioner =>
-    formatCounsel({ counsel: practitioner, screenMetadata }),
+  const formattedPrivatePractitioners = caseDetail.privatePractitioners.map(
+    practitioner => formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
   const formattedParties = (caseDetail.petitioners || []).map(petitioner => {

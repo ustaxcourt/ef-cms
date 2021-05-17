@@ -5,28 +5,32 @@ import { requestAccessHelper as requestAccessHelperComputed } from './requestAcc
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const state = {
-  caseDetail: MOCK_CASE,
-  form: {},
-  validationErrors: {},
-};
-
-const requestAccessHelper = withAppContextDecorator(
-  requestAccessHelperComputed,
-  applicationContext,
-);
-
-const filersMap = {
-  '4e53fade-4966-4efe-8b01-0cb5f587eb47': true,
-  '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': false,
-  '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
-};
-
-applicationContext.getCurrentUser = () => ({
-  role: ROLES.privatePractitioner,
-});
-
 describe('requestAccessHelper', () => {
+  const mockContactId1 = '4e53fade-4966-4efe-8b01-0cb5f587eb47';
+  const mockContactId2 = '68a1e378-6e96-4e61-b06e-2cb4e6c22f48';
+  const mockContactId3 = '00a770ee-eb7a-45df-a1ff-df1c01b9d756';
+
+  const state = {
+    caseDetail: MOCK_CASE,
+    form: {},
+    validationErrors: {},
+  };
+
+  const requestAccessHelper = withAppContextDecorator(
+    requestAccessHelperComputed,
+    applicationContext,
+  );
+
+  const filersMap = {
+    [mockContactId1]: true,
+    [mockContactId2]: false,
+    [mockContactId3]: true,
+  };
+
+  applicationContext.getCurrentUser = () => ({
+    role: ROLES.privatePractitioner,
+  });
+
   beforeEach(() => {
     state.form = {
       filersMap,
@@ -34,15 +38,15 @@ describe('requestAccessHelper', () => {
     state.caseDetail = {
       petitioners: [
         {
-          contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
+          contactId: mockContactId1,
           name: 'bob',
         },
         {
-          contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
+          contactId: mockContactId2,
           name: 'sally',
         },
         {
-          contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
+          contactId: mockContactId3,
           name: 'rick',
         },
       ],
@@ -186,24 +190,24 @@ describe('requestAccessHelper', () => {
     beforeEach(() => {
       state.form = {
         filersMap: {
-          '4e53fade-4966-4efe-8b01-0cb5f587eb47': true,
-          '68a1e378-6e96-4e61-b06e-2cb4e6c22f48': false,
-          '68a1e378-6e96-4e61-b06g-2cb4e6c22f47': true,
+          [mockContactId1]: true,
+          [mockContactId2]: false,
+          [mockContactId3]: true,
         },
       };
 
       state.caseDetail = {
         petitioners: [
           {
-            contactId: '4e53fade-4966-4efe-8b01-0cb5f587eb47',
+            contactId: mockContactId1,
             name: 'bob',
           },
           {
-            contactId: '68a1e378-6e96-4e61-b06e-2cb4e6c22f48',
+            contactId: mockContactId2,
             name: 'sally',
           },
           {
-            contactId: '68a1e378-6e96-4e61-b06g-2cb4e6c22f47',
+            contactId: mockContactId3,
             name: 'rick',
           },
         ],
