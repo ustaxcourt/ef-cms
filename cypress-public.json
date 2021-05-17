@@ -9,5 +9,5 @@
   "requestTimeout": 12000,
   "viewportWidth": 1200,
   "viewportHeight": 900,
-  "testFiles": "public/*.spec.js"
+  "testFiles": "public/advanced-search.spec.js"
 }
