@@ -1417,7 +1417,12 @@
             filers: 
               type: "array"
               flags: 
-                presence: "optional"
+                presence: "required"
+              items: 
+                - 
+                  type: "string"
+                  flags: 
+                    presence: "required"
             filingDate: 
               type: "date"
               flags: 

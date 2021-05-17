@@ -1,9 +1,5 @@
 const joi = require('joi');
 const {
-  addPropertyHelper,
-  makeRequiredHelper,
-} = require('./externalDocumentHelpers');
-const {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
@@ -23,7 +19,8 @@ const {
 const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
-const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
+const { includes } = require('lodash');
+const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
 const VALIDATION_ERROR_MESSAGES = {
   additionalInfo: [
@@ -200,6 +197,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     eventCode: JoiValidationConstants.STRING.valid(
       ...ALL_EVENT_CODES,
     ).optional(),
+    filers: joi.array().items(joi.string().required()).required(),
     freeText: JoiValidationConstants.STRING.optional(),
     hasSupportingDocuments: joi.boolean().required(),
     lodged: joi.boolean().optional(),
@@ -216,7 +214,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    filers: joi.array().items(joi.string().required()).required(),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: JoiValidationConstants.STRING,
     partyIrsPractitioner: joi.boolean(),
@@ -230,16 +227,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     secondarySupportingDocuments: joi.array().optional(),
     selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
     supportingDocuments: joi.array().optional(),
-  };
-
-  const addProperty = (itemName, itemSchema, itemErrorMessage) => {
-    addPropertyHelper({
-      VALIDATION_ERROR_MESSAGES,
-      itemErrorMessage,
-      itemName,
-      itemSchema,
-      schema,
-    });
   };
 
   const makeRequired = itemName => {
@@ -288,45 +275,6 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
     if (documentMetadata.secondaryDocumentFile) {
       makeRequired('hasSecondarySupportingDocuments');
-    }
-  }
-
-  if (
-    documentMetadata.selectedCases &&
-    documentMetadata.selectedCases.length > 1
-  ) {
-    if (documentMetadata.partyIrsPractitioner !== true) {
-      const casesWithAPartySelected = reduce(
-        documentMetadata.casesParties,
-        (accArray, parties, docketNumber) => {
-          if (some(values(parties))) {
-            accArray.push(docketNumber);
-          }
-          return accArray;
-        },
-        [],
-      );
-      if (
-        !isEqual(
-          sortBy(documentMetadata.selectedCases),
-          sortBy(casesWithAPartySelected),
-        )
-      ) {
-        addProperty(
-          'filers',
-          joi.array().items(joi.string().required()).required(),
-        );
-      }
-    }
-  } else {
-    if (
-      documentMetadata.filers.length === 0 &&
-      documentMetadata.partyIrsPractitioner !== true
-    ) {
-      addProperty(
-        'filers',
-        joi.array().items(joi.string().required()).required(),
-      );
     }
   }
 
