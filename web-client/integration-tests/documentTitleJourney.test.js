@@ -208,6 +208,11 @@ describe('Document title journey', () => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
+
     await test.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(test.getState('form.documentTitle')).toEqual(
