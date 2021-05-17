@@ -359,6 +359,30 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should remove a coversheet for the document if the previous document version requires a coversheet but the new document type does not', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet.mockReturnValueOnce({
+        ...MOCK_CASE,
+        docketEntries,
+        docketNumber: '101-20',
+      });
+
+    expect(docketEntries[4].eventCode).toBe('USCA'); // requires a cover sheet.
+
+    await updateDocketEntryMetaInteractor(applicationContext, {
+      docketEntryMeta: {
+        ...docketEntries[4],
+        eventCode: 'MISC', // does NOT require a cover sheet
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().removeCoversheet,
+    ).toHaveBeenCalled();
+  });
+
   it('should not generate a coversheet for the document if the filingDate field is changed on a document that does NOT require a coversheet', async () => {
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
