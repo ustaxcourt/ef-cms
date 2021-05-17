@@ -85,7 +85,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
     await associatePrivatePractitionerWithCaseInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      filers: [caseRecord.petitioners[0].contactId],
+      representing: [caseRecord.petitioners[0].contactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
