@@ -763,6 +763,10 @@ const {
 const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
+
+const {
+  getWorkItemMappingsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
 const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
@@ -1045,8 +1049,26 @@ const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  updateWorkItemAssociatedJudge,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
+const {
+  updateWorkItemCaseIsInProgress,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseIsInProgress');
+const {
+  updateWorkItemCaseStatus,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus');
+const {
+  updateWorkItemCaseTitle,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle');
+const {
+  updateWorkItemDocketNumberSuffix,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix');
+const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  updateWorkItemTrialDate,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
@@ -1324,11 +1346,18 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  getWorkItemMappingsByDocketNumber,
   isEmailAvailable,
   isFileExists,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
+  updateWorkItemAssociatedJudge,
+  updateWorkItemCaseIsInProgress,
+  updateWorkItemCaseStatus,
+  updateWorkItemCaseTitle,
+  updateWorkItemDocketNumberSuffix,
+  updateWorkItemTrialDate,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
