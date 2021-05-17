@@ -94,7 +94,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
-    // todo: write unit test
     let externalType = null;
 
     if (petitioner.contactId === contactPrimary?.contactId) {
@@ -106,7 +105,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
     const editPetitionerLink = isExternalUser
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
-    // todo: end
 
     return {
       ...petitioner,
