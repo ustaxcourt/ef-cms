@@ -97,9 +97,9 @@ export const partiesInformationHelper = (get, applicationContext) => {
     // todo: write unit test
     let externalType = null;
 
-    if (petitioner.contactId === contactPrimary.contactId) {
+    if (petitioner.contactId === contactPrimary?.contactId) {
       externalType = 'primary';
-    } else if (contactSecondary?.contactId === petitioner.contactId) {
+    } else if (petitioner.contactId === contactSecondary?.contactId) {
       externalType = 'secondary';
     }
 

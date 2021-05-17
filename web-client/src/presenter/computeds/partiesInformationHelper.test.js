@@ -32,20 +32,8 @@ describe('partiesInformationHelper', () => {
     role: ROLES.docketClerk,
     userId: 'a09053ab-58c7-4384-96a1-bd5fbe14977a',
   };
-  const mockPetitioner = {
-    contactId: 'f94cef8e-17b8-4504-9296-af911b32020a',
-    contactType: CONTACT_TYPES.primary,
-    role: ROLES.petitioner,
-    userId: 'f94cef8e-17b8-4504-9296-af911b32020a',
-  };
-  const mockPrivatePractitioner = {
-    barNumber: 'PT8888',
-    email: mockEmail,
-    name: 'Test Name',
-    representing: [mockPetitioner.contactId],
-    role: ROLES.privatePractitioner,
-    userId: '39f7c7ee-ab75-492a-a4ee-63755a24e845',
-  };
+  let mockPetitioner;
+  let mockPrivatePractitioner;
   const mockIrsPractitioner = {
     barNumber: 'RT1111',
     email: mockEmail,
@@ -70,6 +58,20 @@ describe('partiesInformationHelper', () => {
 
   beforeEach(() => {
     mockUser = {};
+    mockPetitioner = {
+      contactId: 'f94cef8e-17b8-4504-9296-af911b32020a',
+      contactType: CONTACT_TYPES.primary,
+      role: ROLES.petitioner,
+      userId: 'f94cef8e-17b8-4504-9296-af911b32020a',
+    };
+    mockPrivatePractitioner = {
+      barNumber: 'PT8888',
+      email: mockEmail,
+      name: 'Test Name',
+      representing: [mockPetitioner.contactId],
+      role: ROLES.privatePractitioner,
+      userId: '39f7c7ee-ab75-492a-a4ee-63755a24e845',
+    };
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
   });
 
@@ -776,6 +778,90 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
+    });
+  });
+
+  describe('editPetitionerLink', () => {
+    it('should return primary contact edit if user is external and user is primary', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.privatePractitioner,
+      });
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+      expect(result.formattedPetitioners[0].editPetitionerLink).toBe(
+        '/case-detail/101-19/contacts/primary/edit',
+      );
+    });
+
+    it('should return secondary contact edit if user is external and user is secondary', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.privatePractitioner,
+      });
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
+            petitioners: [
+              mockPetitioner,
+              {
+                ...mockPetitioner,
+                contactId: 'a94cef8e-17b8-4504-9296-af911b32020a',
+                contactType: 'secondary',
+              },
+            ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+      expect(result.formattedPetitioners[1].editPetitionerLink).toBe(
+        '/case-detail/101-19/contacts/secondary/edit',
+      );
+    });
+
+    it('should return edit-petitioner-information url if the user is internal', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+      expect(result.formattedPetitioners[0].editPetitionerLink).toBe(
+        `/case-detail/101-19/edit-petitioner-information/${mockPetitioner.contactId}`,
+      );
     });
   });
 });
