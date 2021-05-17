@@ -88,7 +88,6 @@ exports.addPaperFilingInteractor = async (
       relationship,
       userId: user.userId,
     },
-    // petitioners is not being persisted to DocketEntry, but used to generate filedBy
     { applicationContext, petitioners: caseEntity.petitioners },
   );
 

@@ -114,7 +114,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
-  filers: joi.array().optional(),
+  filers: joi.array().items(joi.string().required()).required(),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
