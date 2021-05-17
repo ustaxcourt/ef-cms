@@ -19,8 +19,6 @@ export const validateAddPrivatePractitionerAction = ({
     ...get(state.modal),
   };
 
-  counsel.representing = counsel.filers;
-
   const errors = applicationContext
     .getUseCases()
     .validateAddPrivatePractitionerInteractor({
