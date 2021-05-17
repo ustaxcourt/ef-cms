@@ -11,6 +11,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getPendingEmailsOnCaseAction } from '../actions/getPendingEmailsOnCaseAction';
+import { getPetitionersPendingEmailStatusOnCaseAction } from '../actions/getPetitionersPendingEmailStatusOnCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { parallel } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
@@ -28,6 +29,7 @@ import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setPendingEmailsForPetitionersOnCaseAction } from '../actions/setPendingEmailsForPetitionersOnCaseAction';
+import { setPetitionersPendingEmailStatusOnCaseAction } from '../actions/setPetitionersPendingEmailStatusOnCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -54,6 +56,8 @@ const gotoCaseDetailInternal = [
 const gotoCaseDetailExternal = [
   getCaseAssociationAction,
   setCaseAssociationAction,
+  getPetitionersPendingEmailStatusOnCaseAction,
+  setPetitionersPendingEmailStatusOnCaseAction,
   setCurrentPageAction('CaseDetail'),
 ];
 

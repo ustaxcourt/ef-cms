@@ -57,11 +57,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
           : 'Participant';
     }
 
-    petitioner.formattedPendingEmail =
+    if (
       screenMetadata.pendingEmails &&
       screenMetadata.pendingEmails[petitioner.contactId]
-        ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
-        : undefined;
+    ) {
+      petitioner.formattedPendingEmail = isExternalUser
+        ? 'Email Pending'
+        : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
+    }
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
@@ -91,6 +94,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
+    // todo: write unit test
     let externalType = null;
 
     if (petitioner.contactId === contactPrimary.contactId) {
@@ -102,6 +106,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     const editPetitionerLink = isExternalUser
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
+    // todo: end
 
     return {
       ...petitioner,

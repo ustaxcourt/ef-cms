@@ -393,6 +393,29 @@ describe('partiesInformationHelper', () => {
         result.formattedPetitioners[0].formattedPendingEmail,
       ).toBeUndefined();
     });
+
+    it('should set formattedPendingEmail to `Email Pending` when the petitioner has a pending email for an external user', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: {
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [mockPrivatePractitioner],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {
+              [mockPetitioner.contactId]: true,
+            },
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].formattedPendingEmail).toBe(
+        'Email Pending',
+      );
+    });
   });
 
   describe('formattedRespondents', () => {
