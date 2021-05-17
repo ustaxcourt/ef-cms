@@ -22,7 +22,6 @@ export const validateEditPetitionerCounselAction = ({
   } = applicationContext.getConstants();
 
   const practitioner = get(state.form);
-  practitioner.representing = practitioner.filers;
 
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 

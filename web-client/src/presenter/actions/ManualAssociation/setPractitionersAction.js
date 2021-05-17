@@ -18,5 +18,5 @@ export const setPractitionersAction = ({ props, store }) => {
     store.set(state.modal.user, practitionerMatches[0]);
   }
 
-  store.set(state.modal.filersMap, {});
+  store.set(state.modal.representingMap, {});
 };

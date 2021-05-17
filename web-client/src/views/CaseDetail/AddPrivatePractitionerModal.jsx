@@ -132,10 +132,12 @@ export const AddPrivatePractitionerModal = connect(
                 <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
                     aria-describedby="representing-legend"
-                    checked={modal.filersMap[petitioner.contactId] || false}
+                    checked={
+                      modal.representingMap[petitioner.contactId] || false
+                    }
                     className="usa-checkbox__input"
-                    id={`filing-${petitioner.contactId}`}
-                    name={`filersMap.${petitioner.contactId}`}
+                    id={`representing-${petitioner.contactId}`}
+                    name={`representingMap.${petitioner.contactId}`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({
@@ -147,7 +149,7 @@ export const AddPrivatePractitionerModal = connect(
                   />
                   <label
                     className="usa-checkbox__label  inline-block"
-                    htmlFor={`filing-${petitioner.contactId}`}
+                    htmlFor={`representing-${petitioner.contactId}`}
                   >
                     {petitioner.name}
                   </label>

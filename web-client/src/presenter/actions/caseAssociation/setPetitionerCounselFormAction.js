@@ -21,9 +21,9 @@ export const setPetitionerCounselFormAction = ({ get, props, store }) => {
   );
 
   store.set(state.form, privatePractitioner);
-  const filersMap = {};
+  const representingMap = {};
   privatePractitioner.representing.forEach(contactId => {
-    filersMap[contactId] = true;
+    representingMap[contactId] = true;
   });
-  store.set(state.form.filersMap, filersMap);
+  store.set(state.form.representingMap, representingMap);
 };

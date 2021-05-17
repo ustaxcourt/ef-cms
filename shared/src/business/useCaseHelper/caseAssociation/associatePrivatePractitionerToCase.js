@@ -9,10 +9,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {boolean} providers.representingPrimary true if the practitioner is
- * representing the primary contact on the case, false otherwise
- * @param {boolean} providers.representingSecondary true if the practitioner is
- * representing the secondary contact on the case, false otherwise
+ * @param {Array} params.representing the contact ids the private practitioner is representing
  * @param {object} providers.user the user object for the logged in user
  * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
@@ -20,7 +17,7 @@ const { UserCase } = require('../../entities/UserCase');
 exports.associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
-  filers,
+  representing,
   serviceIndicator,
   user,
 }) => {
@@ -54,7 +51,7 @@ exports.associatePrivatePractitionerToCase = async ({
     const { petitioners } = caseEntity;
 
     petitioners.map(petitioner => {
-      if (filers.includes(petitioner.contactId)) {
+      if (representing.includes(petitioner.contactId)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
       }
     });
@@ -62,7 +59,7 @@ exports.associatePrivatePractitionerToCase = async ({
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representing: filers,
+        representing,
         serviceIndicator,
       }),
     );
