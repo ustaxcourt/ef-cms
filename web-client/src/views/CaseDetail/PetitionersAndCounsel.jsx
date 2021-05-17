@@ -41,7 +41,7 @@ const PetitionersAndCounsel = connect(
                       <Button
                         link
                         className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
-                        href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                        href={petitioner.editPetitionerLink}
                         icon="edit"
                       >
                         Edit
