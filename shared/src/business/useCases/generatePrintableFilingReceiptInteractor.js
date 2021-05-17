@@ -54,10 +54,9 @@ exports.generatePrintableFilingReceiptInteractor = async (
   const filingReceiptDocumentParams = { document: primaryDocument };
 
   if (documentsFiled.hasSupportingDocuments) {
-    filingReceiptDocumentParams.supportingDocuments =
-      documentsFiled.supportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
-      );
+    filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
+      doc => getDocumentInfo({ applicationContext, documentData: doc }),
+    );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
@@ -68,10 +67,9 @@ exports.generatePrintableFilingReceiptInteractor = async (
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
-    filingReceiptDocumentParams.secondarySupportingDocuments =
-      documentsFiled.secondarySupportingDocuments.map(doc =>
-        getDocumentInfo({ applicationContext, documentData: doc }),
-      );
+    filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
+      doc => getDocumentInfo({ applicationContext, documentData: doc }),
+    );
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -99,13 +97,13 @@ exports.generatePrintableFilingReceiptInteractor = async (
     useTempBucket: true,
   });
 
-  const { url } = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      key,
-      useTempBucket: true,
-    });
+  const {
+    url,
+  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+    applicationContext,
+    key,
+    useTempBucket: true,
+  });
 
   return url;
 };

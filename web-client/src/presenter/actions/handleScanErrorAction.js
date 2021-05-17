@@ -7,7 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for getting the props.error
  * @param {Function} providers.store the cerebral store used for setting error / scanner state
  * @returns {void}
- *
  */
 export const handleScanErrorAction = async ({ props, store }) => {
   const err = props.error;

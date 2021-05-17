@@ -2,7 +2,6 @@ import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocke
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
-import { addressDisplayHelper } from './computeds/addressDisplayHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -49,6 +48,7 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
@@ -111,7 +111,6 @@ const helpers = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
-  addressDisplayHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
@@ -155,6 +154,7 @@ const helpers = {
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedDocketEntries,
   formattedDocument,
   formattedMessageDetail,
   formattedMessages,

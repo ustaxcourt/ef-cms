@@ -28,7 +28,7 @@ describe('refreshCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][1]
         .docketNumber,
     ).toEqual(DOCKET_NUMBER);
   });

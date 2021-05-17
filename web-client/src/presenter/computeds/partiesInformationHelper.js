@@ -11,12 +11,16 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES, UNIQUE_OTHER_FILER_TYPE } =
-    applicationContext.getConstants();
+  const {
+    CONTACT_TYPES,
+    UNIQUE_OTHER_FILER_TYPE,
+    USER_ROLES,
+  } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
+  const permissions = get(state.permissions);
 
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
@@ -43,29 +47,42 @@ export const partiesInformationHelper = (get, applicationContext) => {
           : 'Participant';
     }
 
-    petitioner.formattedEmail = petitioner.email || 'No email provided';
     petitioner.formattedPendingEmail =
       screenMetadata.pendingEmails &&
       screenMetadata.pendingEmails[petitioner.contactId]
         ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
         : undefined;
 
-    const canEditPetitioner =
-      applicationContext.getUtilities().isInternalUser(user.role) ||
-      !!formattedPrivatePractitioners.find(
-        practitioner =>
-          user.barNumber === practitioner.barNumber &&
-          practitioner.representing.includes(petitioner.contactId),
-      ) ||
-      petitioner.contactId === user.userId;
+    if (petitioner.email) {
+      petitioner.formattedEmail = petitioner.email;
+    } else {
+      petitioner.formattedEmail = petitioner.formattedPendingEmail
+        ? undefined
+        : 'No email provided';
+    }
 
-    const canEditParticipant = applicationContext
+    const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
+      practitioner =>
+        user.barNumber === practitioner.barNumber &&
+        practitioner.representing.includes(petitioner.contactId),
+    );
+
+    const petitionIsServed = !!applicationContext
       .getUtilities()
-      .isInternalUser(user.role);
+      .getPetitionDocketEntry(caseDetail)?.servedAt;
+
+    let canEditPetitioner = false;
+    if (user.role === USER_ROLES.petitioner) {
+      canEditPetitioner = petitioner.contactId === user.userId;
+    } else if (user.role === USER_ROLES.privatePractitioner) {
+      canEditPetitioner = userAssociatedWithCase;
+    } else if (permissions.EDIT_PETITIONER_INFO) {
+      canEditPetitioner = true;
+    }
+    canEditPetitioner = petitionIsServed && canEditPetitioner;
 
     return {
       ...petitioner,
-      canEditParticipant,
       canEditPetitioner,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
@@ -82,9 +99,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
   );
 
-  const canEditRespondent = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
+  const canEditRespondent = permissions.EDIT_COUNSEL_ON_CASE;
 
   const formattedRespondents = (caseDetail.irsPractitioners || []).map(
     respondent => ({

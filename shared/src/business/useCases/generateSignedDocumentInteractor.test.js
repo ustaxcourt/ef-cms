@@ -46,7 +46,6 @@ describe('generateSignedDocument', () => {
 
   it('generates a pdf document with the provided signature text attached', async () => {
     const args = {
-      applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -58,7 +57,10 @@ describe('generateSignedDocument', () => {
       },
     };
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
+    const newPdfData = await generateSignedDocumentInteractor(
+      applicationContext,
+      args,
+    );
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
@@ -78,7 +80,6 @@ describe('generateSignedDocument', () => {
     });
 
     const args = {
-      applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -90,7 +91,10 @@ describe('generateSignedDocument', () => {
       },
     };
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
+    const newPdfData = await generateSignedDocumentInteractor(
+      applicationContext,
+      args,
+    );
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();
@@ -99,7 +103,6 @@ describe('generateSignedDocument', () => {
 
   it('uses a default scale value of 1 if not provided in args', async () => {
     const args = {
-      applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -110,7 +113,10 @@ describe('generateSignedDocument', () => {
       },
     };
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
+    const newPdfData = await generateSignedDocumentInteractor(
+      applicationContext,
+      args,
+    );
 
     const newPdfDoc = await PDFDocument.load(newPdfData);
     const newPdfDocPages = newPdfDoc.getPages();

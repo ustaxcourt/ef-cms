@@ -8,23 +8,23 @@ import React from 'react';
 
 export const DraftDocuments = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     showModal: state.modal.showModal,
     stipulatedDecisionEventCode: state.constants.STIPULATED_DECISION_EVENT_CODE,
     viewerDraftDocumentToDisplay: state.viewerDraftDocumentToDisplay,
   },
   function DraftDocuments({
-    formattedCaseDetail,
+    formattedDocketEntries,
     showModal,
     stipulatedDecisionEventCode,
     viewerDraftDocumentToDisplay,
   }) {
     return (
       <>
-        {formattedCaseDetail.formattedDraftDocuments.length === 0 && (
+        {formattedDocketEntries.formattedDraftDocuments.length === 0 && (
           <p>There are no draft documents.</p>
         )}
-        {formattedCaseDetail.formattedDraftDocuments.length > 0 && (
+        {formattedDocketEntries.formattedDraftDocuments.length > 0 && (
           <DraftDocumentViewer />
         )}
         {showModal === 'ArchiveDraftDocumentModal' &&

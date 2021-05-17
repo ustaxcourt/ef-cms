@@ -6,8 +6,8 @@ const { ContactFactory } = require('./ContactFactory');
 /**
  * returns the constructor used for creating the PetitionerEstateWithExecutorPrimaryContact entity
  */
-exports.getPetitionerEstateWithExecutorPrimaryContact =
-  ContactFactory.createContactFactory({
+exports.getPetitionerEstateWithExecutorPrimaryContact = ContactFactory.createContactFactory(
+  {
     additionalErrorMappings: {
       secondaryName: 'Enter name of executor/personal representative',
       title: 'Enter title',
@@ -17,4 +17,5 @@ exports.getPetitionerEstateWithExecutorPrimaryContact =
       title: JoiValidationConstants.STRING.max(100).optional(),
     },
     contactName: 'PetitionerEstateWithExecutorPrimaryContact',
-  });
+  },
+);

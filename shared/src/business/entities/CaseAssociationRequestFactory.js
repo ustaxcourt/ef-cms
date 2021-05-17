@@ -129,8 +129,9 @@ function CaseAssociationRequestFactory(rawProps) {
 
   let schemaOptionalItems = {
     attachments: joi.boolean().required(),
-    certificateOfServiceDate:
-      JoiValidationConstants.ISO_DATE.max('now').required(),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+      'now',
+    ).required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: JoiValidationConstants.STRING.valid(
       ...OBJECTIONS_OPTIONS,
