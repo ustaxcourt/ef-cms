@@ -9,6 +9,10 @@ const { migrateItems } = require('./0031-add-filers-to-docket-entry');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
+  const mockDocketEntryId = 'f03ff1fa-6b53-4226-a61f-6ad36d25911c';
+
+  let mockCaseItem;
+  let mockCaseRecords;
   let documentClient;
   let mockDocketEntry = {
     archived: false,
@@ -22,11 +26,6 @@ describe('migrateItems', () => {
     sk: 'docket-entry|124',
     userId: '8bbfcd5a-b02b-4983-8e9c-6cc50d3d566c',
   };
-
-  const mockDocketEntryId = 'f03ff1fa-6b53-4226-a61f-6ad36d25911c';
-
-  let mockCaseItem;
-  let mockCaseRecords;
 
   beforeEach(() => {
     mockCaseItem = {
@@ -97,6 +96,9 @@ describe('migrateItems', () => {
 
     const results = await migrateItems(items, documentClient);
 
+    expect(results[0].filers[0]).toEqual(
+      getContactPrimary(mockCaseItem).contactId,
+    );
     expect(results[0].filers[1]).toEqual(
       getContactSecondary(mockCaseItem).contactId,
     );
