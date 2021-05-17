@@ -21,6 +21,16 @@ export const partiesInformationHelper = (get, applicationContext) => {
   const screenMetadata = get(state.screenMetadata);
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
+  const isExternalUser = applicationContext
+    .getUtilities()
+    .isExternalUser(user.role);
+
+  const contactPrimary = applicationContext
+    .getUtilities()
+    .getContactPrimary(caseDetail);
+  const contactSecondary = applicationContext
+    .getUtilities()
+    .getContactSecondary(caseDetail);
 
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
@@ -28,7 +38,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
-  const formattedParties = caseDetail.petitioners.map(petitioner => {
+  const formattedParties = (caseDetail.petitioners || []).map(petitioner => {
     const practitionersWithEmail = {
       privatePractitioners: formattedPrivatePractitioners,
     };
@@ -47,11 +57,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
           : 'Participant';
     }
 
-    petitioner.formattedPendingEmail =
+    if (
       screenMetadata.pendingEmails &&
       screenMetadata.pendingEmails[petitioner.contactId]
-        ? `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`
-        : undefined;
+    ) {
+      petitioner.formattedPendingEmail = isExternalUser
+        ? 'Email Pending'
+        : `${screenMetadata.pendingEmails[petitioner.contactId]} (Pending)`;
+    }
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
@@ -81,14 +94,25 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
+    let externalType = null;
+
+    if (petitioner.contactId === contactPrimary?.contactId) {
+      externalType = 'primary';
+    } else if (petitioner.contactId === contactSecondary?.contactId) {
+      externalType = 'secondary';
+    }
+
+    const editPetitionerLink = isExternalUser
+      ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+      : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
+
     return {
       ...petitioner,
       canEditPetitioner,
+      editPetitionerLink,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
-      showExternalHeader: applicationContext
-        .getUtilities()
-        .isExternalUser(user.role),
+      showExternalHeader: isExternalUser,
     };
   });
 
