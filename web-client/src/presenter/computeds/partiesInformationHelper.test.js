@@ -754,5 +754,29 @@ describe('partiesInformationHelper', () => {
 
       expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
     });
+
+    it('should not throw an exception when privatePractitioners is undefined', () => {
+      expect(() =>
+        runCompute(partiesInformationHelper, {
+          state: {
+            ...getBaseState(mockPrivatePractitioner),
+            caseDetail: {
+              docketEntries: [
+                {
+                  documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                  servedAt: '2020-08-01',
+                },
+              ],
+              irsPractitioners: [],
+              petitioners: [mockPetitioner],
+            },
+            permissions: {},
+            screenMetadata: {
+              pendingEmails: {},
+            },
+          },
+        }),
+      ).not.toThrow();
+    });
   });
 });

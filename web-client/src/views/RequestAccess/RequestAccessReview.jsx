@@ -181,7 +181,7 @@ export const RequestAccessReview = connect(
                         <ul className="ustc-unstyled-list without-margins">
                           {requestAccessHelper.representingPartiesNames.map(
                             name => (
-                              <li key={name}>{name}, Petitioner</li>
+                              <li key={name}>{name}</li>
                             ),
                           )}
                         </ul>
