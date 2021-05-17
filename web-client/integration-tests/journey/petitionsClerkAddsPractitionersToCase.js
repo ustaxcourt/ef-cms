@@ -47,7 +47,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
 
     const contactPrimary = contactPrimaryFromState(test);
     await test.runSequence('updateModalValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -92,7 +92,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
 
       const contactSecondary = contactSecondaryFromState(test);
       await test.runSequence('updateModalValueSequence', {
-        key: `filersMap.${contactSecondary.contactId}`,
+        key: `representingMap.${contactSecondary.contactId}`,
         value: true,
       });
 
