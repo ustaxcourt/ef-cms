@@ -91,17 +91,6 @@ describe('requestAccessHelper', () => {
     expect(result.certificateOfServiceDateFormatted).toBeUndefined();
   });
 
-  it('does not show party validation error if none of the party validation errors exists', () => {
-    const result = runCompute(requestAccessHelper, { state });
-    expect(result.partyValidationError).toBeUndefined();
-  });
-
-  it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { filers: 'You did something bad.' };
-    const result = runCompute(requestAccessHelper, { state });
-    expect(result.partyValidationError).toEqual('You did something bad.');
-  });
-
   it('returns correct number of document options for user role privatePractitioner', () => {
     const result = runCompute(requestAccessHelper, { state });
     expect(result.documents.length).toEqual(7);

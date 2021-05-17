@@ -7,7 +7,6 @@ export const requestAccessHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
-  const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
@@ -90,8 +89,6 @@ export const requestAccessHelper = (get, applicationContext) => {
     'Motion to Substitute Parties and Change Caption',
   ].includes(documentType);
 
-  const partyValidationError = validationErrors.filers;
-
   const showFilingIncludes =
     form.certificateOfService || (documentWithAttachments && form.attachments);
 
@@ -118,7 +115,6 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithSupportingDocuments,
     documents,
     documentsForSelect,
-    partyValidationError,
     representingPartiesNames,
     showFilingIncludes,
     showFilingNotIncludes,

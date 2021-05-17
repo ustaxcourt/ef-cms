@@ -7,18 +7,18 @@ export const PartiesRepresenting = connect(
   {
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    requestAccessHelper: state.requestAccessHelper,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
+    validationErrors: state.validationErrors,
   },
   function PartiesRepresenting({
     form,
     formattedCaseDetail,
-    requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
+    validationErrors,
   }) {
     return (
       <React.Fragment>
@@ -26,7 +26,7 @@ export const PartiesRepresenting = connect(
           Tell Us About the Parties You’re Representing
         </h2>
         <div className="blue-container">
-          <FormGroup errorText={requestAccessHelper.partyValidationError}>
+          <FormGroup errorText={validationErrors.filers}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who are you representing?
