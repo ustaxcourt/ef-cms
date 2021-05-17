@@ -22,8 +22,9 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
 
   const eventCodeMatches = docketEntry => docketEntry.eventCode === eventCode;
 
-  const isPractitionerAssociationDocument =
-    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.find(eventCodeMatches);
+  const isPractitionerAssociationDocument = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.find(
+    eventCodeMatches,
+  );
 
   if (category && eventCode && !isPractitionerAssociationDocument) {
     const internalAndExternalFilingEventForCategory = [
@@ -31,8 +32,9 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
       ...INTERNAL_CATEGORY_MAP[category],
     ];
 
-    const categoryInformation =
-      internalAndExternalFilingEventForCategory.find(eventCodeMatches);
+    const categoryInformation = internalAndExternalFilingEventForCategory.find(
+      eventCodeMatches,
+    );
     store.set(state.form.documentTitle, categoryInformation.documentTitle);
   }
 

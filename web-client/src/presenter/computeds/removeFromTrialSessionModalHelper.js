@@ -10,8 +10,9 @@ export const removeFromTrialSessionModalHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const trialSessionId = get(state.modal.trialSessionId);
 
-  const associatedJudgeRequired =
-    STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(selectedCaseStatus);
+  const associatedJudgeRequired = STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(
+    selectedCaseStatus,
+  );
 
   const isFirstTrialSession = trialSessionId === caseDetail.trialSessionId;
 

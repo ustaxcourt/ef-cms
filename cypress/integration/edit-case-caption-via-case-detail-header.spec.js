@@ -1,9 +1,9 @@
 const {
+  getButton,
   getCaptionTextArea,
   getCaseDetailTab,
   getCaseTitleContaining,
   getEditCaseCaptionButton,
-  getSaveButton,
   navigateTo: navigateToCaseDetail,
 } = require('../support/pages/case-detail');
 
@@ -13,7 +13,7 @@ describe('Edit a case caption from case detail header', function () {
     getCaseDetailTab('case-information').click();
     getEditCaseCaptionButton().click();
     getCaptionTextArea().clear().type('there is no cow level');
-    getSaveButton().click();
+    getButton('Save').click();
   });
 
   it('should changes the title of the case', () => {

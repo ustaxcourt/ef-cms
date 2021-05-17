@@ -779,6 +779,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeCoversheet,
+} = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
+const {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
@@ -1593,6 +1596,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
+        removeCoversheet,
         saveFileAndGenerateUrl,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,

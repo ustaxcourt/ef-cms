@@ -156,8 +156,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   action,
                   inputName,
                   inputValue,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
+                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
                   validateSequence: validateDocumentSequence,
                 });
                 return true;
@@ -166,8 +165,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 onInputChange({
                   action,
                   inputText,
-                  updateSequence:
-                    updateDocketEntryMetaDocumentFormValueSequence,
+                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
                 });
               }}
             />

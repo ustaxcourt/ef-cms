@@ -18,8 +18,10 @@ describe('createCaseAction', () => {
 
   const { US_STATES } = applicationContext.getConstants();
 
-  const { addCoversheetInteractor, filePetitionInteractor } =
-    applicationContext.getUseCases();
+  const {
+    addCoversheetInteractor,
+    filePetitionInteractor,
+  } = applicationContext.getUseCases();
 
   applicationContext.getCurrentUser.mockReturnValue({
     email: 'petitioner1@example.com',
@@ -93,7 +95,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -194,7 +196,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {
@@ -230,7 +232,7 @@ describe('createCaseAction', () => {
     });
 
     expect(filePetitionInteractor).toBeCalled();
-    expect(filePetitionInteractor.mock.calls[0][0]).toMatchObject({
+    expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
       petitionMetadata: {

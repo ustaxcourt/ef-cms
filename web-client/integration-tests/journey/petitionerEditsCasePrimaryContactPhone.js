@@ -1,7 +1,7 @@
-import { contactPrimaryFromState } from '../helpers';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const petitionerEditsCasePrimaryContactPhone = test => {
   return it('petitioner updates primary contact phone', async () => {
@@ -16,14 +16,11 @@ export const petitionerEditsCasePrimaryContactPhone = test => {
 
     expect(contactPrimary.phone).toEqual('9999999999');
 
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>
         entry.descriptionDisplay ===
         'Notice of Change of Telephone Number for Mona Schultz',

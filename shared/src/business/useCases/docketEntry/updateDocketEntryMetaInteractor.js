@@ -34,8 +34,7 @@ const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-exports.shouldGenerateCoversheetForDocketEntry =
-  shouldGenerateCoversheetForDocketEntry;
+exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
 /**
  *
  * @param {object} applicationContext the application context
@@ -120,17 +119,17 @@ exports.updateDocketEntryMetaInteractor = async (
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
-  const entryRequiresCoverSheet =
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      editableFields.eventCode,
-    );
-  const originalEntryDoesNotRequireCoversheet =
-    !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      originalDocketEntry.eventCode,
-    );
-
+  const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+    editableFields.eventCode,
+  );
+  const originalEntryRequiresCoversheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+    originalDocketEntry.eventCode,
+  );
   const shouldAddNewCoverSheet =
-    originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
+    !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
+
+  const shouldRemoveExistingCoverSheet =
+    originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
 
   const documentTitleUpdated =
     getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
@@ -184,6 +183,21 @@ exports.updateDocketEntryMetaInteractor = async (
         filingDateUpdated,
       });
 
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  } else if (shouldRemoveExistingCoverSheet) {
+    await applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber,
+      document: docketEntryEntity.validate(),
+    });
+    const updatedDocketEntry = await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet(applicationContext, {
+        docketEntryId: originalDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
+      });
     caseEntity.updateDocketEntry(updatedDocketEntry);
   }
 

@@ -9,7 +9,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object used for getting the props.user
  * @param {object} providers.applicationContext the application context needed for getting the setCurrentUser method
  * @returns {Promise} async action
- *
  */
 export const setUserAction = async ({ applicationContext, props, store }) => {
   store.set(state.user, props.user);

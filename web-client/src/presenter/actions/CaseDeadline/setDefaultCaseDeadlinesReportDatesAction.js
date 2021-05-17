@@ -12,7 +12,11 @@ export const setDefaultCaseDeadlinesReportDatesAction = async ({
   applicationContext,
   store,
 }) => {
-  const { day, month, year } = applicationContext
+  const {
+    day,
+    month,
+    year,
+  } = applicationContext
     .getUtilities()
     .deconstructDate(applicationContext.getUtilities().createISODateString());
   const currentDateStart = applicationContext

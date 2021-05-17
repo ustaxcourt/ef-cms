@@ -1,11 +1,7 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedMessageDetail as formattedMessageDetailComputed } from '../../src/presenter/computeds/formattedMessageDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
 
 const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
@@ -55,10 +51,11 @@ export const docketClerkEditsOrderFromMessage = test => {
     });
     expect(messageDetailFormatted.attachments.length).toEqual(2);
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-    const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
+      test,
+    );
+
+    const caseOrderDocument = formattedDraftDocuments.find(
       d => d.docketEntryId === orderDocument.documentId,
     );
     expect(caseOrderDocument.signedAt).toEqual(null);
