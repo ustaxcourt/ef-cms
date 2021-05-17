@@ -102,7 +102,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      representing: [mockContactId],
+      filers: [mockContactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
