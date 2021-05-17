@@ -294,7 +294,6 @@ DocketEntry.prototype.generateFiledBy = function (docketEntry) {
  *
  * @param {string} signByUserId the user id of the user who signed the document
  * @param {string} signedJudgeName the judge's signature for the document
- *
  */
 DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
