@@ -29,7 +29,6 @@ import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setPendingEmailsForPetitionersOnCaseAction } from '../actions/setPendingEmailsForPetitionersOnCaseAction';
-import { setPetitionersPendingEmailStatusOnCaseAction } from '../actions/setPetitionersPendingEmailStatusOnCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -63,7 +62,7 @@ const gotoCaseDetailExternalPractitioners = [
   getCaseAssociationAction,
   setCaseAssociationAction,
   getPetitionersPendingEmailStatusOnCaseAction,
-  setPetitionersPendingEmailStatusOnCaseAction,
+  setPendingEmailsForPetitionersOnCaseAction,
   setCurrentPageAction('CaseDetail'),
 ];
 
