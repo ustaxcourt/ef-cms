@@ -11,6 +11,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { getPendingEmailsOnCaseAction } from '../actions/getPendingEmailsOnCaseAction';
+import { getPetitionersPendingEmailStatusOnCaseAction } from '../actions/getPetitionersPendingEmailStatusOnCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { parallel } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
@@ -57,6 +58,14 @@ const gotoCaseDetailExternal = [
   setCurrentPageAction('CaseDetail'),
 ];
 
+const gotoCaseDetailExternalPractitioners = [
+  getCaseAssociationAction,
+  setCaseAssociationAction,
+  getPetitionersPendingEmailStatusOnCaseAction,
+  setPendingEmailsForPetitionersOnCaseAction,
+  setCurrentPageAction('CaseDetail'),
+];
+
 const gotoCaseDetailInternalWithNotes = [
   setDocketEntryIdAction,
   getJudgesCaseNoteForCaseAction,
@@ -95,13 +104,12 @@ export const gotoCaseDetailSequence = [
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
-      [
-        USER_ROLES.petitioner,
-        USER_ROLES.privatePractitioner,
-        USER_ROLES.irsPractitioner,
-        USER_ROLES.irsSuperuser,
-      ],
+      [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
       gotoCaseDetailExternal,
+    ),
+    ...takePathForRoles(
+      [USER_ROLES.privatePractitioner, USER_ROLES.irsPractitioner],
+      gotoCaseDetailExternalPractitioners,
     ),
     chambers: gotoCaseDetailInternalWithNotes,
     judge: gotoCaseDetailInternalWithNotes,
