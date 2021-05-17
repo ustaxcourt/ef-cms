@@ -1,4 +1,5 @@
 import { getDocumentTypesForSelect } from './internalTypesHelper';
+import { getFilerParties } from './fileDocumentHelper';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
@@ -99,14 +100,10 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
-  const representingPartiesNames = Object.entries(form.filersMap)
-    .filter(([, isChecked]) => isChecked)
-    .map(
-      ([contactId]) =>
-        caseDetail.petitioners.find(
-          petitioner => petitioner.contactId === contactId,
-        ).name,
-    );
+  let representingPartiesNames = getFilerParties({
+    caseDetail,
+    filersMap: form.filersMap,
+  });
 
   let exported = {
     certificateOfServiceDateFormatted,
