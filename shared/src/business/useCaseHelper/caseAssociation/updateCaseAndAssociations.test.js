@@ -2,6 +2,8 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
@@ -224,6 +226,56 @@ describe('updateCaseAndAssociations', () => {
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).toHaveBeenCalledTimes(4);
     });
+  });
+
+  describe('work items', () => {
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getWorkItemMappingsByDocketNumber.mockReturnValue([
+          { sk: 'workitem|123' },
+        ]);
+    });
+
+    it('the case status has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateWorkItemCaseStatus,
+      ).toBeCalledWith({
+        applicationContext,
+        caseStatus: CASE_STATUS_TYPES.generalDocket,
+        workItemId: '123',
+      });
+    });
+    it('the docket number suffix has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          docketNumberSuffix: 'poop', // DOCKET_NUMBER_SUFFIXES.SMALL,
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updateWorkItemDocketNumberSuffix,
+      ).toBeCalledWith({
+        applicationContext,
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        workItemId: '123',
+      });
+    });
+    // it('the case caption has been updated', async () => {});
+    // it('the trial date has been updated', async () => {});
+    // it('the associated judge has been updated', async () => {});
+    // it('the case in progress flag has been updated', async () => {});
   });
 
   describe('correspondences', () => {

@@ -25,7 +25,6 @@ describe('updateCase', () => {
     docketNumber: '101-18',
   };
 
-  let caseQueryMockData;
   let caseMappingsQueryMockData;
 
   let oldCase;
@@ -46,16 +45,6 @@ describe('updateCase', () => {
       status: 'General Docket - Not at Issue',
     };
 
-    caseQueryMockData = [
-      {
-        docketNumberSuffix: null,
-        inProgress: false,
-        pk: 'case|101-18',
-        sk: 'case|101-18',
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-    ];
-
     caseMappingsQueryMockData = [
       {
         gsi1pk: 'user-case|101-18',
@@ -74,15 +63,11 @@ describe('updateCase', () => {
       promise: async () => null,
     });
 
-    applicationContext
-      .getDocumentClient()
-      .query.mockReturnValueOnce(caseQueryMockData)
-      .mockReturnValueOnce(caseMappingsQueryMockData)
-      .mockReturnValue([
-        {
-          sk: '123',
-        },
-      ]);
+    applicationContext.getDocumentClient().query.mockReturnValue([
+      {
+        sk: '123',
+      },
+    ]);
 
     client.query = applicationContext.getDocumentClient().query;
 
@@ -146,72 +131,6 @@ describe('updateCase', () => {
     });
   });
 
-  it.skip('updates fields on work items', async () => {
-    await updateCase({
-      applicationContext,
-      caseToUpdate: {
-        associatedJudge: 'Judge Buch',
-        caseCaption: 'Johnny Joe Jacobson, Petitioner',
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        inProgress: true,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:40:46.415Z',
-        userId: 'petitioner',
-      },
-      oldCase,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[1][0].Item,
-    ).toMatchObject({
-      pk: 'case|101-18',
-      sk: 'case|101-18',
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[0][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':caseStatus': CASE_STATUS_TYPES.calendared,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[1][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':caseTitle': 'Johnny Joe Jacobson',
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[2][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':docketNumberSuffix': DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[3][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':trialDate': '2019-03-01T21:40:46.415Z',
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[4][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':associatedJudge': 'Judge Buch',
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[5][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':caseIsInProgress': true,
-      },
-    });
-  });
-
   it('updates fields on case messages', async () => {
     await updateCase({
       applicationContext,
@@ -255,54 +174,11 @@ describe('updateCase', () => {
     });
   });
 
-  it('updates associated judge on work items', async () => {
-    await updateCase({
-      applicationContext,
-      caseToUpdate: {
-        associatedJudge: 'Judge Buch',
-        docketNumberSuffix: null,
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-      oldCase,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().update.mock.calls[0][0],
-    ).toMatchObject({
-      ExpressionAttributeValues: {
-        ':associatedJudge': 'Judge Buch',
-      },
-    });
-  });
-
-  it.skip('does not update work items if work item fields are unchanged', async () => {
-    await updateCase({
-      applicationContext,
-      caseToUpdate: {
-        docketNumber: '101-18',
-        docketNumberSuffix: null,
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-      oldCase,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
-    ).toMatchObject({
-      pk: 'case|101-18',
-      sk: 'case|101-18',
-    });
-    expect(applicationContext.getDocumentClient().update).not.toBeCalled();
-  });
-
   describe('user case mappings', () => {
     beforeEach(() => {
       applicationContext.getDocumentClient().query = jest
         .fn()
-        .mockResolvedValueOnce(caseQueryMockData) // getting case
-        .mockResolvedValueOnce([]) // work item mappings
         .mockResolvedValue(caseMappingsQueryMockData);
-
       client.query = applicationContext.getDocumentClient().query;
     });
 
