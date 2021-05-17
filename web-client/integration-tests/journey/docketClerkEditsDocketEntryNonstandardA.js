@@ -1,5 +1,7 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import {
+  contactPrimaryFromState,
+  contactSecondaryFromState,
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
 } from '../helpers';
@@ -72,8 +74,11 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       value: petitionDocument.docketEntryId,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partySecondary',
+    const contactPrimary = contactPrimaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactSecondary.contactId}`,
       value: true,
     });
 
@@ -127,9 +132,8 @@ export const docketClerkEditsDocketEntryNonstandardA = test => {
       documentType: 'Notice of No Objection',
       eventCode: 'NNOB',
       filedBy: 'Resp. & Petrs. Mona Schultz & Jimothy Schultz, Brianna Noble',
+      filers: [contactPrimary.contactId, contactSecondary.contactId],
       partyIrsPractitioner: true,
-      partyPrimary: true,
-      partySecondary: true,
       receivedAt: '2012-01-01T05:00:00.000Z',
     });
   });

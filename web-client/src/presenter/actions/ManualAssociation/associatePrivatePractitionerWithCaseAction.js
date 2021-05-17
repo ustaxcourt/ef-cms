@@ -15,9 +15,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
   path,
 }) => {
   const userId = get(state.modal.user.userId);
-  const { representingPrimary, representingSecondary, serviceIndicator } = get(
-    state.modal,
-  );
+  const { filers, serviceIndicator } = get(state.modal);
   const docketNumber = get(state.caseDetail.docketNumber);
 
   await applicationContext
@@ -25,8 +23,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
     .associatePrivatePractitionerWithCaseInteractor({
       applicationContext,
       docketNumber,
-      representingPrimary,
-      representingSecondary,
+      filers,
       serviceIndicator,
       userId,
     });

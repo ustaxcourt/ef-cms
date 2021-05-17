@@ -28,7 +28,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     formatCounsel({ counsel: practitioner, screenMetadata }),
   );
 
-  const formattedParties = caseDetail.petitioners.map(petitioner => {
+  const formattedParties = (caseDetail.petitioners || []).map(petitioner => {
     const practitionersWithEmail = {
       privatePractitioners: formattedPrivatePractitioners,
     };

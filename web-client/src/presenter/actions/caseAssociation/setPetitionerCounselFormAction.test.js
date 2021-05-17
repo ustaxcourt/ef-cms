@@ -39,9 +39,11 @@ describe('setPetitionerCounselFormAction', () => {
     });
     expect(state.form).toMatchObject({
       barNumber: 'abc',
+      filersMap: {
+        123: true,
+        456: true,
+      },
       representing: ['123', '456'],
-      representingPrimary: true,
-      representingSecondary: true,
     });
   });
 });

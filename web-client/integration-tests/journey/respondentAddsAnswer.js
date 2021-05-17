@@ -1,4 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { contactPrimaryFromState } from '../helpers';
 
 export const respondentAddsAnswer = (test, fakeFile) => {
   return it('Respondent adds an answer', async () => {
@@ -68,8 +69,10 @@ export const respondentAddsAnswer = (test, fakeFile) => {
       value: false,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

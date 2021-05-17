@@ -20,8 +20,7 @@ const { UserCase } = require('../../entities/UserCase');
 exports.associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
-  representingPrimary,
-  representingSecondary,
+  filers,
   serviceIndicator,
   user,
 }) => {
@@ -52,31 +51,21 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    const contactPrimary = caseEntity.getContactPrimary();
-    const contactSecondary = caseEntity.getContactSecondary();
+    const { petitioners } = caseEntity;
 
-    const representing = [];
-    if (representingPrimary) {
-      representing.push(contactPrimary.contactId);
-    }
-    if (representingSecondary) {
-      representing.push(contactSecondary.contactId);
-    }
+    petitioners.map(petitioner => {
+      if (filers.includes(petitioner.contactId)) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      }
+    });
 
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representing,
+        representing: filers,
         serviceIndicator,
       }),
     );
-
-    if (representingPrimary) {
-      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
-    if (contactSecondary && representingSecondary) {
-      contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,

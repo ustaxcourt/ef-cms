@@ -27,14 +27,13 @@ export const A_VALID_DOCKET_ENTRY = {
 };
 
 describe('DocketEntry entity', () => {
-  const caseDetail = {
-    contactPrimary: {
-      name: 'Bob',
-    },
-    contactSecondary: {
-      name: 'Bill',
-    },
-  };
+  const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
+  const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
+
+  const petitioners = [
+    { contactId: mockPrimaryId, name: 'Bob' },
+    { contactId: mockSecondaryId, name: 'Bill' },
+  ];
   const mockUserId = applicationContext.getUniqueId();
 
   describe('signedAt', () => {
@@ -646,10 +645,9 @@ describe('DocketEntry entity', () => {
   });
 
   describe('generate filed by string', () => {
-    it('should generate correct filedBy string for partyPrimary', () => {
+    it('should generate correct filedBy string for single petitioner in filers', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -658,24 +656,23 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
+          filers: [mockPrimaryId],
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
-          partyPrimary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           supportingDocumentFreeText: 'Test',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Petr. Bob');
     });
 
-    it('should generate correct filedBy string for partyPrimary and otherFilingParty', () => {
+    it('should generate correct filedBy string for single petitioner in filers and otherFilingParty', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -684,25 +681,24 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
+          filers: [mockPrimaryId],
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
           otherFilingParty: 'Bob Barker',
-          partyPrimary: true,
           relationship: 'primaryDocument',
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           supportingDocumentFreeText: 'Test',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Petr. Bob, Bob Barker');
     });
 
-    it('should generate correct filedBy string for only partySecondary', () => {
+    it('should generate correct filedBy string for single petitioner in filters that is not the primary', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Petition',
           certificateOfService: false,
@@ -711,25 +707,23 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Amended Petition',
           documentType: 'Amended Petition',
           eventCode: 'PAP',
+          filers: [mockSecondaryId],
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.NO,
-          partyPrimary: false,
-          partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
           supportingDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           supportingDocumentFreeText: 'Test',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Petr. Bill');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner', () => {
+    it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -739,10 +733,10 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
+          filers: [mockPrimaryId],
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
-          partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
@@ -750,15 +744,14 @@ describe('DocketEntry entity', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
-    it('should generate correct filedBy string for partyPrimary, partyIrsPractitioner, and otherFilingParty', () => {
+    it('should generate correct filedBy string for single petitioner in filers, partyIrsPractitioner, and otherFilingParty', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -768,11 +761,11 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
+          filers: [mockPrimaryId],
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           otherFilingParty: 'Bob Barker',
           partyIrsPractitioner: true,
-          partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -780,7 +773,7 @@ describe('DocketEntry entity', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob, Bob Barker');
     });
@@ -788,7 +781,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for only otherFilingParty', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -802,7 +794,6 @@ describe('DocketEntry entity', () => {
           ordinalValue: 'First',
           otherFilingParty: 'Bob Barker',
           partyIrsPractitioner: false,
-          partyPrimary: false,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: 'primaryDocument',
@@ -810,15 +801,14 @@ describe('DocketEntry entity', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Bob Barker');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partySecondary', () => {
+    it('should generate correct filedBy string for multiple petitioners in filers', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: true,
           category: 'Motion',
           certificateOfService: true,
@@ -832,11 +822,10 @@ describe('DocketEntry entity', () => {
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
+          filers: [mockPrimaryId, mockSecondaryId],
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.YES,
-          partyPrimary: true,
-          partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
@@ -844,7 +833,7 @@ describe('DocketEntry entity', () => {
           supportingDocument: 'Declaration in Support',
           supportingDocumentFreeText: 'Rachael',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
     });
@@ -852,7 +841,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -872,7 +860,7 @@ describe('DocketEntry entity', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp.');
     });
@@ -880,7 +868,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -903,7 +890,7 @@ describe('DocketEntry entity', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
@@ -911,7 +898,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -934,7 +920,7 @@ describe('DocketEntry entity', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp.');
     });
@@ -942,7 +928,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -969,7 +954,7 @@ describe('DocketEntry entity', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual(
         'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
@@ -979,7 +964,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1006,70 +990,14 @@ describe('DocketEntry entity', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
 
-    it('should generate correct filedBy string for partyPrimary in the constructor when called with a contactPrimary property', () => {
+    it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
-          attachments: false,
-          category: 'Petition',
-          certificateOfService: false,
-          contactPrimary: caseDetail.contactPrimary,
-          createdAt: '2019-04-19T17:29:13.120Z',
-          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          documentTitle: 'Amended Petition',
-          documentType: 'Amended Petition',
-          eventCode: 'PAP',
-          hasSupportingDocuments: true,
-          objections: OBJECTIONS_OPTIONS_MAP.NO,
-          partyPrimary: true,
-          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          scenario: 'Standard',
-          supportingDocument:
-            'Unsworn Declaration under Penalty of Perjury in Support',
-          supportingDocumentFreeText: 'Test',
-        },
-        { applicationContext },
-      );
-      expect(docketEntry.filedBy).toEqual('Petr. Bob');
-    });
-
-    it('should generate correct filedBy string for partySecondary in the constructor when called with a contactSecondary property', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...caseDetail,
-          attachments: false,
-          category: 'Petition',
-          certificateOfService: false,
-          contactSecondary: caseDetail.contactSecondary,
-          createdAt: '2019-04-19T17:29:13.120Z',
-          docketEntryId: '88cd2c25-b8fa-4dc0-bfb6-57245c86bb0d',
-          documentTitle: 'Amended Petition',
-          documentType: 'Amended Petition',
-          eventCode: 'PAP',
-          hasSupportingDocuments: true,
-          objections: OBJECTIONS_OPTIONS_MAP.NO,
-          partyPrimary: false,
-          partySecondary: true,
-          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          scenario: 'Standard',
-          supportingDocument:
-            'Unsworn Declaration under Penalty of Perjury in Support',
-          supportingDocumentFreeText: 'Test',
-        },
-        { applicationContext },
-      );
-      expect(docketEntry.filedBy).toEqual('Petr. Bill');
-    });
-
-    it('should generate correct filedBy string for partyPrimary and partyIrsPractitioner in the constructor when values are present', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...caseDetail,
           attachments: false,
           category: 'Miscellaneous',
           certificateOfService: false,
@@ -1079,27 +1007,25 @@ describe('DocketEntry entity', () => {
             'First Amended Unsworn Declaration under Penalty of Perjury in Support',
           documentType: 'Amended',
           eventCode: 'ADED',
+          filers: [mockPrimaryId],
           hasSupportingDocuments: true,
           ordinalValue: 'First',
           partyIrsPractitioner: true,
-          partyPrimary: true,
           previousDocument:
             'Unsworn Declaration under Penalty of Perjury in Support',
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard F',
           supportingDocument: 'Brief in Support',
           supportingDocumentFreeText: null,
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Petr. Bob');
     });
 
-    it('should generate correct filedBy string for partyPrimary and partySecondary in the constructor when values are present', () => {
+    it('should generate correct filedBy string for multiple petitioners in filers in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           attachments: true,
           category: 'Motion',
           certificateOfService: true,
@@ -1113,20 +1039,18 @@ describe('DocketEntry entity', () => {
             'Motion for Leave to File Computation for Entry of Decision',
           documentType: 'Motion for Leave to File',
           eventCode: 'M115',
+          filers: [mockPrimaryId, mockSecondaryId],
           hasSecondarySupportingDocuments: false,
           hasSupportingDocuments: true,
           objections: OBJECTIONS_OPTIONS_MAP.YES,
-          partyPrimary: true,
-          partySecondary: true,
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Nonstandard H',
           secondarySupportingDocument: null,
           secondarySupportingDocumentFreeText: null,
           supportingDocument: 'Declaration in Support',
           supportingDocumentFreeText: 'Rachael',
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
     });
@@ -1134,7 +1058,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1156,9 +1079,8 @@ describe('DocketEntry entity', () => {
           ],
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
     });
@@ -1166,7 +1088,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1188,9 +1109,8 @@ describe('DocketEntry entity', () => {
           ],
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp.');
     });
@@ -1198,7 +1118,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1224,9 +1143,8 @@ describe('DocketEntry entity', () => {
           ],
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual(
         'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
@@ -1236,7 +1154,6 @@ describe('DocketEntry entity', () => {
     it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
       const docketEntry = new DocketEntry(
         {
-          ...caseDetail,
           category: 'Supporting Document',
           createdAt: '2019-04-19T17:29:13.122Z',
           docketEntryId: '3ac23dd8-b0c4-4538-86e1-52b715f54838',
@@ -1262,9 +1179,8 @@ describe('DocketEntry entity', () => {
           ],
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY_SUPPORTING,
           scenario: 'Nonstandard C',
-          ...caseDetail,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
     });
@@ -1275,10 +1191,10 @@ describe('DocketEntry entity', () => {
           documentType:
             NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
           eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+          filers: [mockPrimaryId],
           isAutoGenerated: true,
           isMinuteEntry: false,
           isOnDocketRecord: true,
-          partyPrimary: true,
           privatePractitioners: [
             { name: 'Bob Practitioner', partyPrivatePractitioner: true },
           ],
@@ -1293,19 +1209,21 @@ describe('DocketEntry entity', () => {
     it('should generate filed by when the docket entry is a non-auto-generated notice of contact change', () => {
       const docketEntry = new DocketEntry(
         {
-          contactPrimary: { name: 'Bill Petitioner' },
           documentType:
             NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
           eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+          filers: [mockPrimaryId],
           isMinuteEntry: false,
           isOnDocketRecord: true,
-          partyPrimary: true,
           privatePractitioners: [
             { name: 'Bob Practitioner', partyPrivatePractitioner: true },
           ],
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        {
+          applicationContext,
+          petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+        },
       );
 
       expect(docketEntry.filedBy).toEqual(

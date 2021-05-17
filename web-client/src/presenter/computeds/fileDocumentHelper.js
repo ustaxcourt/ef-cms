@@ -21,9 +21,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   );
 
   const partyValidationError =
-    validationErrors.partyPrimary ||
-    validationErrors.partySecondary ||
-    validationErrors.partyIrsPractitioner;
+    validationErrors.filers || validationErrors.partyIrsPractitioner;
 
   let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
@@ -84,9 +82,28 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
+  let formattedFilingParties;
+  if (form.filersMap) {
+    formattedFilingParties = Object.entries(form.filersMap)
+      .filter(([, isChecked]) => isChecked)
+      .map(([filerContactId]) => {
+        const foundPetitioner = caseDetail.petitioners.find(
+          petitioner => petitioner.contactId === filerContactId,
+        );
+
+        if (foundPetitioner) {
+          const petitionerTitle = foundPetitioner.otherFilerType
+            ? foundPetitioner.otherFilerType
+            : 'Petitioner';
+          return `${foundPetitioner.name}, ${petitionerTitle}`;
+        }
+      });
+  }
+
   const exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
+    formattedFilingParties,
     formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
