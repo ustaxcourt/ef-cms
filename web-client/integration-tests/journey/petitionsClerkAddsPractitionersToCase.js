@@ -90,12 +90,11 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         practitionerMatch.userId,
       );
 
+      const contactSecondary = contactSecondaryFromState(test);
       await test.runSequence('updateModalValueSequence', {
-        key: 'representingSecondary',
+        key: `filersMap.${contactSecondary.contactId}`,
         value: true,
       });
-
-      const contactSecondary = contactSecondaryFromState(test);
 
       await test.runSequence('associatePrivatePractitionerWithCaseSequence');
       expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(
