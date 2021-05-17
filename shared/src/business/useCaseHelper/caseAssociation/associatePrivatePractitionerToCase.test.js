@@ -108,7 +108,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      filers: [caseRecord.petitioners[0].contactId],
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -128,7 +128,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      filers: [caseRecord.petitioners[0].contactId],
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -148,7 +148,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      filers: [
+      representing: [
         caseRecord.petitioners[0].contactId,
         caseRecord.petitioners[1].contactId,
         caseRecord.petitioners[2].contactId,
@@ -179,7 +179,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      filers: [caseRecord.petitioners[1].contactId],
+      representing: [caseRecord.petitioners[1].contactId],
       user: practitionerUser,
     });
 
