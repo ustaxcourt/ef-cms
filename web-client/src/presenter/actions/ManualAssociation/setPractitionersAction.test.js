@@ -41,16 +41,18 @@ describe('setPractitionersAction', () => {
     expect(result.state.modal.user).toBeUndefined();
   });
 
-  it('sets state.modal.filersMap to an empty object', async () => {
+  it('sets state.modal.representingMap to an empty object', async () => {
     const result = await runAction(setPractitionersAction, {
       props: {
         privatePractitioners: [],
       },
       state: {
-        modal: { filersMap: { '5e9f7ebe-b2d5-46c5-8c33-60018e14c311': true } },
+        modal: {
+          representingMap: { '5e9f7ebe-b2d5-46c5-8c33-60018e14c311': true },
+        },
       },
     });
 
-    expect(result.state.modal.filersMap).toEqual({});
+    expect(result.state.modal.representingMap).toEqual({});
   });
 });
