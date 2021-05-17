@@ -3,6 +3,9 @@ const {
   AddPrivatePractitionerFactory,
 } = require('./AddPrivatePractitionerFactory');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
@@ -35,7 +38,10 @@ EditPetitionerCounselFactory.get = metadata => {
   };
 
   let schema = {
-    representing: joi.array().items(joi.string().required()).required(),
+    representing: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
   };
 
   joiValidationDecorator(

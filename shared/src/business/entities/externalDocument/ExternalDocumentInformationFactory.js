@@ -197,7 +197,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     eventCode: JoiValidationConstants.STRING.valid(
       ...ALL_EVENT_CODES,
     ).optional(),
-    filers: joi.array().items(joi.string().required()).required(),
+    filers: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     freeText: JoiValidationConstants.STRING.optional(),
     hasSupportingDocuments: joi.boolean().required(),
     lodged: joi.boolean().optional(),

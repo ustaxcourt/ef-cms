@@ -125,7 +125,10 @@ function CaseAssociationRequestFactory(rawProps) {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
       'now',
     ).required(),
-    filers: joi.array().items(joi.string().required()).required(),
+    filers: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     hasSupportingDocuments: joi.boolean().required(),
     objections: JoiValidationConstants.STRING.valid(
       ...OBJECTIONS_OPTIONS,

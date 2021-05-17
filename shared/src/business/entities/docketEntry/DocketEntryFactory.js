@@ -142,7 +142,10 @@ function DocketEntryFactory(rawProps) {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
       'now',
     ).required(),
-    filers: joi.array().items(joi.string().required()).required(),
+    filers: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     objections: JoiValidationConstants.STRING.required(),
     partyIrsPractitioner: joi.boolean().required(),
     partyPrivatePractitioner: joi.boolean().required(),
