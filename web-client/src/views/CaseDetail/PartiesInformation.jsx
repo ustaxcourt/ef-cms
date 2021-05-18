@@ -11,6 +11,8 @@ import classNames from 'classnames';
 
 const PartiesInformation = connect(
   {
+    caseDetail: state.caseDetail,
+    caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
     partyViewTabs: state.constants.PARTY_VIEW_TABS,
     screenMetadata: state.screenMetadata,
@@ -18,6 +20,8 @@ const PartiesInformation = connect(
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function PartiesInformation({
+    caseDetail,
+    caseInformationHelper,
     partiesInformationHelper,
     partyViewTabs,
     screenMetadata,
@@ -95,6 +99,15 @@ const PartiesInformation = connect(
                 </Button>
               </div>
             </div>
+            {caseInformationHelper.showAddPartyButton && (
+              <Button
+                className="margin-right-0 margin-top-3"
+                href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
+                icon="plus-circle"
+              >
+                Add Party
+              </Button>
+            )}
           </div>
           <div className="grid-col-9">
             {screenMetadata.partyViewTab ===
