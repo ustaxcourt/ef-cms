@@ -647,8 +647,8 @@ Case.VALIDATION_RULES = {
     .array()
     .unique(
       (a, b) =>
-        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
-        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
+        a.contactType === UNIQUE_OTHER_FILER_TYPE &&
+        b.contactType === UNIQUE_OTHER_FILER_TYPE,
     )
     .required(),
   preferredTrialCity: joi

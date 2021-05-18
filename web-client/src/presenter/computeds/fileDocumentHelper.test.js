@@ -1,11 +1,11 @@
 import {
   CONTACT_TYPES,
-  OTHER_FILER_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
+import { capitalize } from 'lodash';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -513,17 +513,16 @@ describe('fileDocumentHelper', () => {
             contactId: mockPrimaryContactId,
             contactType: CONTACT_TYPES.primary,
             name: 'bob',
-            otherFilerType: undefined,
           },
           {
             contactId: mockTaxMattersContactId,
+            contactType: CONTACT_TYPES.participant,
             name: 'sally',
-            otherFilerType: OTHER_FILER_TYPES[1],
           },
           {
             contactId: mockIntervenorContactId,
+            contactType: CONTACT_TYPES.intervenor,
             name: 'rick',
-            otherFilerType: OTHER_FILER_TYPES[0],
           },
         ],
       };
@@ -535,7 +534,7 @@ describe('fileDocumentHelper', () => {
       });
 
       expect(formattedFilingParties).toEqual([
-        `rick, ${OTHER_FILER_TYPES[0]}`,
+        `rick, ${capitalize(CONTACT_TYPES.participant)}`,
         'bob, Petitioner',
       ]);
     });
