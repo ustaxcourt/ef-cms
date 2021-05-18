@@ -427,12 +427,11 @@ describe('Case entity', () => {
         {
           address1: '42 Lamb Sauce Blvd',
           city: 'Nashville',
-          contactType: CONTACT_TYPES.otherFiler,
+          contactType: CONTACT_TYPES.intervenor,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'gordon@example.com',
           name: 'Gordon Ramsay',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -442,13 +441,12 @@ describe('Case entity', () => {
         {
           address1: '1337 12th Ave',
           city: 'Flavortown',
-          contactType: CONTACT_TYPES.otherFiler,
+          // fails because there cannot be more than 1 filer with this type
+          contactType: CONTACT_TYPES.intervenor,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'mayor@example.com',
           name: 'Guy Fieri',
-          // fails because there cannot be more than 1 filer with this type
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
           phone: '1234567890',
           postalCode: '05198',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -473,60 +471,6 @@ describe('Case entity', () => {
       expect(errors).toMatchObject({
         'petitioners[2]': '"petitioners[2]" contains a duplicate value',
       });
-    });
-
-    it('fails validation with an invalid otherFilerType', () => {
-      const mockOtherFilers = [
-        {
-          address1: '42 Lamb Sauce Blvd',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'gordon@example.com',
-          name: 'Gordon Ramsay',
-          otherFilerType: null,
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-          title: UNIQUE_OTHER_FILER_TYPE,
-        },
-        {
-          address1: '1337 12th Ave',
-          city: 'Flavortown',
-          contactType: CONTACT_TYPES.otherFiler,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'mayor@example.com',
-          name: 'Guy Fieri',
-          otherFilerType: UNIQUE_OTHER_FILER_TYPE,
-          phone: '1234567890',
-          postalCode: '05198',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          state: 'AK',
-          title: UNIQUE_OTHER_FILER_TYPE,
-        },
-      ];
-
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          petitioners: [...MOCK_CASE.petitioners, ...mockOtherFilers],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      const errors = myCase.getFormattedValidationErrors();
-      expect(errors.petitioners).toMatchObject([
-        {
-          index: 1,
-          otherFilerType: 'Select a filer type',
-        },
-      ]);
     });
   });
 

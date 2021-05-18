@@ -76,7 +76,7 @@ export const AddPetitionerToCase = connect(
               >
                 <option value="">- Select -</option>
                 <option value="petitioner">Petitioner</option>
-                <option value="petitioner">Participant</option>
+                <option value="participant">Participant</option>
               </select>
             </FormGroup>
 
