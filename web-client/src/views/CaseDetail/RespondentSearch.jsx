@@ -73,7 +73,7 @@ const RespondentSearch = connect(
                   }}
                 />
                 <button
-                  className="usa-button"
+                  className="small-search-button usa-button"
                   id="search-for-respondent"
                   type="submit"
                 >
