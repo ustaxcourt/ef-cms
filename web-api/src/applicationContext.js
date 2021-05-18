@@ -704,6 +704,9 @@ const {
   getWorkItemMappingsByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
 const {
+  getWorkItemsByWorkItemId,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
+const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
@@ -948,6 +951,9 @@ const {
   updateCaseHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
 const {
+  updateCaseStatusOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems');
+const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
 const {
@@ -1062,6 +1068,9 @@ const {
 const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  updateWorkItemStatus,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemStatus');
 const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
@@ -1343,6 +1352,7 @@ const gatewayMethods = {
   getWebSocketConnectionsByUserId,
   getWorkItemById,
   getWorkItemMappingsByDocketNumber,
+  getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
   removeIrsPractitionerOnCase,
@@ -1352,6 +1362,7 @@ const gatewayMethods = {
   updateWorkItemCaseStatus,
   updateWorkItemCaseTitle,
   updateWorkItemDocketNumberSuffix,
+  updateWorkItemStatus,
   updateWorkItemTrialDate,
   verifyCaseForUser,
   verifyPendingCaseForUser,
@@ -1628,6 +1639,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveDocumentAndGetPaperServicePdf,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
+        updateCaseStatusOnWorkItems,
         updateInitialFilingDocuments,
         updateUserRecords,
       };
