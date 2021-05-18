@@ -14,7 +14,6 @@ export const RequestAccessReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
@@ -24,7 +23,6 @@ export const RequestAccessReview = connect(
   function RequestAccessReview({
     fileDocumentHelper,
     form,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     requestAccessHelper,
@@ -181,17 +179,10 @@ export const RequestAccessReview = connect(
                           Parties
                         </label>
                         <ul className="ustc-unstyled-list without-margins">
-                          {form.representingPrimary && (
-                            <li>
-                              {formattedCaseDetail.contactPrimary.name},
-                              Petitioner
-                            </li>
-                          )}
-                          {form.representingSecondary && (
-                            <li>
-                              {formattedCaseDetail.contactSecondary.name},
-                              Petitioner
-                            </li>
+                          {requestAccessHelper.representingPartiesNames.map(
+                            name => (
+                              <li key={name}>{name}</li>
+                            ),
                           )}
                         </ul>
                       </div>

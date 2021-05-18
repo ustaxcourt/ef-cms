@@ -291,6 +291,8 @@ export const assignWorkItems = async (test, to, workItems) => {
 };
 
 export const uploadExternalDecisionDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
   test.setState('form', {
     attachments: false,
     category: 'Decision',
@@ -299,8 +301,8 @@ export const uploadExternalDecisionDocument = async test => {
     documentTitle: 'Agreed Computation for Entry of Decision',
     documentType: 'Agreed Computation for Entry of Decision',
     eventCode: 'ACED',
+    filers: [contactPrimary.contactId],
     hasSupportingDocuments: false,
-    partyPrimary: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
@@ -314,6 +316,8 @@ export const uploadExternalDecisionDocument = async test => {
 };
 
 export const uploadExternalRatificationDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
   test.setState('form', {
     attachments: false,
     category: 'Miscellaneous',
@@ -322,9 +326,9 @@ export const uploadExternalRatificationDocument = async test => {
     documentTitle: 'Ratification of do the test',
     documentType: 'Ratification',
     eventCode: 'RATF',
+    filers: [contactPrimary.contactId],
     freeText: 'do the test',
     hasSupportingDocuments: false,
-    partyPrimary: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
     scenario: 'Nonstandard B',

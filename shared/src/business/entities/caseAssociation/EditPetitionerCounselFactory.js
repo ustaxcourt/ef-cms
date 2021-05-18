@@ -3,12 +3,12 @@ const {
   AddPrivatePractitionerFactory,
 } = require('./AddPrivatePractitionerFactory');
 const {
+  JoiValidationConstants,
+} = require('../../../utilities/JoiValidationConstants');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  makeRequiredHelper,
-} = require('../externalDocument/externalDocumentHelpers');
 
 /**
  *
@@ -18,6 +18,7 @@ function EditPetitionerCounselFactory() {}
 
 EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
   ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+  representing: 'Select a representing party',
 };
 
 /**
@@ -32,32 +33,16 @@ EditPetitionerCounselFactory.get = metadata => {
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
     Object.assign(this, {
-      representingPrimary: rawProps.representingPrimary,
-      representingSecondary: rawProps.representingSecondary,
+      representing: rawProps.representing,
     });
   };
 
-  let schema = {};
-
-  let schemaOptionalItems = {
-    representingPrimary: joi.boolean().invalid(false),
-    representingSecondary: joi.boolean(),
+  let schema = {
+    representing: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
   };
-
-  const makeRequired = itemName => {
-    makeRequiredHelper({
-      itemName,
-      schema,
-      schemaOptionalItems,
-    });
-  };
-
-  if (
-    metadata.representingPrimary !== true &&
-    metadata.representingSecondary !== true
-  ) {
-    makeRequired('representingPrimary');
-  }
 
   joiValidationDecorator(
     entityConstructor,

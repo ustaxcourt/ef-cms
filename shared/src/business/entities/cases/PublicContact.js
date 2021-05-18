@@ -20,12 +20,14 @@ function PublicContact() {
 }
 
 PublicContact.prototype.init = function init(rawContact) {
+  this.contactId = rawContact.contactId;
   this.contactType = rawContact.contactType;
   this.name = rawContact.name;
   this.state = rawContact.state;
 };
 
 PublicContact.VALIDATION_RULES = joi.object().keys({
+  contactId: JoiValidationConstants.UUID.required(),
   contactType: JoiValidationConstants.STRING.valid(
     ...Object.values(CONTACT_TYPES),
   ).optional(),
