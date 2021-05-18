@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 const formatCounsel = ({ counsel, screenMetadata }) => {
@@ -11,11 +12,7 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const {
-    CONTACT_TYPES,
-    UNIQUE_OTHER_FILER_TYPE,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { CONTACT_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
@@ -51,10 +48,15 @@ export const partiesInformationHelper = (get, applicationContext) => {
       );
 
     if (petitioner.contactType === CONTACT_TYPES.otherFiler) {
-      petitioner.formattedTitle =
-        petitioner.otherFilerType === UNIQUE_OTHER_FILER_TYPE
-          ? petitioner.otherFilerType
-          : 'Participant';
+      const otherContactTypes = [
+        CONTACT_TYPES.intervenor,
+        CONTACT_TYPES.participant,
+      ];
+      petitioner.formattedTitle = otherContactTypes.includes(
+        petitioner.contactType,
+      )
+        ? capitalize(petitioner.contactType)
+        : 'Participant';
     }
 
     if (

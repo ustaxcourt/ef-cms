@@ -534,7 +534,7 @@ describe('fileDocumentHelper', () => {
       });
 
       expect(formattedFilingParties).toEqual([
-        `rick, ${capitalize(CONTACT_TYPES.participant)}`,
+        `rick, ${capitalize(CONTACT_TYPES.intervenor)}`,
         'bob, Petitioner',
       ]);
     });
