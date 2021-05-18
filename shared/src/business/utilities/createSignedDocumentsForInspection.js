@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 // This utility is used to create signed documents for visual inspection
 // without the need to run the entire application.
 
