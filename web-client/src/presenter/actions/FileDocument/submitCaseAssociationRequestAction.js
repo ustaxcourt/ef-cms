@@ -55,8 +55,7 @@ export const submitCaseAssociationRequestAction = async ({
   } else if (documentWithPendingAssociation) {
     await applicationContext
       .getUseCases()
-      .submitPendingCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
       });
   }
