@@ -286,19 +286,13 @@ const updateCaseWorkItems = async ({
       );
     }
 
-    console.log(
-      '-----------',
-      previousCase.docketNumberSuffix,
-      updatedCase.docketNumberSuffix,
-    );
-
     if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
       workItemRequests.push(
         applicationContext
           .getPersistenceGateway()
           .updateWorkItemDocketNumberSuffix({
             applicationContext,
-            docketNumberSuffix: updatedCase.docketNumberSuffix || null,
+            docketNumberSuffix: updatedCase.docketNumberSuffix,
             workItemId,
           }),
       );
