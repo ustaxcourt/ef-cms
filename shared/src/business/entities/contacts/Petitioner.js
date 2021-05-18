@@ -64,6 +64,9 @@ Petitioner.VALIDATION_RULES = {
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
+  contactType: JoiValidationConstants.STRING.valid(
+    ...Object.values(CONTACT_TYPES),
+  ).required(),
   country: JoiValidationConstants.STRING.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
     otherwise: joi.optional().allow(null),
