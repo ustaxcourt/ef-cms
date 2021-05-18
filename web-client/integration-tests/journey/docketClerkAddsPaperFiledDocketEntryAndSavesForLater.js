@@ -1,5 +1,6 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
   test,
@@ -33,7 +34,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     //primary document
@@ -60,8 +61,10 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: 100,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

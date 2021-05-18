@@ -20,8 +20,7 @@ describe('associatePrivatePractitionerWithCaseAction', () => {
       state: {
         caseDetail: { docketNumber: '123-20' },
         modal: {
-          representingPrimary: true,
-          representingSecondary: false,
+          filers: ['d0821ec5-3293-478d-ace1-71e77f50b7f9'],
           user: {
             userId: 'sdfsd',
           },

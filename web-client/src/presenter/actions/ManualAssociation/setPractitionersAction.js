@@ -17,4 +17,6 @@ export const setPractitionersAction = ({ props, store }) => {
     //if there is only one result, default select that option on the form
     store.set(state.modal.user, practitionerMatches[0]);
   }
+
+  store.set(state.modal.representingMap, {});
 };
