@@ -450,7 +450,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFullCaseByDocketNumber),
     getItem: jest.fn().mockImplementation(getItem),
-
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
       .fn()
@@ -459,6 +458,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
+    getWorkItemMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
