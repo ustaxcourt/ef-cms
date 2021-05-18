@@ -15,10 +15,10 @@ exports.createUserOutboxRecord = async ({
 }) => {
   await put({
     Item: {
+      ...workItem,
       gsi1pk: `work-item|${workItem.workItemId}`,
       pk: `user-outbox|${userId}`,
       sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
-      ...workItem,
     },
     applicationContext,
   });
