@@ -7,6 +7,7 @@ import { getCaseAction } from '../../actions/getCaseAction';
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
+import { setRepresentingFromRepresentingMapActionFactory } from '../../actions/setRepresentingFromRepresentingMapActionFactory';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
@@ -16,6 +17,7 @@ import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociat
 export const associatePrivatePractitionerWithCaseSequence = showProgressSequenceDecorator(
   [
     startShowValidationAction,
+    setRepresentingFromRepresentingMapActionFactory('modal'),
     validateAddPrivatePractitionerAction,
     {
       error: [setValidationErrorsAction],

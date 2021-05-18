@@ -230,6 +230,9 @@ const {
   getUserPendingEmailLambda,
 } = require('./users/getUserPendingEmailLambda');
 const {
+  getUserPendingEmailStatusLambda,
+} = require('./users/getUserPendingEmailStatusLambda');
+const {
   getUsersPendingEmailLambda,
 } = require('./users/getUsersPendingEmailLambda');
 const {
@@ -960,6 +963,10 @@ app.get(
   lambdaWrapper(getUserPendingEmailLambda),
 );
 app.get('/users/pending-email', lambdaWrapper(getUsersPendingEmailLambda));
+app.get(
+  '/users/:userId/pending-email-status',
+  lambdaWrapper(getUserPendingEmailStatusLambda),
+);
 app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.put(
   '/async/users/verify-email',

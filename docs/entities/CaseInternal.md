@@ -1414,6 +1414,24 @@
                     allow: 
                       - ""
                       - null
+            filers: 
+              type: "array"
+              flags: 
+                presence: "optional"
+              items: 
+                - 
+                  type: "string"
+                  rules: 
+                    - 
+                      name: "min"
+                      args: 
+                        limit: 1
+                    - 
+                      name: "guid"
+                      args: 
+                        options: 
+                          version: 
+                            - "uuidv4"
             filingDate: 
               type: "date"
               flags: 
@@ -1736,16 +1754,6 @@
               type: "boolean"
               flags: 
                 presence: "optional"
-            partyPrimary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
-                description: "Use the primary contact to compose the filedBy text."
-            partySecondary: 
-              type: "boolean"
-              flags: 
-                presence: "optional"
-                description: "Use the secondary contact to compose the filedBy text."
             pending: 
               type: "boolean"
               flags: 

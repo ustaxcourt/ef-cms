@@ -9,6 +9,9 @@ describe('setPetitionerCounselFormAction', () => {
   });
 
   it('should set the state.form to the associated petitioner counsel via its barNumber', async () => {
+    const mockPrimaryId = '99370a21-3197-49bb-ac1b-2df7f2dca50a';
+    const mockSecondaryId = 'e70dce71-d27a-4e21-b065-4e92665748ea';
+
     const { state } = await runAction(setPetitionerCounselFormAction, {
       modules: {
         presenter,
@@ -20,18 +23,18 @@ describe('setPetitionerCounselFormAction', () => {
         caseDetail: {
           petitioners: [
             {
-              contactId: '123',
+              contactId: mockPrimaryId,
               contactType: 'primary',
             },
             {
-              contactId: '456',
+              contactId: mockSecondaryId,
               contactType: 'secondary',
             },
           ],
           privatePractitioners: [
             {
               barNumber: 'abc',
-              representing: ['123', '456'],
+              representing: [mockPrimaryId, mockSecondaryId],
             },
           ],
         },
@@ -39,9 +42,11 @@ describe('setPetitionerCounselFormAction', () => {
     });
     expect(state.form).toMatchObject({
       barNumber: 'abc',
-      representing: ['123', '456'],
-      representingPrimary: true,
-      representingSecondary: true,
+      representing: [mockPrimaryId, mockSecondaryId],
+      representingMap: {
+        [mockPrimaryId]: true,
+        [mockSecondaryId]: true,
+      },
     });
   });
 });
