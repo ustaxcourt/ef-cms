@@ -58,15 +58,15 @@ export const AddPetitionerToCase = connect(
 
           <div className="blue-container margin-bottom-5">
             <FormGroup>
-              <label className="usa-label" htmlFor="petitionerType">
-                <span>Petitioner Type</span>
+              <label className="usa-label" htmlFor="roleType">
+                <span>Role type</span>
               </label>
               <select
-                aria-describedby="petitioner-type"
+                aria-describedby="role-type"
                 className="usa-select max-width-400"
-                id="petitionerType"
-                name="petitionerType"
-                value={form.petitionerType || ''}
+                id="roleType"
+                name="roleType"
+                value={form.roleType || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
@@ -76,6 +76,7 @@ export const AddPetitionerToCase = connect(
               >
                 <option value="">- Select -</option>
                 <option value="petitioner">Petitioner</option>
+                <option value="petitioner">Participant</option>
               </select>
             </FormGroup>
 
