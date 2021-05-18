@@ -38,7 +38,8 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
 
   const isAssociationPending = await applicationContext
     .getPersistenceGateway()
-    .verifyPendingCaseForUser(applicationContext, {
+    .verifyPendingCaseForUser({
+      applicationContext,
       docketNumber,
       userId: user.userId,
     });
