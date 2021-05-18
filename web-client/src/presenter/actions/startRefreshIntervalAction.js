@@ -18,8 +18,7 @@ export const startRefreshIntervalAction = ({
   const interval = setInterval(async () => {
     const response = await applicationContext
       .getUseCases()
-      .refreshTokenInteractor({
-        applicationContext,
+      .refreshTokenInteractor(applicationContext, {
         refreshToken,
       });
 
