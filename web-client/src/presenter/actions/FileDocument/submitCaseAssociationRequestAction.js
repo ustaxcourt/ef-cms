@@ -50,8 +50,7 @@ export const submitCaseAssociationRequestAction = async ({
       .submitCaseAssociationRequestInteractor({
         applicationContext,
         docketNumber,
-        representingPrimary: documentMetadata.representingPrimary,
-        representingSecondary: documentMetadata.representingSecondary,
+        filers: documentMetadata.filers,
       });
   } else if (documentWithPendingAssociation) {
     await applicationContext

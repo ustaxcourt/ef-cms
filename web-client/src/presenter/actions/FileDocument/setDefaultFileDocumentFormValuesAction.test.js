@@ -6,35 +6,46 @@ import { setDefaultFileDocumentFormValuesAction } from './setDefaultFileDocument
 
 describe('setDefaultFileDocumentFormValuesAction', () => {
   presenter.providers.applicationContext = applicationContext;
+  const mockUserId = '082093a4-20e0-4a82-9d89-e24108535216';
 
-  it('sets form.partyPrimary to true if the user is a petitioner', async () => {
-    applicationContext.getCurrentUser = () => ({
-      role: ROLES.petitioner,
-    });
-    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
-      modules: { presenter },
-      state: {
-        form: {
-          partyPrimary: false,
-        },
-      },
-    });
-
-    expect(result.state.form.partyPrimary).toEqual(true);
-  });
-  it('does not set form.partyPrimary if the user is not a petitioner', async () => {
-    applicationContext.getCurrentUser = () => ({
+  it('sets up the form with default values', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.privatePractitioner,
+      userId: mockUserId,
     });
+
     const result = await runAction(setDefaultFileDocumentFormValuesAction, {
       modules: { presenter },
       state: {
-        form: {
-          partyPrimary: false,
-        },
+        form: {},
       },
     });
 
-    expect(result.state.form.partyPrimary).toEqual(false);
+    expect(result.state.form).toEqual({
+      attachments: false,
+      certificateOfService: false,
+      filersMap: {},
+      hasSecondarySupportingDocuments: false,
+      hasSupportingDocuments: false,
+      practitioner: [],
+    });
+  });
+
+  it('should set filersMap[userId] to true if the logged in user is a petitioner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitioner,
+      userId: mockUserId,
+    });
+
+    const result = await runAction(setDefaultFileDocumentFormValuesAction, {
+      modules: { presenter },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(result.state.form.filersMap).toEqual({
+      [mockUserId]: true,
+    });
   });
 });
