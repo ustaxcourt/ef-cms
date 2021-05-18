@@ -247,11 +247,11 @@ const updateCaseWorkItems = async ({
   const workItemUpdates = [];
 
   const workItemsRequireUpdate =
-    oldCase.status !== caseToUpdate.status ||
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.trialDate !== caseToUpdate.trialDate;
 
   if (!workItemsRequireUpdate) {
     return workItemUpdates;
@@ -266,56 +266,56 @@ const updateCaseWorkItems = async ({
 
   const updateWorkItemRecords = (updatedCase, previousCase, workItemId) => {
     const workItemRequests = [];
-    if (previousCase.status !== updatedCase.status) {
-      workItemRequests.push(
-        applicationContext.getPersistenceGateway().updateWorkItemCaseStatus({
-          applicationContext,
-          caseStatus: updatedCase.status,
-          workItemId,
-        }),
-      );
-    }
-    if (previousCase.caseCaption !== updatedCase.caseCaption) {
-      workItemRequests.push(
-        applicationContext.getPersistenceGateway().updateWorkItemCaseTitle({
-          applicationContext,
-          caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
-          workItemId,
-        }),
-      );
-    }
-
-    if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
-      workItemRequests.push(
-        applicationContext
-          .getPersistenceGateway()
-          .updateWorkItemDocketNumberSuffix({
-            applicationContext,
-            docketNumberSuffix: updatedCase.docketNumberSuffix,
-            workItemId,
-          }),
-      );
-    }
-    if (previousCase.trialDate !== updatedCase.trialDate) {
-      workItemRequests.push(
-        applicationContext.getPersistenceGateway().updateWorkItemTrialDate({
-          applicationContext,
-          trialDate: updatedCase.trialDate || null,
-          workItemId,
-        }),
-      );
-    }
     if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
       workItemRequests.push(
         applicationContext
-          .getPersistenceGateway()
-          .updateWorkItemAssociatedJudge({
+          .getUseCaseHelpers()
+          .updateAssociatedJudgeOnWorkItems({
             applicationContext,
             associatedJudge: updatedCase.associatedJudge,
             workItemId,
           }),
       );
     }
+    if (previousCase.caseCaption !== updatedCase.caseCaption) {
+      workItemRequests.push(
+        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems({
+          applicationContext,
+          caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
+      workItemRequests.push(
+        applicationContext
+          .getUseCaseHelpers()
+          .updateDocketNumberSuffixOnWorkItems({
+            applicationContext,
+            docketNumberSuffix: updatedCase.docketNumberSuffix,
+            workItemId,
+          }),
+      );
+    }
+    if (previousCase.status !== updatedCase.status) {
+      workItemRequests.push(
+        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems({
+          applicationContext,
+          caseStatus: updatedCase.status,
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.trialDate !== updatedCase.trialDate) {
+      workItemRequests.push(
+        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({
+          applicationContext,
+          trialDate: updatedCase.trialDate || null,
+          workItemId,
+        }),
+      );
+    }
+
     return workItemRequests;
   };
 

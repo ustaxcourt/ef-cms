@@ -235,24 +235,24 @@ describe('updateCaseAndAssociations', () => {
       applicationContext
         .getPersistenceGateway()
         .getWorkItemMappingsByDocketNumber.mockReturnValue([
-          { sk: 'workitem|123' },
+          { pk: 'abc|987', sk: 'workitem|123' },
         ]);
     });
 
-    it('the case status has been updated', async () => {
+    it('the associated judge has been updated', async () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
           ...validMockCase,
-          status: CASE_STATUS_TYPES.generalDocket,
+          associatedJudge: 'Judge Dredd',
         },
       });
 
       expect(
-        applicationContext.getPersistenceGateway().updateWorkItemCaseStatus,
+        applicationContext.getUseCaseHelpers().updateAssociatedJudgeOnWorkItems,
       ).toBeCalledWith({
         applicationContext,
-        caseStatus: CASE_STATUS_TYPES.generalDocket,
+        associatedJudge: 'Judge Dredd',
         workItemId: '123',
       });
     });
@@ -267,8 +267,8 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .updateWorkItemDocketNumberSuffix,
+        applicationContext.getUseCaseHelpers()
+          .updateDocketNumberSuffixOnWorkItems,
       ).toBeCalledWith({
         applicationContext,
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
@@ -286,10 +286,28 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().updateWorkItemCaseTitle,
+        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems,
       ).toBeCalledWith({
         applicationContext,
         caseTitle: Case.getCaseTitle('Some caption changed'),
+        workItemId: '123',
+      });
+    });
+
+    it('the case status has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        caseStatus: CASE_STATUS_TYPES.generalDocket,
         workItemId: '123',
       });
     });
@@ -305,29 +323,10 @@ describe('updateCaseAndAssociations', () => {
       });
 
       expect(
-        applicationContext.getPersistenceGateway().updateWorkItemTrialDate,
+        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
       ).toBeCalledWith({
         applicationContext,
         trialDate: '2021-01-02T05:22:16.001Z',
-        workItemId: '123',
-      });
-    });
-
-    it('the associated judge has been updated', async () => {
-      await updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          associatedJudge: 'Judge Dredd',
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updateWorkItemAssociatedJudge,
-      ).toBeCalledWith({
-        applicationContext,
-        associatedJudge: 'Judge Dredd',
         workItemId: '123',
       });
     });
