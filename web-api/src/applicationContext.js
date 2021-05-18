@@ -1776,8 +1776,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         validatePdfInteractor,
         verifyPendingCaseForUserInteractor,
         verifyUserPendingEmailInteractor,
-        virusScanPdfInteractor: args =>
-          process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
+        virusScanPdfInteractor: (applicationContext, args) =>
+          process.env.SKIP_VIRUS_SCAN
+            ? null
+            : virusScanPdfInteractor(applicationContext, args),
       };
     },
     getUtilities: () => {
