@@ -17,5 +17,6 @@ exports.validateCaseAssociationRequestInteractor = ({
   const errors = CaseAssociationRequestFactory(caseAssociationRequest, {
     applicationContext,
   }).getFormattedValidationErrors();
+
   return errors || null;
 };

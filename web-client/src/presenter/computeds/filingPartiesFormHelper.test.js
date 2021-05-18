@@ -39,7 +39,7 @@ describe('filingPartiesFormHelper', () => {
   });
 
   it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { partyPrimary: 'You did something bad.' };
+    state.validationErrors = { filers: 'You did something bad.' };
     const result = runCompute(filingPartiesFormHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });

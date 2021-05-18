@@ -1,3 +1,5 @@
+import { contactPrimaryFromState } from '../helpers';
+
 export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
   return it('DocketClerk adds miscellaneous paper filing', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -33,8 +35,10 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

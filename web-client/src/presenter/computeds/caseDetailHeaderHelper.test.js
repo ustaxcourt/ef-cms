@@ -650,5 +650,19 @@ describe('caseDetailHeaderHelper', () => {
 
       expect(result.showBlockedTag).toBeFalsy();
     });
+
+    it('should not throw an exception when petitioners array is undefined', () => {
+      expect(() =>
+        runCompute(caseDetailHeaderHelper, {
+          state: {
+            caseDetail: {
+              ...MOCK_CASE,
+              petitioners: undefined,
+            },
+            ...getBaseState(docketClerkUser),
+          },
+        }),
+      ).not.toThrow();
+    });
   });
 });

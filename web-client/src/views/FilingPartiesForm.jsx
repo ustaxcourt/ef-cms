@@ -6,13 +6,13 @@ import classNames from 'classnames';
 
 export const FilingPartiesForm = connect(
   {
-    caseDetailContactHelper: state.caseDetailContactHelper,
+    caseDetail: state.caseDetail,
     filingPartiesFormHelper: state.filingPartiesFormHelper,
     form: state.form,
     validationErrors: state.validationErrors,
   },
   function FilingPartiesForm({
-    caseDetailContactHelper,
+    caseDetail,
     filingPartiesFormHelper,
     form,
     updateSequence,
@@ -28,35 +28,13 @@ export const FilingPartiesForm = connect(
           )}
         >
           <legend className="usa-legend">Who is filing this document?</legend>
-          <div className="usa-checkbox">
-            <input
-              checked={form.partyPrimary || false}
-              className="usa-checkbox__input"
-              id="party-primary"
-              name="partyPrimary"
-              type="checkbox"
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.checked,
-                });
-                validateSequence();
-              }}
-            />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="party-primary"
-            >
-              {caseDetailContactHelper.contactPrimary.name}
-            </label>
-          </div>
-          {filingPartiesFormHelper.showSecondaryParty && (
-            <div className="usa-checkbox">
+          {caseDetail.petitioners.map(petitioner => (
+            <div className="usa-checkbox" key={petitioner.contactId}>
               <input
-                checked={form.partySecondary || false}
+                checked={form.filersMap[petitioner.contactId] || false}
                 className="usa-checkbox__input"
-                id="party-secondary"
-                name="partySecondary"
+                id={`filing-${petitioner.contactId}`}
+                name={`filersMap.${petitioner.contactId}`}
                 type="checkbox"
                 onChange={e => {
                   updateSequence({
@@ -68,12 +46,13 @@ export const FilingPartiesForm = connect(
               />
               <label
                 className="usa-checkbox__label inline-block"
-                htmlFor="party-secondary"
+                htmlFor={`filing-${petitioner.contactId}`}
               >
-                {caseDetailContactHelper.contactSecondary.name}
+                {petitioner.name}
               </label>
             </div>
-          )}
+          ))}
+
           <div className="usa-checkbox">
             <input
               checked={form.partyIrsPractitioner || false}
