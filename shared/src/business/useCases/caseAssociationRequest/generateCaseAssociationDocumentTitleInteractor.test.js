@@ -7,6 +7,7 @@ const {
 
 describe('generateCaseAssociationDocumentTitle', () => {
   it('generates a document title', async () => {
+    const mockPrimaryId = 'df21f551-abe2-4755-80d2-d76b19528d6e';
     const title = await generateCaseAssociationDocumentTitleInteractor(
       applicationContext,
       {
@@ -14,10 +15,15 @@ describe('generateCaseAssociationDocumentTitle', () => {
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          representingPrimary: true,
+          filers: [mockPrimaryId],
         },
-        contactPrimaryName: 'Test Petitioner',
-        contactSecondaryName: 'Another Petitioner',
+        petitioners: [
+          { contactId: mockPrimaryId, name: 'Test Petitioner' },
+          {
+            contactId: 'dc184c34-5f03-4fcb-9aff-920c737d80ff',
+            name: 'Another Petitioner',
+          },
+        ],
       },
     );
 

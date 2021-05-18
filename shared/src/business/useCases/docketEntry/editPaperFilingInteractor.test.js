@@ -7,6 +7,7 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { editPaperFilingInteractor } = require('./editPaperFilingInteractor');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('editPaperFilingInteractor', () => {
@@ -44,6 +45,8 @@ describe('editPaperFilingInteractor', () => {
       },
     ],
   };
+
+  const mockPrimaryId = getContactPrimary(MOCK_CASE).contactId;
 
   beforeEach(() => {
     mockCurrentUser = {
@@ -87,8 +90,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: false,
-        partyPrimary: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
     });
@@ -113,8 +116,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: true,
-        partyPrimary: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
     });
@@ -156,8 +159,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: true,
-        partyPrimary: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
     });
@@ -174,8 +177,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: true,
-        partyPrimary: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
     });
@@ -200,11 +203,11 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Edited Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         freeText: 'Some text about this document',
         hasOtherFilingParty: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
-        partyPrimary: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
     });
@@ -230,8 +233,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: true,
-        partyPrimary: true,
       },
       isSavingForLater: true,
       primaryDocumentFileId: mockDocketEntryId,
@@ -257,8 +260,8 @@ describe('editPaperFilingInteractor', () => {
         documentTitle: 'My Document',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filers: [mockPrimaryId],
         isFileAttached: false,
-        partyPrimary: true,
       },
       isSavingForLater: true,
       primaryDocumentFileId: mockDocketEntryId,

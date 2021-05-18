@@ -18,6 +18,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -62,6 +63,7 @@ export const submitPaperFilingSequence = [
       setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
       generateTitleForPaperFilingAction,
+      setFilersFromFilersMapAction,
       validateDocketEntryAction,
       {
         error: [

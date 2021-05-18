@@ -16,7 +16,6 @@ export const FileDocumentReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
@@ -24,7 +23,6 @@ export const FileDocumentReview = connect(
   function FileDocumentReview({
     fileDocumentHelper,
     form,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     showModal,
@@ -300,17 +298,10 @@ export const FileDocumentReview = connect(
                             Filing parties
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
-                            {form.partyPrimary && (
-                              <li>
-                                {formattedCaseDetail.contactPrimary.name},
-                                Petitioner
-                              </li>
-                            )}
-                            {form.partySecondary && (
-                              <li>
-                                {formattedCaseDetail.contactSecondary.name},
-                                Petitioner
-                              </li>
+                            {fileDocumentHelper.formattedFilingParties.map(
+                              party => (
+                                <li key={party}>{party}</li>
+                              ),
                             )}
                             {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>

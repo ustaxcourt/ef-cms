@@ -44,7 +44,7 @@ describe('validateEditPetitionerCounselAction', () => {
           ],
         },
         form: {
-          representingPrimary: true,
+          representing: ['abc'],
           serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
           userId: '1',
         },
@@ -117,7 +117,7 @@ describe('validateEditPetitionerCounselAction', () => {
           ],
         },
         form: {
-          representingPrimary: true,
+          representing: ['abc'],
           serviceIndicator: serviceIndicatorTypes.SI_ELECTRONIC,
           userId: '2',
         },

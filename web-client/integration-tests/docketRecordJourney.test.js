@@ -13,6 +13,7 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 import {
+  contactPrimaryFromState,
   createCourtIssuedDocketEntry,
   fakeFile,
   getFormattedDocketEntriesForTest,
@@ -140,8 +141,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 'Little Rock, AR',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -208,8 +211,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 'Little Rock, AR',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -426,8 +431,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 'A',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

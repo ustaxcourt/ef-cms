@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsTrackedDocketEntry = (
   test,
@@ -22,7 +23,7 @@ export const docketClerkAddsTrackedDocketEntry = (
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
@@ -51,8 +52,10 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

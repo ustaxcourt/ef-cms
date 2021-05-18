@@ -9,11 +9,6 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-  isSealedCase,
-} = require('./Case');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -22,6 +17,7 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
@@ -64,10 +60,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else if (!this.isSealed) {
-    this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
-    if (getContactSecondary(rawCase)) {
-      this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
-    }
+    this.petitioners = [];
+    rawCase.petitioners.map(petitioner => {
+      const publicPetitionerContact = new PublicContact(petitioner);
+      this.petitioners.push(publicPetitionerContact);
+    });
   }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
