@@ -930,6 +930,9 @@ const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
+  updateAssociatedJudgeOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -953,6 +956,9 @@ const {
 const {
   updateCaseStatusOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems');
+const {
+  updateCaseTitleOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -983,6 +989,9 @@ const {
 const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
+const {
+  updateDocketNumberSuffixOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems');
 const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
@@ -1017,6 +1026,9 @@ const {
 const {
   updateSecondaryContactInteractor,
 } = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
+const {
+  updateTrialDateOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
@@ -1633,10 +1645,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
         updateCaseStatusOnWorkItems,
+        updateCaseTitleOnWorkItems,
+        updateDocketNumberSuffixOnWorkItems,
         updateInitialFilingDocuments,
+        updateTrialDateOnWorkItems,
         updateUserRecords,
       };
     },
