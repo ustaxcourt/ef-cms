@@ -1,5 +1,8 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
@@ -75,12 +78,15 @@ export const docketClerkEditsDocketEntryStandard = test => {
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
+
+    const contactPrimary = contactPrimaryFromState(test);
+
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Entry of Appearance',
       documentType: 'Entry of Appearance',
       eventCode: 'EA',
       filedBy: 'Petr. Mona Schultz, Brianna Noble',
-      partyPrimary: true,
+      filers: [contactPrimary.contactId],
       receivedAt: '2018-01-01T05:00:00.000Z',
     });
   });

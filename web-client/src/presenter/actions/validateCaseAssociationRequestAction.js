@@ -39,8 +39,7 @@ export const validateCaseAssociationRequestAction = ({
       'objections',
       'hasSupportingDocuments',
       'supportingDocuments',
-      'representingPrimary',
-      'representingSecondary',
+      'filers',
     ];
 
     const errorDisplayMap = {

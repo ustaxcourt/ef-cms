@@ -6,22 +6,18 @@ const { put } = require('../requests');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.representingPrimary true if the user is representing
- * the primary contact on the case, false otherwise
- * @param {string} providers.representingSecondary true if the user is representing
- * the secondary contact on the case, false otherwise
+ * @param {string} providers.filers the list of filers to associate with
  * @returns {Promise<*>} the promise of the api call
  */
 exports.submitCaseAssociationRequestInteractor = (
   applicationContext,
-  { docketNumber, representingPrimary, representingSecondary },
+  { docketNumber, filers },
 ) => {
   const user = applicationContext.getCurrentUser();
   return put({
     applicationContext,
     body: {
-      representingPrimary,
-      representingSecondary,
+      filers,
     },
     endpoint: `/users/${user.userId}/case/${docketNumber}`,
   });

@@ -342,7 +342,6 @@ const formatCase = (applicationContext, caseDetail) => {
     );
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
-
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
       entry => applicationContext.getUtilities().isPending(entry),
     );

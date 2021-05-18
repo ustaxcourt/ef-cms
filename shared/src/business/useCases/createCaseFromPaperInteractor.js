@@ -118,12 +118,13 @@ exports.createCaseFromPaperInteractor = async (
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
 
-  let partySecondary = false;
+  const filers = [caseToAdd.getContactPrimary().contactId];
+
   if (
     petitionMetadata.contactSecondary &&
     petitionMetadata.contactSecondary.name
   ) {
-    partySecondary = true;
+    filers.push(caseToAdd.getContactSecondary().contactId);
   }
 
   const petitionDocketEntryEntity = new DocketEntry(
@@ -135,17 +136,16 @@ exports.createCaseFromPaperInteractor = async (
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filers,
       filingDate: caseToAdd.receivedAt,
       isFileAttached: true,
       isOnDocketRecord: true,
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
-      partyPrimary: true,
-      partySecondary,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToAdd.petitioners },
   );
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
@@ -171,16 +171,15 @@ exports.createCaseFromPaperInteractor = async (
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
         eventCode:
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(applicationForWaiverOfFilingFeeDocketEntryEntity);
@@ -205,16 +204,15 @@ exports.createCaseFromPaperInteractor = async (
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(requestForPlaceOfTrialDocketEntryEntity);
@@ -230,17 +228,16 @@ exports.createCaseFromPaperInteractor = async (
         documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         index: 0,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(stinDocketEntryEntity);
@@ -256,16 +253,15 @@ exports.createCaseFromPaperInteractor = async (
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(odsDocketEntryEntity);

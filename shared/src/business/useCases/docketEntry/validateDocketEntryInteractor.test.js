@@ -11,16 +11,16 @@ const {
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 describe('validateDocketEntryInteractor', () => {
-  it('returns the expected errors object on an empty message', () => {
+  it('returns the expected errors object on an empty docket entry', () => {
     const errors = validateDocketEntryInteractor(applicationContext, {
-      entryMetadata: {},
+      entryMetadata: { filers: [] },
     });
 
     expect(errors).toEqual({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
   });
 
@@ -32,9 +32,9 @@ describe('validateDocketEntryInteractor', () => {
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Answer',
         eventCode: 'A',
+        filers: ['30016a85-dd92-4eba-8539-a8c9fd977e94'],
         lodged: false,
         ordinalValue: 'First',
-        partyPrimary: true,
         primaryDocumentFile: {},
         primaryDocumentFileSize: 1,
         scenario: 'Nonstandard G',

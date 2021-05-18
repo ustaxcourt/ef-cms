@@ -99,7 +99,11 @@ export const UploadCourtIssuedDocument = connect(
                 </div>
 
                 <div className="document-select-container">
-                  <FormGroup errorText={validationErrors.primaryDocumentFile}>
+                  <FormGroup
+                    errorText={
+                      validationErrors && validationErrors.primaryDocumentFile
+                    }
+                  >
                     <label
                       className={classNames(
                         'usa-label ustc-upload with-hint',
