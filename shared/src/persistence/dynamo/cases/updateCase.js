@@ -246,10 +246,10 @@ exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
   await Promise.all([
     client.put({
       Item: {
-        pk: `case|${caseToUpdate.docketNumber}`,
-        sk: `case|${caseToUpdate.docketNumber}`,
         ...setLeadCase,
         ...omit(caseToUpdate, fieldsToOmitBeforePersisting),
+        pk: `case|${caseToUpdate.docketNumber}`,
+        sk: `case|${caseToUpdate.docketNumber}`,
       },
       applicationContext,
     }),
