@@ -230,7 +230,7 @@ describe('updateCaseAndAssociations', () => {
     });
   });
 
-  describe.only('work items', () => {
+  describe('work items', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
@@ -328,24 +328,6 @@ describe('updateCaseAndAssociations', () => {
       ).toBeCalledWith({
         applicationContext,
         associatedJudge: 'Judge Dredd',
-        workItemId: '123',
-      });
-    });
-    it('the case in progress flag has been updated', async () => {
-      await updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: {
-          ...validMockCase,
-          trialDate: '2021-01-02T05:22:16.001Z',
-          trialSessionId: faker.datatype.uuid(),
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().updateWorkItemTrialDate,
-      ).toBeCalledWith({
-        applicationContext,
-        trialDate: '2021-01-02T05:22:16.001Z',
         workItemId: '123',
       });
     });

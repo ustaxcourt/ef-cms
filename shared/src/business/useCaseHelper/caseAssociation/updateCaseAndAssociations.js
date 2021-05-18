@@ -251,8 +251,7 @@ const updateCaseWorkItems = async ({
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
     oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.trialDate !== caseToUpdate.trialDate ||
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
-    oldCase.caseIsInProgress !== caseToUpdate.caseIsInProgress;
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
 
   if (!workItemsRequireUpdate) {
     return workItemUpdates;
@@ -313,17 +312,6 @@ const updateCaseWorkItems = async ({
           .updateWorkItemAssociatedJudge({
             applicationContext,
             associatedJudge: updatedCase.associatedJudge,
-            workItemId,
-          }),
-      );
-    }
-    if (previousCase.inProgress !== updatedCase.inProgress) {
-      workItemRequests.push(
-        applicationContext
-          .getPersistenceGateway()
-          .updateWorkItemCaseIsInProgress({
-            applicationContext,
-            caseIsInProgress: updatedCase.inProgress,
             workItemId,
           }),
       );
