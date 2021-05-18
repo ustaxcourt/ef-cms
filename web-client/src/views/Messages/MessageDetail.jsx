@@ -69,6 +69,7 @@ export const MessageDetail = connect(
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
     isExpanded: state.isExpanded,
+    messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
@@ -78,19 +79,18 @@ export const MessageDetail = connect(
     setMessageDetailViewerDocumentToDisplaySequence:
       sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
+    messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
-    viewerDocumentToDisplay,
   }) {
     return (
       <>
@@ -220,17 +220,17 @@ export const MessageDetail = connect(
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                             attachment.documentId && 'active',
                         )}
                         isActive={
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
                         key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: attachment,
+                            messageViewerDocumentToDisplay: attachment,
                           });
                         }}
                       >

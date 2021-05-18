@@ -40,6 +40,7 @@ import { generatePrintablePendingReportInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -124,7 +125,6 @@ import { filterEmptyStrings } from '../../shared/src/business/utilities/filterEm
 import { formatAttachments } from '../../shared/src/business/utilities/formatAttachments';
 import {
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
@@ -413,6 +413,7 @@ const allUseCases = {
   getUserCaseNoteInteractor,
   getUserInteractor,
   getUserPendingEmailInteractor,
+  getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
@@ -650,7 +651,6 @@ const applicationContext = {
       filterEmptyStrings,
       formatAttachments,
       formatCase,
-      formatCaseDeadlines,
       formatCaseForTrialSession,
       formatDateString,
       formatDocketEntry,

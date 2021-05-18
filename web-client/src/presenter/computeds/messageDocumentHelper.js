@@ -4,7 +4,7 @@ import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
   const viewerDocumentIdToDisplay = get(
-    state.viewerDocumentToDisplay.documentId,
+    state.messageViewerDocumentToDisplay.documentId,
   );
 
   if (!viewerDocumentIdToDisplay) {

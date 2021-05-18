@@ -3,7 +3,7 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);

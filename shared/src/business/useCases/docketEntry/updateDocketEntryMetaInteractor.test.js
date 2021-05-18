@@ -6,6 +6,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -25,10 +26,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
+        filers: [getContactPrimary(MOCK_CASE).contactId],
         filingDate: '2019-01-01T05:00:00.000Z',
         freeText: 'some free text',
         index: 1,
-        partyPrimary: true,
         pending: false,
         servedAt: '2019-01-01T05:00:00.000Z',
         servedParties: [{ name: 'Some Party' }],
@@ -40,9 +41,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
+        filedBy: 'Test Petitioner',
+        filers: [getContactPrimary(MOCK_CASE).contactId],
         filingDate: '2019-01-01T05:00:00.000Z',
         index: 2,
-        partyPrimary: true,
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: [{ name: 'Some Other Party' }],
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -56,10 +58,11 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Test Entry 2',
         documentType: 'Request for Place of Trial',
         eventCode: 'RQT',
+        filedBy: 'Test Petitioner',
+        filers: [getContactPrimary(MOCK_CASE).contactId],
         filingDate: '2019-01-01T05:00:00.000Z',
         index: 3,
         isMinuteEntry: true,
-        partyPrimary: true,
         servedAt: '2019-01-02T00:01:00.000Z',
         servedParties: [{ name: 'Some Other Party' }],
         userId: mockUserId,
@@ -70,6 +73,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Some Order',
         documentType: 'Order',
         eventCode: 'O',
+        filedBy: 'Test Petitioner',
         filingDate: '2011-01-11T00:01:00.000Z',
         index: 4,
         isMinuteEntry: false,
@@ -84,6 +88,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Unservable Document with Filing Date',
         documentType: 'U.S.C.A',
         eventCode: 'USCA',
+        filedBy: 'Test Petitioner',
         filingDate: '2011-02-22T00:01:00.000Z',
         index: 5,
         isMinuteEntry: false,
@@ -98,6 +103,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Hearing before [Judge] at [Place]',
         documentType: 'Hearing before',
         eventCode: 'HEAR',
+        filedBy: 'Test Petitioner',
         filingDate: '2011-02-22T00:01:00.000Z',
         index: 6,
         isMinuteEntry: false,
@@ -109,6 +115,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
+        filedBy: 'Test Petitioner',
         filingDate: '2011-02-22T05:00:00.000Z',
         index: 7,
         isMinuteEntry: false,
@@ -117,14 +124,6 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
     ];
 
-    const caseByDocketNumber = {
-      '101-20': {
-        ...MOCK_CASE,
-        docketEntries,
-        docketNumber: '101-20',
-      },
-    };
-
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
       userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
@@ -132,8 +131,10 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return caseByDocketNumber[docketNumber];
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries,
+        docketNumber: '101-20',
       });
 
     applicationContext
@@ -168,6 +169,9 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(undefined);
     await expect(
       updateDocketEntryMetaInteractor(applicationContext, {
         docketNumber: '999-99',
@@ -222,7 +226,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...docketEntries[0],
-        partyPrimary: true,
+        filers: [getContactPrimary(MOCK_CASE).contactId],
       },
       docketNumber: '101-20',
     });
@@ -364,6 +368,30 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should remove a coversheet for the document if the previous document version requires a coversheet but the new document type does not', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet.mockReturnValueOnce({
+        ...MOCK_CASE,
+        docketEntries,
+        docketNumber: '101-20',
+      });
+
+    expect(docketEntries[4].eventCode).toBe('USCA'); // requires a cover sheet.
+
+    await updateDocketEntryMetaInteractor(applicationContext, {
+      docketEntryMeta: {
+        ...docketEntries[4],
+        eventCode: 'MISC', // does NOT require a cover sheet
+      },
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().removeCoversheet,
     ).toHaveBeenCalled();
   });
 

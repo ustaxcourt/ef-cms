@@ -13,7 +13,7 @@ const {
 } = require('../../entities/EntityConstants');
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
-  let caseRecord = {
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: [
@@ -36,6 +36,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       {
         address1: '123 Main St',
         city: 'Somewhere',
+        contactId: 'f354ab90-5fb1-4012-8714-6636c0939945',
         contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
@@ -84,8 +85,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
     await associatePrivatePractitionerWithCaseInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: false,
+      representing: [caseRecord.petitioners[0].contactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 

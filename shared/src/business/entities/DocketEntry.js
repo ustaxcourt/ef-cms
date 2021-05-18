@@ -70,7 +70,7 @@ DocketEntry.prototype.initUnfilteredForInternalUsers = function initForUnfiltere
 
 DocketEntry.prototype.init = function init(
   rawDocketEntry,
-  { applicationContext, filtered = false },
+  { applicationContext, petitioners = [], filtered = false },
 ) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
@@ -122,11 +122,10 @@ DocketEntry.prototype.init = function init(
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.objections = rawDocketEntry.objections;
+  this.filers = rawDocketEntry.filers || [];
   this.ordinalValue = rawDocketEntry.ordinalValue;
   this.otherFilingParty = rawDocketEntry.otherFilingParty;
   this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
-  this.partyPrimary = rawDocketEntry.partyPrimary;
-  this.partySecondary = rawDocketEntry.partySecondary;
   this.processingStatus = rawDocketEntry.processingStatus || 'pending';
   this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
   this.relationship = rawDocketEntry.relationship;
@@ -175,7 +174,7 @@ DocketEntry.prototype.init = function init(
     this.signedAt = createISODateString();
   }
 
-  this.generateFiledBy(rawDocketEntry);
+  this.generateFiledBy(petitioners);
 };
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
@@ -234,7 +233,7 @@ and contact info from the raw docket entry
  *
  * @param {object} docketEntry the docket entry
  */
-DocketEntry.prototype.generateFiledBy = function (docketEntry) {
+DocketEntry.prototype.generateFiledBy = function (petitioners) {
   const isNoticeOfContactChange = NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
     this.eventCode,
   );
@@ -251,28 +250,13 @@ DocketEntry.prototype.generateFiledBy = function (docketEntry) {
         practitioner.partyPrivatePractitioner &&
           partiesArray.push(`Counsel ${practitioner.name}`);
       });
-
-    if (
-      this.partyPrimary &&
-      !this.partySecondary &&
-      docketEntry.contactPrimary
-    ) {
-      partiesArray.push(`Petr. ${docketEntry.contactPrimary.name}`);
-    } else if (
-      this.partySecondary &&
-      !this.partyPrimary &&
-      docketEntry.contactSecondary
-    ) {
-      partiesArray.push(`Petr. ${docketEntry.contactSecondary.name}`);
-    } else if (
-      this.partyPrimary &&
-      this.partySecondary &&
-      docketEntry.contactPrimary &&
-      docketEntry.contactSecondary
-    ) {
-      partiesArray.push(
-        `Petrs. ${docketEntry.contactPrimary.name} & ${docketEntry.contactSecondary.name}`,
-      );
+    const petitionersArray = this.filers.map(
+      contactId => petitioners.find(p => p.contactId === contactId).name,
+    );
+    if (petitionersArray.length === 1) {
+      partiesArray.push(`Petr. ${petitionersArray[0]}`);
+    } else if (petitionersArray.length > 1) {
+      partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
     }
 
     const filedByArray = [];
@@ -294,7 +278,6 @@ DocketEntry.prototype.generateFiledBy = function (docketEntry) {
  *
  * @param {string} signByUserId the user id of the user who signed the document
  * @param {string} signedJudgeName the judge's signature for the document
- *
  */
 DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;

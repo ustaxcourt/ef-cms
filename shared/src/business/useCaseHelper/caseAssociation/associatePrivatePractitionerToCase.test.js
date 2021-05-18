@@ -52,6 +52,7 @@ describe('associatePrivatePractitionerToCase', () => {
         {
           address1: '123 Main St',
           city: 'Somewhere',
+          contactId: '007d0ea1-e7ce-4f13-a6bf-3e6d9167d6fd',
           contactType: CONTACT_TYPES.primary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
@@ -64,9 +65,22 @@ describe('associatePrivatePractitionerToCase', () => {
         {
           address1: '123 Main St',
           city: 'Somewhere',
+          contactId: '999d0ea1-e7ce-4f13-a6bf-3e6d9167d6fd',
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           name: 'Test Petitioner Secondary',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'TN',
+        },
+        {
+          address1: '1234 Bain St',
+          city: 'Somewhere',
+          contactId: '111d0ea1-e7ce-4f13-a6bf-3e6d9167d6fd',
+          contactType: CONTACT_TYPES.otherPetitioner,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Petitioner Tertiary',
           phone: '1234567',
           postalCode: '12345',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -94,8 +108,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: false,
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -115,8 +128,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: false,
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -128,7 +140,7 @@ describe('associatePrivatePractitionerToCase', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should set contactPrimary and contactSecondary to receive no service if the practitioner is representing both parties', async () => {
+  it('should set petitioners to receive no service if the practitioner is representing them', async () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -136,8 +148,11 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: true,
+      representing: [
+        caseRecord.petitioners[0].contactId,
+        caseRecord.petitioners[1].contactId,
+        caseRecord.petitioners[2].contactId,
+      ],
       user: practitionerUser,
     });
 
@@ -149,15 +164,14 @@ describe('associatePrivatePractitionerToCase', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
-    expect(getContactSecondary(updatedCase)).toMatchObject({
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-    });
-    expect(getContactPrimary(updatedCase)).toMatchObject({
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    updatedCase.petitioners.forEach(petitioner => {
+      expect(petitioner.serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      );
     });
   });
 
-  it('should only set contactSecondary to receive no service if the practitioner is only representing contactSecondary', async () => {
+  it('should only set a petitioner to receive no service if the practitioner is only representing that petitioner', async () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -165,8 +179,7 @@ describe('associatePrivatePractitionerToCase', () => {
     await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber: caseRecord.docketNumber,
-      representingPrimary: false,
-      representingSecondary: true,
+      representing: [caseRecord.petitioners[1].contactId],
       user: practitionerUser,
     });
 

@@ -18,12 +18,13 @@ export const submitOtherStatisticsAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().updateOtherStatisticsInteractor({
-      applicationContext,
-      damages,
-      docketNumber,
-      litigationCosts,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateOtherStatisticsInteractor(applicationContext, {
+        damages,
+        docketNumber,
+        litigationCosts,
+      });
 
     let successMessage = 'Other statistics added.';
     if (isEditing) {

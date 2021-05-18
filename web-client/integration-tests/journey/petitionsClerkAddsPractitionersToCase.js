@@ -45,8 +45,9 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       practitionerMatch.userId,
     );
 
+    const contactPrimary = contactPrimaryFromState(test);
     await test.runSequence('updateModalValueSequence', {
-      key: 'representingPrimary',
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -57,8 +58,6 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
     await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
-    const contactPrimary = contactPrimaryFromState(test);
-
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([contactPrimary.contactId]);
@@ -75,6 +74,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
 
+    test.privatePractitioners = formatted.privatePractitioners[0];
+
     //add a second practitioner
     if (!skipSecondary) {
       await test.runSequence('updateFormValueSequence', {
@@ -89,12 +90,11 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         practitionerMatch.userId,
       );
 
+      const contactSecondary = contactSecondaryFromState(test);
       await test.runSequence('updateModalValueSequence', {
-        key: 'representingSecondary',
+        key: `representingMap.${contactSecondary.contactId}`,
         value: true,
       });
-
-      const contactSecondary = contactSecondaryFromState(test);
 
       await test.runSequence('associatePrivatePractitionerWithCaseSequence');
       expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(

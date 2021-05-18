@@ -61,7 +61,7 @@ describe('addPetitionerToCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().addPetitionerToCaseInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseCaption: mockContact.caseCaption,
       contact: mockContact,

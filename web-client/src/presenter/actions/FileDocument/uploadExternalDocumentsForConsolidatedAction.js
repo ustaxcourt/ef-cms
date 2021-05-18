@@ -62,11 +62,12 @@ export const uploadExternalDocumentsForConsolidatedAction = async ({
       });
 
     for (let docketEntryId of docketEntryIdsAdded) {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId,
-        docketNumber,
-      });
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber,
+        });
     }
 
     return path.success({

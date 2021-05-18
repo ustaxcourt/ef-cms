@@ -2,7 +2,7 @@ import { state } from 'cerebral';
 
 export const caseDetailHeaderHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const { USER_ROLES } = applicationContext.getConstants();
+  const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -19,7 +19,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const isRequestAccessForm = currentPage === 'RequestAccessWizard';
   const isCaseSealed = !!caseDetail.isSealed;
 
-  const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
+  const caseHasRepresentedParty = (
+    caseDetail.petitioners || []
+  ).some(petitioner =>
     applicationContext
       .getUtilities()
       .isUserIdRepresentedByPrivatePractitioner(
@@ -77,10 +79,16 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showCreateMessageButton = user.role !== USER_ROLES.general;
 
+  const showBlockedTag =
+    caseDetail.blocked ||
+    (caseDetail.automaticBlocked &&
+      caseDetail.status !== STATUS_TYPES.calendared);
+
   return {
     hidePublicCaseInformation: !isExternalUser,
     showAddCorrespondenceButton,
     showAddDocketEntryButton,
+    showBlockedTag,
     showCaseDetailHeaderMenu,
     showConsolidatedCaseIcon,
     showCreateMessageButton,

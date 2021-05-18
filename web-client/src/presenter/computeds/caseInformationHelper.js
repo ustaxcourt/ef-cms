@@ -2,17 +2,27 @@ import { state } from 'cerebral';
 
 export const caseInformationHelper = (get, applicationContext) => {
   const { STATUS_TYPES } = applicationContext.getConstants();
+
+  const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
+  const isInternalUser = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
+
+  const canEditCounsel = permissions.EDIT_COUNSEL_ON_CASE;
+
   const showEditPrivatePractitionersButton =
-    permissions.ASSOCIATE_USER_WITH_CASE &&
-    caseDetail.privatePractitioners &&
-    !!caseDetail.privatePractitioners.length;
+    canEditCounsel && !!caseDetail.privatePractitioners?.length;
+
+  const showViewCounselButton = !canEditCounsel;
+
   const showEditIrsPractitionersButton =
-    permissions.ASSOCIATE_USER_WITH_CASE &&
+    canEditCounsel &&
     caseDetail.irsPractitioners &&
     !!caseDetail.irsPractitioners.length;
-  const showAddCounsel = permissions.ASSOCIATE_USER_WITH_CASE;
+
+  const showAddCounsel = canEditCounsel;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
   const showingAdditionalPetitioners =
     get(state.showingAdditionalPetitioners) || false;
@@ -47,6 +57,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     contactPrimaryEmailFormatted,
     contactSecondaryEmailFormatted,
     formattedPetitioners,
+    isInternalUser,
     showAddCounsel,
     showAddPartyButton,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
@@ -54,6 +65,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
+    showViewCounselButton,
     toggleAdditionalPetitionersDisplay,
   };
 };

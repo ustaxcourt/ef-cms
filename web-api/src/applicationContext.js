@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker */
+/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker, max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
@@ -677,6 +677,9 @@ const {
   getUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/getUserPendingEmailInteractor');
 const {
+  getUserPendingEmailStatusInteractor,
+} = require('../../shared/src/business/useCases/users/getUserPendingEmailStatusInteractor');
+const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
@@ -775,6 +778,9 @@ const {
 const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
+const {
+  removeCoversheet,
+} = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
 const {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
@@ -1590,6 +1596,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
+        removeCoversheet,
         saveFileAndGenerateUrl,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
@@ -1705,6 +1712,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUserCaseNoteInteractor,
         getUserInteractor,
         getUserPendingEmailInteractor,
+        getUserPendingEmailStatusInteractor,
         getUsersInSectionInteractor,
         getWorkItemInteractor,
         onConnectInteractor,

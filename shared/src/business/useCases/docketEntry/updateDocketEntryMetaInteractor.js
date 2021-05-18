@@ -83,6 +83,7 @@ exports.updateDocketEntryMetaInteractor = async (
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
+    filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
     freeText2: docketEntryMeta.freeText2,
@@ -93,8 +94,6 @@ exports.updateDocketEntryMetaInteractor = async (
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
-    partyPrimary: docketEntryMeta.partyPrimary,
-    partySecondary: docketEntryMeta.partySecondary,
     pending: docketEntryMeta.pending,
     previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
@@ -122,12 +121,14 @@ exports.updateDocketEntryMetaInteractor = async (
   const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
     editableFields.eventCode,
   );
-  const originalEntryDoesNotRequireCoversheet = !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+  const originalEntryRequiresCoversheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
     originalDocketEntry.eventCode,
   );
-
   const shouldAddNewCoverSheet =
-    originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
+    !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
+
+  const shouldRemoveExistingCoverSheet =
+    originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
 
   const documentTitleUpdated =
     getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
@@ -151,12 +152,9 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      // allow constructor to re-generate
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       filedBy: undefined,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);
@@ -181,6 +179,21 @@ exports.updateDocketEntryMetaInteractor = async (
         filingDateUpdated,
       });
 
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  } else if (shouldRemoveExistingCoverSheet) {
+    await applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber,
+      document: docketEntryEntity.validate(),
+    });
+    const updatedDocketEntry = await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet(applicationContext, {
+        docketEntryId: originalDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
+      });
     caseEntity.updateDocketEntry(updatedDocketEntry);
   }
 

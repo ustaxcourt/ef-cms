@@ -144,12 +144,14 @@ describe('Petitions Clerk Counsel Association Journey', () => {
       practitionerMatch.userId,
     );
 
+    const contactPrimary = contactPrimaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(test);
     await test.runSequence('updateModalValueSequence', {
-      key: 'representingPrimary',
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateModalValueSequence', {
-      key: 'representingSecondary',
+      key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
@@ -160,13 +162,9 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
-
     expect(
       test.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
-
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );

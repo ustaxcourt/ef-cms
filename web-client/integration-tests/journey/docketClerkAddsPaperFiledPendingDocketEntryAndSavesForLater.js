@@ -1,11 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   test,
@@ -47,8 +44,10 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       key: 'primaryDocumentFileSize',
       value: 100,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -75,12 +74,10 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    const {
+      formattedPendingDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual([]);
+    expect(formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });
 };

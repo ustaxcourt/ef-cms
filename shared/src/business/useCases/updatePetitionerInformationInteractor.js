@@ -2,9 +2,15 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  Case,
+  getPetitionerById,
+  getPractitionersRepresenting,
+} = require('../entities/cases/Case');
+const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
 } = require('../entities/EntityConstants');
 const {
   copyToNewPdf,
@@ -15,7 +21,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case, getPetitionerById } = require('../entities/cases/Case');
 const { defaults, pick } = require('lodash');
 const { DOCKET_SECTION } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -237,13 +242,35 @@ exports.updatePetitionerInformationInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)) {
-    throw new UnauthorizedError('Unauthorized for editing petition details');
-  }
-
   const oldCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
+
+  let isRepresentingCounsel = false;
+  if (user.role === ROLES.privatePractitioner) {
+    const practitioners = getPractitionersRepresenting(
+      oldCase,
+      updatedPetitionerData.contactId,
+    );
+
+    isRepresentingCounsel = practitioners.find(
+      practitioner => practitioner.userId === user.userId,
+    );
+  }
+
+  let isCurrentPetitioner = false;
+  if (user.role === ROLES.petitioner) {
+    isCurrentPetitioner = updatedPetitionerData?.contactId === user.userId;
+  }
+
+  const hasAuthorization =
+    isRepresentingCounsel ||
+    isCurrentPetitioner ||
+    isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO);
+
+  if (!hasAuthorization) {
+    throw new UnauthorizedError('Unauthorized for editing petition details');
+  }
 
   if (oldCase.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -338,32 +365,30 @@ exports.updatePetitionerInformationInteractor = async (
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
-    if (petitionerInfoChange) {
-      let privatePractitionersRepresentingContact;
-      if (updatedCaseContact.contactType === CONTACT_TYPES.primary) {
-        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-          privatePractitioner =>
-            privatePractitioner.getRepresentingPrimary(caseEntity),
-        );
-      } else if (updatedCaseContact.contactType === CONTACT_TYPES.secondary) {
-        privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-          privatePractitioner =>
-            privatePractitioner.getRepresentingSecondary(caseEntity),
-        );
-      }
-
-      petitionerChangeDocs = await createDocketEntryAndWorkItem({
-        applicationContext,
-        caseEntity,
-        change: petitionerInfoChange,
-        editableFields,
-        oldCaseContact,
-        partyWithPaperService,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
+    let privatePractitionersRepresentingContact;
+    if (updatedCaseContact.contactType === CONTACT_TYPES.primary) {
+      privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingPrimary(caseEntity),
+      );
+    } else if (updatedCaseContact.contactType === CONTACT_TYPES.secondary) {
+      privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
+        privatePractitioner =>
+          privatePractitioner.getRepresentingSecondary(caseEntity),
+      );
     }
+
+    petitionerChangeDocs = await createDocketEntryAndWorkItem({
+      applicationContext,
+      caseEntity,
+      change: petitionerInfoChange,
+      editableFields,
+      oldCaseContact,
+      partyWithPaperService,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user,
+    });
 
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = await generatePaperServicePdf({

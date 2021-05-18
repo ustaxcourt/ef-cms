@@ -65,11 +65,12 @@ export const uploadExternalDocumentsAction = async ({
       });
 
     const addCoversheet = docketEntryId => {
-      return applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
+      return applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
     };
 
     for (let docketEntryId of docketEntryIdsAdded) {

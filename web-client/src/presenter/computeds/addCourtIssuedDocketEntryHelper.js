@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
@@ -26,17 +25,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     value: type.eventCode,
   }));
 
-  const petitioners = [
-    applicationContext.getUtilities().getContactPrimary(caseDetail),
-  ];
-
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(caseDetail);
-
-  if (!isEmpty(contactSecondary)) {
-    petitioners.push(contactSecondary);
-  }
+  const { petitioners } = caseDetail;
 
   const serviceParties = [
     ...petitioners.map(petitioner => ({
