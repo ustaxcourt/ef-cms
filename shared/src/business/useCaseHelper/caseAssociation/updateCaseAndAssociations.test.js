@@ -1,8 +1,10 @@
+const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
@@ -228,7 +230,7 @@ describe('updateCaseAndAssociations', () => {
     });
   });
 
-  describe('work items', () => {
+  describe.only('work items', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
@@ -254,12 +256,13 @@ describe('updateCaseAndAssociations', () => {
         workItemId: '123',
       });
     });
-    it('the docket number suffix has been updated', async () => {
+
+    it('the docket number suffix is null has been updated because the case type has changed', async () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
           ...validMockCase,
-          docketNumberSuffix: 'poop', // DOCKET_NUMBER_SUFFIXES.SMALL,
+          caseType: CASE_TYPES_MAP.whistleblower,
         },
       });
 
@@ -268,14 +271,84 @@ describe('updateCaseAndAssociations', () => {
           .updateWorkItemDocketNumberSuffix,
       ).toBeCalledWith({
         applicationContext,
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         workItemId: '123',
       });
     });
-    // it('the case caption has been updated', async () => {});
-    // it('the trial date has been updated', async () => {});
-    // it('the associated judge has been updated', async () => {});
-    // it('the case in progress flag has been updated', async () => {});
+
+    it('the case caption has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          caseCaption: 'Some caption changed',
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateWorkItemCaseTitle,
+      ).toBeCalledWith({
+        applicationContext,
+        caseTitle: Case.getCaseTitle('Some caption changed'),
+        workItemId: '123',
+      });
+    });
+
+    it('the trial date has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialDate: '2021-01-02T05:22:16.001Z',
+          trialSessionId: faker.datatype.uuid(),
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateWorkItemTrialDate,
+      ).toBeCalledWith({
+        applicationContext,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        workItemId: '123',
+      });
+    });
+
+    it('the associated judge has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          associatedJudge: 'Judge Dredd',
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updateWorkItemAssociatedJudge,
+      ).toBeCalledWith({
+        applicationContext,
+        associatedJudge: 'Judge Dredd',
+        workItemId: '123',
+      });
+    });
+    it('the case in progress flag has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialDate: '2021-01-02T05:22:16.001Z',
+          trialSessionId: faker.datatype.uuid(),
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().updateWorkItemTrialDate,
+      ).toBeCalledWith({
+        applicationContext,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        workItemId: '123',
+      });
+    });
   });
 
   describe('correspondences', () => {
