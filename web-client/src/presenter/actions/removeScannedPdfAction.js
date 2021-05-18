@@ -8,7 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  * @returns {object} the new documentUploadMode
- *
  */
 export const removeScannedPdfAction = async ({
   applicationContext,
