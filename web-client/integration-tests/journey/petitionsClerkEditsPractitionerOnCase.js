@@ -16,28 +16,35 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('form.representingPrimary')).toBeFalsy();
-    expect(test.getState('form.representingSecondary')).toBeTruthy();
+    const contactPrimary = contactPrimaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(test);
+
+    expect(
+      test.getState(`form.representingMap.${contactPrimary.contactId}`),
+    ).toBeFalsy();
+    expect(
+      test.getState(`form.representingMap.${contactSecondary.contactId}`),
+    ).toBeTruthy();
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'representingSecondary',
+      key: `representingMap.${contactSecondary.contactId}`,
       value: false,
     });
 
     await test.runSequence('submitEditPetitionerCounselSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      representing: VALIDATION_ERROR_MESSAGES.representing,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'representingPrimary',
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'representingSecondary',
+      key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
@@ -46,11 +53,9 @@ export const petitionsClerkEditsPractitionerOnCase = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
 
     expect(
       test.getState('caseDetail.privatePractitioners.1.representing'),
-    ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
+    ).toEqual([contactSecondary.contactId, contactPrimary.contactId]);
   });
 };

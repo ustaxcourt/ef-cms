@@ -54,8 +54,7 @@ exports.addPaperFilingInteractor = async (
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const baseMetadata = pick(documentMetadata, [
-    'partyPrimary',
-    'partySecondary',
+    'filers',
     'partyIrsPractitioner',
     'practitioner',
   ]);
@@ -79,8 +78,6 @@ exports.addPaperFilingInteractor = async (
     {
       ...baseMetadata,
       ...metadata,
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       docketEntryId,
       documentTitle: metadata.documentTitle,
       documentType: metadata.documentType,
@@ -91,7 +88,7 @@ exports.addPaperFilingInteractor = async (
       relationship,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseEntity.petitioners },
   );
 
   const workItem = new WorkItem(

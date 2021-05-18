@@ -1,3 +1,4 @@
+import { contactPrimaryFromState } from '../helpers';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -26,11 +27,6 @@ export const petitionerFilesANonstardardDDocumentForCase = (test, fakeFile) => {
         value: documentToSelect[key],
       });
     }
-
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
-      value: true,
-    });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
       key: 'certificateOfService',
@@ -79,6 +75,13 @@ export const petitionerFilesANonstardardDDocumentForCase = (test, fakeFile) => {
 
     runCompute(withAppContextDecorator(formattedCaseDetail), {
       state: test.getState(),
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
     });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');

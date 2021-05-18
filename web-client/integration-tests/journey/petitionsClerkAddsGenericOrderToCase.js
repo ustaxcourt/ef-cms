@@ -58,6 +58,6 @@ export const petitionsClerkAddsGenericOrderToCase = test => {
     expect(createdOrder.draftOrderState.documentTitle).toEqual(test.freeText);
     expect(createdOrder.freeText).toEqual(test.freeText);
 
-    test.docketEntryId = createdOrder ? createdOrder.docketEntryId : undefined;
+    test.docketEntryId = createdOrder.docketEntryId;
   });
 };

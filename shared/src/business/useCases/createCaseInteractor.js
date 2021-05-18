@@ -119,14 +119,6 @@ exports.createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
-  let partySecondary = false;
-  if (
-    petitionMetadata.contactSecondary &&
-    petitionMetadata.contactSecondary.name
-  ) {
-    partySecondary = true;
-  }
-
   const caseToAdd = new Case(
     {
       docketNumber,
@@ -147,6 +139,15 @@ exports.createCaseInteractor = async (
   caseToAdd.caseCaption = Case.getCaseCaption(caseToAdd);
   caseToAdd.initialCaption = caseToAdd.caseCaption;
 
+  const filers = [caseToAdd.getContactPrimary().contactId];
+
+  if (
+    petitionMetadata.contactSecondary &&
+    petitionMetadata.contactSecondary.name
+  ) {
+    filers.push(caseToAdd.getContactSecondary().contactId);
+  }
+
   const petitionDocketEntryEntity = new DocketEntry(
     {
       contactPrimary: caseToAdd.getContactPrimary(),
@@ -155,15 +156,14 @@ exports.createCaseInteractor = async (
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filers,
       filingDate: caseToAdd.createdAt,
       isFileAttached: true,
       isOnDocketRecord: true,
-      partyPrimary: true,
-      partySecondary,
       privatePractitioners,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToAdd.petitioners },
   );
 
   const newWorkItem = addPetitionDocketEntryToCase({
@@ -187,7 +187,7 @@ exports.createCaseInteractor = async (
         processingStatus: 'complete',
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     ),
   );
 
@@ -199,15 +199,14 @@ exports.createCaseInteractor = async (
       documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+      filers,
       filingDate: caseToAdd.createdAt,
       index: 0,
       isFileAttached: true,
-      partyPrimary: true,
-      partySecondary,
       privatePractitioners,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToAdd.petitioners },
   );
 
   caseToAdd.addDocketEntry(stinDocketEntryEntity);
@@ -221,15 +220,14 @@ exports.createCaseInteractor = async (
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filers,
         filingDate: caseToAdd.createdAt,
         isFileAttached: true,
         isOnDocketRecord: true,
-        partyPrimary: true,
-        partySecondary,
         privatePractitioners,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(odsDocketEntryEntity);
