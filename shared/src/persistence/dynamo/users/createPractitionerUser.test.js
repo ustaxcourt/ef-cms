@@ -92,9 +92,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUser,
       },
     });
     expect(
@@ -126,9 +126,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUserWithoutBarNumber,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUserWithoutBarNumber,
       },
     });
 
@@ -273,9 +273,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
         },
       });
       expect(
@@ -310,9 +310,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutBarNumber,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });
