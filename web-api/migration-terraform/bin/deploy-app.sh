@@ -36,7 +36,7 @@ npm run build:assets
 
 # exit on any failure
 set -eo pipefail
-npm run build:lambda:api
+npm run build:lambda:migration
 
 # get the stream arn
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
