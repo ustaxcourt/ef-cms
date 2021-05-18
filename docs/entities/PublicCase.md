@@ -829,6 +829,8 @@
                 - "primary"
                 - "secondary"
                 - "otherFilers"
+                - "intervenor"
+                - "participant"
                 - "otherPetitioners"
             name: 
               type: "string"
