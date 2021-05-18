@@ -1,3 +1,5 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { capitalize } from 'lodash';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from 'cerebral';
 
@@ -18,9 +20,16 @@ export const getFilerParties = ({ caseDetail, filersMap = {} }) => {
       );
 
       if (foundPetitioner) {
-        const petitionerTitle = foundPetitioner.otherFilerType
-          ? foundPetitioner.otherFilerType
+        const otherContactTypes = [
+          CONTACT_TYPES.intervenor,
+          CONTACT_TYPES.participant,
+        ];
+        const petitionerTitle = otherContactTypes.includes(
+          foundPetitioner.contactType,
+        )
+          ? capitalize(foundPetitioner.contactType)
           : 'Petitioner';
+
         return `${foundPetitioner.name}, ${petitionerTitle}`;
       }
     });
