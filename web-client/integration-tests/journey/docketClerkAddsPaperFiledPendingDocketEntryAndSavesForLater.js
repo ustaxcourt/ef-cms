@@ -1,5 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   test,
@@ -41,8 +44,10 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       key: 'primaryDocumentFileSize',
       value: 100,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
     await test.runSequence('updateDocketEntryFormValueSequence', {

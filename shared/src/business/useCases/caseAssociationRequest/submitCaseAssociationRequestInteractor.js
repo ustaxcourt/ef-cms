@@ -25,7 +25,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.submitCaseAssociationRequestInteractor = async (
   applicationContext,
-  { docketNumber, representingPrimary, representingSecondary },
+  { docketNumber, filers },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -47,8 +47,7 @@ exports.submitCaseAssociationRequestInteractor = async (
     return await associatePrivatePractitionerToCase({
       applicationContext,
       docketNumber,
-      representingPrimary,
-      representingSecondary,
+      representing: filers,
       user,
     });
   } else if (isIrsPractitioner) {

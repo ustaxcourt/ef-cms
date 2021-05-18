@@ -1,5 +1,9 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -22,7 +26,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     //primary document
@@ -39,8 +43,10 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
       value: overrides.dateReceivedYear || 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -82,5 +88,16 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
     });
 
     expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
+
+    test.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.documentTitle === 'Administrative Record',
+    );
+
+    expect(test.docketRecordEntry.index).toBeFalsy();
   });
 };
