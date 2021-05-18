@@ -9,6 +9,23 @@ export const supportingDocumentFreeTextTypes = [
 
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
+export const getFilerParties = ({ caseDetail, filersMap = {} }) => {
+  return Object.entries(filersMap)
+    .filter(([, isChecked]) => isChecked)
+    .map(([filerContactId]) => {
+      const foundPetitioner = caseDetail.petitioners.find(
+        petitioner => petitioner.contactId === filerContactId,
+      );
+
+      if (foundPetitioner) {
+        const petitionerTitle = foundPetitioner.otherFilerType
+          ? foundPetitioner.otherFilerType
+          : 'Petitioner';
+        return `${foundPetitioner.name}, ${petitionerTitle}`;
+      }
+    });
+};
+
 export const fileDocumentHelper = (get, applicationContext) => {
   const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
@@ -21,9 +38,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   );
 
   const partyValidationError =
-    validationErrors.partyPrimary ||
-    validationErrors.partySecondary ||
-    validationErrors.partyIrsPractitioner;
+    validationErrors.filers || validationErrors.partyIrsPractitioner;
 
   let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
@@ -84,9 +99,15 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
+  let formattedFilingParties = getFilerParties({
+    caseDetail,
+    filersMap: form.filersMap,
+  });
+
   const exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
+    formattedFilingParties,
     formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',

@@ -69,7 +69,6 @@ export const PrimaryDocumentForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-
           <DateInput
             errorText={validationErrors.dateReceived}
             id="date-received"
@@ -87,7 +86,6 @@ export const PrimaryDocumentForm = connect(
             onBlur={validateDocketEntrySequence}
             onChange={updateDocketEntryFormValueSequence}
           />
-
           <FormGroup errorText={validationErrors.mailingDate}>
             <label className="usa-label" htmlFor="mailing-date">
               Mailing date <span className="usa-hint">(optional)</span>
@@ -107,7 +105,6 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </FormGroup>
-
           <FormGroup errorText={validationErrors.eventCode}>
             <label
               className="usa-label"
@@ -152,7 +149,6 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </FormGroup>
-
           {addDocketEntryHelper.primary.showSecondaryDocumentForm && (
             <FormGroup
               errorText={
@@ -204,7 +200,6 @@ export const PrimaryDocumentForm = connect(
               />
             </FormGroup>
           )}
-
           {addDocketEntryHelper.primary.showNonstandardForm && (
             <NonstandardForm
               helper="addDocketEntryHelper"
@@ -214,9 +209,7 @@ export const PrimaryDocumentForm = connect(
               validationErrors="validationErrors"
             />
           )}
-
           {form.secondaryDocument && <SecondaryDocumentForm />}
-
           <FormGroup errorText={validationErrors.additionalInfo}>
             <label
               className="usa-label"
@@ -268,7 +261,6 @@ export const PrimaryDocumentForm = connect(
               </label>
             </div>
           </div>
-
           <FormGroup errorText={validationErrors.additionalInfo2}>
             <label
               className="usa-label"
@@ -296,14 +288,11 @@ export const PrimaryDocumentForm = connect(
               }}
             />
           </FormGroup>
-
           <Inclusions updateSequence="updateDocketEntryFormValueSequence" />
-
           <FilingPartiesForm
             updateSequence={updateDocketEntryFormValueSequence}
             validateSequence={validateDocketEntrySequence}
           />
-
           {addDocketEntryHelper.showObjection && (
             <FormGroup errorText={validationErrors.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
@@ -339,7 +328,6 @@ export const PrimaryDocumentForm = connect(
               </fieldset>
             </FormGroup>
           )}
-
           {addDocketEntryHelper.showTrackOption && (
             <>
               <hr />

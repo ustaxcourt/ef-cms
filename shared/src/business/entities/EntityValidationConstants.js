@@ -114,6 +114,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
+  filers: joi.array().items(JoiValidationConstants.UUID).optional(),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
@@ -219,14 +220,6 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     ),
   partyIrsPractitioner: joi.boolean().optional(),
-  partyPrimary: joi
-    .boolean()
-    .optional()
-    .description('Use the primary contact to compose the filedBy text.'),
-  partySecondary: joi
-    .boolean()
-    .optional()
-    .description('Use the secondary contact to compose the filedBy text.'),
   pending: joi
     .boolean()
     .optional()

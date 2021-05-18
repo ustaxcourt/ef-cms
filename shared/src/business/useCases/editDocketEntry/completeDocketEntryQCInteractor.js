@@ -109,6 +109,7 @@ exports.completeDocketEntryQCInteractor = async (
     documentTitle: entryMetadata.documentTitle,
     documentType: entryMetadata.documentType,
     eventCode: entryMetadata.eventCode,
+    filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
@@ -119,8 +120,6 @@ exports.completeDocketEntryQCInteractor = async (
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
-    partyPrimary: entryMetadata.partyPrimary,
-    partySecondary: entryMetadata.partySecondary,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
@@ -132,14 +131,12 @@ exports.completeDocketEntryQCInteractor = async (
       ...currentDocketEntry,
       filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
 
@@ -312,7 +309,7 @@ exports.completeDocketEntryQCInteractor = async (
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext

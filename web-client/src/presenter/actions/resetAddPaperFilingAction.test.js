@@ -28,6 +28,8 @@ describe('resetAddPaperFilingAction', () => {
         documentUploadMode: 'scan',
       },
       form: {
+        filers: [],
+        filersMap: {},
         lodged: false,
         practitioner: [],
       },

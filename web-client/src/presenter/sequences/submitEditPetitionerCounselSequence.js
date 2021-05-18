@@ -6,6 +6,7 @@ import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/nav
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../actions/setCasePropFromStateAction';
+import { setRepresentingFromRepresentingMapActionFactory } from '../actions/setRepresentingFromRepresentingMapActionFactory';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -15,6 +16,7 @@ import { validateEditPetitionerCounselAction } from '../actions/caseAssociation/
 
 export const submitEditPetitionerCounselSequence = [
   startShowValidationAction,
+  setRepresentingFromRepresentingMapActionFactory('form'),
   validateEditPetitionerCounselAction,
   {
     error: [setValidationAlertErrorsAction],
@@ -26,11 +28,11 @@ export const submitEditPetitionerCounselSequence = [
         success: [
           setAlertSuccessAction,
           clearModalAction,
-          clearFormAction,
           setCasePropFromStateAction,
           getCaseAction,
           setCaseAction,
           navigateToCaseDetailCaseInformationActionFactory('parties'),
+          clearFormAction,
         ],
       },
     ]),

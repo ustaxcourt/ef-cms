@@ -39,8 +39,7 @@ export const validateDocketEntryAction = ({
       'ordinalValue',
       'certificateOfServiceDate',
       'objections',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
     ];
