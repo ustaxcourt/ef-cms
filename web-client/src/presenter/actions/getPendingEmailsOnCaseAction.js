@@ -17,34 +17,20 @@ export const getPendingEmailsOnCaseAction = async ({
     state.caseDetail,
   );
 
-  for (let petitioner of petitioners) {
-    const pendingEmail = await applicationContext
-      .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: petitioner.contactId,
-      });
-    pendingEmails[petitioner.contactId] = pendingEmail;
-  }
+  const userIds = [
+    ...petitioners.map(petitioner => petitioner.contactId),
+    ...irsPractitioners.map(irsPractitioner => irsPractitioner.userId),
+    ...privatePractitioners.map(
+      privatePractitioner => privatePractitioner.userId,
+    ),
+  ];
 
-  for (let respondent of irsPractitioners) {
-    const pendingEmail = await applicationContext
-      .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: respondent.userId,
-      });
-    pendingEmails[respondent.userId] = pendingEmail;
-  }
+  console.log('aggregated userIds', userIds);
 
-  for (let privatePractitioner of privatePractitioners) {
-    const pendingEmail = await applicationContext
+  if (userIds.length) {
+    pendingEmails = await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: privatePractitioner.userId,
-      });
-    pendingEmails[privatePractitioner.userId] = pendingEmail;
+      .getUsersPendingEmailInteractor({ applicationContext, userIds });
   }
 
   return { pendingEmails };
