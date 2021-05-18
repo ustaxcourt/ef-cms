@@ -700,9 +700,9 @@ const {
 const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
-// const {
-//   getWorkItemMappingsByDocketNumber,
-// } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
+const {
+  getWorkItemMappingsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
 const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
@@ -766,10 +766,6 @@ const {
 const {
   putWorkItemInOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInOutbox');
-
-const {
-  getWorkItemMappingsByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
 const {
   putWorkItemInUsersOutbox,
 } = require('../../shared/src/persistence/dynamo/workitems/putWorkItemInUsersOutbox');
@@ -1054,9 +1050,6 @@ const {
 const {
   updateWorkItemAssociatedJudge,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
-const {
-  updateWorkItemCaseIsInProgress,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseIsInProgress');
 const {
   updateWorkItemCaseStatus,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus');
@@ -1356,7 +1349,6 @@ const gatewayMethods = {
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
   updateWorkItemAssociatedJudge,
-  updateWorkItemCaseIsInProgress,
   updateWorkItemCaseStatus,
   updateWorkItemCaseTitle,
   updateWorkItemDocketNumberSuffix,
