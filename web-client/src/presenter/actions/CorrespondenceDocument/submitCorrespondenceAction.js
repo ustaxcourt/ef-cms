@@ -47,16 +47,14 @@ export const submitCorrespondenceAction = async ({
   if (documentIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()
-      .updateCorrespondenceDocumentInteractor({
-        applicationContext,
+      .updateCorrespondenceDocumentInteractor(applicationContext, {
         correspondenceId: documentIdToEdit,
         documentMetadata,
       });
   } else {
     caseDetail = await applicationContext
       .getUseCases()
-      .fileCorrespondenceDocumentInteractor({
-        applicationContext,
+      .fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata,
         primaryDocumentFileId: correspondenceId,
       });
