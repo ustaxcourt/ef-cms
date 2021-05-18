@@ -31,11 +31,11 @@ describe('updateCaseStatusOnWorkItems', () => {
     ).toHaveBeenCalledWith({ applicationContext, workItemId });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItemStatus,
+      applicationContext.getPersistenceGateway().updateWorkItemCaseStatus,
     ).toHaveBeenCalledTimes(workItemsResults.length);
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItemStatus.mock
+      applicationContext.getPersistenceGateway().updateWorkItemCaseStatus.mock
         .calls[0][0],
     ).toMatchObject({
       applicationContext,

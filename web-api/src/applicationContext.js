@@ -1069,9 +1069,6 @@ const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
-  updateWorkItemStatus,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemStatus');
-const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
 const {
@@ -1362,7 +1359,6 @@ const gatewayMethods = {
   updateWorkItemCaseStatus,
   updateWorkItemCaseTitle,
   updateWorkItemDocketNumberSuffix,
-  updateWorkItemStatus,
   updateWorkItemTrialDate,
   verifyCaseForUser,
   verifyPendingCaseForUser,
