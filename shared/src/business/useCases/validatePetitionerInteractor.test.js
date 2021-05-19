@@ -1,4 +1,5 @@
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
@@ -20,6 +21,7 @@ describe('validatePetitionerInteractor', () => {
       address3: 'Apt. #104',
       city: 'Jordan',
       confirmEmail: 'night@example.com',
+      contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Wilbur Rayou',
       phone: '1111111111',
