@@ -23,7 +23,6 @@ const {
   SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
-  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -647,8 +646,8 @@ Case.VALIDATION_RULES = {
     .array()
     .unique(
       (a, b) =>
-        a.contactType === UNIQUE_OTHER_FILER_TYPE &&
-        b.contactType === UNIQUE_OTHER_FILER_TYPE,
+        a.contactType === CONTACT_TYPES.intervenor &&
+        b.contactType === CONTACT_TYPES.intervenor,
     )
     .required(),
   preferredTrialCity: joi
@@ -1607,7 +1606,10 @@ const getContactSecondary = function (rawCase) {
  */
 const getOtherFilers = function (rawCase) {
   return rawCase.petitioners?.filter(
-    p => p.contactType === CONTACT_TYPES.otherFiler,
+    p =>
+      p.contactType === CONTACT_TYPES.otherFiler ||
+      p.contactType === CONTACT_TYPES.participant ||
+      p.contactType === CONTACT_TYPES.intervenor,
   );
 };
 
