@@ -22,34 +22,33 @@ export const socketProvider = ({ socketRouter }) => {
 
   const start = () => {
     const token = app.getState('token');
+    if (!socket) {
+      return new Promise((resolve, reject) => {
+        try {
+          socket = createWebSocketClient(token);
+          socket.onmessage = socketRouter(app);
+          socket.onerror = error => {
+            applicationContext.logger.error('Websocket error detected', error);
+            return reject(error);
+          };
 
-    if (socket && socket.close) {
-      stopSocket();
-    }
-
-    return new Promise((resolve, reject) => {
-      try {
-        socket = createWebSocketClient(token);
-        socket.onmessage = socketRouter(app);
-        socket.onerror = reject;
-
-        socket.onopen = () => {
-          // the socket needs to be open for a short period or it could miss the first message
-          setTimeout(() => {
-            resolve();
-          }, 300);
-        };
-      } catch (e) {
-        if (applicationContext) {
-          applicationContext.logger.error(
-            'Failed to establish WebSocket connection',
-            e,
-          );
+          socket.onopen = () => {
+            // the socket needs to be open for a short period or it could miss the first message
+            setTimeout(() => {
+              resolve();
+            }, 300);
+          };
+        } catch (e) {
+          if (applicationContext) {
+            applicationContext.logger.error(
+              'Failed to establish WebSocket connection',
+              { e },
+            );
+          }
+          reject();
         }
-        console.error(e);
-        reject();
-      }
-    });
+      });
+    }
   };
 
   const initialize = (_app, _applicationContext) => {
