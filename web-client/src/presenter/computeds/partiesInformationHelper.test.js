@@ -615,10 +615,6 @@ describe('partiesInformationHelper', () => {
     });
 
     it('is true when the user is an internal user with permission to edit petitioner info and the petition has been served', () => {
-      const mockPetitioner = {
-        contactType: CONTACT_TYPES.primary,
-      };
-
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
@@ -630,7 +626,11 @@ describe('partiesInformationHelper', () => {
               },
             ],
             irsPractitioners: [],
-            petitioners: [mockPetitioner],
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
             privatePractitioners: [],
           },
           permissions: { EDIT_PETITIONER_INFO: true },
@@ -644,10 +644,6 @@ describe('partiesInformationHelper', () => {
     });
 
     it('is false when the user is an internal user without permission to edit petitioner info', () => {
-      const mockPetitioner = {
-        contactType: CONTACT_TYPES.primary,
-      };
-
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockPetitionsClerk),
@@ -659,7 +655,11 @@ describe('partiesInformationHelper', () => {
               },
             ],
             irsPractitioners: [],
-            petitioners: [mockPetitioner],
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
             privatePractitioners: [],
           },
           permissions: { EDIT_PETITIONER_INFO: false },
