@@ -643,6 +643,35 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
     });
 
+    it('is returns false when the petitioner is otherPetitioner and we are logged in as an external user', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.otherPetitioner,
+              },
+            ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: false },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
+    });
+
     it('is false when the user is an internal user without permission to edit petitioner info', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -738,6 +767,41 @@ describe('partiesInformationHelper', () => {
             ],
             irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [
+              {
+                ...mockPrivatePractitioner,
+                representing: [mockPetitioner.contactId],
+              },
+            ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(result.formattedPetitioners[0].canEditPetitioner).toBeTruthy();
+    });
+
+    it('is false when the current user is a private practitioner associated with the case and the petition has been served BUT the petitioner is an otherPetitioner', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          caseDetail: {
+            ...getBaseState(mockPrivatePractitioner),
+            docketEntries: [
+              {
+                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+                servedAt: '2020-08-01',
+              },
+            ],
+            irsPractitioners: [],
+            petitioners: [
+              {
+                ...mockPetitioner,
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
             privatePractitioners: [
               {
                 ...mockPrivatePractitioner,
