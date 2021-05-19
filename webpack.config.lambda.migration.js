@@ -7,6 +7,7 @@ module.exports = {
     'migration-segments':
       './web-api/migration-terraform/main/lambdas/migration-segments.js',
   },
+  externals: ['aws-sdk'],
   output: {
     clean: true,
     libraryTarget: 'umd',
