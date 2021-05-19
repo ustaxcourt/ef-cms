@@ -25,8 +25,6 @@ export const getPendingEmailsOnCaseAction = async ({
     ),
   ];
 
-  console.log('aggregated userIds', userIds);
-
   if (userIds.length) {
     pendingEmails = await applicationContext
       .getUseCases()
