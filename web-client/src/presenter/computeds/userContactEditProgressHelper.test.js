@@ -26,7 +26,33 @@ describe('userContactEditProgressHelper', () => {
     });
     expect(result).toMatchObject({
       completedCases: 0,
-      percentComplete: NaN,
+      percentComplete: 0,
+      totalCases: 0,
+    });
+  });
+
+  it('returns zero percent if completed cases are zero', () => {
+    const result = runCompute(userContactEditProgressHelper, {
+      state: {
+        userContactEditProgress: { completedCases: 0 },
+      },
+    });
+    expect(result).toMatchObject({
+      completedCases: 0,
+      percentComplete: 0,
+      totalCases: 0,
+    });
+  });
+
+  it('returns zero percent if total cases are zero', () => {
+    const result = runCompute(userContactEditProgressHelper, {
+      state: {
+        userContactEditProgress: { totalCases: 0 },
+      },
+    });
+    expect(result).toMatchObject({
+      completedCases: 0,
+      percentComplete: 0,
       totalCases: 0,
     });
   });
