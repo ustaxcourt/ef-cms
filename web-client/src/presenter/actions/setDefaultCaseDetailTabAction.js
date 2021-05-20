@@ -39,6 +39,6 @@ export const setDefaultCaseDetailTabAction = ({
 
   store.set(
     state.screenMetadata.partyViewTab,
-    PARTY_VIEW_TABS.petitionersAndCounsel,
+    props.partiesTab || PARTY_VIEW_TABS.petitionersAndCounsel,
   );
 };

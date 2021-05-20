@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -25,7 +26,9 @@ export const addPetitionerToCaseAction = async ({
 
   return {
     alertSuccess: {
-      message: `Petitioner ${contact.name} has been added to case.`,
+      message: `${capitalize(contact.contactType)} ${
+        contact.name
+      } has been added to the case.`,
     },
     caseDetail: updatedCase,
     docketNumber,
