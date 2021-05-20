@@ -25,11 +25,14 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
 
   const amendmentEventCodes = ['AMAT', 'ADMT'];
 
+  const { isServed } = form;
+
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
   return {
+    isServed,
     noMargin:
       objectionDocumentTypes.includes(form.documentType) ||
       (amendmentEventCodes.includes(form.eventCode) &&

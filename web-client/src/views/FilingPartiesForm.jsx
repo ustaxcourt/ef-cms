@@ -28,30 +28,58 @@ export const FilingPartiesForm = connect(
           )}
         >
           <legend className="usa-legend">Who is filing this document?</legend>
-          {caseDetail.petitioners.map(petitioner => (
-            <div className="usa-checkbox" key={petitioner.contactId}>
-              <input
-                checked={form.filersMap[petitioner.contactId] || false}
-                className="usa-checkbox__input"
-                id={`filing-${petitioner.contactId}`}
-                name={`filersMap.${petitioner.contactId}`}
-                type="checkbox"
-                onChange={e => {
-                  updateSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor={`filing-${petitioner.contactId}`}
-              >
-                {petitioner.name}
-              </label>
-            </div>
-          ))}
+          {filingPartiesFormHelper.isServed ? (
+            <FormGroup errorText={validationErrors.filedBy}>
+              <div>
+                <label
+                  className="usa-label"
+                  htmlFor="filed-by"
+                  id="filed-by-label"
+                >
+                  Filed by
+                </label>
+                <input
+                  aria-describedby="filed-by-label"
+                  className="usa-input"
+                  id="filed-by"
+                  name="filedBy"
+                  type="text"
+                  value={form.filedBy || ''}
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </FormGroup>
+          ) : (
+            caseDetail.petitioners.map(petitioner => (
+              <div className="usa-checkbox" key={petitioner.contactId}>
+                <input
+                  checked={form.filersMap[petitioner.contactId] || false}
+                  className="usa-checkbox__input"
+                  id={`filing-${petitioner.contactId}`}
+                  name={`filersMap.${petitioner.contactId}`}
+                  type="checkbox"
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateSequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor={`filing-${petitioner.contactId}`}
+                >
+                  {petitioner.name}
+                </label>
+              </div>
+            ))
+          )}
 
           <div className="usa-checkbox">
             <input
