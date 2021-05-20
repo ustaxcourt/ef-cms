@@ -47,16 +47,14 @@ export const submitCaseAssociationRequestAction = async ({
   if (documentWithImmediateAssociation) {
     await applicationContext
       .getUseCases()
-      .submitCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
         filers: documentMetadata.filers,
       });
   } else if (documentWithPendingAssociation) {
     await applicationContext
       .getUseCases()
-      .submitPendingCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
       });
   }

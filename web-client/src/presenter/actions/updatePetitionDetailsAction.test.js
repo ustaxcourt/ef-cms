@@ -38,7 +38,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -76,7 +76,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         petitionPaymentDate: '2001-01-01T05:00:00.000Z',
@@ -113,7 +113,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         irsNoticeDate: '2001-01-01T05:00:00.000Z',
@@ -145,7 +145,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: null,
@@ -169,7 +169,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: 'Fresno, California',

@@ -20,7 +20,7 @@ describe('updateUserPendingEmailAction', () => {
 
     expect(
       applicationContext.getUseCases().updateUserPendingEmailInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       pendingEmail: mockNewEmail,
     });

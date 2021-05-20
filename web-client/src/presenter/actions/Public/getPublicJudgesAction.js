@@ -10,9 +10,7 @@ import { sortBy } from 'lodash';
 export const getPublicJudgesAction = async ({ applicationContext }) => {
   const judges = await applicationContext
     .getUseCases()
-    .getPublicJudgesInteractor({
-      applicationContext,
-    });
+    .getPublicJudgesInteractor(applicationContext);
 
   return {
     users: sortBy(judges, 'name'),

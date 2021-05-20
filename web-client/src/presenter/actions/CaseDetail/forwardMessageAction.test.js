@@ -43,7 +43,7 @@ describe('forwardMessageAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().forwardMessageInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       attachments: [
         {

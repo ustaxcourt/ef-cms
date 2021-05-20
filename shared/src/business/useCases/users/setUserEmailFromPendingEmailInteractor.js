@@ -37,15 +37,15 @@ exports.updatePetitionerCases = updatePetitionerCases;
 /**
  * setUserEmailFromPendingEmailInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the user
  * @returns {Promise} the updated user object
  */
-exports.setUserEmailFromPendingEmailInteractor = async ({
+exports.setUserEmailFromPendingEmailInteractor = async (
   applicationContext,
-  user,
-}) => {
+  { user },
+) => {
   const userEntity = new User({
     ...user,
     email: user.pendingEmail,

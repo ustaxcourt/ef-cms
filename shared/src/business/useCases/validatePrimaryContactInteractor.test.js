@@ -22,8 +22,7 @@ describe('validatePrimaryContactInteractor', () => {
 
     const partyType = PARTY_TYPES.petitioner;
 
-    const errors = validatePrimaryContactInteractor({
-      applicationContext,
+    const errors = validatePrimaryContactInteractor(applicationContext, {
       contactInfo: contactPrimary,
       partyType,
     });
@@ -47,8 +46,7 @@ describe('validatePrimaryContactInteractor', () => {
 
     const partyType = PARTY_TYPES.petitioner;
 
-    const errors = validatePrimaryContactInteractor({
-      applicationContext,
+    const errors = validatePrimaryContactInteractor(applicationContext, {
       contactInfo: contactPrimary,
       partyType,
     });

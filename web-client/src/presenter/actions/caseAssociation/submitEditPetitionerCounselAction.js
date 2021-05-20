@@ -18,12 +18,13 @@ export const submitEditPetitionerCounselAction = async ({
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
 
-  await applicationContext.getUseCases().updateCounselOnCaseInteractor({
-    applicationContext,
-    docketNumber,
-    userData: form,
-    userId: form.userId,
-  });
+  await applicationContext
+    .getUseCases()
+    .updateCounselOnCaseInteractor(applicationContext, {
+      docketNumber,
+      userData: form,
+      userId: form.userId,
+    });
 
   return path.success({
     alertSuccess: {

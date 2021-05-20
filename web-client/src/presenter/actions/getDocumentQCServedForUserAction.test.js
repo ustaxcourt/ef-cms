@@ -38,7 +38,7 @@ describe('getDocumentQCServedForUserAction', () => {
 
     expect(
       applicationContext.getUseCases().getDocumentQCServedForUserInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ userId: mockUserId });
   });
 

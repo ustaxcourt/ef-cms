@@ -18,8 +18,7 @@ export const validateDocketEntryAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateDocketEntryInteractor({
-      applicationContext,
+    .validateDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
 

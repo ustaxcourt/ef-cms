@@ -8,8 +8,7 @@ const { US_STATES } = require('../../entities/EntityConstants');
 
 describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validateAddPractitionerInteractor({
-      applicationContext,
+    const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {},
     });
 
@@ -27,8 +26,7 @@ describe('validateAddPractitionerInteractor', () => {
   });
 
   it('returns null on no errors', () => {
-    const errors = validateAddPractitionerInteractor({
-      applicationContext,
+    const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',

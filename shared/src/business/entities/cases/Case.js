@@ -1183,6 +1183,22 @@ const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
 };
 
 /**
+ * removes the contact from the practitioner they are presenting
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ */
+Case.prototype.removeRepresentingFromPractitioners = function (
+  petitionerContactId,
+) {
+  this.privatePractitioners.forEach(practitioner =>
+    practitioner.representing.splice(
+      practitioner.representing.indexOf(petitionerContactId),
+      1,
+    ),
+  );
+};
+
+/**
  * returns the practitioner representing a petitioner
  *
  * @params {string} petitionerContactId the id of the petitioner

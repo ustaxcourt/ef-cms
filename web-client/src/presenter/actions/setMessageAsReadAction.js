@@ -17,11 +17,12 @@ export const setMessageAsReadAction = async ({
 }) => {
   const { messageToMarkRead } = props;
 
-  await applicationContext.getUseCases().setMessageAsReadInteractor({
-    applicationContext,
-    docketNumber: messageToMarkRead.docketNumber,
-    messageId: messageToMarkRead.messageId,
-  });
+  await applicationContext
+    .getUseCases()
+    .setMessageAsReadInteractor(applicationContext, {
+      docketNumber: messageToMarkRead.docketNumber,
+      messageId: messageToMarkRead.messageId,
+    });
 
   const { unreadMessageCount } = get(state.notifications) || 0;
 

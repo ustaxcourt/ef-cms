@@ -10,8 +10,7 @@ const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
 describe('validateOrderWithoutBodyInteractor', () => {
   it('returns the expected errors object on an empty order object', () => {
-    const errors = validateOrderWithoutBodyInteractor({
-      applicationContext,
+    const errors = validateOrderWithoutBodyInteractor(applicationContext, {
       orderMetadata: {},
     });
 
@@ -23,14 +22,16 @@ describe('validateOrderWithoutBodyInteractor', () => {
   });
 
   it('returns no errors when a valid order object is passed through', async () => {
-    const errors = await validateOrderWithoutBodyInteractor({
+    const errors = await validateOrderWithoutBodyInteractor(
       applicationContext,
-      orderMetadata: {
-        documentTitle: 'Order to Be Awesome',
-        documentType: 'Order',
-        eventCode: 'O',
+      {
+        orderMetadata: {
+          documentTitle: 'Order to Be Awesome',
+          documentType: 'Order',
+          eventCode: 'O',
+        },
       },
-    });
+    );
 
     expect(errors).toEqual(null);
   });

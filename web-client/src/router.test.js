@@ -132,8 +132,7 @@ describe('router', () => {
       });
     });
 
-    it.skip('/case-detail/*/documents/*/add-court-issued-docket-entry/*', () => {
-      // TODO: enable when the redirectUrl fix comes from ustaxcourt/staging
+    it('/case-detail/*/documents/*/add-court-issued-docket-entry/*', () => {
       const docketNumber = '111-44';
       const docketEntryId = '000-001';
       const parentMessageId = '222-555';

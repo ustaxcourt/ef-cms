@@ -38,14 +38,16 @@ exports.filePetitionInteractor = async (
         onUploadProgress,
       });
 
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      key,
-    });
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      key,
-    });
+    await applicationContext
+      .getUseCases()
+      .virusScanPdfInteractor(applicationContext, {
+        key,
+      });
+    await applicationContext
+      .getUseCases()
+      .validatePdfInteractor(applicationContext, {
+        key,
+      });
 
     return key;
   };
