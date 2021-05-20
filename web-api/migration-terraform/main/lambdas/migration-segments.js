@@ -11,6 +11,9 @@ const {
   migrateItems: migration0031,
 } = require('./migrations/0031-add-filers-to-docket-entry');
 const {
+  migrateItems: migration0032,
+} = require('./migrations/0032-contact-type-other-filers');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -42,6 +45,9 @@ const migrateRecords = async ({ documentClient, items }) => {
 
   applicationContext.logger.debug('about to run migration 0031');
   items = await migration0031(items, documentClient);
+
+  applicationContext.logger.debug('about to run migration 0032');
+  items = await migration0032(items, documentClient);
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items, documentClient);
