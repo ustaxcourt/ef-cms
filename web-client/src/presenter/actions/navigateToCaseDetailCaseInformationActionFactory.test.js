@@ -93,4 +93,25 @@ describe('navigateToCaseDetailCaseInformationActionFactory', () => {
       '/case-detail/123-45/case-information?caseInformationTab=parties',
     );
   });
+
+  it('should navigate to the case-information, parties-tabs, particpants-tab when expected props are passed in', async () => {
+    await runAction(
+      navigateToCaseDetailCaseInformationActionFactory(
+        'parties',
+        'participantsAndCounsel',
+      ),
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          docketNumber: '123-45',
+        },
+      },
+    );
+
+    expect(routeMock).toHaveBeenCalledWith(
+      '/case-detail/123-45/case-information?caseInformationTab=parties&partiesTab=participantsAndCounsel',
+    );
+  });
 });

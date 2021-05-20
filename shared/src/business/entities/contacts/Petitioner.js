@@ -122,6 +122,7 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   ],
   address1: 'Enter mailing address',
   city: 'Enter city',
+  contactType: 'Select a role type',
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: [

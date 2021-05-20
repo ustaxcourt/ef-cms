@@ -15,6 +15,7 @@ export const addPetitionerToCaseAction = async ({
 }) => {
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.form);
+  const { CONTACT_TYPES } = get(state.constants);
 
   const updatedCase = await applicationContext
     .getUseCases()
@@ -24,11 +25,14 @@ export const addPetitionerToCaseAction = async ({
       docketNumber,
     });
 
+  const contactTypeDisplay =
+    contact.contactType === CONTACT_TYPES.otherPetitioner
+      ? 'Petitioner'
+      : capitalize(contact.contactType);
+
   return {
     alertSuccess: {
-      message: `${capitalize(contact.contactType)} ${
-        contact.name
-      } has been added to the case.`,
+      message: `${contactTypeDisplay} ${contact.name} has been added to the case.`,
     },
     caseDetail: updatedCase,
     docketNumber,
