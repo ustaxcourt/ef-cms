@@ -26,7 +26,7 @@ export const AddPetitionerToCase = connect(
     toggleUseExistingAddressSequence:
       sequences.toggleUseExistingAddressSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePetitionerSequence: sequences.validatePetitionerSequence,
+    validateAddPetitionerSequence: sequences.validateAddPetitionerSequence,
     validationErrors: state.validationErrors,
   },
   function AddPetitionerToCase({
@@ -40,12 +40,12 @@ export const AddPetitionerToCase = connect(
     submitAddPetitionerSequence,
     toggleUseExistingAddressSequence,
     updateFormValueSequence,
-    validatePetitionerSequence,
+    validateAddPetitionerSequence,
     validationErrors,
   }) {
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePetitionerSequence';
+    const onBlur = 'validateAddPetitionerSequence';
 
     return (
       <>
@@ -57,7 +57,7 @@ export const AddPetitionerToCase = connect(
           <h2>Add Party</h2>
 
           <div className="blue-container margin-bottom-5">
-            <FormGroup>
+            <FormGroup errorText={validationErrors?.contactType}>
               <label className="usa-label" htmlFor="contactType">
                 <span>Role type</span>
               </label>
@@ -72,10 +72,11 @@ export const AddPetitionerToCase = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validateAddPetitionerSequence();
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="petitioner">Petitioner</option>
+                <option value="otherPetitioners">Petitioner</option>
                 <option value="participant">Participant</option>
               </select>
             </FormGroup>
@@ -91,12 +92,12 @@ export const AddPetitionerToCase = connect(
                 name="contact.name"
                 type="text"
                 value={form.contact.name || ''}
-                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validateAddPetitionerSequence();
                 }}
               />
             </FormGroup>
@@ -118,12 +119,12 @@ export const AddPetitionerToCase = connect(
                 name="contact.additionalName"
                 type="text"
                 value={form.contact.additionalName || ''}
-                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validateAddPetitionerSequence();
                 }}
               />
             </FormGroup>
@@ -211,12 +212,12 @@ export const AddPetitionerToCase = connect(
                 name="contact.phone"
                 type="tel"
                 value={form.contact.phone || ''}
-                onBlur={() => validatePetitionerSequence()}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validateAddPetitionerSequence();
                 }}
               />
             </FormGroup>
@@ -229,7 +230,7 @@ export const AddPetitionerToCase = connect(
               <ServiceIndicatorRadios
                 bind="form.contact"
                 hideElectronic={!form.contact.currentEmail}
-                validateSequence={validatePetitionerSequence}
+                validateSequence={validateAddPetitionerSequence}
                 validationErrors="validationErrors.contact"
               />
             </div>
@@ -251,7 +252,7 @@ export const AddPetitionerToCase = connect(
                     key: 'contact.caseCaption',
                     value: e.target.value,
                   });
-                  validatePetitionerSequence();
+                  validateAddPetitionerSequence();
                 }}
               />
               <span className="display-inline-block margin-top-1">

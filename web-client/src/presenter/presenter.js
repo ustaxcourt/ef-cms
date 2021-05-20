@@ -429,6 +429,7 @@ import { userContactUpdateInitialUpdateCompleteSequence } from './sequences/user
 import { userContactUpdateProgressSequence } from './sequences/userContactUpdateProgressSequence';
 import { validateAddDeficiencyStatisticsSequence } from './sequences/validateAddDeficiencyStatisticsSequence';
 import { validateAddIrsPractitionerSequence } from './sequences/caseAssociation/validateAddIrsPractitionerSequence';
+import { validateAddPetitionerSequence } from './sequences/validateAddPetitionerSequence';
 import { validateAddPractitionerSequence } from './sequences/validateAddPractitionerSequence';
 import { validateAddPrivatePractitionerSequence } from './sequences/caseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
@@ -912,6 +913,7 @@ export const presenter = {
     userContactUpdateProgressSequence,
     validateAddDeficiencyStatisticsSequence,
     validateAddIrsPractitionerSequence,
+    validateAddPetitionerSequence,
     validateAddPractitionerSequence,
     validateAddPrivatePractitionerSequence,
     validateAddToTrialSessionSequence,

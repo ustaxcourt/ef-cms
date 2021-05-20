@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { addPetitionerToCaseAction } from './addPetitionerToCaseAction';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
@@ -11,12 +12,19 @@ describe('addPetitionerToCaseAction', () => {
     name: 'Selena Kyle',
   };
 
+  const baseState = {
+    constants: {
+      CONTACT_TYPES,
+    },
+  };
+
   presenter.providers.applicationContext = applicationContext;
 
   it('sets state.alertSuccess from props.alertSuccess for a Petitioner', async () => {
     const result = await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
+        ...baseState,
         caseDetail: {
           docketNumber: '999-99',
         },
@@ -37,6 +45,7 @@ describe('addPetitionerToCaseAction', () => {
     const result = await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
+        ...baseState,
         caseDetail: {
           docketNumber: '999-99',
         },
@@ -55,6 +64,7 @@ describe('addPetitionerToCaseAction', () => {
     const result = await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
+        ...baseState,
         caseDetail: {
           docketNumber: '999-99',
         },
@@ -71,6 +81,7 @@ describe('addPetitionerToCaseAction', () => {
     await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
+        ...baseState,
         caseDetail: {
           docketNumber: '999-99',
         },

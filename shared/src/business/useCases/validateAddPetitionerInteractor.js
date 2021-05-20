@@ -11,9 +11,13 @@ const { Petitioner } = require('../entities/contacts/Petitioner');
  * @returns {object} errors (null if no errors)
  */
 exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
+  console.table(contact);
+
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
+
+  console.log('petitionerErrors', petitionerErrors);
 
   let caseCaptionError;
   if (!contact.caseCaption) {
