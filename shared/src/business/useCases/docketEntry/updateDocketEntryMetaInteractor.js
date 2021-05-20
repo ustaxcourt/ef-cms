@@ -10,7 +10,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const { DocketEntry, isServed } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -69,6 +69,10 @@ exports.updateDocketEntryMetaInteractor = async (
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
+
+  if (!isServed(originalDocketEntry)) {
+    throw new Error('Unable to update unserved docket entry.');
+  }
 
   const editableFields = {
     action: docketEntryMeta.action,
