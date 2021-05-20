@@ -25,7 +25,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
 
   const amendmentEventCodes = ['AMAT', 'ADMT'];
 
-  const { isServed } = form;
+  const isServed = applicationContext.getUtilities().isServed(form);
 
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
