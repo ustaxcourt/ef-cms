@@ -17,7 +17,7 @@ describe('setPDFForSigningAction', () => {
     applicationContext
       .getUseCases()
       .loadPDFForSigningInteractor.mockImplementation(
-        (applicationContext, { removeCover }) => {
+        (_applicationContext, { removeCover }) => {
           if (removeCover === true) {
             removeCoverMock();
           }

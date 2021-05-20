@@ -13,7 +13,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     applicationContext
       .getUseCases()
       .uploadDocumentAndMakeSafeInteractor.mockImplementation(
-        (applicationContext, { key }) => {
+        (_applicationContext, { key }) => {
           if (key) {
             return key;
           } else {
