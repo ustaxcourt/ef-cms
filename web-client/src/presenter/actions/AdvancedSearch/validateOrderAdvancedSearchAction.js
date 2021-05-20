@@ -19,8 +19,7 @@ export const validateOrderAdvancedSearchAction = async ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateOrderAdvancedSearchInteractor({
-      applicationContext,
+    .validateOrderAdvancedSearchInteractor(applicationContext, {
       orderSearch,
     });
 

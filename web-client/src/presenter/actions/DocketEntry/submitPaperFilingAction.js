@@ -49,15 +49,17 @@ export const submitPaperFilingAction = async ({
   };
 
   if (isFileAttachedNow) {
-    await applicationContext.getUseCases().virusScanPdfInteractor({
-      applicationContext,
-      key: docketEntryId,
-    });
+    await applicationContext
+      .getUseCases()
+      .virusScanPdfInteractor(applicationContext, {
+        key: docketEntryId,
+      });
 
-    await applicationContext.getUseCases().validatePdfInteractor({
-      applicationContext,
-      key: docketEntryId,
-    });
+    await applicationContext
+      .getUseCases()
+      .validatePdfInteractor(applicationContext, {
+        key: docketEntryId,
+      });
   }
 
   let caseDetail, paperServicePdfUrl;
@@ -66,22 +68,24 @@ export const submitPaperFilingAction = async ({
     ({
       caseDetail,
       paperServicePdfUrl,
-    } = await applicationContext.getUseCases().editPaperFilingInteractor({
-      applicationContext,
-      documentMetadata,
-      isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
-    }));
+    } = await applicationContext
+      .getUseCases()
+      .editPaperFilingInteractor(applicationContext, {
+        documentMetadata,
+        isSavingForLater,
+        primaryDocumentFileId: docketEntryId,
+      }));
   } else {
     ({
       caseDetail,
       paperServicePdfUrl,
-    } = await applicationContext.getUseCases().addPaperFilingInteractor({
-      applicationContext,
-      documentMetadata,
-      isSavingForLater,
-      primaryDocumentFileId: docketEntryId,
-    }));
+    } = await applicationContext
+      .getUseCases()
+      .addPaperFilingInteractor(applicationContext, {
+        documentMetadata,
+        isSavingForLater,
+        primaryDocumentFileId: docketEntryId,
+      }));
   }
 
   if (generateCoversheet) {

@@ -16,8 +16,7 @@ export const generatePublicDocketRecordPdfUrlAction = async ({
     url,
   } = await applicationContext
     .getUseCases()
-    .generatePublicDocketRecordPdfInteractor({
-      applicationContext,
+    .generatePublicDocketRecordPdfInteractor(applicationContext, {
       docketNumber,
     });
 

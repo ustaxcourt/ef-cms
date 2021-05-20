@@ -23,8 +23,7 @@ export const validateSetForHearingAction = ({
 
   const noteEntityErrors = applicationContext
     .getUseCases()
-    .validateHearingNoteInteractor({
-      applicationContext,
+    .validateHearingNoteInteractor(applicationContext, {
       note: calendarNotes,
     });
 

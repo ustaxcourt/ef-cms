@@ -3,9 +3,9 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitOrderAdvancedSearchAction } from './submitOrderAdvancedSearchAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('submitOrderAdvancedSearchAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should call orderAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
     await runAction(submitOrderAdvancedSearchAction, {
       modules: {
@@ -26,7 +26,7 @@ describe('submitOrderAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         keyword: 'a',
@@ -55,7 +55,7 @@ describe('submitOrderAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().orderAdvancedSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         docketNumber: '105-20',

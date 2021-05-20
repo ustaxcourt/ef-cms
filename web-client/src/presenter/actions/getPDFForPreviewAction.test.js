@@ -40,9 +40,9 @@ describe('getPDFForPreviewAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().loadPDFForPreviewInteractor,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+      applicationContext.getUseCases().loadPDFForPreviewInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       docketEntryId: '456',
       docketNumber: '123-20',
     });

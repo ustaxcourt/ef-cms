@@ -28,12 +28,11 @@ describe('getPetitionersPendingEmailStatusOnCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().getUserPendingEmailStatusInteractor.mock
-        .calls[0][0].userId,
+        .calls[0][1].userId,
     ).toBe(mockUserId);
-
     expect(
       applicationContext.getUseCases().getUserPendingEmailStatusInteractor.mock
-        .calls[1][0].userId,
+        .calls[1][1].userId,
     ).toBe(mockSecondUserId);
   });
 

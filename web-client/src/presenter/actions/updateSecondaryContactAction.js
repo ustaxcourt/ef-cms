@@ -16,8 +16,7 @@ export const updateSecondaryContactAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .updateSecondaryContactInteractor({
-      applicationContext,
+    .updateSecondaryContactInteractor(applicationContext, {
       contactInfo: contactSecondary,
       docketNumber,
     });

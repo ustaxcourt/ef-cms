@@ -20,8 +20,7 @@ export const getPendingEmailsOnCaseAction = async ({
   for (let petitioner of petitioners) {
     const pendingEmail = await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
+      .getUserPendingEmailInteractor(applicationContext, {
         userId: petitioner.contactId,
       });
     pendingEmails[petitioner.contactId] = pendingEmail;
@@ -30,8 +29,7 @@ export const getPendingEmailsOnCaseAction = async ({
   for (let respondent of irsPractitioners) {
     const pendingEmail = await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
+      .getUserPendingEmailInteractor(applicationContext, {
         userId: respondent.userId,
       });
     pendingEmails[respondent.userId] = pendingEmail;
@@ -40,8 +38,7 @@ export const getPendingEmailsOnCaseAction = async ({
   for (let privatePractitioner of privatePractitioners) {
     const pendingEmail = await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
+      .getUserPendingEmailInteractor(applicationContext, {
         userId: privatePractitioner.userId,
       });
     pendingEmails[privatePractitioner.userId] = pendingEmail;
