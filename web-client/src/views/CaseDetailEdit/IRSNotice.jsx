@@ -16,7 +16,6 @@ export const IRSNotice = connect(
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
@@ -25,10 +24,11 @@ export const IRSNotice = connect(
     form,
     refreshStatisticsSequence,
     setIrsNoticeFalseSequence,
+    shouldStartWithBlankStatistic = true,
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
-    validateCaseDetailSequence,
+    validate,
     validationErrors,
   }) {
     const renderIrsNoticeRadios = () => {
@@ -51,7 +51,9 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
-                refreshStatisticsSequence();
+                if (shouldStartWithBlankStatistic) {
+                  refreshStatisticsSequence();
+                }
               }}
             />
             <label
@@ -105,21 +107,21 @@ export const IRSNotice = connect(
             month: form.irsMonth,
             year: form.irsYear,
           }}
-          onBlur={validateCaseDetailSequence}
+          onBlur={validate}
           onChange={updateFormValueSequence}
         />
       );
     };
 
     return (
-      <div className="blue-container">
+      <section>
         {renderIrsNoticeRadios()}
 
         <CaseTypeSelect
           allowDefaultOption={true}
           caseTypes={CASE_TYPES}
           legend="Type of case"
-          validation="validateCaseDetailSequence"
+          validation="validate"
           value={form.caseType}
           onChange="updateFormValueSequence"
           onChangePreValidation="refreshStatisticsSequence"
@@ -130,7 +132,7 @@ export const IRSNotice = connect(
         {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
 
         {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
-      </div>
+      </section>
     );
   },
 );
