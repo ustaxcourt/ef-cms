@@ -10,7 +10,7 @@ describe('getPractitionerDetailAction', () => {
     applicationContext
       .getUseCases()
       .getPractitionerByBarNumberInteractor.mockImplementation(
-        (applicationContext, { barNumber }) => ({
+        (_applicationContext, { barNumber }) => ({
           barNumber,
         }),
       );
