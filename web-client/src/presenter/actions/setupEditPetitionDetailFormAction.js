@@ -17,9 +17,11 @@ export const setupEditPetitionDetailFormAction = ({
 
   store.set(state.form, {
     caseType: caseDetail.caseType,
+    hasVerifiedIrsNotice: caseDetail.hasVerifiedIrsNotice,
     petitionPaymentStatus: caseDetail.petitionPaymentStatus,
     preferredTrialCity: caseDetail.preferredTrialCity,
     procedureType: caseDetail.procedureType,
+    statistics: caseDetail.statistics,
   });
 
   if (caseDetail.petitionPaymentStatus === paymentStatus.WAIVED) {
