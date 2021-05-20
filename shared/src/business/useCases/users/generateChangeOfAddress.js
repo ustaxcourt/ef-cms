@@ -52,6 +52,10 @@ exports.generateChangeOfAddress = async ({
       userId: user.userId,
     });
 
+  if (docketNumbers.length === 0) {
+    return [];
+  }
+
   let completedCases = 0;
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

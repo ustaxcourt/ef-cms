@@ -127,7 +127,7 @@ module.exports = {
       { name: 'name' },
       { name: 'document' },
     ],
-    'no-shadow': ['warn', { builtinGlobals: false }],
+    'no-shadow': ['error', { builtinGlobals: false }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
@@ -412,7 +412,7 @@ module.exports = {
       },
     },
     react: {
-      version: '17.0.1',
+      version: '17.0.2',
     },
   },
 };

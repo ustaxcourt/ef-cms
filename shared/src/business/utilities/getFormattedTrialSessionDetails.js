@@ -155,7 +155,7 @@ exports.getTrialSessionStatus = ({ applicationContext, session }) => {
     return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
     return SESSION_STATUS_GROUPS.open;
-  } else if (!session.isCalendared) {
+  } else {
     return SESSION_STATUS_GROUPS.new;
   }
 };

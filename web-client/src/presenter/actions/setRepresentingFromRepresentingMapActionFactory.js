@@ -1,10 +1,10 @@
 import { state } from 'cerebral';
 
 /**
- * sets the representing from the representingMap on the form
+ * generates a function which sets the representing from the representingMap on the form
  *
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store object
+ * @param {String} stateLocation the providers object
+ * @returns {Function} action
  */
 export const setRepresentingFromRepresentingMapActionFactory = stateLocation => ({
   get,

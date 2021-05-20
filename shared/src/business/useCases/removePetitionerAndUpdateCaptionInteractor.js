@@ -59,10 +59,8 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     petitionerContactId,
   );
   for (const practitioner of practitioners) {
-    if (
-      practitioner.isRepresenting(petitionerContactId) &&
-      practitioner.representing.length === 1
-    ) {
+    if (!practitioner.isRepresenting(petitionerContactId)) continue;
+    if (practitioner.representing.length === 1) {
       caseEntity.removePrivatePractitioner(practitioner);
 
       await applicationContext.getPersistenceGateway().deleteUserFromCase({
@@ -70,6 +68,8 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
         docketNumber,
         userId: practitioner.userId,
       });
+    } else if (practitioner.representing.length > 1) {
+      caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
     }
   }
 

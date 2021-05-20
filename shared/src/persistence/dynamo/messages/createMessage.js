@@ -11,10 +11,10 @@ const { put } = require('../../dynamodbClientService');
 exports.createMessage = async ({ applicationContext, message }) => {
   await put({
     Item: {
+      ...message,
       gsi1pk: `message|${message.parentMessageId}`,
       pk: `case|${message.docketNumber}`,
       sk: `message|${message.messageId}`,
-      ...message,
     },
     applicationContext,
   });
