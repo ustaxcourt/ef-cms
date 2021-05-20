@@ -20,10 +20,7 @@ export const FilingPartiesForm = connect(
     validationErrors,
   }) {
     return (
-      <FormGroup errorText={filingPartiesFormHelper.partyValidationError}>
-        <legend className="usa-legend" id="filed-by-legend">
-          Who is filing this document?
-        </legend>
+      <>
         {filingPartiesFormHelper.isServed ? (
           <FormGroup errorText={validationErrors.filedBy}>
             <div>
@@ -44,19 +41,47 @@ export const FilingPartiesForm = connect(
             </div>
           </FormGroup>
         ) : (
-          <fieldset
-            className={classNames(
-              'usa-fieldset',
-              !filingPartiesFormHelper.noMargin && 'margin-bottom-0',
-            )}
-          >
-            {caseDetail.petitioners.map(petitioner => (
-              <div className="usa-checkbox" key={petitioner.contactId}>
+          <FormGroup errorText={filingPartiesFormHelper.partyValidationError}>
+            <fieldset
+              aria-labelledby="filed-by-legend"
+              className={classNames(
+                'usa-fieldset',
+                !filingPartiesFormHelper.noMargin && 'margin-bottom-0',
+              )}
+            >
+              <legend className="usa-legend" id="filed-by-legend">
+                Who is filing this document?
+              </legend>
+              {caseDetail.petitioners.map(petitioner => (
+                <div className="usa-checkbox" key={petitioner.contactId}>
+                  <input
+                    checked={form.filersMap[petitioner.contactId] || false}
+                    className="usa-checkbox__input"
+                    id={`filing-${petitioner.contactId}`}
+                    name={`filersMap.${petitioner.contactId}`}
+                    type="checkbox"
+                    onChange={e => {
+                      updateSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                      validateSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label inline-block"
+                    htmlFor={`filing-${petitioner.contactId}`}
+                  >
+                    {petitioner.name}
+                  </label>
+                </div>
+              ))}
+              <div className="usa-checkbox">
                 <input
-                  checked={form.filersMap[petitioner.contactId] || false}
+                  checked={form.partyIrsPractitioner || false}
                   className="usa-checkbox__input"
-                  id={`filing-${petitioner.contactId}`}
-                  name={`filersMap.${petitioner.contactId}`}
+                  id="party-irs-practitioner"
+                  name="partyIrsPractitioner"
                   type="checkbox"
                   onChange={e => {
                     updateSequence({
@@ -68,86 +93,64 @@ export const FilingPartiesForm = connect(
                 />
                 <label
                   className="usa-checkbox__label inline-block"
-                  htmlFor={`filing-${petitioner.contactId}`}
+                  htmlFor="party-irs-practitioner"
                 >
-                  {petitioner.name}
+                  Respondent
                 </label>
               </div>
-            ))}
-            <div className="usa-checkbox">
-              <input
-                checked={form.partyIrsPractitioner || false}
-                className="usa-checkbox__input"
-                id="party-irs-practitioner"
-                name="partyIrsPractitioner"
-                type="checkbox"
-                onChange={e => {
-                  updateSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                  validateSequence();
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="party-irs-practitioner"
-              >
-                Respondent
-              </label>
-            </div>
-            <div className="usa-checkbox">
-              <input
-                checked={form.hasOtherFilingParty || false}
-                className="usa-checkbox__input"
-                id="has-other-filing-party"
-                name="hasOtherFilingParty"
-                type="checkbox"
-                onChange={e => {
-                  updateSequence({
-                    key: e.target.name,
-                    value: e.target.checked,
-                  });
-                }}
-              />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="has-other-filing-party"
-                id="has-other-filing-party-label"
-              >
-                Other
-              </label>
-            </div>
-            {form.hasOtherFilingParty && (
-              <FormGroup errorText={validationErrors.otherFilingParty}>
-                <div>
-                  <label
-                    className="usa-label"
-                    htmlFor="other-filing-party"
-                    id="other-filing-party-label"
-                  >
-                    Other filing party name
-                  </label>
-                  <input
-                    aria-describedby="other-filing-party-label"
-                    className="usa-input"
-                    id="other-filing-party"
-                    name="otherFilingParty"
-                    type="text"
-                    value={form.otherFilingParty || ''}
-                    onChange={e => {
-                      updateSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </FormGroup>
-            )}
-          </fieldset>
+              <div className="usa-checkbox">
+                <input
+                  checked={form.hasOtherFilingParty || false}
+                  className="usa-checkbox__input"
+                  id="has-other-filing-party"
+                  name="hasOtherFilingParty"
+                  type="checkbox"
+                  onChange={e => {
+                    updateSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label inline-block"
+                  htmlFor="has-other-filing-party"
+                  id="has-other-filing-party-label"
+                >
+                  Other
+                </label>
+              </div>
+              {form.hasOtherFilingParty && (
+                <FormGroup errorText={validationErrors.otherFilingParty}>
+                  <div>
+                    <label
+                      className="usa-label"
+                      htmlFor="other-filing-party"
+                      id="other-filing-party-label"
+                    >
+                      Other filing party name
+                    </label>
+                    <input
+                      aria-describedby="other-filing-party-label"
+                      className="usa-input"
+                      id="other-filing-party"
+                      name="otherFilingParty"
+                      type="text"
+                      value={form.otherFilingParty || ''}
+                      onChange={e => {
+                        updateSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                  </div>
+                </FormGroup>
+              )}
+            </fieldset>
+          </FormGroup>
         )}
-      </FormGroup>
+      </>
     );
   },
 );
