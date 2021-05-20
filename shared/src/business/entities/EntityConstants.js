@@ -745,6 +745,15 @@ const CONTACT_TYPES = {
   otherPetitioner: 'otherPetitioners',
 };
 
+const CONTACT_TYPE_TITLES = {
+  primary: 'Petitioner',
+  secondary: 'Petitioner',
+  otherFilers: 'Petitioner',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
+  otherPetitioner: 'Petitioner',
+};
+
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -1128,4 +1137,5 @@ module.exports = deepFreeze({
   LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
+  CONTACT_TYPE_TITLES,
 });
