@@ -174,7 +174,9 @@ DocketEntry.prototype.init = function init(
     this.signedAt = createISODateString();
   }
 
-  this.generateFiledBy(petitioners);
+  if (!isServed(this)) {
+    this.generateFiledBy(petitioners);
+  }
 };
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
