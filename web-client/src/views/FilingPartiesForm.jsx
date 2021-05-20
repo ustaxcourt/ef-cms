@@ -23,22 +23,23 @@ export const FilingPartiesForm = connect(
       <>
         {filingPartiesFormHelper.isServed ? (
           <FormGroup errorText={validationErrors.filedBy}>
-            <div>
-              <input
-                aria-describedby="filed-by-legend"
-                className="usa-input"
-                id="filed-by"
-                name="filedBy"
-                type="text"
-                value={form.filedBy || ''}
-                onChange={e => {
-                  updateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
+            <label className="usa-label" htmlFor="filed-by" id="filed-by-label">
+              Filed by
+            </label>
+            <input
+              aria-describedby="filed-by-label"
+              className="usa-input"
+              id="filed-by"
+              name="filedBy"
+              type="text"
+              value={form.filedBy || ''}
+              onChange={e => {
+                updateSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
           </FormGroup>
         ) : (
           <FormGroup errorText={filingPartiesFormHelper.partyValidationError}>
