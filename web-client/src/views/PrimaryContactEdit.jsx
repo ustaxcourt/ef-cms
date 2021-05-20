@@ -93,13 +93,7 @@ export const PrimaryContactEdit = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.phone
-              }
-            >
+            <FormGroup errorText={validationErrors?.contactPrimary?.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>

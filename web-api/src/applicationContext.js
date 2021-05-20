@@ -701,6 +701,12 @@ const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
+  getWorkItemMappingsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
+const {
+  getWorkItemsByWorkItemId,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
+const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
@@ -924,6 +930,9 @@ const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
+  updateAssociatedJudgeOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
+const {
   updateCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
@@ -944,6 +953,12 @@ const {
 const {
   updateCaseHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
+const {
+  updateCaseStatusOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseStatusOnWorkItems');
+const {
+  updateCaseTitleOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateCaseTitleOnWorkItems');
 const {
   updateCaseTrialSortMappingRecords,
 } = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
@@ -974,6 +989,9 @@ const {
 const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
+const {
+  updateDocketNumberSuffixOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateDocketNumberSuffixOnWorkItems');
 const {
   updateInitialFilingDocuments,
 } = require('../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments');
@@ -1008,6 +1026,9 @@ const {
 const {
   updateSecondaryContactInteractor,
 } = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
+const {
+  updateTrialDateOnWorkItems,
+} = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
 const {
   updateTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateTrialSession');
@@ -1045,8 +1066,23 @@ const {
   updateWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
 const {
+  updateWorkItemAssociatedJudge,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
+const {
+  updateWorkItemCaseStatus,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseStatus');
+const {
+  updateWorkItemCaseTitle,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemCaseTitle');
+const {
+  updateWorkItemDocketNumberSuffix,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix');
+const {
   updateWorkItemInCase,
 } = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
+const {
+  updateWorkItemTrialDate,
+} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
@@ -1324,11 +1360,18 @@ const gatewayMethods = {
   getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
+  getWorkItemMappingsByDocketNumber,
+  getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
+  updateWorkItemAssociatedJudge,
+  updateWorkItemCaseStatus,
+  updateWorkItemCaseTitle,
+  updateWorkItemDocketNumberSuffix,
+  updateWorkItemTrialDate,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
@@ -1602,9 +1645,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
+        updateCaseStatusOnWorkItems,
+        updateCaseTitleOnWorkItems,
+        updateDocketNumberSuffixOnWorkItems,
         updateInitialFilingDocuments,
+        updateTrialDateOnWorkItems,
         updateUserRecords,
       };
     },

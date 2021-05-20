@@ -17,10 +17,10 @@ exports.saveWorkItemAndAddToUserAndSectionInbox = async ({
   await Promise.all([
     put({
       Item: {
+        ...workItem,
         gsi1pk: `work-item|${workItem.workItemId}`,
         pk: `work-item|${workItem.workItemId}`,
         sk: `work-item|${workItem.workItemId}`,
-        ...workItem,
       },
       applicationContext,
     }),

@@ -36,7 +36,7 @@ npm run build:assets
 
 # exit on any failure
 set -eo pipefail
-npm run build:lambda:api
+npm run build:lambda:migration
 
 # get the stream arn
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
@@ -48,4 +48,4 @@ export TF_VAR_destination_table=$DESTINATION_TABLE
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
-terraform apply
+terraform apply --auto-approve
