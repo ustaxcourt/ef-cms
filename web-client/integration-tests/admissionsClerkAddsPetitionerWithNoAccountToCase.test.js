@@ -49,8 +49,7 @@ const callCognitoTriggerForPendingEmail = async userId => {
   };
 
   const user = await getUserRecordById(userId);
-  await setUserEmailFromPendingEmailInteractor({
-    applicationContext: apiApplicationContext,
+  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
     user,
   });
 };

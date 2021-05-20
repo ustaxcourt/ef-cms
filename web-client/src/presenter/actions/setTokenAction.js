@@ -6,8 +6,7 @@ export const setTokenAction = async ({ applicationContext, props, store }) => {
 
   applicationContext.setCurrentUserToken(props.token);
 
-  await applicationContext.getUseCases().setItemInteractor({
-    applicationContext,
+  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'token',
     value: props.token,
   });

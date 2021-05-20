@@ -31,8 +31,7 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('runs validation on a contact with no invalid properties', async () => {
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -46,8 +45,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -62,8 +60,7 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: undefined, // required
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -83,8 +80,7 @@ describe('validatePetitionerInteractor', () => {
       postalCode: 'what is love',
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
     });
 
@@ -104,8 +100,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
     });
 

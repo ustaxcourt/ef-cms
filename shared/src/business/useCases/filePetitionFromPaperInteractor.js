@@ -30,8 +30,7 @@ exports.filePetitionFromPaperInteractor = async (
   if (applicationForWaiverOfFilingFeeFile) {
     applicationForWaiverOfFilingFeeUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor({
-        applicationContext,
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: applicationForWaiverOfFilingFeeFile,
         onUploadProgress: applicationForWaiverOfFilingFeeUploadProgress,
       });
@@ -39,8 +38,7 @@ exports.filePetitionFromPaperInteractor = async (
 
   const petitionFileUpload = applicationContext
     .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor({
-      applicationContext,
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
       document: petitionFile,
       onUploadProgress: petitionUploadProgress,
     });
@@ -49,8 +47,7 @@ exports.filePetitionFromPaperInteractor = async (
   if (ownershipDisclosureFile) {
     ownershipDisclosureFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor({
-        applicationContext,
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: ownershipDisclosureFile,
         onUploadProgress: ownershipDisclosureUploadProgress,
       });
@@ -60,8 +57,7 @@ exports.filePetitionFromPaperInteractor = async (
   if (stinFile) {
     stinFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor({
-        applicationContext,
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: stinFile,
         onUploadProgress: stinUploadProgress,
       });
@@ -71,8 +67,7 @@ exports.filePetitionFromPaperInteractor = async (
   if (requestForPlaceOfTrialFile) {
     requestForPlaceOfTrialFileUpload = applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor({
-        applicationContext,
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
         document: requestForPlaceOfTrialFile,
         onUploadProgress: requestForPlaceOfTrialUploadProgress,
       });
@@ -86,13 +81,14 @@ exports.filePetitionFromPaperInteractor = async (
     stinFileUpload,
   ]);
 
-  return await applicationContext.getUseCases().createCaseFromPaperInteractor({
-    applicationContext,
-    applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
-    ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
-    petitionFileId: await petitionFileUpload,
-    petitionMetadata,
-    requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
-    stinFileId: await stinFileUpload,
-  });
+  return await applicationContext
+    .getUseCases()
+    .createCaseFromPaperInteractor(applicationContext, {
+      applicationForWaiverOfFilingFeeFileId: await applicationForWaiverOfFilingFeeUpload,
+      ownershipDisclosureFileId: await ownershipDisclosureFileUpload,
+      petitionFileId: await petitionFileUpload,
+      petitionMetadata,
+      requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
+      stinFileId: await stinFileUpload,
+    });
 };

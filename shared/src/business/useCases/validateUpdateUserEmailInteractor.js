@@ -3,15 +3,15 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 /**
  * validateUpdateUserEmailInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.updateUserEmail the update user email form data
  * @returns {object} errors (null if no errors)
  */
-exports.validateUpdateUserEmailInteractor = ({
+exports.validateUpdateUserEmailInteractor = (
   applicationContext,
-  updateUserEmail,
-}) => {
+  { updateUserEmail },
+) => {
   const errors = new UpdateUserEmail(updateUserEmail, {
     applicationContext,
   }).getFormattedValidationErrors();

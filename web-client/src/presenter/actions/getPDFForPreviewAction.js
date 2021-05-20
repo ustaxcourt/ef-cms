@@ -25,8 +25,7 @@ export const getPDFForPreviewAction = async ({
 
   const pdfObj = await applicationContext
     .getUseCases()
-    .loadPDFForPreviewInteractor({
-      applicationContext,
+    .loadPDFForPreviewInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });

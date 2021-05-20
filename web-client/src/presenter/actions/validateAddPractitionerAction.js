@@ -53,8 +53,7 @@ export const validateAddPractitionerAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddPractitionerInteractor({
-      applicationContext,
+    .validateAddPractitionerInteractor(applicationContext, {
       practitioner,
     });
 

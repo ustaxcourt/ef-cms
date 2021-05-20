@@ -1,7 +1,11 @@
+const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
@@ -223,6 +227,108 @@ describe('updateCaseAndAssociations', () => {
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).toHaveBeenCalledTimes(4);
+    });
+  });
+
+  describe('work items', () => {
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getWorkItemMappingsByDocketNumber.mockReturnValue([
+          { pk: 'abc|987', sk: 'workitem|123' },
+        ]);
+    });
+
+    it('the associated judge has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          associatedJudge: 'Judge Dredd',
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateAssociatedJudgeOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        associatedJudge: 'Judge Dredd',
+        workItemId: '123',
+      });
+    });
+
+    it('the docket number suffix is null has been updated because the case type has changed', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          caseType: CASE_TYPES_MAP.whistleblower,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .updateDocketNumberSuffixOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+        workItemId: '123',
+      });
+    });
+
+    it('the case caption has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          caseCaption: 'Some caption changed',
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        caseTitle: Case.getCaseTitle('Some caption changed'),
+        workItemId: '123',
+      });
+    });
+
+    it('the case status has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        caseStatus: CASE_STATUS_TYPES.generalDocket,
+        workItemId: '123',
+      });
+    });
+
+    it('the trial date has been updated', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialDate: '2021-01-02T05:22:16.001Z',
+          trialSessionId: faker.datatype.uuid(),
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        workItemId: '123',
+      });
     });
   });
 

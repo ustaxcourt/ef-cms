@@ -30,7 +30,7 @@ exports.getUsersPendingEmailInteractor = async (
       userIds,
     });
 
-  if (!usersRaw.length) return;
+  if (!usersRaw || !usersRaw.length) return;
 
   const usersMapping = {};
 

@@ -34,29 +34,29 @@ export const submitCourtIssuedOrderAction = async ({
     ...documentMetadata,
   };
 
-  await applicationContext.getUseCases().virusScanPdfInteractor({
-    applicationContext,
-    key: docketEntryId,
-  });
+  await applicationContext
+    .getUseCases()
+    .virusScanPdfInteractor(applicationContext, {
+      key: docketEntryId,
+    });
 
-  await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    key: docketEntryId,
-  });
+  await applicationContext
+    .getUseCases()
+    .validatePdfInteractor(applicationContext, {
+      key: docketEntryId,
+    });
 
   if (docketEntryIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()
-      .updateCourtIssuedOrderInteractor({
-        applicationContext,
+      .updateCourtIssuedOrderInteractor(applicationContext, {
         docketEntryIdToEdit,
         documentMetadata,
       });
   } else {
     caseDetail = await applicationContext
       .getUseCases()
-      .fileCourtIssuedOrderInteractor({
-        applicationContext,
+      .fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata,
         primaryDocumentFileId: docketEntryId,
       });

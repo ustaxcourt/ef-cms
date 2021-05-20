@@ -15,10 +15,10 @@ exports.saveWorkItemForDocketEntryInProgress = async ({
 }) => {
   await put({
     Item: {
+      ...workItem,
       gsi1pk: `work-item|${workItem.workItemId}`,
       pk: `work-item|${workItem.workItemId}`,
       sk: `work-item|${workItem.workItemId}`,
-      ...workItem,
     },
     applicationContext,
   });

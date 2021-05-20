@@ -18,11 +18,12 @@ export const updateDocketEntryMetaAction = async ({
   const docketRecordEntry = get(state.form);
 
   try {
-    await applicationContext.getUseCases().updateDocketEntryMetaInteractor({
-      applicationContext,
-      docketEntryMeta: docketRecordEntry,
-      docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: docketRecordEntry,
+        docketNumber,
+      });
     return path.success();
   } catch (err) {
     return path.error({

@@ -24,7 +24,7 @@ describe('generateTitleAction', () => {
 
     expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Judgment on the Pleadings');
   });
@@ -48,11 +48,11 @@ describe('generateTitleAction', () => {
     });
 
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Protective Order Pursuant to Rule 103');
     expect(
-      generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[1][1].documentMetadata
         .documentType,
     ).toEqual('Motion for Entry of Decision');
   });

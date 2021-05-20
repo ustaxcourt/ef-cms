@@ -8,10 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.userId the user id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getOutboxMessagesForUserInteractor = ({
+exports.getOutboxMessagesForUserInteractor = (
   applicationContext,
-  userId,
-}) => {
+  { userId },
+) => {
   return get({
     applicationContext,
     endpoint: `/messages/outbox/${userId}`,

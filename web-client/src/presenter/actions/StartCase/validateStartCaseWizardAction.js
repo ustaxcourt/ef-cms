@@ -25,8 +25,7 @@ export const validateStartCaseWizardAction = ({
 
   let errors = applicationContext
     .getUseCases()
-    .validateStartCaseWizardInteractor({
-      applicationContext,
+    .validateStartCaseWizardInteractor(applicationContext, {
       petition,
     });
 
