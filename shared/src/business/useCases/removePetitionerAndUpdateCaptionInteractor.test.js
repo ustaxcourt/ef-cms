@@ -187,4 +187,46 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
         .caseToUpdate.caseCaption,
     ).toEqual(mockUpdatedCaption);
   });
+
+  it('should remove the petitioner from the representing id of the privatePractitioner', async () => {
+    const otherPetitioner = petitionerToRemove;
+
+    mockCase.privatePractitioners = [
+      {
+        barNumber: 'OK0063',
+        contact: {
+          address1: '5943 Joseph Summit',
+          address2: 'Suite 334',
+          address3: null,
+          city: 'Millermouth',
+          country: 'U.S.A.',
+          countryType: 'domestic',
+          phone: '348-858-8312',
+          postalCode: '99517',
+          state: 'AK',
+        },
+        email: 'thomastorres@example.com',
+        entityName: 'PrivatePractitioner',
+        name: 'Brandon Choi',
+        representing: [
+          getContactPrimary(MOCK_CASE).contactId,
+          otherPetitioner.contactId,
+        ],
+        role: 'privatePractitioner',
+        serviceIndicator: 'Electronic',
+        userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
+      },
+    ];
+
+    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
+      caseCaption: 'hello world',
+      contactId: getContactPrimary(MOCK_CASE).contactId,
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.privatePractitioners[0].representing,
+    ).toEqual([otherPetitioner.contactId]);
+  });
 });

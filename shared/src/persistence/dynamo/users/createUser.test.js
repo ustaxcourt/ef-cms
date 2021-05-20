@@ -162,9 +162,9 @@ describe('createUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUser,
       },
     });
     expect(
@@ -208,9 +208,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[1][0],
       ).toMatchObject({
         Item: {
+          ...petitionsClerkUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...petitionsClerkUser,
         },
       });
     });
@@ -250,9 +250,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
+          ...judgeUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...judgeUser,
         },
       });
     });
@@ -293,9 +293,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
+          ...judgeUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...judgeUser,
         },
       });
     });
@@ -314,9 +314,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutBarNumber,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });
@@ -335,9 +335,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
         },
       });
       expect(
@@ -377,9 +377,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutSection,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutSection,
         },
       });
     });

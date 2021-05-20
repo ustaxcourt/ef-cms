@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -7,7 +6,6 @@ import classNames from 'classnames';
 
 const PartiesInformationContentHeader = connect(
   {
-    caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     form: state.form,
     openAddPrivatePractitionerModalSequence:
@@ -19,7 +17,6 @@ const PartiesInformationContentHeader = connect(
     validationErrors: state.validationErrors,
   },
   function PartiesInformationContentHeader({
-    caseDetail,
     caseInformationHelper,
     form,
     openAddPrivatePractitionerModalSequence,
@@ -30,7 +27,7 @@ const PartiesInformationContentHeader = connect(
     return (
       <>
         <div className="grid-row margin-bottom-2">
-          <div className="grid-col-4">
+          <div className="grid-col-6">
             <h2>{title}</h2>
           </div>
 
@@ -96,18 +93,6 @@ const PartiesInformationContentHeader = connect(
                 </FormGroup>
               </div>
             </>
-          )}
-          {caseInformationHelper.showAddPartyButton && (
-            <div className="grid-col-2">
-              <Button
-                link
-                className="float-right margin-right-0"
-                href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
-                icon="plus-circle"
-              >
-                Add Party
-              </Button>
-            </div>
           )}
         </div>
       </>
