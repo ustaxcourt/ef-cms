@@ -1,5 +1,6 @@
 const {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  UNSERVABLE_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   getDocumentTitleWithAdditionalInfo,
@@ -70,7 +71,10 @@ exports.updateDocketEntryMetaInteractor = async (
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
-  if (!isServed(originalDocketEntry)) {
+  if (
+    !isServed(originalDocketEntry) &&
+    !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode)
+  ) {
     throw new Error('Unable to update unserved docket entry.');
   }
 
