@@ -64,6 +64,7 @@ describe('DocketEntry entity', () => {
           filers: [mockPrimaryId, mockSecondaryId],
           isLegacyServed: undefined,
           servedAt: '2019-08-25T05:00:00.000Z',
+          servedParties: 'Test Petitioner',
         },
         { applicationContext, petitioners },
       );
@@ -80,7 +81,7 @@ describe('DocketEntry entity', () => {
           eventCode: 'NOT',
           signedAt: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(myDoc.signedAt).toBeTruthy();
@@ -93,7 +94,7 @@ describe('DocketEntry entity', () => {
           eventCode: 'O',
           signedAt: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(myDoc.signedAt).toEqual(null);
@@ -108,7 +109,7 @@ describe('DocketEntry entity', () => {
           eventCode: 'NOT',
           signedAt: null,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(myDoc.isDraft).toBe(false);
@@ -123,6 +124,7 @@ describe('DocketEntry entity', () => {
     it('Creates a valid docket entry', () => {
       const myDoc = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,
+        petitioners,
       });
       myDoc.docketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       expect(myDoc.isValid()).toBeTruthy();
@@ -134,7 +136,7 @@ describe('DocketEntry entity', () => {
         {
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(myDoc.isValid()).toBeFalsy();
     });
@@ -144,7 +146,7 @@ describe('DocketEntry entity', () => {
         {
           documentType: 'Petition',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(myDoc.isValid()).toBeFalsy();
     });
@@ -154,7 +156,7 @@ describe('DocketEntry entity', () => {
         {
           serviceDate: 'undefined-undefined-undefined',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(myDoc.isValid()).toBeFalsy();
     });
@@ -167,13 +169,31 @@ describe('DocketEntry entity', () => {
           ...A_VALID_DOCKET_ENTRY,
           documentContents: 'this is the content of the document',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       docketEntry.docketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
       docketEntry.validate();
 
       expect(docketEntry.documentContents).not.toBeDefined();
       expect(docketEntry.isValid()).toBeTruthy();
+    });
+
+    it('should be invalid if filedBy is undefined, filers is valid, and servedAt is populated', () => {
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filedBy: undefined,
+          filers: [mockPrimaryId, mockSecondaryId],
+          isLegacyServed: undefined,
+          servedAt: '2019-08-25T05:00:00.000Z',
+          servedParties: [{ name: 'Test Petitioner' }],
+        },
+        { applicationContext, petitioners },
+      );
+
+      expect(Object.keys(docketEntry.getFormattedValidationErrors())).toEqual([
+        'filedBy',
+      ]);
     });
 
     it('should throw an error on invalid docket entries', () => {
@@ -195,7 +215,7 @@ describe('DocketEntry entity', () => {
           signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           signedJudgeName: 'Mock Signed Judge',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       ).validate();
       expect(docketEntry.isValid()).toBeTruthy();
     });
@@ -213,7 +233,7 @@ describe('DocketEntry entity', () => {
           signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
           signedJudgeName: 'Mock Signed Judge',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       ).validate();
       expect(docketEntry.isValid()).toBeTruthy();
     });
@@ -224,7 +244,7 @@ describe('DocketEntry entity', () => {
           {
             ...A_VALID_DOCKET_ENTRY,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeTruthy();
       });
@@ -235,7 +255,7 @@ describe('DocketEntry entity', () => {
             ...A_VALID_DOCKET_ENTRY,
             isLegacySealed: true,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeFalsy();
         expect(docketEntry.getFormattedValidationErrors()).toMatchObject({
@@ -257,7 +277,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
             signedJudgeName: 'A Judge',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeTruthy();
       });
@@ -273,7 +293,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
             signedJudgeName: 'A Judge',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeTruthy();
       });
@@ -284,7 +304,7 @@ describe('DocketEntry entity', () => {
         it('should pass validation when filedBy is undefined', () => {
           const internalDocketEntry = new DocketEntry(
             { ...A_VALID_DOCKET_ENTRY, documentType: 'Petition' },
-            { applicationContext },
+            { applicationContext, petitioners },
           );
 
           expect(internalDocketEntry.isValid()).toBeTruthy();
@@ -301,8 +321,9 @@ describe('DocketEntry entity', () => {
                   documentType: EXTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
+                  filers: [],
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
               expect(docketEntry.isValid()).toBeFalsy();
               expect(docketEntry.filedBy).toBeUndefined();
@@ -316,7 +337,7 @@ describe('DocketEntry entity', () => {
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.isValid()).toBeTruthy();
@@ -331,9 +352,10 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                   isAutoGenerated: true,
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.filedBy).toBeUndefined();
@@ -347,8 +369,9 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.filedBy).toBeUndefined();
@@ -362,9 +385,10 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                   isAutoGenerated: false,
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.isValid()).toBeFalsy();
@@ -381,8 +405,9 @@ describe('DocketEntry entity', () => {
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: undefined,
+                  filers: [],
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
               expect(docketEntry.isValid()).toBeFalsy();
               expect(docketEntry.filedBy).toBeUndefined();
@@ -395,8 +420,9 @@ describe('DocketEntry entity', () => {
                   documentType: INTERNAL_DOCUMENT_TYPES[0],
                   eventCode: TRANSCRIPT_EVENT_CODE,
                   filedBy: 'Test Petitioner1',
+                  filers: [],
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.isValid()).toBeTruthy();
@@ -411,9 +437,10 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                   isAutoGenerated: true,
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.filedBy).toBeUndefined();
@@ -427,8 +454,9 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.filedBy).toBeUndefined();
@@ -442,9 +470,10 @@ describe('DocketEntry entity', () => {
                   documentType: 'Notice of Change of Address',
                   eventCode: 'NCA',
                   filedBy: undefined,
+                  filers: [],
                   isAutoGenerated: false,
                 },
-                { applicationContext },
+                { applicationContext, petitioners },
               );
 
               expect(docketEntry.isValid()).toBeFalsy();
@@ -465,7 +494,7 @@ describe('DocketEntry entity', () => {
             signedAt: undefined,
             signedJudgeName: undefined,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeFalsy();
@@ -481,7 +510,7 @@ describe('DocketEntry entity', () => {
             signedAt: undefined,
             signedJudgeName: undefined,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeTruthy();
@@ -497,7 +526,7 @@ describe('DocketEntry entity', () => {
             signedAt: undefined,
             signedJudgeName: undefined,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeFalsy();
@@ -514,7 +543,7 @@ describe('DocketEntry entity', () => {
             signedAt: undefined,
             signedJudgeName: undefined,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeTruthy();
@@ -531,7 +560,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeTruthy();
@@ -547,7 +576,7 @@ describe('DocketEntry entity', () => {
             signedAt: undefined,
             signedJudgeName: undefined,
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeTruthy();
@@ -560,7 +589,7 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeFalsy();
         expect(docketEntry.signedJudgeName).toBeUndefined();
@@ -576,7 +605,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
 
         expect(docketEntry.isValid()).toBeTruthy();
@@ -592,7 +621,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeTruthy();
       });
@@ -604,7 +633,7 @@ describe('DocketEntry entity', () => {
             documentType: 'Order',
             eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeFalsy();
         expect(docketEntry.signedJudgeName).toBeUndefined();
@@ -620,7 +649,7 @@ describe('DocketEntry entity', () => {
             signedByUserId: mockUserId,
             signedJudgeName: 'Dredd',
           },
-          { applicationContext },
+          { applicationContext, petitioners },
         );
         expect(docketEntry.isValid()).toBeTruthy();
       });
@@ -633,7 +662,7 @@ describe('DocketEntry entity', () => {
           documentType: OPINION_DOCUMENT_TYPES[0].documentType,
           eventCode: 'MOP',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.isValid()).toBeFalsy();
       expect(docketEntry.judge).toBeUndefined();
@@ -650,7 +679,7 @@ describe('DocketEntry entity', () => {
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(docketEntry.isValid()).toBeFalsy();
@@ -670,7 +699,7 @@ describe('DocketEntry entity', () => {
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(docketEntry.isValid()).toBeFalsy();
@@ -1236,7 +1265,7 @@ describe('DocketEntry entity', () => {
           ],
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(docketEntry.filedBy).toBeUndefined();
@@ -1272,6 +1301,7 @@ describe('DocketEntry entity', () => {
     it('signs and unsigns the document', () => {
       const docketEntry = new DocketEntry(A_VALID_DOCKET_ENTRY, {
         applicationContext,
+        petitioners,
       });
       docketEntry.setSigned('abc-123', 'Joe Exotic');
 
@@ -1295,7 +1325,7 @@ describe('DocketEntry entity', () => {
           scenario: 'Standard',
           secondaryDocument: {},
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.secondaryDocument).toBeUndefined();
       expect(createdDocketEntry.isValid()).toEqual(true);
@@ -1307,7 +1337,7 @@ describe('DocketEntry entity', () => {
           ...A_VALID_DOCKET_ENTRY,
           scenario: 'Standard',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       createdDocketEntry.secondaryDocument = {
         secondaryDocumentInfo: 'was set by accessor rather than init',
@@ -1325,7 +1355,7 @@ describe('DocketEntry entity', () => {
           scenario: 'Standard',
           secondaryDocument: undefined,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.isValid()).toEqual(true);
     });
@@ -1337,7 +1367,7 @@ describe('DocketEntry entity', () => {
           scenario: 'Nonstandard H',
           secondaryDocument: undefined,
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(createdDocketEntry.isValid()).toEqual(true);
@@ -1354,7 +1384,7 @@ describe('DocketEntry entity', () => {
             eventCode: 'P',
           },
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.isValid()).toEqual(true);
     });
@@ -1366,7 +1396,7 @@ describe('DocketEntry entity', () => {
           scenario: 'Nonstandard H',
           secondaryDocument: {},
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
@@ -1389,7 +1419,7 @@ describe('DocketEntry entity', () => {
             },
           ],
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.isValid()).toEqual(true);
       expect(createdDocketEntry.servedParties).toEqual([
@@ -1414,7 +1444,7 @@ describe('DocketEntry entity', () => {
             role: 'irsSuperuser',
           },
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
@@ -1435,7 +1465,7 @@ describe('DocketEntry entity', () => {
           isOnDocketRecord: true,
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(docketEntry.isValid()).toBe(true);
@@ -1457,7 +1487,7 @@ describe('DocketEntry entity', () => {
           judgeUserId: mockJudgeUserId,
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
 
       expect(docketEntry).toMatchObject({
@@ -1477,7 +1507,7 @@ describe('DocketEntry entity', () => {
           isOnDocketRecord: true,
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
-        { applicationContext },
+        { applicationContext, petitioners },
       );
       expect(docketEntry.judgeUserId).toBeUndefined();
       expect(docketEntry.isValid()).toBeTruthy();
