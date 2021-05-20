@@ -3,21 +3,21 @@ import { getBlockedCasesByTrialLocationAction } from './getBlockedCasesByTrialLo
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-applicationContext
-  .getUseCases()
-  .getBlockedCasesInteractor.mockImplementation(async () => {
-    return [
-      {
-        blocked: true,
-        docketNumber: '123-45',
-        preferredTrialCity: 'Boise, Idaho',
-      },
-    ];
-  });
-
 describe('getBlockedCasesByTrialLocationAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  applicationContext
+    .getUseCases()
+    .getBlockedCasesInteractor.mockImplementation(async () => {
+      return [
+        {
+          blocked: true,
+          docketNumber: '123-45',
+          preferredTrialCity: 'Boise, Idaho',
+        },
+      ];
+    });
+
   it('should not call getBlockedCasesInteractor if the trialLocation is not on the form', async () => {
     await runAction(getBlockedCasesByTrialLocationAction, {
       modules: {
@@ -50,7 +50,7 @@ describe('getBlockedCasesByTrialLocationAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().getBlockedCasesInteractor.mock
-        .calls[0][0].trialLocation,
+        .calls[0][1].trialLocation,
     ).toEqual('Boise, Idaho');
     expect(result.output).toEqual({
       blockedCases: [

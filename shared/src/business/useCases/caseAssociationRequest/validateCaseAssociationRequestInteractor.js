@@ -5,15 +5,15 @@ const {
 /**
  * validateCaseAssociationRequestInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseAssociationRequest the case association request data
  * @returns {object} errors if there are any, or null
  */
-exports.validateCaseAssociationRequestInteractor = ({
+exports.validateCaseAssociationRequestInteractor = (
   applicationContext,
-  caseAssociationRequest,
-}) => {
+  { caseAssociationRequest },
+) => {
   const errors = CaseAssociationRequestFactory(caseAssociationRequest, {
     applicationContext,
   }).getFormattedValidationErrors();

@@ -19,8 +19,7 @@ export const validateSearchDeadlinesAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateSearchDeadlinesInteractor({
-      applicationContext,
+    .validateSearchDeadlinesInteractor(applicationContext, {
       deadlineSearch: {
         endDate,
         startDate,

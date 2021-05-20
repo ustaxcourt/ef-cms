@@ -20,11 +20,12 @@ export const removeRespondentCounselFromCaseAction = async ({
     practitioner => practitioner.barNumber === barNumber,
   );
 
-  await applicationContext.getUseCases().deleteCounselFromCaseInteractor({
-    applicationContext,
-    docketNumber,
-    userId: respondentCounsel.userId,
-  });
+  await applicationContext
+    .getUseCases()
+    .deleteCounselFromCaseInteractor(applicationContext, {
+      docketNumber,
+      userId: respondentCounsel.userId,
+    });
 
   return {
     alertSuccess: {

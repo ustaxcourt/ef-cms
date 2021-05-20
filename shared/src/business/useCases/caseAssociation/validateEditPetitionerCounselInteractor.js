@@ -5,15 +5,15 @@ const {
 /**
  * validateEditPetitionerCounselInteractor
  *
- * @param {object} params params
- * @param {object} params.applicationContext the application context
- * @param {object} params.practitioner metadata
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.practitioner the petitioner counsel to validate
  * @returns {object} errors
  */
-exports.validateEditPetitionerCounselInteractor = ({
+exports.validateEditPetitionerCounselInteractor = (
   applicationContext,
-  practitioner,
-}) => {
+  { practitioner },
+) => {
   const errors = EditPetitionerCounselFactory.get(practitioner, {
     applicationContext,
   }).getFormattedValidationErrors();

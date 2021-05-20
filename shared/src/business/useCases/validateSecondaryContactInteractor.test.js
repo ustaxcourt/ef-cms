@@ -22,8 +22,7 @@ describe('validateSecondaryContactInteractor', () => {
 
     const partyType = PARTY_TYPES.petitionerSpouse;
 
-    const errors = validateSecondaryContactInteractor({
-      applicationContext,
+    const errors = validateSecondaryContactInteractor(applicationContext, {
       contactInfo: contactSecondary,
       partyType,
     });
@@ -47,8 +46,7 @@ describe('validateSecondaryContactInteractor', () => {
 
     const partyType = PARTY_TYPES.petitionerSpouse;
 
-    const errors = validateSecondaryContactInteractor({
-      applicationContext,
+    const errors = validateSecondaryContactInteractor(applicationContext, {
       contactInfo: contactSecondary,
       partyType,
     });

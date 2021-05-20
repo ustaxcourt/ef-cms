@@ -79,8 +79,7 @@ exports.handler = async event => {
 
     const user = await applicationContext
       .getUseCases()
-      .createPetitionerAccountInteractor({
-        applicationContext,
+      .createPetitionerAccountInteractor(applicationContext, {
         email,
         name,
         userId,
@@ -105,8 +104,7 @@ exports.handler = async event => {
     ) {
       const updatedUser = await applicationContext
         .getUseCases()
-        .setUserEmailFromPendingEmailInteractor({
-          applicationContext,
+        .setUserEmailFromPendingEmailInteractor(applicationContext, {
           user: userFromPersistence,
         });
 

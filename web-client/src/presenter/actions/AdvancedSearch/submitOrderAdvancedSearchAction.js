@@ -25,8 +25,7 @@ export const submitOrderAdvancedSearchAction = async ({
 
   const searchResults = await applicationContext
     .getUseCases()
-    .orderAdvancedSearchInteractor({
-      applicationContext,
+    .orderAdvancedSearchInteractor(applicationContext, {
       searchParams,
     });
 

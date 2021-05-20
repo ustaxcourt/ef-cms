@@ -9,7 +9,7 @@ const tmp = require('tmp');
  * @param {string} providers.key the key of the document to virus scan
  * @returns {object} errors (null if no errors)
  */
-exports.virusScanPdfInteractor = async ({ applicationContext, key }) => {
+exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

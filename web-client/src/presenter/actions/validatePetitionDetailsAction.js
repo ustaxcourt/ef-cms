@@ -66,19 +66,20 @@ export const validatePetitionDetailsAction = ({
       });
   }
 
-  const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
-    applicationContext,
-    caseDetail: {
-      ...caseDetail,
-      ...form,
-      irsNoticeDate,
-      petitionPaymentDate,
-      petitionPaymentWaivedDate,
-      preferredTrialCity: form.preferredTrialCity
-        ? form.preferredTrialCity
-        : null,
-    },
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateCaseDetailInteractor(applicationContext, {
+      caseDetail: {
+        ...caseDetail,
+        ...form,
+        irsNoticeDate,
+        petitionPaymentDate,
+        petitionPaymentWaivedDate,
+        preferredTrialCity: form.preferredTrialCity
+          ? form.preferredTrialCity
+          : null,
+      },
+    });
 
   if (!errors) {
     return path.success();

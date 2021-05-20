@@ -41,7 +41,7 @@ describe('submitEditRespondentCounselAction', () => {
     ).toEqual(1);
     expect(
       applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       docketNumber: '123-20',
       userData: { userId: '1' },
