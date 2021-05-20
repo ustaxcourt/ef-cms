@@ -7,12 +7,13 @@ describe('addPetitionerToCaseAction', () => {
   const mockContact = {
     address1: '123 cat lane',
     caseCaption: 'A test caption',
+    contactType: 'Petitioner',
     name: 'Selena Kyle',
   };
 
   presenter.providers.applicationContext = applicationContext;
 
-  it('sets state.alertSuccess from props.alertSuccess', async () => {
+  it('sets state.alertSuccess from props.alertSuccess for a Petitioner', async () => {
     const result = await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
@@ -26,7 +27,27 @@ describe('addPetitionerToCaseAction', () => {
     });
 
     expect(result.output.alertSuccess).toEqual({
-      message: `Petitioner ${mockContact.name} has been added to case.`,
+      message: `Petitioner ${mockContact.name} has been added to the case.`,
+    });
+  });
+
+  it('sets state.alertSuccess from props.alertSuccess for a Petitioner', async () => {
+    mockContact.contactType = 'Participant';
+
+    const result = await runAction(addPetitionerToCaseAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          docketNumber: '999-99',
+        },
+        form: {
+          contact: mockContact,
+        },
+      },
+    });
+
+    expect(result.output.alertSuccess).toEqual({
+      message: `Participant ${mockContact.name} has been added to the case.`,
     });
   });
 
