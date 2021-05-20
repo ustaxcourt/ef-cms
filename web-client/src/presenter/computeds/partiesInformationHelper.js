@@ -103,12 +103,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
 
     const editPetitionerLink = isExternalUser
-      ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+      ? externalType
+        ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+        : null
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
     return {
       ...petitioner,
-      canEditPetitioner,
+      canEditPetitioner: canEditPetitioner && !!editPetitionerLink,
       editPetitionerLink,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
