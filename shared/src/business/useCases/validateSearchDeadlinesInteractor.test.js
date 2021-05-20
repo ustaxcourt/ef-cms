@@ -5,8 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateSearchDeadlinesInteractor', () => {
   it('returns the expected errors object on an empty statistic', () => {
-    const errors = validateSearchDeadlinesInteractor({
-      applicationContext,
+    const errors = validateSearchDeadlinesInteractor(applicationContext, {
       deadlineSearch: {},
     });
 
@@ -14,8 +13,7 @@ describe('validateSearchDeadlinesInteractor', () => {
   });
 
   it('returns null when there are no errors', () => {
-    const result = validateSearchDeadlinesInteractor({
-      applicationContext,
+    const result = validateSearchDeadlinesInteractor(applicationContext, {
       deadlineSearch: {
         endDate: '01/02/2020',
         startDate: '01/01/2020',

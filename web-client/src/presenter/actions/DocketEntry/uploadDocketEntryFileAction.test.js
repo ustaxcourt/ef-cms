@@ -60,7 +60,7 @@ describe('uploadDocketEntryFileAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadDocumentInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       documentFile: fakeFile,
       key: mockDocketEntryIdFromProps,
@@ -84,7 +84,7 @@ describe('uploadDocketEntryFileAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadDocumentInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       documentFile: fakeFile,
       key: mockDocketEntryIdFromState,

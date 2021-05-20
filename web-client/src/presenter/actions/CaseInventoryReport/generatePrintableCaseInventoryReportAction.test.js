@@ -30,9 +30,8 @@ describe('generatePrintableCaseInventoryReportAction', () => {
 
     expect(
       applicationContext.getUseCases()
-        .generatePrintableCaseInventoryReportInteractor,
-    ).toBeCalledWith({
-      applicationContext: expect.anything(),
+        .generatePrintableCaseInventoryReportInteractor.mock.calls[0][1],
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       status: STATUS_TYPES.new,
     });

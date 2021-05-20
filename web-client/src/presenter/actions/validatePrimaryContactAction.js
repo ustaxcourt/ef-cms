@@ -20,8 +20,7 @@ export const validatePrimaryContactAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validatePrimaryContactInteractor({
-      applicationContext,
+    .validatePrimaryContactInteractor(applicationContext, {
       contactInfo: contactPrimary,
       partyType,
     });

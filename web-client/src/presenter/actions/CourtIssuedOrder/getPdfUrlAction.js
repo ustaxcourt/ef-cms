@@ -16,8 +16,7 @@ export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
     url,
   } = await applicationContext
     .getUseCases()
-    .createCourtIssuedOrderPdfFromHtmlInteractor({
-      applicationContext,
+    .createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
       contentHtml,
       docketNumber,
       documentTitle,

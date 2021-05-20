@@ -39,7 +39,7 @@ describe('deleteCaseDeadlineAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().deleteCaseDeadlineInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseDeadlineId: mockCaseDeadlineId,
       docketNumber: mockDocketNumber,

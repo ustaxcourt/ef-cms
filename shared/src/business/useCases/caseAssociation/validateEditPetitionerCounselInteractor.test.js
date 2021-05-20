@@ -7,8 +7,7 @@ const {
 
 describe('validateEditPetitionerCounselInteractor', () => {
   it('should return the expected errors when the petitioner counsel is invalid', () => {
-    const errors = validateEditPetitionerCounselInteractor({
-      applicationContext,
+    const errors = validateEditPetitionerCounselInteractor(applicationContext, {
       practitioner: {},
     });
 
@@ -16,8 +15,7 @@ describe('validateEditPetitionerCounselInteractor', () => {
   });
 
   it('should return null when the petitioner counsel to edit is valid', () => {
-    const errors = validateEditPetitionerCounselInteractor({
-      applicationContext,
+    const errors = validateEditPetitionerCounselInteractor(applicationContext, {
       practitioner: { representing: ['f56624e1-853e-44bb-aff3-e9947780d247'] },
     });
 

@@ -18,8 +18,7 @@ export const getBlockedCasesByTrialLocationAction = async ({
   if (trialLocation) {
     blockedCases = await applicationContext
       .getUseCases()
-      .getBlockedCasesInteractor({
-        applicationContext,
+      .getBlockedCasesInteractor(applicationContext, {
         trialLocation,
       });
   }

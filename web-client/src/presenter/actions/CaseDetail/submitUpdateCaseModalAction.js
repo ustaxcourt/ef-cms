@@ -33,8 +33,7 @@ export const submitUpdateCaseModalAction = async ({
   ) {
     updatedCase = await applicationContext
       .getUseCases()
-      .updateCaseContextInteractor({
-        applicationContext,
+      .updateCaseContextInteractor(applicationContext, {
         associatedJudge: selectedAssociatedJudge,
         caseCaption,
         caseStatus,
