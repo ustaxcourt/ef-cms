@@ -1,5 +1,5 @@
 import { getDocumentTypesForSelect } from './internalTypesHelper';
-import { getFilerParties } from './fileDocumentHelper';
+import { getFilerParties } from './getFilerParties';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
