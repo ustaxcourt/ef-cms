@@ -88,7 +88,7 @@ export const formattedCaseDetail = (get, applicationContext) => {
     ...formatCase(applicationContext, caseDetail),
   };
 
-  result.petitioners.map(
+  (result.petitioners || []).forEach(
     contact =>
       (contact.contactTypeDisplay = CONTACT_TYPE_TITLES[contact.contactType]),
   );
