@@ -152,7 +152,6 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      filedBy: undefined,
     },
     { applicationContext, petitioners: caseEntity.petitioners },
   ).validate();
