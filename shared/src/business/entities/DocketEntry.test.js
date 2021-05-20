@@ -14,6 +14,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 
+const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
 export const A_VALID_DOCKET_ENTRY = {
   createdAt: '2020-07-17T19:28:29.675Z',
   docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
@@ -21,13 +22,13 @@ export const A_VALID_DOCKET_ENTRY = {
   documentType: 'Petition',
   eventCode: 'A',
   filedBy: 'Test Petitioner',
+  filers: [mockPrimaryId],
   receivedAt: '2020-07-17T19:28:29.675Z',
   role: ROLES.petitioner,
   userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
 };
 
 describe('DocketEntry entity', () => {
-  const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
   const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
 
   const petitioners = [
@@ -36,30 +37,31 @@ describe('DocketEntry entity', () => {
   ];
   const mockUserId = applicationContext.getUniqueId();
 
-  describe('constructor', () => {
-    it('should generate filedBy when the docket entry has not been served', () => {
+  describe('generateFiledBy', () => {
+    it('should update filedBy when the docket entry has not been served', () => {
       const myDoc = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
-          filedBy: undefined,
-          filers: [mockPrimaryId],
+          filers: [mockPrimaryId, mockSecondaryId],
           isLegacyServed: undefined,
           servedAt: undefined,
         },
         { applicationContext, petitioners },
       );
 
-      expect(myDoc.filedBy).not.toBeUndefined();
+      expect(myDoc.filedBy).toEqual(
+        `Petrs. ${petitioners[0].name} & ${petitioners[1].name}`,
+      );
     });
 
-    it('should not generate filedBy when the docket entry has been served', () => {
+    it('should not update filedBy when the docket entry has been served', () => {
       const mockFiledBy =
         'This filed by should not be updated by the constructor';
       const myDoc = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           filedBy: mockFiledBy,
-          filers: [mockPrimaryId],
+          filers: [mockPrimaryId, mockSecondaryId],
           isLegacyServed: undefined,
           servedAt: '2019-08-25T05:00:00.000Z',
         },
