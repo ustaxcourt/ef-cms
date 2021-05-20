@@ -20,6 +20,7 @@ const mockUser2 = {
 
 const mockUserIds = [
   '6805d1ab-18d0-43ec-bafb-654e83405416',
+  '6805d1ab-18d0-43ec-bafb-654e83405416',
   'a805d1ab-18d0-43ec-bafb-654e83405412',
 ];
 
@@ -39,11 +40,12 @@ describe('getUsersById', () => {
     ]);
   });
 
-  it('should return data as received from persistence', async () => {
+  it('should return data as received from persistence with unique userIds', async () => {
     const result = await getUsersById({
       applicationContext,
       userIds: mockUserIds,
     });
+
     expect(result).toEqual([
       {
         ...mockUser1,
