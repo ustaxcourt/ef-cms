@@ -36,6 +36,40 @@ describe('DocketEntry entity', () => {
   ];
   const mockUserId = applicationContext.getUniqueId();
 
+  describe('constructor', () => {
+    it('should generate filedBy when the docket entry has not been served', () => {
+      const myDoc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filedBy: undefined,
+          filers: [mockPrimaryId],
+          isLegacyServed: undefined,
+          servedAt: undefined,
+        },
+        { applicationContext, petitioners },
+      );
+
+      expect(myDoc.filedBy).not.toBeUndefined();
+    });
+
+    it('should not generate filedBy when the docket entry has been served', () => {
+      const mockFiledBy =
+        'This filed by should not be updated by the constructor';
+      const myDoc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filedBy: mockFiledBy,
+          filers: [mockPrimaryId],
+          isLegacyServed: undefined,
+          servedAt: undefined,
+        },
+        { applicationContext, petitioners },
+      );
+
+      expect(myDoc.filedBy).toEqual(mockFiledBy);
+    });
+  });
+
   describe('signedAt', () => {
     it('should implicitly set a signedAt for Notice event codes', () => {
       const myDoc = new DocketEntry(
