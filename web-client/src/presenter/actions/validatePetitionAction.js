@@ -18,10 +18,11 @@ export const validatePetitionAction = ({ applicationContext, get, path }) => {
     'trialCities',
   );
 
-  const errors = applicationContext.getUseCases().validatePetitionInteractor({
-    applicationContext,
-    petition: form,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validatePetitionInteractor(applicationContext, {
+      petition: form,
+    });
 
   if (!errors) {
     return path.success();

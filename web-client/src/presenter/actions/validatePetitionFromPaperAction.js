@@ -75,8 +75,7 @@ export const validatePetitionFromPaperAction = ({
 
   let errors = applicationContext
     .getUseCases()
-    .validatePetitionFromPaperInteractor({
-      applicationContext,
+    .validatePetitionFromPaperInteractor(applicationContext, {
       petition: {
         ...form,
         petitionPaymentDate,
