@@ -83,9 +83,7 @@ export const EditPetitionerInformationInternal = connect(
               </select>
             </FormGroup>
 
-            <FormGroup
-              errorText={validationErrors && validationErrors.contact?.name}
-            >
+            <FormGroup errorText={validationErrors?.contact?.name}>
               <label className="usa-label" htmlFor="name">
                 <span>Name</span>
               </label>
@@ -108,11 +106,7 @@ export const EditPetitionerInformationInternal = connect(
               />
             </FormGroup>
 
-            <FormGroup
-              errorText={
-                validationErrors && validationErrors.contact?.additionalName
-              }
-            >
+            <FormGroup errorText={validationErrors?.contact?.additionalName}>
               <label className="usa-label" htmlFor="additionalName">
                 <span>
                   Additional name <span className="usa-hint">(optional)</span>
@@ -162,13 +156,7 @@ export const EditPetitionerInformationInternal = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contact &&
-                validationErrors.contact.phone
-              }
-            >
+            <FormGroup errorText={validationErrors?.contact?.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>

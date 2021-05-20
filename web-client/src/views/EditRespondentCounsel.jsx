@@ -61,9 +61,7 @@ export const EditRespondentCounsel = connect(
               <div className="margin-top-2">
                 <ServiceIndicatorRadios
                   bind={'form'}
-                  getValidationError={() =>
-                    validationErrors && validationErrors.serviceIndicator
-                  }
+                  getValidationError={() => validationErrors?.serviceIndicator}
                   validateSequence={validateEditRespondentCounselSequence}
                 />
               </div>
