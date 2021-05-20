@@ -7,14 +7,12 @@ describe('authenticateCodeAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .authorizeCodeInteractor.mockImplementation(
-        (applicationContext, { code }) => {
-          return {
-            refreshToken: `refresh-token-${code}`,
-            token: `token-${code}`,
-          };
-        },
-      );
+      .authorizeCodeInteractor.mockImplementation((appContext, { code }) => {
+        return {
+          refreshToken: `refresh-token-${code}`,
+          token: `token-${code}`,
+        };
+      });
     presenter.providers.applicationContext = applicationContext;
   });
 

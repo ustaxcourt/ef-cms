@@ -23,7 +23,7 @@ const RespondentCounsel = connect(
     return (
       <>
         <div className="grid-row ">
-          <div className="grid-col-4">
+          <div className="grid-col-6">
             <h2>Respondent Counsel</h2>
           </div>
           {caseInformationHelper.showAddCounsel && <RespondentSearch />}
