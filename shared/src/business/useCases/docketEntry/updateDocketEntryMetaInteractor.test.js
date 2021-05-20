@@ -191,14 +191,14 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it("should not throw an error when the docket entry has not been served and it's unservable", async () => {
-    await expect(() =>
+    await expect(
       updateDocketEntryMetaInteractor(applicationContext, {
         docketEntryMeta: {
-          docketEntryId: mockDocketEntries[4].docketEntryId, // Unservable document
+          ...mockDocketEntries[4], // Unservable document
         },
         docketNumber: MOCK_CASE.docketNumber,
       }),
-    ).not.toThrow();
+    ).resolves.not.toThrow();
   });
 
   it('should call the persistence method to load the case by its docket number', async () => {
