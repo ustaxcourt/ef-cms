@@ -61,7 +61,7 @@ describe('DocketEntry entity', () => {
           filedBy: mockFiledBy,
           filers: [mockPrimaryId],
           isLegacyServed: undefined,
-          servedAt: undefined,
+          servedAt: '2019-08-25T05:00:00.000Z',
         },
         { applicationContext, petitioners },
       );
