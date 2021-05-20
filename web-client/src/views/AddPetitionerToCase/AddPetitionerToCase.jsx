@@ -65,8 +65,8 @@ export const AddPetitionerToCase = connect(
                 aria-describedby="role-type"
                 className="usa-select max-width-400"
                 id="contactType"
-                name="contactType"
-                value={form.contactType || ''}
+                name="contact.contactType"
+                value={form.contact.contactType || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
