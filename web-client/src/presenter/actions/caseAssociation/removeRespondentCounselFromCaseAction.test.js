@@ -34,9 +34,8 @@ describe('removeRespondentCounselFromCaseAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
-      applicationContext: expect.anything(),
       docketNumber: '101-20',
       userId: 'user-id-123',
     });

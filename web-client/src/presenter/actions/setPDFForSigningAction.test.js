@@ -16,12 +16,14 @@ describe('setPDFForSigningAction', () => {
 
     applicationContext
       .getUseCases()
-      .loadPDFForSigningInteractor.mockImplementation(({ removeCover }) => {
-        if (removeCover === true) {
-          removeCoverMock();
-        }
-        return mockPDFObj;
-      });
+      .loadPDFForSigningInteractor.mockImplementation(
+        (_applicationContext, { removeCover }) => {
+          if (removeCover === true) {
+            removeCoverMock();
+          }
+          return mockPDFObj;
+        },
+      );
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -152,7 +154,7 @@ describe('setPDFForSigningAction', () => {
 
     expect(
       applicationContext.getUseCases().loadPDFForSigningInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketEntryId,
       docketNumber: '123-20',

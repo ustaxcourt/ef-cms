@@ -27,8 +27,7 @@ export const validateEditPetitionerCounselAction = ({
 
   let error = applicationContext
     .getUseCases()
-    .validateEditPetitionerCounselInteractor({
-      applicationContext,
+    .validateEditPetitionerCounselInteractor(applicationContext, {
       practitioner,
     });
 

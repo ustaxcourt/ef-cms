@@ -20,8 +20,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
 
   await applicationContext
     .getUseCases()
-    .associatePrivatePractitionerWithCaseInteractor({
-      applicationContext,
+    .associatePrivatePractitionerWithCaseInteractor(applicationContext, {
       docketNumber,
       representing,
       serviceIndicator,

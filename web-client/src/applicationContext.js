@@ -184,6 +184,8 @@ import { getUserInteractor } from '../../shared/src/proxies/users/getUserProxy';
 import { getUserPendingEmailInteractor } from '../../shared/src/proxies/users/getUserPendingEmailProxy';
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
+import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailProxy';
+import { getUsersPendingEmailStatusesInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailStatusesProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
@@ -415,6 +417,8 @@ const allUseCases = {
   getUserPendingEmailInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
+  getUsersPendingEmailInteractor,
+  getUsersPendingEmailStatusesInteractor,
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
@@ -515,8 +519,10 @@ const allUseCases = {
   validateUserContactInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
-  virusScanPdfInteractor: args =>
-    process.env.SKIP_VIRUS_SCAN ? null : virusScanPdfInteractor(args),
+  virusScanPdfInteractor: (applicationContext, args) =>
+    process.env.SKIP_VIRUS_SCAN
+      ? null
+      : virusScanPdfInteractor(applicationContext, args),
 };
 tryCatchDecorator(allUseCases);
 

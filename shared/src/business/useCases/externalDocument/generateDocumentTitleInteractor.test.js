@@ -7,8 +7,7 @@ const {
 
 describe('generateDocumentTitleInteractor', () => {
   it('generates a document title from passed metadata', async () => {
-    const title = await generateDocumentTitleInteractor({
-      applicationContext,
+    const title = await generateDocumentTitleInteractor(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc',
         previousDocument: {
@@ -22,8 +21,7 @@ describe('generateDocumentTitleInteractor', () => {
   });
 
   it('generate the full document title for the previousDocument when documentMetadata.previousDocument exists', async () => {
-    const title = await generateDocumentTitleInteractor({
-      applicationContext,
+    const title = await generateDocumentTitleInteractor(applicationContext, {
       documentMetadata: {
         documentTitle: 'abc [pizza]',
         previousDocument: {

@@ -27,8 +27,7 @@ export const removeCaseFromTrialAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .removeCaseFromTrialInteractor({
-      applicationContext,
+    .removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge,
       caseStatus,
       disposition,

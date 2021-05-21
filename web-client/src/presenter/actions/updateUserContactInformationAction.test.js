@@ -25,7 +25,7 @@ describe('updateUserContactInformationAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateUserContactInformationInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       contactInfo: {
         address1: '999 Jump St',

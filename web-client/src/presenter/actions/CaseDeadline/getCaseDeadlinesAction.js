@@ -17,12 +17,13 @@ export const getCaseDeadlinesAction = async ({ applicationContext, get }) => {
   const {
     deadlines,
     totalCount,
-  } = await applicationContext.getUseCases().getCaseDeadlinesInteractor({
-    applicationContext,
-    endDate,
-    judge: judgeFilter,
-    page,
-    startDate,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .getCaseDeadlinesInteractor(applicationContext, {
+      endDate,
+      judge: judgeFilter,
+      page,
+      startDate,
+    });
   return { caseDeadlines: deadlines, totalCount };
 };

@@ -66,7 +66,7 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
 
     expect(
       applicationContext.getUseCases()
-        .removePetitionerAndUpdateCaptionInteractor.mock.calls[0][0],
+        .removePetitionerAndUpdateCaptionInteractor.mock.calls[0][1],
     ).toMatchObject({
       contactId: mockContact.contactId,
       docketNumber: mockDocketNumber,

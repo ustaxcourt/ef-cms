@@ -21,8 +21,7 @@ export const updatePetitionerInformationAction = async ({
     updatedCase,
   } = await applicationContext
     .getUseCases()
-    .updatePetitionerInformationInteractor({
-      applicationContext,
+    .updatePetitionerInformationInteractor(applicationContext, {
       docketNumber,
       updatedPetitionerData: contact,
     });
