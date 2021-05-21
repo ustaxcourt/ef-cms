@@ -150,7 +150,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
       !isNotice,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showNotServed,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument,
