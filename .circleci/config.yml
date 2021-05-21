@@ -200,14 +200,14 @@ jobs:
     resource_class: small
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
       - run:
           name: NPM - Install
           command: |
             npm set progress=false
             npm ci
             npm rebuild
+      - attach_workspace:
+          at: ~/
       - run:
           name: Combine Coverage
           command: |
