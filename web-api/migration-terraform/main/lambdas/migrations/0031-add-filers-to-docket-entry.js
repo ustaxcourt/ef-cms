@@ -39,24 +39,57 @@ const migrateItems = async (items, documentClient) => {
 
       const caseRecord = aggregateCaseItems(fullCase);
 
-      if (item.partyPrimary) {
-        const contactPrimaryId = getContactPrimary(caseRecord).contactId;
-        filers.push(contactPrimaryId);
-        item.partyPrimary = undefined;
+      if (!caseRecord.docketNumber) {
+        applicationContext.logger.info(
+          `0031: Docket entry ${item.sk} does not have an associated case.`,
+          {
+            pk: item.pk,
+            sk: item.sk,
+          },
+        );
+      } else {
+        if (item.partyPrimary) {
+          const contactPrimary = getContactPrimary(caseRecord);
+
+          if (contactPrimary) {
+            filers.push(contactPrimary.contactId);
+          } else {
+            applicationContext.logger.info(
+              `0031: Docket entry ${item.sk} has partyPrimary=true but no contactPrimary was found on the case.`,
+              {
+                pk: item.pk,
+                sk: item.sk,
+              },
+            );
+          }
+          item.partyPrimary = undefined;
+        }
+
+        if (item.partySecondary) {
+          const contactSecondary = getContactSecondary(caseRecord);
+
+          if (contactSecondary) {
+            filers.push(contactSecondary.contactId);
+          } else {
+            applicationContext.logger.info(
+              `0031: Docket entry ${item.sk} has partySecondary=true but no contactSecondary was found on the case.`,
+              {
+                pk: item.pk,
+                sk: item.sk,
+              },
+            );
+          }
+
+          item.partySecondary = undefined;
+        }
+
+        item.filers = filers;
+
+        new DocketEntry(item, {
+          applicationContext,
+          petitioners: caseRecord.petitioners,
+        }).validate();
       }
-
-      if (item.partySecondary) {
-        const contactSecondaryId = getContactSecondary(caseRecord).contactId;
-        filers.push(contactSecondaryId);
-        item.partySecondary = undefined;
-      }
-
-      item.filers = filers;
-
-      new DocketEntry(item, {
-        applicationContext,
-        petitioners: caseRecord.petitioners,
-      }).validate();
 
       itemsAfter.push(item);
     } else {
