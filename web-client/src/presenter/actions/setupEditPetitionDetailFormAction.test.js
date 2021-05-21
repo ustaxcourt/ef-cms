@@ -96,4 +96,40 @@ describe('setupEditPetitionDetailFormAction', () => {
       irsYear: '2019',
     });
   });
+
+  it('sets hasVerifiedIrsNotice on the form from caseDetail', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          hasVerifiedIrsNotice: true,
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      hasVerifiedIrsNotice: true,
+    });
+  });
+
+  it('sets statistics on the form from caseDetail', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          statistics: [{ foo: 'bar' }, { bar: 'baz' }],
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      statistics: [{ foo: 'bar' }, { bar: 'baz' }],
+    });
+  });
 });
