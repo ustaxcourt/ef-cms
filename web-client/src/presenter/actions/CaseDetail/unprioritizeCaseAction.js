@@ -13,8 +13,7 @@ export const unprioritizeCaseAction = async ({ applicationContext, get }) => {
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .unprioritizeCaseInteractor({
-      applicationContext,
+    .unprioritizeCaseInteractor(applicationContext, {
       docketNumber,
     });
 

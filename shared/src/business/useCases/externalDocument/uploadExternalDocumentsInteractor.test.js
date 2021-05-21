@@ -22,8 +22,7 @@ describe('uploadExternalDocumentsInteractor', () => {
     });
 
     await expect(
-      uploadExternalDocumentsInteractor({
-        applicationContext,
+      uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles: [
           {
             primary: 'something',
@@ -40,8 +39,7 @@ describe('uploadExternalDocumentsInteractor', () => {
       userId: 'irsPractitioner',
     });
 
-    const result = await uploadExternalDocumentsInteractor({
-      applicationContext,
+    const result = await uploadExternalDocumentsInteractor(applicationContext, {
       documentFiles: {
         primary: 'something',
       },
@@ -65,8 +63,7 @@ describe('uploadExternalDocumentsInteractor', () => {
     });
 
     await expect(
-      uploadExternalDocumentsInteractor({
-        applicationContext,
+      uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -98,8 +95,7 @@ describe('uploadExternalDocumentsInteractor', () => {
     });
 
     await expect(
-      uploadExternalDocumentsInteractor({
-        applicationContext,
+      uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -121,8 +117,7 @@ describe('uploadExternalDocumentsInteractor', () => {
   });
 
   it('should call fileExternalDocumentForConsolidatedInteractor when a leadDocketNumber is provided', async () => {
-    await uploadExternalDocumentsInteractor({
-      applicationContext,
+    await uploadExternalDocumentsInteractor(applicationContext, {
       documentFiles: {
         primary: 'something',
         primarySupporting0: 'something3',

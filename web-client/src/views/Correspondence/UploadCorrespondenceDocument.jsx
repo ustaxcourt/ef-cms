@@ -56,11 +56,7 @@ export const UploadCorrespondenceDocument = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
                 <div className="blue-container upload-court-document-description-container">
-                  <FormGroup
-                    errorText={
-                      validationErrors && validationErrors.documentTitle
-                    }
-                  >
+                  <FormGroup errorText={validationErrors?.documentTitle}>
                     <label
                       className="usa-label"
                       htmlFor="upload-description"
@@ -102,7 +98,7 @@ export const UploadCorrespondenceDocument = connect(
                 </div>
 
                 <div className="document-select-container">
-                  <FormGroup errorText={validationErrors.primaryDocumentFile}>
+                  <FormGroup errorText={validationErrors?.primaryDocumentFile}>
                     <label
                       className={classNames(
                         'usa-label ustc-upload with-hint',

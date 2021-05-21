@@ -3,16 +3,16 @@ const { ROLES } = require('../../entities/EntityConstants');
 /**
  * getJudgeForUserChambersInteractor - returns the judge user for a given user in a chambers section
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the chambers user
  * @returns {User} the judge user for the given chambers user
  */
 
-exports.getJudgeForUserChambersInteractor = async ({
+exports.getJudgeForUserChambersInteractor = async (
   applicationContext,
-  user,
-}) => {
+  { user },
+) => {
   let judgeUser;
   if (user.role === ROLES.judge) {
     judgeUser = user;

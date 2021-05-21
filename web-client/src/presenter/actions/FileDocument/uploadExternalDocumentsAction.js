@@ -57,8 +57,7 @@ export const uploadExternalDocumentsAction = async ({
       docketEntryIdsAdded,
     } = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor({
-        applicationContext,
+      .uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles,
         documentMetadata,
         progressFunctions,

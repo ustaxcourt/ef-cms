@@ -30,8 +30,7 @@ export const generateTitlePreviewAction = ({
 
   let updatedDocumentTitle = applicationContext
     .getUseCases()
-    .generateDocumentTitleInteractor({
-      applicationContext,
+    .generateDocumentTitleInteractor(applicationContext, {
       documentMetadata,
     });
 

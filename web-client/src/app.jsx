@@ -119,17 +119,17 @@ const app = {
   initialize: async (applicationContext, debugTools) => {
     const scannerSourceName = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+      .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
     const scanMode = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scanMode' });
+      .getItemInteractor(applicationContext, { key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
     const user =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'user' })) ||
+        .getItemInteractor(applicationContext, { key: 'user' })) ||
       presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
@@ -150,7 +150,7 @@ const app = {
     const token =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'token' })) ||
+        .getItemInteractor(applicationContext, { key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);

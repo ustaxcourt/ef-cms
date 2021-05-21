@@ -32,29 +32,29 @@ export const submitCorrespondenceAction = async ({
     docketNumber,
   };
 
-  await applicationContext.getUseCases().virusScanPdfInteractor({
-    applicationContext,
-    key: correspondenceId,
-  });
+  await applicationContext
+    .getUseCases()
+    .virusScanPdfInteractor(applicationContext, {
+      key: correspondenceId,
+    });
 
-  await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    key: correspondenceId,
-  });
+  await applicationContext
+    .getUseCases()
+    .validatePdfInteractor(applicationContext, {
+      key: correspondenceId,
+    });
 
   if (documentIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()
-      .updateCorrespondenceDocumentInteractor({
-        applicationContext,
+      .updateCorrespondenceDocumentInteractor(applicationContext, {
         correspondenceId: documentIdToEdit,
         documentMetadata,
       });
   } else {
     caseDetail = await applicationContext
       .getUseCases()
-      .fileCorrespondenceDocumentInteractor({
-        applicationContext,
+      .fileCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata,
         primaryDocumentFileId: correspondenceId,
       });

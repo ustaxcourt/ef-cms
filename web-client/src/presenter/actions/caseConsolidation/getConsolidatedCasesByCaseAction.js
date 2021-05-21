@@ -18,8 +18,7 @@ export const getConsolidatedCasesByCaseAction = async ({
   if (leadDocketNumber) {
     const unsortedConsolidatedCases = await applicationContext
       .getUseCases()
-      .getConsolidatedCasesByCaseInteractor({
-        applicationContext,
+      .getConsolidatedCasesByCaseInteractor(applicationContext, {
         docketNumber: leadDocketNumber,
       });
 

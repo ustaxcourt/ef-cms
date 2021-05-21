@@ -34,13 +34,14 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
       },
       state: { form: { practitionerSearch: 'Test Practitioner' } },
     });
+
     expect(
       applicationContext.getUseCases()
         .getPrivatePractitionersBySearchKeyInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases()
-        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][0]
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][1]
         .searchKey,
     ).toEqual('Test Practitioner');
     expect(successStub.mock.calls.length).toEqual(1);
@@ -58,13 +59,14 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
       },
       state: { form: { practitionerSearch: 'Test Practitioner2' } },
     });
+
     expect(
       applicationContext.getUseCases()
         .getPrivatePractitionersBySearchKeyInteractor.mock.calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases()
-        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][0]
+        .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][1]
         .searchKey,
     ).toEqual('Test Practitioner2');
     expect(successStub).not.toBeCalled();
