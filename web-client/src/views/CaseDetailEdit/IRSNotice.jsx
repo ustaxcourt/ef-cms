@@ -3,7 +3,7 @@ import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { StatisticsForm } from '../StartCaseInternal/StatisticsForm';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const IRSNotice = connect(
@@ -16,6 +16,7 @@ export const IRSNotice = connect(
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validation: sequences[props.validate],
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
@@ -29,6 +30,7 @@ export const IRSNotice = connect(
     statisticsFormHelper,
     updateFormValueSequence,
     validate,
+    validation,
     validationErrors,
   }) {
     const renderIrsNoticeRadios = () => {
@@ -107,7 +109,7 @@ export const IRSNotice = connect(
             month: form.irsMonth,
             year: form.irsYear,
           }}
-          onBlur={validate}
+          onBlur={validation}
           onChange={updateFormValueSequence}
         />
       );
@@ -121,7 +123,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={CASE_TYPES}
           legend="Type of case"
-          validation="validate"
+          validation={validate}
           value={form.caseType}
           onChange="updateFormValueSequence"
           onChangePreValidation="refreshStatisticsSequence"
