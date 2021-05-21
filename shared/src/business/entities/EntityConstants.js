@@ -740,7 +740,18 @@ const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
   otherFiler: 'otherFilers',
+  intervenor: 'intervenor',
+  participant: 'participant',
   otherPetitioner: 'otherPetitioners',
+};
+
+const CONTACT_TYPE_TITLES = {
+  primary: 'Petitioner',
+  secondary: 'Petitioner',
+  otherFilers: 'Petitioner',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
+  otherPetitioner: 'Petitioner',
 };
 
 const COMMON_CITIES = [
@@ -1126,4 +1137,5 @@ module.exports = deepFreeze({
   LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
+  CONTACT_TYPE_TITLES,
 });

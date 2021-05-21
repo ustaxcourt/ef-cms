@@ -1,4 +1,7 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPE_TITLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -84,6 +87,11 @@ export const formattedCaseDetail = (get, applicationContext) => {
     ...setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
+
+  (result.petitioners || []).forEach(
+    contact =>
+      (contact.contactTypeDisplay = CONTACT_TYPE_TITLES[contact.contactType]),
+  );
 
   result.otherFilers = (
     applicationContext.getUtilities().getOtherFilers(result) || []
