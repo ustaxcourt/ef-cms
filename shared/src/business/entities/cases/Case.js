@@ -161,11 +161,11 @@ Case.prototype.init = function init(
     this.assignFieldsForInternalUsers({ applicationContext, rawCase });
   }
 
+  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
@@ -265,7 +265,11 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
     this.docketEntries = rawCase.docketEntries
       .map(
         docketEntry =>
-          new DocketEntry(docketEntry, { applicationContext, filtered }),
+          new DocketEntry(docketEntry, {
+            applicationContext,
+            filtered,
+            petitioners: this.petitioners,
+          }),
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
@@ -305,7 +309,11 @@ Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntrie
 }) {
   if (Array.isArray(rawCase.archivedDocketEntries)) {
     this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
-      docketEntry => new DocketEntry(docketEntry, { applicationContext }),
+      docketEntry =>
+        new DocketEntry(docketEntry, {
+          applicationContext,
+          petitioners: this.petitioners,
+        }),
     );
   } else {
     this.archivedDocketEntries = [];
@@ -901,6 +909,7 @@ Case.prototype.archiveDocketEntry = function (
 ) {
   const docketEntryToArchive = new DocketEntry(docketEntry, {
     applicationContext,
+    petitioners: this.petitioners,
   });
   docketEntryToArchive.archive();
   this.archivedDocketEntries.push(docketEntryToArchive);
@@ -1065,7 +1074,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
           processingStatus: 'complete',
           userId,
         },
-        { applicationContext },
+        { applicationContext, petitioners: this.petitioners },
       ),
     );
   }
@@ -1115,7 +1124,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
           processingStatus: 'complete',
           userId,
         },
-        { applicationContext },
+        { applicationContext, petitioners: this.petitioners },
       ),
     );
   }

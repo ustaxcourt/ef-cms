@@ -1,4 +1,7 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
+const {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} = require('./DocketEntry.test');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
 const { DocketEntry } = require('./DocketEntry');
@@ -10,9 +13,8 @@ describe('setWorkItem', () => {
       {
         ...A_VALID_DOCKET_ENTRY,
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
-
     const workItem = new WorkItem(
       {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
