@@ -290,7 +290,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all
-            npx run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
+            npx run-p start:api:ci start:client:ci --no-install >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 10
@@ -352,7 +352,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all
-            npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            npx run-p start:api:ci start:public:ci --no-install >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
@@ -416,7 +416,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:client:ci --no-install > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -484,7 +484,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npx run-p start:api:ci start:public:ci --no-install > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
