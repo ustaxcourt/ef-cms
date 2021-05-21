@@ -16,7 +16,7 @@ export const IRSNotice = connect(
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validation: sequences[props.validate],
+    validation: sequences[props.validationName],
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
@@ -29,9 +29,9 @@ export const IRSNotice = connect(
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
-    validate,
     validation,
     validationErrors,
+    validationName,
   }) {
     const renderIrsNoticeRadios = () => {
       return (
@@ -123,7 +123,7 @@ export const IRSNotice = connect(
           allowDefaultOption={true}
           caseTypes={CASE_TYPES}
           legend="Type of case"
-          validation={validate}
+          validation={validationName}
           value={form.caseType}
           onChange="updateFormValueSequence"
           onChangePreValidation="refreshStatisticsSequence"
