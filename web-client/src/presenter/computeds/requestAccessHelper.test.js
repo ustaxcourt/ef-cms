@@ -193,10 +193,12 @@ describe('requestAccessHelper', () => {
         petitioners: [
           {
             contactId: mockContactId1,
+            contactType: CONTACT_TYPES.primary,
             name: 'bob',
           },
           {
             contactId: mockContactId2,
+            contactType: CONTACT_TYPES.secondary,
             name: 'sally',
           },
           {
@@ -212,6 +214,9 @@ describe('requestAccessHelper', () => {
       const { representingPartiesNames } = runCompute(requestAccessHelper, {
         state,
       });
+
+      console.log('representingPartiesNames', representingPartiesNames);
+
       expect(representingPartiesNames).toEqual([
         'bob, Petitioner',
         `rick, ${capitalize(CONTACT_TYPES.participant)}`,
