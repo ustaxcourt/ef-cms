@@ -19,7 +19,6 @@ export const StartCaseInternal = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitPetitionFromPaperSequence: sequences.submitPetitionFromPaperSequence,
-    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
     validatePetitionFromPaperSequence:
       sequences.validatePetitionFromPaperSequence,
   },
@@ -28,7 +27,6 @@ export const StartCaseInternal = connect(
     formCancelToggleCancelSequence,
     showModal,
     submitPetitionFromPaperSequence,
-    validateCaseDetailSequence,
     validatePetitionFromPaperSequence,
   }) {
     return (
@@ -63,7 +61,7 @@ export const StartCaseInternal = connect(
                     title="IRS Notice"
                   >
                     <div className="blue-container">
-                      <IRSNotice validate={validateCaseDetailSequence} />
+                      <IRSNotice validate="validateCaseDetailSequence" />
                     </div>
                   </Tab>
                 </Tabs>
