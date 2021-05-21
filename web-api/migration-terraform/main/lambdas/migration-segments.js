@@ -47,7 +47,7 @@ const migrateRecords = async ({ documentClient, items }) => {
   items = await migration0031(items, documentClient);
 
   applicationContext.logger.debug('about to run migration 0032');
-  items = await migration0032(items, documentClient);
+  items = await migration0032(items);
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items, documentClient);
