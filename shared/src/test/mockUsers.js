@@ -109,3 +109,24 @@ exports.validUser = {
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
 };
+
+exports.docketClerkUser = {
+  role: ROLES.docketClerk,
+  userId: '123',
+};
+exports.petitionsClerkUser = {
+  role: ROLES.petitionsClerk,
+  userId: '123',
+};
+exports.clerkOfCourtUser = {
+  role: ROLES.clerkOfCourt,
+  userId: '123',
+};
+exports.judgeUser = {
+  role: ROLES.judge,
+  userId: '123',
+};
+exports.petitionerUser = {
+  role: ROLES.petitioner,
+  userId: '123',
+};
