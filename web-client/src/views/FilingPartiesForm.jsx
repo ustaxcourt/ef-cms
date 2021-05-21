@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 export const FilingPartiesForm = connect(
   {
-    caseDetail: state.caseDetail,
+    caseDetail: state.formattedCaseDetail,
     filingPartiesFormHelper: state.filingPartiesFormHelper,
     form: state.form,
     validationErrors: state.validationErrors,
@@ -73,7 +73,7 @@ export const FilingPartiesForm = connect(
                     className="usa-checkbox__label inline-block"
                     htmlFor={`filing-${petitioner.contactId}`}
                   >
-                    {petitioner.name}
+                    {petitioner.name}, {petitioner.contactTypeDisplay}
                   </label>
                 </div>
               ))}

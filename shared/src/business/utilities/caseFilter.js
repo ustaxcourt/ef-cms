@@ -26,7 +26,6 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'inCareOf',
   'isAddressSealed',
   'name',
-  'otherFilerType',
   'secondaryName',
   'serviceIndicator',
   'title',
