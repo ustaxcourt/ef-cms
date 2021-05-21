@@ -20,8 +20,7 @@ export const canSetTrialSessionToCalendarAction = async ({
     emptyFields,
   } = applicationContext
     .getUseCases()
-    .canSetTrialSessionAsCalendaredInteractor({
-      applicationContext,
+    .canSetTrialSessionAsCalendaredInteractor(applicationContext, {
       trialSession,
     });
 

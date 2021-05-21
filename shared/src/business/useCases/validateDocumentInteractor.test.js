@@ -3,8 +3,7 @@ const { validateDocumentInteractor } = require('./validateDocumentInteractor');
 
 describe('validateDocumentInteractor', () => {
   it('returns the expected errors object on an empty docket record', () => {
-    const errors = validateDocumentInteractor({
-      applicationContext,
+    const errors = validateDocumentInteractor(applicationContext, {
       document: {},
     });
 
@@ -12,8 +11,7 @@ describe('validateDocumentInteractor', () => {
   });
 
   it('returns null when there are no errors', () => {
-    const result = validateDocumentInteractor({
-      applicationContext,
+    const result = validateDocumentInteractor(applicationContext, {
       document: {
         docketNumber: '101-21',
         documentTitle: 'Administrative Record',

@@ -19,11 +19,12 @@ export const completeMessageAction = async ({
 
   const {
     parentMessageId,
-  } = await applicationContext.getUseCases().completeMessageInteractor({
-    applicationContext,
-    parentMessageId: mostRecentMessage.parentMessageId,
-    ...form,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .completeMessageInteractor(applicationContext, {
+      parentMessageId: mostRecentMessage.parentMessageId,
+      ...form,
+    });
 
   return {
     parentMessageId,

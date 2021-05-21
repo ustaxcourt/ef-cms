@@ -24,12 +24,13 @@ export const openCaseDocumentDownloadUrlAction = async ({
 
   const {
     url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    docketNumber,
-    isPublic,
-    key: docketEntryId,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .getDocumentDownloadUrlInteractor(applicationContext, {
+      docketNumber,
+      isPublic,
+      key: docketEntryId,
+    });
 
   if (isForIFrame) {
     store.set(state.iframeSrc, url);

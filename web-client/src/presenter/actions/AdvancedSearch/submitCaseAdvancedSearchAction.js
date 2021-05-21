@@ -16,8 +16,7 @@ export const submitCaseAdvancedSearchAction = async ({
 
   const searchResults = await applicationContext
     .getUseCases()
-    .caseAdvancedSearchInteractor({
-      applicationContext,
+    .caseAdvancedSearchInteractor(applicationContext, {
       searchParams,
     });
 

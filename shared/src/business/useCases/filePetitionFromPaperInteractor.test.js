@@ -51,7 +51,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].document,
+        .calls[0][1].document,
     ).toEqual('this petition file');
   });
 
@@ -67,7 +67,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].document,
+        .calls[0][1].document,
     ).toEqual('this APW file');
   });
 
@@ -83,7 +83,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this ods file');
   });
 
@@ -99,7 +99,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this stin file');
   });
 
@@ -115,7 +115,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this rqt file');
   });
 
@@ -128,7 +128,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -146,7 +146,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -164,7 +164,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFileId:
         'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -183,7 +183,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       requestForPlaceOfTrialFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

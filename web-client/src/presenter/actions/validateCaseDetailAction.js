@@ -44,18 +44,18 @@ export const validateCaseDetailAction = ({
   if (formWithComputedDates.isPaper) {
     errors = applicationContext
       .getUseCases()
-      .validatePetitionFromPaperInteractor({
-        applicationContext,
+      .validatePetitionFromPaperInteractor(applicationContext, {
         petition: {
           ...formWithComputedDates,
           ...initialDocumentFormFiles,
         },
       });
   } else {
-    errors = applicationContext.getUseCases().validateCaseDetailInteractor({
-      applicationContext,
-      caseDetail: formWithComputedDates,
-    });
+    errors = applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor(applicationContext, {
+        caseDetail: formWithComputedDates,
+      });
   }
 
   errors = aggregatePetitionerErrors({ errors });

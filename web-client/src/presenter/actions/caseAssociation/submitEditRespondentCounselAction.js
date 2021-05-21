@@ -17,12 +17,13 @@ export const submitEditRespondentCounselAction = async ({
   const respondentCounsel = get(state.form);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  await applicationContext.getUseCases().updateCounselOnCaseInteractor({
-    applicationContext,
-    docketNumber,
-    userData: respondentCounsel,
-    userId: respondentCounsel.userId,
-  });
+  await applicationContext
+    .getUseCases()
+    .updateCounselOnCaseInteractor(applicationContext, {
+      docketNumber,
+      userData: respondentCounsel,
+      userId: respondentCounsel.userId,
+    });
 
   return path.success({
     alertSuccess: {

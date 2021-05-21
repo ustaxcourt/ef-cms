@@ -38,7 +38,7 @@ describe('sealAddressAction', () => {
 
     expect(
       applicationContext.getUseCases().sealCaseContactAddressInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       contactId: mockContactId,
       docketNumber: mockDocketNumber,
