@@ -192,7 +192,7 @@ jobs:
             - project/web-client/coverage-integration-*
 
   build-client-coverage:
-    docker:
+    docker:s
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
@@ -201,7 +201,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
-           - run:
+      - checkout
+      - run:
           name: NPM - Install
           command: |
             npm set progress=false
