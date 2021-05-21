@@ -54,4 +54,12 @@ describe('socket', () => {
     expect(webSocketStub).toHaveBeenCalled();
     expect(webSocketCloseStub).toHaveBeenCalled();
   });
+
+  it('calling start twice returns the original socket rather than a second one', () => {
+    startSocket();
+    startSocket();
+
+    expect(webSocketStub).toBeCalledTimes(1);
+    expect(webSocketCloseStub).not.toHaveBeenCalled();
+  });
 });
