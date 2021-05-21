@@ -680,6 +680,9 @@ const {
   getUserPendingEmailStatusInteractor,
 } = require('../../shared/src/business/useCases/users/getUserPendingEmailStatusInteractor');
 const {
+  getUsersById,
+} = require('../../shared/src/persistence/dynamo/users/getUsersById');
+const {
   getUsersBySearchKey,
 } = require('../../shared/src/persistence/dynamo/users/getUsersBySearchKey');
 const {
@@ -688,6 +691,12 @@ const {
 const {
   getUsersInSectionInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersInSectionInteractor');
+const {
+  getUsersPendingEmailInteractor,
+} = require('../../shared/src/business/useCases/users/getUsersPendingEmailInteractor');
+const {
+  getUsersPendingEmailStatusesInteractor,
+} = require('../../shared/src/business/useCases/users/getUsersPendingEmailStatusesInteractor');
 const {
   getWebSocketConnectionByConnectionId,
 } = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
@@ -1355,6 +1364,7 @@ const gatewayMethods = {
   getUserCaseNoteForCases,
   getUserInboxMessages,
   getUserOutboxMessages,
+  getUsersById,
   getUsersBySearchKey,
   getUsersInSection,
   getWebSocketConnectionByConnectionId,
@@ -1762,6 +1772,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUserPendingEmailInteractor,
         getUserPendingEmailStatusInteractor,
         getUsersInSectionInteractor,
+        getUsersPendingEmailInteractor,
+        getUsersPendingEmailStatusesInteractor,
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
