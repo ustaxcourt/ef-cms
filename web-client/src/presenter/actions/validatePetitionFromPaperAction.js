@@ -18,19 +18,12 @@ export const aggregateStatisticsErrors = ({ errors, get }) => {
       formStatistics.forEach((formStatistic, index) => {
         const errorStatistic = errors.statistics.find(s => s.index === index);
         if (errorStatistic) {
-          if (formStatistic.yearOrPeriod === 'Year') {
-            newErrorStatistics.push({
-              enterAllValues:
-                'Enter year, deficiency amount, and total penalties',
-              index,
-            });
-          } else {
-            newErrorStatistics.push({
-              enterAllValues:
-                'Enter period, deficiency amount, and total penalties',
-              index,
-            });
-          }
+          const messageYearOrPeriod =
+            formStatistic.yearOrPeriod === 'Year' ? 'year' : 'period';
+          newErrorStatistics.push({
+            enterAllValues: `Enter ${messageYearOrPeriod}, deficiency amount, and total penalties`,
+            index,
+          });
         }
       });
 
