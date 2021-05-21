@@ -233,7 +233,7 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 
-  it('should update the calendared case with new trial session info when the trialSessionId matches the case.trialSessionId', async () => {
+  it('should update the hearing mapping with new trial session info when a hearing trialSessionId matches the case.trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce({
@@ -262,7 +262,7 @@ describe('updateTrialSessionInteractor', () => {
     });
   });
 
-  it('should update the hearing mapping with new trial session info when a hearing trialSessionId matches the case.trialSessionId', async () => {
+  it('should update the calendared case with new trial session info when the trialSessionId matches the case.trialSessionId', async () => {
     const mockCalendaredCase = new Case(
       {
         ...MOCK_CASE,
