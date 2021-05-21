@@ -25,7 +25,7 @@ describe('setDefaultCaseDetailTabAction', () => {
     );
   });
 
-  it('should set the partyViewTab based on the props.ppartiesTab provided', async () => {
+  it('should set the partyViewTab based on the props.partiesTab provided', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
       modules: { presenter },
       props: {
