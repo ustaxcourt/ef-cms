@@ -1,10 +1,15 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  clerkOfCourtUser,
+  docketClerkUser,
+  judgeUser,
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-
-const { USER_ROLES } = applicationContext.getConstants();
 
 let globalUser;
 
@@ -53,27 +58,6 @@ describe('messageDocumentHelper', () => {
       parentMessageId: mockParentMessageId,
       permissions: getUserPermissions(user),
     };
-  };
-
-  const docketClerkUser = {
-    role: USER_ROLES.docketClerk,
-    userId: '123',
-  };
-  const petitionsClerkUser = {
-    role: USER_ROLES.petitionsClerk,
-    userId: '123',
-  };
-  const clerkOfCourtUser = {
-    role: USER_ROLES.clerkOfCourt,
-    userId: '123',
-  };
-  const judgeUser = {
-    role: USER_ROLES.judge,
-    userId: '123',
-  };
-  const petitionerUser = {
-    role: USER_ROLES.petitioner,
-    userId: '123',
   };
 
   it('return empty object if messageViewerDocumentToDisplay is not set', () => {
