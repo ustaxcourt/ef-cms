@@ -44,7 +44,7 @@ export const EditPetitionDetails = connect(
               <h4 className="margin-bottom-2">IRS Notice/Case</h4>
               <IRSNotice
                 shouldStartWithBlankStatistic={false}
-                validate="validatePetitionDetailsSequence"
+                validationName="validatePetitionDetailsSequence"
               />
 
               <ProcedureType
