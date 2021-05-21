@@ -5,8 +5,7 @@ const { get } = require('../requests');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.pendingEmail the pendingEmail to update the pendingEmail
- * @param {string} providers.userId the userId to update the pendingEmail
+ * @param {string} providers.userId the userIds to check for pending email statuses
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getUsersPendingEmailStatusesInteractor = ({

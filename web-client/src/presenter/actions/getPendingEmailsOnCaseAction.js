@@ -1,3 +1,4 @@
+import { map } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -18,11 +19,9 @@ export const getPendingEmailsOnCaseAction = async ({
   );
 
   const userIds = [
-    ...petitioners.map(petitioner => petitioner.contactId),
-    ...irsPractitioners.map(irsPractitioner => irsPractitioner.userId),
-    ...privatePractitioners.map(
-      privatePractitioner => privatePractitioner.userId,
-    ),
+    ...map(petitioners, 'contactId'),
+    ...map(irsPractitioners, 'userId'),
+    ...map(privatePractitioners, 'userId'),
   ];
 
   if (userIds.length) {
