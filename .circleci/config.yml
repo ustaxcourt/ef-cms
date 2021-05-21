@@ -199,9 +199,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: small
     steps:
+      - checkout
       - attach_workspace:
           at: ~/
-      - checkout
       - run:
           name: NPM - Install
           command: |
