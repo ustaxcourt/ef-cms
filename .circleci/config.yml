@@ -31,7 +31,7 @@ jobs:
           command: npm run test:api:ci
       - run:
           name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
+          command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json --no-install
       # - run:
       #     name: Web API - SonarQube
       #     command: |
@@ -76,7 +76,7 @@ jobs:
           command: npm run test:shared:ci
       - run:
           name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
+          command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json --no-install
       # - run:
       #     name: Shared - SonarQube
       #     command: |
@@ -182,7 +182,7 @@ jobs:
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
-             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -201,6 +201,12 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/
+           - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
       - run:
           name: Combine Coverage
           command: |
@@ -213,12 +219,12 @@ jobs:
             ./web-client/coverage-integration-5/coverage-final.json \
             ./web-client/coverage-integration-6/coverage-final.json \
             ./web-client/coverage-integration-7/coverage-final.json \
-            ./web-client/coverage-unit/coverage-final.json
+            ./web-client/coverage-unit/coverage-final.json --no-install
       - run:
           name: Check Coverage
           command: |
             npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
-            --statements 95 --functions 95 --branches 95 --lines 95
+            --statements 95 --functions 95 --branches 95 --lines 95 --no-install
       # - run:
       #     name: Web Client - SonarQube
       #     command: |
