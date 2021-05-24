@@ -123,6 +123,8 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   contactType: 'Select a role type',
+  contactTypeSecondIntervenor:
+    'Only one (1) Intervenor is allowed per case. Please select a different Role.',
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: [
