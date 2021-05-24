@@ -80,7 +80,6 @@ exports.editPaperFilingInteractor = async (
   const docketEntryEntity = new DocketEntry(
     {
       ...currentDocketEntry,
-      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       docketEntryId: primaryDocumentFileId,
       documentTitle: editableFields.documentTitle,
