@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
-import { docketClerkRemovesPetitionerFromCase } from './journey/docketClerkRemovesPetitionerFromCase';
+import { docketClerkRemovesIntervenorFromCase } from './journey/docketClerkRemovesIntervenorFromCase';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -53,13 +53,5 @@ describe('Docket Clerk removes petitioners on a case', () => {
   petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'docketclerk@example.com');
-  docketClerkRemovesPetitionerFromCase(test);
-
-  //delte intervenor
-  //make sure counsel still has access to case
-  //remove primary petitioner
-  //make sure secondary is now primary
-
-  // loginAs(test, 'docketclerk@example.com');
-  // docketClerkEditsPetitionerInformation(test);
+  docketClerkRemovesIntervenorFromCase(test);
 });
