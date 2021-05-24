@@ -160,11 +160,11 @@ Case.prototype.init = function init(
     this.assignFieldsForInternalUsers({ applicationContext, rawCase });
   }
 
-  this.assignContacts({ applicationContext, filtered, rawCase });
   this.assignDocketEntries({ applicationContext, filtered, rawCase });
   this.assignHearings({ applicationContext, rawCase });
   this.assignPractitioners({ applicationContext, filtered, rawCase });
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  this.assignContacts({ applicationContext, filtered, rawCase });
 };
 
 Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
