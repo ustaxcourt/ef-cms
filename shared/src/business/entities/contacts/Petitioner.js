@@ -45,7 +45,6 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.inCareOf = rawContact.inCareOf;
   this.isAddressSealed = rawContact.isAddressSealed || false;
   this.name = rawContact.name;
-  this.otherFilerType = rawContact.otherFilerType;
   this.phone = rawContact.phone;
   this.postalCode = rawContact.postalCode;
   this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
@@ -56,7 +55,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
 };
 
 Petitioner.VALIDATION_RULES = {
-  additionalName: JoiValidationConstants.STRING.max(100).optional(),
+  additionalName: JoiValidationConstants.STRING.max(600).optional(),
   address1: JoiValidationConstants.STRING.max(100).required(),
   address2: JoiValidationConstants.STRING.max(100).optional().allow(null),
   address3: JoiValidationConstants.STRING.max(100).optional().allow(null),
@@ -64,6 +63,9 @@ Petitioner.VALIDATION_RULES = {
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
+  contactType: JoiValidationConstants.STRING.valid(
+    ...Object.values(CONTACT_TYPES),
+  ).required(),
   country: JoiValidationConstants.STRING.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
     otherwise: joi.optional().allow(null),
@@ -87,11 +89,6 @@ Petitioner.VALIDATION_RULES = {
   inCareOf: JoiValidationConstants.STRING.max(100).optional(),
   isAddressSealed: joi.boolean().required(),
   name: JoiValidationConstants.STRING.max(100).required(),
-  otherFilerType: joi.when('contactType', {
-    is: CONTACT_TYPES.otherFiler,
-    otherwise: joi.optional(),
-    then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
-  }),
   phone: JoiValidationConstants.STRING.max(100).required(),
   postalCode: joi.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
@@ -125,6 +122,7 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   ],
   address1: 'Enter mailing address',
   city: 'Enter city',
+  contactType: 'Select a role type',
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: [
@@ -134,7 +132,6 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter name',
   ],
-  otherFilerType: 'Select a filer type',
   phone: 'Enter phone number',
   postalCode: [
     {

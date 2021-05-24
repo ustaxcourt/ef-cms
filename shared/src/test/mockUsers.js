@@ -6,6 +6,22 @@ const {
   ROLES,
 } = require('../business/entities/EntityConstants');
 
+const docketClerkUser = {
+  name: 'Docketclerk',
+  role: ROLES.docketClerk,
+  section: DOCKET_SECTION,
+  userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+};
+exports.docketClerkUser = docketClerkUser;
+
+const petitionsClerkUser = {
+  name: 'Petitionsclerk',
+  role: ROLES.petitionsClerk,
+  section: PETITIONS_SECTION,
+  userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+};
+exports.petitionsClerkUser = petitionsClerkUser;
+
 exports.MOCK_USERS = {
   '2eee98ac-613f-46bc-afd5-2574d1b15664': {
     name: 'IRS Superuser',
@@ -20,24 +36,13 @@ exports.MOCK_USERS = {
     section: 'privatePractitioner',
     userId: '330d4b65-620a-489d-8414-6623653ebc4f',
   },
-  'a7d90c05-f6cd-442c-a168-202db587f16f': {
-    name: 'Docketclerk',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
-    userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-  },
+  'a7d90c05-f6cd-442c-a168-202db587f16f': docketClerkUser,
   'b7d90c05-f6cd-442c-a168-202db587f16f': {
+    ...docketClerkUser,
     name: 'Docketclerk1',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
     userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
   },
-  'c7d90c05-f6cd-442c-a168-202db587f16f': {
-    name: 'Petitionsclerk',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
-    userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-  },
+  'c7d90c05-f6cd-442c-a168-202db587f16f': petitionsClerkUser,
   'd7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Tax Payer',
     role: ROLES.petitioner,
@@ -45,9 +50,8 @@ exports.MOCK_USERS = {
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'e7d90c05-f6cd-442c-a168-202db587f16f': {
+    ...petitionsClerkUser,
     name: 'Petitionsclerk1',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
     userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
@@ -108,4 +112,17 @@ exports.validUser = {
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+exports.clerkOfCourtUser = {
+  role: ROLES.clerkOfCourt,
+  userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
+};
+exports.judgeUser = {
+  role: ROLES.judge,
+  userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+};
+exports.petitionerUser = {
+  role: ROLES.petitioner,
+  userId: '6844385f-b3de-444b-b76a-64fedfbb0229',
 };

@@ -17,7 +17,7 @@ describe('getPendingEmailsOnCaseAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make calls to getUserPendingEmailInteractor with the contactId of each petitioner and practitioner on the case', async () => {
+  it('should make calls to getUsersPendingEmailInteractor with the contactId of each petitioner and practitioner on the case', async () => {
     await runAction(getPendingEmailsOnCaseAction, {
       modules: {
         presenter,
@@ -35,32 +35,25 @@ describe('getPendingEmailsOnCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[0][1].userId,
-    ).toBe(mockUserId);
-
-    expect(
-      applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[1][1].userId,
-    ).toBe(mockSecondUserId);
-
-    expect(
-      applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[2][1].userId,
-    ).toBe(mockThirdUserId);
-    expect(
-      applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[3][1].userId,
-    ).toBe(mockFourthUserId);
+      applicationContext.getUseCases().getUsersPendingEmailInteractor.mock
+        .calls[0][0].userIds,
+    ).toEqual([
+      mockUserId,
+      mockSecondUserId,
+      mockThirdUserId,
+      mockFourthUserId,
+    ]);
   });
 
   it('should return pendingEmails as props', async () => {
     applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor.mockReturnValueOnce(mockEmail)
-      .mockReturnValueOnce(mockSecondaryEmail)
-      .mockReturnValueOnce(mockTertiaryEmail)
-      .mockReturnValueOnce(mockQuadrilateralEmail);
+      .getUsersPendingEmailInteractor.mockReturnValueOnce({
+        [mockFourthUserId]: mockQuadrilateralEmail,
+        [mockSecondUserId]: mockSecondaryEmail,
+        [mockThirdUserId]: mockTertiaryEmail,
+        [mockUserId]: mockEmail,
+      });
 
     const { output } = await runAction(getPendingEmailsOnCaseAction, {
       modules: {
@@ -78,6 +71,15 @@ describe('getPendingEmailsOnCaseAction', () => {
       },
     });
 
+    expect(
+      applicationContext.getUseCases().getUsersPendingEmailInteractor.mock
+        .calls[0][0].userIds,
+    ).toEqual([
+      mockUserId,
+      mockSecondUserId,
+      mockThirdUserId,
+      mockFourthUserId,
+    ]);
     expect(output.pendingEmails).toEqual({
       [mockFourthUserId]: mockQuadrilateralEmail,
       [mockSecondUserId]: mockSecondaryEmail,

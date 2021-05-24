@@ -1,7 +1,7 @@
-import { CONTACT_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/associatedExternalUserViewsCaseDetailForOwnedCase.js';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase.js';
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 
 const test = setupTest();
 
@@ -35,10 +35,7 @@ describe('an external user files a document for their legacy case', () => {
       docketNumber: test.docketNumber,
     });
 
-    const petitioners = test.getState('caseDetail.petitioners');
-    const otherFilers = petitioners.filter(
-      p => p.contactType === CONTACT_TYPES.otherFiler,
-    );
+    const otherFilers = getOtherFilers(test.getState('caseDetail'));
     const docketEntries = test.getState('caseDetail.docketEntries');
     const lastServedDocument = docketEntries.pop();
 

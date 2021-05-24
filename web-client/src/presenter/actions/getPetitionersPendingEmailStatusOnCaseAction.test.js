@@ -11,7 +11,7 @@ describe('getPetitionersPendingEmailStatusOnCaseAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make calls to getUserPendingEmailStatusInteractor with the contactId of each petitioner on the case', async () => {
+  it('should make calls to getUsersPendingEmailStatusesInteractor with the contactId of each petitioner on the case', async () => {
     await runAction(getPetitionersPendingEmailStatusOnCaseAction, {
       modules: {
         presenter,
@@ -27,20 +27,18 @@ describe('getPetitionersPendingEmailStatusOnCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getUserPendingEmailStatusInteractor.mock
-        .calls[0][1].userId,
-    ).toBe(mockUserId);
-    expect(
-      applicationContext.getUseCases().getUserPendingEmailStatusInteractor.mock
-        .calls[1][1].userId,
-    ).toBe(mockSecondUserId);
+      applicationContext.getUseCases().getUsersPendingEmailStatusesInteractor
+        .mock.calls[0][0].userIds,
+    ).toEqual([mockUserId, mockSecondUserId]);
   });
 
   it('should return pendingEmails as props', async () => {
     applicationContext
       .getUseCases()
-      .getUserPendingEmailStatusInteractor.mockReturnValueOnce(true)
-      .mockReturnValueOnce(false);
+      .getUsersPendingEmailStatusesInteractor.mockReturnValueOnce({
+        [mockSecondUserId]: false,
+        [mockUserId]: true,
+      });
 
     const { output } = await runAction(
       getPetitionersPendingEmailStatusOnCaseAction,
@@ -59,6 +57,10 @@ describe('getPetitionersPendingEmailStatusOnCaseAction', () => {
       },
     );
 
+    expect(
+      applicationContext.getUseCases().getUsersPendingEmailStatusesInteractor
+        .mock.calls[0][0].userIds,
+    ).toEqual([mockUserId, mockSecondUserId]);
     expect(output.pendingEmails).toEqual({
       [mockSecondUserId]: false,
       [mockUserId]: true,
