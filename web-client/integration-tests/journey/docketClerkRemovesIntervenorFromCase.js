@@ -23,6 +23,8 @@ export const docketClerkRemovesIntervenorFromCase = test => {
     await test.runSequence('openRemovePetitionerModalSequence');
     await test.runSequence('removePetitionerAndUpdateCaptionSequence');
 
+    expect(test.getState('alertSuccess.message')).toBe('Intervenor removed.');
+
     expect(
       getPetitionerById(test.getState('caseDetail'), test.intervenorContactId),
     ).toBeUndefined();

@@ -335,7 +335,7 @@ export const EditPetitionerInformationInternal = connect(
                   openRemovePetitionerModalSequence();
                 }}
               >
-                Remove this petitioner
+                Remove this Party
               </Button>
             )}
           </div>

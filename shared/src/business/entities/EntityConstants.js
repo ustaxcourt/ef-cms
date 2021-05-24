@@ -26,7 +26,7 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
 };
 
 const PARTY_VIEW_TABS = {
-  participantsAndCounsel: 'Intervenor/Participants & Counsel',
+  participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
   respondentCounsel: 'Respondent Counsel',
 };

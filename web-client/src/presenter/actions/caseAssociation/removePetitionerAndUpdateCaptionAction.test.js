@@ -29,7 +29,7 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
     };
   });
 
-  it('should set the success message of `Petitioner removed.` when a petitioner is removed form the case', async () => {
+  it('should set the success message of `Petitioner successfully removed.` when a petitioner is removed form the case', async () => {
     const { output } = await runAction(removePetitionerAndUpdateCaptionAction, {
       modules: {
         presenter,
@@ -51,11 +51,13 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
       },
     });
 
-    expect(output.alertSuccess.message).toBe('Petitioner removed.');
+    expect(output.alertSuccess.message).toBe(
+      'Petitioner successfully removed.',
+    );
     expect(output.tab).toBe('caseInfo');
   });
 
-  it('should set the success message of `Intervenor removed.` when an intervenor is removed form the case', async () => {
+  it('should set the success message of `Intervenor successfully emoved.` when an intervenor is removed form the case', async () => {
     const { output } = await runAction(removePetitionerAndUpdateCaptionAction, {
       modules: {
         presenter,
@@ -77,7 +79,9 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
       },
     });
 
-    expect(output.alertSuccess.message).toBe('Intervenor removed.');
+    expect(output.alertSuccess.message).toBe(
+      'Intervenor successfully removed.',
+    );
     expect(output.tab).toBe('caseInfo');
   });
 

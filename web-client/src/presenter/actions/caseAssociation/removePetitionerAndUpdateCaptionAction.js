@@ -30,7 +30,7 @@ export const removePetitionerAndUpdateCaptionAction = async ({
 
   return {
     alertSuccess: {
-      message: `${title} removed.`,
+      message: `${title} successfully removed.`,
     },
     caseDetail: updatedCaseDetail,
     docketNumber,
