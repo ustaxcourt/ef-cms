@@ -59,13 +59,8 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     petitionerContactId,
   );
   for (const practitioner of practitioners) {
-    console.log(
-      'represeting ----',
-      practitioner.isRepresenting(petitionerContactId),
-    );
-
     if (!practitioner.isRepresenting(petitionerContactId)) continue;
-    console.log('represeting ----', practitioner.representing);
+
     if (practitioner.representing.length === 1) {
       caseEntity.removePrivatePractitioner(practitioner);
 
