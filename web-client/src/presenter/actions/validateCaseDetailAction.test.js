@@ -109,6 +109,7 @@ describe('validateCaseDetail', () => {
     });
 
     expect(errorStub.mock.calls[0][0].errors.statistics).toEqual([
+      {},
       {
         enterAllValues: 'Enter period, deficiency amount, and total penalties',
         index: 1,
