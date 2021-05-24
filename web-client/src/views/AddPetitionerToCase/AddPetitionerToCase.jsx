@@ -76,7 +76,7 @@ export const AddPetitionerToCase = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="otherPetitioners">Petitioner</option>
+                <option value="otherPetitioner">Petitioner</option>
                 <option value="intervenor">Intervenor</option>
                 <option value="participant">Participant</option>
               </select>

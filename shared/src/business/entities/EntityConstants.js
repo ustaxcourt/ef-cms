@@ -751,7 +751,7 @@ const CONTACT_TYPE_TITLES = {
   otherFilers: 'Petitioner',
   intervenor: 'Intervenor',
   participant: 'Participant',
-  otherPetitioners: 'Petitioner',
+  otherPetitioner: 'Petitioner',
 };
 
 const COMMON_CITIES = [
