@@ -38,8 +38,12 @@ export const setDefaultCaseDetailTabAction = ({
     );
   }
 
-  store.set(
-    state.screenMetadata.partyViewTab,
-    PARTY_VIEW_TABS[props.partiesTab] || PARTY_VIEW_TABS.petitionersAndCounsel,
-  );
+  console.log('what is state', get(state.screenMetadata.partyViewTab));
+  if (!get(state.screenMetadata.partyViewTab)) {
+    store.set(
+      state.screenMetadata.partyViewTab,
+      PARTY_VIEW_TABS[props.partiesTab] ||
+        PARTY_VIEW_TABS.petitionersAndCounsel,
+    );
+  }
 };

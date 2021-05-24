@@ -30,6 +30,7 @@ const PartiesInformation = connect(
   }) {
     return (
       <>
+        {console.log(screenMetadata.partyViewTab)}
         <div className="grid-row grid-gap">
           <div className="grid-col-3">
             <div className="border border-base-lighter">

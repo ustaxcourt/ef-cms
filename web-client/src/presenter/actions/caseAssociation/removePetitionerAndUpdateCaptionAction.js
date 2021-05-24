@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 /**
@@ -11,8 +12,13 @@ import { state } from 'cerebral';
 export const removePetitionerAndUpdateCaptionAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
-  const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
+  const {
+    CONTACT_TYPE_TITLES,
+    PARTY_VIEW_TABS,
+  } = applicationContext.getConstants();
+
   const { docketNumber, petitioners } = get(state.caseDetail);
   const { contactId } = get(state.form.contact);
   const { caseCaption } = get(state.modal);
@@ -27,6 +33,22 @@ export const removePetitionerAndUpdateCaptionAction = async ({
       contactId,
       docketNumber,
     });
+
+  let tab;
+
+  console.log('ciontactt[4em ', contactType);
+
+  if (
+    contactType === CONTACT_TYPES.intervenor ||
+    contactType === CONTACT_TYPES.participant
+    // (and there are more intervenors or participants left on the case)
+  ) {
+    tab = PARTY_VIEW_TABS.participantsAndCounsel;
+  } else {
+    tab = PARTY_VIEW_TABS.petitionersAndCounsel;
+  }
+  console.log(tab);
+  store.set(state.screenMetadata.partyViewTab, tab);
 
   return {
     alertSuccess: {
