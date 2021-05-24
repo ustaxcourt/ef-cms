@@ -181,7 +181,9 @@ DocketEntry.isPendingOnCreation = rawDocketEntry => {
   return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
 
-joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
+joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
+  filedBy: 'Enter a filed by',
+});
 
 /**
  *
