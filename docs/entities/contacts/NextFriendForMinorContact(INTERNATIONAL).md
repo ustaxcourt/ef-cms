@@ -110,6 +110,8 @@
         - "primary"
         - "secondary"
         - "otherFilers"
+        - "intervenor"
+        - "participant"
         - "otherPetitioners"
     hasEAccess: 
       type: "boolean"

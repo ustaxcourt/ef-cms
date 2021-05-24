@@ -9,25 +9,12 @@ export const supportingDocumentFreeTextTypes = [
 
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
-export const getFilerParties = ({ caseDetail, filersMap = {} }) => {
-  return Object.entries(filersMap)
-    .filter(([, isChecked]) => isChecked)
-    .map(([filerContactId]) => {
-      const foundPetitioner = caseDetail.petitioners.find(
-        petitioner => petitioner.contactId === filerContactId,
-      );
-
-      if (foundPetitioner) {
-        const petitionerTitle = foundPetitioner.otherFilerType
-          ? foundPetitioner.otherFilerType
-          : 'Petitioner';
-        return `${foundPetitioner.name}, ${petitionerTitle}`;
-      }
-    });
-};
-
 export const fileDocumentHelper = (get, applicationContext) => {
-  const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
+  const {
+    CATEGORY_MAP,
+    CONTACT_TYPE_TITLES,
+    PARTY_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const form = get(state.form);
@@ -99,10 +86,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
-  let formattedFilingParties = getFilerParties({
-    caseDetail,
-    filersMap: form.filersMap,
-  });
+  const formattedFilingParties = caseDetail.petitioners.map(
+    petitioner =>
+      `${petitioner.name}, ${CONTACT_TYPE_TITLES[petitioner.contactType]}`,
+  );
 
   const exported = {
     certificateOfServiceDateFormatted,
