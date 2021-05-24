@@ -272,8 +272,6 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    console.log('this.docketEntries', this.docketEntries);
-
     this.isSealed = isSealedCase(rawCase);
 
     if (
