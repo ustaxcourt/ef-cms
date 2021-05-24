@@ -83,7 +83,7 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'partyType',
-      value: PARTY_TYPES.petitioner,
+      value: PARTY_TYPES.estate,
     });
 
     await test.runSequence('updateFormValueSequence', {
@@ -136,6 +136,8 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitPetitionFromPaperSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
   });
