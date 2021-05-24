@@ -1,4 +1,7 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPetitionerToCase = test => {
@@ -8,6 +11,11 @@ export const docketClerkAddsPetitionerToCase = test => {
 
     await test.runSequence('gotoAddPetitionerToCaseSequence', {
       docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.contactType',
+      value: CONTACT_TYPES.otherPetitioner,
     });
 
     await test.runSequence('updateFormValueSequence', {

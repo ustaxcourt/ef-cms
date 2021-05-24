@@ -15,8 +15,7 @@ export const sealAddressAction = async ({ applicationContext, get, store }) => {
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .sealCaseContactAddressInteractor({
-      applicationContext,
+    .sealCaseContactAddressInteractor(applicationContext, {
       contactId,
       docketNumber,
     });

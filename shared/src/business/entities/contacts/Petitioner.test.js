@@ -3,6 +3,7 @@ const {
   over1000Characters,
 } = require('../../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../EntityConstants');
@@ -34,6 +35,7 @@ describe('Petitioner', () => {
         {
           address1: '1234 Some Street',
           city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
           country: 'Uruguay',
           countryType: COUNTRY_TYPES.INTERNATIONAL,
           name: 'Juana Pereyra',
@@ -55,6 +57,7 @@ describe('Petitioner', () => {
         {
           address1: '1234 Some Street',
           city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
           country: 'Uruguay',
           countryType: COUNTRY_TYPES.INTERNATIONAL,
           name: over1000Characters,
@@ -77,6 +80,7 @@ describe('Petitioner', () => {
           additionalName: over1000Characters,
           address1: '1234 Some Street',
           city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
           country: 'Uruguay',
           countryType: COUNTRY_TYPES.INTERNATIONAL,
           name: 'Somebody Somewhere',
@@ -99,6 +103,7 @@ describe('Petitioner', () => {
         {
           address1: '1234 Some Street',
           city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
           country: 'Uruguay',
           countryType: COUNTRY_TYPES.INTERNATIONAL,
           name: 'Juana Pereyra',

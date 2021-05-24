@@ -67,8 +67,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -82,8 +81,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should update the user cases with the new email and electronic service for the contact primary', async () => {
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -122,8 +120,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
 
     mockUser.role = ROLES.petitioner;
 
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -153,8 +150,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       },
     ];
 
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -205,8 +201,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[1]);
 
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 

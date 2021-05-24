@@ -22,13 +22,7 @@ export const EditPetitionerLoginForm = connect(
     return (
       <>
         <h4>Add Login &amp; Service Email</h4>
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].email
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.email}>
           <label className="usa-label" htmlFor={`${type}-email`}>
             New email address
           </label>
@@ -50,13 +44,7 @@ export const EditPetitionerLoginForm = connect(
             }
           />
         </FormGroup>
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].confirmEmail
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.confirmEmail}>
           <label className="usa-label" htmlFor={`${type}-confirmEmail`}>
             Re-enter new email address
           </label>

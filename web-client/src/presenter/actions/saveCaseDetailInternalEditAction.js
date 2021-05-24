@@ -49,8 +49,7 @@ export const saveCaseDetailInternalEditAction = async ({
 
         await applicationContext
           .getUseCases()
-          .uploadDocumentAndMakeSafeInteractor({
-            applicationContext,
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: caseToUpdate[fileKey],
             key: oldPetitionDocument.docketEntryId,
             onUploadProgress: progressFunctions[fileKey],
@@ -58,8 +57,7 @@ export const saveCaseDetailInternalEditAction = async ({
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
-          .uploadDocumentAndMakeSafeInteractor({
-            applicationContext,
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: caseToUpdate[fileKey],
             onUploadProgress: progressFunctions[fileKey],
           });
@@ -85,16 +83,16 @@ export const saveCaseDetailInternalEditAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .saveCaseDetailInternalEditInteractor({
-      applicationContext,
+    .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
     });
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
-    await applicationContext.getUseCases().updateCaseTrialSortTagsInteractor({
-      applicationContext,
-      docketNumber: caseDetail.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateCaseTrialSortTagsInteractor(applicationContext, {
+        docketNumber: caseDetail.docketNumber,
+      });
   }
 
   return {

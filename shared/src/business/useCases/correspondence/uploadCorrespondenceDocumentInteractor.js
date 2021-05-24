@@ -4,11 +4,10 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.uploadCorrespondenceDocumentInteractor = async ({
+exports.uploadCorrespondenceDocumentInteractor = async (
   applicationContext,
-  documentFile,
-  keyToOverwrite,
-}) => {
+  { documentFile, keyToOverwrite },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {

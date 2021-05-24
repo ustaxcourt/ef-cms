@@ -5,8 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateHearingNoteInteractor', () => {
   it('returns a defined errors object if the note is null', () => {
-    const errors = validateHearingNoteInteractor({
-      applicationContext,
+    const errors = validateHearingNoteInteractor(applicationContext, {
       note: null,
     });
 
@@ -14,8 +13,7 @@ describe('validateHearingNoteInteractor', () => {
   });
 
   it('returns null when note is defined', () => {
-    const result = validateHearingNoteInteractor({
-      applicationContext,
+    const result = validateHearingNoteInteractor(applicationContext, {
       note: 'this is a note',
     });
 

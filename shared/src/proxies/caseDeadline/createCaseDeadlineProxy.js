@@ -3,15 +3,15 @@ const { post } = require('../requests');
 /**
  * createCaseDeadlineInteractorProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCaseDeadlineInteractor = ({
+exports.createCaseDeadlineInteractor = (
   applicationContext,
-  caseDeadline,
-}) => {
+  { caseDeadline },
+) => {
   return post({
     applicationContext,
     body: { caseDeadline },

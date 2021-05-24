@@ -17,8 +17,7 @@ export const runTrialSessionPlanningReportAction = async ({
     url,
   } = await applicationContext
     .getUseCases()
-    .runTrialSessionPlanningReportInteractor({
-      applicationContext,
+    .runTrialSessionPlanningReportInteractor(applicationContext, {
       term,
       year,
     });

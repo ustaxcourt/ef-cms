@@ -13,8 +13,7 @@ export const getUserPendingEmailAction = async ({
 
   const userPendingEmail = await applicationContext
     .getUseCases()
-    .getUserPendingEmailInteractor({
-      applicationContext,
+    .getUserPendingEmailInteractor(applicationContext, {
       userId: contactId,
     });
 

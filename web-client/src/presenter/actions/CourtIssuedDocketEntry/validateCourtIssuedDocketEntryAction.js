@@ -21,8 +21,7 @@ export const validateCourtIssuedDocketEntryAction = ({
 
   let errors = applicationContext
     .getUseCases()
-    .validateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    .validateCourtIssuedDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
 

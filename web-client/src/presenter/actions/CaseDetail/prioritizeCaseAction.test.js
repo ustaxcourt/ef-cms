@@ -27,7 +27,7 @@ describe('prioritizeCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().prioritizeCaseInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
       reason: mockReason,

@@ -31,8 +31,7 @@ describe('validateAddPetitionerInteractor', () => {
   });
 
   it('should not return validation errors when contact is valid and a case caption is present', async () => {
-    const errors = validateAddPetitionerInteractor({
-      applicationContext,
+    const errors = validateAddPetitionerInteractor(applicationContext, {
       contact: mockContact,
     });
 
@@ -46,8 +45,7 @@ describe('validateAddPetitionerInteractor', () => {
       caseCaption: undefined,
     };
 
-    const errors = validateAddPetitionerInteractor({
-      applicationContext,
+    const errors = validateAddPetitionerInteractor(applicationContext, {
       contact: mockContact,
     });
 

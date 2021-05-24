@@ -32,8 +32,7 @@ export const validatePetitionerInformationFormAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validatePetitionerInformationFormInteractor({
-      applicationContext,
+    .validatePetitionerInformationFormInteractor(applicationContext, {
       contactPrimary,
       contactSecondary,
       partyType,
@@ -45,8 +44,7 @@ export const validatePetitionerInformationFormAction = ({
   ) {
     const errorsContactPrimary = applicationContext
       .getUseCases()
-      .validateUpdateUserEmailInteractor({
-        applicationContext,
+      .validateUpdateUserEmailInteractor(applicationContext, {
         updateUserEmail: contactPrimary,
       });
 

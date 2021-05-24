@@ -3,9 +3,9 @@ import { getPractitionersByNameAction } from './getPractitionersByNameAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('getPractitionersByNameAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should call getPractitionersByNameInteractor with the practitionerName as name and return the results received', async () => {
     applicationContext
       .getUseCases()
@@ -32,7 +32,7 @@ describe('getPractitionersByNameAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getPractitionersByNameInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       name: 'Ricky',
     });
