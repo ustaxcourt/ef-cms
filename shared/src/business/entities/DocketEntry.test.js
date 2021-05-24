@@ -1479,14 +1479,8 @@ describe('DocketEntry entity', () => {
       const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
-          docketNumber: '101-21',
-          documentType:
-            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
+          ...A_VALID_DOCKET_ENTRY,
           judgeUserId: mockJudgeUserId,
-          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
         },
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
@@ -1500,13 +1494,8 @@ describe('DocketEntry entity', () => {
     it('does not fail validation without a judgeUserId', () => {
       const docketEntry = new DocketEntry(
         {
-          docketNumber: '101-21',
-          documentType:
-            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-          eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-          isMinuteEntry: true,
-          isOnDocketRecord: true,
-          userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+          ...A_VALID_DOCKET_ENTRY,
+          judgeUserId: undefined,
         },
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );

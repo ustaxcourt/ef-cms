@@ -2993,15 +2993,14 @@
         "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
         "address1": "42 Lamb Sauce Blvd",
         "postalCode": "05198",
-        "contactType": "otherFilers",
+        "contactType": "intervenor",
         "title": "Intervenor",
         "countryType": "domestic",
         "serviceIndicator": "None",
         "phone": "1234567890",
         "name": "Gordon Ramsay",
         "state": "AK",
-        "email": "testUser@example.com",
-        "otherFilerType": "Intervenor"
+        "email": "testUser@example.com"
       }
     ],
     "initialDocketNumberSuffix": "_",
@@ -3872,15 +3871,14 @@
         "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
         "address1": "42 Lamb Sauce Blvd",
         "postalCode": "05198",
-        "contactType": "otherFilers",
+        "contactType": "intervenor",
         "title": "Intervenor",
         "countryType": "domestic",
         "serviceIndicator": "None",
         "phone": "1234567890",
         "name": "Gordon Ramsay",
         "state": "AK",
-        "email": "testUser@example.com",
-        "otherFilerType": "Intervenor"
+        "email": "testUser@example.com"
       },
       {
         "isAddressSealed": false,
@@ -8242,15 +8240,14 @@
         "contactId": "89d7d182-46da-4b96-b29b-260d15249c25",
         "address1": "42 Lamb Sauce Blvd",
         "postalCode": "05198",
-        "contactType": "otherFilers",
+        "contactType": "intervenor",
         "title": "Intervenor",
         "countryType": "domestic",
         "serviceIndicator": "None",
         "phone": "1234567890",
         "name": "Gordon Ramsay",
         "state": "AK",
-        "email": "testUser@example.com",
-        "otherFilerType": "Intervenor"
+        "email": "testUser@example.com"
       },
       {
         "isAddressSealed": false,

@@ -27,7 +27,6 @@ export const EditPetitionerCounsel = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateEditPetitionerCounselSequence:
       sequences.validateEditPetitionerCounselSequence,
-    validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
   function EditPetitionerCounsel({

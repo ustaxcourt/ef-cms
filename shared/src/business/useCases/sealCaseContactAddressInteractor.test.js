@@ -83,7 +83,7 @@ describe('sealCaseContactAddressInteractor', () => {
     expect(getContactPrimary(result).isAddressSealed).toBe(true);
   });
 
-  it('should call updateCase with `isSealedAddress` on contactSecondary and otherFilers[1] and return the updated case', async () => {
+  it('should call updateCase with `isSealedAddress` on contactSecondary and return the updated case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE_WITH_SECONDARY_OTHERS);

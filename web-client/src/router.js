@@ -168,12 +168,13 @@ const router = {
     registerRoute(
       '/case-detail/*/case-information?..',
       ifHasAccess({ app }, docketNumber => {
-        const { caseInformationTab } = route.query();
+        const { caseInformationTab, partiesTab } = route.query();
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           caseInformationTab,
           docketNumber,
+          partiesTab,
           primaryTab: 'caseInformation',
         });
       }),

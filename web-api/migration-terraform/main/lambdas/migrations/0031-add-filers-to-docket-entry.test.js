@@ -78,6 +78,15 @@ describe('migrateItems', () => {
     ]);
   });
 
+  it('should not update the docketEntry when a case is not found', async () => {
+    mockCaseRecords = [];
+    const items = [{ ...mockDocketEntry }];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers).toBeUndefined();
+  });
+
   it('should add the primary petitioner contactId to the filers array when partyPrimary is true', async () => {
     const items = [{ ...mockDocketEntry }];
 
@@ -86,6 +95,17 @@ describe('migrateItems', () => {
     expect(results[0].filers[0]).toEqual(
       getContactPrimary(mockCaseItem).contactId,
     );
+    expect(results[0].partyPrimary).toBeUndefined();
+  });
+
+  it('should not update filedBy when partyPrimary is true but the case does not have a contactPrimary', async () => {
+    mockCaseItem.petitioners = [];
+    const items = [{ ...mockDocketEntry, partyPrimary: true }];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers.length).toEqual(0);
+    expect(results[0].filedBy).toEqual(mockDocketEntry.filedBy);
     expect(results[0].partyPrimary).toBeUndefined();
   });
 
@@ -102,6 +122,22 @@ describe('migrateItems', () => {
     expect(results[0].filers[1]).toEqual(
       getContactSecondary(mockCaseItem).contactId,
     );
+    expect(results[0].partySecondary).toBeUndefined();
+  });
+
+  it('should not update filedBy when partySecondary is true but the case does not have a contactSecondary', async () => {
+    mockCaseItem.petitioners = [...MOCK_CASE.petitioners];
+    const items = [
+      { ...mockDocketEntry, partyPrimary: true, partySecondary: true },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].filers[0]).toEqual(
+      getContactPrimary(mockCaseItem).contactId,
+    );
+    expect(results[0].filers.length).toEqual(1);
+    expect(results[0].filedBy).toEqual(mockDocketEntry.filedBy);
     expect(results[0].partySecondary).toBeUndefined();
   });
 
