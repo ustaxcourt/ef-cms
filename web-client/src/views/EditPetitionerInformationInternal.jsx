@@ -61,7 +61,7 @@ export const EditPetitionerInformationInternal = connect(
           <h2>Edit Party Information</h2>
 
           <div className="blue-container margin-bottom-5">
-            <FormGroup errorText={validationErrors?.contactType}>
+            <FormGroup errorText={validationErrors?.contact?.contactType}>
               <label className="usa-label" htmlFor="contactType">
                 <span>Role type</span>
               </label>
@@ -80,7 +80,7 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="otherPetitioners">Petitioner</option>
+                <option value="otherPetitioner">Petitioner</option>
                 <option value="intervenor">Intervenor</option>
                 <option value="participant">Participant</option>
               </select>
