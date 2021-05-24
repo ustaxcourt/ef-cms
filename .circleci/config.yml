@@ -352,7 +352,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all
-            npx run-p --no-install start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
