@@ -248,6 +248,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
+        filedBy: 'Petr. Test Petitioner',
         filers: [getContactPrimary(MOCK_CASE).contactId],
       },
       docketNumber: '101-20',
@@ -601,6 +602,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         ...mockDocketEntries[6],
         docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
         eventCode: 'HE',
+        servedAt: '2019-01-01T05:00:00.000Z',
       },
       docketNumber: '101-20',
     });

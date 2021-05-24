@@ -91,6 +91,7 @@ exports.updateDocketEntryMetaInteractor = async (
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
+    filedBy: docketEntryMeta.filedBy,
     filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
