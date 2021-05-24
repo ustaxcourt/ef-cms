@@ -751,7 +751,7 @@ const CONTACT_TYPE_TITLES = {
   otherFilers: 'Petitioner',
   intervenor: 'Intervenor',
   participant: 'Participant',
-  otherPetitioner: 'Petitioner',
+  otherPetitioners: 'Petitioner',
 };
 
 const COMMON_CITIES = [
@@ -1041,6 +1041,7 @@ module.exports = deepFreeze({
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -1137,5 +1138,4 @@ module.exports = deepFreeze({
   LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
-  CONTACT_TYPE_TITLES,
 });
