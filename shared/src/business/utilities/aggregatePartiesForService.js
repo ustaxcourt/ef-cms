@@ -27,7 +27,7 @@ const aggregatePartiesForService = caseEntity => {
     ...formattedCase.irsPractitioners,
   ];
 
-  const otherParties = [...getOtherPetitioners(formattedCase)];
+  const otherParties = getOtherPetitioners(formattedCase);
 
   const aggregated = {
     electronic: [],
