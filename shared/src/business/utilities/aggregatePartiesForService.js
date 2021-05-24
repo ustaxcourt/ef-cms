@@ -22,14 +22,12 @@ const aggregatePartiesForService = caseEntity => {
   const parties = [
     getContactPrimary(formattedCase),
     getContactSecondary(formattedCase),
+    ...getOtherFilers(formattedCase),
     ...formattedCase.privatePractitioners,
     ...formattedCase.irsPractitioners,
   ];
 
-  const otherParties = [
-    ...getOtherFilers(formattedCase),
-    ...getOtherPetitioners(formattedCase),
-  ];
+  const otherParties = [...getOtherPetitioners(formattedCase)];
 
   const aggregated = {
     electronic: [],
