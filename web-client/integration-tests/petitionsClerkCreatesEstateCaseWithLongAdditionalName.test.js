@@ -5,7 +5,6 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, getTextByCount, loginAs, setupTest } from './helpers';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
 
@@ -141,5 +140,12 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
   });
-  // petitionsClerkServesElectronicCaseToIrs(test);
+
+  it('Petitions clerk serves paper case', async () => {
+    await test.runSequence('openConfirmServeToIrsModalSequence');
+
+    await test.runSequence('serveCaseToIrsSequence');
+
+    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
+  });
 });
