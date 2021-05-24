@@ -227,6 +227,7 @@ module.exports = [
       'wait for #remove-petitioner-modal to be visible',
     ],
     notes: 'checks a11y of remove petitioner confirm modal',
+    only: true,
     url:
       'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416&info=remove-petitioner-modal',
   },
