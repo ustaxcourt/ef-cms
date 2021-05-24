@@ -1,4 +1,10 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../shared/src/business/entities/EntityConstants';
+import { fakeFile, getTextByCount, loginAs, setupTest } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
@@ -15,7 +21,6 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
   loginAs(test, 'petitionsclerk@example.com');
   it('login as a petitions clerk and create a case', async () => {
     await test.runSequence('gotoStartCaseWizardSequence');
-    expect(test.getState('form.hasVerifiedIrsNotice')).toEqual(false);
 
     await test.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
@@ -57,48 +62,12 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'stinFile',
-      value: fakeFile,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'stinFileSize',
-      value: 1,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFile',
-      value: fakeFile,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'ownershipDisclosureFileSize',
-      value: 1,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
       key: 'requestForPlaceOfTrialFile',
       value: fakeFile,
     });
 
     await test.runSequence('updateFormValueSequence', {
       key: 'requestForPlaceOfTrialFileSize',
-      value: 1,
-    });
-
-    await test.runSequence('submitPetitionFromPaperSequence');
-
-    expect(
-      test.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toBeUndefined();
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFile',
-      value: fakeFile,
-    });
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
     });
 
@@ -152,6 +121,11 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
       value: '1234567890',
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contactPrimary.secondaryName',
+      value: getTextByCount(500),
+    });
+
     await test.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.UNPAID,
@@ -164,25 +138,6 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
     await test.runSequence('submitPetitionFromPaperSequence');
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
-
-    const docketNumber = test.getState('caseDetail.docketNumber');
-    const receivedDocketNumberYear = docketNumber.slice(-2);
-    const expectedDocketNumberYear = receivedAtYear.slice(-2);
-    expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
-
-    if (shouldServe) {
-      await test.runSequence('serveCaseToIrsSequence');
-    }
-
-    await test.runSequence('gotoCaseDetailSequence');
-
-    test.docketNumber = test.getState('caseDetail.docketNumber');
-    expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
-      trialLocation,
-    );
-    if (test.casesReadyForTrial) {
-      test.casesReadyForTrial.push(test.docketNumber);
-    }
   });
-  petitionsClerkServesElectronicCaseToIrs(test);
+  // petitionsClerkServesElectronicCaseToIrs(test);
 });
