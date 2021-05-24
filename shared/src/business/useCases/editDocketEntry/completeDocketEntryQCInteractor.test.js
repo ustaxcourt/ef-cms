@@ -184,6 +184,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
+          filedBy: 'Resp.',
           filers: [mockPrimaryId],
         },
       }),
@@ -226,6 +227,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -256,6 +258,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -327,6 +330,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -352,6 +356,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Different',
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -398,6 +403,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -425,6 +431,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
       },
     });
@@ -473,6 +480,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
+        filedBy: 'Resp',
         filers: [mockPrimaryId],
       },
     });
@@ -601,6 +609,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'My Edited Document',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
+        filedBy: 'Resp.',
         filers: [mockPrimaryId],
         freeText: 'Some text about this document',
         hasOtherFilingParty: true,
@@ -634,6 +643,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'My Edited Document',
           documentType: 'Notice of Change of Address',
           eventCode: 'NCA',
+          filedBy: 'Resp.',
           filers: [mockPrimaryId],
           freeText: 'Some text about this document',
           hasOtherFilingParty: true,
@@ -686,6 +696,7 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'My Edited Document',
           documentType: 'Notice of Change of Address',
           eventCode: 'NCA',
+          filedBy: 'Resp.',
           filers: [mockPrimaryId],
           freeText: 'Some text about this document',
           hasOtherFilingParty: true,

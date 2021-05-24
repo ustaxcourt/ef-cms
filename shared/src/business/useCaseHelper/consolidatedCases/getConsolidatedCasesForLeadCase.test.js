@@ -12,8 +12,6 @@ describe('getConsolidatedCasesForLeadCase', () => {
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockReturnValue([MOCK_CASE]);
 
-    console.log('mockCase.docketEntries[2]', MOCK_CASE.docketEntries[2]);
-
     await getConsolidatedCasesForLeadCase({
       applicationContext,
       leadDocketNumber: '123-20',
