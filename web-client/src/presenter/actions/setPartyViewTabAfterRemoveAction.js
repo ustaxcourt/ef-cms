@@ -2,26 +2,24 @@ import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityCo
 import { state } from 'cerebral';
 
 /**
- * Sets the currentViewMetadata.partyViewTab view.
+ * Sets the currentViewMetadata.partyViewTab view after removing petitioner.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
- * @param {object} providers.props.tab the tab to display
  */
 export const setPartyViewTabAfterRemoveAction = ({
   applicationContext,
-  get,
   props,
   store,
 }) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const { contactType: deletedContactType } = props;
-  const { petitioners } = get(state.caseDetail);
+  const { petitioners } = props.caseDetail;
 
   let tab = PARTY_VIEW_TABS.petitionersAndCounsel;
 
-  // need to check if there are still otherFilers on the case
   if (
     (deletedContactType === CONTACT_TYPES.intervenor ||
       deletedContactType === CONTACT_TYPES.participant) &&
@@ -30,7 +28,6 @@ export const setPartyViewTabAfterRemoveAction = ({
         p.contactType === CONTACT_TYPES.intervenor ||
         p.contactType === CONTACT_TYPES.participant,
     )
-    // (and there are more intervenors or participants left on the case)
   ) {
     tab = PARTY_VIEW_TABS.participantsAndCounsel;
   }
