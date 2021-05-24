@@ -29,4 +29,44 @@ describe('setPartyViewTabAfterRemoveAction', () => {
       PARTY_VIEW_TABS.participantsAndCounsel,
     );
   });
+
+  it('sets state.currentViewMetadata.caseDetail.partyViewTab to petitionersAndCounsel when deleted contact is an intervenor and there are no otherFilers on the case', async () => {
+    const { state } = await runAction(setPartyViewTabAfterRemoveAction, {
+      modules: { presenter },
+      props: {
+        caseDetail: {
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
+        },
+        contactType: CONTACT_TYPES.intervenor,
+      },
+    });
+
+    expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
+      PARTY_VIEW_TABS.petitionersAndCounsel,
+    );
+  });
+
+  it('sets state.currentViewMetadata.caseDetail.partyViewTab to petitionersAndCounsel when deleted contact is a petitioner', async () => {
+    const { state } = await runAction(setPartyViewTabAfterRemoveAction, {
+      modules: { presenter },
+      props: {
+        caseDetail: {
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
+        },
+        contactType: CONTACT_TYPES.primary,
+      },
+    });
+
+    expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
+      PARTY_VIEW_TABS.petitionersAndCounsel,
+    );
+  });
 });
