@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';

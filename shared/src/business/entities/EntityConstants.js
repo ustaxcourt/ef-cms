@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
