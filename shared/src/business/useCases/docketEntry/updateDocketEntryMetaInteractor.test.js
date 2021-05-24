@@ -365,6 +365,8 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
+    mockDocketEntries[3].servedAt = '2012-02-22T02:22:00.000Z';
+    mockDocketEntries[3].servedParties = [{ name: 'bob evans' }];
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[3], // originally an Order
@@ -403,6 +405,8 @@ describe('updateDocketEntryMetaInteractor', () => {
         docketNumber: '101-20',
       });
 
+    mockDocketEntries[4].servedAt = '2012-02-22T02:22:00.000Z';
+    mockDocketEntries[4].servedParties = [{ name: 'bob evans' }];
     expect(mockDocketEntries[4].eventCode).toBe('USCA'); // requires a cover sheet.
 
     await updateDocketEntryMetaInteractor(applicationContext, {
@@ -597,6 +601,8 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should add a coversheet when the docket entry event code changes to one requiring a coversheet', async () => {
+    mockDocketEntries[6].servedParties = [{ name: 'bob evans' }];
+    mockDocketEntries[6].servedAt = '2012-02-22T02:22:00.000Z';
     await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[6],

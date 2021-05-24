@@ -71,6 +71,12 @@ exports.updateDocketEntryMetaInteractor = async (
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
+  if (!originalDocketEntry) {
+    throw new Error(
+      `Docket entry with id ${docketEntryMeta.docketEntryId} not found.`,
+    );
+  }
+
   if (
     !isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode)
@@ -113,12 +119,6 @@ exports.updateDocketEntryMetaInteractor = async (
     serviceDate: docketEntryMeta.serviceDate,
     trialLocation: docketEntryMeta.trialLocation,
   };
-
-  if (!originalDocketEntry) {
-    throw new Error(
-      `Docket entry with id ${docketEntryMeta.docketEntryId} not found.`,
-    );
-  }
 
   const servedAtUpdated =
     editableFields.servedAt &&
