@@ -739,10 +739,10 @@ const OTHER_TYPES = {
 const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers',
+  otherFiler: 'otherFiler',
   intervenor: 'intervenor',
   participant: 'participant',
-  otherPetitioner: 'otherPetitioners',
+  otherPetitioner: 'otherPetitioner',
 };
 
 const CONTACT_TYPE_TITLES = {
