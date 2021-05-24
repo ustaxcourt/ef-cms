@@ -55,7 +55,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
 };
 
 Petitioner.VALIDATION_RULES = {
-  additionalName: JoiValidationConstants.STRING.max(100).optional(),
+  additionalName: JoiValidationConstants.STRING.max(600).optional(),
   address1: JoiValidationConstants.STRING.max(100).required(),
   address2: JoiValidationConstants.STRING.max(100).optional().allow(null),
   address3: JoiValidationConstants.STRING.max(100).optional().allow(null),
