@@ -1,3 +1,4 @@
+// const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -5,14 +6,20 @@ const {
   getConsolidatedCasesForLeadCase,
 } = require('./getConsolidatedCasesForLeadCase');
 const { MOCK_CASE } = require('../../../test/mockCase');
+// const { ROLES } = require('../../entities/EntityConstants');
 
 describe('getConsolidatedCasesForLeadCase', () => {
+  // beforeEach(() => {
+  //   applicationContext.getCurrentUser.mockReturnValue({
+  //     role: ROLES.docketClerk,
+  //     userId: faker.datatype.uuid(),
+  //   });
+  // });
+
   it('should retrieve all cases associated with the leadDocketNumber', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockReturnValue([MOCK_CASE]);
-
-    console.log('mockCase.docketEntries[2]', MOCK_CASE.docketEntries[2]);
 
     await getConsolidatedCasesForLeadCase({
       applicationContext,
