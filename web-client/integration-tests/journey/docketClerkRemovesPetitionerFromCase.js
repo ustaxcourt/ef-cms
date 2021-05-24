@@ -40,6 +40,8 @@ export const docketClerkRemovesPetitionerFromCase = test => {
       getPetitionerById(test.getState('caseDetail'), contactPrimaryContactId),
     ).toBeUndefined();
 
+    expect(test.getState('alertSuccess.message')).toBe('Petitioner removed.');
+
     // primary contact should be replaced with the secondary contact
     expect(petitionerOnCase).toBe(CONTACT_TYPES.primary);
   });

@@ -10,7 +10,7 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 const test = setupTest();
 test.draftOrders = [];
 
-describe('Docket Clerk removes petitioners on a case', () => {
+describe('Docket Clerk removes petitioners journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
