@@ -88,6 +88,7 @@ describe('validatePetitionFromPaperAction', () => {
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       caseCaption: expect.anything(),
       statistics: [
+        {},
         {
           enterAllValues:
             'Enter period, deficiency amount, and total penalties',
@@ -196,6 +197,7 @@ describe('validatePetitionFromPaperAction', () => {
         errors: {
           caseCaption: 'Enter a case caption',
           statistics: [
+            {},
             {
               enterAllValues:
                 'Enter period, deficiency amount, and total penalties',

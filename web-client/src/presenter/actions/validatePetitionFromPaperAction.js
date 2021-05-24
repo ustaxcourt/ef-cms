@@ -1,4 +1,4 @@
-import { map, omit } from 'lodash';
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }) => {
@@ -20,18 +20,20 @@ export const aggregateStatisticsErrors = ({ errors, get }) => {
         if (errorStatistic) {
           const messageYearOrPeriod =
             formStatistic.yearOrPeriod === 'Year' ? 'year' : 'period';
+          const errMessage = `Enter ${messageYearOrPeriod}, deficiency amount, and total penalties`;
+
           newErrorStatistics.push({
-            enterAllValues: `Enter ${messageYearOrPeriod}, deficiency amount, and total penalties`,
+            enterAllValues: errMessage,
             index,
           });
+
+          statisticsErrorMessages.push(errMessage);
+        } else {
+          newErrorStatistics.push({});
         }
       });
 
       errors.statistics = newErrorStatistics;
-      statisticsErrorMessages = map(
-        Object.values(newErrorStatistics),
-        'enterAllValues',
-      );
     } else {
       statisticsErrorMessages = [errors.statistics];
     }
