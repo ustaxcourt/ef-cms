@@ -61,25 +61,28 @@ export const EditPetitionerInformationInternal = connect(
           <h2>Edit Party Information</h2>
 
           <div className="blue-container margin-bottom-5">
-            <FormGroup>
-              <label className="usa-label" htmlFor="petitionerType">
-                <span>Petitioner Type</span>
+            <FormGroup errorText={validationErrors?.contactType}>
+              <label className="usa-label" htmlFor="contactType">
+                <span>Role type</span>
               </label>
               <select
-                aria-describedby="petitioner-type"
+                aria-describedby="role-type"
                 className="usa-select max-width-400"
-                id="petitionerType"
-                name="petitionerType"
-                value={form.petitionerType || 'petitioner'}
+                id="contactType"
+                name="contact.contactType"
+                value={form.contact.contactType || ''}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
+                  validatePetitionerSequence();
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="petitioner">Petitioner</option>
+                <option value="otherPetitioners">Petitioner</option>
+                <option value="intervenor">Intervenor</option>
+                <option value="participant">Participant</option>
               </select>
             </FormGroup>
 
