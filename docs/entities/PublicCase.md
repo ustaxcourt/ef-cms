@@ -828,10 +828,10 @@
               allow: 
                 - "primary"
                 - "secondary"
-                - "otherFilers"
+                - "otherFiler"
                 - "intervenor"
                 - "participant"
-                - "otherPetitioners"
+                - "otherPetitioner"
             name: 
               type: "string"
               flags: 
