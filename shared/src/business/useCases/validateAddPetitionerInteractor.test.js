@@ -1,3 +1,4 @@
+const Petitioner = require('../entities/contacts/Petitioner');
 const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -52,6 +53,28 @@ describe('validateAddPetitionerInteractor', () => {
     expect(errors).toEqual({
       address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
       caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
+    });
+  });
+
+  it('should return an error when second intervenor is added', async () => {
+    mockContact = {
+      ...mockContact,
+      contactType: 'intervenor',
+    };
+    const mockExistingPetitioners = [
+      {
+        contactType: 'intervenor',
+      },
+    ];
+
+    const errors = validateAddPetitionerInteractor(applicationContext, {
+      contact: mockContact,
+      mockExistingPetitioners,
+    });
+
+    expect(errors).toEqual({
+      contactType:
+        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
     });
   });
 });
