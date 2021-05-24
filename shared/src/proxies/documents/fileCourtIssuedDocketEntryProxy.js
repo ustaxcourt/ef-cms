@@ -3,15 +3,15 @@ const { post } = require('../requests');
 /**
  * fileCourtIssuedDocketEntryProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMeta the document data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedDocketEntryInteractor = ({
+exports.fileCourtIssuedDocketEntryInteractor = (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const { docketNumber } = documentMeta;
   return post({
     applicationContext,

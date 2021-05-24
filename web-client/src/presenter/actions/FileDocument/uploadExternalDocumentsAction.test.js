@@ -54,7 +54,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
@@ -113,7 +113,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
@@ -166,7 +166,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: {
         primary: { data: 'something' },
         primarySupporting0: { data: 'something3' },

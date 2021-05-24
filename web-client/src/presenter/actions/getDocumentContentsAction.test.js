@@ -39,7 +39,7 @@ describe('getDocumentContentsAction', () => {
     });
     expect(
       applicationContext.getUseCases()
-        .getDocumentContentsForDocketEntryInteractor.mock.calls[0][0],
+        .getDocumentContentsForDocketEntryInteractor.mock.calls[0][1],
     ).toMatchObject({
       documentContentsId: mockDocumentContentsId,
     });

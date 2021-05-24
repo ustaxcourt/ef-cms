@@ -20,8 +20,7 @@ export const setTrialSessionJudgeAction = async ({
       judge,
     } = await applicationContext
       .getUseCases()
-      .getTrialSessionDetailsInteractor({
-        applicationContext,
+      .getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: caseDetail.trialSessionId,
       });
 

@@ -1,3 +1,4 @@
+import { map } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -17,34 +18,16 @@ export const getPendingEmailsOnCaseAction = async ({
     state.caseDetail,
   );
 
-  for (let petitioner of petitioners) {
-    const pendingEmail = await applicationContext
-      .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: petitioner.contactId,
-      });
-    pendingEmails[petitioner.contactId] = pendingEmail;
-  }
+  const userIds = [
+    ...map(petitioners, 'contactId'),
+    ...map(irsPractitioners, 'userId'),
+    ...map(privatePractitioners, 'userId'),
+  ];
 
-  for (let respondent of irsPractitioners) {
-    const pendingEmail = await applicationContext
+  if (userIds.length) {
+    pendingEmails = await applicationContext
       .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: respondent.userId,
-      });
-    pendingEmails[respondent.userId] = pendingEmail;
-  }
-
-  for (let privatePractitioner of privatePractitioners) {
-    const pendingEmail = await applicationContext
-      .getUseCases()
-      .getUserPendingEmailInteractor({
-        applicationContext,
-        userId: privatePractitioner.userId,
-      });
-    pendingEmails[privatePractitioner.userId] = pendingEmail;
+      .getUsersPendingEmailInteractor({ applicationContext, userIds });
   }
 
   return { pendingEmails };

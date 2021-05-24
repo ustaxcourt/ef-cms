@@ -15,8 +15,7 @@ export const getIrsPractitionersBySearchKeyAction = async ({
 
   const irsPractitioners = await applicationContext
     .getUseCases()
-    .getIrsPractitionersBySearchKeyInteractor({
-      applicationContext,
+    .getIrsPractitionersBySearchKeyInteractor(applicationContext, {
       searchKey,
     });
 

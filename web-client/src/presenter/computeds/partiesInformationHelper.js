@@ -1,3 +1,4 @@
+import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 const formatCounsel = ({ counsel, screenMetadata }) => {
@@ -11,11 +12,11 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
-  const {
-    CONTACT_TYPES,
-    UNIQUE_OTHER_FILER_TYPE,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { CONTACT_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const otherContactTypes = [
+    CONTACT_TYPES.intervenor,
+    CONTACT_TYPES.participant,
+  ];
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
@@ -50,12 +51,11 @@ export const partiesInformationHelper = (get, applicationContext) => {
         petitioner.contactId,
       );
 
-    if (petitioner.contactType === CONTACT_TYPES.otherFiler) {
-      petitioner.formattedTitle =
-        petitioner.otherFilerType === UNIQUE_OTHER_FILER_TYPE
-          ? petitioner.otherFilerType
-          : 'Participant';
-    }
+    petitioner.formattedTitle = otherContactTypes.includes(
+      petitioner.contactType,
+    )
+      ? capitalize(petitioner.contactType)
+      : 'Petitioner';
 
     if (
       screenMetadata.pendingEmails &&
@@ -103,12 +103,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
 
     const editPetitionerLink = isExternalUser
-      ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+      ? externalType
+        ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
+        : null
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
     return {
       ...petitioner,
-      canEditPetitioner,
+      canEditPetitioner: canEditPetitioner && !!editPetitionerLink,
       editPetitionerLink,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
@@ -117,10 +119,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
   });
 
   const formattedPetitioners = formattedParties.filter(
-    petitioner => petitioner.contactType !== CONTACT_TYPES.otherFiler,
+    petitioner => !otherContactTypes.includes(petitioner.contactType),
   );
-  const formattedParticipants = formattedParties.filter(
-    petitioner => petitioner.contactType === CONTACT_TYPES.otherFiler,
+  const formattedParticipants = formattedParties.filter(petitioner =>
+    otherContactTypes.includes(petitioner.contactType),
   );
 
   const canEditRespondent = permissions.EDIT_COUNSEL_ON_CASE;

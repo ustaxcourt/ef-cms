@@ -15,11 +15,12 @@ export const replyToMessageAction = async ({ applicationContext, get }) => {
 
   const {
     parentMessageId,
-  } = await applicationContext.getUseCases().replyToMessageInteractor({
-    applicationContext,
-    docketNumber,
-    ...form,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .replyToMessageInteractor(applicationContext, {
+      docketNumber,
+      ...form,
+    });
 
   let messageViewerDocumentToDisplay;
   if (form.attachments.length) {

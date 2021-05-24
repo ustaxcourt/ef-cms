@@ -1,10 +1,10 @@
 import {
   CONTACT_TYPES,
-  OTHER_FILER_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
+import { capitalize } from 'lodash';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -193,17 +193,18 @@ describe('requestAccessHelper', () => {
         petitioners: [
           {
             contactId: mockContactId1,
+            contactType: CONTACT_TYPES.primary,
             name: 'bob',
           },
           {
             contactId: mockContactId2,
+            contactType: CONTACT_TYPES.secondary,
             name: 'sally',
           },
           {
             contactId: mockContactId3,
-            contactType: CONTACT_TYPES.otherFilers,
+            contactType: CONTACT_TYPES.participant,
             name: 'rick',
-            otherFilerType: OTHER_FILER_TYPES[1],
           },
         ],
       };
@@ -213,9 +214,12 @@ describe('requestAccessHelper', () => {
       const { representingPartiesNames } = runCompute(requestAccessHelper, {
         state,
       });
+
+      console.log('representingPartiesNames', representingPartiesNames);
+
       expect(representingPartiesNames).toEqual([
         'bob, Petitioner',
-        'rick, Tax Matters Partner',
+        `rick, ${capitalize(CONTACT_TYPES.participant)}`,
       ]);
     });
   });

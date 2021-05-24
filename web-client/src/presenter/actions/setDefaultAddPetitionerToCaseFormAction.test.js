@@ -1,7 +1,4 @@
-import {
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { COUNTRY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter-mock';
@@ -13,7 +10,7 @@ describe('setDefaultAddPetitionerToCaseFormAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets state.form with a contact type of otherPetitioner', async () => {
+  it('sets state.form with default values', async () => {
     const { state } = await runAction(setDefaultAddPetitionerToCaseFormAction, {
       modules: { presenter },
       state: {
@@ -24,7 +21,7 @@ describe('setDefaultAddPetitionerToCaseFormAction', () => {
     expect(state.form).toEqual({
       contact: {
         caseCaption: MOCK_CASE.caseCaption,
-        contactType: CONTACT_TYPES.otherPetitioner,
+        contactType: undefined,
         countryType: COUNTRY_TYPES.DOMESTIC,
       },
       useExistingAddress: false,

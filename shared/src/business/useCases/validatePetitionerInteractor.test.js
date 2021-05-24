@@ -1,4 +1,5 @@
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
@@ -20,6 +21,7 @@ describe('validatePetitionerInteractor', () => {
       address3: 'Apt. #104',
       city: 'Jordan',
       confirmEmail: 'night@example.com',
+      contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Wilbur Rayou',
       phone: '1111111111',
@@ -31,8 +33,7 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('runs validation on a contact with no invalid properties', async () => {
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -46,8 +47,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -62,8 +62,7 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: undefined, // required
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
 
@@ -83,8 +82,7 @@ describe('validatePetitionerInteractor', () => {
       postalCode: 'what is love',
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
     });
 
@@ -104,8 +102,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor({
-      applicationContext,
+    const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
     });
 

@@ -740,6 +740,8 @@ const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
   otherFiler: 'otherFilers',
+  intervenor: 'intervenor',
+  participant: 'participant',
   otherPetitioner: 'otherPetitioners',
 };
 

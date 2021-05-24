@@ -21,7 +21,10 @@ export const submitAddPetitionerSequence = [
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setCurrentPageAction('Interstitial'),
-      navigateToCaseDetailCaseInformationActionFactory('parties'),
+      navigateToCaseDetailCaseInformationActionFactory(
+        'parties',
+        'participantsAndCounsel',
+      ),
     ]),
   },
 ];

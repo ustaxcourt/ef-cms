@@ -26,9 +26,7 @@ describe('loadPDFForSigningInteractor', () => {
       .getPersistenceGateway()
       .getDocument.mockReturnValue(null);
 
-    const result = await loadPDFForSigningInteractor({
-      applicationContext,
-    });
+    const result = await loadPDFForSigningInteractor(applicationContext, {});
 
     expect(result).toEqual('pdf data');
   });
@@ -38,8 +36,7 @@ describe('loadPDFForSigningInteractor', () => {
       .getPersistenceGateway()
       .getDocument.mockReturnValue(null);
 
-    await loadPDFForSigningInteractor({
-      applicationContext,
+    await loadPDFForSigningInteractor(applicationContext, {
       removeCover: true,
     });
 
@@ -55,9 +52,7 @@ describe('loadPDFForSigningInteractor', () => {
       });
 
     await expect(
-      loadPDFForSigningInteractor({
-        applicationContext,
-      }),
+      loadPDFForSigningInteractor(applicationContext, {}),
     ).rejects.toThrow(new Error('error loading PDF for signing'));
   });
 });

@@ -26,7 +26,7 @@ describe('saveCalendarNoteAction', () => {
 
     expect(
       applicationContext.getUseCases().saveCalendarNoteInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       calendarNote: NOTE,
       docketNumber: DOCKET_NUMBER,
@@ -56,7 +56,7 @@ describe('saveCalendarNoteAction', () => {
 
     expect(
       applicationContext.getUseCases().saveCalendarNoteInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       calendarNote: NOTE,
       docketNumber: DOCKET_NUMBER,

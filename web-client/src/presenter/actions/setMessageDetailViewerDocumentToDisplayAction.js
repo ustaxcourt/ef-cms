@@ -13,8 +13,7 @@ const setPdfToDisplay = async (
       url,
     } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
         key: messageViewerDocumentToDisplay.documentId,

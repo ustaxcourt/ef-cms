@@ -5,12 +5,12 @@ const { Petitioner } = require('../entities/contacts/Petitioner');
 /**
  * validateAddPetitionerInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.contact the contact to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateAddPetitionerInteractor = ({ applicationContext, contact }) => {
+exports.validateAddPetitionerInteractor = (applicationContext, { contact }) => {
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
