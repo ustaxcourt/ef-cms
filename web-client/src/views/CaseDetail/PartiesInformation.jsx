@@ -13,24 +13,23 @@ const PartiesInformation = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
+    currentViewMetadata: state.currentViewMetadata,
     partiesInformationHelper: state.partiesInformationHelper,
     partyViewTabs: state.constants.PARTY_VIEW_TABS,
-    screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
-    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+    updatePartyViewTabSequence: sequences.updatePartyViewTabSequence,
   },
   function PartiesInformation({
     caseDetail,
     caseInformationHelper,
+    currentViewMetadata,
     partiesInformationHelper,
     partyViewTabs,
-    screenMetadata,
     showModal,
-    updateScreenMetadataSequence,
+    updatePartyViewTabSequence,
   }) {
     return (
       <>
-        {console.log(screenMetadata.partyViewTab)}
         <div className="grid-row grid-gap">
           <div className="grid-col-3">
             <div className="border border-base-lighter">
@@ -41,13 +40,12 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
-                    screenMetadata.partyViewTab ===
+                    currentViewMetadata.caseDetail.partyViewTab ===
                       partyViewTabs.petitionersAndCounsel && 'active',
                   )}
                   onClick={() => {
-                    updateScreenMetadataSequence({
-                      key: 'partyViewTab',
-                      value: partyViewTabs.petitionersAndCounsel,
+                    updatePartyViewTabSequence({
+                      tab: partyViewTabs.petitionersAndCounsel,
                     });
                   }}
                 >
@@ -62,13 +60,12 @@ const PartiesInformation = connect(
                   <Button
                     className={classNames(
                       'usa-button--unstyled attachment-viewer-button',
-                      screenMetadata.partyViewTab ===
+                      currentViewMetadata.caseDetail.partyViewTab ===
                         partyViewTabs.participantsAndCounsel && 'active',
                     )}
                     onClick={() => {
-                      updateScreenMetadataSequence({
-                        key: 'partyViewTab',
-                        value: partyViewTabs.participantsAndCounsel,
+                      updatePartyViewTabSequence({
+                        tab: partyViewTabs.participantsAndCounsel,
                       });
                     }}
                   >
@@ -83,14 +80,13 @@ const PartiesInformation = connect(
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
-                    screenMetadata.partyViewTab ===
+                    currentViewMetadata.caseDetail.partyViewTab ===
                       partyViewTabs.respondentCounsel && 'active',
                   )}
                   id="respondent-counsel"
                   onClick={() => {
-                    updateScreenMetadataSequence({
-                      key: 'partyViewTab',
-                      value: partyViewTabs.respondentCounsel,
+                    updatePartyViewTabSequence({
+                      tab: partyViewTabs.respondentCounsel,
                     });
                   }}
                 >
@@ -111,13 +107,13 @@ const PartiesInformation = connect(
             )}
           </div>
           <div className="grid-col-9">
-            {screenMetadata.partyViewTab ===
+            {currentViewMetadata.caseDetail.partyViewTab ===
               partyViewTabs.petitionersAndCounsel && <PetitionersAndCounsel />}
-            {screenMetadata.partyViewTab ===
+            {currentViewMetadata.caseDetail.partyViewTab ===
               partyViewTabs.participantsAndCounsel && (
               <ParticipantsAndCounsel />
             )}
-            {screenMetadata.partyViewTab ===
+            {currentViewMetadata.caseDetail.partyViewTab ===
               partyViewTabs.respondentCounsel && <RespondentCounsel />}
           </div>
         </div>
