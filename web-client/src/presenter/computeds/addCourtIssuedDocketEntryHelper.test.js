@@ -1,4 +1,7 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -16,6 +19,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     role: USER_ROLES.docketClerk,
   };
   let mockConstants = {
+    CONTACT_TYPE_TITLES,
     COURT_ISSUED_EVENT_CODES: [
       { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
       { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },

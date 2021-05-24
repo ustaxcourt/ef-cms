@@ -1,7 +1,6 @@
 import {
   CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
-  OTHER_FILER_TYPES,
   ROLES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -16,13 +15,11 @@ describe('partiesInformationHelper', () => {
 
   const mockIntervenor = {
     contactId: '59ab3015-5072-4d70-a66a-f83265b1e77d',
-    contactType: CONTACT_TYPES.otherFiler,
-    otherFilerType: UNIQUE_OTHER_FILER_TYPE,
+    contactType: CONTACT_TYPES.intervenor,
   };
   const mockParticipant = {
     contactId: '25d51a3b-969e-4bb4-a932-cc9645ba888c',
-    contactType: CONTACT_TYPES.otherFiler,
-    otherFilerType: OTHER_FILER_TYPES[1],
+    contactType: CONTACT_TYPES.participant,
   };
   const mockPetitionsClerk = {
     role: ROLES.petitionsClerk,
