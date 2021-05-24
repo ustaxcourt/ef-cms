@@ -1,4 +1,3 @@
-const Petitioner = require('../entities/contacts/Petitioner');
 const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -10,6 +9,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../entities/cases/Case');
 const { ContactFactory } = require('../entities/contacts/ContactFactory');
+const { Petitioner } = require('../entities/contacts/Petitioner');
 
 describe('validateAddPetitionerInteractor', () => {
   let mockContact;
@@ -59,17 +59,17 @@ describe('validateAddPetitionerInteractor', () => {
   it('should return an error when second intervenor is added', async () => {
     mockContact = {
       ...mockContact,
-      contactType: 'intervenor',
+      contactType: CONTACT_TYPES.intervenor,
     };
     const mockExistingPetitioners = [
       {
-        contactType: 'intervenor',
+        contactType: CONTACT_TYPES.intervenor,
       },
     ];
 
     const errors = validateAddPetitionerInteractor(applicationContext, {
       contact: mockContact,
-      mockExistingPetitioners,
+      existingPetitioners: mockExistingPetitioners,
     });
 
     expect(errors).toEqual({
