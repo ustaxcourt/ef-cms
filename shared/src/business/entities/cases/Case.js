@@ -272,6 +272,8 @@ Case.prototype.assignDocketEntries = function assignDocketEntries({
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
+    console.log('this.docketEntries', this.docketEntries);
+
     this.isSealed = isSealedCase(rawCase);
 
     if (
@@ -347,7 +349,7 @@ Case.prototype.assignContacts = function assignContacts({
         petitioner => new Petitioner(petitioner, { applicationContext }),
       );
 
-      this.setAdditionalNameOnPetitioners();
+      this.setAdditionalNameOnPetitioners(rawCase);
     }
   }
 };
@@ -1551,11 +1553,11 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * Computes and sets additionalName for contactPrimary depending on partyType
  *
  */
-Case.prototype.setAdditionalNameOnPetitioners = function () {
-  const contactPrimary = this.getContactPrimary(this);
+Case.prototype.setAdditionalNameOnPetitioners = function (rawCase) {
+  const contactPrimary = this.getContactPrimary(rawCase);
 
   if (contactPrimary && !contactPrimary.additionalName) {
-    switch (this.partyType) {
+    switch (rawCase.partyType) {
       case PARTY_TYPES.conservator:
       case PARTY_TYPES.custodian:
       case PARTY_TYPES.guardian:
