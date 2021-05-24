@@ -372,7 +372,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   caseStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(CASE_STATUS_TYPES),
   ).optional(),
-  caseTitle: JoiValidationConstants.STRING.max(500).optional(),
+  caseTitle: JoiValidationConstants.CASE_CAPTION.optional(),
   completedAt: JoiValidationConstants.ISO_DATE.optional(),
   completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
   completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
