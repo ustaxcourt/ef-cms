@@ -1,7 +1,8 @@
 const { Case } = require('../entities/cases/Case');
+const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { Petitioner } = require('../entities/contacts/Petitioner');
-
+const { some } = require('lodash');
 /**
  * validateAddPetitionerInteractor
  *
@@ -10,7 +11,10 @@ const { Petitioner } = require('../entities/contacts/Petitioner');
  * @param {object} providers.contact the contact to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateAddPetitionerInteractor = (applicationContext, { contact }) => {
+exports.validateAddPetitionerInteractor = (
+  applicationContext,
+  { contact, existingPetitioners },
+) => {
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
@@ -26,6 +30,14 @@ exports.validateAddPetitionerInteractor = (applicationContext, { contact }) => {
     ...petitionerErrors,
     ...caseCaptionError,
   };
+
+  if (
+    some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
+    contact.contactType === CONTACT_TYPES.intervenor
+  ) {
+    aggregatedErrors.contactType =
+      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
+  }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };
