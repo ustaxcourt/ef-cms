@@ -147,6 +147,18 @@ exports.updateTrialSessionInteractor = async (
           caseToUpdate: caseEntity,
         });
       }
+
+      const matchingHearing = caseToUpdate.hearings.find(
+        hearing =>
+          hearing.trialSessionId == newTrialSessionEntity.trialSessionId,
+      );
+      if (matchingHearing) {
+        applicationContext.getPersistenceGateway().updateCaseHearing({
+          applicationContext,
+          docketNumber: calendaredCase.docketNumber,
+          hearingToUpdate: newTrialSessionEntity.validate().toRawObject(),
+        });
+      }
     }
   }
 
