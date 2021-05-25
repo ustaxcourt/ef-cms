@@ -10,7 +10,10 @@ import { state } from 'cerebral';
  * view options
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const constants = applicationContext.getConstants();
+  const {
+    CONTACT_TYPE_TITLES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const formattedCase = applicationContext
@@ -31,12 +34,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     parties[key].forEach(party => {
       if (
         party &&
-        party.serviceIndicator === constants.SERVICE_INDICATOR_TYPES.SI_PAPER
+        party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
       ) {
         contactsNeedingPaperService.push({
-          name: `${party.name}, ${
-            constants.CONTACT_TYPE_TITLES[party.contactType]
-          }`,
+          name: `${party.name}, ${CONTACT_TYPE_TITLES[party.contactType]}`,
         });
       }
     });
