@@ -739,9 +739,10 @@ const OTHER_TYPES = {
 const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFiler',
+  otherFiler: 'otherFilers',
   intervenor: 'intervenor',
   participant: 'participant',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
   otherPetitioner: 'otherPetitioner',
 };
 

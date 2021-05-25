@@ -96,9 +96,10 @@
       allow: 
         - "primary"
         - "secondary"
-        - "otherFiler"
+        - "otherFilers"
         - "intervenor"
         - "participant"
+        - "otherPetitioners"
         - "otherPetitioner"
     hasEAccess: 
       type: "boolean"
