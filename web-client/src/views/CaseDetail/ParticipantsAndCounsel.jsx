@@ -21,7 +21,7 @@ const ParticipantsAndCounsel = connect(
   }) {
     return (
       <>
-        <PartiesInformationContentHeader title="Intervenor(s)" />
+        <PartiesInformationContentHeader title="Intervenor/Participant(s)" />
         <div className="grid-row grid-gap-2">
           {partiesInformationHelper.formattedParticipants.map(petitioner => (
             <div
