@@ -48,7 +48,7 @@ export const validatePetitionerAction = ({
     };
   }
 
-  store.set(state.validationErrors.contact, errors || {});
+  store.set(state.validationErrors.contact, errors);
 
   if (isEmpty(errors)) {
     return path.success();
