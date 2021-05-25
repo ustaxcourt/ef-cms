@@ -62,7 +62,7 @@ export const AddPetitionerToCase = connect(
                 <span>Role type</span>
               </label>
               <select
-                aria-describedby="role-type"
+                aria-label="role type dropdown"
                 className="usa-select max-width-400"
                 id="contactType"
                 name="contact.contactType"
@@ -76,7 +76,7 @@ export const AddPetitionerToCase = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="otherPetitioners">Petitioner</option>
+                <option value="otherPetitioner">Petitioner</option>
                 <option value="intervenor">Intervenor</option>
                 <option value="participant">Participant</option>
               </select>

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -407,6 +408,7 @@ import { updateMessageModalAttachmentsSequence } from './sequences/updateMessage
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
+import { updatePartyViewTabSequence } from './sequences/updatePartyViewTabSequence';
 import { updatePetitionDetailsSequence } from './sequences/updatePetitionDetailsSequence';
 import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
@@ -891,6 +893,7 @@ export const presenter = {
     updateModalFormValueSequence,
     updateModalValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
+    updatePartyViewTabSequence,
     updatePetitionDetailsSequence,
     updatePetitionPaymentFormValueSequence,
     updateQcCompleteForTrialSequence,

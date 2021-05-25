@@ -82,7 +82,7 @@ export const CaseDetail = connect(
                         </option>
                         {partiesInformationHelper.showParticipantsTab && (
                           <option value="participants">
-                            Intervenor/Participants(s) &amp; Counsel
+                            Intervenor/Participants(s)
                           </option>
                         )}
                         <option value="respondents">Respondent Counsel</option>
