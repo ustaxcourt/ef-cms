@@ -182,7 +182,13 @@ DocketEntry.isPendingOnCreation = rawDocketEntry => {
 };
 
 joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
-  filedBy: 'Enter a filed by',
+  filedBy: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+    'Enter a filed by',
+  ],
 });
 
 /**
