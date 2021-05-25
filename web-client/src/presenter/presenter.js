@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
