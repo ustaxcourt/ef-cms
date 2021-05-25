@@ -30,6 +30,7 @@ export const validatePetitionerAction = ({
       .getUseCases()
       .validatePetitionerInteractor(applicationContext, {
         contactInfo: contact,
+        existingPetitioners: caseDetail.petitioners,
       }) || {};
 
   const caseContact = applicationContext

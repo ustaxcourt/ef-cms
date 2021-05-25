@@ -1623,7 +1623,6 @@ const getContactSecondary = function (rawCase) {
 const getOtherFilers = function (rawCase) {
   return rawCase.petitioners?.filter(
     p =>
-      p.contactType === CONTACT_TYPES.otherFiler ||
       p.contactType === CONTACT_TYPES.participant ||
       p.contactType === CONTACT_TYPES.intervenor,
   );

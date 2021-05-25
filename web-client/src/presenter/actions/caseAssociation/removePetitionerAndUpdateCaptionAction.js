@@ -12,9 +12,13 @@ export const removePetitionerAndUpdateCaptionAction = async ({
   applicationContext,
   get,
 }) => {
-  const { docketNumber } = get(state.caseDetail);
+  const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
+
+  const { docketNumber, petitioners } = get(state.caseDetail);
   const { contactId } = get(state.form.contact);
   const { caseCaption } = get(state.modal);
+
+  const { contactType } = petitioners.find(p => p.contactId === contactId);
 
   const updatedCaseDetail = await applicationContext
     .getUseCases()
@@ -24,11 +28,14 @@ export const removePetitionerAndUpdateCaptionAction = async ({
       docketNumber,
     });
 
+  const title = CONTACT_TYPE_TITLES[contactType];
+
   return {
     alertSuccess: {
-      message: 'Petitioner removed.',
+      message: `${title} successfully removed.`,
     },
     caseDetail: updatedCaseDetail,
+    contactType,
     docketNumber,
     tab: 'caseInfo',
   };
