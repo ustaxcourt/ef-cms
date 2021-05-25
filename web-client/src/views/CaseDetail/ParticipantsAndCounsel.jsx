@@ -2,21 +2,18 @@ import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 const ParticipantsAndCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
   },
   function ParticipantsAndCounsel({
     caseDetail,
     caseInformationHelper,
-    openEditPrivatePractitionersModalSequence,
     partiesInformationHelper,
   }) {
     return (
@@ -76,11 +73,10 @@ const ParticipantsAndCounsel = connect(
                               {caseInformationHelper.showEditPrivatePractitioners && (
                                 <Button
                                   link
-                                  className="margin-left-205 padding-0 height-3"
+                                  className="margin-left-1 padding-0 height-3"
+                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="edit"
-                                  onClick={() =>
-                                    openEditPrivatePractitionersModalSequence()
-                                  }
+                                  overrideMargin={true}
                                 >
                                   Edit
                                 </Button>

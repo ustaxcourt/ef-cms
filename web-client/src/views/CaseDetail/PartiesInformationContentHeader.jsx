@@ -10,8 +10,6 @@ const PartiesInformationContentHeader = connect(
     form: state.form,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
-    openEditPrivatePractitionersModalSequence:
-      sequences.openEditPrivatePractitionersModalSequence,
     partiesInformationHelper: state.partiesInformationHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
