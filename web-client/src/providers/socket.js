@@ -28,7 +28,7 @@ export const socketProvider = ({ socketRouter }) => {
           socket = createWebSocketClient(token);
           socket.onmessage = socketRouter(app);
           socket.onerror = error => {
-            applicationContext.logger.error('Websocket error detected', error);
+            console.error(error);
             return reject(error);
           };
 
@@ -40,10 +40,7 @@ export const socketProvider = ({ socketRouter }) => {
           };
         } catch (e) {
           if (applicationContext) {
-            applicationContext.logger.error(
-              'Failed to establish WebSocket connection',
-              { e },
-            );
+            console.error(e);
           }
           reject();
         }
