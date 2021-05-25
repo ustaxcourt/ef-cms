@@ -52,7 +52,7 @@ export const PartiesFiling = connect(
                     className="usa-checkbox__label inline-block"
                     htmlFor={`filing-${petitioner.contactId}`}
                   >
-                    {petitioner.name}, {petitioner.contactTypeDisplay}
+                    {petitioner.displayName}
                   </label>
                 </div>
               ))}
