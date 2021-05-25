@@ -828,9 +828,10 @@
               allow: 
                 - "primary"
                 - "secondary"
-                - "otherFiler"
+                - "otherFilers"
                 - "intervenor"
                 - "participant"
+                - "otherPetitioners"
                 - "otherPetitioner"
             name: 
               type: "string"
