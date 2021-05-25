@@ -122,6 +122,19 @@ describe('updateDocketEntryMetaInteractor', () => {
         judge: 'Buch',
         userId: mockUserId,
       },
+      {
+        docketEntryId: 'a110995d-b825-4f7e-899e-1773aa8e7017',
+        docketNumber: '101-20',
+        documentTitle: 'Request for Place of Trial at Flavortown, AR',
+        documentType: 'Request for Place of Trial',
+        eventCode: 'RQT',
+        filedBy: 'Test Petitioner',
+        filingDate: '2011-02-22T05:00:00.000Z',
+        index: 8,
+        isMinuteEntry: true,
+        judge: 'Buch',
+        userId: mockUserId,
+      },
     ];
 
     applicationContext.getCurrentUser.mockReturnValue({
@@ -195,6 +208,17 @@ describe('updateDocketEntryMetaInteractor', () => {
       updateDocketEntryMetaInteractor(applicationContext, {
         docketEntryMeta: {
           ...mockDocketEntries[4], // Unservable document
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).resolves.not.toThrow();
+  });
+
+  it("should not throw an error when the docket entry has not been served and it's a minute entry", async () => {
+    await expect(
+      updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: {
+          ...mockDocketEntries[7], // Minute entry
         },
         docketNumber: MOCK_CASE.docketNumber,
       }),

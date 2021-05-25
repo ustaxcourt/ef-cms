@@ -79,7 +79,8 @@ exports.updateDocketEntryMetaInteractor = async (
 
   if (
     !isServed(originalDocketEntry) &&
-    !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode)
+    !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
+    !originalDocketEntry.isMinuteEntry
   ) {
     throw new Error('Unable to update unserved docket entry.');
   }
