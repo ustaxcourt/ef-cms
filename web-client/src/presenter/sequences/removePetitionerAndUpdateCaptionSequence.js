@@ -3,7 +3,7 @@ import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/nav
 import { removePetitionerAndUpdateCaptionAction } from '../actions/caseAssociation/removePetitionerAndUpdateCaptionAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
-import { setPartyViewTabAfterRemoveAction } from '../actions/setPartyViewTabAfterRemoveAction';
+import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPartyViewTabAfterUpdatingPetitionersAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
@@ -11,7 +11,7 @@ export const removePetitionerAndUpdateCaptionSequence = showProgressSequenceDeco
   [
     clearModalAction,
     removePetitionerAndUpdateCaptionAction,
-    setPartyViewTabAfterRemoveAction,
+    setPartyViewTabAfterUpdatingPetitionersAction,
     setCaseDetailPageTabFrozenAction,
     setSaveAlertsForNavigationAction,
     setAlertSuccessAction,
