@@ -14,10 +14,10 @@ import React from 'react';
 
 export const EditPetitionerCounsel = connect(
   {
-    caseDetail: state.caseDetail,
     editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
     openRemovePetitionerCounselModalSequence:
       sequences.openRemovePetitionerCounselModalSequence,
     screenMetadata: state.screenMetadata,
@@ -30,8 +30,8 @@ export const EditPetitionerCounsel = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionerCounsel({
-    caseDetail,
     form,
+    formattedCaseDetail,
     formCancelToggleCancelSequence,
     openRemovePetitionerCounselModalSequence,
     showModal,
@@ -77,7 +77,7 @@ export const EditPetitionerCounsel = connect(
                     Representing
                   </legend>
 
-                  {caseDetail.petitioners.map(petitioner => (
+                  {formattedCaseDetail.petitioners.map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         aria-describedby="representing-legend"
@@ -100,7 +100,7 @@ export const EditPetitionerCounsel = connect(
                         className="usa-checkbox__label  inline-block"
                         htmlFor={`representing-${petitioner.contactId}`}
                       >
-                        {petitioner.name}
+                        {petitioner.displayName}
                       </label>
                     </div>
                   ))}
