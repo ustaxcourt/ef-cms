@@ -30,7 +30,7 @@ describe('an external user files a document for their legacy case', () => {
   externalUserFilesDocumentForOwnedCase(test, fakeFile);
 
   loginAs(test, 'docketclerk@example.com');
-  it('verifies otherFiler parties receive paper service', async () => {
+  it('verifies otherFiler parties receive paper service when serviceIndicator is set to paper', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
