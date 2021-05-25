@@ -62,11 +62,15 @@ export const EditPetitionerInformationInternal = connect(
 
           <div className="blue-container margin-bottom-5">
             <FormGroup errorText={validationErrors?.contact?.contactType}>
-              <label className="usa-label" htmlFor="contactType">
+              <label
+                className="usa-label"
+                htmlFor="contactType"
+                id="contact-type-label"
+              >
                 <span>Role type</span>
               </label>
               <select
-                aria-describedby="role-type"
+                aria-describedby="contact-type-label"
                 className="usa-select max-width-400"
                 id="contactType"
                 name="contact.contactType"
