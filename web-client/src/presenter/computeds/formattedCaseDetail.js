@@ -87,8 +87,9 @@ export const formattedCaseDetail = (get, applicationContext) => {
 
   result.petitioners = applicationContext
     .getUtilities()
-    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners })
-    .map(p => p.displayName);
+    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners });
+
+  console.log('result.petitioners', result.petitioners);
 
   result.otherFilers = (
     applicationContext.getUtilities().getOtherFilers(result) || []
