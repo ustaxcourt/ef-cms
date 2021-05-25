@@ -1,10 +1,10 @@
 const {
   A_VALID_DOCKET_ENTRY,
-  DocketEntry,
   MOCK_PETITIONERS,
   mockPrimaryId,
   mockSecondaryId,
-} = require('./DocketEntry');
+} = require('./DocketEntry.test');
+
 const {
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
@@ -14,6 +14,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { DocketEntry } = require('./DocketEntry');
 
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
