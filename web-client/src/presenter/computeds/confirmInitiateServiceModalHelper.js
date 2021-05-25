@@ -1,4 +1,3 @@
-import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -35,9 +34,9 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
         party.serviceIndicator === constants.SERVICE_INDICATOR_TYPES.SI_PAPER
       ) {
         contactsNeedingPaperService.push({
-          name: `${party.name}, ${capitalize(
-            constants.CONTACT_TYPE_TITLES[party.contactType],
-          )}`,
+          name: `${party.name}, ${
+            constants.CONTACT_TYPE_TITLES[party.contactType]
+          }`,
         });
       }
     });
