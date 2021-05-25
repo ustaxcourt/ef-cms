@@ -26,9 +26,9 @@ export const FilingPartiesForm = connect(
             <label className="usa-label" htmlFor="filed-by" id="filed-by-label">
               Filed by
             </label>
-            <input
+            <textarea
               aria-describedby="filed-by-label"
-              className="usa-input"
+              className="usa-textarea height-8"
               id="filed-by"
               name="filedBy"
               type="text"
