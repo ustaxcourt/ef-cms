@@ -12,6 +12,12 @@ describe('setAsProcessingStatusAsCompleted', () => {
       },
       {
         applicationContext,
+        petitioners: [
+          {
+            contactId: '7111b30b-ad38-42c8-9db0-d938cb2cb16b',
+            contactType: 'primary',
+          },
+        ],
       },
     );
 

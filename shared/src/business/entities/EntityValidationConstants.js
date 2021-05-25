@@ -138,7 +138,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     ),
   isDraft: joi
     .boolean()
-    .required()
+    .optional()
     .description('Whether the document is a draft (not on the docket record).'),
   isFileAttached: joi
     .boolean()
@@ -360,7 +360,11 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'An optional trial location used when generating a fully concatenated document title.',
     ),
-  userId: JoiValidationConstants.UUID.required(),
+  userId: JoiValidationConstants.UUID.when('isDraft', {
+    is: undefined,
+    otherwise: joi.optional(),
+    then: joi.required(),
+  }),
   workItem: joi.object().optional(),
 };
 

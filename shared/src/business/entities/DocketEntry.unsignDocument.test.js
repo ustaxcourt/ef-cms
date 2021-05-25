@@ -6,6 +6,12 @@ describe('unsignDocument', () => {
   it('signs and unsigns the document', () => {
     const docketEntry = new DocketEntry(A_VALID_DOCKET_ENTRY, {
       applicationContext,
+      petitioners: [
+        {
+          contactId: '7111b30b-ad38-42c8-9db0-d938cb2cb16b',
+          contactType: 'primary',
+        },
+      ],
     });
     docketEntry.setSigned('abc-123', 'Joe Exotic');
 
