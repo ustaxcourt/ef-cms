@@ -68,7 +68,7 @@ const ifHasAccess = (
 
 const router = {
   initialize: (app, registerRoute) => {
-    setPageTitle('U.S. Tax Court', false);
+    setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => route(path || '/');
