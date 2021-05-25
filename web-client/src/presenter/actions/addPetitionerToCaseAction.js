@@ -35,6 +35,7 @@ export const addPetitionerToCaseAction = async ({
       message: `${contactTypeDisplay} ${contact.name} has been added to the case.`,
     },
     caseDetail: updatedCase,
+    contactType: contact.contactType,
     docketNumber,
     tab: 'caseInfo',
   };
