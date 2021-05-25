@@ -11,6 +11,7 @@ const {
 const {
   getContactPrimary,
   getContactSecondary,
+  getOtherFilers,
 } = require('../entities/cases/Case');
 const {
   MOCK_CASE,
@@ -426,6 +427,30 @@ describe('updatePetitionerInformationInteractor', () => {
       p => p.contactType === CONTACT_TYPES.secondary,
     );
     expect(updatedContactSecondary.additionalName).toBe(mockAdditionalName);
+  });
+
+  it('should update contactType', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    };
+    const otherFilerToUpdate = getOtherFilers(mockCase)[0];
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+      updatedPetitionerData: {
+        ...otherFilerToUpdate,
+        contactType: CONTACT_TYPES.otherPetitioner,
+      },
+    });
+
+    const updatedPetitioners = applicationContext.getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+
+    const updatedOtherFiler = updatedPetitioners.find(
+      p => p.contactId === otherFilerToUpdate.contactId,
+    );
+    expect(updatedOtherFiler.contactType).toBe(CONTACT_TYPES.otherPetitioner);
   });
 
   it('should throw an error when attempting to update contactPrimary.countryType to an invalid value', async () => {

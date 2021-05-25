@@ -18,11 +18,9 @@ describe('setDefaultCaseDetailTabAction', () => {
       caseInformationTab: 'overview',
       docketRecordTab: 'docketRecord',
       inProgressTab: 'draftDocuments',
+      partyViewTab: PARTY_VIEW_TABS.petitionersAndCounsel,
       primaryTab: 'docketRecord',
     });
-    expect(state.screenMetadata.partyViewTab).toEqual(
-      PARTY_VIEW_TABS.petitionersAndCounsel,
-    );
   });
 
   it('should set the partyViewTab based on the props.partiesTab provided', async () => {
@@ -37,11 +35,9 @@ describe('setDefaultCaseDetailTabAction', () => {
 
     expect(state.currentViewMetadata.caseDetail).toMatchObject({
       caseInformationTab: 'parties',
+      partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
       primaryTab: 'caseInformation',
     });
-    expect(state.screenMetadata.partyViewTab).toEqual(
-      PARTY_VIEW_TABS.participantsAndCounsel,
-    );
   });
 
   it('should set the primaryTab to passed in prop value', async () => {

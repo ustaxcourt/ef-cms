@@ -1,5 +1,7 @@
+const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { Petitioner } = require('../entities/contacts/Petitioner');
+const { some } = require('lodash');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
@@ -12,7 +14,7 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
  */
 exports.validatePetitionerInteractor = (
   applicationContext,
-  { contactInfo },
+  { contactInfo, existingPetitioners },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
@@ -30,6 +32,14 @@ exports.validatePetitionerInteractor = (
     ...contactErrors,
     ...updateUserEmailErrors,
   };
+
+  if (
+    some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
+    contactInfo.contactType === CONTACT_TYPES.intervenor
+  ) {
+    aggregatedErrors.contactType =
+      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
+  }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };
