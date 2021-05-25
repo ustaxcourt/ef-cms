@@ -1,4 +1,7 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
+const {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} = require('./DocketEntry.test');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 
@@ -10,8 +13,9 @@ describe('isAutoServed', () => {
         documentTitle: 'Answer to Second Amendment to Petition',
         documentType: 'Answer to Second Amendment to Petition',
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
+
     expect(docketEntry.isAutoServed()).toBeTruthy();
   });
 
@@ -22,8 +26,9 @@ describe('isAutoServed', () => {
         documentTitle: 'Notice of Election to Participate',
         documentType: 'Notice of Election to Participate',
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
+
     expect(docketEntry.isAutoServed()).toBeTruthy();
 
     docketEntry.documentTitle = 'Entry of Appearance';
@@ -49,8 +54,9 @@ describe('isAutoServed', () => {
         ...A_VALID_DOCKET_ENTRY,
         documentTitle: 'Amended Simultaneous Memoranda of Law',
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
+
     expect(docketEntry.isAutoServed()).toBeFalsy();
   });
 
@@ -60,8 +66,9 @@ describe('isAutoServed', () => {
         ...A_VALID_DOCKET_ENTRY,
         documentType: 'Amended Simultaneous Memoranda of Law',
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
+
     expect(docketEntry.isAutoServed()).toBeFalsy();
   });
 
@@ -72,8 +79,9 @@ describe('isAutoServed', () => {
         documentTitle: 'Application for Examination Pursuant to Rule 73',
         documentType: 'Application for Examination Pursuant to Rule 73',
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
+
     expect(docketEntry.isAutoServed()).toBeFalsy();
   });
 });
