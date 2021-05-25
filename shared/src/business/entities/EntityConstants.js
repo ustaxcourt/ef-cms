@@ -27,7 +27,7 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
 };
 
 const PARTY_VIEW_TABS = {
-  participantsAndCounsel: 'Intervenor/Participants & Counsel',
+  participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
   respondentCounsel: 'Respondent Counsel',
 };
@@ -740,10 +740,11 @@ const OTHER_TYPES = {
 const CONTACT_TYPES = {
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers',
+  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
   intervenor: 'intervenor',
   participant: 'participant',
-  otherPetitioner: 'otherPetitioners',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  otherPetitioner: 'otherPetitioner',
 };
 
 const CONTACT_TYPE_TITLES = {
@@ -752,7 +753,7 @@ const CONTACT_TYPE_TITLES = {
   otherFilers: 'Petitioner',
   intervenor: 'Intervenor',
   participant: 'Participant',
-  otherPetitioners: 'Petitioner',
+  otherPetitioner: 'Petitioner',
 };
 
 const COMMON_CITIES = [
