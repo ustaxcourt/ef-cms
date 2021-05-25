@@ -2,14 +2,14 @@ import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityCo
 import { state } from 'cerebral';
 
 /**
- * Sets the currentViewMetadata.partyViewTab view after removing petitioner.
+ * Sets the currentViewMetadata.partyViewTab view after updating petitioners on case.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const setPartyViewTabAfterRemoveAction = ({
+export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   applicationContext,
   props,
   store,

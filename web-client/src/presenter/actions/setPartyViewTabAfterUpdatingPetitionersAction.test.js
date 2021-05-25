@@ -5,25 +5,28 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setPartyViewTabAfterRemoveAction } from './setPartyViewTabAfterRemoveAction';
+import { setPartyViewTabAfterUpdatingPetitionersAction } from './setPartyViewTabAfterUpdatingPetitionersAction';
 
-describe('setPartyViewTabAfterRemoveAction', () => {
+describe('setPartyViewTabAfterUpdatingPetitionersAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('sets state.currentViewMetadata.caseDetail.partyViewTab to participantsAndCounsel when deleted contact is an intervenor and there are still otherFilers on the case', async () => {
-    const { state } = await runAction(setPartyViewTabAfterRemoveAction, {
-      modules: { presenter },
-      props: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactType: CONTACT_TYPES.intervenor,
-            },
-          ],
+    const { state } = await runAction(
+      setPartyViewTabAfterUpdatingPetitionersAction,
+      {
+        modules: { presenter },
+        props: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.intervenor,
+              },
+            ],
+          },
+          contactType: CONTACT_TYPES.intervenor,
         },
-        contactType: CONTACT_TYPES.intervenor,
       },
-    });
+    );
 
     expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
       PARTY_VIEW_TABS.participantsAndCounsel,
@@ -31,19 +34,22 @@ describe('setPartyViewTabAfterRemoveAction', () => {
   });
 
   it('sets state.currentViewMetadata.caseDetail.partyViewTab to petitionersAndCounsel when deleted contact is an intervenor and there are no otherFilers on the case', async () => {
-    const { state } = await runAction(setPartyViewTabAfterRemoveAction, {
-      modules: { presenter },
-      props: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactType: CONTACT_TYPES.primary,
-            },
-          ],
+    const { state } = await runAction(
+      setPartyViewTabAfterUpdatingPetitionersAction,
+      {
+        modules: { presenter },
+        props: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
+          },
+          contactType: CONTACT_TYPES.intervenor,
         },
-        contactType: CONTACT_TYPES.intervenor,
       },
-    });
+    );
 
     expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
       PARTY_VIEW_TABS.petitionersAndCounsel,
@@ -51,19 +57,22 @@ describe('setPartyViewTabAfterRemoveAction', () => {
   });
 
   it('sets state.currentViewMetadata.caseDetail.partyViewTab to petitionersAndCounsel when deleted contact is a petitioner', async () => {
-    const { state } = await runAction(setPartyViewTabAfterRemoveAction, {
-      modules: { presenter },
-      props: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactType: CONTACT_TYPES.primary,
-            },
-          ],
+    const { state } = await runAction(
+      setPartyViewTabAfterUpdatingPetitionersAction,
+      {
+        modules: { presenter },
+        props: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.primary,
+              },
+            ],
+          },
+          contactType: CONTACT_TYPES.primary,
         },
-        contactType: CONTACT_TYPES.primary,
       },
-    });
+    );
 
     expect(state.currentViewMetadata.caseDetail.partyViewTab).toEqual(
       PARTY_VIEW_TABS.petitionersAndCounsel,
