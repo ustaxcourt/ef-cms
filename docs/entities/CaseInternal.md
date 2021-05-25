@@ -1495,7 +1495,7 @@
             isDraft: 
               type: "boolean"
               flags: 
-                presence: "required"
+                presence: "optional"
                 description: "Whether the document is a draft (not on the docket record)."
             isFileAttached: 
               type: "boolean"
@@ -3496,8 +3496,6 @@
                 - null
             userId: 
               type: "string"
-              flags: 
-                presence: "required"
               rules: 
                 - 
                   name: "min"
@@ -3509,6 +3507,28 @@
                     options: 
                       version: 
                         - "uuidv4"
+              whens: 
+                - 
+                  ref: 
+                    path: 
+                      - "isDraft"
+                  is: 
+                    type: "any"
+                    flags: 
+                      presence: "required"
+                    invalid: 
+                      - null
+                      - false
+                      - 0
+                      - ""
+                  then: 
+                    type: "any"
+                    flags: 
+                      presence: "required"
+                  otherwise: 
+                    type: "any"
+                    flags: 
+                      presence: "optional"
             workItem: 
               type: "object"
               flags: 

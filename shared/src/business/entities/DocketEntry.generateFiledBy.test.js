@@ -3,8 +3,10 @@ const {
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
+const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
 describe('generateFiledBy (called in constructor)', () => {
+  const mockDocketEntry = MOCK_DOCUMENTS[0];
   const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
   const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
   const petitioners = [
@@ -15,6 +17,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
       },
       { applicationContext, petitioners },
@@ -25,6 +28,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers and otherFilingParty', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
         otherFilingParty: 'Bob Barker',
       },
@@ -36,6 +40,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers that is not the primary', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockSecondaryId],
       },
       { applicationContext, petitioners },
@@ -46,6 +51,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
         partyIrsPractitioner: true,
       },
@@ -57,6 +63,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers, partyIrsPractitioner, and otherFilingParty', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
         otherFilingParty: 'Bob Barker',
         partyIrsPractitioner: true,
@@ -69,6 +76,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for only otherFilingParty', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         otherFilingParty: 'Bob Barker',
       },
       { applicationContext, petitioners },
@@ -79,6 +87,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for multiple petitioners in filers', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId, mockSecondaryId],
       },
       { applicationContext, petitioners },
@@ -89,6 +98,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner (as an object, legacy data)', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: {
@@ -103,6 +113,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -120,6 +131,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -137,6 +149,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -160,6 +173,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -181,6 +195,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
         partyIrsPractitioner: true,
       },
@@ -192,6 +207,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for multiple petitioners in filers in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId, mockSecondaryId],
       },
       { applicationContext, petitioners },
@@ -202,6 +218,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -219,6 +236,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -236,6 +254,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -259,6 +278,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         partyIrsPractitioner: true,
         partyPrivatePractitioner: true,
         privatePractitioners: [
@@ -278,15 +298,19 @@ describe('generateFiledBy (called in constructor)', () => {
   });
 
   it('should set filedBy to undefined when the docket entry is an auto-generated notice of contact change', () => {
+    const mockDocketEntryNoFiledBy = {
+      ...mockDocketEntry,
+      filedBy: undefined,
+    };
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntryNoFiledBy,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
         eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
         filers: [mockPrimaryId],
         isAutoGenerated: true,
         isMinuteEntry: false,
         isOnDocketRecord: true,
-
         privatePractitioners: [
           { name: 'Bob Practitioner', partyPrivatePractitioner: true },
         ],
@@ -301,6 +325,7 @@ describe('generateFiledBy (called in constructor)', () => {
   it('should generate filed by when the docket entry is a non-auto-generated notice of contact change', () => {
     const docketEntry = new DocketEntry(
       {
+        ...mockDocketEntry,
         filers: [mockPrimaryId],
         privatePractitioners: [
           { name: 'Bob Practitioner', partyPrivatePractitioner: true },

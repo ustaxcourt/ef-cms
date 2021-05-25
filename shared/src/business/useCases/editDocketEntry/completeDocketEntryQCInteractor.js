@@ -109,6 +109,7 @@ exports.completeDocketEntryQCInteractor = async (
     documentTitle: entryMetadata.documentTitle,
     documentType: entryMetadata.documentType,
     eventCode: entryMetadata.eventCode,
+    filedBy: entryMetadata.filedBy,
     filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
@@ -129,7 +130,6 @@ exports.completeDocketEntryQCInteractor = async (
   const updatedDocketEntry = new DocketEntry(
     {
       ...currentDocketEntry,
-      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
       documentTitle: editableFields.documentTitle,
       editState: '{}',

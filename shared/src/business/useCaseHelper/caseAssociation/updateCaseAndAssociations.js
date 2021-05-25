@@ -41,7 +41,7 @@ const updateCaseDocketEntries = ({
       ...addedArchivedDocketEntries,
       ...updatedArchivedDocketEntries,
     ],
-    { applicationContext },
+    { applicationContext, petitioners: caseToUpdate.petitioners },
   );
 
   return validDocketEntries.map(doc =>

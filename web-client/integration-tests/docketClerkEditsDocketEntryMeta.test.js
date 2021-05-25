@@ -55,7 +55,9 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(test);
 
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
-  docketClerkEditsDocketEntryMeta(test, 3);
+  docketClerkEditsDocketEntryMeta(test, 3, {
+    filedBy: 'Resp. & Petr. Mona Schultz, Brianna Noble',
+  });
   docketClerkVerifiesDocketEntryMetaUpdates(test, 3);
   docketClerkNavigatesToEditDocketEntryMeta(test, 3);
   docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(test);

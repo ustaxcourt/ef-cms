@@ -2,7 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case, getContactPrimary } = require('./Case');
-const { CASE_STATUS_TYPES, PARTY_TYPES } = require('../EntityConstants');
+const { CASE_STATUS_TYPES, PARTY_TYPES, ROLES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setAdditionalNameOnPetitioners', () => {
@@ -20,6 +20,12 @@ describe('setAdditionalNameOnPetitioners', () => {
     PARTY_TYPES.survivingSpouse,
     PARTY_TYPES.trust,
   ];
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+    });
+  });
 
   partyTypesWithSecondaryName.forEach(partyType => {
     it(`should set additionalName as secondaryName when party type is ${partyType}`, () => {

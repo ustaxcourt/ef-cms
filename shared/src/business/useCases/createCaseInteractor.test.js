@@ -318,6 +318,7 @@ describe('createCaseInteractor', () => {
           serviceIndicator: undefined,
           state: 'AR',
         },
+        filedBy: 'Resp.',
         filingType: 'Myself and my spouse',
         hasIrsNotice: true,
         isSpouseDeceased: 'No',
