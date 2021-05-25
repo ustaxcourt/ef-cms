@@ -2,7 +2,6 @@ const joi = require('joi');
 const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  OTHER_FILER_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -106,11 +105,7 @@ Petitioner.VALIDATION_RULES = {
       .required(),
     then: joi.optional().allow(null),
   }),
-  title: joi.when('contactType', {
-    is: CONTACT_TYPES.participant || CONTACT_TYPES.intervenor,
-    otherwise: JoiValidationConstants.STRING.max(100).optional(),
-    then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
-  }),
+  title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
 Petitioner.VALIDATION_ERROR_MESSAGES = {
