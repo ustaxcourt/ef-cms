@@ -110,7 +110,8 @@ export const AddPetitionerToCase = connect(
                 </span>
                 <p className="usa-hint">
                   A representative of the taxpayer or petitioner (In Care Of,
-                  Guardian, Executor, Trustee, Surviving Spouse, etc.)
+                  Guardian, Executor, Trustee, Surviving Spouse, Tax Matters
+                  Partner, etc.)
                 </p>
               </label>
               <input
