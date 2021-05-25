@@ -1,4 +1,7 @@
-const { A_VALID_DOCKET_ENTRY } = require('./DocketEntry.test');
+const {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} = require('./DocketEntry.test');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 
@@ -11,7 +14,7 @@ describe('setAsServed', () => {
           documentContents: 'Yee to the haw',
         },
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
     docketEntry.setAsServed();
 
@@ -24,7 +27,7 @@ describe('setAsServed', () => {
       {
         ...A_VALID_DOCKET_ENTRY,
       },
-      { applicationContext },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
     );
 
     docketEntry.setAsServed([
@@ -32,6 +35,7 @@ describe('setAsServed', () => {
         name: 'Served Party',
       },
     ]);
+
     expect(docketEntry.servedAt).toBeDefined();
     expect(docketEntry.servedParties).toMatchObject([{ name: 'Served Party' }]);
   });
