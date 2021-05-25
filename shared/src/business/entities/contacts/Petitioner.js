@@ -107,7 +107,7 @@ Petitioner.VALIDATION_RULES = {
     then: joi.optional().allow(null),
   }),
   title: joi.when('contactType', {
-    is: CONTACT_TYPES.otherFiler,
+    is: CONTACT_TYPES.participant || CONTACT_TYPES.intervenor,
     otherwise: JoiValidationConstants.STRING.max(100).optional(),
     then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
   }),
@@ -123,6 +123,8 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   contactType: 'Select a role type',
+  contactTypeSecondIntervenor:
+    'Only one (1) Intervenor is allowed per case. Please select a different Role.',
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: [

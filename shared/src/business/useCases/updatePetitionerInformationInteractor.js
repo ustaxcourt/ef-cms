@@ -301,6 +301,7 @@ exports.updatePetitionerInformationInteractor = async (
       'address2',
       'address3',
       'city',
+      'contactType',
       'country',
       'countryType',
       'name',
