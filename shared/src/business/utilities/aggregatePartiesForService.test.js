@@ -151,6 +151,7 @@ describe('aggregatePartiesForService', () => {
         name: 'Test Petitioner5',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'TN',
         title: 'Tax Matters Partner',
       },
@@ -165,6 +166,7 @@ describe('aggregatePartiesForService', () => {
         name: 'Test Petitioner6',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
         state: 'TN',
         title: 'Tax Matters Partner',
       },
@@ -348,7 +350,7 @@ describe('aggregatePartiesForService', () => {
     expect(foundIrsPractitionerWithPaper).toBeTruthy();
   });
 
-  it('should serve any otherPetitioners by paper if they exist', () => {
+  it('should serve any otherPetitioners by paper ONLY if their serviceIndicator is set to paper', () => {
     const result = aggregatePartiesForService({
       ...mockCase,
       petitioners: [
@@ -365,7 +367,7 @@ describe('aggregatePartiesForService', () => {
       p => p.contactId === otherPetitioners[1].contactId,
     );
     expect(otherPetitioner1).toBeTruthy();
-    expect(otherPetitioner2).toBeTruthy();
+    expect(otherPetitioner2).toBeFalsy();
   });
 
   it('should serve any otherFilers by paper if their serviceIndicator is set to paper', () => {
