@@ -7,7 +7,7 @@ const { CONTACT_TYPE_TITLES } = require('../entities/EntityConstants');
  * @returns {object} formatted list of petitioners
  */
 export const getFormattedPartiesNameAndTitle = ({ petitioners }) => {
-  return petitioners.map(petitioner => ({
+  return petitioners?.map(petitioner => ({
     ...petitioner,
     displayName: `${petitioner.name}, ${
       CONTACT_TYPE_TITLES[petitioner.contactType]

@@ -17,4 +17,12 @@ describe('getFormattedPartiesNameAndTitle', () => {
       }`,
     });
   });
+
+  it('should not throw an error when petitioners is undefined', () => {
+    expect(() =>
+      getFormattedPartiesNameAndTitle({
+        petitioners: undefined,
+      }),
+    ).not.toThrow();
+  });
 });
