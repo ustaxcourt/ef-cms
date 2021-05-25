@@ -281,11 +281,9 @@ const formatTrialSessionScheduling = ({
     // TODO: get trial session note
   } else if (formattedCase.blocked) {
     formattedCase.showBlockedFromTrial = true;
-    if (formattedCase.blocked) {
-      formattedCase.blockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-    }
+    formattedCase.blockedDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedCase.blockedDate, 'MMDDYY');
   } else if (formattedCase.highPriority) {
     formattedCase.formattedTrialDate = 'Not scheduled';
     formattedCase.formattedAssociatedJudge = 'Not assigned';

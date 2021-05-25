@@ -107,7 +107,7 @@ Petitioner.VALIDATION_RULES = {
     then: joi.optional().allow(null),
   }),
   title: joi.when('contactType', {
-    is: CONTACT_TYPES.otherFiler,
+    is: CONTACT_TYPES.participant || CONTACT_TYPES.intervenor,
     otherwise: JoiValidationConstants.STRING.max(100).optional(),
     then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
   }),
