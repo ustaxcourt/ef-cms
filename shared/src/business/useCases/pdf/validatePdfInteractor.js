@@ -1,5 +1,19 @@
 const { StringDecoder } = require('string_decoder');
 
+const removePdf = async ({
+  applicationContext,
+  key,
+  message = 'PDF Error',
+}) => {
+  applicationContext.logger.debug(`${message}: Deleting from S3`, key);
+  await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+    applicationContext,
+    key,
+  });
+};
+
+exports.removePdf = removePdf;
+
 /**
  * validatePdfInteractor
  *
@@ -34,10 +48,10 @@ exports.validatePdfInteractor = async (applicationContext, { key }) => {
   applicationContext.logger.debug('pdfIsEncrypted', pdfIsEncrypted);
 
   if (pdfIsEncrypted || pdfHeaderString !== '%PDF-') {
-    applicationContext.logger.debug('pdf invalid, deleting from S3', key);
-    await applicationContext.getPersistenceGateway().deleteDocumentFromS3({
+    await removePdf({
       applicationContext,
       key,
+      message: 'PDF Invalid',
     });
 
     throw new Error('invalid pdf');
@@ -46,6 +60,12 @@ exports.validatePdfInteractor = async (applicationContext, { key }) => {
   try {
     pdfDoc.getPages();
   } catch (e) {
+    await removePdf({
+      applicationContext,
+      key,
+      message: 'PDF Pages Unreadable',
+    });
+
     throw new Error('pdf pages cannot be read');
   }
 
