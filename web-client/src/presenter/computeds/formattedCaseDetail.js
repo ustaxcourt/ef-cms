@@ -1,4 +1,3 @@
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 export const formattedOpenCases = (get, applicationContext) => {
@@ -69,9 +68,6 @@ const getCalendarDetailsForTrialSession = ({
 
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const isExternalUser = applicationContext
-    .getUtilities()
-    .isExternalUser(user.role);
 
   const {
     formatCase,
@@ -88,40 +84,6 @@ export const formattedCaseDetail = (get, applicationContext) => {
   result.petitioners = applicationContext
     .getUtilities()
     .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners });
-
-  result.otherFilers = (
-    applicationContext.getUtilities().getOtherFilers(result) || []
-  ).map(otherFiler => ({
-    ...otherFiler,
-    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
-  }));
-
-  result.otherPetitioners = (
-    applicationContext.getUtilities().getOtherPetitioners(result) || []
-  ).map(otherPetitioner => ({
-    ...otherPetitioner,
-    showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
-  }));
-
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(result);
-
-  result.contactPrimary = {
-    ...contactPrimary,
-    showEAccessFlag: !isExternalUser && contactPrimary?.hasEAccess,
-  };
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(result);
-
-  if (contactSecondary) {
-    result.contactSecondary = {
-      ...contactSecondary,
-      showEAccessFlag: !isExternalUser && contactSecondary.hasEAccess,
-    };
-  }
 
   result.consolidatedCases = result.consolidatedCases || [];
 
