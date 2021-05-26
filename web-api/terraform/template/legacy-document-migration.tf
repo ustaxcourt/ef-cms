@@ -10,6 +10,7 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler          = "legacy-documents-migration.handler"
   source_code_hash = data.archive_file.legacy_documents_migration_zip.output_base64sha256
+  layers           = [aws_lambda_layer_version.puppeteer_layer.arn]
 
   runtime     = "nodejs14.x"
   timeout     = "900"
