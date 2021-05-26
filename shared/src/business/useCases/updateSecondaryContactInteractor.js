@@ -55,7 +55,9 @@ exports.updateSecondaryContactInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const oldContactSecondary = cloneDeep(caseEntity.getContactSecondary());
+  const oldContactSecondary = cloneDeep(
+    caseEntity.getPetitionerById(contactInfo.contactId),
+  );
 
   const updatedSecondaryContact = {
     ...oldContactSecondary,
