@@ -1037,11 +1037,10 @@ Case.prototype.markAsSentToIRS = function () {
     CONTACT_TYPES.primary,
     CONTACT_TYPES.secondary,
     CONTACT_TYPES.otherPetitioner,
-  ]
+  ];
+
   this.petitioners.map(p => {
-    if (
-     // do stuff
-    ) {
+    if (petitionerContactTypes.includes(p.contactType)) {
       p.contactType = CONTACT_TYPES.petitioner;
     }
   });
