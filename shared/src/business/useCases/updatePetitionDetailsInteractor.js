@@ -32,6 +32,7 @@ exports.updatePetitionDetailsInteractor = async (
 
   const editableFields = {
     caseType: petitionDetails.caseType,
+    hasVerifiedIrsNotice: petitionDetails.hasVerifiedIrsNotice,
     irsNoticeDate: petitionDetails.irsNoticeDate,
     petitionPaymentDate: petitionDetails.petitionPaymentDate,
     petitionPaymentMethod: petitionDetails.petitionPaymentMethod,
@@ -39,6 +40,7 @@ exports.updatePetitionDetailsInteractor = async (
     petitionPaymentWaivedDate: petitionDetails.petitionPaymentWaivedDate,
     preferredTrialCity: petitionDetails.preferredTrialCity,
     procedureType: petitionDetails.procedureType,
+    statistics: petitionDetails.statistics,
   };
 
   const oldCase = await applicationContext
