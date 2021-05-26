@@ -1,4 +1,5 @@
-const { DynamoDB } = require('aws-sdk');
+const AWS = require('aws-sdk');
+const { chunk } = require('lodash');
 const { getClient } = require('../elasticsearch/client');
 
 const {
@@ -8,10 +9,8 @@ const {
 
 const environmentName = process.argv[2] || 'exp1';
 const version = process.argv[3] || 'alpha';
-const dynamodb = new DynamoDB({ region: 'us-east-1' });
-const TableName = `efcms-${environmentName}-${version}`;
 
-const findDocketEntries = async startDate => {
+const findDocketEntries = async () => {
   const esClient = await getClient({ environmentName, version });
 
   const allDocketEntries = [];
@@ -24,21 +23,34 @@ const findDocketEntries = async startDate => {
       'pk.S',
       'eventCode.S',
       'servedAt.S',
-      'isStricken.BOOL',
-      'signedJudgeName.S',
-      'advancedocket.S',
+      'docketEntryId.S',
+      'documentId.S',
+      'docketNumber.S',
     ],
     body: {
       query: {
-        range: {
-          'servedAt.S': {
-            gte: startDate,
-          },
-        },
-        terms: {
-          'eventCode.S': [
-            ...ORDER_EVENT_CODES,
-            ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        bool: {
+          must: [
+            { term: { 'entityName.S': 'DocketEntry' } },
+            {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              bool: {
+                must: [
+                  {
+                    terms: {
+                      'eventCode.S': [
+                        ...ORDER_EVENT_CODES,
+                        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
           ],
         },
       },
@@ -58,9 +70,6 @@ const findDocketEntries = async startDate => {
       allDocketEntries.push({
         docketEntryId: hit['_source'].docketEntryId.S,
         docketNumber: hit['_source'].pk.S.split('|')[1],
-        eventCode: hit['_source'].eventCode.S,
-        isStricken: hit['_source'].isStricken.BOOL,
-        servedAt: hit['_source'].servedAt.S,
       });
     });
 
@@ -78,101 +87,39 @@ const findDocketEntries = async startDate => {
     );
   }
 };
-
-const getCaseInfo = async docketNumber => {
-  const data = await dynamodb
-    .getItem({
-      ExpressionAttributeNames: {
-        '#status': 'status',
-      },
-      Key: {
-        pk: {
-          S: `case|${docketNumber}`,
-        },
-        sk: {
-          S: `case|${docketNumber}`,
-        },
-      },
-      // ProjectionExpression: 'otherFilers, otherPetitioners, #status',
-      ProjectionExpression: 'petitioners, #status',
-      TableName,
-    })
-    .promise();
-  if (!data || !data.Item) return false;
-  if (
-    // data.Item.otherPetitioners.L.length === 0 &&
-    // data.Item.otherFilers.L.length === 0
-    data.Item.petitioners.L.length === 0
-  )
-    return false;
-
-  return {
-    docketNumber,
-    // otherFilers: data.Item.otherFilers.L.length,
-    // otherPetitioners: data.Item.otherPetitioners.L.length,
-    petitioners: data.Item.petitioners.L.length,
-    status: data.Item.status.S,
-  };
-};
-
-const lookupDocketNumbers = async docketNumbers => {
-  const cases = [];
-
-  for await (let docketNumber of docketNumbers) {
-    const res = await getCaseInfo(docketNumber);
-    if (res) {
-      cases.push(res);
-      console.log(res);
-    }
-  }
-
-  return cases;
-};
-
+let sent = 0;
 (async () => {
-  // get all of the docket entries served after startDate
-  const startDate = '2021-03-31T19:58:20.793Z'; // '2020-11-25';
-  const docketEntries = await findDocketEntries(startDate);
-
-  // get the distinct docket numbers
-  const docketNumbers = new Set(docketEntries.map(entry => entry.docketNumber));
-  console.log(docketNumbers);
-
-  // lookup the case information
-  const cases = await lookupDocketNumbers(docketNumbers);
-
-  console.log(
-    `found ${cases.length} total cases that have otherFilers / otherPetitioners`,
-  );
+  const docketEntries = await findDocketEntries();
+  const sqs = new AWS.SQS({ apiVersion: '2012-11-05', region: 'us-east-1' });
 
   // output the case information
-  const results = docketEntries
-    .map(docketEntry => {
-      const caseEntity = cases.find(
-        c => c.docketNumber === docketEntry.docketNumber,
-      );
+  const results = docketEntries.filter(Boolean);
 
-      if (!caseEntity) return null;
-
-      return {
-        ...caseEntity,
-        ...docketEntry,
-      };
-    })
-    .filter(Boolean);
-
-  results.forEach(row => {
-    console.log(
-      [
-        row.docketNumber,
-        // row.otherFilers,
-        // row.otherPetitioners,
-        // row.status,
-        // row.eventCode,
-        // row.isStricken,
-        // row.servedAt,
-        row.docketEntryId,
-      ].join(','),
+  const chunks = chunk(results, 10);
+  let done = 0;
+  const promises = [];
+  for (let chonk of chunks) {
+    console.log('chonkin', chonk);
+    promises.push(
+      sqs
+        .sendMessageBatch({
+          Entries: chonk.map(segment => ({
+            Id: `${sent++}`,
+            MessageBody: JSON.stringify(segment),
+          })),
+          QueueUrl: `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/migrate_legacy_documents_queue_${process.env.ENV}`,
+        })
+        .promise()
+        .then(() => {
+          done += chunk.length;
+          console.log(
+            `${done} out of ${results.length} messages sent successfully.`,
+          );
+        })
+        .catch(err => {
+          console.log(err);
+        }),
     );
-  });
+  }
+  await Promise.all(promises);
 })();
