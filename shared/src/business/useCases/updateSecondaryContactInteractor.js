@@ -144,16 +144,9 @@ exports.updateSecondaryContactInteractor = async (
       servedParties,
     });
 
-    let privatePractitionersRepresentingSecondaryContact = false;
-    for (const privatePractitioner of caseEntity.privatePractitioners) {
-      const practitionerRepresentingSecondary = privatePractitioner.getRepresentingSecondary(
-        caseEntity,
-      );
-      if (practitionerRepresentingSecondary) {
-        privatePractitionersRepresentingSecondaryContact = true;
-        break;
-      }
-    }
+    const privatePractitionersRepresentingSecondaryContact = caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactInfo.contactId,
+    );
 
     if (!privatePractitionersRepresentingSecondaryContact) {
       const workItem = new WorkItem(

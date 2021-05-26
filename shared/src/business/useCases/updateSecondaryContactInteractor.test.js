@@ -172,6 +172,7 @@ describe('updateSecondaryContactInteractor', () => {
       contactInfo: {
         address1: '453 Electric Ave',
         city: 'Philadelphia',
+        contactId: getContactSecondary(mockCase).contactId,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'secondary@example.com',
         name: 'New Secondary',
