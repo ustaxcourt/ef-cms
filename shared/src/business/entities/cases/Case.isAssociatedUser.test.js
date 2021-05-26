@@ -21,10 +21,6 @@ describe('isAssociatedUser', () => {
     caseEntity = new Case(
       {
         ...MOCK_CASE,
-        contactSecondary: {
-          ...MOCK_CASE.contactPrimary,
-          contactId: CONTACT_SECONDARY_ID,
-        },
         irsPractitioners: [{ userId: '4c644ac6-e5bc-4905-9dc8-d658f25a8e72' }],
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: [

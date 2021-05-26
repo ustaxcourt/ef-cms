@@ -1537,10 +1537,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
-  const isPrimaryContact =
-    getContactPrimary(caseRaw)?.contactId === user.userId;
-  const isSecondaryContact =
-    getContactSecondary(caseRaw)?.contactId === user.userId;
+
+  const isPartyOnCase = !!getPetitionerById(caseRaw, user.userId);
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1553,8 +1551,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   return (
     isIrsPractitioner ||
     isPrivatePractitioner ||
-    isPrimaryContact ||
-    isSecondaryContact ||
+    isPartyOnCase ||
     (isIrsSuperuser && isPetitionServed)
   );
 };
@@ -2212,12 +2209,10 @@ Case.prototype.deleteStatistic = function (statisticId) {
 };
 
 Case.prototype.hasPartyWithPaperService = function () {
-  const contactSecondary = this.getContactSecondary();
   return (
-    this.getContactPrimary().serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (contactSecondary &&
-      contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    this.petitioners.some(
+      p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+    ) ||
     (this.privatePractitioners &&
       this.privatePractitioners.find(
         pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
