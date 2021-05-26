@@ -10,11 +10,7 @@ export const supportingDocumentFreeTextTypes = [
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (get, applicationContext) => {
-  const {
-    CATEGORY_MAP,
-    CONTACT_TYPE_TITLES,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { CATEGORY_MAP, PARTY_TYPES } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const form = get(state.form);
@@ -86,10 +82,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
-  const formattedFilingParties = caseDetail.petitioners.map(
-    petitioner =>
-      `${petitioner.name}, ${CONTACT_TYPE_TITLES[petitioner.contactType]}`,
-  );
+  const formattedFilingParties = applicationContext
+    .getUtilities()
+    .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners })
+    .map(p => p.displayName);
 
   const exported = {
     certificateOfServiceDateFormatted,
