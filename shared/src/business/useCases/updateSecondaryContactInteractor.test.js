@@ -199,6 +199,17 @@ describe('updateSecondaryContactInteractor', () => {
     ).rejects.toThrow('Case 101-18 was not found.');
   });
 
+  it('throws an error when the petitioner is not found on the case', async () => {
+    await expect(
+      updateSecondaryContactInteractor(applicationContext, {
+        contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(
+      `Error: Petitioner was not found on case ${MOCK_CASE.docketNumber}.`,
+    );
+  });
+
   it('throws an error if the user making the request is not associated with the case', async () => {
     mockUser = {
       ...mockUser,
@@ -207,7 +218,7 @@ describe('updateSecondaryContactInteractor', () => {
 
     await expect(
       updateSecondaryContactInteractor(applicationContext, {
-        contactInfo: {},
+        contactInfo: mockContactSecondary,
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
