@@ -39,7 +39,11 @@ exports.validatePetitionerInteractor = (
     }
   });
 
-  if (firstIntervenorId && firstIntervenorId !== contactInfo.contactId) {
+  if (
+    firstIntervenorId &&
+    firstIntervenorId !== contactInfo.contactId &&
+    contactInfo.contactType === CONTACT_TYPES.intervenor
+  ) {
     aggregatedErrors.contactType =
       Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
   }
