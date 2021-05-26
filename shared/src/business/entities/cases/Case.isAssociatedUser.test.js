@@ -12,8 +12,8 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('isAssociatedUser', () => {
   let caseEntity;
-  const CONTACT_PRIMARY_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
-  const CONTACT_SECONDARY_ID = '90035070-d10f-49cc-b08c-bb9d09993f5b';
+  const CONTACT_ID = '3855b2dd-4094-4526-acc0-b48d7eed1f28';
+
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -26,7 +26,7 @@ describe('isAssociatedUser', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
-            contactId: CONTACT_PRIMARY_ID,
+            contactId: CONTACT_ID,
           },
         ],
         privatePractitioners: [
@@ -111,19 +111,10 @@ describe('isAssociatedUser', () => {
     expect(isAssociated).toBeFalsy();
   });
 
-  it('returns true if the user is the primary contact on the case', () => {
+  it('returns true if the user is the contact on the case', () => {
     const isAssociated = isAssociatedUser({
       caseRaw: caseEntity.toRawObject(),
-      user: { userId: CONTACT_PRIMARY_ID },
-    });
-
-    expect(isAssociated).toBeTruthy();
-  });
-
-  it('returns true if the user is the secondary contact on the case', () => {
-    const isAssociated = isAssociatedUser({
-      caseRaw: caseEntity.toRawObject(),
-      user: { userId: CONTACT_SECONDARY_ID },
+      user: { userId: CONTACT_ID },
     });
 
     expect(isAssociated).toBeTruthy();
