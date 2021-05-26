@@ -1,16 +1,9 @@
 const {
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-  isAssociatedUser,
-  isSealedCase,
-} = require('../entities/cases/Case');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { cloneDeep, pick } = require('lodash');
+const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
@@ -51,6 +44,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
   );
+
   if (userCanViewSealedAddresses) {
     return caseRaw;
   }
@@ -61,17 +55,17 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
     result.sealedAndUnavailable = true;
     return result;
   };
-  const caseContactsToBeSealed = [
-    getContactPrimary(formattedCase),
-    getContactSecondary(formattedCase),
-    ...(getOtherFilers(formattedCase) || []),
-    ...(getOtherPetitioners(formattedCase) || []),
-  ].filter(caseContact => caseContact && caseContact.isAddressSealed);
+
+  const caseContactsToBeSealed = formattedCase.petitioners.filter(
+    caseContact => caseContact && caseContact.isAddressSealed,
+  );
+
   caseContactsToBeSealed.forEach(caseContact => {
     const sealedContactAddress = formatSealedAddress(caseContact);
     Object.keys(caseContact).forEach(key => delete caseContact[key]);
     Object.assign(caseContact, sealedContactAddress);
   });
+
   return formattedCase;
 };
 
