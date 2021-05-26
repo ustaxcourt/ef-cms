@@ -24,6 +24,8 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
 
   const contactPrimaryHasEmail = !!contactPrimaryEmail;
 
+  // should this be updated since now intervenors/participants count as petitioners?
+  // FIXME: this allows us to remove all parties on petitioners(s) & counsel
   const showRemovePetitionerButton =
     caseDetail.petitioners.length > 1 && permissions.REMOVE_PETITIONER;
 

@@ -15,14 +15,14 @@ export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   store,
 }) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
-  const { contactType: deletedContactType } = props;
+  const { contactType } = props;
   const { petitioners } = props.caseDetail;
 
   let tab = PARTY_VIEW_TABS.petitionersAndCounsel;
 
   if (
-    (deletedContactType === CONTACT_TYPES.intervenor ||
-      deletedContactType === CONTACT_TYPES.participant) &&
+    (contactType === CONTACT_TYPES.intervenor ||
+      contactType === CONTACT_TYPES.participant) &&
     petitioners.some(
       p =>
         p.contactType === CONTACT_TYPES.intervenor ||
