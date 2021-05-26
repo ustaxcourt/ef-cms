@@ -75,6 +75,7 @@ describe('update primary contact on a case', () => {
           phone: '1234567890',
           postalCode: '99999',
           state: 'PA',
+          //add contact id
         },
         docketNumber: MOCK_CASE.docketNumber,
       },
