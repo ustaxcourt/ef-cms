@@ -9,12 +9,9 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const {
   updateSecondaryContactInteractor,
 } = require('./updateSecondaryContactInteractor');
+const { getPetitionerById } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -44,7 +41,7 @@ describe('updateSecondaryContactInteractor', () => {
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
-      userId: getContactPrimary(MOCK_CASE).contactId,
+      userId: MOCK_CASE.petitioners[0].contactId,
     });
 
     applicationContext
@@ -104,7 +101,9 @@ describe('updateSecondaryContactInteractor', () => {
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-    expect(getContactSecondary(updatedCase)).toMatchObject({
+    expect(
+      getPetitionerById(updatedCase, mockContactSecondary.contactId),
+    ).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
       countryType: COUNTRY_TYPES.DOMESTIC,
@@ -159,7 +158,7 @@ describe('updateSecondaryContactInteractor', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representing: [getContactSecondary(mockCase).contactId],
+            representing: [mockContactSecondary.contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
@@ -265,7 +264,10 @@ describe('updateSecondaryContactInteractor', () => {
       },
     );
 
-    const contactSecondary = getContactSecondary(caseDetail);
+    const contactSecondary = getPetitionerById(
+      caseDetail,
+      mockContactSecondary.contactId,
+    );
     expect(contactSecondary.name).not.toBe('Secondary Party Name Changed');
     expect(contactSecondary.name).toBe(mockContactSecondary.name);
     expect(contactSecondary.email).not.toBe('hello123@example.com');
