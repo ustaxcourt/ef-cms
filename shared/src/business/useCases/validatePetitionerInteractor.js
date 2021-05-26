@@ -33,10 +33,15 @@ exports.validatePetitionerInteractor = (
     ...updateUserEmailErrors,
   };
 
+  console.log('contactErrors', contactErrors);
+  console.log('existingPetitioners', existingPetitioners);
+  console.log('contactInfo.contactType', contactInfo.contactType);
+
   if (
     some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
     contactInfo.contactType === CONTACT_TYPES.intervenor
   ) {
+    console.log('in ehre');
     aggregatedErrors.contactType =
       Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
   }
