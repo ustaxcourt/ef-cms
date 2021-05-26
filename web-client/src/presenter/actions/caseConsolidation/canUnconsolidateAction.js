@@ -15,7 +15,7 @@ export const canUnconsolidateAction = async ({ get, path }) => {
     .filter(([, shouldRemove]) => shouldRemove)
     .map(([docketNumber]) => docketNumber);
 
-  if (!docketNumbersToRemove || docketNumbersToRemove.length === 0) {
+  if (docketNumbersToRemove.length === 0) {
     return path.error({
       error: 'Select a case',
     });
