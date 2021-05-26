@@ -12,7 +12,7 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   source_code_hash = data.archive_file.legacy_documents_migration_zip.output_base64sha256
 
   layers = [
-    module.api-east-green.aws_lambda_layer_version.puppeteer_layer.arn
+    module.api-east-green.puppeteer_layer
   ]
 
   runtime     = "nodejs14.x"
