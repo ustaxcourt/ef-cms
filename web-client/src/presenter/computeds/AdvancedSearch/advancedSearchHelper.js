@@ -3,23 +3,6 @@ import { state } from 'cerebral';
 export const formatSearchResultRecord = (result, { applicationContext }) => {
   const { US_STATES } = applicationContext.getConstants();
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(result);
-
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(result);
-
-  result.contactPrimary = contactPrimary || {};
-
-  result.contactSecondary = contactSecondary || {};
-
-  result.contactPrimaryName =
-    result.contactPrimary && result.contactPrimary.name;
-
-  result.contactSecondaryName = contactSecondary && contactSecondary.name;
-
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
@@ -27,15 +10,15 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.fullStateNamePrimary =
-    US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
+    US_STATES[result.petitioners[0].state] || result.petitioners[0].state;
 
   if (
-    result.contactSecondary &&
-    result.contactSecondary.state &&
-    result.contactPrimary.state !== result.contactSecondary.state
+    result.petitioners[1] &&
+    result.petitioners[1].state &&
+    result.petitioners[0].state !== result.petitioners[1].state
   ) {
     result.fullStateNameSecondary =
-      US_STATES[result.contactSecondary.state] || result.contactSecondary.state;
+      US_STATES[result.petitioners[1].state] || result.petitioners[1].state;
   }
 
   return result;

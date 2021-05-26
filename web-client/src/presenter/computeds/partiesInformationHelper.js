@@ -94,7 +94,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     }
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
-    //this wcan be updated when consolidating updateprimarycontact and updatesecondarycontactinteracor
+    // this can be updated when consolidating update primaryContact and update secondaryContact interacor
     let externalType = null;
 
     if (petitioner.contactId === contactPrimary?.contactId) {
