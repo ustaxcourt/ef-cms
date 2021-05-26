@@ -8,11 +8,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const {
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-} = require('../entities/cases/Case');
+const { getContactPrimary } = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -62,12 +58,7 @@ describe('caseFilter', () => {
         role: ROLES.petitioner,
       });
 
-      [
-        getContactPrimary(result),
-        getContactSecondary(result),
-        ...getOtherFilers(result),
-        ...getOtherFilers(result),
-      ].forEach(party => {
+      result.petitioners.forEach(party => {
         expect(Object.keys(party).sort()).toMatchObject([
           'additionalName',
           'contactId',
