@@ -1,12 +1,9 @@
 const {
-  CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-} = require('../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -51,10 +48,6 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  const isPetitionerToRemovePrimary =
-    caseEntity.getPetitionerById(contactId).contactType ===
-    CONTACT_TYPES.primary;
-
   const practitioners = caseEntity.getPractitionersRepresenting(
     petitionerContactId,
   );
@@ -81,10 +74,6 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     docketNumber,
     userId: petitionerContactId,
   });
-
-  if (isPetitionerToRemovePrimary) {
-    caseEntity.petitioners[0].contactType = CONTACT_TYPES.primary;
-  }
 
   caseEntity.caseCaption = caseCaption;
 
