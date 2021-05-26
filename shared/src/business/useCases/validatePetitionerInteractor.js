@@ -37,7 +37,6 @@ exports.validatePetitionerInteractor = (
     some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
     contactInfo.contactType === CONTACT_TYPES.intervenor
   ) {
-    console.log('in ehre');
     aggregatedErrors.contactType =
       Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
   }
