@@ -23,15 +23,20 @@ const getSealedCase = async ({
 }) => {
   const currentUser = applicationContext.getCurrentUser();
 
-  let isAuthorizedToViewSealedCase = false;
+  let isAuthorizedToViewSealedCase = isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+  );
 
-  const petitioner = getPetitionerById(caseRecord, currentUser.userId);
-  if (petitioner) {
-    isAuthorizedToViewSealedCase = isAuthorized(
-      currentUser,
-      ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      getPetitionerById(caseRecord, currentUser.userId).contactId,
-    );
+  if (!isAuthorizedToViewSealedCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToViewSealedCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
   }
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
@@ -91,14 +96,19 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
 
   const currentUser = applicationContext.getCurrentUser();
 
-  let isAuthorizedToGetCase = false;
-  const petitioner = getPetitionerById(caseRecord, currentUser.userId);
-  if (petitioner) {
-    isAuthorizedToGetCase = isAuthorized(
-      currentUser,
-      ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      getPetitionerById(caseRecord, currentUser.userId).contactId,
-    );
+  let isAuthorizedToGetCase = isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.GET_CASE,
+  );
+  if (!isAuthorizedToGetCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToGetCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.GET_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
   }
 
   const isAssociatedWithCase = isAssociatedUser({
