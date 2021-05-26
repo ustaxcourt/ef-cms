@@ -38,16 +38,10 @@ const findDocketEntries = async () => {
               },
             },
             {
-              bool: {
-                must: [
-                  {
-                    terms: {
-                      'eventCode.S': [
-                        ...ORDER_EVENT_CODES,
-                        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-                      ],
-                    },
-                  },
+              terms: {
+                'eventCode.S': [
+                  ...ORDER_EVENT_CODES,
+                  ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
                 ],
               },
             },
