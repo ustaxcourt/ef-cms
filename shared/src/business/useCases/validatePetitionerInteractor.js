@@ -1,7 +1,6 @@
 const { CONTACT_TYPES } = require('../entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { Petitioner } = require('../entities/contacts/Petitioner');
-const { some } = require('lodash');
 const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
 
 /**
@@ -33,10 +32,14 @@ exports.validatePetitionerInteractor = (
     ...updateUserEmailErrors,
   };
 
-  if (
-    some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
-    contactInfo.contactType === CONTACT_TYPES.intervenor
-  ) {
+  let firstIntervenorId;
+  existingPetitioners?.forEach(petitioner => {
+    if (petitioner.contactType === CONTACT_TYPES.intervenor) {
+      firstIntervenorId = petitioner.contactId;
+    }
+  });
+
+  if (firstIntervenorId && firstIntervenorId !== contactInfo.contactId) {
     aggregatedErrors.contactType =
       Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
   }
