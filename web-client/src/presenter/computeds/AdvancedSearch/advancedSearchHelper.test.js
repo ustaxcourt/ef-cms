@@ -147,11 +147,13 @@ describe('advancedSearchHelper', () => {
         searchResults: {
           case: [
             {
-              contactPrimary: {
-                name: 'Daenerys Stormborn',
-                state: 'TN',
-              },
               docketNumber: '101-19',
+              petitioners: [
+                {
+                  name: 'Daenerys Stormborn',
+                  state: 'TN',
+                },
+              ],
             },
           ],
         },
@@ -215,16 +217,12 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
         fullStateNamePrimary: US_STATES.TN,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
         fullStateNamePrimary: US_STATES.TX,
