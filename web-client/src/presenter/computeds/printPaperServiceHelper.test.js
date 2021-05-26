@@ -2,14 +2,15 @@ import { printPaperServiceHelper } from './printPaperServiceHelper';
 import { runCompute } from 'cerebral/test';
 
 describe('printPaperServiceHelper', () => {
-  it('should set documentTitle to the documentType if set', () => {
+  it('should set documentTitle to the documentTitle if set', () => {
     const { documentTitle } = runCompute(printPaperServiceHelper, {
       state: {
         caseDetail: {
           docketEntries: [
             {
               docketEntryId: 'abc',
-              documentType: 'Document',
+              documentTitle: 'Document',
+              documentType: 'Document [Anything]',
             },
           ],
         },
