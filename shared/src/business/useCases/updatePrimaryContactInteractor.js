@@ -58,6 +58,7 @@ exports.updatePrimaryContactInteractor = async (
     { applicationContext },
   );
 
+  // we can replace getContactPrimary() with getContactById()
   const oldContactPrimary = cloneDeep(caseEntity.getContactPrimary());
 
   const updatedPrimaryContact = {
@@ -136,16 +137,9 @@ exports.updatePrimaryContactInteractor = async (
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    let privatePractitionersRepresentingPrimaryContact = false;
-    for (const privatePractitioner of caseEntity.privatePractitioners) {
-      const practitionerRepresentingPrimary = privatePractitioner.getRepresentingPrimary(
-        caseEntity,
-      );
-      if (practitionerRepresentingPrimary) {
-        privatePractitionersRepresentingPrimaryContact = true;
-        break;
-      }
-    }
+    const privatePractitionersRepresentingPrimaryContact = caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactInfo.contactId,
+    );
 
     if (!privatePractitionersRepresentingPrimaryContact) {
       const workItem = new WorkItem(
