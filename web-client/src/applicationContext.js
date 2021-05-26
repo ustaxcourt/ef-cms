@@ -158,6 +158,7 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
+import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -672,6 +673,7 @@ const applicationContext = {
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
       getFormattedCaseDetail,
+      getFormattedPartiesNameAndTitle,
       getJudgeLastName,
       getMonthDayYearObj,
       getOtherFilers,
