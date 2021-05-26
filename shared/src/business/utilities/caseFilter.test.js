@@ -8,7 +8,6 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const { getContactPrimary } = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -149,7 +148,7 @@ describe('caseFilter', () => {
       });
 
       expect(result.length).toEqual(4);
-      expect(getContactPrimary(result[2])).toMatchObject({
+      expect(result[2].petitioners[0]).toMatchObject({
         isAddressSealed: true,
         name: 'Joe Walsh',
         sealedAndUnavailable: true,
