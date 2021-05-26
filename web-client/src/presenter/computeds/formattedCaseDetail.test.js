@@ -899,7 +899,7 @@ describe('formattedCaseDetail', () => {
     });
 
     expect(result.petitioners[0]).toMatchObject({
-      contactTypeDisplay: 'Participant',
+      displayName: 'John Johnson, Participant',
     });
   });
 });
