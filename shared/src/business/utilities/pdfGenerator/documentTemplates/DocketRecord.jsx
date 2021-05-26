@@ -3,10 +3,6 @@ const React = require('react');
 const {
   CompressedDocketHeader,
 } = require('../components/CompressedDocketHeader.jsx');
-const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../../entities/cases/Case');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 const RenderAddress = ({ contact, countryTypes }) => {
@@ -53,17 +49,7 @@ const RenderContact = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderPractitioner = ({
-  contactPrimary,
-  contactSecondary,
-  countryTypes,
-  practitioner,
-}) => {
-  const { representingPrimary, representingSecondary } = practitioner;
-  const showRepresentingPrimary = representingPrimary && contactPrimary;
-  const showRepresentingSecondary =
-    representingSecondary && contactSecondary && contactSecondary.name;
-
+const RenderPractitioner = ({ countryTypes, practitioner }) => {
   return (
     <div className="party-details">
       <p className="margin-bottom-0">
@@ -76,13 +62,13 @@ const RenderPractitioner = ({
         }}
         countryTypes={countryTypes}
       />
-
-      {(showRepresentingPrimary || showRepresentingSecondary) && (
+      {practitioner.representingFormatted && (
         <div className="extra-margin-top">
           <strong>Representing</strong>
           <br />
-          {showRepresentingPrimary && <div>{contactPrimary.name}</div>}
-          {showRepresentingSecondary && <div>{contactSecondary.name}</div>}
+          {practitioner.representingFormatted.map(p => (
+            <div key={p.name}>{p.name}</div>
+          ))}
         </div>
       )}
     </div>
@@ -176,8 +162,6 @@ export const DocketRecord = ({
             if (practitioner.formattedName) {
               return (
                 <RenderPractitioner
-                  contactPrimary={getContactPrimary(caseDetail)}
-                  contactSecondary={getContactSecondary(caseDetail)}
                   countryTypes={countryTypes}
                   key={practitioner.barNumber}
                   practitioner={practitioner}
