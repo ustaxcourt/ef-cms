@@ -26,9 +26,11 @@ export const validatePetitionerInformationFormAction = ({
 
   const oldContactPrimary = applicationContext
     .getUtilities()
-    .getContactPrimary(caseDetail);
+    .getPetitionerById(caseDetail, contactPrimary.contactId);
 
-  const { contactSecondary: oldContactSecondary } = caseDetail;
+  const oldContactSecondary = applicationContext
+    .getUtilities()
+    .getPetitionerById(caseDetail, contactPrimary.contactId);
 
   const errors = applicationContext
     .getUseCases()
