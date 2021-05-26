@@ -45,21 +45,11 @@ export const BaseModal = connect(
     };
 
     useEffect(() => {
-      const touchmoveTriggered = event => {
-        return event.preventDefault();
-      };
-
       const toggleNoScroll = scrollingOn => {
         if (scrollingOn) {
           window.document.body.classList.add('no-scroll');
-          window.document.addEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
         } else {
           window.document.body.classList.remove('no-scroll');
-          window.document.removeEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
         }
       };
 

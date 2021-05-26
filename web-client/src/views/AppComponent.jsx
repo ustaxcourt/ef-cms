@@ -208,12 +208,12 @@ export const AppComponent = connect(
         <Header />
         <main id="main-content" role="main">
           <CurrentPage />
-          {zipInProgress && <BatchDownloadProgress />}
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
         <Loading />
 
         <Footer />
+        {zipInProgress && <BatchDownloadProgress />}
 
         {showModal === 'TrialSessionPlanningModal' && (
           <TrialSessionPlanningModal />
