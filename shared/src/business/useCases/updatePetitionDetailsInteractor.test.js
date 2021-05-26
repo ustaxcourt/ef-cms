@@ -247,4 +247,34 @@ describe('updatePetitionDetailsInteractor', () => {
         .updateCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
+
+  it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        highPriorityReason: 'roll out',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        mailingDate: 'SOME NEW MAILING DATE', // attempting to change a field that does not exist in editableFields
+        partyType: 'SOME NEW PARTY TYPE', // attempting to change a field that does not exist in editableFields
+        preferredTrialCity: 'Cheyenne, Wyoming',
+        status: CASE_STATUS_TYPES.rule155,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.mailingDate,
+    ).toEqual(MOCK_CASE.mailingDate); // does not change
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.partyType,
+    ).toEqual(MOCK_CASE.partyType); // does not change
+  });
 });
