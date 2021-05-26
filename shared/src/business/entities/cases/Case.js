@@ -1028,11 +1028,23 @@ Case.prototype.closeCase = function () {
 
 /**
  *
- * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
   this.status = CASE_STATUS_TYPES.generalDocket;
+
+  const petitionerContactTypes = [
+    CONTACT_TYPES.primary,
+    CONTACT_TYPES.secondary,
+    CONTACT_TYPES.otherPetitioner,
+  ]
+  this.petitioners.map(p => {
+    if (
+     // do stuff
+    ) {
+      p.contactType = CONTACT_TYPES.petitioner;
+    }
+  });
 
   return this;
 };
