@@ -97,7 +97,7 @@ describe('sealCaseContactAddressInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    expect(result.petitioners[1].isAddressSealed).toBe(true);
+    expect(result.petitioners[5].isAddressSealed).toBe(true);
   });
 
   it('should call updateCase with `isSealedAddress` on otherFilers[1] and return the updated case', async () => {

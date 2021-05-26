@@ -9,10 +9,6 @@ const {
 const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
-const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('deleteCounselFromCaseInteractor', () => {
@@ -162,7 +158,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+    expect(updatedCase.petitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
@@ -191,7 +187,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       },
     );
 
-    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+    expect(updatedCase.petitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
@@ -248,7 +244,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: mockPrivatePractitioners[0].userId,
       },
     );
-    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual(
+    expect(updatedCase.petitioners[1].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -303,7 +299,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: mockPrivatePractitioners[0].userId,
       },
     );
-    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual(
+    expect(updatedCase.petitioners[1].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
