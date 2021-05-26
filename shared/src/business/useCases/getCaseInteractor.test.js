@@ -5,10 +5,6 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
-  getCaseInteractor,
-  isAuthorizedForContact,
-} = require('./getCaseInteractor');
-const {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -18,10 +14,8 @@ const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
-const {
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getCaseInteractor } = require('./getCaseInteractor');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -415,57 +409,6 @@ describe('getCaseInteractor', () => {
 
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
-    });
-  });
-
-  describe('isAuthorizedForContact', () => {
-    let currentUser;
-    let contact;
-
-    beforeEach(() => {
-      currentUser = {
-        userId: '123',
-      };
-      contact = {
-        contactId: currentUser.userId,
-      };
-    });
-
-    it('returns false if the default value is false and the user is not authorized', () => {
-      const result = isAuthorizedForContact({
-        contact: {
-          contactId: 'not_the_current_user',
-        },
-        currentUser,
-        defaultValue: false,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(false);
-    });
-
-    it('returns true if the default value is true and the user is not authorized', () => {
-      const result = isAuthorizedForContact({
-        contact: {
-          contactId: 'not_the_current_user',
-        },
-        currentUser,
-        defaultValue: true,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(true);
-    });
-
-    it('returns true if the default value is false and the user is authorized', () => {
-      const result = isAuthorizedForContact({
-        contact,
-        currentUser,
-        defaultValue: false,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(true);
     });
   });
 });
