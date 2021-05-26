@@ -1,7 +1,10 @@
+import {
+  aggregateStatisticsErrors,
+  validatePetitionFromPaperAction,
+} from './validatePetitionFromPaperAction';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { validatePetitionFromPaperAction } from './validatePetitionFromPaperAction';
 
 describe('validatePetitionFromPaperAction', () => {
   let successStub;
@@ -167,6 +170,70 @@ describe('validatePetitionFromPaperAction', () => {
 
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       contactSecondary: { inCareOf: mockInCareOfError },
+    });
+  });
+
+  describe('aggregateStatisticsErrors', () => {
+    it('formats statistics errors for both UI validation and alertMessages', () => {
+      const errors = {
+        caseCaption: 'Enter a case caption',
+        irsDeficiencyAmount: '"statistics[0].irsDeficiencyAmount" is required',
+        statistics: [
+          { deficiency: 'enter deficiency amount', index: 1 },
+          { index: 2, irsTotalPenalties: 'enter total penalties' },
+        ],
+        year: '"statistics[0].year" is required',
+      };
+
+      const get = () => [
+        { yearOrPeriod: 'Year' },
+        { yearOrPeriod: 'Period' },
+        { yearOrPeriod: 'Year' },
+      ];
+
+      const result = aggregateStatisticsErrors({ errors, get });
+
+      expect(result).toMatchObject({
+        errors: {
+          caseCaption: 'Enter a case caption',
+          statistics: [
+            {},
+            {
+              enterAllValues:
+                'Enter period, deficiency amount, and total penalties',
+              index: 1,
+            },
+            {
+              enterAllValues:
+                'Enter year, deficiency amount, and total penalties',
+              index: 2,
+            },
+          ],
+        },
+        statisticsErrorMessages: [
+          'Enter period, deficiency amount, and total penalties',
+          'Enter year, deficiency amount, and total penalties',
+        ],
+      });
+    });
+
+    it('does not format statistics errors and only returns the errors.statistics message on statisticsErrorMessages when there are no statistics on the form', () => {
+      const errors = {
+        caseCaption: 'Enter a case caption',
+        statistics: '"statistics" must contain at least 1 items',
+      };
+
+      const get = () => []; // mock get call returns no results from from.statistics
+
+      const result = aggregateStatisticsErrors({ errors, get });
+
+      expect(result).toMatchObject({
+        errors: {
+          caseCaption: 'Enter a case caption',
+          statistics: '"statistics" must contain at least 1 items',
+        },
+        statisticsErrorMessages: ['"statistics" must contain at least 1 items'],
+      });
     });
   });
 });

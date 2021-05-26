@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }) => {
   let newErrorStatistics;
+  let statisticsErrorMessages = [];
 
   Object.keys(errors).forEach(key => {
     if (/statistics\[\d+\]/.test(errors[key])) {
@@ -13,30 +14,31 @@ export const aggregateStatisticsErrors = ({ errors, get }) => {
     newErrorStatistics = [];
     const formStatistics = get(state.form.statistics);
 
-    formStatistics.forEach((formStatistic, index) => {
-      const errorStatistic = errors.statistics.find(s => s.index === index);
-      if (errorStatistic) {
-        if (formStatistic.yearOrPeriod === 'Year') {
-          newErrorStatistics.push({
-            enterAllValues:
-              'Enter year, deficiency amount, and total penalties',
-            index,
-          });
-        } else {
-          newErrorStatistics.push({
-            enterAllValues:
-              'Enter period, deficiency amount, and total penalties',
-            index,
-          });
-        }
-      } else {
-        newErrorStatistics.push({});
-      }
-    });
+    if (formStatistics.length) {
+      formStatistics.forEach((formStatistic, index) => {
+        const errorStatistic = errors.statistics.find(s => s.index === index);
+        if (errorStatistic) {
+          const messageYearOrPeriod =
+            formStatistic.yearOrPeriod === 'Year' ? 'year' : 'period';
+          const errMessage = `Enter ${messageYearOrPeriod}, deficiency amount, and total penalties`;
 
-    errors.statistics = newErrorStatistics;
+          newErrorStatistics.push({
+            enterAllValues: errMessage,
+            index,
+          });
+
+          statisticsErrorMessages.push(errMessage);
+        } else {
+          newErrorStatistics.push({});
+        }
+      });
+
+      errors.statistics = newErrorStatistics;
+    } else {
+      statisticsErrorMessages = [errors.statistics];
+    }
   }
-  return errors;
+  return { errors, statisticsErrorMessages };
 };
 
 export const aggregatePetitionerErrors = ({ errors }) => {
@@ -92,9 +94,12 @@ export const validatePetitionFromPaperAction = ({
       statistics: 'Statistics',
     };
 
-    errors = aggregateStatisticsErrors({ errors, get });
+    const { errors: formattedErrors } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
 
-    errors = aggregatePetitionerErrors({ errors });
+    errors = aggregatePetitionerErrors({ errors: formattedErrors });
 
     return path.error({
       alertError: {

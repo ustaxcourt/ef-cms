@@ -1,3 +1,5 @@
+import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -66,7 +68,7 @@ export const validatePetitionDetailsAction = ({
       });
   }
 
-  const errors = applicationContext.getUseCases().validateCaseDetailInteractor({
+  let errors = applicationContext.getUseCases().validateCaseDetailInteractor({
     applicationContext,
     caseDetail: {
       ...caseDetail,
@@ -83,12 +85,30 @@ export const validatePetitionDetailsAction = ({
   if (!errors) {
     return path.success();
   } else {
+    const errorDisplayMap = {
+      statistics: 'Statistics',
+    };
+
+    const {
+      errors: formattedErrors,
+      statisticsErrorMessages,
+    } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
+
+    const errorMessags = [
+      ...Object.values(omit(errors, 'statistics')),
+      ...statisticsErrorMessages,
+    ];
+
     return path.error({
       alertError: {
-        messages: Object.values(errors),
+        messages: errorMessags,
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors,
+      errorDisplayMap,
+      errors: formattedErrors,
     });
   }
 };
