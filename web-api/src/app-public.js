@@ -39,13 +39,12 @@ const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
-// Temporarily disabled for story 7387
-// const {
-//   opinionPublicSearchLambda,
-// } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
+const {
+  opinionPublicSearchLambda,
+} = require('./public-api/opinionPublicSearchLambda');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
@@ -53,9 +52,8 @@ const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
-// Temporarily disabled for story 7387
-// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
+app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
 
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
