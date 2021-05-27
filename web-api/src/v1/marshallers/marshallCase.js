@@ -10,6 +10,7 @@ const { marshallPractitioner } = require('./marshallPractitioner');
  * @returns {object} the v1 representation of a case
  */
 exports.marshallCase = caseObject => {
+  // todo: after getContactPrimary, getContactSecondary returns the first petitioner, put this back to what it was
   const contactPrimary = caseObject.petitioners
     ? caseObject.petitioners[0]
     : undefined;
