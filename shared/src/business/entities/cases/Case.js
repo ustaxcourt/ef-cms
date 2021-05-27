@@ -1163,7 +1163,7 @@ Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
  * @returns {Object} the contact object
  */
 const getPetitionerById = function (rawCase, contactId) {
-  return rawCase.petitioners.find(
+  return rawCase.petitioners?.find(
     petitioner => petitioner.contactId === contactId,
   );
 };
