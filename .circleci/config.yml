@@ -1,99 +1,5 @@
 version: 2.1
 jobs:
-  build-api:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Web API - Test
-          command: npm run test:api:ci
-
-  build-shared:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Shared - Test
-          command: npm run test:shared:ci
-
-  build-client-unit:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit:ci
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/web-client/coverage-unit
-
   build-client-integration:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -780,9 +686,6 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - build-shared
-      - build-api
-      - build-client-unit
       - build-client-integration
       - e2e-pa11y
       - e2e-pa11y-public
@@ -790,9 +693,6 @@ workflows:
       - e2e-cypress-public
       - deploy:
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
@@ -816,12 +716,6 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-defaults
-      - build-api:
-          <<: *build-and-deploy-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-defaults
       - build-client-integration:
           <<: *build-and-deploy-defaults
       - e2e-pa11y:
@@ -834,9 +728,6 @@ workflows:
           <<: *build-and-deploy-defaults
       - deploy:
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
@@ -895,12 +786,6 @@ workflows:
                 - dawson
   build-and-deploy-without-smoketests:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - build-api:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-without-smoketests-defaults
       - build-client-integration:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-pa11y:
@@ -914,9 +799,6 @@ workflows:
       - deploy:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
@@ -933,12 +815,6 @@ workflows:
 
   build-and-deploy-with-context:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-with-context-defaults
-      - build-api:
-          <<: *build-and-deploy-with-context-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-with-context-defaults
       - build-client-integration:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y:
@@ -952,9 +828,6 @@ workflows:
       - deploy:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
