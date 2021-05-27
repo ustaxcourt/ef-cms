@@ -1,9 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
-import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { IRSNotice } from '../CaseDetailEdit/IRSNotice';
 import { PetitionPaymentForm } from './PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { TrialCityOptions } from '../TrialCityOptions';
@@ -22,7 +21,6 @@ export const EditPetitionDetails = connect(
     validationErrors: state.validationErrors,
   },
   function EditPetitionDetails({
-    CASE_TYPES,
     docketNumber,
     form,
     updateFormValueSequence,
@@ -44,32 +42,9 @@ export const EditPetitionDetails = connect(
           <div className="blue-container margin-bottom-4">
             <div className="margin-bottom-5">
               <h4 className="margin-bottom-2">IRS Notice/Case</h4>
-
-              <CaseTypeSelect
-                allowDefaultOption={true}
-                caseTypes={CASE_TYPES}
-                legend="Type of case"
-                validation="validatePetitionDetailsSequence"
-                value={form.caseType}
-                onChange="updateFormValueSequence"
-              />
-
-              <DateInput
-                errorText={validationErrors.irsNoticeDate}
-                id="date-of-notice"
-                label="Date of notice"
-                names={{
-                  day: 'irsDay',
-                  month: 'irsMonth',
-                  year: 'irsYear',
-                }}
-                values={{
-                  day: form.irsDay,
-                  month: form.irsMonth,
-                  year: form.irsYear,
-                }}
-                onBlur={validatePetitionDetailsSequence}
-                onChange={updateFormValueSequence}
+              <IRSNotice
+                shouldStartWithBlankStatistic={false}
+                validationName="validatePetitionDetailsSequence"
               />
 
               <ProcedureType
