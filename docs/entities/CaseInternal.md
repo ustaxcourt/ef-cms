@@ -3789,7 +3789,7 @@
             limit: 1
       allow: 
         - "Paid"
-        - "Not Paid"
+        - "Not paid"
         - "Waived"
     applicationForWaiverOfFilingFeeFile: 
       type: "object"
