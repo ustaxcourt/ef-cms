@@ -137,6 +137,7 @@ export const CaseSearchByName = connect(
               </div>
               <div className="tablet:grid-col-5">
                 <FormGroup
+                  className="margin-top-0"
                   errorText={[
                     validationErrors.yearFiledMin,
                     validationErrors.yearFiledMax,
