@@ -1665,27 +1665,6 @@ Case.prototype.getOtherFilers = function () {
 };
 
 /**
- * Retrieves the other petitioners on the case
- *
- * @param {object} arguments.rawCase the raw case
- * @returns {Array} the other petitioners on the case
- */
-const getOtherPetitioners = function (rawCase) {
-  return rawCase.petitioners?.filter(
-    p => p.contactType === CONTACT_TYPES.otherPetitioner,
-  );
-};
-
-/**
- * Returns the other petitioners on the case
- *
- * @returns {Array} the other petitioners on the case
- */
-Case.prototype.getOtherPetitioners = function () {
-  return getOtherPetitioners(this);
-};
-
-/**
  * Updates the specified contact object in the case petitioner's array
  *
  * @param {object} arguments.rawCase the raw case object
@@ -2245,7 +2224,6 @@ module.exports = {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
-  getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
