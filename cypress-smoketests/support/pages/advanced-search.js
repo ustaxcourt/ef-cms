@@ -61,9 +61,7 @@ exports.createOpinion = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
-  cy.get('inputprimary-document-file').attachFile(
-    '../../fixtures/w3-dummy.pdf',
-  );
+  cy.get('#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 
@@ -71,7 +69,7 @@ exports.addDocketEntryAndServeOpinion = testData => {
   cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('#document-type').children().first().click();
+  cy.get('#document-type').children().eq(1).click();
   cy.get('div.select-react-element__menu-list')
     .find('div')
     .contains('Memorandum Opinion')
