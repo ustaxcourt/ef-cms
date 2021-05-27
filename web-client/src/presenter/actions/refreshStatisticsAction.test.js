@@ -59,7 +59,7 @@ describe('refreshStatisticsAction', () => {
     ]);
   });
 
-  it('should not append a new entry to the statistics array is >= 12 entries', async () => {
+  it('should not append a new entry to the statistics array if it is >= 12 entries', async () => {
     const statistics = new Array(12).fill({
       yearOrPeriod: 'Year',
     });
