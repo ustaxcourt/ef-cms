@@ -42,6 +42,11 @@ describe('Adds correspondence to a case', () => {
   );
   docketClerkCreatesMessageWithCorrespondence(test);
   docketClerkViewsMessageWithCorrespondence(test);
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'DocketClerk',
+  );
   userEditsCorrespondence(test, 'DocketClerk');
   docketClerkDeletesCorrespondence(test, firstCorrespondenceTitle);
 
