@@ -41,7 +41,10 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       practitionerMatch.userId,
     );
 
-    const contactPrimary = formattedCaseDetail.petitioners[0];
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+    const contactPrimary = formattedCase.petitioners[0];
 
     await test.runSequence('updateModalValueSequence', {
       key: `representingMap.${contactPrimary.contactId}`,
