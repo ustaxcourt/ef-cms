@@ -1283,7 +1283,7 @@ describe('getFormattedCaseDetail', () => {
       },
     });
 
-    expect(result.filingFee).toEqual('Not Paid  ');
+    expect(result.filingFee).toEqual(`${PAYMENT_STATUS.UNPAID}  `);
   });
 
   describe('sortDocketEntries', () => {
