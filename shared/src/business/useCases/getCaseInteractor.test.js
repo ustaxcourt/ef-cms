@@ -5,15 +5,12 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('../entities/cases/Case');
-const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { getCaseInteractor } = require('./getCaseInteractor');
+const { getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -191,9 +188,7 @@ describe('getCaseInteractor', () => {
       getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
-      getOtherPetitioners(mockCaseWithSealed).forEach(
-        filer => (filer.isAddressSealed = true),
-      );
+
       applicationContext
         .getPersistenceGateway()
         .getFullCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
@@ -217,10 +212,6 @@ describe('getCaseInteractor', () => {
       expect(contactSecondary.city).toBeDefined();
       expect(contactSecondary.sealedAndUnavailable).toBe(false);
       getOtherFilers(result).forEach(filer => {
-        expect(filer.city).toBeDefined();
-        expect(filer.sealedAndUnavailable).toBe(false);
-      });
-      getOtherPetitioners(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
