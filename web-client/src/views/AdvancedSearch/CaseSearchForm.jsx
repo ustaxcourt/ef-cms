@@ -22,7 +22,7 @@ export const CaseSearchForm = connect(
             name="advancedSearchForm.searchMode"
           >
             <option value={'byName'}>Search by Name</option>
-            <option value={'byDocketNumber'}>Search by Docket number</option>
+            <option value={'byDocketNumber'}>Search by Docket Number</option>
           </BindedSelect>
 
           {advancedSearchForm.searchMode === 'byName' && (
