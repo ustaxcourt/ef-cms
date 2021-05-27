@@ -15,7 +15,6 @@ const migrateItems = async items => {
     if (
       item.pk.startsWith('case|') &&
       item.sk.startsWith('case|') &&
-      // check if status is not NEW ?!
       item.status !== CASE_STATUS_TYPES.new
     ) {
       item.petitioners.forEach(petitioner => {

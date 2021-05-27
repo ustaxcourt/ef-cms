@@ -81,8 +81,43 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it("should modify petitioners in the case item that have contactType 'primary' and 'secondary' to be 'petitioner'", async () => {
-    const items = [mockCaseItem];
+  it('should return and not modify records that are unserved case records', async () => {
+    const mockUnservedCaseRecord = {
+      ...mockCaseItem,
+      status: CASE_STATUS_TYPES.new,
+    };
+
+    const items = [mockUnservedCaseRecord];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0]).toEqual(mockUnservedCaseRecord);
+  });
+
+  it("should modify petitioners in the case item that have contactType 'primary', 'secondary' and 'otherPetitioner' to be 'petitioner' for a served case", async () => {
+    const items = [
+      {
+        ...mockCaseItem,
+        petitioners: [
+          MOCK_CASE.petitioners[0],
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: '7acfa199-c297-46b8-9371-2dc1470a5b26',
+            contactType: CONTACT_TYPES.secondary,
+          },
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: 'b6ef7294-6b3f-4bdb-bd96-390541a2f66a',
+            contactType: CONTACT_TYPES.intervenor,
+          },
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: 'b6ef7256-6b3f-4bdb-bd96-390541a2f66a',
+            contactType: CONTACT_TYPES.otherPetitioner,
+          },
+        ],
+      },
+    ];
 
     const results = await migrateItems(items, documentClient);
 
@@ -94,6 +129,32 @@ describe('migrateItems', () => {
     );
 
     expect(results[0].petitioners[2].contactType).toEqual(
+      CONTACT_TYPES.intervenor,
+    );
+
+    expect(results[0].petitioners[3].contactType).toEqual(
+      CONTACT_TYPES.petitioner,
+    );
+  });
+
+  it("should NOT modify petitioners in the case item that have contactType 'intervenor', or 'participant'", async () => {
+    const items = [
+      {
+        ...mockCaseItem,
+        petitioners: [
+          MOCK_CASE.petitioners[0],
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: 'b6ef7294-6b3f-4bdb-bd96-390541a2f66a',
+            contactType: CONTACT_TYPES.intervenor,
+          },
+        ],
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(results[0].petitioners[1].contactType).toEqual(
       CONTACT_TYPES.intervenor,
     );
   });
