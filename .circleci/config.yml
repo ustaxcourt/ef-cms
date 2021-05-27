@@ -29,21 +29,6 @@ jobs:
       - run:
           name: Web API - Test
           command: npm run test:api:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json --no-install
-      # - run:
-      #     name: Web API - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${API_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="web-api" \
-      #       -Dproject.settings="web-api/sonar-project.properties" \
-      #       -Dsonar.login="${API_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-shared:
     docker:
@@ -74,21 +59,6 @@ jobs:
       - run:
           name: Shared - Test
           command: npm run test:shared:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json --no-install
-      # - run:
-      #     name: Shared - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="shared" \
-      #       -Dproject.settings="shared/sonar-project.properties" \
-      #       -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io"
 
   build-client-unit:
     docker:
@@ -190,55 +160,6 @@ jobs:
           paths:
             - project/web-client
             - project/web-client/coverage-integration-*
-
-  build-client-coverage:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Combine Coverage
-          command: |
-            npx istanbul-combine -d combined-coverage -p both -r lcov \
-            ./web-client/coverage-integration-0/coverage-final.json \
-            ./web-client/coverage-integration-1/coverage-final.json \
-            ./web-client/coverage-integration-2/coverage-final.json \
-            ./web-client/coverage-integration-3/coverage-final.json \
-            ./web-client/coverage-integration-4/coverage-final.json \
-            ./web-client/coverage-integration-5/coverage-final.json \
-            ./web-client/coverage-integration-6/coverage-final.json \
-            ./web-client/coverage-integration-7/coverage-final.json \
-            ./web-client/coverage-unit/coverage-final.json --no-install
-      - run:
-          name: Check Coverage
-          command: |
-            npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
-            --statements 95 --functions 95 --branches 95 --lines 95 --no-install
-      # - run:
-      #     name: Web Client - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${UI_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="web-client" \
-      #       -Dproject.settings="web-client/sonar-project.properties" \
-      #       -Dsonar.login="${UI_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io" \
-      #       -Dsonar.verbose=true
 
   e2e-pa11y:
     docker:
@@ -867,7 +788,7 @@ workflows:
       - e2e-pa11y-public
       - e2e-cypress
       - e2e-cypress-public
-      - build-client-coverage:
+      - deploy:
           requires:
             - build-shared
             - build-api
@@ -877,9 +798,6 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
       - migrate:
           requires:
             - deploy
@@ -914,8 +832,7 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
-      - build-client-coverage:
-          <<: *build-and-deploy-defaults
+      - deploy:
           requires:
             - build-shared
             - build-api
@@ -925,9 +842,6 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
           filters:
             branches:
               only:
@@ -997,7 +911,7 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-without-smoketests-defaults
-      - build-client-coverage:
+      - deploy:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - build-shared
@@ -1008,10 +922,6 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - build-client-coverage
       - migrate:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
@@ -1039,7 +949,7 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
-      - build-client-coverage:
+      - deploy:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - build-shared
@@ -1050,7 +960,3 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - build-client-coverage
