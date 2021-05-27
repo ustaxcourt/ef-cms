@@ -123,24 +123,29 @@ export const getOptionsForCategory = ({
   return options;
 };
 
+export const MAX_TITLE_LENGTH = 100;
+
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
   selectedDocketEntryId,
 ) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const withDocumentTitle = doc => {
+    let documentTitle = applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
+    if (documentTitle && documentTitle.length > MAX_TITLE_LENGTH) {
+      documentTitle = documentTitle.substring(0, MAX_TITLE_LENGTH - 1) + '…';
+    }
+    return { ...doc, documentTitle };
+  };
+
   return caseDetail.docketEntries
     .filter(
       doc =>
         doc.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType &&
         doc.docketEntryId !== selectedDocketEntryId,
     )
-    .map(doc => {
-      return {
-        ...doc,
-        documentTitle: applicationContext
-          .getUtilities()
-          .getDocumentTitleWithAdditionalInfo({ docketEntry: doc }),
-      };
-    });
+    .map(withDocumentTitle);
 };
