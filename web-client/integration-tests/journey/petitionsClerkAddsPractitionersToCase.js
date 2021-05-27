@@ -1,9 +1,5 @@
-import {
-  contactPrimaryFromState,
-  contactSecondaryFromState,
-  refreshElasticsearchIndex,
-} from '../helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -45,7 +41,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       practitionerMatch.userId,
     );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = formattedCaseDetail.petitioners[0];
 
     await test.runSequence('updateModalValueSequence', {
       key: `representingMap.${contactPrimary.contactId}`,
@@ -105,7 +101,7 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         practitionerMatch.userId,
       );
 
-      const contactSecondary = contactSecondaryFromState(test);
+      const contactSecondary = formattedCaseDetail.petitioners[1];
       await test.runSequence('updateModalValueSequence', {
         key: `representingMap.${contactSecondary.contactId}`,
         value: true,
