@@ -10,8 +10,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInformationHelper', () => {
-  const mockEmail = 'error@example.com';
-  const mockEmailSecondary = 'petitioner2@example.com';
   const mockPetitionsClerk = {
     role: ROLES.petitionsClerk,
     userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
