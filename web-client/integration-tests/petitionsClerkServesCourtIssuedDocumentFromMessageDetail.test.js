@@ -42,7 +42,7 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   docketClerkViewsDraftOrder(test, 0);
   docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  createNewMessageOnCase(test, 0);
+  createNewMessageOnCase(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
