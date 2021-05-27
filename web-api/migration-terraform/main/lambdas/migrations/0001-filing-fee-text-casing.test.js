@@ -1,7 +1,7 @@
 const {
   PAYMENT_STATUS,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0027-filing-fee-text-casing');
+const { migrateItems } = require('./0001-filing-fee-text-casing');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
