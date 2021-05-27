@@ -13,4 +13,6 @@ export const setFilersFromFilersMapAction = ({ get, store }) => {
     .filter(Boolean);
 
   store.set(state.form.filers, filers);
+
+  console.log('--------firlers on state', get(state.form.filers));
 };
