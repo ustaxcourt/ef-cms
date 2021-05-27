@@ -259,13 +259,10 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
           partiesArray.push(`Counsel ${practitioner.name}`);
       });
 
-    const petitionersArray = this.filers.map(contactId =>
-      petitioners.find(p => {
-        if (p.contactId === contactId) {
-          return p.name;
-        }
-      }),
+    const petitionersArray = this.filers.map(
+      contactId => petitioners.find(p => p.contactId === contactId).name,
     );
+
     if (petitionersArray.length === 1) {
       partiesArray.push(`Petr. ${petitionersArray[0]}`);
     } else if (petitionersArray.length > 1) {
