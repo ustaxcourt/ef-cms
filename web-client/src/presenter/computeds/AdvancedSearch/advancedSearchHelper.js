@@ -9,16 +9,18 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
-  result.fullStateNamePrimary =
-    US_STATES[result.petitioners[0].state] || result.petitioners[0].state;
+  if (result.petitioners) {
+    result.fullStateNamePrimary =
+      US_STATES[result.petitioners[0].state] || result.petitioners[0].state;
 
-  if (
-    result.petitioners[1] &&
-    result.petitioners[1].state &&
-    result.petitioners[0].state !== result.petitioners[1].state
-  ) {
-    result.fullStateNameSecondary =
-      US_STATES[result.petitioners[1].state] || result.petitioners[1].state;
+    if (
+      result.petitioners[1] &&
+      result.petitioners[1].state &&
+      result.petitioners[0].state !== result.petitioners[1].state
+    ) {
+      result.fullStateNameSecondary =
+        US_STATES[result.petitioners[1].state] || result.petitioners[1].state;
+    }
   }
 
   return result;

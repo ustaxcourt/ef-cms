@@ -750,6 +750,7 @@ const CONTACT_TYPES = {
 
 const CONTACT_TYPE_TITLES = {
   intervenor: 'Intervenor',
+  petitioner: 'Petitioner',
   otherFilers: 'Petitioner',
   otherPetitioner: 'Petitioner',
   participant: 'Participant',
