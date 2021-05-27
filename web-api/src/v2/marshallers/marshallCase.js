@@ -1,3 +1,7 @@
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallContact } = require('./marshallContact');
 const { marshallDocketEntry } = require('./marshallDocketEntry');
 const { marshallPractitioner } = require('./marshallPractitioner');
@@ -10,13 +14,8 @@ const { marshallPractitioner } = require('./marshallPractitioner');
  * @returns {object} the v2 representation of a case
  */
 exports.marshallCase = caseObject => {
-  // todo: after getContactPrimary, getContactSecondary returns the first petitioner, put this back to what it was
-  const contactPrimary = caseObject.petitioners
-    ? caseObject.petitioners[0]
-    : undefined;
-  const contactSecondary = caseObject.petitioners
-    ? caseObject.petitioners[1]
-    : undefined;
+  const contactPrimary = getContactPrimary(caseObject) || undefined;
+  const contactSecondary = getContactSecondary(caseObject) || undefined;
   return {
     caseCaption: caseObject.caseCaption,
     caseType: caseObject.caseType,
