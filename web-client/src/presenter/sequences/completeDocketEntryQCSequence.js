@@ -10,13 +10,13 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
@@ -45,9 +45,8 @@ export const completeDocketEntryQCSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
+    success: showProgressSequenceDecorator([
       stopShowValidationAction,
-      setCurrentPageAction('Interstitial'),
       refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
       completeDocketEntryQCAction,
@@ -58,6 +57,6 @@ export const completeDocketEntryQCSequence = [
       setSaveAlertsForNavigationAction,
       navigateToDocumentQCAction,
       clearErrorAlertsAction,
-    ],
+    ]),
   },
 ];
