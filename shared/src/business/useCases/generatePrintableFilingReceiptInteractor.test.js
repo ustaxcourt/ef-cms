@@ -93,4 +93,21 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     expect(receiptMockCall.secondarySupportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondaryDocument).toBeDefined();
   });
+
+  it('formats certificateOfServiceDate', async () => {
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      documentsFiled: {
+        certificateOfService: true,
+        certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
+        primaryDocumentId: mockPrimaryDocketEntryId,
+      },
+    });
+
+    const receiptMockCall = applicationContext.getDocumentGenerators()
+      .receiptOfFiling.mock.calls[0][0].data;
+    expect(receiptMockCall.document.formattedCertificateOfServiceDate).toEqual(
+      '08/25/19',
+    );
+  });
 });
