@@ -59,7 +59,7 @@ export const StartCaseStep5 = connect(
                         >
                           Type of notice/case
                         </span>
-                        {form.caseType}
+                        {startCaseHelper.formattedCaseType}
                         <div className="grid-row margin-top-3">
                           <div className="grid-col">
                             <span
