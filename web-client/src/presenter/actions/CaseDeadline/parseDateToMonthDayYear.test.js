@@ -25,7 +25,7 @@ describe('parseDateToMonthDayYear', () => {
         moment.tz('2019-03-01T22:54:06.000Z', USTC_TZ),
       );
 
-    const result = await parseDateToMonthDayYear({
+    const result = parseDateToMonthDayYear({
       applicationContext,
       dateString: '1/20/2021',
     });
