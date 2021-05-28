@@ -6,11 +6,11 @@ import {
 export const petitionerEditsCasePrimaryContactPhone = test => {
   return it('petitioner updates primary contact phone', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.phone',
+      key: 'contact.phone',
       value: '9999999999',
     });
 
-    await test.runSequence('submitEditPrimaryContactSequence');
+    await test.runSequence('submitEditContactSequence');
 
     const contactPrimary = contactPrimaryFromState(test);
 
