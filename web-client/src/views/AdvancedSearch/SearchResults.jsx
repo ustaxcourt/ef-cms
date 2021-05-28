@@ -69,14 +69,9 @@ export const SearchResults = connect(
                       <td className="center-column">{idx + 1}</td>
                       <NonMobile>
                         <td>
-                          {/* todo: get UX design for this (show all petitioners?) and update advancedSearchHelper */}
-                          {result.petitioners[0].name}
-                          {result.petitioners[1] && (
-                            <>
-                              <br />
-                              {result.petitioners[1].name}
-                            </>
-                          )}
+                          {result.petitioners.map(p => (
+                            <div key={p.name}>{p.name}</div>
+                          ))}
                         </td>
                       </NonMobile>
                       <td>
@@ -86,13 +81,9 @@ export const SearchResults = connect(
                         <td>{result.formattedFiledDate}</td>
                         <td>{result.caseTitle}</td>
                         <td>
-                          {result.fullStateNamePrimary}
-                          {result.fullStateNameSecondary && (
-                            <>
-                              <br />
-                              {result.fullStateNameSecondary}
-                            </>
-                          )}
+                          {result.petitionerFullStateNames.map(p => (
+                            <div key={p.contactId}>{p.state}</div>
+                          ))}
                         </td>
                       </NonMobile>
                       <Mobile>
