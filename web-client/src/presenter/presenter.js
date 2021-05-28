@@ -114,6 +114,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
+import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoCreateOrderSequence } from './sequences/gotoCreateOrderSequence';
 import { gotoCreatePractitionerUserSequence } from './sequences/gotoCreatePractitionerUserSequence';
@@ -144,7 +145,6 @@ import { gotoPdfPreviewSequence } from './sequences/gotoPdfPreviewSequence';
 import { gotoPendingReportSequence } from './sequences/gotoPendingReportSequence';
 import { gotoPetitionQcSequence } from './sequences/gotoPetitionQcSequence';
 import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDetailSequence';
-import { gotoPrimaryContactEditSequence } from './sequences/gotoPrimaryContactEditSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrintableCaseInventoryReportSequence';
@@ -600,6 +600,7 @@ export const presenter = {
     gotoCaseInventoryReportSequence,
     gotoCaseSearchNoMatchesSequence,
     gotoChangeLoginAndServiceEmailSequence,
+    gotoContactEditSequence,
     gotoContactSequence,
     gotoCreateOrderSequence,
     gotoCreatePractitionerUserSequence,
@@ -630,7 +631,6 @@ export const presenter = {
     gotoPendingReportSequence,
     gotoPetitionQcSequence,
     gotoPractitionerDetailSequence,
-    gotoPrimaryContactEditSequence,
     gotoPrintPaperServiceSequence,
     gotoPrintableCaseConfirmationSequence,
     gotoPrintableCaseInventoryReportSequence,

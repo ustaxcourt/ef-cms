@@ -1033,9 +1033,6 @@ const {
   updateQcCompleteForTrialInteractor,
 } = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
 const {
-  updateSecondaryContactInteractor,
-} = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
-const {
   updateTrialDateOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
 const {
@@ -1827,7 +1824,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updateQcCompleteForTrialInteractor,
-        updateSecondaryContactInteractor,
         updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,
