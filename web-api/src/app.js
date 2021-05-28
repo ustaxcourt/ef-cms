@@ -348,9 +348,6 @@ const {
   updateQcCompleteForTrialLambda,
 } = require('./cases/updateQcCompleteForTrialLambda');
 const {
-  updateSecondaryContactLambda,
-} = require('./cases/updateSecondaryContactLambda');
-const {
   updateTrialSessionLambda,
 } = require('./trialSessions/updateTrialSessionLambda');
 const {
@@ -681,10 +678,6 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.put(
     '/case-parties/:docketNumber/contact-primary',
     lambdaWrapper(updateContactLambda),
-  );
-  app.put(
-    '/case-parties/:docketNumber/contact-secondary',
-    lambdaWrapper(updateSecondaryContactLambda),
   );
   app.post(
     '/case-parties/:docketNumber/associate-private-practitioner',

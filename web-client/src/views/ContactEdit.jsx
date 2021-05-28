@@ -16,7 +16,6 @@ export const ContactEdit = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    //update this
     submitEditContactSequence: sequences.submitEditContactSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePrimaryContactSequence: sequences.validatePrimaryContactSequence, //update this
