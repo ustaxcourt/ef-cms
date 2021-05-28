@@ -1,9 +1,3 @@
-require('regenerator-runtime');
-require('@babel/register')({
-  extensions: ['.jsx'],
-  presets: ['@babel/preset-react', '@babel/preset-env'],
-});
-
 // Documents
 const {
   AddressLabelCoverSheet,
