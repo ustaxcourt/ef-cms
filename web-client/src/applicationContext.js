@@ -243,7 +243,6 @@ import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/update
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
-import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
@@ -285,7 +284,6 @@ import { validatePetitionerInteractor } from '../../shared/src/business/useCases
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
-import { validateSecondaryContactInteractor } from '../../shared/src/business/useCases/validateSecondaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
@@ -471,7 +469,6 @@ const allUseCases = {
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
   updateQcCompleteForTrialInteractor,
-  updateSecondaryContactInteractor,
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
@@ -512,7 +509,6 @@ const allUseCases = {
   validatePractitionerInteractor,
   validatePrimaryContactInteractor,
   validateSearchDeadlinesInteractor,
-  validateSecondaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,

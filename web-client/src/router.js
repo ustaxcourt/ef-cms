@@ -460,7 +460,6 @@ const router = {
       }),
     );
 
-    //fixme, also remove all secondary related stuff
     registerRoute(
       '/case-detail/*/contacts/*/edit',
       ifHasAccess({ app }, (docketNumber, contactId) => {
