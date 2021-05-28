@@ -34,7 +34,27 @@ describe('setViewerDraftDocumentToDisplayAction', () => {
     expect(result.state.iframeSrc).toEqual('www.example.com');
   });
 
-  it('does not set iframeSrc if props.viewerDraftDocumentToDisplay is null', async () => {
+  it('sets the state.screenMetadata.draftDocumentViewerDocketEntryId from props on state from viewerDraftDocumentToDisplay if set', async () => {
+    const result = await runAction(setViewerDraftDocumentToDisplayAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        viewerDraftDocumentToDisplay: { docketEntryId: '1234' },
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+        },
+        viewerDraftDocumentToDisplay: null,
+      },
+    });
+    expect(
+      result.state.screenMetadata.draftDocumentViewerDocketEntryId,
+    ).toEqual('1234');
+  });
+
+  it('does not set state.screenMetadata.draftDocumentViewerDocketEntryId or iframeSrc if props.viewerDraftDocumentToDisplay is null', async () => {
     const result = await runAction(setViewerDraftDocumentToDisplayAction, {
       modules: {
         presenter,
@@ -46,9 +66,13 @@ describe('setViewerDraftDocumentToDisplayAction', () => {
         caseDetail: {
           docketNumber: '123-45',
         },
+        screenMetadata: {},
         viewerDraftDocumentToDisplay: null,
       },
     });
     expect(result.state.iframeSrc).toBeUndefined();
+    expect(
+      result.state.screenMetadata.draftDocumentViewerDocketEntryId,
+    ).toBeUndefined();
   });
 });
