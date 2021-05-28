@@ -18,7 +18,7 @@ export const ContactEdit = connect(
     showModal: state.modal.showModal,
     submitEditContactSequence: sequences.submitEditContactSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence, //update this
+    validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
   function ContactEdit({
@@ -28,14 +28,14 @@ export const ContactEdit = connect(
     showModal,
     submitEditContactSequence,
     updateFormValueSequence,
-    validatePrimaryContactSequence,
+    validatePetitionerSequence,
     validationErrors,
   }) {
     // update type since now it can be any kind of petitioner
     // will probably require integration test updates (modifyInfo and NCA tests)
     const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePrimaryContactSequence';
+    const onBlur = 'validatePetitionerSequence';
 
     return (
       <>
@@ -107,7 +107,7 @@ export const ContactEdit = connect(
                 type="tel"
                 value={form.contact.phone || ''}
                 onBlur={() => {
-                  validatePrimaryContactSequence();
+                  validatePetitionerSequence();
                 }}
                 onChange={e => {
                   updateFormValueSequence({
