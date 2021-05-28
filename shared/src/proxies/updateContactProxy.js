@@ -16,6 +16,6 @@ exports.updateContactInteractor = (
   return put({
     applicationContext,
     body: { contactInfo, docketNumber },
-    endpoint: `/case-parties/${docketNumber}/contact-primary`,
+    endpoint: `/case-parties/${docketNumber}/contact`,
   });
 };
