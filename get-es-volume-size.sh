@@ -13,7 +13,7 @@
 BRANCH=$1
 
 if [[ $BRANCH == 'develop' ]] ; then
-  echo "10"
+  echo "350"
 elif [[ $BRANCH == 'experimental1' ]] ; then
   echo "10"
 elif [[ $BRANCH == 'experimental2' ]] ; then
