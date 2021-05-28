@@ -5,6 +5,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  PETITIONS_SECTION,
 } = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 jest.mock('../messages/updateMessage');
@@ -282,6 +283,51 @@ describe('updateCase', () => {
         docketNumber: '101-18',
         docketNumberSuffix: null,
         status: CASE_STATUS_TYPES.generalDocket,
+      },
+      oldCase,
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
+    ).toMatchObject({
+      pk: 'case|101-18',
+      sk: 'case|101-18',
+    });
+    expect(applicationContext.getDocumentClient().update).not.toBeCalled();
+  });
+
+  it('should create a work item when a new docket entry with a work item has been added', async () => {
+    await updateCase({
+      applicationContext,
+      caseToUpdate: {
+        ...oldCase,
+        docketEntries: [
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'd753cab8-d9c8-4a5b-8420-4c0ab54e987c',
+            docketNumber: '101-18',
+            documentTitle: 'Answer',
+            documentType: 'Answer',
+            eventCode: 'A',
+            filedBy: 'Test Petitioner',
+            filingDate: '2018-03-01T05:00:00.000Z',
+            index: 1,
+            isFileAttached: true,
+            processingStatus: 'pending',
+            receivedAt: '2018-03-01T05:00:00.000Z',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            workItem: {
+              assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+              assigneeName: 'bob',
+              caseStatus: CASE_STATUS_TYPES.NEW,
+              caseTitle: 'Johnny Joe Jacobson',
+              docketEntry: A_VALID_DOCKET_ENTRY,
+              docketNumber: '101-18',
+              section: PETITIONS_SECTION,
+              sentBy: 'bob',
+            },
+          },
+        ],
       },
       oldCase,
     });
