@@ -186,6 +186,36 @@ describe('Joi Validation Decorator', () => {
     });
   });
 
+  describe('validate for migration', () => {
+    it('throws an invalid entity error if validation fails', () => {
+      const obj1 = new MockCase({
+        docketNumber: '123-20',
+        title: 'some title',
+      });
+      let error;
+      try {
+        obj1.validateForMigration();
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toBeDefined();
+      expect(error.message).toContain("'somethingId' is required");
+      expect(error.message).not.toContain('"somethingId":"<undefined>"');
+      expect(error.message).not.toContain('"docketNumber":"123-20"');
+    });
+
+    it('sets a non-iterable, non-writable "isValidated" property on an entity which is valid', () => {
+      const obj = new MockCase({
+        docketNumber: '123-20',
+        somethingId: 'some Id on a valid entity',
+        title: 'some title',
+      });
+      obj.validateForMigration();
+      expect(obj.isValidated).toEqual(true);
+      expect(Object.keys(obj.toRawObject())).not.toContain('isValidated');
+    });
+  });
+
   it('should have access to the schema', () => {
     const obj = new MockEntity2({});
     expect(obj.getSchema()).toEqual(MockEntity2Schema);
