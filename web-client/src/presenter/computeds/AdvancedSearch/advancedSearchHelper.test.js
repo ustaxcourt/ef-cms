@@ -158,12 +158,7 @@ describe('advancedSearchHelper', () => {
           case: [
             {
               docketNumber: '101-19',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
-                },
-              ],
+              petitioners: [mockPetitionerOne],
             },
           ],
         },
@@ -190,11 +185,7 @@ describe('advancedSearchHelper', () => {
               caseCaption: 'Test Petitioner, Petitioner',
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19',
-              petitioners: [
-                {
-                  ...mockPetitionerOne,
-                },
-              ],
+              petitioners: [mockPetitionerOne],
               receivedAt: '2019-03-01T05:00:00.000Z',
             },
             {
@@ -250,12 +241,7 @@ describe('advancedSearchHelper', () => {
               caseCaption: 'Test Petitioner, Petitioner',
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
-                },
-              ],
+              petitioners: [mockPetitionerOne],
               receivedAt: '2019-03-01T05:00:00.000Z',
             },
             {
@@ -264,28 +250,14 @@ describe('advancedSearchHelper', () => {
               docketNumber: '102-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               docketNumberWithSuffix: '102-18W',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TX',
-                },
-                {
-                  name: 'Another Person',
-                  state: 'TX',
-                },
-              ],
+              petitioners: [mockPetitionerOne, mockPetitionerTwo],
               receivedAt: '2019-05-01T05:00:00.000Z',
             },
             {
               caseCaption: 'Test Petitioner, Petitioner',
               docketNumber: '103-19',
               docketNumberWithSuffix: '103-19',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
-                },
-              ],
+              petitioners: [mockPetitionerOne],
               receivedAt: '2019-03-01T05:00:00.000Z',
             },
             {
@@ -294,16 +266,7 @@ describe('advancedSearchHelper', () => {
               docketNumber: '104-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               docketNumberWithSuffix: '104-18W',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TX',
-                },
-                {
-                  name: 'Another Person',
-                  state: 'TX',
-                },
-              ],
+              petitioners: [mockPetitionerOne, mockPetitionerTwo],
               receivedAt: '2019-05-01T05:00:00.000Z',
             },
           ],
