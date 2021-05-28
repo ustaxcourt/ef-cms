@@ -340,13 +340,13 @@ import { submitChangeLoginAndServiceEmailSequence } from './sequences/submitChan
 import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIssuedDocketEntrySequence';
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
+import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
 import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetitionerCounselSequence';
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
-import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
@@ -821,13 +821,13 @@ export const presenter = {
     submitCourtIssuedDocketEntrySequence,
     submitCourtIssuedOrderSequence,
     submitCreateOrderModalSequence,
+    submitEditContactSequence,
     submitEditDeficiencyStatisticSequence,
     submitEditDocketEntryMetaSequence,
     submitEditOrderTitleModalSequence,
     submitEditOtherStatisticsSequence,
     submitEditPetitionerCounselSequence,
     submitEditPetitionerSequence,
-    submitEditPrimaryContactSequence,
     submitEditRespondentCounselSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
