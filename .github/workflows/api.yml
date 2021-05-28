@@ -3,7 +3,7 @@ name: Node.js CI
 on: [pull_request]
 
 jobs:
-  Shared:
+  API:
     runs-on: ubuntu-latest
 
     strategy:
@@ -18,5 +18,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
         run: npm ci --no-optional && npm rebuild
-      - name: Unit Test Shared
-        run: npm run test:shared
+      - name: API
+        run: npm run test:api
