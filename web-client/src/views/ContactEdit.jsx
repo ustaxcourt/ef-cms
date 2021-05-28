@@ -16,10 +16,11 @@ export const ContactEdit = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
+    //update this
     submitEditPrimaryContactSequence:
       sequences.submitEditPrimaryContactSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
+    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence, //update this
     validationErrors: state.validationErrors,
   },
   function ContactEdit({
@@ -34,7 +35,7 @@ export const ContactEdit = connect(
   }) {
     // update type since now it can be any kind of petitioner
     // will probably require integration test updates (modifyInfo and NCA tests)
-    const type = 'contactPrimary';
+    const type = 'contact';
     const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';
 
@@ -42,7 +43,7 @@ export const ContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Edit Contact Information</h1>
+            <h1>Edit Contact Information rowoiwkjer;oakwjdf;klajsdf;kl</h1>
           </div>
         </div>
 
@@ -62,15 +63,13 @@ export const ContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label margin-bottom-0">Contact name</p>
-              <p className="margin-top-0">{form.contactPrimary.name}</p>
+              <p className="margin-top-0">{form.contact.name}</p>
             </div>
 
-            {form.contactPrimary.additionalName && (
+            {form.contact.additionalName && (
               <div className="usa-form-group">
                 <p className="usa-label margin-bottom-0">Additional name</p>
-                <p className="margin-top-0">
-                  {form.contactPrimary.additionalName}
-                </p>
+                <p className="margin-top-0">{form.contact.additionalName}</p>
               </div>
             )}
 
@@ -80,7 +79,7 @@ export const ContactEdit = connect(
               type={type}
               onChange="contactPrimaryCountryTypeChangeSequence"
             />
-            {form.contactPrimary.countryType === COUNTRY_TYPES.DOMESTIC ? (
+            {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}
                 type={type}
@@ -95,7 +94,7 @@ export const ContactEdit = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup errorText={validationErrors?.contactPrimary?.phone}>
+            <FormGroup errorText={validationErrors?.contact?.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -106,9 +105,9 @@ export const ContactEdit = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contact.phone"
                 type="tel"
-                value={form.contactPrimary.phone || ''}
+                value={form.contact.phone || ''}
                 onBlur={() => {
                   validatePrimaryContactSequence();
                 }}

@@ -26,13 +26,6 @@ export const partiesInformationHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail);
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(caseDetail);
-
   const formattedPrivatePractitioners = (
     caseDetail.privatePractitioners || []
   ).map(practitioner =>
@@ -92,30 +85,13 @@ export const partiesInformationHelper = (get, applicationContext) => {
     } else if (permissions.EDIT_PETITIONER_INFO) {
       canEditPetitioner = true;
     }
+
     canEditPetitioner = petitionIsServed && canEditPetitioner;
 
-    // this can be updated when consolidating update primaryContact and update secondaryContact interacor
-    let externalType = null;
-
-    if (petitioner.contactId === contactPrimary?.contactId) {
-      externalType = 'primary';
-    } else if (petitioner.contactId === contactSecondary?.contactId) {
-      externalType = 'secondary';
-    }
-
-    console.log('canEditPetitioner', canEditPetitioner);
-    console.log('isExternalUser', isExternalUser);
-
     const editPetitionerLink = isExternalUser
-      ? externalType
-        ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
-        : null
+      ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
-    console.log(
-      'canEditPetitioner && !!editPetitionerLink',
-      canEditPetitioner && !!editPetitionerLink,
-    );
     return {
       ...petitioner,
       canEditPetitioner: canEditPetitioner && !!editPetitionerLink,

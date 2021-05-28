@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setupContactPrimaryFormAction = ({
+export const setupContactFormAction = ({
   applicationContext,
   props,
   store,
@@ -19,6 +19,9 @@ export const setupContactPrimaryFormAction = ({
     .getPetitionerById(caseDetail, contactId);
 
   store.set(state.form.docketNumber, caseDetail.docketNumber);
-  store.set(state.form.contactPrimary, contactToEdit);
+  store.set(state.form.contact, contactToEdit);
   store.set(state.form.partyType, caseDetail.partyType);
+
+  console.log('contactToEdit', contactToEdit);
+  console.log('state.form.contact', state.form.contact);
 };

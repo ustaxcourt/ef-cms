@@ -4,7 +4,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setupContactPrimaryFormAction } from '../actions/setupContactPrimaryFormAction';
+import { setupContactFormAction } from '../actions/setupContactFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoContactEdit = [
@@ -13,7 +13,7 @@ const gotoContactEdit = [
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
-  setupContactPrimaryFormAction,
+  setupContactFormAction,
   setCurrentPageAction('ContactEdit'),
 ];
 
