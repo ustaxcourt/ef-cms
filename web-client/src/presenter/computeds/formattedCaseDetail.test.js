@@ -326,7 +326,7 @@ describe('formattedCaseDetail', () => {
       otherPetitioners = [
         { ...baseContact, contactType: CONTACT_TYPES.otherPetitioner },
       ];
-      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.otherFiler }];
+      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.intervenor }];
 
       caseDetail = {
         ...MOCK_CASE,
@@ -899,7 +899,7 @@ describe('formattedCaseDetail', () => {
     });
 
     expect(result.petitioners[0]).toMatchObject({
-      contactTypeDisplay: 'Participant',
+      displayName: 'John Johnson, Participant',
     });
   });
 });

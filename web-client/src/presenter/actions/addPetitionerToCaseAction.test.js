@@ -13,6 +13,9 @@ describe('addPetitionerToCaseAction', () => {
   };
 
   const baseState = {
+    caseDetail: {
+      docketNumber: '999-99',
+    },
     constants: {
       CONTACT_TYPES,
     },
@@ -25,9 +28,6 @@ describe('addPetitionerToCaseAction', () => {
       modules: { presenter },
       state: {
         ...baseState,
-        caseDetail: {
-          docketNumber: '999-99',
-        },
         form: {
           contact: mockContact,
         },
@@ -46,9 +46,6 @@ describe('addPetitionerToCaseAction', () => {
       modules: { presenter },
       state: {
         ...baseState,
-        caseDetail: {
-          docketNumber: '999-99',
-        },
         form: {
           contact: mockContact,
         },
@@ -65,9 +62,6 @@ describe('addPetitionerToCaseAction', () => {
       modules: { presenter },
       state: {
         ...baseState,
-        caseDetail: {
-          docketNumber: '999-99',
-        },
         form: {
           contact: mockContact,
         },
@@ -77,14 +71,25 @@ describe('addPetitionerToCaseAction', () => {
     expect(result.output.tab).toBe('caseInfo');
   });
 
+  it('returns form.contact.contactType as props.contactType', async () => {
+    const result = await runAction(addPetitionerToCaseAction, {
+      modules: { presenter },
+      state: {
+        ...baseState,
+        form: {
+          contact: mockContact,
+        },
+      },
+    });
+
+    expect(result.output.contactType).toBe(mockContact.contactType);
+  });
+
   it('calls addPetitionerToCaseInteractor with params from state.form', async () => {
     await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
       state: {
         ...baseState,
-        caseDetail: {
-          docketNumber: '999-99',
-        },
         form: {
           contact: mockContact,
         },

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
-    CONTACT_TYPE_TITLES,
     COURT_ISSUED_EVENT_CODES,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
@@ -26,15 +25,12 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     value: type.eventCode,
   }));
 
-  const { petitioners } = caseDetail;
+  const petitioners = applicationContext
+    .getUtilities()
+    .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
 
   const serviceParties = [
-    ...petitioners.map(petitioner => ({
-      ...petitioner,
-      displayName: `${petitioner.name}, ${
-        CONTACT_TYPE_TITLES[petitioner.contactType]
-      }`,
-    })),
+    ...petitioners,
     ...caseDetail.privatePractitioners.map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Petitioner Counsel`,

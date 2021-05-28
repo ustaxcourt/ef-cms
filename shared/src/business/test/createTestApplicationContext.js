@@ -121,6 +121,9 @@ const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
 const {
+  getFormattedPartiesNameAndTitle,
+} = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
   getFullCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getFullCaseByDocketNumber');
 const {
@@ -299,6 +302,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getFormattedPartiesNameAndTitle: jest
+      .fn()
+      .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearObj: jest
       .fn()

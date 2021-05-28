@@ -1,7 +1,11 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
+export const docketClerkEditsDocketEntryMeta = (
+  test,
+  docketRecordIndex,
+  data = {},
+) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
@@ -68,9 +72,15 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       otherFilingParty: 'Enter other filing party name.',
     });
 
+    // note: this is not possible if the docket entry is already served
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'otherFilingParty',
       value: 'Brianna Noble',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filedBy',
+      value: data.filedBy || 'Resp. & Petr. Mona Schultz, Brianna Noble',
     });
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {

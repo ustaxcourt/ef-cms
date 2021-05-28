@@ -100,6 +100,7 @@
         - "intervenor"
         - "participant"
         - "otherPetitioners"
+        - "otherPetitioner"
     hasEAccess: 
       type: "boolean"
       flags: 

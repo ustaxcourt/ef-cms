@@ -1,3 +1,4 @@
+import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { removePetitionerAndUpdateCaptionAction } from './removePetitionerAndUpdateCaptionAction';
@@ -28,7 +29,7 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
     };
   });
 
-  it('should set the success message of `Petitioner removed.`', async () => {
+  it('should set the success message of `Petitioner successfully removed.` when a petitioner is removed from the case', async () => {
     const { output } = await runAction(removePetitionerAndUpdateCaptionAction, {
       modules: {
         presenter,
@@ -36,6 +37,12 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
       state: {
         caseDetail: {
           docketNumber: mockDocketNumber,
+          petitioners: [
+            {
+              contactId: mockContact.contactId,
+              contactType: CONTACT_TYPES.otherPetitioner,
+            },
+          ],
         },
         form,
         modal: {
@@ -44,7 +51,37 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
       },
     });
 
-    expect(output.alertSuccess.message).toBe('Petitioner removed.');
+    expect(output.alertSuccess.message).toBe(
+      'Petitioner successfully removed.',
+    );
+    expect(output.tab).toBe('caseInfo');
+  });
+
+  it('should set the success message of `Intervenor successfully removed.` when an intervenor is removed from the case', async () => {
+    const { output } = await runAction(removePetitionerAndUpdateCaptionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+          petitioners: [
+            {
+              contactId: mockContact.contactId,
+              contactType: CONTACT_TYPES.intervenor,
+            },
+          ],
+        },
+        form,
+        modal: {
+          caseCaption: caseCaptionToUpdate,
+        },
+      },
+    });
+
+    expect(output.alertSuccess.message).toBe(
+      'Intervenor successfully removed.',
+    );
     expect(output.tab).toBe('caseInfo');
   });
 
@@ -56,6 +93,12 @@ describe('removePetitionerAndUpdateCaptionAction', () => {
       state: {
         caseDetail: {
           docketNumber: mockDocketNumber,
+          petitioners: [
+            {
+              contactId: mockContact.contactId,
+              contactType: CONTACT_TYPES.intervenor,
+            },
+          ],
         },
         form,
         modal: {

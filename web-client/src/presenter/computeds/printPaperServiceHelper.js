@@ -7,7 +7,7 @@ export const printPaperServiceHelper = get => {
     const doc = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
-    return { documentTitle: doc.documentType };
+    return { documentTitle: doc.documentTitle };
   } else {
     return {};
   }

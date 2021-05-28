@@ -2,7 +2,6 @@ const joi = require('joi');
 const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  OTHER_FILER_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -106,11 +105,7 @@ Petitioner.VALIDATION_RULES = {
       .required(),
     then: joi.optional().allow(null),
   }),
-  title: joi.when('contactType', {
-    is: CONTACT_TYPES.otherFiler,
-    otherwise: JoiValidationConstants.STRING.max(100).optional(),
-    then: JoiValidationConstants.STRING.valid(...OTHER_FILER_TYPES).required(),
-  }),
+  title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
 Petitioner.VALIDATION_ERROR_MESSAGES = {
@@ -123,6 +118,8 @@ Petitioner.VALIDATION_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
   city: 'Enter city',
   contactType: 'Select a role type',
+  contactTypeSecondIntervenor:
+    'Only one (1) Intervenor is allowed per case. Please select a different Role.',
   country: 'Enter a country',
   countryType: 'Enter country type',
   name: [

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   clerkOfCourtUser,
