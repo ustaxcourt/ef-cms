@@ -33,16 +33,6 @@ export const caseInformationHelper = (get, applicationContext) => {
   const showSealAddressLink = permissions.SEAL_ADDRESS;
   const showHearingsTable = !!caseDetail.hearings?.length;
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail);
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(caseDetail);
-  const contactPrimaryEmailFormatted = contactPrimary?.email ?? 'Not provided';
-  const contactSecondaryEmailFormatted =
-    contactSecondary?.email ?? 'Not provided';
-
   const allPetitioners = caseDetail.petitioners;
 
   const formattedPetitioners = showingAdditionalPetitioners
@@ -54,8 +44,6 @@ export const caseInformationHelper = (get, applicationContext) => {
     caseDetail.status !== STATUS_TYPES.new;
 
   return {
-    contactPrimaryEmailFormatted,
-    contactSecondaryEmailFormatted,
     formattedPetitioners,
     isInternalUser,
     showAddCounsel,

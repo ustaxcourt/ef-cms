@@ -36,21 +36,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
 
-    const contactPrimary = applicationContext
+    isAssociated = !!applicationContext
       .getUtilities()
-      .getContactPrimary(caseDetail);
-
-    const caseContactPrimaryId = contactPrimary && contactPrimary.contactId;
-
-    const contactSecondary = applicationContext
-      .getUtilities()
-      .getContactSecondary(caseDetail);
-
-    const caseContactSecondaryId = contactSecondary?.contactId;
-
-    isAssociated =
-      (caseContactPrimaryId && caseContactPrimaryId === user.userId) ||
-      (!!caseContactSecondaryId && caseContactSecondaryId === user.userId);
+      .getPetitionerById(caseDetail, user.userId);
   } else if (user.role === USER_ROLES.irsSuperuser) {
     const docketEntries = get(state.caseDetail.docketEntries);
     const petitionDocketEntry = docketEntries.find(

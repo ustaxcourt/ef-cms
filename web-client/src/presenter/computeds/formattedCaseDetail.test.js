@@ -1,7 +1,4 @@
-import {
-  CONTACT_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
@@ -79,10 +76,6 @@ describe('formattedCaseDetail', () => {
   const docketClerkUser = {
     role: USER_ROLES.docketClerk,
     userId: '222',
-  };
-  const petitionerUser = {
-    role: USER_ROLES.petitioner,
-    userId: '333',
   };
   const judgeUser = {
     role: USER_ROLES.judge,
@@ -303,116 +296,6 @@ describe('formattedCaseDetail', () => {
 
       expect(result.consolidatedCases).toBeDefined();
       expect(result.consolidatedCases).toEqual([]);
-    });
-  });
-
-  describe('showEAccessFlag', () => {
-    let baseContact;
-    let contactPrimary;
-    let contactSecondary;
-    let otherPetitioners;
-    let otherFilers;
-    let caseDetail;
-
-    beforeEach(() => {
-      baseContact = {
-        hasEAccess: true,
-      };
-      contactPrimary = { ...baseContact, contactType: CONTACT_TYPES.primary };
-      contactSecondary = {
-        ...baseContact,
-        contactType: CONTACT_TYPES.secondary,
-      };
-      otherPetitioners = [
-        { ...baseContact, contactType: CONTACT_TYPES.otherPetitioner },
-      ];
-      otherFilers = [{ ...baseContact, contactType: CONTACT_TYPES.intervenor }];
-
-      caseDetail = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            attachments: false,
-            certificateOfService: false,
-            createdAt: '2019-06-19T17:29:13.120Z',
-            description: 'Motion to Dismiss for Lack of Jurisdiction',
-            docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
-            documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
-            documentType: 'Motion to Dismiss for Lack of Jurisdiction',
-            eventCode: 'M073',
-            filingDate: '2019-06-19T17:29:13.120Z',
-            isLegacy: true,
-            isStricken: true,
-            numberOfPages: 24,
-          },
-        ],
-        petitioners: [
-          contactPrimary,
-          contactSecondary,
-          ...otherFilers,
-          ...otherPetitioners,
-        ],
-      };
-    });
-
-    it('sets the showEAccessFlag to false for internal users when a contact does not have legacy access', () => {
-      baseContact.hasEAccess = false;
-      contactPrimary.hasEAccess = false;
-      contactSecondary.hasEAccess = false;
-      otherFilers[0].hasEAccess = false;
-      otherPetitioners[0].hasEAccess = false;
-
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-
-      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
-      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
-      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
-      expect(result.otherFilers[0].serviceIndicator).toEqual(
-        SERVICE_INDICATOR_TYPES.SI_PAPER,
-      );
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
-    });
-
-    it('sets the showEAccessFlag to true for internal users when contact has legacy access', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-
-      expect(result.contactPrimary.showEAccessFlag).toEqual(true);
-      expect(result.contactSecondary.showEAccessFlag).toEqual(true);
-      expect(result.otherFilers[0].showEAccessFlag).toEqual(true);
-      expect(result.otherFilers[0].serviceIndicator).toEqual(
-        SERVICE_INDICATOR_TYPES.SI_PAPER,
-      );
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(true);
-    });
-
-    it('sets the showEAccessFlag to false for external users when contact has legacy access', () => {
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-
-      expect(result.contactPrimary.showEAccessFlag).toEqual(false);
-      expect(result.contactSecondary.showEAccessFlag).toEqual(false);
-      expect(result.otherFilers[0].showEAccessFlag).toEqual(false);
-      expect(result.otherFilers[0].serviceIndicator).toEqual(
-        SERVICE_INDICATOR_TYPES.SI_PAPER,
-      );
-      expect(result.otherPetitioners[0].showEAccessFlag).toEqual(false);
     });
   });
 

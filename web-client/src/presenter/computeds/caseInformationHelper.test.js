@@ -10,8 +10,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInformationHelper', () => {
-  const mockEmail = 'error@example.com';
-  const mockEmailSecondary = 'petitioner2@example.com';
   const mockPetitionsClerk = {
     role: ROLES.petitionsClerk,
     userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
@@ -54,104 +52,6 @@ describe('caseInformationHelper', () => {
   beforeEach(() => {
     mockUser = {};
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
-  });
-
-  describe('contactPrimaryEmailFormatted', () => {
-    it('should display the case contact primary email when it is defined', () => {
-      const { contactPrimaryEmailFormatted } = runCompute(
-        caseInformationHelper,
-        {
-          state: {
-            ...getBaseState(mockPetitioner),
-            caseDetail: {
-              petitioners: [
-                {
-                  contactType: CONTACT_TYPES.primary,
-                  email: mockEmail,
-                },
-              ],
-            },
-            form: {},
-          },
-        },
-      );
-
-      expect(contactPrimaryEmailFormatted).toBe(mockEmail);
-    });
-
-    it('should display `Not provided` when the case contact primary does not have an email', () => {
-      const { contactPrimaryEmailFormatted } = runCompute(
-        caseInformationHelper,
-        {
-          state: {
-            ...getBaseState(mockPetitioner),
-            caseDetail: {
-              petitioners: [
-                {
-                  contactType: CONTACT_TYPES.primary,
-                  pendingEmail: mockEmail,
-                },
-              ],
-            },
-            form: {},
-          },
-        },
-      );
-
-      expect(contactPrimaryEmailFormatted).toBe('Not provided');
-    });
-  });
-
-  describe('contactSecondaryEmailFormatted', () => {
-    it('should display the case contact secondary email when it is defined', () => {
-      const { contactSecondaryEmailFormatted } = runCompute(
-        caseInformationHelper,
-        {
-          state: {
-            ...getBaseState(mockPetitioner),
-            caseDetail: {
-              petitioners: [
-                {
-                  contactType: CONTACT_TYPES.primary,
-                },
-                {
-                  contactType: CONTACT_TYPES.secondary,
-                  email: mockEmailSecondary,
-                },
-              ],
-            },
-            form: {},
-          },
-        },
-      );
-
-      expect(contactSecondaryEmailFormatted).toBe(mockEmailSecondary);
-    });
-
-    it('should display `Not provided` when the case contact secondary does not have an email', () => {
-      const { contactSecondaryEmailFormatted } = runCompute(
-        caseInformationHelper,
-        {
-          state: {
-            ...getBaseState(mockPetitioner),
-            caseDetail: {
-              petitioners: [
-                {
-                  contactType: CONTACT_TYPES.primary,
-                },
-                {
-                  contactType: CONTACT_TYPES.secondary,
-                  pendingEmail: mockEmail,
-                },
-              ],
-            },
-            form: {},
-          },
-        },
-      );
-
-      expect(contactSecondaryEmailFormatted).toBe('Not provided');
-    });
   });
 
   describe('formattedPetitioners', () => {

@@ -3,7 +3,6 @@ const {
 } = require('../../../../web-client/src/applicationContext');
 const {
   CASE_STATUS_TYPES,
-  CONTACT_TYPES,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
 const {
@@ -713,25 +712,6 @@ describe('getFormattedCaseDetail', () => {
   });
 
   describe('getFormattedCaseDetail', () => {
-    it('should set a contactSecondary on the formatted case when one exists in the petitioners array', () => {
-      const result = getFormattedCaseDetail({
-        applicationContext,
-        caseDetail: {
-          ...MOCK_CASE,
-          petitioners: [
-            ...MOCK_CASE.petitioners,
-            {
-              ...MOCK_CASE.petitioners[0],
-              contactId: '16f375ac-ec56-4c3b-b365-1eed853cdf2e',
-              contactType: CONTACT_TYPES.secondary,
-            },
-          ],
-        },
-      });
-
-      expect(result.contactSecondary).toBeDefined();
-    });
-
     it('should call formatCase and add additional details on the given case', () => {
       const result = getFormattedCaseDetail({
         applicationContext,

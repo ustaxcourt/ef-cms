@@ -69,11 +69,12 @@ export const SearchResults = connect(
                       <td className="center-column">{idx + 1}</td>
                       <NonMobile>
                         <td>
-                          {result.contactPrimaryName}
-                          {result.contactSecondaryName && (
+                          {/* todo: get UX design for this (show all petitioners?) and update advancedSearchHelper */}
+                          {result.petitioners[0].name}
+                          {result.petitioners[1] && (
                             <>
                               <br />
-                              {result.contactSecondaryName}
+                              {result.petitioners[1].name}
                             </>
                           )}
                         </td>
