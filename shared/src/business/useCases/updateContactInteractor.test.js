@@ -2,15 +2,13 @@ const {
   applicationContext,
   fakeData,
 } = require('../test/createTestApplicationContext');
-const {
-  updatePrimaryContactInteractor,
-} = require('./updatePrimaryContactInteractor');
 const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
+const { updateContactInteractor } = require('./updateContactInteractor');
 const { User } = require('../entities/User');
 
-describe('update primary contact on a case', () => {
+describe('updates the contact on a case', () => {
   let mockCase;
   let mockUser;
   const mockCaseContactPrimary = MOCK_CASE.petitioners[0];
@@ -63,22 +61,19 @@ describe('update primary contact on a case', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
-    const caseDetail = await updatePrimaryContactInteractor(
-      applicationContext,
-      {
-        contactInfo: {
-          ...mockCaseContactPrimary,
-          address1: '453 Electric Ave',
-          city: 'Philadelphia',
-          email: 'petitioner',
-          name: 'Bill Burr',
-          phone: '1234567890',
-          postalCode: '99999',
-          state: 'PA',
-        },
-        docketNumber: MOCK_CASE.docketNumber,
+    const caseDetail = await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+        address1: '453 Electric Ave',
+        city: 'Philadelphia',
+        email: 'petitioner',
+        name: 'Bill Burr',
+        phone: '1234567890',
+        postalCode: '99999',
+        state: 'PA',
       },
-    );
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     const updatedCase = applicationContext.getPersistenceGateway().updateCase
       .mock.calls[0][0].caseToUpdate;
@@ -115,7 +110,7 @@ describe('update primary contact on a case', () => {
   });
 
   it('creates a work item if the primary contact is not represented by a privatePractitioner', async () => {
-    await updatePrimaryContactInteractor(applicationContext, {
+    await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
@@ -145,7 +140,7 @@ describe('update primary contact on a case', () => {
         ],
       });
 
-    await updatePrimaryContactInteractor(applicationContext, {
+    await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
@@ -165,7 +160,7 @@ describe('update primary contact on a case', () => {
       .getCaseByDocketNumber.mockResolvedValue(null);
 
     await expect(
-      updatePrimaryContactInteractor(applicationContext, {
+      updateContactInteractor(applicationContext, {
         contactInfo: {},
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -179,7 +174,7 @@ describe('update primary contact on a case', () => {
     };
 
     await expect(
-      updatePrimaryContactInteractor(applicationContext, {
+      updateContactInteractor(applicationContext, {
         contactInfo: mockCaseContactPrimary,
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -191,7 +186,7 @@ describe('update primary contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
-    await updatePrimaryContactInteractor(applicationContext, {
+    await updateContactInteractor(applicationContext, {
       contactInfo: mockCaseContactPrimary,
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -212,19 +207,16 @@ describe('update primary contact on a case', () => {
       .getUtilities()
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
-    const caseDetail = await updatePrimaryContactInteractor(
-      applicationContext,
-      {
-        contactInfo: {
-          ...mockCaseContactPrimary,
-          address1: 'nothing',
-          city: 'Somewhere',
-          email: 'hello123@example.com',
-          name: 'Secondary Party Name Changed',
-        },
-        docketNumber: MOCK_CASE.docketNumber,
+    const caseDetail = await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+        address1: 'nothing',
+        city: 'Somewhere',
+        email: 'hello123@example.com',
+        name: 'Secondary Party Name Changed',
       },
-    );
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     const contactPrimary = getContactPrimary(caseDetail);
 
@@ -251,7 +243,7 @@ describe('update primary contact on a case', () => {
         () => mockCaseWithSealedAddress,
       );
 
-    await updatePrimaryContactInteractor(applicationContext, {
+    await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
         address1: 'nothing 1',
@@ -274,7 +266,7 @@ describe('update primary contact on a case', () => {
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
-    await updatePrimaryContactInteractor(applicationContext, {
+    await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',

@@ -7,11 +7,9 @@ describe('updatePrimaryContactAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    applicationContext
-      .getUseCases()
-      .updatePrimaryContactInteractor.mockReturnValue({
-        docketNumber: '101-20',
-      });
+    applicationContext.getUseCases().updateContactInteractor.mockReturnValue({
+      docketNumber: '101-20',
+    });
   });
 
   it('updates primary contact for the current case', async () => {
@@ -30,7 +28,7 @@ describe('updatePrimaryContactAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePrimaryContactInteractor,
+      applicationContext.getUseCases().updateContactInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       alertSuccess: {

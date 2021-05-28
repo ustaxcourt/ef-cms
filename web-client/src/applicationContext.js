@@ -231,6 +231,7 @@ import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritiz
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
@@ -241,7 +242,6 @@ import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseSt
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
-import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
 import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
@@ -459,6 +459,7 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
@@ -469,7 +470,6 @@ const allUseCases = {
   updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
-  updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
   updateSecondaryContactInteractor,
   updateTrialSessionInteractor,

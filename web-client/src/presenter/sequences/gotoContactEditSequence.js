@@ -7,7 +7,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setupContactPrimaryFormAction } from '../actions/setupContactPrimaryFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoPrimaryContactEdit = [
+const gotoContactEdit = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -17,10 +17,10 @@ const gotoPrimaryContactEdit = [
   setCurrentPageAction('PrimaryContactEdit'),
 ];
 
-export const gotoPrimaryContactEditSequence = [
+export const gotoContactEditSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoPrimaryContactEdit,
+    isLoggedIn: gotoContactEdit,
     unauthorized: [redirectToCognitoAction],
   },
 ];
