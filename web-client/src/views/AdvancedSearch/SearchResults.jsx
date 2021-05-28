@@ -70,7 +70,7 @@ export const SearchResults = connect(
                       <NonMobile>
                         <td>
                           {result.petitioners.map(p => (
-                            <div key={p.name}>{p.name}</div>
+                            <div key={p.contactId}>{p.name}</div>
                           ))}
                         </td>
                       </NonMobile>
