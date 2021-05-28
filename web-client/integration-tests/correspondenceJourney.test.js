@@ -1,5 +1,6 @@
 import { docketClerkCreatesMessageWithCorrespondence } from './journey/docketClerkCreatesMessageWithCorrespondence';
 import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCorrespondence';
+import { docketClerkViewsMessageWithCorrespondence } from './journey/docketClerkViewsMessageWithCorrespondence';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { userAddsCorrespondence } from './journey/userAddsCorrespondence';
 import { userDeletesCorrespondence } from './journey/userDeletesCorrespondence';
@@ -40,6 +41,12 @@ describe('Adds correspondence to a case', () => {
     'DocketClerk',
   );
   docketClerkCreatesMessageWithCorrespondence(test);
+  docketClerkViewsMessageWithCorrespondence(test);
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'DocketClerk',
+  );
   userEditsCorrespondence(test, 'DocketClerk');
   docketClerkDeletesCorrespondence(test, firstCorrespondenceTitle);
 
