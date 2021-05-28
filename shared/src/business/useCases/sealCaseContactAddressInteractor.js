@@ -40,12 +40,7 @@ exports.sealCaseContactAddressInteractor = async (
     applicationContext,
   });
 
-  const contactToSeal = [
-    caseEntity.getContactPrimary(),
-    caseEntity.getContactSecondary(),
-    ...(caseEntity.getOtherFilers() || []),
-    ...(caseEntity.getOtherPetitioners() || []),
-  ].find(contact => contact && contact.contactId == contactId);
+  const contactToSeal = caseEntity.getPetitionerById(contactId);
 
   if (!contactToSeal) {
     throw new UnprocessableEntityError(

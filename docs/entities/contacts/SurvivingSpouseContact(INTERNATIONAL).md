@@ -107,13 +107,14 @@
           args: 
             limit: 1
       allow: 
+        - "intervenor"
+        - "otherFilers"
+        - "otherPetitioner"
+        - "otherPetitioners"
+        - "participant"
+        - "petitioner"
         - "primary"
         - "secondary"
-        - "otherFilers"
-        - "intervenor"
-        - "participant"
-        - "otherPetitioners"
-        - "otherPetitioner"
     hasEAccess: 
       type: "boolean"
       flags: 
