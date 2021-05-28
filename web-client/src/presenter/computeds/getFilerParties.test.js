@@ -4,10 +4,9 @@ import { getFilerParties } from './getFilerParties';
 
 describe('getFilerParties', () => {
   const docketEntryId = applicationContext.getUniqueId();
+  const mockContactId = 'af8db7fa-9b1b-4a9a-ace0-6788d3e15943';
 
   it('should return petitioners name with title when checked in the filersMap', () => {
-    const mockContactId = 'af8db7fa-9b1b-4a9a-ace0-6788d3e15943';
-
     const filerParties = getFilerParties({
       caseDetail: {
         docketEntries: [
@@ -37,8 +36,6 @@ describe('getFilerParties', () => {
   });
 
   it('should NOT return petitioners name with title when they are unchecked in the filersMap', () => {
-    const mockContactId = 'af8db7fa-9b1b-4a9a-ace0-6788d3e15943';
-
     const filerParties = getFilerParties({
       caseDetail: {
         docketEntries: [
@@ -54,17 +51,21 @@ describe('getFilerParties', () => {
             ...MOCK_CASE.petitioners[0],
             contactId: mockContactId,
           },
+          {
+            ...MOCK_CASE.petitioners[0],
+          },
         ],
       },
-      filersMap: { [mockContactId]: false },
+      filersMap: {
+        [mockContactId]: false,
+        [MOCK_CASE.petitioners[0].contactId]: false,
+      },
     });
 
     expect(filerParties).toEqual([]);
   });
 
   it('should NOT return petitioners name with title when they are not in the filersMap', () => {
-    const mockContactId = 'af8db7fa-9b1b-4a9a-ace0-6788d3e15943';
-
     const filerParties = getFilerParties({
       caseDetail: {
         docketEntries: [
@@ -75,13 +76,27 @@ describe('getFilerParties', () => {
             eventCode: 'O',
           },
         ],
-        petitioners: [
+        petitioners: MOCK_CASE.petitioners,
+      },
+      filersMap: { [mockContactId]: true },
+    });
+
+    expect(filerParties).toEqual([]);
+  });
+
+  it('should default filersMap t an empty object when it is not passed in', () => {
+    const filerParties = getFilerParties({
+      caseDetail: {
+        docketEntries: [
           {
-            ...MOCK_CASE.petitioners[0],
+            docketEntryId,
+            documentTitle: 'Some Stuff',
+            documentType: 'Order',
+            eventCode: 'O',
           },
         ],
+        petitioners: MOCK_CASE.petitioners,
       },
-      filersMap: { [mockContactId]: false },
     });
 
     expect(filerParties).toEqual([]);
