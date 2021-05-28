@@ -58,51 +58,6 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.showEditEmail).toEqual(false);
   });
 
-  it('should return contactPrimaryHasEmail true if the contactPrimary has an email address', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactType: CONTACT_TYPES.primary,
-              email: 'testpetitioner@example.com',
-            },
-          ],
-        },
-        form: {
-          contactPrimary: {
-            email: 'testpetitioner@example.com',
-          },
-          partyType: PARTY_TYPES.petitioner,
-        },
-        permissions: {
-          EDIT_PETITIONER_EMAIL: true,
-        },
-      },
-    });
-
-    expect(result.contactPrimaryHasEmail).toEqual(true);
-  });
-
-  it('should return contactPrimaryHasEmail false if the contactPrimary DOES NOT have an email address', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          petitioners: [],
-        },
-        form: {
-          contactPrimary: {},
-          partyType: PARTY_TYPES.petitioner,
-        },
-        permissions: {
-          EDIT_PETITIONER_EMAIL: true,
-        },
-      },
-    });
-
-    expect(result.contactPrimaryHasEmail).toEqual(false);
-  });
-
   it('returns userPendingEmail from state', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
@@ -117,11 +72,18 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.userPendingEmail).toEqual('email@example.com');
   });
 
-  it('returns showRemovePetitionerButton = true when there is more than one petitioner on the case', () => {
+  it('returns showRemovePetitionerButton `true` when there is more than one petitioner on the case with contactType of `petitioner`', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: {
-          petitioners: [{}, {}],
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.petitioner,
+            },
+            {
+              contactType: CONTACT_TYPES.petitioner,
+            },
+          ],
         },
         permissions: {
           REMOVE_PETITIONER: true,
@@ -131,11 +93,18 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.showRemovePetitionerButton).toBeTruthy();
   });
 
-  it('returns showRemovePetitionerButton = false when there is only one petitioner on the case', () => {
+  it('returns showRemovePetitionerButton = false when there is only one petitioner on the case with contactType of `petitioner`', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: {
-          petitioners: [{}],
+          petitioners: [
+            {
+              contactType: CONTACT_TYPES.petitioner,
+            },
+            {
+              contactType: CONTACT_TYPES.intervenor,
+            },
+          ],
         },
         permissions: {
           REMOVE_PETITIONER: true,

@@ -88,15 +88,13 @@ export const getFormattedDocketEntriesForTest = async test => {
   });
 };
 
-export const contactPrimaryFromState = test =>
-  applicationContext
-    .getUtilities()
-    .getContactPrimary(test.getState('caseDetail'));
+export const contactPrimaryFromState = test => {
+  return test.getState('caseDetail.petitioners.0');
+};
 
-export const contactSecondaryFromState = test =>
-  applicationContext
-    .getUtilities()
-    .getContactSecondary(test.getState('caseDetail'));
+export const contactSecondaryFromState = test => {
+  return test.getState('caseDetail.petitioners.1');
+};
 
 export const getCaseMessagesForCase = async test => {
   await test.runSequence('gotoCaseDetailSequence', {

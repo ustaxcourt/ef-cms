@@ -1,9 +1,4 @@
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -11,6 +6,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -31,24 +27,21 @@ const updateCasesForPetitioner = async ({
 
   const validatedCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
-      const caseRaw = new Case(caseToUpdate, {
+      const caseEntity = new Case(caseToUpdate, {
         applicationContext,
       });
 
-      const petitionerObject = [
-        getContactPrimary(caseRaw),
-        getContactSecondary(caseRaw),
-      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
+      const petitionerObject = caseEntity.getPetitionerById(user.userId);
       if (!petitionerObject) {
         applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseRaw.docketNumber}`,
+          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
         );
         return;
       }
       petitionerObject.email = user.email;
       petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
-      const newCase = new Case(caseRaw, { applicationContext }).validate();
+      const newCase = new Case(caseEntity, { applicationContext }).validate();
       return newCase;
     })
     // if petitioner is not found on the case, function exits early and returns `undefined`.

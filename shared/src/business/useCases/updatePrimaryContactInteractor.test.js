@@ -13,7 +13,7 @@ const { User } = require('../entities/User');
 describe('update primary contact on a case', () => {
   let mockCase;
   let mockUser;
-  const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+  const mockCaseContactPrimary = MOCK_CASE.petitioners[0];
 
   beforeEach(() => {
     mockCase = MOCK_CASE;
@@ -67,9 +67,9 @@ describe('update primary contact on a case', () => {
       applicationContext,
       {
         contactInfo: {
+          ...mockCaseContactPrimary,
           address1: '453 Electric Ave',
           city: 'Philadelphia',
-          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner',
           name: 'Bill Burr',
           phone: '1234567890',
@@ -117,14 +117,8 @@ describe('update primary contact on a case', () => {
   it('creates a work item if the primary contact is not represented by a privatePractitioner', async () => {
     await updatePrimaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
-        city: 'Philadelphia',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner',
-        name: 'Bill Burr',
-        phone: '1234567890',
-        postalCode: '99999',
-        state: 'PA',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -153,15 +147,8 @@ describe('update primary contact on a case', () => {
 
     await updatePrimaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
-        city: 'Philadelphia',
-        contactId: mockCaseContactPrimary.contactId,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner',
-        name: 'Bill Burr',
-        phone: '1234567890',
-        postalCode: '99999',
-        state: 'PA',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -193,7 +180,7 @@ describe('update primary contact on a case', () => {
 
     await expect(
       updatePrimaryContactInteractor(applicationContext, {
-        contactInfo: {},
+        contactInfo: mockCaseContactPrimary,
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
@@ -205,18 +192,7 @@ describe('update primary contact on a case', () => {
       .getDocumentTypeForAddressChange.mockReturnValue(undefined);
 
     await updatePrimaryContactInteractor(applicationContext, {
-      contactInfo: {
-        // Matches current contact info
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner@example.com',
-        name: 'Test Petitioner',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Executor',
-      },
+      contactInfo: mockCaseContactPrimary,
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -240,14 +216,11 @@ describe('update primary contact on a case', () => {
       applicationContext,
       {
         contactInfo: {
+          ...mockCaseContactPrimary,
           address1: 'nothing',
           city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'hello123@example.com',
           name: 'Secondary Party Name Changed',
-          phone: '9876543210',
-          postalCode: '12345',
-          state: 'TN',
         },
         docketNumber: MOCK_CASE.docketNumber,
       },
@@ -280,14 +253,8 @@ describe('update primary contact on a case', () => {
 
     await updatePrimaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockCaseContactPrimary,
         address1: 'nothing 1',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'hello123@example.com',
-        name: 'Secondary Party Name Changed',
-        phone: '9876543210',
-        postalCode: '12345',
-        state: 'TN',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -309,14 +276,8 @@ describe('update primary contact on a case', () => {
   it('should use original case caption to create case title when creating work item', async () => {
     await updatePrimaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
-        city: 'Philadelphia',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'petitioner',
-        name: 'Bill Burr',
-        phone: '1234567890',
-        postalCode: '99999',
-        state: 'PA',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });

@@ -456,7 +456,6 @@ import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequ
 import { validateOrderWithoutBodySequence } from './sequences/validateOrderWithoutBodySequence';
 import { validatePetitionDetailsSequence } from './sequences/validatePetitionDetailsSequence';
 import { validatePetitionFromPaperSequence } from './sequences/validatePetitionFromPaperSequence';
-import { validatePetitionerInformationFormSequence } from './sequences/validatePetitionerInformationFormSequence';
 import { validatePetitionerSequence } from './sequences/validatePetitionerSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from './sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from './sequences/validatePractitionerSearchByNameFormSequence';
@@ -941,7 +940,6 @@ export const presenter = {
     validateOrderWithoutBodySequence,
     validatePetitionDetailsSequence,
     validatePetitionFromPaperSequence,
-    validatePetitionerInformationFormSequence,
     validatePetitionerSequence,
     validatePractitionerSearchByBarNumberFormSequence,
     validatePractitionerSearchByNameFormSequence,

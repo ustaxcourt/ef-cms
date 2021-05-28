@@ -2,10 +2,6 @@ const {
   CONTACT_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
-const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
 const { aggregatePartiesForService } = require('./aggregatePartiesForService');
 
 describe('aggregatePartiesForService', () => {
@@ -181,8 +177,8 @@ describe('aggregatePartiesForService', () => {
 
   it('should serve an unrepresented primary and secondary contact by paper if filed by paper', async () => {
     mockCase.petitioners = [
-      { ...getContactPrimary(mockCase), email: null },
-      { ...getContactSecondary(mockCase) },
+      { ...mockCase.petitioners[0], email: null },
+      mockCase.petitioners[1],
     ];
 
     const result = aggregatePartiesForService(mockCase);

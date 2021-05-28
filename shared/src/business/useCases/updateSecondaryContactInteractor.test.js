@@ -9,12 +9,9 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const {
   updateSecondaryContactInteractor,
 } = require('./updateSecondaryContactInteractor');
+const { getPetitionerById } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { User } = require('../entities/User');
 
@@ -44,7 +41,7 @@ describe('updateSecondaryContactInteractor', () => {
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
-      userId: getContactPrimary(MOCK_CASE).contactId,
+      userId: MOCK_CASE.petitioners[0].contactId,
     });
 
     applicationContext
@@ -87,10 +84,9 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext,
       {
         contactInfo: {
+          ...mockContactSecondary,
           address1: '453 Electric Ave',
           city: 'Philadelphia',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'secondary@example.com',
           name: 'New Secondary',
           phone: '1234567890',
           postalCode: '99999',
@@ -105,7 +101,9 @@ describe('updateSecondaryContactInteractor', () => {
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
-    expect(getContactSecondary(updatedCase)).toMatchObject({
+    expect(
+      getPetitionerById(updatedCase, mockContactSecondary.contactId),
+    ).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
       countryType: COUNTRY_TYPES.DOMESTIC,
@@ -134,10 +132,9 @@ describe('updateSecondaryContactInteractor', () => {
   it('creates a work item if the secondary contact is not represented by a privatePractitioner', async () => {
     await updateSecondaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockContactSecondary,
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'secondary@example.com',
         name: 'New Secondary',
         phone: '1234567890',
         postalCode: '99999',
@@ -161,7 +158,7 @@ describe('updateSecondaryContactInteractor', () => {
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
-            representing: [getContactSecondary(mockCase).contactId],
+            representing: [mockContactSecondary.contactId],
             role: ROLES.privatePractitioner,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
@@ -170,9 +167,9 @@ describe('updateSecondaryContactInteractor', () => {
 
     await updateSecondaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockContactSecondary,
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'secondary@example.com',
         name: 'New Secondary',
         phone: '1234567890',
@@ -201,6 +198,17 @@ describe('updateSecondaryContactInteractor', () => {
     ).rejects.toThrow('Case 101-18 was not found.');
   });
 
+  it('throws an error when the petitioner is not found on the case', async () => {
+    await expect(
+      updateSecondaryContactInteractor(applicationContext, {
+        contactInfo: {},
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(
+      `Error: Petitioner was not found on case ${MOCK_CASE.docketNumber}.`,
+    );
+  });
+
   it('throws an error if the user making the request is not associated with the case', async () => {
     mockUser = {
       ...mockUser,
@@ -209,7 +217,7 @@ describe('updateSecondaryContactInteractor', () => {
 
     await expect(
       updateSecondaryContactInteractor(applicationContext, {
-        contactInfo: {},
+        contactInfo: mockContactSecondary,
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
@@ -222,17 +230,7 @@ describe('updateSecondaryContactInteractor', () => {
     applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue({});
 
     await updateSecondaryContactInteractor(applicationContext, {
-      contactInfo: {
-        // Matches current contact info
-        address1: 'nothing',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'secondary@example.com',
-        name: 'Secondary Party',
-        phone: '9876543210',
-        postalCode: '12345',
-        state: 'TN',
-      },
+      contactInfo: mockContactSecondary,
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -258,20 +256,18 @@ describe('updateSecondaryContactInteractor', () => {
       applicationContext,
       {
         contactInfo: {
-          address1: 'nothing',
-          city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
+          ...mockContactSecondary,
           email: 'hello123@example.com',
           name: 'Secondary Party Name Changed',
-          phone: '9876543210',
-          postalCode: '12345',
-          state: 'TN',
         },
         docketNumber: MOCK_CASE.docketNumber,
       },
     );
 
-    const contactSecondary = getContactSecondary(caseDetail);
+    const contactSecondary = getPetitionerById(
+      caseDetail,
+      mockContactSecondary.contactId,
+    );
     expect(contactSecondary.name).not.toBe('Secondary Party Name Changed');
     expect(contactSecondary.name).toBe(mockContactSecondary.name);
     expect(contactSecondary.email).not.toBe('hello123@example.com');
@@ -288,15 +284,8 @@ describe('updateSecondaryContactInteractor', () => {
 
     await updateSecondaryContactInteractor(applicationContext, {
       contactInfo: {
-        address1: 'nothing',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'secondary@example.com',
+        ...mockContactSecondary,
         inCareOf: 'Andy Dwyer',
-        name: 'Secondary Party',
-        phone: '9876543210',
-        postalCode: '12345',
-        state: 'TN',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -329,15 +318,8 @@ describe('updateSecondaryContactInteractor', () => {
 
     await updateSecondaryContactInteractor(applicationContext, {
       contactInfo: {
-        address1: 'nothing',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'secondary@example.com',
+        ...mockContactSecondary,
         inCareOf: 'Andy Dwyer',
-        name: 'Secondary Party',
-        phone: '9876543210',
-        postalCode: '12345',
-        state: 'TN',
       },
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -356,10 +338,9 @@ describe('updateSecondaryContactInteractor', () => {
   it('should use original case caption to create case title when creating work item', async () => {
     await updateSecondaryContactInteractor(applicationContext, {
       contactInfo: {
+        ...mockContactSecondary,
         address1: '453 Electric Ave',
         city: 'Philadelphia',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'secondary@example.com',
         name: 'New Secondary',
         phone: '1234567890',
         postalCode: '99999',

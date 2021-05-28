@@ -22,7 +22,6 @@ const {
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
-  getOtherPetitioners,
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
@@ -310,7 +309,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
-    getOtherPetitioners: jest.fn().mockImplementation(getOtherPetitioners),
     getPetitionDocketEntry: jest
       .fn()
       .mockImplementation(getPetitionDocketEntry),

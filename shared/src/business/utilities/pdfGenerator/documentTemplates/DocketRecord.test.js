@@ -69,6 +69,7 @@ describe('DocketRecord', () => {
       },
       formattedName: 'Test Private Practitioner (PT20001)',
       name: 'Test Private Practitioner',
+      representingFormatted: [],
     };
 
     irsPractitioner = {
@@ -90,7 +91,7 @@ describe('DocketRecord', () => {
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
       petitioners: [contactPrimary],
-      privatePractitioners: [],
+      privatePractitioners: [{ representingFormatted: [] }],
     };
 
     entries = [
@@ -260,17 +261,16 @@ describe('DocketRecord', () => {
     expect(contactEl).toContain(privatePractitioner.contact.state);
     expect(contactEl).toContain(privatePractitioner.contact.postalCode);
     expect(contactEl).toContain(privatePractitioner.contact.phone);
-
-    expect(contactEl).not.toContain('Representing');
+    expect(contactEl).toContain('Representing');
   });
 
   it('displays represented parties with each practitioner', () => {
     const privatePractitioner2 = {
       ...privatePractitioner,
       barNumber: 'PT20002',
-      representingSecondary: true,
+      representingFormatted: [{ name: contactSecondary.name }],
     };
-    privatePractitioner.representingPrimary = true;
+    privatePractitioner.representingFormatted = [{ name: contactPrimary.name }];
     caseDetail.privatePractitioners = [
       privatePractitioner,
       privatePractitioner2,

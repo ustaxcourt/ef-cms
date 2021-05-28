@@ -6,13 +6,10 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getPetitionerById,
-} = require('../entities/cases/Case');
-const {
   removePetitionerAndUpdateCaptionInteractor,
 } = require('./removePetitionerAndUpdateCaptionInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getPetitionerById } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -36,7 +33,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
 
     mockCase = {
       ...MOCK_CASE,
-      petitioners: [getContactPrimary(MOCK_CASE), petitionerToRemove],
+      petitioners: [MOCK_CASE.petitioners[0], petitionerToRemove],
       status: CASE_STATUS_TYPES.generalDocket,
     };
     applicationContext.getCurrentUser.mockReturnValue({
@@ -87,20 +84,18 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   it('should throw an error when there is only one petitioner left on the case', async () => {
     mockCase = {
       ...MOCK_CASE,
-      petitioners: [getContactPrimary(MOCK_CASE)],
+      petitioners: MOCK_CASE.petitioners[0],
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
     await expect(
       removePetitionerAndUpdateCaptionInteractor(applicationContext, {
         caseCaption: MOCK_CASE.caseCaption,
-        contactId: getContactPrimary(MOCK_CASE).contactId,
+        contactId: MOCK_CASE.petitioners[0].contactId,
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow(
-      `Cannot remove petitioner ${
-        getContactPrimary(MOCK_CASE).contactId
-      } from case with docketNumber ${MOCK_CASE.docketNumber}`,
+      `Cannot remove petitioner ${MOCK_CASE.petitioners[0].contactId} from case with docketNumber ${MOCK_CASE.docketNumber}`,
     );
   });
 
@@ -159,26 +154,12 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     expect(caseToUpdate.privatePractitioners.length).toEqual(0);
   });
 
-  it('should reassign contactPrimary to another petitioner on the case when the petitioner to remove is the current contactPrimary', async () => {
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockCase.caseCaption,
-      contactId: getContactPrimary(MOCK_CASE).contactId,
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const {
-      caseToUpdate,
-    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
-
-    expect(getContactPrimary(caseToUpdate)).toBeDefined();
-  });
-
   it('should update the case caption', async () => {
     const mockUpdatedCaption = 'An updated caption';
 
     await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
       caseCaption: mockUpdatedCaption,
-      contactId: getContactPrimary(MOCK_CASE).contactId,
+      contactId: MOCK_CASE.petitioners[0].contactId,
       docketNumber: mockCase.docketNumber,
     });
 
@@ -209,7 +190,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
         entityName: 'PrivatePractitioner',
         name: 'Brandon Choi',
         representing: [
-          getContactPrimary(MOCK_CASE).contactId,
+          MOCK_CASE.petitioners[0].contactId,
           otherPetitioner.contactId,
         ],
         role: 'privatePractitioner',
@@ -220,7 +201,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
 
     await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
       caseCaption: 'hello world',
-      contactId: getContactPrimary(MOCK_CASE).contactId,
+      contactId: MOCK_CASE.petitioners[0].contactId,
       docketNumber: mockCase.docketNumber,
     });
 
