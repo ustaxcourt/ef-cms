@@ -64,7 +64,7 @@ describe('Modify Petitioner Contact Information', () => {
 
   // attempt to modify secondary contact information
   loginAs(test, 'petitioner@example.com');
-  petitionerViewsDashboard(test, { caseIndex: 2 });
+  petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
