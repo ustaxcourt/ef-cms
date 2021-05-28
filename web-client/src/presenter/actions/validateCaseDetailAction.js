@@ -71,8 +71,11 @@ export const validateCaseDetailAction = ({
       statistics: 'Statistics',
     };
 
-    errors = aggregateStatisticsErrors({ errors, get });
+    const { errors: formattedErrors } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
 
-    return path.error({ errorDisplayMap, errors });
+    return path.error({ errorDisplayMap, errors: formattedErrors });
   }
 };
