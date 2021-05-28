@@ -158,9 +158,6 @@ describe('updateDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).not.toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
@@ -185,12 +182,6 @@ describe('updateDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
     ).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
@@ -221,9 +212,6 @@ describe('updateDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 

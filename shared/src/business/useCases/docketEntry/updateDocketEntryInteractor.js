@@ -98,19 +98,6 @@ exports.updateDocketEntryInteractor = async (
     const { workItem } = docketEntryEntity;
 
     if (!isSavingForLater) {
-      const workItemToDelete =
-        currentDocketEntry.workItem &&
-        !currentDocketEntry.workItem.docketEntry.isFileAttached;
-
-      if (workItemToDelete) {
-        await applicationContext
-          .getPersistenceGateway()
-          .deleteWorkItemFromInbox({
-            applicationContext,
-            workItem: workItemToDelete,
-          });
-      }
-
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,

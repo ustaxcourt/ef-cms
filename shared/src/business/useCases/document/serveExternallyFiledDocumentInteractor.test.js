@@ -203,17 +203,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        workItem: expect.objectContaining({
-          docketNumber: DOCKET_NUMBER,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        }),
-      }),
-    );
-    expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toHaveBeenCalledWith(

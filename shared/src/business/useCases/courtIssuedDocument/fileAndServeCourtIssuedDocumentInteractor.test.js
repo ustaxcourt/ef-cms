@@ -571,9 +571,5 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
   });
 });

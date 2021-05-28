@@ -191,11 +191,6 @@ exports.completeDocketEntryQCInteractor = async (
   const workItemToUpdate = updatedDocketEntry.workItem;
 
   if (workItemToUpdate) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-
     Object.assign(workItemToUpdate, {
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
