@@ -12,12 +12,12 @@ export const updatePrimaryContactAction = async ({
   applicationContext,
   get,
 }) => {
-  const { contactPrimary, docketNumber } = get(state.form);
+  const { contact, docketNumber } = get(state.form);
 
   const updatedCase = await applicationContext
     .getUseCases()
     .updateContactInteractor(applicationContext, {
-      contactInfo: contactPrimary,
+      contactInfo: contact,
       docketNumber,
     });
 
