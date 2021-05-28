@@ -1,6 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
+import { petitionsClerkCancelsAddingDeficiencyStatisticToCase } from './journey/petitionsClerkCancelsAddingDeficiencyStatisticToCase';
 import { petitionsClerkChangesCaseCaptionDuringQC } from './journey/petitionsClerkChangesCaseCaptionDuringQC';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkDeleteDeficiencyStatistic } from './journey/petitionsClerkDeleteDeficiencyStatistic';
@@ -51,6 +52,7 @@ describe('Petitions clerk case journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsDeficiencyStatisticToCase(test);
+  petitionsClerkCancelsAddingDeficiencyStatisticToCase(test);
   petitionsClerkEditsDeficiencyStatistic(test);
   petitionsClerkDeleteDeficiencyStatistic(test);
 
