@@ -22,7 +22,7 @@ describe('getDocumentQCInboxForUser', () => {
               must: [
                 {
                   term: {
-                    'pk.S': 'user|123',
+                    'assigneeId.S': '123',
                   },
                 },
               ],
