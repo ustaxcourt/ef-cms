@@ -137,12 +137,10 @@ exports.saveCaseDetailInternalEditInteractor = async (
       { applicationContext },
     );
 
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox({
-        applicationContext,
-        workItem: workItemEntity.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    });
   }
 
   const updatedCase = await applicationContext

@@ -234,8 +234,7 @@ describe('updateDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
@@ -287,8 +286,7 @@ describe('updateDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -316,8 +314,7 @@ describe('updateDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });

@@ -144,12 +144,10 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     );
   } else {
     saveItems.push(
-      applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemAndAddToUserAndSectionInbox({
-          applicationContext,
-          workItem: rawValidWorkItem,
-        }),
+      applicationContext.getPersistenceGateway().saveWorkItem({
+        applicationContext,
+        workItem: rawValidWorkItem,
+      }),
     );
   }
 

@@ -88,7 +88,7 @@ describe('archiveDraftDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+      applicationContext.getPersistenceGateway().deleteWorkItem,
     ).toHaveBeenCalled();
 
     expect(

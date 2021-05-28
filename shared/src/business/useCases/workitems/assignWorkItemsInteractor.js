@@ -60,11 +60,9 @@ exports.assignWorkItemsInteractor = async (
       caseToUpdate: caseToUpdate.validate().toRawObject(),
       workItem: workItemEntity.validate().toRawObject(),
     }),
-    applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox({
-        applicationContext,
-        workItem: workItemEntity.validate().toRawObject(),
-      }),
+    applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    }),
   ]);
 };

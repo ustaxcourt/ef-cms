@@ -44,8 +44,8 @@ const {
   deleteUserOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
-  deleteWorkItemFromInbox,
-} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
+  deleteWorkItem,
+} = require('../../persistence/dynamo/workitems/deleteWorkItem');
 const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
@@ -118,11 +118,8 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  saveWorkItemAndAddToSectionInbox,
-} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
-const {
-  saveWorkItemAndAddToUserAndSectionInbox,
-} = require('../../persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
+  saveWorkItem,
+} = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
@@ -394,7 +391,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteUserOutboxRecord: jest
       .fn()
       .mockImplementation(deleteUserOutboxRecord),
-    deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
@@ -428,12 +425,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItemAndAddToSectionInbox: jest
-      .fn()
-      .mockImplementation(saveWorkItemAndAddToSectionInbox),
-    saveWorkItemAndAddToUserAndSectionInbox: jest
-      .fn()
-      .mockImplementation(saveWorkItemAndAddToUserAndSectionInbox),
+    saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
