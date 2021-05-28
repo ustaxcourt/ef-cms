@@ -67,7 +67,7 @@ const RenderPractitioner = ({ countryTypes, practitioner }) => {
           <strong>Representing</strong>
           <br />
           {practitioner.representingFormatted.map(p => (
-            <div key={p.contactId}>{p.name}</div>
+            <div key={p.name}>{p.name}</div>
           ))}
         </div>
       )}
