@@ -37,14 +37,14 @@ export const SuccessNotification = connect(
             <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="tablet:grid-col-10">
+                  <div className="tablet:grid-col-10 grid-col-8">
                     <p className="usa-alert__text padding-top-0 padding-bottom-0">
                       {alertSuccess.message}
                     </p>
                     {alertSuccess.linkUrl && (
                       <Button
                         link
-                        className="padding-0 margin-top-2"
+                        className="padding-0 margin-top-2 ustc-button--mobile-inline"
                         href={alertSuccess.linkUrl}
                         rel="noopener noreferrer"
                         target="_blank"
@@ -53,7 +53,7 @@ export const SuccessNotification = connect(
                       </Button>
                     )}
                   </div>
-                  <div className="tablet:grid-col-2 usa-alert__action">
+                  <div className="tablet:grid-col-2 grid-col-4 usa-alert__action">
                     <Button
                       link
                       className="no-underline padding-0"
