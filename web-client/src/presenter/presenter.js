@@ -348,7 +348,6 @@ import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetit
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
 import { submitEditPrimaryContactSequence } from './sequences/submitEditPrimaryContactSequence';
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
-import { submitEditSecondaryContactSequence } from './sequences/submitEditSecondaryContactSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
 import { submitLoginSequence } from './sequences/submitLoginSequence';
@@ -461,7 +460,6 @@ import { validatePractitionerSearchByNameFormSequence } from './sequences/valida
 import { validatePrimaryContactSequence } from './sequences/validatePrimaryContactSequence';
 import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
-import { validateSecondaryContactSequence } from './sequences/validateSecondaryContactSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
@@ -831,7 +829,6 @@ export const presenter = {
     submitEditPetitionerSequence,
     submitEditPrimaryContactSequence,
     submitEditRespondentCounselSequence,
-    submitEditSecondaryContactSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
     submitLoginSequence,
@@ -944,7 +941,6 @@ export const presenter = {
     validatePrimaryContactSequence,
     validatePrioritizeCaseSequence,
     validateRemoveFromTrialSessionSequence,
-    validateSecondaryContactSequence,
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
     validateStartCaseWizardSequence,
