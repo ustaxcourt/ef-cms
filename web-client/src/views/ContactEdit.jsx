@@ -17,8 +17,7 @@ export const ContactEdit = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     //update this
-    submitEditPrimaryContactSequence:
-      sequences.submitEditPrimaryContactSequence,
+    submitEditContactSequence: sequences.submitEditContactSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validatePrimaryContactSequence: sequences.validatePrimaryContactSequence, //update this
     validationErrors: state.validationErrors,
@@ -28,7 +27,7 @@ export const ContactEdit = connect(
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPrimaryContactSequence,
+    submitEditContactSequence,
     updateFormValueSequence,
     validatePrimaryContactSequence,
     validationErrors,
@@ -122,7 +121,7 @@ export const ContactEdit = connect(
           </div>
           <Button
             onClick={() => {
-              submitEditPrimaryContactSequence();
+              submitEditContactSequence();
             }}
           >
             Save

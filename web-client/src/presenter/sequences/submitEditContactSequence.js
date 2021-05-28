@@ -10,7 +10,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
 import { validatePrimaryContactAction } from '../actions/validatePrimaryContactAction';
 
-export const submitEditPrimaryContactSequence = [
+export const submitEditContactSequence = [
   clearAlertsAction,
   startShowValidationAction,
   validatePrimaryContactAction,
