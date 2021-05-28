@@ -4,7 +4,7 @@ export const getFilerParties = ({ caseDetail, filersMap = {} }) => {
   const nameAndTitleArray = [];
   Object.entries(filersMap)
     .filter(([, isChecked]) => isChecked)
-    .map(([filerContactId]) => {
+    .forEach(([filerContactId]) => {
       const foundPetitioner = caseDetail.petitioners.find(
         petitioner => petitioner.contactId === filerContactId,
       );
