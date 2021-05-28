@@ -676,7 +676,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  */
 {
   app.put(
-    '/case-parties/:docketNumber/contact-primary',
+    '/case-parties/:docketNumber/contact',
     lambdaWrapper(updateContactLambda),
   );
   app.post(

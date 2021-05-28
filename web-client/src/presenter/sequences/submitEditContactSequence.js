@@ -7,7 +7,7 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
+import { updateContactAction } from '../actions/updateContactAction';
 import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
 export const submitEditContactSequence = [
@@ -17,7 +17,7 @@ export const submitEditContactSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      updatePrimaryContactAction,
+      updateContactAction, //fixme: use updatePetitionerInformationAction instead?
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       setCaseDetailPageTabFrozenAction,

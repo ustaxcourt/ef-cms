@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updatePrimaryContactAction } from './updatePrimaryContactAction';
+import { updateContactAction } from './updateContactAction';
 
-describe('updatePrimaryContactAction', () => {
+describe('updateContactAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
@@ -13,13 +13,13 @@ describe('updatePrimaryContactAction', () => {
   });
 
   it('updates primary contact for the current case', async () => {
-    const result = await runAction(updatePrimaryContactAction, {
+    const result = await runAction(updateContactAction, {
       modules: {
         presenter,
       },
       state: {
         form: {
-          contactPrimary: {
+          contact: {
             docketNumber: '101-20',
             name: 'Rachael Ray',
           },
