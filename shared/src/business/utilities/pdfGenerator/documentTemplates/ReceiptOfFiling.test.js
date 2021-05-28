@@ -200,9 +200,9 @@ describe('ReceiptOfFiling', () => {
     expect(wrapper.find('p.included').text()).toEqual('Attachment(s)');
   });
 
-  it('displays the certificate of service date if the document has a certificate of service', () => {
+  it('displays the formatted certificate of service date if the document has a certificate of service', () => {
     document.certificateOfService = true;
-    document.certificateOfServiceDate = '02/02/20';
+    document.formattedCertificateOfServiceDate = '02/02/20';
 
     const wrapper = mount(
       <ReceiptOfFiling
@@ -216,7 +216,7 @@ describe('ReceiptOfFiling', () => {
     wrapper.find('.receipt-filed-document').at(0);
 
     expect(wrapper.find('p.included').text()).toEqual(
-      `Certificate of Service ${document.certificateOfServiceDate}`,
+      `Certificate of Service ${document.formattedCertificateOfServiceDate}`,
     );
   });
 
