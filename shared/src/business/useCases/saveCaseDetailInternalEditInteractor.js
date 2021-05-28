@@ -127,11 +127,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: initializeCaseWorkItem.validate().toRawObject(),
-    });
-
     const workItemEntity = new WorkItem(
       {
         ...initializeCaseWorkItem,

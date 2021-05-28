@@ -2,9 +2,6 @@ const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
-  addWorkItemToSectionInbox,
-} = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
-const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
@@ -383,7 +380,6 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetPersistenceGateway = appContextProxy({
     addCaseToHearing: jest.fn(),
-    addWorkItemToSectionInbox,
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createCase: jest.fn().mockImplementation(createCase),
@@ -448,7 +444,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseHearing: jest.fn(),
     updateCaseTrialSortMappingRecords: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
-    updateWorkItem,
+    updateWorkItem: jest.fn().mockImplementation(updateWorkItem),
     updateWorkItemInCase,
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
