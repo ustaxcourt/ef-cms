@@ -21,7 +21,4 @@ export const setupContactFormAction = ({
   store.set(state.form.docketNumber, caseDetail.docketNumber);
   store.set(state.form.contact, contactToEdit);
   store.set(state.form.partyType, caseDetail.partyType);
-
-  console.log('contactToEdit', contactToEdit);
-  console.log('state.form.contact', state.form.contact);
 };
