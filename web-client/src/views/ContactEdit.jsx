@@ -10,7 +10,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PrimaryContactEdit = connect(
+export const ContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     form: state.form,
@@ -22,7 +22,7 @@ export const PrimaryContactEdit = connect(
     validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
     validationErrors: state.validationErrors,
   },
-  function PrimaryContactEdit({
+  function ContactEdit({
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
@@ -32,6 +32,8 @@ export const PrimaryContactEdit = connect(
     validatePrimaryContactSequence,
     validationErrors,
   }) {
+    // update type since now it can be any kind of petitioner
+    // will probably require integration test updates (modifyInfo and NCA tests)
     const type = 'contactPrimary';
     const bind = 'form';
     const onBlur = 'validatePrimaryContactSequence';
