@@ -40,6 +40,17 @@ describe('advancedSearchHelper', () => {
     },
   );
 
+  const mockPetitionerOne = {
+    contactId: '4572d453-fae3-44c8-a298-254cc0eb43cd',
+    name: 'Daenerys Stormborn',
+    state: 'TN',
+  };
+  const mockPetitionerTwo = {
+    contactId: '52f678c6-ba27-4c64-9479-10604684dc7a',
+    name: 'Another Person',
+    state: 'TX',
+  };
+
   beforeEach(() => {
     globalUser = {
       role: USER_ROLES.docketClerk,
@@ -181,8 +192,7 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-19',
               petitioners: [
                 {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
+                  ...mockPetitionerOne,
                 },
               ],
               receivedAt: '2019-03-01T05:00:00.000Z',
@@ -193,16 +203,7 @@ describe('advancedSearchHelper', () => {
               docketNumber: '102-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               docketNumberWithSuffix: '102-18W',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TX',
-                },
-                {
-                  name: 'Another Person',
-                  state: 'TX',
-                },
-              ],
+              petitioners: [mockPetitionerOne, mockPetitionerTwo],
               receivedAt: '2019-05-01T05:00:00.000Z',
             },
           ],
@@ -215,13 +216,24 @@ describe('advancedSearchHelper', () => {
         caseTitle: 'Test Petitioner',
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: US_STATES.TN,
+        petitionerFullStateNames: [
+          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
+        ],
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
-        fullStateNamePrimary: US_STATES.TX,
+        petitionerFullStateNames: [
+          {
+            contactId: mockPetitionerOne.contactId,
+            state: US_STATES.TN,
+          },
+          {
+            contactId: mockPetitionerTwo.contactId,
+            state: US_STATES.TX,
+          },
+        ],
       },
     ]);
   });
@@ -315,12 +327,7 @@ describe('advancedSearchHelper', () => {
               caseCaption: 'Test Petitioner, Petitioner',
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
-                },
-              ],
+              petitioners: [mockPetitionerOne],
               receivedAt: '2019-03-01T05:00:00.000Z',
             },
             {
@@ -328,16 +335,7 @@ describe('advancedSearchHelper', () => {
                 'Test Petitioner & Another Petitioner, Petitioner(s)',
               docketNumber: '102-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TX',
-                },
-                {
-                  name: 'Another Person',
-                  state: 'TX',
-                },
-              ],
+              petitioners: [mockPetitionerOne, mockPetitionerTwo],
               receivedAt: '2018-05-01T05:00:00.000Z',
             },
           ],
@@ -365,12 +363,7 @@ describe('advancedSearchHelper', () => {
               caseCaption: 'Test Petitioner, Petitioner',
               docketNumber: '101-19',
               docketNumberWithSuffix: '101-19',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TN',
-                },
-              ],
+              petitioners: [mockPetitionerOne],
               receivedAt: '2019-03-01T05:00:00.000Z',
             },
             {
@@ -379,16 +372,7 @@ describe('advancedSearchHelper', () => {
               docketNumber: '102-18',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               docketNumberWithSuffix: '102-18W',
-              petitioners: [
-                {
-                  name: 'Daenerys Stormborn',
-                  state: 'TX',
-                },
-                {
-                  name: 'Another Person',
-                  state: 'TX',
-                },
-              ],
+              petitioners: [mockPetitionerOne, mockPetitionerTwo],
               receivedAt: '2018-05-01T05:00:00.000Z',
             },
             {
@@ -399,11 +383,11 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-18W',
               petitioners: [
                 {
-                  name: 'Test Petitioner',
+                  ...mockPetitionerOne,
                   state: 'CA',
                 },
                 {
-                  name: 'Another Petitioner',
+                  ...mockPetitionerTwo,
                   state: 'TN',
                 },
               ],
@@ -415,7 +399,7 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '102-18W',
               petitioners: [
                 {
-                  name: 'Another Person',
+                  ...mockPetitionerOne,
                   state: 'AX',
                 },
               ],
@@ -432,26 +416,35 @@ describe('advancedSearchHelper', () => {
         caseTitle: 'Test Petitioner',
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
-        fullStateNamePrimary: US_STATES.TN,
+        petitionerFullStateNames: [
+          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
+        ],
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: US_STATES.TX,
+        petitionerFullStateNames: [
+          { contactId: mockPetitionerOne.contactId, state: US_STATES.TN },
+          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TX },
+        ],
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
         docketNumberWithSuffix: '101-18W',
         formattedFiledDate: '04/01/18',
-        fullStateNamePrimary: US_STATES.CA,
-        fullStateNameSecondary: US_STATES.TN,
+        petitionerFullStateNames: [
+          { contactId: mockPetitionerOne.contactId, state: US_STATES.CA },
+          { contactId: mockPetitionerTwo.contactId, state: US_STATES.TN },
+        ],
       },
       {
         caseTitle: '',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: 'AX',
+        petitionerFullStateNames: [
+          { contactId: mockPetitionerOne.contactId, state: 'AX' },
+        ],
       },
     ]);
   });
