@@ -13,6 +13,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEditDocketEntryMetaTabAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
@@ -42,6 +43,7 @@ export const gotoEditDocketEntryMeta = [
     document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
     noDocument: [],
   },
+  setDefaultEditDocketEntryMetaTabAction,
   setCurrentPageAction('EditDocketEntryMeta'),
 ];
 
