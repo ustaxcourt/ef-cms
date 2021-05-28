@@ -1,7 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { DocumentSearchResults } from './DocumentSearchResults';
-import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from './OpinionSearchForm';
 import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
@@ -48,7 +47,6 @@ export const AdvancedSearch = connect(
 
         <section className="usa-section grid-container advanced-search">
           <SuccessNotification />
-          <ErrorNotification />
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
