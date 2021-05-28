@@ -128,16 +128,16 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     { applicationContext },
   );
 
-  if (docketEntry.workItem) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: docketEntry.workItem,
-    });
-  }
-
   servedDocketEntryWorkItem.setAsCompleted({ message: 'completed', user });
   docketEntryEntity.setWorkItem(servedDocketEntryWorkItem);
   caseEntity.updateDocketEntry(docketEntryEntity);
+
+  if (docketEntry.workItem) {
+    await applicationContext.getPersistenceGateway().updateWorkItem({
+      applicationContext,
+      workItemToUpdate: servedDocketEntryWorkItem.validate().toRawObject(),
+    });
+  }
 
   servedDocketEntryWorkItem.assignToUser({
     assigneeId: user.userId,

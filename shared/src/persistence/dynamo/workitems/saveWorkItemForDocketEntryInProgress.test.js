@@ -10,34 +10,18 @@ const {
 
 describe('saveWorkItemForDocketEntryInProgress', () => {
   let putStub;
-  let getStub;
 
   beforeEach(() => {
     putStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
+      promise: async () => ({}),
     });
-    getStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Item: {
-          section: DOCKET_SECTION,
-          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      }),
+
+    applicationContext.getDocumentClient.mockReturnValue({
+      put: putStub,
     });
   });
 
-  it('invokes the persistence layer 4 times to store the work item, user and section inbox records, and work item mapping record', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      section: DOCKET_SECTION,
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getDocumentClient.mockReturnValue({
-      get: getStub,
-      put: putStub,
-    });
+  it('invokes the persistence layer 2 times to store the work item and work item mapping record', async () => {
     await saveWorkItemForDocketEntryInProgress({
       applicationContext,
       workItem: {
@@ -55,18 +39,6 @@ describe('saveWorkItemForDocketEntryInProgress', () => {
       },
     });
     expect(putStub.mock.calls[1][0]).toMatchObject({
-      Item: {
-        pk: 'section|docket',
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[2][0]).toMatchObject({
-      Item: {
-        pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[3][0]).toMatchObject({
       Item: {
         pk: 'case|456-20',
         sk: 'work-item|123',

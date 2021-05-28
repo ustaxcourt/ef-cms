@@ -47,9 +47,6 @@ const {
   addServedStampToDocument,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
 const {
-  addWorkItemToSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
-const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
@@ -192,9 +189,6 @@ const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
-  createSectionInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
-const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
@@ -212,9 +206,6 @@ const {
 const {
   createUserForContactPrimary,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
-const {
-  createUserInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
@@ -1197,7 +1188,6 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
     bulkDeleteRecords,
@@ -1207,11 +1197,9 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createMessage,
     createPractitionerUser,
-    createSectionInboxRecord,
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
-    createUserInboxRecord,
     fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,

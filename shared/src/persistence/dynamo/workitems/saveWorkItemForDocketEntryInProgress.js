@@ -1,5 +1,3 @@
-const { createSectionInboxRecord } = require('./createSectionInboxRecord');
-const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
 /**
  * saveWorkItemForDocketEntryInProgress
@@ -23,23 +21,11 @@ exports.saveWorkItemForDocketEntryInProgress = async ({
     applicationContext,
   });
 
-  return Promise.all([
-    createSectionInboxRecord({
-      applicationContext,
-      section: workItem.section,
-      workItem,
-    }),
-    createUserInboxRecord({
-      applicationContext,
-      userId: workItem.assigneeId,
-      workItem,
-    }),
-    put({
-      Item: {
-        pk: `case|${workItem.docketNumber}`,
-        sk: `work-item|${workItem.workItemId}`,
-      },
-      applicationContext,
-    }),
-  ]);
+  await put({
+    Item: {
+      pk: `case|${workItem.docketNumber}`,
+      sk: `work-item|${workItem.workItemId}`,
+    },
+    applicationContext,
+  });
 };

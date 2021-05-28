@@ -1,5 +1,3 @@
-const { createSectionInboxRecord } = require('./createSectionInboxRecord');
-const { createUserInboxRecord } = require('./createUserInboxRecord');
 const { put } = require('../../dynamodbClientService');
 
 /**
@@ -30,14 +28,6 @@ exports.saveWorkItemAndAddToUserAndSectionInbox = async ({
         sk: `work-item|${workItem.workItemId}`,
       },
       applicationContext,
-    }),
-    createUserInboxRecord({
-      applicationContext,
-      workItem,
-    }),
-    createSectionInboxRecord({
-      applicationContext,
-      workItem,
     }),
   ]);
 };
