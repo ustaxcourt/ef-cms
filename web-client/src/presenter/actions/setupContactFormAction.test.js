@@ -2,9 +2,9 @@ import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityCo
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { setupContactPrimaryFormAction } from './setupContactPrimaryFormAction';
+import { setupContactFormAction } from './setupContactFormAction';
 
-describe('setupContactPrimaryFormAction', () => {
+describe('setupContactFormAction', () => {
   let PARTY_TYPES;
 
   beforeAll(() => {
@@ -13,7 +13,7 @@ describe('setupContactPrimaryFormAction', () => {
   });
 
   it('should set contactPrimary, docketNumber, and partyType from props.caseDetail on form', async () => {
-    const result = await runAction(setupContactPrimaryFormAction, {
+    const result = await runAction(setupContactFormAction, {
       modules: { presenter },
       props: {
         caseDetail: {
