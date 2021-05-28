@@ -96,7 +96,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call countPagesInDocument, updateCase, and saveWorkItemAndAddToUserAndSectionInbox', async () => {
+  it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -119,8 +119,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToUserAndSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
   });
 

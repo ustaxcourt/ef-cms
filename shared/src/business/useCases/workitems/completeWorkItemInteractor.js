@@ -52,11 +52,6 @@ exports.completeWorkItemInteractor = async (
     },
   });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    workItem: completedWorkItem,
-  });
-
   await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
     workItemToUpdate: completedWorkItem,

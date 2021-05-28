@@ -93,7 +93,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Document not found');
   });
 
-  it('should call updateCase and saveWorkItemAndAddToUserAndSectionInbox', async () => {
+  it('should call updateCase and saveWorkItem', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -116,8 +116,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToUserAndSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
   });
 

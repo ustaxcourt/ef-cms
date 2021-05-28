@@ -92,12 +92,10 @@ exports.updateCourtIssuedDocketEntryInteractor = async (
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [
-    applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox({
-        applicationContext,
-        workItem: rawValidWorkItem,
-      }),
+    applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: rawValidWorkItem,
+    }),
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: caseEntity,

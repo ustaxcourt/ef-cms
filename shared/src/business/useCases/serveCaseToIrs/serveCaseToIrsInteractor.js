@@ -177,11 +177,6 @@ exports.serveCaseToIrsInteractor = async (
   initializeCaseWorkItem.docketNumberWithSuffix =
     caseEntity.docketNumberWithSuffix;
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
-
   initializeCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
     user,

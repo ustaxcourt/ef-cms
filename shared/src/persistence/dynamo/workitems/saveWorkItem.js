@@ -1,16 +1,13 @@
 const { put } = require('../../dynamodbClientService');
+
 /**
- * saveWorkItemForDocketEntryInProgress
+ * saveWorkItem
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
- * @returns {Promise} promise
  */
-exports.saveWorkItemForDocketEntryInProgress = async ({
-  applicationContext,
-  workItem,
-}) => {
+exports.saveWorkItem = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,

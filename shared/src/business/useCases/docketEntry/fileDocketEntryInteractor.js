@@ -216,18 +216,14 @@ const saveWorkItem = async ({
         workItem: workItemRaw,
       });
   } else if (isPaper) {
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketEntryInProgress({
-        applicationContext,
-        workItem: workItemRaw,
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemRaw,
+    });
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToSectionInbox({
-        applicationContext,
-        workItem: workItemRaw,
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemRaw,
+    });
   }
 };
