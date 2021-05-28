@@ -137,7 +137,10 @@ export const DocketRecordOverlay = connect(
               <p className="margin-top-0">{entry.action}</p>
               <p className="semi-bold label margin-top-3">Served</p>
               <p className="margin-top-0">
-                {entry.isStatusServed && <span>{entry.servedAtFormatted}</span>}
+                {entry.showNotServed && (
+                  <span className="text-semibold not-served">Not served</span>
+                )}
+                {entry.showServed && <span>{entry.servedAtFormatted}</span>}
               </p>
               <p className="semi-bold label margin-top-3">Parties</p>
               <p className="margin-top-0">{entry.servedPartiesCode}</p>
