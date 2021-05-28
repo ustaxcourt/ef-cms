@@ -1,10 +1,11 @@
 import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
+  MAX_TITLE_LENGTH,
   getOptionsForCategory,
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('selectDocumentTypeHelper', () => {
   describe('getOptionsForCategory', () => {
@@ -352,6 +353,87 @@ describe('selectDocumentTypeHelper', () => {
           .mock.calls[0][0],
       ).toEqual({ docketEntry: mockExhibit });
       expect(result[0].documentTitle).toEqual('Exhibit(s) First');
+    });
+
+    it('should return documentTitle truncated to MAX_TITLE_LENGTH', () => {
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(
+          "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & REQUEST FOR PRODUCTION OF DOCUMENTS. by Petrs. Michael R. Bridges & Casie L. Bridges; Marvin R. Allen & Susan A. Allen; & Michael R. Bridges & Casie L. Bridges (EXHIBIT)",
+        );
+      const mockSelectedDocketEntryId = 'f9fbccfb-88cb-4bf6-a90d-174b6f4130d0';
+      const mockExhibit = {
+        addToCoversheet: true,
+        additionalInfo: 'First',
+        docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
+        documentTitle: 'Exhibit(s)',
+        documentType: 'Exhibit(s)',
+      };
+
+      const mockCaseDetail = {
+        docketEntries: [
+          mockExhibit,
+          {
+            docketEntryId: mockSelectedDocketEntryId,
+          },
+        ],
+      };
+
+      const result = getPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        mockSelectedDocketEntryId,
+      );
+
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
+          .mock.calls[0][0],
+      ).toEqual({ docketEntry: mockExhibit });
+      expect(result[0].documentTitle.length).toBe(MAX_TITLE_LENGTH);
+      expect(result[0].documentTitle).toEqual(
+        "MOTION FOR PROTECTIVE ORDER PURSUANT TO RULE 103 REGARDING RESPONDING TO RESP'S INTERROGATORIES & R…",
+      );
+    });
+
+    it('should return documentTitle undefined if utility function returns undefined', () => {
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(undefined);
+      const mockSelectedDocketEntryId = 'f9fbccfb-88cb-4bf6-a90d-174b6f4130d0';
+      const mockExhibit = {
+        addToCoversheet: true,
+        additionalInfo: 'First',
+        docketEntryId: '3913f8a9-891a-4c9c-827e-1a02b403fa63',
+        documentTitle: 'Exhibit(s)',
+        documentType: 'Exhibit(s)',
+      };
+
+      const mockCaseDetail = {
+        docketEntries: [
+          mockExhibit,
+          {
+            docketEntryId: mockSelectedDocketEntryId,
+          },
+        ],
+      };
+
+      const result = getPreviouslyFiledDocuments(
+        applicationContext,
+        mockCaseDetail,
+        mockSelectedDocketEntryId,
+      );
+
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo
+          .mock.calls[0][0],
+      ).toEqual({ docketEntry: mockExhibit });
+      expect(result[0].documentTitle).toBeUndefined();
     });
   });
 });

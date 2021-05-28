@@ -11,10 +11,12 @@ const getDocumentInfo = ({ applicationContext, documentData, petitioners }) => {
   return {
     attachments: doc.attachments,
     certificateOfService: doc.certificateOfService,
-    certificateOfServiceDate: doc.certificateOfServiceDate,
     documentTitle: doc.documentTitle,
     filedBy: doc.filedBy,
     filingDate: doc.filingDate,
+    formattedCertificateOfServiceDate: applicationContext
+      .getUtilities()
+      .formatDateString(doc.certificateOfServiceDate, 'MMDDYY'),
     objections: doc.objections,
     receivedAt: doc.receivedAt,
   };
