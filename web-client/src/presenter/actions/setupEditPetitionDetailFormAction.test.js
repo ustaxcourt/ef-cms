@@ -96,4 +96,75 @@ describe('setupEditPetitionDetailFormAction', () => {
       irsYear: '2019',
     });
   });
+
+  it('sets hasVerifiedIrsNotice on the form from caseDetail', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          hasVerifiedIrsNotice: true,
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      hasVerifiedIrsNotice: true,
+    });
+  });
+
+  it('sets statistics on the form from caseDetail', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          statistics: [{ foo: 'bar' }, { bar: 'baz' }],
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      statistics: [{ foo: 'bar' }, { bar: 'baz' }],
+    });
+  });
+
+  it('sets lastDateOfPeriod date parts on the form for Period statistics', async () => {
+    const result = await runAction(setupEditPetitionDetailFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          statistics: [
+            {
+              irsDeficiencyAmount: '1.00',
+              irsTotalPenalties: '23.00',
+              lastDateOfPeriod: '2021-05-10T04:00:00.000Z',
+              statisticId: '3b85798f-1fc5-4d94-9a33-09705c23cfec',
+              yearOrPeriod: 'Period',
+            },
+          ],
+        },
+        form: {},
+      },
+    });
+
+    expect(result.state.form.statistics).toEqual([
+      {
+        irsDeficiencyAmount: '1.00',
+        irsTotalPenalties: '23.00',
+        lastDateOfPeriod: '2021-05-10T04:00:00.000Z',
+        lastDateOfPeriodDay: '10',
+        lastDateOfPeriodMonth: '5',
+        lastDateOfPeriodYear: '2021',
+        statisticId: '3b85798f-1fc5-4d94-9a33-09705c23cfec',
+        yearOrPeriod: 'Period',
+      },
+    ]);
+  });
 });
