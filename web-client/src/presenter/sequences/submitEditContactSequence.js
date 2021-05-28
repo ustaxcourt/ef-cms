@@ -8,12 +8,12 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updatePrimaryContactAction } from '../actions/updatePrimaryContactAction';
-import { validatePrimaryContactAction } from '../actions/validatePrimaryContactAction';
+import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
 export const submitEditContactSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validatePrimaryContactAction,
+  validatePetitionerAction,
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
