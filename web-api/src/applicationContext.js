@@ -975,6 +975,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateContactInteractor,
+} = require('../../shared/src/business/useCases/updateContactInteractor');
+const {
   updateCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor');
 const {
@@ -1026,9 +1029,6 @@ const {
 const {
   updatePractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor');
-const {
-  updatePrimaryContactInteractor,
-} = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
 const {
   updateQcCompleteForTrialInteractor,
 } = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
@@ -1815,6 +1815,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateContactInteractor,
         updateCorrespondenceDocumentInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
@@ -1825,7 +1826,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
-        updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
         updateSecondaryContactInteractor,
         updateTrialSessionInteractor,
