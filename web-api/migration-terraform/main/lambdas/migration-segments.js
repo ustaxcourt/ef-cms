@@ -58,7 +58,6 @@ const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.debug('about to run migration 0033');
   items = await migration0033(items);
 
-  //order of stuff?
   applicationContext.logger.debug('about to run migration 0034');
   items = await migration0034(items);
 
