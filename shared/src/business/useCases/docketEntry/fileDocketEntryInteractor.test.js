@@ -146,9 +146,6 @@ describe('fileDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toBeCalled();
-    expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).not.toBeCalled();

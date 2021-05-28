@@ -156,12 +156,6 @@ exports.fileDocketEntryInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  await saveWorkItem({
-    applicationContext,
-    isSavingForLater,
-    workItem,
-  });
-
   if (readyForService) {
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
@@ -215,11 +209,6 @@ const saveWorkItem = async ({
         applicationContext,
         workItem: workItemRaw,
       });
-  } else if (isPaper) {
-    await applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: workItemRaw,
-    });
   } else {
     await applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
