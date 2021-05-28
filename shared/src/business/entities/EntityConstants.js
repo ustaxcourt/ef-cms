@@ -738,22 +738,24 @@ const OTHER_TYPES = {
 };
 
 const CONTACT_TYPES = {
+  intervenor: 'intervenor',
+  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  otherPetitioner: 'otherPetitioner',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  participant: 'participant',
+  petitioner: 'petitioner',
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
-  intervenor: 'intervenor',
-  participant: 'participant',
-  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
-  otherPetitioner: 'otherPetitioner',
 };
 
 const CONTACT_TYPE_TITLES = {
+  intervenor: 'Intervenor',
+  petitioner: 'Petitioner',
+  otherFilers: 'Petitioner',
+  otherPetitioner: 'Petitioner',
+  participant: 'Participant',
   primary: 'Petitioner',
   secondary: 'Petitioner',
-  otherFilers: 'Petitioner',
-  intervenor: 'Intervenor',
-  participant: 'Participant',
-  otherPetitioner: 'Petitioner',
 };
 
 const COMMON_CITIES = [

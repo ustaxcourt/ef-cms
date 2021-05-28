@@ -1,4 +1,3 @@
-import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedSearchHelper as advancedSearchHelperComputed,
   paginationHelper,
@@ -147,11 +146,13 @@ describe('advancedSearchHelper', () => {
         searchResults: {
           case: [
             {
-              contactPrimary: {
-                name: 'Daenerys Stormborn',
-                state: 'TN',
-              },
               docketNumber: '101-19',
+              petitioners: [
+                {
+                  name: 'Daenerys Stormborn',
+                  state: 'TN',
+                },
+              ],
             },
           ],
         },
@@ -180,7 +181,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-19',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TN',
                 },
@@ -195,12 +195,10 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '102-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TX',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'TX',
                 },
@@ -215,16 +213,12 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
         fullStateNamePrimary: US_STATES.TN,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/19',
         fullStateNamePrimary: US_STATES.TX,
@@ -246,7 +240,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-19',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TN',
                 },
@@ -261,12 +254,10 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '102-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TX',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'TX',
                 },
@@ -279,7 +270,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '103-19',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TN',
                 },
@@ -294,12 +284,10 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '104-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TX',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'TX',
                 },
@@ -329,7 +317,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-19',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TN',
                 },
@@ -343,12 +330,10 @@ describe('advancedSearchHelper', () => {
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TX',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'TX',
                 },
@@ -364,7 +349,6 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
         docketNumberWithSuffix: '101-19',
         receivedAt: '2019-03-01T05:00:00.000Z',
       },
@@ -383,7 +367,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-19',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TN',
                 },
@@ -398,12 +381,10 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '102-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Daenerys Stormborn',
                   state: 'TX',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'TX',
                 },
@@ -418,12 +399,10 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '101-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.primary,
                   name: 'Test Petitioner',
                   state: 'CA',
                 },
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Petitioner',
                   state: 'TN',
                 },
@@ -436,7 +415,6 @@ describe('advancedSearchHelper', () => {
               docketNumberWithSuffix: '102-18W',
               petitioners: [
                 {
-                  contactType: CONTACT_TYPES.secondary,
                   name: 'Another Person',
                   state: 'AX',
                 },
@@ -452,24 +430,18 @@ describe('advancedSearchHelper', () => {
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: undefined,
         docketNumberWithSuffix: '101-19',
         formattedFiledDate: '03/01/19',
         fullStateNamePrimary: US_STATES.TN,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Daenerys Stormborn',
-        contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
         fullStateNamePrimary: US_STATES.TX,
       },
       {
         caseTitle: 'Test Petitioner & Another Petitioner',
-        contactPrimaryName: 'Test Petitioner',
-        contactSecondaryName: 'Another Petitioner',
         docketNumberWithSuffix: '101-18W',
         formattedFiledDate: '04/01/18',
         fullStateNamePrimary: US_STATES.CA,
@@ -477,12 +449,9 @@ describe('advancedSearchHelper', () => {
       },
       {
         caseTitle: '',
-        contactPrimaryName: undefined,
-        contactSecondaryName: 'Another Person',
         docketNumberWithSuffix: '102-18W',
         formattedFiledDate: '05/01/18',
-        fullStateNamePrimary: undefined,
-        fullStateNameSecondary: 'AX',
+        fullStateNamePrimary: 'AX',
       },
     ]);
   });

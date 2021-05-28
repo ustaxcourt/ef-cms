@@ -258,9 +258,16 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
         practitioner.partyPrivatePractitioner &&
           partiesArray.push(`Counsel ${practitioner.name}`);
       });
-    const petitionersArray = this.filers.map(
-      contactId => petitioners.find(p => p.contactId === contactId).name,
+
+    const petitionersArray = [];
+    this.filers.forEach(contactId =>
+      petitioners.forEach(p => {
+        if (p.contactId === contactId) {
+          petitionersArray.push(p.name);
+        }
+      }),
     );
+
     if (petitionersArray.length === 1) {
       partiesArray.push(`Petr. ${petitionersArray[0]}`);
     } else if (petitionersArray.length > 1) {

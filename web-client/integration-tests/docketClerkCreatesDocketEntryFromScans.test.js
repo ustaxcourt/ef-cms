@@ -63,10 +63,7 @@ describe('Create Docket Entry From Scans', () => {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(test, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  createPDFFromScannedBatches(test);
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
   docketClerkSavesAndServesDocketEntry(test);

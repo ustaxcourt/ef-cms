@@ -26,7 +26,7 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
 
   loginAs(test, 'docketclerk1@example.com');
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  createNewMessageOnCase(test, 0);
+  createNewMessageOnCase(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);

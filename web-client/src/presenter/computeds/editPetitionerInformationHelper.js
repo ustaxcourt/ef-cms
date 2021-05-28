@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {object} object containing the view settings
  */
 export const editPetitionerInformationHelper = (get, applicationContext) => {
-  const { PARTY_TYPES } = applicationContext.getConstants();
+  const { CONTACT_TYPES, PARTY_TYPES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
   const partyType = get(state.form.partyType);
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
@@ -18,17 +18,22 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
   const showSealAddress = permissions.SEAL_ADDRESS;
 
   const caseDetail = get(state.caseDetail);
-  const contactPrimaryEmail = applicationContext
-    .getUtilities()
-    .getContactPrimary(caseDetail)?.email;
 
-  const contactPrimaryHasEmail = !!contactPrimaryEmail;
+  const petitionerContactTypes = [
+    CONTACT_TYPES.primary,
+    CONTACT_TYPES.secondary,
+    CONTACT_TYPES.otherPetitioner,
+    CONTACT_TYPES.petitioner,
+  ];
+
+  const petitioners = caseDetail.petitioners.filter(p =>
+    petitionerContactTypes.includes(p.contactType),
+  );
 
   const showRemovePetitionerButton =
-    caseDetail.petitioners.length > 1 && permissions.REMOVE_PETITIONER;
+    petitioners.length > 1 && permissions.REMOVE_PETITIONER;
 
   return {
-    contactPrimaryHasEmail,
     partyTypes: PARTY_TYPES,
     showEditEmail,
     showPrimaryContact: showContacts.contactPrimary,
