@@ -103,12 +103,19 @@ export const partiesInformationHelper = (get, applicationContext) => {
       externalType = 'secondary';
     }
 
+    console.log('canEditPetitioner', canEditPetitioner);
+    console.log('isExternalUser', isExternalUser);
+
     const editPetitionerLink = isExternalUser
       ? externalType
         ? `/case-detail/${caseDetail.docketNumber}/contacts/${externalType}/edit`
         : null
       : `/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`;
 
+    console.log(
+      'canEditPetitioner && !!editPetitionerLink',
+      canEditPetitioner && !!editPetitionerLink,
+    );
     return {
       ...petitioner,
       canEditPetitioner: canEditPetitioner && !!editPetitionerLink,

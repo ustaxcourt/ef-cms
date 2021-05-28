@@ -14,7 +14,7 @@ const gotoContactEdit = [
   clearScreenMetadataAction,
   getCaseAction,
   setupContactPrimaryFormAction,
-  setCurrentPageAction('PrimaryContactEdit'),
+  setCurrentPageAction('ContactEdit'),
 ];
 
 export const gotoContactEditSequence = [

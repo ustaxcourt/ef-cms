@@ -8,8 +8,7 @@ import { petitionerEditsCasePrimaryContactPhone } from './journey/petitionerEdit
 import { petitionerEditsCaseSecondaryContactAddress } from './journey/petitionerEditsCaseSecondaryContactAddress';
 import { petitionerEditsCaseSecondaryContactAddressAndPhone } from './journey/petitionerEditsCaseSecondaryContactAddressAndPhone';
 import { petitionerEditsCaseSecondaryContactPhone } from './journey/petitionerEditsCaseSecondaryContactPhone';
-import { petitionerNavigatesToEditPrimaryContact } from './journey/petitionerNavigatesToEditPrimaryContact';
-import { petitionerNavigatesToEditSecondaryContact } from './journey/petitionerNavigatesToEditSecondaryContact';
+import { petitionerNavigatesToEditContact } from './journey/petitionerNavigatesToEditContact';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
@@ -55,11 +54,11 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
   });
-  petitionerNavigatesToEditPrimaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCasePrimaryContactAddress(test);
-  petitionerNavigatesToEditPrimaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCasePrimaryContactPhone(test);
-  petitionerNavigatesToEditPrimaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCasePrimaryContactAddressAndPhone(test);
 
   // attempt to modify secondary contact information
@@ -69,11 +68,11 @@ describe('Modify Petitioner Contact Information', () => {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });
-  petitionerNavigatesToEditSecondaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCaseSecondaryContactAddress(test);
-  petitionerNavigatesToEditSecondaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCaseSecondaryContactPhone(test);
-  petitionerNavigatesToEditSecondaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCaseSecondaryContactAddressAndPhone(test);
 
   loginAs(test, 'docketclerk@example.com');

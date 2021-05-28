@@ -464,9 +464,7 @@ const router = {
     registerRoute(
       '/case-detail/*/contacts/*/edit',
       ifHasAccess({ app }, (docketNumber, contactId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Primary contact`,
-        );
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Contact`);
         return app.getSequence('gotoContactEditSequence')({
           contactId,
           docketNumber,

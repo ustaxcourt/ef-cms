@@ -154,7 +154,6 @@ import { gotoPrintablePendingReportSequence } from './sequences/gotoPrintablePen
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoRequestAccessSequence } from './sequences/gotoRequestAccessSequence';
 import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPetitionSequence';
-import { gotoSecondaryContactEditSequence } from './sequences/gotoSecondaryContactEditSequence';
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
@@ -640,7 +639,6 @@ export const presenter = {
     gotoPrivacySequence,
     gotoRequestAccessSequence,
     gotoReviewSavedPetitionSequence,
-    gotoSecondaryContactEditSequence,
     gotoSignOrderSequence,
     gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
