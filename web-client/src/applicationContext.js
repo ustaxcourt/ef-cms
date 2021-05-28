@@ -282,7 +282,6 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
-import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
@@ -507,7 +506,6 @@ const allUseCases = {
   validatePetitionerInformationFormInteractor,
   validatePetitionerInteractor,
   validatePractitionerInteractor,
-  validatePrimaryContactInteractor,
   validateSearchDeadlinesInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,

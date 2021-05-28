@@ -31,8 +31,6 @@ export const ContactEdit = connect(
     validatePetitionerSequence,
     validationErrors,
   }) {
-    // update type since now it can be any kind of petitioner
-    // will probably require integration test updates (modifyInfo and NCA tests)
     const type = 'contact';
     const bind = 'form';
     const onBlur = 'validatePetitionerSequence';
@@ -41,7 +39,7 @@ export const ContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Edit Contact Information rowoiwkjer;oakwjdf;klajsdf;kl</h1>
+            <h1>Edit Contact Information</h1>
           </div>
         </div>
 
