@@ -63,8 +63,7 @@ describe('documentGenerators', () => {
       });
 
       applicationContext.getPug.mockImplementation(() => {
-        // eslint-disable-next-line security/detect-non-literal-require
-        return require('p' + 'ug');
+        return require('pug');
       });
 
       applicationContext
