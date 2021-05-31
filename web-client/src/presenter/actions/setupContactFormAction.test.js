@@ -33,7 +33,7 @@ describe('setupContactFormAction', () => {
     });
 
     expect(result.state.form).toEqual({
-      contactPrimary: {
+      contact: {
         contactType: CONTACT_TYPES.primary,
         name: 'Rachael Ray',
       },
