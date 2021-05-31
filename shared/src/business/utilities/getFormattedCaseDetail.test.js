@@ -9,6 +9,7 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   REVISED_TRANSCRIPT_EVENT_CODE,
+  SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../entities/EntityConstants');
@@ -124,6 +125,7 @@ describe('getFormattedCaseDetail', () => {
           isLegacySealed: true,
           isOnDocketRecord: true,
           servedAt: getDateISO(),
+          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
           workItem: {
             completedAt: getDateISO(),
           },
