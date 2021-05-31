@@ -25,7 +25,6 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
       .then(async results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        const recordsUpdated = [];
         for (const result of results.Items) {
           if (result.irsPractitioners) {
             result.irsPractitioners = result.irsPractitioners.map(r => ({
@@ -63,14 +62,12 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
 
           if (result.irsPractitioners || result.privatePractitioners) {
             console.log('updating a case');
-            await recordsUpdated.push(
-              documentClient
-                .put({
-                  Item: result,
-                  TableName: 'efcms-stg',
-                })
-                .promise(),
-            );
+            await documentClient
+              .put({
+                Item: result,
+                TableName: 'efcms-stg',
+              })
+              .promise();
           }
         }
       });
