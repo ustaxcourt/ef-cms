@@ -1,4 +1,3 @@
-import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -13,9 +12,9 @@ export const addPetitionerToCaseAction = async ({
   applicationContext,
   get,
 }) => {
+  const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.form);
-  const { CONTACT_TYPES } = get(state.constants);
 
   const updatedCase = await applicationContext
     .getUseCases()
@@ -24,11 +23,7 @@ export const addPetitionerToCaseAction = async ({
       contact,
       docketNumber,
     });
-
-  const contactTypeDisplay =
-    contact.contactType === CONTACT_TYPES.otherPetitioner
-      ? 'Petitioner'
-      : capitalize(contact.contactType);
+  const contactTypeDisplay = CONTACT_TYPE_TITLES[contact.contactType];
 
   return {
     alertSuccess: {
