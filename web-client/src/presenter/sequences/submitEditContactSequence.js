@@ -17,7 +17,7 @@ export const submitEditContactSequence = [
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      updateContactAction, //fixme: use updatePetitionerInformationAction instead?
+      updateContactAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       setCaseDetailPageTabFrozenAction,

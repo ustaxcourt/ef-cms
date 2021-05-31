@@ -1,7 +1,4 @@
-import {
-  CONTACT_TYPES,
-  PARTY_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { editPetitionerInformationHelper as editPetitionerInformationHelperComputed } from './editPetitionerInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -17,7 +14,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
-        form: { partyType: PARTY_TYPES.petitioner },
+        form: { contact: {} },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
         },
@@ -33,7 +30,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
-        form: { partyType: PARTY_TYPES.petitioner },
+        form: { contact: {} },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
         },
@@ -46,7 +43,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
-        form: { partyType: PARTY_TYPES.petitioner },
+        form: { contact: {} },
         permissions: {
           EDIT_PETITIONER_EMAIL: false,
         },
@@ -62,7 +59,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
-        form: { partyType: PARTY_TYPES.petitioner },
+        form: { contact: {} },
         permissions: {
           EDIT_PETITIONER_EMAIL: true,
         },
@@ -72,66 +69,117 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.userPendingEmail).toEqual('email@example.com');
   });
 
-  it('returns showRemovePetitionerButton `true` when there is more than one petitioner on the case with contactType of `petitioner`', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
+  describe('showRemovePetitionerButton', () => {
+    it('is false when the current user does not have permission to edit petitioners', () => {
+      const result = runCompute(editPetitionerInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+            ],
+          },
+          form: {
+            contact: {
               contactType: CONTACT_TYPES.petitioner,
             },
-            {
-              contactType: CONTACT_TYPES.petitioner,
-            },
-          ],
+          },
+          permissions: {
+            REMOVE_PETITIONER: false,
+          },
         },
-        permissions: {
-          REMOVE_PETITIONER: true,
-        },
-      },
+      });
+      expect(result.showRemovePetitionerButton).toBeFalsy();
     });
-    expect(result.showRemovePetitionerButton).toBeTruthy();
-  });
 
-  it('returns showRemovePetitionerButton = false when there is only one petitioner on the case with contactType of `petitioner`', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
+    it('is true when there is more than one petitioner contact type on the case and form.contact.contactType is petitioner', () => {
+      const result = runCompute(editPetitionerInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+            ],
+          },
+          form: {
+            contact: {
               contactType: CONTACT_TYPES.petitioner,
             },
-            {
+          },
+          permissions: {
+            REMOVE_PETITIONER: true,
+          },
+        },
+      });
+      expect(result.showRemovePetitionerButton).toBeTruthy();
+    });
+
+    it('is false when there is only one petitioner contact type on the case and form.contact.contactType is petitioner', () => {
+      const result = runCompute(editPetitionerInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+              {
+                contactType: CONTACT_TYPES.intervenor,
+              },
+            ],
+          },
+          form: {
+            contact: {
+              contactType: CONTACT_TYPES.petitioner,
+            },
+          },
+          permissions: {
+            REMOVE_PETITIONER: true,
+          },
+        },
+      });
+      expect(result.showRemovePetitionerButton).toBeFalsy();
+    });
+
+    it('is true when the form.contact.contactType is a participant or intervenor', () => {
+      const result = runCompute(editPetitionerInformationHelper, {
+        state: {
+          caseDetail: {
+            petitioners: [
+              {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+              {
+                contactType: CONTACT_TYPES.intervenor,
+              },
+            ],
+          },
+          form: {
+            contact: {
               contactType: CONTACT_TYPES.intervenor,
             },
-          ],
+          },
+          permissions: {
+            REMOVE_PETITIONER: true,
+          },
         },
-        permissions: {
-          REMOVE_PETITIONER: true,
-        },
-      },
+      });
+      expect(result.showRemovePetitionerButton).toBeTruthy();
     });
-    expect(result.showRemovePetitionerButton).toBeFalsy();
-  });
-
-  it('returns showRemovePetitionerButton = false when >1 petitioner on the case but the user does not have permissions', () => {
-    const result = runCompute(editPetitionerInformationHelper, {
-      state: {
-        caseDetail: {
-          petitioners: [{}, {}],
-        },
-        permissions: {
-          REMOVE_PETITIONER: false,
-        },
-      },
-    });
-    expect(result.showRemovePetitionerButton).toBeFalsy();
   });
 
   it('returns showSealAddress true if the current user has the SEAL_ADDRESS permission', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
+        form: { contact: {} },
         permissions: {
           SEAL_ADDRESS: true,
         },
@@ -144,6 +192,7 @@ describe('editPetitionerInformationHelper', () => {
     const result = runCompute(editPetitionerInformationHelper, {
       state: {
         caseDetail: { petitioners: [{}, {}] },
+        form: { contact: {} },
         permissions: {
           SEAL_ADDRESS: false,
         },

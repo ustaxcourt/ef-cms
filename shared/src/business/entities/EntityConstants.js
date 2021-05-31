@@ -762,7 +762,6 @@ const PETITIONER_CONTACT_TYPES = [
   CONTACT_TYPES.primary,
   CONTACT_TYPES.secondary,
   CONTACT_TYPES.otherPetitioner,
-  CONTACT_TYPES.petitioner,
 ];
 
 const COMMON_CITIES = [
