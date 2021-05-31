@@ -10,31 +10,30 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PrimaryContactEdit = connect(
+export const ContactEdit = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
-    submitEditPrimaryContactSequence:
-      sequences.submitEditPrimaryContactSequence,
+    submitEditContactSequence: sequences.submitEditContactSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validatePrimaryContactSequence: sequences.validatePrimaryContactSequence,
+    validatePetitionerSequence: sequences.validatePetitionerSequence,
     validationErrors: state.validationErrors,
   },
-  function PrimaryContactEdit({
+  function ContactEdit({
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
     showModal,
-    submitEditPrimaryContactSequence,
+    submitEditContactSequence,
     updateFormValueSequence,
-    validatePrimaryContactSequence,
+    validatePetitionerSequence,
     validationErrors,
   }) {
-    const type = 'contactPrimary';
+    const type = 'contact';
     const bind = 'form';
-    const onBlur = 'validatePrimaryContactSequence';
+    const onBlur = 'validatePetitionerSequence';
 
     return (
       <>
@@ -60,15 +59,13 @@ export const PrimaryContactEdit = connect(
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
               <p className="usa-label margin-bottom-0">Contact name</p>
-              <p className="margin-top-0">{form.contactPrimary.name}</p>
+              <p className="margin-top-0">{form.contact.name}</p>
             </div>
 
-            {form.contactPrimary.additionalName && (
+            {form.contact.additionalName && (
               <div className="usa-form-group">
                 <p className="usa-label margin-bottom-0">Additional name</p>
-                <p className="margin-top-0">
-                  {form.contactPrimary.additionalName}
-                </p>
+                <p className="margin-top-0">{form.contact.additionalName}</p>
               </div>
             )}
 
@@ -78,7 +75,7 @@ export const PrimaryContactEdit = connect(
               type={type}
               onChange="contactPrimaryCountryTypeChangeSequence"
             />
-            {form.contactPrimary.countryType === COUNTRY_TYPES.DOMESTIC ? (
+            {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
               <Address
                 bind={bind}
                 type={type}
@@ -93,7 +90,7 @@ export const PrimaryContactEdit = connect(
                 onChange="updateFormValueSequence"
               />
             )}
-            <FormGroup errorText={validationErrors?.contactPrimary?.phone}>
+            <FormGroup errorText={validationErrors?.contact?.phone}>
               <label className="usa-label" htmlFor="phone">
                 Phone number
               </label>
@@ -104,11 +101,11 @@ export const PrimaryContactEdit = connect(
                 autoCapitalize="none"
                 className="usa-input max-width-200"
                 id="phone"
-                name="contactPrimary.phone"
+                name="contact.phone"
                 type="tel"
-                value={form.contactPrimary.phone || ''}
+                value={form.contact.phone || ''}
                 onBlur={() => {
-                  validatePrimaryContactSequence();
+                  validatePetitionerSequence();
                 }}
                 onChange={e => {
                   updateFormValueSequence({
@@ -121,7 +118,7 @@ export const PrimaryContactEdit = connect(
           </div>
           <Button
             onClick={() => {
-              submitEditPrimaryContactSequence();
+              submitEditContactSequence();
             }}
           >
             Save

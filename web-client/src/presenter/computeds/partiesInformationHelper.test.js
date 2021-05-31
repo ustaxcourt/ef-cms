@@ -867,7 +867,7 @@ describe('partiesInformationHelper', () => {
   });
 
   describe('editPetitionerLink', () => {
-    it('should return primary contact edit if user is external and user is primary', () => {
+    it('should return external contact edit link when the user is external', () => {
       applicationContext.getCurrentUser.mockReturnValue({
         role: ROLES.privatePractitioner,
       });
@@ -888,39 +888,7 @@ describe('partiesInformationHelper', () => {
         },
       });
       expect(result.formattedPetitioners[0].editPetitionerLink).toBe(
-        '/case-detail/101-19/contacts/primary/edit',
-      );
-    });
-
-    it('should return secondary contact edit if user is external and user is secondary', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.privatePractitioner,
-      });
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockDocketClerk),
-          caseDetail: {
-            docketEntries: [],
-            docketNumber: '101-19',
-            irsPractitioners: [],
-            petitioners: [
-              mockPetitioner,
-              {
-                ...mockPetitioner,
-                contactId: 'a94cef8e-17b8-4504-9296-af911b32020a',
-                contactType: 'secondary',
-              },
-            ],
-            privatePractitioners: [],
-          },
-          permissions: { EDIT_PETITIONER_INFO: true },
-          screenMetadata: {
-            pendingEmails: {},
-          },
-        },
-      });
-      expect(result.formattedPetitioners[1].editPetitionerLink).toBe(
-        '/case-detail/101-19/contacts/secondary/edit',
+        `/case-detail/101-19/contacts/${mockPetitioner.contactId}/edit`,
       );
     });
 

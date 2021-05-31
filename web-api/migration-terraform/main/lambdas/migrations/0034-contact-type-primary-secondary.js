@@ -5,6 +5,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
+  PETITIONER_CONTACT_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 
 const applicationContext = createApplicationContext({});
@@ -18,13 +19,7 @@ const migrateItems = async items => {
       item.status !== CASE_STATUS_TYPES.new
     ) {
       item.petitioners.forEach(petitioner => {
-        const petitionerContactTypes = [
-          CONTACT_TYPES.primary,
-          CONTACT_TYPES.secondary,
-          CONTACT_TYPES.otherPetitioner,
-        ];
-
-        if (petitionerContactTypes.includes(petitioner.contactType)) {
+        if (PETITIONER_CONTACT_TYPES.includes(petitioner.contactType)) {
           petitioner.contactType = CONTACT_TYPES.petitioner;
         }
       });

@@ -16,6 +16,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Contact } from './Contact';
+import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -55,7 +56,6 @@ import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
-import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
@@ -65,7 +65,6 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
-import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
@@ -105,6 +104,7 @@ const pages = {
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
   Contact,
+  ContactEdit,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -141,7 +141,6 @@ const pages = {
   PendingReport,
   PetitionQc,
   PractitionerDetail,
-  PrimaryContactEdit,
   PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintPaperTrialNotices,
@@ -151,7 +150,6 @@ const pages = {
   Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
-  SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
   SimplePdfPreviewPage,

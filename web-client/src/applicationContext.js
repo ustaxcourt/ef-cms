@@ -231,6 +231,7 @@ import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritiz
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
+import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
 import { updateCourtIssuedDocketEntryInteractor } from '../../shared/src/proxies/documents/updateCourtIssuedDocketEntryProxy';
@@ -241,9 +242,7 @@ import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseSt
 import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
-import { updatePrimaryContactInteractor } from '../../shared/src/proxies/updatePrimaryContactProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
-import { updateSecondaryContactInteractor } from '../../shared/src/proxies/updateSecondaryContactProxy';
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
@@ -283,9 +282,7 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
-import { validatePrimaryContactInteractor } from '../../shared/src/business/useCases/validatePrimaryContactInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
-import { validateSecondaryContactInteractor } from '../../shared/src/business/useCases/validateSecondaryContactInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
@@ -459,6 +456,7 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
   updateCourtIssuedDocketEntryInteractor,
@@ -469,9 +467,7 @@ const allUseCases = {
   updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
-  updatePrimaryContactInteractor,
   updateQcCompleteForTrialInteractor,
-  updateSecondaryContactInteractor,
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
@@ -510,9 +506,7 @@ const allUseCases = {
   validatePetitionerInformationFormInteractor,
   validatePetitionerInteractor,
   validatePractitionerInteractor,
-  validatePrimaryContactInteractor,
   validateSearchDeadlinesInteractor,
-  validateSecondaryContactInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,

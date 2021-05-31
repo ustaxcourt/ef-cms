@@ -7,17 +7,17 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updateSecondaryContactAction } from '../actions/updateSecondaryContactAction';
-import { validateSecondaryContactAction } from '../actions/validateSecondaryContactAction';
+import { updateContactAction } from '../actions/updateContactAction';
+import { validatePetitionerAction } from '../actions/validatePetitionerAction';
 
-export const submitEditSecondaryContactSequence = [
+export const submitEditContactSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  validateSecondaryContactAction,
+  validatePetitionerAction,
   {
     error: [setValidationAlertErrorsAction],
     success: showProgressSequenceDecorator([
-      updateSecondaryContactAction,
+      updateContactAction,
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       setCaseDetailPageTabFrozenAction,

@@ -4,23 +4,23 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setupContactPrimaryFormAction } from '../actions/setupContactPrimaryFormAction';
+import { setupContactFormAction } from '../actions/setupContactFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoPrimaryContactEdit = [
+const gotoContactEdit = [
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
   getCaseAction,
-  setupContactPrimaryFormAction,
-  setCurrentPageAction('PrimaryContactEdit'),
+  setupContactFormAction,
+  setCurrentPageAction('ContactEdit'),
 ];
 
-export const gotoPrimaryContactEditSequence = [
+export const gotoContactEditSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoPrimaryContactEdit,
+    isLoggedIn: gotoContactEdit,
     unauthorized: [redirectToCognitoAction],
   },
 ];
