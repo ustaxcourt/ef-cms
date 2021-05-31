@@ -8,7 +8,7 @@ describe('addPetitionerToCaseAction', () => {
   const mockContact = {
     address1: '123 cat lane',
     caseCaption: 'A test caption',
-    contactType: 'Petitioner',
+    contactType: CONTACT_TYPES.petitioner,
     name: 'Selena Kyle',
   };
 
@@ -40,7 +40,7 @@ describe('addPetitionerToCaseAction', () => {
   });
 
   it('sets state.alertSuccess from props.alertSuccess for a Petitioner', async () => {
-    mockContact.contactType = 'Participant';
+    mockContact.contactType = CONTACT_TYPES.participant;
 
     const result = await runAction(addPetitionerToCaseAction, {
       modules: { presenter },
