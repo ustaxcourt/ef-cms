@@ -73,8 +73,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseInformationExternal: isExternalUser,
     showDocketRecordInProgressState: !isExternalUser,
     showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
-    showEditSecondaryContactModal:
-      get(state.modal.showModal) === 'EditSecondaryContact',
     showFileDocumentButton,
     showFilingFeeExternal:
       isExternalUser &&
