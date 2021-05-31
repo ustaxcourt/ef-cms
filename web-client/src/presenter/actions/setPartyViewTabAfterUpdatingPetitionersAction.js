@@ -6,20 +6,21 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store object
  * @param {object} providers.store the cerebral store object
  */
 export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const { contactType } = props;
-  const { petitioners } = props.caseDetail;
+  const { petitioners } = props.caseDetail || get(state.caseDetail);
 
   let tab = PARTY_VIEW_TABS.petitionersAndCounsel;
-
   if (
     (contactType === CONTACT_TYPES.intervenor ||
       contactType === CONTACT_TYPES.participant) &&
@@ -31,6 +32,5 @@ export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   ) {
     tab = PARTY_VIEW_TABS.participantsAndCounsel;
   }
-
   store.set(state.currentViewMetadata.caseDetail.partyViewTab, tab);
 };

@@ -84,7 +84,7 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               >
                 <option value="">- Select -</option>
-                <option value="otherPetitioner">Petitioner</option>
+                <option value="petitioner">Petitioner</option>
                 <option value="intervenor">Intervenor</option>
                 <option value="participant">Participant</option>
               </select>
