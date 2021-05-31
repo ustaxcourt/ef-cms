@@ -758,6 +758,13 @@ const CONTACT_TYPE_TITLES = {
   secondary: 'Petitioner',
 };
 
+const PETITIONER_CONTACT_TYPES = [
+  CONTACT_TYPES.primary,
+  CONTACT_TYPES.secondary,
+  CONTACT_TYPES.otherPetitioner,
+  CONTACT_TYPES.petitioner,
+];
+
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
   { city: 'Mobile', state: 'Alabama' },
@@ -1046,6 +1053,7 @@ module.exports = deepFreeze({
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
+  PETITIONER_CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
