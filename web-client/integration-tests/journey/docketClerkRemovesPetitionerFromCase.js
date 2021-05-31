@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  PARTY_VIEW_TABS,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 import { getPetitionerById } from '../../../shared/src/business/entities/cases/Case';
 
@@ -32,6 +35,9 @@ export const docketClerkRemovesPetitionerFromCase = test => {
 
     expect(test.getState('alertSuccess.message')).toBe(
       'Petitioner successfully removed.',
+    );
+    expect(test.getState('currentViewMetadata.caseDetail.partyViewTab')).toBe(
+      PARTY_VIEW_TABS.petitionersAndCounsel,
     );
   });
 };

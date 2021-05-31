@@ -7,7 +7,7 @@ import React from 'react';
 
 export const RemovePetitionerModal = connect(
   {
-    cancelSequence: sequences.clearModalSequence,
+    cancelRemovePetitionerSequence: sequences.cancelRemovePetitionerSequence,
     confirmSequence: sequences.removePetitionerAndUpdateCaptionSequence,
     constants: state.constants,
     form: state.form,
@@ -19,7 +19,7 @@ export const RemovePetitionerModal = connect(
     validationErrors: state.validationErrors,
   },
   function RemovePetitionerModal({
-    cancelSequence,
+    cancelRemovePetitionerSequence,
     confirmSequence,
     constants,
     form,
@@ -31,7 +31,11 @@ export const RemovePetitionerModal = connect(
     return (
       <ModalDialog
         cancelLabel="Cancel"
-        cancelSequence={cancelSequence}
+        cancelSequence={() =>
+          cancelRemovePetitionerSequence({
+            contactType: form.contact.contactType,
+          })
+        }
         className=""
         confirmLabel="Yes, Remove"
         confirmSequence={confirmSequence}

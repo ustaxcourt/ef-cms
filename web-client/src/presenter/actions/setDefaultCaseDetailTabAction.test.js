@@ -23,13 +23,37 @@ describe('setDefaultCaseDetailTabAction', () => {
     });
   });
 
-  it('should set the partyViewTab based on the props.partiesTab provided', async () => {
+  it('should set the partyViewTab based on the props.partiesTab provided if it is not already set in state', async () => {
     const { state } = await runAction(setDefaultCaseDetailTabAction, {
       modules: { presenter },
       props: {
         caseInformationTab: 'parties',
         partiesTab: 'participantsAndCounsel',
         primaryTab: 'caseInformation',
+      },
+    });
+
+    expect(state.currentViewMetadata.caseDetail).toMatchObject({
+      caseInformationTab: 'parties',
+      partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
+      primaryTab: 'caseInformation',
+    });
+  });
+
+  it('should NOT set the partyViewTab based on the props.partiesTab provided if it is already set in state', async () => {
+    const { state } = await runAction(setDefaultCaseDetailTabAction, {
+      modules: { presenter },
+      props: {
+        caseInformationTab: 'parties',
+        partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
+        primaryTab: 'caseInformation',
+      },
+      state: {
+        currentViewMetadata: {
+          caseDetail: {
+            partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
+          },
+        },
       },
     });
 
