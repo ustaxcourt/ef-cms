@@ -1,4 +1,4 @@
-import { showContactsHelper } from '../computeds/showContactsHelper';
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,37 +9,33 @@ import { state } from 'cerebral';
  * @returns {object} object containing the view settings
  */
 export const editPetitionerInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  const { CONTACT_TYPES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
-  const partyType = get(state.form.partyType);
-  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+  const { contact } = cloneDeep(get(state.form));
   const userPendingEmail = get(state.screenMetadata.userPendingEmail);
   const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
   const showSealAddress = permissions.SEAL_ADDRESS;
 
   const caseDetail = get(state.caseDetail);
 
-  const petitionerContactTypes = [
-    CONTACT_TYPES.primary,
-    CONTACT_TYPES.secondary,
-    CONTACT_TYPES.otherPetitioner,
-    CONTACT_TYPES.petitioner,
-  ];
-
-  const petitioners = caseDetail.petitioners.filter(p =>
-    petitionerContactTypes.includes(p.contactType),
+  const petitioners = caseDetail.petitioners.filter(
+    p => p.contactType === CONTACT_TYPES.petitioner,
   );
 
+  const canRemovePetitioner =
+    contact.contactType === CONTACT_TYPES.petitioner && petitioners.length > 1;
+
+  const isOtherFiler =
+    contact.contactType === CONTACT_TYPES.intervenor ||
+    contact.contactType === CONTACT_TYPES.participant;
+
   const showRemovePetitionerButton =
-    petitioners.length > 1 && permissions.REMOVE_PETITIONER;
+    (isOtherFiler || canRemovePetitioner) && permissions.REMOVE_PETITIONER;
 
   return {
-    partyTypes: PARTY_TYPES,
     showEditEmail,
-    showPrimaryContact: showContacts.contactPrimary,
     showRemovePetitionerButton,
     showSealAddress,
-    showSecondaryContact: showContacts.contactSecondary,
     userPendingEmail,
   };
 };

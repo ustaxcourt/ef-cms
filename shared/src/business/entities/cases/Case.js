@@ -18,6 +18,7 @@ const {
   MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -1033,14 +1034,8 @@ Case.prototype.closeCase = function () {
 Case.prototype.markAsSentToIRS = function () {
   this.status = CASE_STATUS_TYPES.generalDocket;
 
-  const petitionerContactTypes = [
-    CONTACT_TYPES.primary,
-    CONTACT_TYPES.secondary,
-    CONTACT_TYPES.otherPetitioner,
-  ];
-
   this.petitioners.map(p => {
-    if (petitionerContactTypes.includes(p.contactType)) {
+    if (PETITIONER_CONTACT_TYPES.includes(p.contactType)) {
       p.contactType = CONTACT_TYPES.petitioner;
     }
   });

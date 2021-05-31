@@ -461,24 +461,11 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/contacts/primary/edit',
-      ifHasAccess({ app }, docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Primary contact`,
-        );
-        return app.getSequence('gotoPrimaryContactEditSequence')({
-          docketNumber,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/contacts/secondary/edit',
-      ifHasAccess({ app }, docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Secondary contact`,
-        );
-        return app.getSequence('gotoSecondaryContactEditSequence')({
+      '/case-detail/*/contacts/*/edit',
+      ifHasAccess({ app }, (docketNumber, contactId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Contact`);
+        return app.getSequence('gotoContactEditSequence')({
+          contactId,
           docketNumber,
         });
       }),
