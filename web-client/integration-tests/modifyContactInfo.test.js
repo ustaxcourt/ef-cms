@@ -47,7 +47,7 @@ describe('Modify Petitioner Contact Information', () => {
     test.docketNumber = caseDetail.docketNumber;
   });
 
-  petitionerViewsDashboard(test, { caseIndex: 2 });
+  petitionerViewsDashboard(test);
   petitionerViewsCaseDetail(test, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
   });
