@@ -45,7 +45,7 @@ describe('setDefaultCaseDetailTabAction', () => {
       modules: { presenter },
       props: {
         caseInformationTab: 'parties',
-        partyViewTab: PARTY_VIEW_TABS.participantsAndCounsel,
+        partyViewTab: PARTY_VIEW_TABS.petitionersAndCounsel,
         primaryTab: 'caseInformation',
       },
       state: {

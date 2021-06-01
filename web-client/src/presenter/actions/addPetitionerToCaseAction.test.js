@@ -39,7 +39,7 @@ describe('addPetitionerToCaseAction', () => {
     });
   });
 
-  it('sets state.alertSuccess from props.alertSuccess for a Petitioner', async () => {
+  it('sets state.alertSuccess from props.alertSuccess for a Participant', async () => {
     mockContact.contactType = CONTACT_TYPES.participant;
 
     const result = await runAction(addPetitionerToCaseAction, {
