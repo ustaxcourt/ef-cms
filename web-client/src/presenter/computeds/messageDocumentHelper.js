@@ -34,7 +34,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
       useArchived: true,
     }) || {};
 
-  const isCorrespondence = !caseDocument.entityName;
+  const isCorrespondence = !!caseDocument.correspondenceId;
 
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     caseDocument.eventCode,
