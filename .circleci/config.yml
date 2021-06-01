@@ -851,36 +851,36 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-defaults
-      - build-api:
-          <<: *build-and-deploy-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-defaults
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
-      - build-client-coverage:
-          <<: *build-and-deploy-defaults
-          requires:
-            - build-shared
-            - build-api
-            - build-client-unit
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-public
+      # - build-shared:
+      #     <<: *build-and-deploy-defaults
+      # - build-api:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-unit:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
+      # - build-client-coverage:
+      #     <<: *build-and-deploy-defaults
+      #     requires:
+      #       - build-shared
+      #       - build-api
+      #       - build-client-unit
+      #       - build-client-integration
+      #       - e2e-pa11y
+      #       - e2e-pa11y-public
+      #       - e2e-cypress
+      #       - e2e-cypress-public
       - deploy:
-          requires:
-            - build-client-coverage
+          # requires:
+          #   - build-client-coverage
           filters:
             branches:
               only:
@@ -908,21 +908,21 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
       - switch-colors:
           requires:
-            - smoketests
+            - deploy
           filters:
             branches:
               only:
