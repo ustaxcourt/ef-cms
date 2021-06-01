@@ -7,6 +7,7 @@ const {
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -371,7 +372,9 @@ exports.updatePetitionerInformationInteractor = async (
     (primaryChange && !newContactPrimary.isAddressSealed) ||
     (secondaryChange && !newContactSecondary.isAddressSealed)
   ) {
-    const partyWithPaperService = caseEntity.hasPartyWithPaperService();
+    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     if (primaryChange) {
       const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
