@@ -24,6 +24,8 @@ Table of contents:
 | Testing | See [testing overview](./testing.md).
 | Email | The [email documentation](./architecture/email.md) includes sending domains and information about SPF, DKIM, and DMARC records.
 
+See the [architecture decision records folder](./architecture/decisions/) for more insight into how the application’s architecture came to be.
+
 ## Developing EF-CMS on a local developer machine
 
 | Item | Description
