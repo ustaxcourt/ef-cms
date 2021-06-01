@@ -13,6 +13,27 @@ exports.parseLegacyDocumentsInteractor = async ({
   docketEntryId,
   docketNumber,
 }) => {
+  // Gets the case by Docket Number, to find the Docket Entry
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+  const caseEntity = new Case(caseRecord, { applicationContext });
+  const foundDocketEntry = caseEntity.getDocketEntryById({ docketEntryId });
+
+  if (!foundDocketEntry) {
+    throw new Error(`Docket entry not found. ${docketNumber} ${docketEntryId}`);
+  }
+
+  if (!foundDocketEntry.isFileAttached) {
+    applicationContext.logger.info(
+      `Docket entry has no file attached, skipping parsing: ${docketNumber} ${docketEntryId}`,
+    );
+    return;
+  }
+
   let pdfBuffer;
   try {
     // Finding the PDF in the S3 Bucket
@@ -28,20 +49,6 @@ exports.parseLegacyDocumentsInteractor = async ({
     throw new Error(
       `Docket entry document not found in S3. ${docketNumber} ${docketEntryId}`,
     );
-  }
-
-  // Gets the case by Docket Number, to find the Docket Entry
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-  const caseEntity = new Case(caseRecord, { applicationContext });
-  const foundDocketEntry = caseEntity.getDocketEntryById({ docketEntryId });
-
-  if (!foundDocketEntry) {
-    throw new Error(`Docket entry not found. ${docketNumber} ${docketEntryId}`);
   }
 
   // Scrape the contents of the PDF
