@@ -33,6 +33,7 @@ import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocume
 import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequence';
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
+import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetitionerSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
@@ -514,6 +515,7 @@ export const presenter = {
     cancelAddStatisticSequence,
     cancelAndNavigateToCorrespondenceSequence,
     cancelFileUploadSequence,
+    cancelRemovePetitionerSequence,
     caseInventoryReportLoadMoreSequence,
     cerebralBindSimpleSetStateSequence,
     changeTabAndSetViewerDocumentToDisplaySequence,
