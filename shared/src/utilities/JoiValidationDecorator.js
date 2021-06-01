@@ -175,7 +175,10 @@ exports.joiValidationDecorator = function (
     return this;
   };
 
-  entityConstructor.prototype.validate = function validate() {
+  entityConstructor.prototype.validate = function validate(options) {
+    const applicationContext = options?.applicationContext;
+    const logErrors = options?.logErrors;
+
     if (!this.isValid()) {
       const stringifyTransform = obj => {
         if (!obj) return obj;
@@ -189,6 +192,9 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
+      if (logErrors) {
+        applicationContext.logger.error('*** Entity with error: ***', this);
+      }
       const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
         this.entityName,
@@ -203,31 +209,7 @@ exports.joiValidationDecorator = function (
   entityConstructor.prototype.validateWithLogging = function validateWithLogging(
     applicationContext,
   ) {
-    if (!this.isValid()) {
-      const stringifyTransform = obj => {
-        if (!obj) return obj;
-        const transformed = {};
-        Object.keys(obj).forEach(key => {
-          if (typeof obj[key] === 'string') {
-            transformed[key] = obj[key].replace(/"/g, "'");
-          } else {
-            transformed[key] = obj[key];
-          }
-        });
-        return transformed;
-      };
-      applicationContext.logger.error('*** Entity with error: ***', this);
-      const validationErrors = this.getValidationErrors();
-
-      throw new InvalidEntityError(
-        this.entityName,
-        JSON.stringify(stringifyTransform(validationErrors)),
-        validationErrors,
-      );
-    }
-    setIsValidated(this);
-
-    return this;
+    return this.validate({ applicationContext, logErrors: true });
   };
 
   entityConstructor.prototype.getFormattedValidationErrors = function () {
