@@ -1,17 +1,7 @@
 data "archive_file" "legacy_documents_migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/legacy-documents-migration.js.zip"
-  source_file = "${path.module}/lambdas/dist"
-  excludes    = [
-                  "${path.module}/lambdas/dist/api-public.js",
-                  "${path.module}/lambdas/dist/api.js",
-                  "${path.module}/lambdas/dist/cognito-authorizer.js",
-                  "${path.module}/lambdas/dist/cognito-triggers.js",
-                  "${path.module}/lambdas/dist/cron.js",
-                  "${path.module}/lambdas/dist/report.html",
-                  "${path.module}/lambdas/dist/streams.js",
-                  "${path.module}/lambdas/dist/websockets.js",
-                ]
+  source_file = "${path.module}/lambdas/dist/legacy-documents-migration.js"
 }
 
 resource "aws_lambda_function" "legacy_documents_migration_lambda" {
