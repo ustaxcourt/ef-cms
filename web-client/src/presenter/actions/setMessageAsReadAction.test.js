@@ -25,9 +25,9 @@ describe('setMessageAsReadAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().setMessageAsReadInteractor,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+      applicationContext.getUseCases().setMessageAsReadInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       docketNumber: '123-45',
       messageId: '123',
     });

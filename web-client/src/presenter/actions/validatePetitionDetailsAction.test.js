@@ -42,9 +42,10 @@ describe('validatePetitionDetailsAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       petitionPaymentDate: '2001-01-01T05:00:00.000Z',
       petitionPaymentMethod: 'check',
@@ -65,9 +66,10 @@ describe('validatePetitionDetailsAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     });
@@ -89,9 +91,10 @@ describe('validatePetitionDetailsAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
       petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
@@ -113,9 +116,10 @@ describe('validatePetitionDetailsAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       irsNoticeDate: '2001-01-01T05:00:00.000Z',
     });
@@ -132,9 +136,10 @@ describe('validatePetitionDetailsAction', () => {
         form: {},
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       preferredTrialCity: null,
     });
@@ -151,9 +156,10 @@ describe('validatePetitionDetailsAction', () => {
         form: { preferredTrialCity: 'Fresno, California' },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       preferredTrialCity: 'Fresno, California',
     });

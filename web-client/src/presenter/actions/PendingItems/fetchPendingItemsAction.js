@@ -16,11 +16,12 @@ export const fetchPendingItemsAction = async ({ applicationContext, get }) => {
   const {
     foundDocuments,
     total,
-  } = await applicationContext.getUseCases().fetchPendingItemsInteractor({
-    applicationContext,
-    judge,
-    page,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .fetchPendingItemsInteractor(applicationContext, {
+      judge,
+      page,
+    });
 
   return { pendingItems: foundDocuments, total };
 };

@@ -34,13 +34,12 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumber: '123-20',
-        key: 'docket-entry-id-123',
-      }),
-    );
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
     expect(result.state).toMatchObject({
       iframeSrc: 'http://example.com',
     });
@@ -57,13 +56,12 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumber: '123-20',
-        key: 'docket-entry-id-123',
-      }),
-    );
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
     expect(window.location.href).toEqual('http://example.com');
   });
 
@@ -78,13 +76,12 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentDownloadUrlInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumber: '123-20',
-        key: 'docket-entry-id-123',
-      }),
-    );
+      applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      docketNumber: '123-20',
+      key: 'docket-entry-id-123',
+    });
     expect(openInNewTab).toHaveBeenCalledWith('http://example.com');
   });
 });

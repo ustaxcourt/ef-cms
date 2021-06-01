@@ -10,7 +10,6 @@ const {
 } = require('../../entities/EntityConstants');
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { generateChangeOfAddress } = require('./generateChangeOfAddress');
-const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -283,11 +282,11 @@ describe('generateChangeOfAddress', () => {
       ...mockCaseWithPrivatePractitioner,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         {
-          ...MOCK_CASE.contactSecondary,
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
@@ -328,11 +327,11 @@ describe('generateChangeOfAddress', () => {
       ...mockCaseWithPrivatePractitioner,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           name: 'Test Secondary',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -372,11 +371,11 @@ describe('generateChangeOfAddress', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           name: 'Test Secondary',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -415,11 +414,11 @@ describe('generateChangeOfAddress', () => {
       ...mockCaseWithPrivatePractitioner,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         {
-          ...MOCK_CASE.contactSecondary,
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
@@ -457,11 +456,11 @@ describe('generateChangeOfAddress', () => {
       ...mockCaseWithPrivatePractitioner,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         {
-          ...MOCK_CASE.contactSecondary,
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
@@ -535,11 +534,11 @@ describe('generateChangeOfAddress', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...MOCK_CASE.petitioners[0],
           contactType: CONTACT_TYPES.secondary,
           name: 'Test Secondary',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -615,5 +614,40 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    mockCase = {
+      ...mockCaseWithPrivatePractitioner,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    };
+
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockPrivatePractitioner.contact,
+        address1: '234 Main St',
+      },
+      user: mockPrivatePractitioner,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: 'Test Petitioner',
+    });
   });
 });

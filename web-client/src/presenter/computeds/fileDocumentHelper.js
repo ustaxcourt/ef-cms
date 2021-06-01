@@ -21,9 +21,7 @@ export const fileDocumentHelper = (get, applicationContext) => {
   );
 
   const partyValidationError =
-    validationErrors.partyPrimary ||
-    validationErrors.partySecondary ||
-    validationErrors.partyIrsPractitioner;
+    validationErrors.filers || validationErrors.partyIrsPractitioner;
 
   let { certificateOfServiceDate } = form;
   let certificateOfServiceDateFormatted;
@@ -84,9 +82,15 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
+  const formattedFilingParties = applicationContext
+    .getUtilities()
+    .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners })
+    .map(p => p.displayName);
+
   const exported = {
     certificateOfServiceDateFormatted,
     formattedDocketNumbers,
+    formattedFilingParties,
     formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',

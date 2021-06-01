@@ -33,8 +33,8 @@ echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.14.9"* ]]; then
-  echo "Please set your terraform version to 0.14.9 before deploying."
+if [[ ${tf_version} != *"0.15.3"* ]]; then
+  echo "Please set your terraform version to 0.15.3 before deploying."
   exit 1
 fi
 
@@ -61,12 +61,8 @@ npm run build:assets
 
 # exit on any failure
 set -eo pipefail
-# build the cognito authorizer, api, and api-public with parcel
-pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js legacy-documents-migration.js api-public.js api.js --target node --bundle-node-modules --no-source-maps
-popd
-
-
+# build the cognito authorizer, api, and api-public with web pack
+npm run build:lambda:api
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
@@ -118,4 +114,4 @@ export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
-terraform apply --auto-approve execution-plan
+terraform apply -auto-approve execution-plan

@@ -24,13 +24,14 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
+
     expect(
       applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
         .calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
-        .calls[0][0].trialSessionId,
+        .calls[0][1].trialSessionId,
     ).toEqual('123');
   });
 
@@ -52,17 +53,18 @@ describe('getTrialSessionDetailsAction', () => {
       },
       state: {},
     });
+
     expect(
       applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
         .calls.length,
     ).toEqual(2);
     expect(
       applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
-        .calls[0][0].trialSessionId,
+        .calls[0][1].trialSessionId,
     ).toEqual('123');
     expect(
       applicationContext.getUseCases().getTrialSessionDetailsInteractor.mock
-        .calls[1][0].trialSessionId,
+        .calls[1][1].trialSessionId,
     ).toEqual('234');
   });
 });

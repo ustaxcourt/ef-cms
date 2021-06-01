@@ -24,8 +24,7 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
-        .verifyPendingCaseForUserInteractor({
-          applicationContext,
+        .verifyPendingCaseForUserInteractor(applicationContext, {
           docketNumber,
           userId: user.userId,
         });
@@ -37,21 +36,9 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
   } else if (user.role === USER_ROLES.petitioner) {
     const caseDetail = get(state.caseDetail);
 
-    const contactPrimary = applicationContext
+    isAssociated = !!applicationContext
       .getUtilities()
-      .getContactPrimary(caseDetail);
-
-    const caseContactPrimaryId = contactPrimary && contactPrimary.contactId;
-
-    const contactSecondary = applicationContext
-      .getUtilities()
-      .getContactSecondary(caseDetail);
-
-    const caseContactSecondaryId = contactSecondary?.contactId;
-
-    isAssociated =
-      (caseContactPrimaryId && caseContactPrimaryId === user.userId) ||
-      (!!caseContactSecondaryId && caseContactSecondaryId === user.userId);
+      .getPetitionerById(caseDetail, user.userId);
   } else if (user.role === USER_ROLES.irsSuperuser) {
     const caseDetail = get(state.caseDetail);
     const caseHasServedDocketEntries = applicationContext

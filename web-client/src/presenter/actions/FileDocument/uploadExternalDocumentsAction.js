@@ -57,19 +57,19 @@ export const uploadExternalDocumentsAction = async ({
       docketEntryIdsAdded,
     } = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor({
-        applicationContext,
+      .uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles,
         documentMetadata,
         progressFunctions,
       });
 
     const addCoversheet = docketEntryId => {
-      return applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
+      return applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
     };
 
     for (let docketEntryId of docketEntryIdsAdded) {

@@ -1,4 +1,3 @@
-import { startCase } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -11,7 +10,11 @@ import { state } from 'cerebral';
  * view options
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const constants = applicationContext.getConstants();
+  const {
+    CONTACT_TYPE_TITLES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
+  const caseDetail = get(state.caseDetail);
 
   const formattedCase = applicationContext
     .getUtilities()
@@ -20,10 +23,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     });
 
   const parties = {
-    petitioner: [
-      applicationContext.getUtilities().getContactPrimary(formattedCase),
-      applicationContext.getUtilities().getContactSecondary(formattedCase),
-    ],
+    petitioner: caseDetail.petitioners,
     privatePractitioners: formattedCase.privatePractitioners,
     respondent: formattedCase.irsPractitioners,
   };
@@ -34,10 +34,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     parties[key].forEach(party => {
       if (
         party &&
-        party.serviceIndicator === constants.SERVICE_INDICATOR_TYPES.SI_PAPER
+        party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
       ) {
         contactsNeedingPaperService.push({
-          name: `${party.name}, ${startCase(key)}`,
+          name: `${party.name}, ${CONTACT_TYPE_TITLES[party.contactType]}`,
         });
       }
     });

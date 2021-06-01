@@ -3,39 +3,19 @@ import { state } from 'cerebral';
 export const formatSearchResultRecord = (result, { applicationContext }) => {
   const { US_STATES } = applicationContext.getConstants();
 
-  const contactPrimary = applicationContext
-    .getUtilities()
-    .getContactPrimary(result);
-
-  const contactSecondary = applicationContext
-    .getUtilities()
-    .getContactSecondary(result);
-
-  result.contactPrimary = contactPrimary || {};
-
-  result.contactSecondary = contactSecondary || {};
-
-  result.contactPrimaryName =
-    result.contactPrimary && result.contactPrimary.name;
-
-  result.contactSecondaryName = contactSecondary && contactSecondary.name;
-
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
-  result.fullStateNamePrimary =
-    US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
-
-  if (
-    result.contactSecondary &&
-    result.contactSecondary.state &&
-    result.contactPrimary.state !== result.contactSecondary.state
-  ) {
-    result.fullStateNameSecondary =
-      US_STATES[result.contactSecondary.state] || result.contactSecondary.state;
+  if (result.petitioners) {
+    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
+      return {
+        contactId: petitioner.contactId,
+        state: US_STATES[petitioner.state] || petitioner.state,
+      };
+    });
   }
 
   return result;

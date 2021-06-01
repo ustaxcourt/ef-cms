@@ -98,6 +98,7 @@ describe('validateAddPractitionerAction', () => {
       .getUseCases()
       .validateAddPractitionerInteractor.mockReturnValue({
         address1: 'Enter a mailing address',
+        serviceIndicator: 'Select a service indicator',
       });
 
     runAction(validateAddPractitionerAction, {
@@ -128,6 +129,7 @@ describe('validateAddPractitionerAction', () => {
     expect(errorMock.mock.calls[0][0].errors).toEqual({
       contact: {
         address1: 'Enter a mailing address',
+        serviceIndicator: 'Select a service indicator',
       },
     });
   });
