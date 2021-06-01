@@ -1,10 +1,10 @@
 const client = require('../../dynamodbClientService');
 
-exports.deleteUserInboxRecord = ({ applicationContext, workItem }) => {
+exports.deleteWorkItem = ({ applicationContext, workItem }) => {
   return client.delete({
     applicationContext,
     key: {
-      pk: `user|${workItem.assigneeId}`,
+      pk: `work-item|${workItem.workItemId}`,
       sk: `work-item|${workItem.workItemId}`,
     },
   });
