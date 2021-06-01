@@ -1,4 +1,7 @@
-const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
+const {
+  INITIAL_DOCUMENT_TYPES,
+  SERVED_PARTIES_CODES,
+} = require('../EntityConstants');
 const { PublicDocketEntry } = require('./PublicDocketEntry');
 
 describe('PublicDocketEntry', () => {
@@ -34,6 +37,7 @@ describe('PublicDocketEntry', () => {
           sk: 'secondary',
         },
       ],
+      servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
 
     expect(entity.toRawObject()).toEqual({
@@ -56,6 +60,7 @@ describe('PublicDocketEntry', () => {
       processingStatus: 'testing',
       receivedAt: 'testing',
       servedAt: '2019-03-01T21:40:46.415Z',
+      servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });
   });
 
