@@ -1,7 +1,7 @@
 data "archive_file" "legacy_documents_migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/legacy-documents-migration.js.zip"
-  source_file = "${path.module}/lambdas/dist"
+  source_dir = "${path.module}/lambdas/dist"
   excludes    = [
     "${path.module}/lambdas/dist/api-public.js",
     "${path.module}/lambdas/dist/api.js",
