@@ -6,6 +6,7 @@ const connectionClass = require('http-aws-es');
 const docketNumberGenerator = require('../../shared/src/persistence/dynamo/cases/docketNumberGenerator');
 const elasticsearch = require('elasticsearch');
 const pdfLib = require('pdf-lib');
+const pug = require('pug');
 const sass = require('sass');
 const util = require('util');
 const {
@@ -975,6 +976,9 @@ const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
+  updateContactInteractor,
+} = require('../../shared/src/business/useCases/updateContactInteractor');
+const {
   updateCorrespondenceDocumentInteractor,
 } = require('../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor');
 const {
@@ -1027,14 +1031,8 @@ const {
   updatePractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/updatePractitionerUserInteractor');
 const {
-  updatePrimaryContactInteractor,
-} = require('../../shared/src/business/useCases/updatePrimaryContactInteractor');
-const {
   updateQcCompleteForTrialInteractor,
 } = require('../../shared/src/business/useCases/updateQcCompleteForTrialInteractor');
-const {
-  updateSecondaryContactInteractor,
-} = require('../../shared/src/business/useCases/updateSecondaryContactInteractor');
 const {
   updateTrialDateOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
@@ -1573,14 +1571,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
-      // Notice: this require is here to only have the lambdas that need it call it.
-      // This dependency is only available on lambdas with the 'puppeteer' layer,
-      // which means including it globally causes the other lambdas to fail.
-      // This also needs to have the string split to cause web pack to NOT bundle this dependency,
-      // which is wanted as bundling would have the dependency to not be searched for
-      // and found at the layer level and would cause issues.
-      // eslint-disable-next-line security/detect-non-literal-require
-      const pug = require('p' + 'ug');
       return pug;
     },
     getScannerResourceUri: () => {
@@ -1815,6 +1805,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseTrialSortTagsInteractor,
+        updateContactInteractor,
         updateCorrespondenceDocumentInteractor,
         updateCounselOnCaseInteractor,
         updateCourtIssuedDocketEntryInteractor,
@@ -1825,9 +1816,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
-        updatePrimaryContactInteractor,
         updateQcCompleteForTrialInteractor,
-        updateSecondaryContactInteractor,
         updateTrialSessionInteractor,
         updateTrialSessionWorkingCopyInteractor,
         updateUserCaseNoteInteractor,

@@ -345,14 +345,8 @@ const {
   updatePractitionerUserLambda,
 } = require('./practitioners/updatePractitionerUserLambda');
 const {
-  updatePrimaryContactLambda,
-} = require('./cases/updatePrimaryContactLambda');
-const {
   updateQcCompleteForTrialLambda,
 } = require('./cases/updateQcCompleteForTrialLambda');
-const {
-  updateSecondaryContactLambda,
-} = require('./cases/updateSecondaryContactLambda');
 const {
   updateTrialSessionLambda,
 } = require('./trialSessions/updateTrialSessionLambda');
@@ -409,6 +403,7 @@ const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
+const { updateContactLambda } = require('./cases/updateContactLambda');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
@@ -681,12 +676,8 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
  */
 {
   app.put(
-    '/case-parties/:docketNumber/contact-primary',
-    lambdaWrapper(updatePrimaryContactLambda),
-  );
-  app.put(
-    '/case-parties/:docketNumber/contact-secondary',
-    lambdaWrapper(updateSecondaryContactLambda),
+    '/case-parties/:docketNumber/contact',
+    lambdaWrapper(updateContactLambda),
   );
   app.post(
     '/case-parties/:docketNumber/associate-private-practitioner',

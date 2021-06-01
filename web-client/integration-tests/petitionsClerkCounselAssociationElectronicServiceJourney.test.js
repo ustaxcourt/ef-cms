@@ -14,7 +14,6 @@ const test = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { getContactSecondary } from '../../shared/src/business/entities/cases/Case';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -212,11 +211,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   });
 
   it('verifies the service indicator for the second petitioner reverts to electronic', async () => {
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    const contactSecondary = getContactSecondary(formattedCase);
+    const contactSecondary = contactSecondaryFromState(test);
 
     expect(contactSecondary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

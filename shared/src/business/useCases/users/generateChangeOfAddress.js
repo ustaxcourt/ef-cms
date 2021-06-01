@@ -253,12 +253,12 @@ const generateAndServeDocketEntry = async ({
     servedParties,
   });
 
+  const petitionerHasPaperService = caseEntity.petitioners.some(
+    p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+  );
+
   const paperServiceRequested =
-    caseEntity.getContactPrimary().serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (caseEntity.getContactSecondary() &&
-      caseEntity.getContactSecondary().serviceIndicator ===
-        SERVICE_INDICATOR_TYPES.SI_PAPER) ||
+    petitionerHasPaperService ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
   let workItem = null;

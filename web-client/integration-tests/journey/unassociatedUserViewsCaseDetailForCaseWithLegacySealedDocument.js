@@ -17,7 +17,6 @@ export const unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument = te
     });
 
     expect(formattedCase.docketEntries).toEqual([]);
-    expect(formattedCase.contactPrimary).toEqual({ showEAccessFlag: false });
 
     await expect(
       test.runSequence('openCaseDocumentDownloadUrlSequence', {

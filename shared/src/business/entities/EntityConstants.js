@@ -738,23 +738,31 @@ const OTHER_TYPES = {
 };
 
 const CONTACT_TYPES = {
+  intervenor: 'intervenor',
+  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  otherPetitioner: 'otherPetitioner',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  participant: 'participant',
+  petitioner: 'petitioner',
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
-  intervenor: 'intervenor',
-  participant: 'participant',
-  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
-  otherPetitioner: 'otherPetitioner',
 };
 
 const CONTACT_TYPE_TITLES = {
+  intervenor: 'Intervenor',
+  petitioner: 'Petitioner',
+  otherFilers: 'Petitioner',
+  otherPetitioner: 'Petitioner',
+  participant: 'Participant',
   primary: 'Petitioner',
   secondary: 'Petitioner',
-  otherFilers: 'Petitioner',
-  intervenor: 'Intervenor',
-  participant: 'Participant',
-  otherPetitioner: 'Petitioner',
 };
+
+const PETITIONER_CONTACT_TYPES = [
+  CONTACT_TYPES.primary,
+  CONTACT_TYPES.secondary,
+  CONTACT_TYPES.otherPetitioner,
+];
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -1044,6 +1052,7 @@ module.exports = deepFreeze({
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
+  PETITIONER_CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,

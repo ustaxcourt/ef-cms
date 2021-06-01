@@ -41,7 +41,7 @@ export const validateEditRespondentCounselAction = ({
     };
   }
 
-  store.set(state.validationErrors, errors || {});
+  store.set(state.validationErrors, errors);
 
   if (isEmpty(errors)) {
     return path.success();

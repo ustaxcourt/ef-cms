@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# This runs the same build steps that run in Circle, except sonar
+# This runs the same build steps that run in Circle
 npm i
 npm i --prefix=web-client/pa11y/
 

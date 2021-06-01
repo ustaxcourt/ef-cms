@@ -21,7 +21,7 @@ export const practitionerViewsCaseDetailWithPaperService = test => {
     });
 
     expect(formattedCase.isPaper).toEqual(true);
-    expect(formattedCase.contactPrimary.serviceIndicator).toEqual(
+    expect(formattedCase.petitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });

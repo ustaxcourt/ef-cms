@@ -23,7 +23,7 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test
       state: test.getState(),
     });
 
-    expect(formattedCase.contactPrimary).toMatchObject({
+    expect(formattedCase.petitioners[0]).toMatchObject({
       address1: expect.anything(),
       contactId: expect.anything(),
       name: expect.anything(),

@@ -1,8 +1,8 @@
 import {
   CASE_STATUS_TYPES,
-  CONTACT_TYPES,
+  PARTY_VIEW_TABS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
+import { contactPrimaryFromState } from '../helpers';
 import { getPetitionerById } from '../../../shared/src/business/entities/cases/Case';
 
 export const docketClerkRemovesPetitionerFromCase = test => {
@@ -16,8 +16,6 @@ export const docketClerkRemovesPetitionerFromCase = test => {
     );
 
     const contactPrimaryContactId = contactPrimaryFromState(test).contactId;
-    const originalSecondaryContactId = contactSecondaryFromState(test)
-      .contactId;
 
     await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
       contactId: contactPrimaryContactId,
@@ -31,11 +29,6 @@ export const docketClerkRemovesPetitionerFromCase = test => {
     await test.runSequence('openRemovePetitionerModalSequence');
     await test.runSequence('removePetitionerAndUpdateCaptionSequence');
 
-    const petitionerOnCase = getPetitionerById(
-      test.getState('caseDetail'),
-      originalSecondaryContactId,
-    ).contactType;
-
     expect(
       getPetitionerById(test.getState('caseDetail'), contactPrimaryContactId),
     ).toBeUndefined();
@@ -43,8 +36,8 @@ export const docketClerkRemovesPetitionerFromCase = test => {
     expect(test.getState('alertSuccess.message')).toBe(
       'Petitioner successfully removed.',
     );
-
-    // primary contact should be replaced with the secondary contact
-    expect(petitionerOnCase).toBe(CONTACT_TYPES.primary);
+    expect(test.getState('currentViewMetadata.caseDetail.partyViewTab')).toBe(
+      PARTY_VIEW_TABS.petitionersAndCounsel,
+    );
   });
 };
