@@ -36,10 +36,14 @@ export const setDefaultCaseDetailTabAction = ({
       state.currentViewMetadata.caseDetail.docketRecordTab,
       props.docketRecordTab || 'docketRecord',
     );
-    store.set(
-      state.currentViewMetadata.caseDetail.partyViewTab,
-      PARTY_VIEW_TABS[props.partiesTab] ||
-        PARTY_VIEW_TABS.petitionersAndCounsel,
-    );
+
+    const partyViewTab = get(state.currentViewMetadata.caseDetail.partyViewTab);
+    if (!partyViewTab) {
+      store.set(
+        state.currentViewMetadata.caseDetail.partyViewTab,
+        PARTY_VIEW_TABS[props.partiesTab] ||
+          PARTY_VIEW_TABS.petitionersAndCounsel,
+      );
+    }
   }
 };

@@ -158,11 +158,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...rawDocument,
-            contactPrimary: caseEntity.getContactPrimary(),
-            contactSecondary: caseEntity.getContactSecondary(),
           },
           {
             applicationContext,
+            petitioners: caseEntity.petitioners,
           },
         );
 

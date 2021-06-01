@@ -22,7 +22,8 @@ const DocumentRow = ({ document }) => {
             {hasAttachments && <p className="included">Attachment(s)</p>}
             {hasCertificateOfService && (
               <p className="included">
-                Certificate of Service {document.certificateOfServiceDate}
+                Certificate of Service{' '}
+                {document.formattedCertificateOfServiceDate}
               </p>
             )}
           </>

@@ -4,13 +4,6 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('../entities/cases/Case');
-const {
   CASE_STATUS_TYPES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
@@ -22,6 +15,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 
@@ -364,51 +358,17 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      const contactPrimary = getContactPrimary(caseDetail);
-
-      if (counsel.representing.includes(contactPrimary.contactId)) {
-        counsel.representingFormatted.push({
-          name: contactPrimary.name,
-          secondaryName: contactPrimary.secondaryName,
-          title: contactPrimary.title,
-        });
-      }
-
-      const contactSecondary = getContactSecondary(caseDetail);
-
-      if (
-        contactSecondary &&
-        counsel.representing.includes(contactSecondary.contactId)
-      ) {
-        counsel.representingFormatted.push({
-          name: contactSecondary.name,
-          secondaryName: contactSecondary.secondaryName,
-          title: contactSecondary.title,
-        });
-      }
-
-      const otherPetitioners = getOtherPetitioners(caseDetail);
-
-      otherPetitioners.forEach(otherPetitioner => {
-        if (counsel.representing.includes(otherPetitioner.contactId)) {
+      caseDetail.petitioners.forEach(p => {
+        if (counsel.representing.includes(p.contactId)) {
           counsel.representingFormatted.push({
-            name: otherPetitioner.name,
-            secondaryName: otherPetitioner.secondaryName,
-            title: otherPetitioner.title,
-          });
-        }
-      });
-
-      getOtherFilers(caseDetail).forEach(otherFiler => {
-        if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingFormatted.push({
-            name: otherFiler.name,
-            secondaryName: otherFiler.secondaryName,
-            title: otherFiler.title,
+            name: p.name,
+            secondaryName: p.secondaryName,
+            title: p.title,
           });
         }
       });
     }
+
     return counsel;
   };
 
@@ -552,9 +512,6 @@ const getFormattedCaseDetail = ({
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
-
-  result.contactPrimary = getContactPrimary(caseDetail);
-  result.contactSecondary = getContactSecondary(caseDetail);
 
   return result;
 };

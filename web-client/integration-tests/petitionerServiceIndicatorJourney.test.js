@@ -1,5 +1,4 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -7,7 +6,6 @@ import {
   setupTest,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
-import { getContactPrimary } from '../../shared/src/business/entities/cases/Case';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
@@ -47,9 +45,7 @@ describe('Petitioner Service Indicator Journey', () => {
       },
     );
 
-    const contactPrimary = applicationContext
-      .getUtilities()
-      .getContactPrimary(caseDetailFormatted);
+    const contactPrimary = caseDetailFormatted.petitioners[0];
 
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
@@ -251,7 +247,7 @@ describe('Petitioner Service Indicator Journey', () => {
       },
     );
 
-    contactPrimary = getContactPrimary(caseDetailFormatted);
+    contactPrimary = caseDetailFormatted.petitioners[0];
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 

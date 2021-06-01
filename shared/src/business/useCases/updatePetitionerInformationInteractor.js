@@ -8,7 +8,6 @@ const {
 } = require('../entities/cases/Case');
 const {
   CASE_STATUS_TYPES,
-  CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
 } = require('../entities/EntityConstants');
@@ -365,18 +364,9 @@ exports.updatePetitionerInformationInteractor = async (
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
     const partyWithPaperService = caseEntity.hasPartyWithPaperService();
 
-    let privatePractitionersRepresentingContact;
-    if (updatedCaseContact.contactType === CONTACT_TYPES.primary) {
-      privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-        privatePractitioner =>
-          privatePractitioner.getRepresentingPrimary(caseEntity),
-      );
-    } else if (updatedCaseContact.contactType === CONTACT_TYPES.secondary) {
-      privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(
-        privatePractitioner =>
-          privatePractitioner.getRepresentingSecondary(caseEntity),
-      );
-    }
+    const privatePractitionersRepresentingContact = caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      updatedCaseContact.contactId,
+    );
 
     petitionerChangeDocs = await createDocketEntryAndWorkItem({
       applicationContext,

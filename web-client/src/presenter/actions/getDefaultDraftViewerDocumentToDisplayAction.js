@@ -14,7 +14,10 @@ export const getDefaultDraftViewerDocumentToDisplayAction = ({
   applicationContext,
   get,
 }) => {
-  const draftDocketEntryId = get(state.draftDocumentViewerDocketEntryId);
+  const draftDocketEntryId =
+    get(state.draftDocumentViewerDocketEntryId) ||
+    get(state.screenMetadata.draftDocumentViewerDocketEntryId);
+
   const caseDetail = get(state.caseDetail);
   const { draftDocuments } = applicationContext
     .getUtilities()

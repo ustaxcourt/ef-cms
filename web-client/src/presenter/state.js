@@ -9,7 +9,6 @@ import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
-import { caseDetailContactHelper } from './computeds/caseDetailContactHelper';
 import { caseDetailEditContactsHelper } from './computeds/caseDetailEditContactsHelper';
 import { caseDetailEditHelper } from './computeds/caseDetailEditHelper';
 import { caseDetailHeaderHelper } from './computeds/caseDetailHeaderHelper';
@@ -118,7 +117,6 @@ const helpers = {
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
-  caseDetailContactHelper,
   caseDetailEditContactsHelper,
   caseDetailEditHelper,
   caseDetailHeaderHelper,
