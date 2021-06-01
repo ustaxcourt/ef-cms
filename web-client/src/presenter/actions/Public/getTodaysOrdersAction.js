@@ -18,7 +18,7 @@ export const getTodaysOrdersAction = async ({ applicationContext, get }) => {
     totalCount,
   } = await applicationContext
     .getUseCases()
-    .getTodaysOrdersInteractor({ applicationContext, page, todaysOrdersSort });
+    .getTodaysOrdersInteractor(applicationContext, { page, todaysOrdersSort });
 
   return { todaysOrders: results, totalCount };
 };

@@ -21,12 +21,13 @@ export const generateDocketRecordPdfUrlAction = async ({
 
   const {
     url,
-  } = await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-    applicationContext,
-    docketNumber: caseDetail.docketNumber,
-    docketRecordSort,
-    includePartyDetail: shouldIncludePartyDetail,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      docketRecordSort,
+      includePartyDetail: shouldIncludePartyDetail,
+    });
 
   return { pdfUrl: url };
 };

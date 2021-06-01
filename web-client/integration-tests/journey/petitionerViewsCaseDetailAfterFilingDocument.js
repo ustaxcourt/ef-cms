@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -27,6 +28,10 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
         state: test.getState(),
       },
     );
+
+    const {
+      formattedDocketEntriesOnDocketRecord,
+    } = await getFormattedDocketEntriesForTest(test);
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);
@@ -66,14 +71,12 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       ]),
     );
 
-    const statement = caseDetailFormatted.formattedDocketEntries.find(
+    const statement = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentType === 'Statement',
     );
 
     expect(statement.showLinkToDocument).toBeTruthy();
 
-    expect(
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[1].eventCode,
-    ).toEqual('RQT');
+    expect(formattedDocketEntriesOnDocketRecord[1].eventCode).toEqual('RQT');
   });
 };

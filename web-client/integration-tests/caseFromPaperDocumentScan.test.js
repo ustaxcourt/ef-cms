@@ -68,7 +68,7 @@ describe('Case from Paper Document Scan journey', () => {
     scannerSourceName,
   });
   petitionsClerkCreatesScannedPDF(test);
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  petitionsClerkCreatesNewCase(test, fakeFile, undefined, false);
   petitionsClerkSubmitsPaperCaseToIrs(test);
 
   loginAs(test, 'irsPractitioner@example.com');

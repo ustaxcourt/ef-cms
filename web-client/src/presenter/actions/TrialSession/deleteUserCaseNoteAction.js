@@ -12,10 +12,11 @@ export const deleteUserCaseNoteAction = async ({
 }) => {
   const { docketNumber, trialSessionId } = props;
 
-  await applicationContext.getUseCases().deleteUserCaseNoteInteractor({
-    applicationContext,
-    docketNumber,
-  });
+  await applicationContext
+    .getUseCases()
+    .deleteUserCaseNoteInteractor(applicationContext, {
+      docketNumber,
+    });
 
   return {
     userNote: {

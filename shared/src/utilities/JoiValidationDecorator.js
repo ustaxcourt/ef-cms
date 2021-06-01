@@ -175,7 +175,10 @@ exports.joiValidationDecorator = function (
     return this;
   };
 
-  entityConstructor.prototype.validate = function validate() {
+  entityConstructor.prototype.validate = function validate(options) {
+    const applicationContext = options?.applicationContext;
+    const logErrors = options?.logErrors;
+
     if (!this.isValid()) {
       const stringifyTransform = obj => {
         if (!obj) return obj;
@@ -189,6 +192,9 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
+      if (logErrors) {
+        applicationContext.logger.error('*** Entity with error: ***', this);
+      }
       const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
         this.entityName,
@@ -198,6 +204,12 @@ exports.joiValidationDecorator = function (
     }
     setIsValidated(this);
     return this;
+  };
+
+  entityConstructor.prototype.validateWithLogging = function validateWithLogging(
+    applicationContext,
+  ) {
+    return this.validate({ applicationContext, logErrors: true });
   };
 
   entityConstructor.prototype.getFormattedValidationErrors = function () {
@@ -229,14 +241,9 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
-  entityConstructor.validateRawCollection = function (
-    collection,
-    { applicationContext },
-  ) {
+  entityConstructor.validateRawCollection = function (collection, args) {
     const validRawEntity = entity =>
-      new entityConstructor(entity, { applicationContext })
-        .validate()
-        .toRawObject();
+      new entityConstructor(entity, args).validate().toRawObject();
     return (collection || []).map(validRawEntity);
   };
 

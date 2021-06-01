@@ -2,13 +2,18 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   setUserEmailFromPendingEmailInteractor,
 } = require('./setUserEmailFromPendingEmailInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { validUser } = require('../../../test/mockUsers');
 
@@ -21,19 +26,13 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   beforeEach(() => {
     mockUser = {
       ...validUser,
-      admissionsDate: '2019-03-01',
-      admissionsStatus: 'Active',
-      barNumber: 'RA3333',
       birthYear: '1950',
       email: undefined,
-      employer: 'Private',
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
-      originalBarState: 'Florida',
       pendingEmail: UPDATED_EMAIL,
-      practitionerType: 'Attorney',
-      role: ROLES.privatePractitioner,
+      role: ROLES.petitioner,
       userId: USER_ID,
     };
 
@@ -68,8 +67,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -82,9 +80,8 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     });
   });
 
-  it('should update the user cases with the new email and electronic service', async () => {
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+  it('should update the user cases with the new email and electronic service for the contact primary', async () => {
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -94,6 +91,45 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
 
     expect(applicationContext.logger.error).not.toBeCalled();
     expect(getContactPrimary(caseToUpdate)).toMatchObject({
+      email: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  });
+
+  it('should update the user cases with the new email and electronic service for the contact secondary', async () => {
+    userCases = [
+      {
+        ...MOCK_CASE,
+        docketNumber: '101-21',
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: USER_ID,
+            contactType: CONTACT_TYPES.secondary,
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ];
+
+    mockUser.role = ROLES.petitioner;
+
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      user: mockUser,
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(applicationContext.logger.error).not.toBeCalled();
+    expect(getContactSecondary(caseToUpdate)).toMatchObject({
       email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
@@ -114,8 +150,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       },
     ];
 
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 
@@ -166,8 +201,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[1]);
 
-    await setUserEmailFromPendingEmailInteractor({
-      applicationContext,
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
 

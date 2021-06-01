@@ -17,12 +17,13 @@ export const deleteOtherStatisticsAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().updateOtherStatisticsInteractor({
-      applicationContext,
-      damages: null,
-      docketNumber,
-      litigationCosts: null,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateOtherStatisticsInteractor(applicationContext, {
+        damages: null,
+        docketNumber,
+        litigationCosts: null,
+      });
     return path.success({
       alertSuccess: {
         message: 'Other statistics deleted.',

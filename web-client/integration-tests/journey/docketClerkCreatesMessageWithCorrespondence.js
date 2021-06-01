@@ -4,7 +4,9 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const { JUDGES_CHAMBERS } = applicationContext.getConstants();
+const JUDGES_CHAMBERS = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambers();
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
 export const docketClerkCreatesMessageWithCorrespondence = test => {

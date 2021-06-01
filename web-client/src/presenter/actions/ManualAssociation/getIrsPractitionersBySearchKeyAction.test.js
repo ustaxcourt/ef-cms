@@ -3,14 +3,14 @@ import { getIrsPractitionersBySearchKeyAction } from './getIrsPractitionersBySea
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('getIrsPractitionersBySearchKeyAction', () => {
   let successStub, errorStub;
 
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
 
     applicationContext
       .getUseCases()
@@ -34,13 +34,14 @@ describe('getIrsPractitionersBySearchKeyAction', () => {
       },
       state: { form: { respondentSearch: 'Test Respondent' } },
     });
+
     expect(
       applicationContext.getUseCases().getIrsPractitionersBySearchKeyInteractor
         .mock.calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getIrsPractitionersBySearchKeyInteractor
-        .mock.calls[0][0].searchKey,
+        .mock.calls[0][1].searchKey,
     ).toEqual('Test Respondent');
     expect(successStub.mock.calls.length).toEqual(1);
     expect(errorStub).not.toBeCalled();
@@ -57,13 +58,14 @@ describe('getIrsPractitionersBySearchKeyAction', () => {
       },
       state: { form: { respondentSearch: 'Test Respondent2' } },
     });
+
     expect(
       applicationContext.getUseCases().getIrsPractitionersBySearchKeyInteractor
         .mock.calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getIrsPractitionersBySearchKeyInteractor
-        .mock.calls[0][0].searchKey,
+        .mock.calls[0][1].searchKey,
     ).toEqual('Test Respondent2');
     expect(successStub).not.toBeCalled();
     expect(errorStub.mock.calls.length).toEqual(1);

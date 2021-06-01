@@ -26,21 +26,23 @@ export const submitCourtIssuedDocketEntryAction = async ({
     docketNumber,
   };
 
-  await applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor({
-    applicationContext,
-    docketEntryId,
-    documentMeta,
-  });
+  await applicationContext
+    .getUseCases()
+    .fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketEntryId,
+      documentMeta,
+    });
 
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       documentMeta.eventCode,
     )
   ) {
-    await applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
   }
 };

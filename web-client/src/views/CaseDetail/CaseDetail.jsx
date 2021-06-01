@@ -4,9 +4,10 @@ import { CaseInformationExternal } from './CaseInformationExternal';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { ErrorNotification } from '../ErrorNotification';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { OtherFilerInformation } from './OtherFilerInformation';
-import { PetitionerInformation } from './PetitionerInformation';
-import { RespondentInformation } from './RespondentInformation';
+import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
+import { PartiesInformation } from './PartiesInformation';
+import { PetitionersAndCounsel } from './PetitionersAndCounsel';
+import { RespondentCounsel } from './RespondentCounsel';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -18,6 +19,7 @@ export const CaseDetail = connect(
     caseDetailHelper: state.caseDetailHelper,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
     caseInformationTab: state.currentViewMetadata.caseDetail.caseInformationTab,
+    partiesInformationHelper: state.partiesInformationHelper,
     primaryTab: state.currentViewMetadata.caseDetail.primaryTab,
     setCaseDetailPageTabSequence: sequences.setCaseDetailPageTabSequence,
   },
@@ -25,6 +27,7 @@ export const CaseDetail = connect(
     caseDetailHelper,
     caseDetailSubnavHelper,
     caseInformationTab,
+    partiesInformationHelper,
     primaryTab,
     setCaseDetailPageTabSequence,
   }) {
@@ -63,9 +66,9 @@ export const CaseDetail = connect(
                         setCaseDetailPageTabSequence({
                           isSecondary: [
                             'overview',
-                            'petitioner',
-                            'respondent',
-                            'otherFiler',
+                            'petitioners',
+                            'participants',
+                            'respondents',
                           ].includes(e.target.value),
                           tab: e.target.value,
                         });
@@ -74,9 +77,15 @@ export const CaseDetail = connect(
                       <option value="docketRecord">Docket Record</option>
                       <optgroup label="Case Information">
                         <option value="overview">Overview</option>
-                        <option value="petitioner">Petitioner</option>
-                        <option value="respondent">Respondent</option>
-                        <option value="otherFiler">Other</option>
+                        <option value="petitioners">
+                          Petitioner(s) &amp; Counsel
+                        </option>
+                        {partiesInformationHelper.showParticipantsTab && (
+                          <option value="participants">
+                            Intervenor/Participants(s)
+                          </option>
+                        )}
+                        <option value="respondents">Respondent Counsel</option>
                       </optgroup>
                     </select>
                   </div>
@@ -105,26 +114,9 @@ export const CaseDetail = connect(
                         >
                           <CaseInformationExternal />
                         </Tab>
-                        <Tab
-                          id="tab-petitioner"
-                          tabName="petitioner"
-                          title="Petitioner"
-                        >
-                          <PetitionerInformation />
-                        </Tab>
-                        <Tab
-                          id="tab-respondent"
-                          tabName="respondent"
-                          title="Respondent"
-                        >
-                          <RespondentInformation />
-                        </Tab>
-                        <Tab
-                          id="tab-other-filer"
-                          tabName="otherFiler"
-                          title="Other"
-                        >
-                          <OtherFilerInformation />
+
+                        <Tab id="tab-parties" tabName="parties" title="Parties">
+                          <PartiesInformation />
                         </Tab>
                       </Tabs>
                     </NonMobile>
@@ -142,31 +134,19 @@ export const CaseDetail = connect(
                             <CaseInformationExternal />
                           </Tab>
                         )}
-                        {caseInformationTab === 'petitioner' && (
-                          <Tab
-                            id="tab-petitioner"
-                            tabName="petitioner"
-                            title="Petitioner"
-                          >
-                            <PetitionerInformation />
+                        {caseInformationTab === 'petitioners' && (
+                          <Tab id="tab-parties" tabName="petitioners">
+                            <PetitionersAndCounsel />
                           </Tab>
                         )}
-                        {caseInformationTab === 'respondent' && (
-                          <Tab
-                            id="tab-respondent"
-                            tabName="respondent"
-                            title="Respondent"
-                          >
-                            <RespondentInformation />
+                        {caseInformationTab === 'participants' && (
+                          <Tab id="tab-parties" tabName="participants">
+                            <ParticipantsAndCounsel />
                           </Tab>
                         )}
-                        {caseInformationTab === 'otherFiler' && (
-                          <Tab
-                            id="tab-other-filer"
-                            tabName="otherFiler"
-                            title="Other"
-                          >
-                            <OtherFilerInformation />
+                        {caseInformationTab === 'respondents' && (
+                          <Tab id="tab-parties" tabName="respondents">
+                            <RespondentCounsel />
                           </Tab>
                         )}
                       </Tabs>

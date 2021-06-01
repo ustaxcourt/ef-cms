@@ -18,8 +18,7 @@ describe('validateCaseAdvancedSearchInteractor', () => {
   });
 
   it('should be able to set an item', async () => {
-    await validateCaseAdvancedSearchInteractor({
-      applicationContext,
+    await validateCaseAdvancedSearchInteractor(applicationContext, {
       caseSearch: {},
     });
     expect(validatorSpy.mock.calls.length).toEqual(1);

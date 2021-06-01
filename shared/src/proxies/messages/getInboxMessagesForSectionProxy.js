@@ -3,15 +3,15 @@ const { get } = require('../requests');
 /**
  * getInboxMessagesForSectionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.section the section
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getInboxMessagesForSectionInteractor = ({
+exports.getInboxMessagesForSectionInteractor = (
   applicationContext,
-  section,
-}) => {
+  { section },
+) => {
   return get({
     applicationContext,
     endpoint: `/messages/inbox/section/${section}`,

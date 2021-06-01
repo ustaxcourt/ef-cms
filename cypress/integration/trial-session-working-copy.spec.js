@@ -29,7 +29,7 @@ const {
   manuallyAddCaseToNewTrialSession,
 } = require('../../cypress-smoketests/support/pages/case-detail');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 const testData = {
   docketNumbers: [],
@@ -101,8 +101,7 @@ let judgeUserId;
 describe.skip('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {
-      cy.server();
-      cy.route({ method: 'POST', url: '/trial-sessions' }).as(
+      cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
     });

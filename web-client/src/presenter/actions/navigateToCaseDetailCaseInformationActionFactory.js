@@ -9,11 +9,10 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {Promise} async action
  */
-export const navigateToCaseDetailCaseInformationActionFactory = caseInformationTab => async ({
-  get,
-  props,
-  router,
-}) => {
+export const navigateToCaseDetailCaseInformationActionFactory = (
+  caseInformationTab,
+  partiesTab,
+) => async ({ get, props, router }) => {
   const docketNumber =
     props.docketNumber ||
     (props.caseDetail
@@ -25,6 +24,10 @@ export const navigateToCaseDetailCaseInformationActionFactory = caseInformationT
 
     if (caseInformationTab) {
       url += `?caseInformationTab=${caseInformationTab}`;
+
+      if (partiesTab) {
+        url += `&partiesTab=${partiesTab}`;
+      }
     }
     await router.route(url);
   }

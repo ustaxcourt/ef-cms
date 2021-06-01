@@ -18,11 +18,12 @@ export const strikeDocketEntryAction = async ({
   const { docketEntryId } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().strikeDocketEntryInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .strikeDocketEntryInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
     return path.success({
       alertSuccess: {
         message: 'Docket entry has been stricken.',

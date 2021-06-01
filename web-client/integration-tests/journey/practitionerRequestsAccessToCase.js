@@ -1,6 +1,6 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
-import { contactSecondaryFromState } from '../helpers';
+import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -44,8 +44,8 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
       scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
@@ -68,8 +68,8 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -79,7 +79,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -91,7 +91,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -111,7 +111,7 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
     expect(test.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -121,16 +121,18 @@ export const practitionerRequestsAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'representingPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
+    const contactSecondary = contactSecondaryFromState(test);
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'representingSecondary',
+      key: `filersMap.${contactSecondary.contactId}`,
       value: true,
     });
 

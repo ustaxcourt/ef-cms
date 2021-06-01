@@ -30,7 +30,6 @@ exports.getPractitionersByName = async ({ applicationContext, name }) => {
           ],
         },
       },
-
       size: MAX_SEARCH_CLIENT_RESULTS,
     },
     index: 'efcms-user',

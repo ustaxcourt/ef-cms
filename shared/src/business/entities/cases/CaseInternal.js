@@ -101,7 +101,6 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
       primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
       secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
-    isPaper: true,
     partyType: rawCase.partyType,
   });
   this.petitioners = [contacts.primary];
