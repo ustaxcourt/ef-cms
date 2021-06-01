@@ -232,7 +232,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
+  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and no docket entry on the case is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -256,7 +256,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
+  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and a single docket entry on the case is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -270,7 +270,10 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           docketEntries: [
-            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+            {
+              documentType: 'Legacy Petition',
+              servedAt: '2019-03-01T21:40:46.415Z',
+            },
           ],
         },
       },
