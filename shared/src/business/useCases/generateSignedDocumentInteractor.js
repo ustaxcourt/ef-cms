@@ -144,8 +144,8 @@ exports.generateSignedDocumentInteractor = async ({
     StandardFonts.HelveticaBold,
   );
 
-  const textSize = 16 * scale;
-  const padding = 20 * scale;
+  const textSize = 15 * scale;
+  const padding = 13 * scale;
   const nameTextWidth = helveticaBoldFont.widthOfTextAtSize(
     signatureName,
     textSize,
