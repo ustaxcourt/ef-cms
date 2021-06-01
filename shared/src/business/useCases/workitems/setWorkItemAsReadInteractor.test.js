@@ -14,24 +14,20 @@ describe('setWorkItemAsReadInteractor', () => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
 
-  it('unauthorized user tries to invoke this interactor', async () => {
+  it('should throw an error when an unauthorized user tries to invoke this interactor', async () => {
     user = {
       userId: 'baduser',
     };
 
-    let error;
-    try {
-      await setWorkItemAsReadInteractor(applicationContext, {
+    await expect(
+      setWorkItemAsReadInteractor(applicationContext, {
         messageId: 'abc',
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
-    expect(error).toBeInstanceOf(UnauthorizedError);
+      }),
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('returns the expected result', async () => {
+    const mockWorkItemId = 'abc';
     user = {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
@@ -40,9 +36,15 @@ describe('setWorkItemAsReadInteractor', () => {
       .getPersistenceGateway()
       .setWorkItemAsRead.mockResolvedValue([]);
 
-    const res = await setWorkItemAsReadInteractor(applicationContext, {
-      messageId: 'abc',
+    await setWorkItemAsReadInteractor(applicationContext, {
+      workItemId: mockWorkItemId,
     });
-    expect(res).toEqual([]);
+
+    expect(
+      applicationContext.getPersistenceGateway().setWorkItemAsRead.mock
+        .calls[0][0],
+    ).toMatchObject({
+      workItemId: mockWorkItemId,
+    });
   });
 });

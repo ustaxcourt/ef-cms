@@ -47,9 +47,6 @@ const {
   addServedStampToDocument,
 } = require('../../shared/src/business/useCases/courtIssuedDocument/addServedStampToDocument');
 const {
-  addWorkItemToSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/addWorkItemToSectionInbox');
-const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
@@ -192,9 +189,6 @@ const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
 const {
-  createSectionInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createSectionInboxRecord');
-const {
   createTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSession');
 const {
@@ -212,9 +206,6 @@ const {
 const {
   createUserForContactPrimary,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContactPrimary');
-const {
-  createUserInboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/createUserInboxRecord');
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
@@ -276,11 +267,8 @@ const {
   deleteUserOutboxRecord,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
-  deleteWorkItemFromInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromInbox');
-const {
-  deleteWorkItemFromSection,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItemFromSection');
+  deleteWorkItem,
+} = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
 const {
   DocketEntry,
 } = require('../../shared/src/business/entities/DocketEntry');
@@ -813,17 +801,11 @@ const {
   saveUserConnection,
 } = require('../../shared/src/persistence/dynamo/notifications/saveUserConnection');
 const {
-  saveWorkItemAndAddToSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToSectionInbox');
-const {
-  saveWorkItemAndAddToUserAndSectionInbox,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemAndAddToUserAndSectionInbox');
+  saveWorkItem,
+} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItem');
 const {
   saveWorkItemForDocketClerkFilingExternalDocument,
 } = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument');
-const {
-  saveWorkItemForDocketEntryInProgress,
-} = require('../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketEntryInProgress');
 const {
   scrapePdfContents,
 } = require('../../shared/src/business/utilities/scrapePdfContents');
@@ -1197,7 +1179,6 @@ const isValidatedDecorator = persistenceGatewayMethods => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    addWorkItemToSectionInbox,
     associateUserWithCase,
     associateUserWithCasePending,
     bulkDeleteRecords,
@@ -1207,11 +1188,9 @@ const gatewayMethods = {
     createCaseTrialSortMappingRecords,
     createMessage,
     createPractitionerUser,
-    createSectionInboxRecord,
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
-    createUserInboxRecord,
     fetchPendingItems,
     getFullCaseByDocketNumber,
     getSesStatus,
@@ -1223,10 +1202,8 @@ const gatewayMethods = {
     removeCaseFromHearing,
     saveDocumentFromLambda,
     saveUserConnection,
-    saveWorkItemAndAddToSectionInbox,
-    saveWorkItemAndAddToUserAndSectionInbox,
+    saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
-    saveWorkItemForDocketEntryInProgress,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     setWorkItemAsRead,
@@ -1266,8 +1243,7 @@ const gatewayMethods = {
   deleteUserConnection,
   deleteUserFromCase,
   deleteUserOutboxRecord,
-  deleteWorkItemFromInbox,
-  deleteWorkItemFromSection,
+  deleteWorkItem,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,

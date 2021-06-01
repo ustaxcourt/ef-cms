@@ -86,8 +86,7 @@ describe('createCaseInteractor', () => {
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).not.toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toBeCalled();
   });
 
@@ -106,8 +105,7 @@ describe('createCaseInteractor', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
   });
 
@@ -208,8 +206,7 @@ describe('createCaseInteractor', () => {
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
   });
 
@@ -273,8 +270,7 @@ describe('createCaseInteractor', () => {
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
   });
 });
