@@ -38,6 +38,7 @@ exports.generateChangeOfAddress = async ({
   applicationContext,
   bypassDocketEntry = false,
   contactInfo,
+  firmName,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -50,6 +51,10 @@ exports.generateChangeOfAddress = async ({
       applicationContext,
       userId: user.userId,
     });
+
+  if (docketNumbers.length === 0) {
+    return [];
+  }
 
   let completedCases = 0;
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -93,6 +98,7 @@ exports.generateChangeOfAddress = async ({
 
       // This updates the case by reference!
       practitionerObject.contact = contactInfo;
+      practitionerObject.firmName = firmName;
       practitionerObject.name = practitionerName;
 
       if (!oldData.email && updatedEmail) {
@@ -121,7 +127,6 @@ exports.generateChangeOfAddress = async ({
           oldData,
           practitionerName,
           user,
-          userCase,
         });
       }
 
@@ -163,7 +168,6 @@ exports.generateChangeOfAddress = async ({
  * @param {object} providers.oldData the old practitioner contact information (for comparison)
  * @param {object} providers.practitionerName the name of the practitioner
  * @param {object} providers.user the user object that includes userId, barNumber etc.
- * @param {object} providers.userCase the application context
  * @returns {Promise<User[]>} the internal users
  */
 const generateAndServeDocketEntry = async ({
@@ -173,7 +177,6 @@ const generateAndServeDocketEntry = async ({
   oldData,
   practitionerName,
   user,
-  userCase,
 }) => {
   const rawCase = caseEntity.validate().toRawObject();
   const caseDetail = {
@@ -251,10 +254,10 @@ const generateAndServeDocketEntry = async ({
   });
 
   const paperServiceRequested =
-    userCase.contactPrimary.serviceIndicator ===
+    caseEntity.getContactPrimary().serviceIndicator ===
       SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (userCase.contactSecondary &&
-      userCase.contactSecondary.serviceIndicator ===
+    (caseEntity.getContactSecondary() &&
+      caseEntity.getContactSecondary().serviceIndicator ===
         SERVICE_INDICATOR_TYPES.SI_PAPER) ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 

@@ -1,6 +1,11 @@
 const getPageDimensionsWithTrim = page => {
-  const size = page.getTrimBox();
-  return { pageHeight: size.height, pageWidth: size.width, startingY: size.y };
+  const sizeCropBox = page.getCropBox();
+  const sizeTrimBox = page.getTrimBox();
+  return {
+    pageHeight: sizeCropBox.height,
+    pageWidth: sizeTrimBox.width,
+    startingY: sizeCropBox.y,
+  };
 };
 
 const computeCoordinates = ({
@@ -118,7 +123,6 @@ exports.addServedStampToDocument = async ({
     pageRotation: rotationAngle,
     pageWidth,
     posY,
-    scale,
   });
 
   const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);

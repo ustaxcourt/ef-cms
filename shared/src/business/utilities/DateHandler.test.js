@@ -129,30 +129,37 @@ describe('DateHandler', () => {
   describe('calculateISODate', () => {
     it('returns the dateString param exactly as provided when the `howMuch` param is omitted', () => {
       const result = DateHandler.calculateISODate({ dateString: '12/1/1901' });
+
       expect(result).toEqual('12/1/1901');
     });
+
     it('calculates dates with positive adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-01T00:00:00.000Z',
         howMuch: 20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-21T00:00:00.000Z');
     });
+
     it('calculates dates with an hour not at midnight', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-01T20:01:23.212Z',
         howMuch: 20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-21T20:01:23.212Z');
     });
+
     it('calculates dates with negative adjustment', () => {
       const result = DateHandler.calculateISODate({
         dateString: '2000-01-21T00:00:00.000Z',
         howMuch: -20,
         units: 'days',
       });
+
       expect(result).toEqual('2000-01-01T00:00:00.000Z');
     });
   });
@@ -420,27 +427,32 @@ describe('DateHandler', () => {
   });
 
   describe('computeDate', () => {
-    it('should return a zero-padded date formatted like YYYY-MM-DD if provided day, month, and year', () => {
+    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
       const result = DateHandler.computeDate({
         day: '9',
         month: '3',
         year: '1993',
       });
-      expect(result).toBe('1993-03-09');
+
+      expect(result).toBe('1993-03-09T05:00:00.000Z');
     });
-    it('should return "undefined-mm-dd" when year is not provided', () => {
+
+    it('should return undefined when year, month, or day is not provided', () => {
       const result = DateHandler.computeDate({
         day: '5',
         month: '11',
       });
-      expect(result).toBe('undefined-11-05');
+
+      expect(result).toBe(undefined);
     });
+
     it('should return null if not provided values for all of day, month, and year', () => {
       const result = DateHandler.computeDate({
         daynotprovided: true,
         not: 'date info',
         some: 'other thing',
       });
+
       expect(result).toBe(null);
     });
   });

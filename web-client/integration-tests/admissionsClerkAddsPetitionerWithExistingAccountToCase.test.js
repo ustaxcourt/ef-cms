@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
+  contactPrimaryFromState,
   fakeFile,
   loginAs,
   refreshElasticsearchIndex,
@@ -61,10 +62,10 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     expect(test.getState('modal.showModal')).toBeUndefined();
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    expect(test.getState('caseDetail.contactPrimary.email')).toEqual(
-      EMAIL_TO_ADD,
-    );
-    expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 

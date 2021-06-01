@@ -543,7 +543,7 @@ th {
 }
 
 #address-label-cover-sheet {
-  font-family: sans-serif;
+  font-family: 'nimbus_roman', serif;
   font-size: 12px;
 
   .docket {
@@ -558,6 +558,18 @@ th {
     bottom: 0in;
     left: 0.5in;
   }
+}
+
+.notice-of-trial-title {
+  margin-bottom: 0px;
+}
+
+#notice-of-trial-pdf .info-box {
+  margin-bottom: 20px;
+}
+
+#notice-body > p {
+  margin-top: 0px;
 }
 
 @font-face {

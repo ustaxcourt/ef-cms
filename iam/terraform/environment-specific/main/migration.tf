@@ -47,6 +47,7 @@ resource "aws_iam_role_policy" "migration_policy" {
                 "dynamodb:GetShardIterator",
                 "dynamodb:ListShards",
                 "dynamodb:ListStreams",
+                "dynamodb:Query",
                 "dynamodb:PutItem",
                 "dynamodb:Scan"
             ],
@@ -121,6 +122,7 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
                 "dynamodb:ListShards",
                 "dynamodb:ListStreams",
                 "dynamodb:PutItem",
+                "dynamodb:Query",
                 "dynamodb:Scan"
             ],
             "Resource": [

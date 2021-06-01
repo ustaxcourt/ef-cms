@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId },
+  { trialSessionId, verifyFiles = false },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -56,7 +56,11 @@ const batchDownloadTrialSessionInteractor = async (
     .replace(/,/g, '');
 
   sessionCases = sessionCases
-    .filter(caseToFilter => caseToFilter.status !== CASE_STATUS_TYPES.closed)
+    .filter(
+      caseToFilter =>
+        caseToFilter.status !== CASE_STATUS_TYPES.closed &&
+        !caseToFilter.removedFromTrial,
+    )
     .map(caseToBatch => {
       const caseTitle = Case.getCaseTitle(caseToBatch.caseCaption);
       const caseFolder = `${caseToBatch.docketNumber}, ${caseTitle}`;
@@ -68,7 +72,7 @@ const batchDownloadTrialSessionInteractor = async (
       };
     });
 
-  sessionCases.forEach(caseToBatch => {
+  for (const caseToBatch of sessionCases) {
     const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
       d => d.isOnDocketRecord && d.isFileAttached,
     );
@@ -78,26 +82,37 @@ const batchDownloadTrialSessionInteractor = async (
       return acc;
     }, {});
 
-    docketEntriesOnDocketRecord.forEach(aDocketRecord => {
+    for (const aDocketRecord of docketEntriesOnDocketRecord) {
       let myDoc;
       if (
         aDocketRecord.docketEntryId &&
         (myDoc = documentMap[aDocketRecord.docketEntryId])
       ) {
-        const docDate = formatDateString(
-          aDocketRecord.filingDate,
-          'YYYY-MM-DD',
+        // check that all file exists before continuing
+        if (verifyFiles) {
+          const isFileExists = await applicationContext
+            .getPersistenceGateway()
+            .isFileExists({
+              applicationContext,
+              key: aDocketRecord.docketEntryId,
+            });
+
+          if (!isFileExists) {
+            throw new Error(
+              `Batch Download Error: File ${aDocketRecord.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
+            );
+          }
+        }
+
+        const filename = exports.generateValidDocketEntryFilename(
+          aDocketRecord,
         );
-        const docNum = padStart(`${aDocketRecord.index}`, 4, '0');
-        const fileName = sanitize(
-          `${docDate}_${docNum}_${aDocketRecord.documentTitle}.pdf`,
-        );
-        const pdfTitle = `${caseToBatch.caseFolder}/${fileName}`;
+        const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
         s3Ids.push(myDoc.docketEntryId);
         fileNames.push(pdfTitle);
       }
-    });
-  });
+    }
+  }
 
   let numberOfDocketRecordsGenerated = 0;
   const numberOfDocketRecordsToGenerate = sessionCases.length;
@@ -162,6 +177,18 @@ const batchDownloadTrialSessionInteractor = async (
     });
   };
 
+  const onError = error => {
+    applicationContext.logger.error('Archive Error', { error });
+    applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'batch_download_error',
+        error,
+      },
+      userId: user.userId,
+    });
+  };
+
   const onProgress = progressData => {
     applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
@@ -193,6 +220,7 @@ const batchDownloadTrialSessionInteractor = async (
     extraFiles,
     fileNames,
     onEntry,
+    onError,
     onProgress,
     onUploadStart,
     s3Ids,
@@ -218,6 +246,24 @@ const batchDownloadTrialSessionInteractor = async (
   });
 };
 
+exports.generateValidDocketEntryFilename = ({
+  documentTitle,
+  filingDate,
+  index,
+}) => {
+  const MAX_OVERALL_FILE_LENGTH = 200;
+  const EXTENSION = '.pdf';
+  const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
+
+  const docDate = formatDateString(filingDate, 'YYYY-MM-DD');
+  const docNum = padStart(`${index}`, 4, '0');
+  let fileName = sanitize(`${docDate}_${docNum}_${documentTitle}`);
+  if (fileName.length > VALID_FILE_NAME_MAX_LENGTH) {
+    fileName = fileName.substring(0, VALID_FILE_NAME_MAX_LENGTH);
+  }
+  return `${fileName}${EXTENSION}`;
+};
+
 /**
  * batchDownloadTrialSessionInteractor
  *
@@ -228,18 +274,19 @@ const batchDownloadTrialSessionInteractor = async (
  */
 exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId },
+  { trialSessionId, verifyFiles = false },
 ) => {
   try {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
+      verifyFiles,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
     applicationContext.logger.error(
       `Error when batch downloading trial session with id ${trialSessionId}`,
-      error,
+      { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

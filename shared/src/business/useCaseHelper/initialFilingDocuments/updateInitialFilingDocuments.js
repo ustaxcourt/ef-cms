@@ -25,13 +25,17 @@ const addNewInitialFilingToCase = ({
       dt => dt.documentType === documentType,
     );
 
+    const contactSecondary = caseEntity.getContactSecondary();
+
     let partySecondary = false;
-    if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
+    if (contactSecondary && contactSecondary.name) {
       partySecondary = true;
     }
 
     documentMeta = {
       ...currentCaseDocument,
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
       createdAt: caseEntity.receivedAt,
       eventCode,
       filingDate: caseEntity.receivedAt,
@@ -43,10 +47,6 @@ const addNewInitialFilingToCase = ({
       partySecondary,
       receivedAt: caseEntity.receivedAt,
       userId: authorizedUser.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     };
   }
 

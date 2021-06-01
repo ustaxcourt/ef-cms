@@ -12,7 +12,7 @@ const { search } = require('./searchClient');
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearchExactMatch = async ({
+exports.casePublicSearch = async ({
   applicationContext,
   countryType,
   petitionerName,
@@ -31,8 +31,7 @@ exports.casePublicSearchExactMatch = async ({
 
   const sourceFields = [
     'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
+    'petitioners',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',

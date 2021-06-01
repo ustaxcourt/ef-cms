@@ -4,8 +4,12 @@ const {
 const {
   deleteCounselFromCaseInteractor,
 } = require('./deleteCounselFromCaseInteractor');
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const { CONTACT_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -130,5 +134,113 @@ describe('deleteCounselFromCaseInteractor', () => {
         userId: '835f072c-5ea1-493c-acb8-d67b05c96f85',
       }),
     ).rejects.toThrow('User is not a practitioner');
+  });
+
+  it('should set the contactPrimary.serviceIndicator to Electronic if the case was e-filed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: 'None',
+          },
+        ],
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual(
+      'Electronic',
+    );
+  });
+
+  it('should set the contactPrimary.serviceIndicator to Paper if the case was paper', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        contactPrimary: {
+          ...MOCK_CASE.contactPrimary,
+          serviceIndicator: 'None',
+        },
+        isPaper: true,
+        mailingDate: '04/16/2019',
+        privatePractitioners: [mockPrivatePractitioners[0]],
+      });
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+
+    expect(getContactPrimary(updatedCase).serviceIndicator).toEqual('Paper');
+  });
+
+  it('should set the contactSecondary.serviceIndicator to Paper if the case was paper', async () => {
+    const caseToReturn = {
+      ...MOCK_CASE,
+      associatedJudge: 'Buch',
+      mailingDate: '04/16/2019',
+      partyType: 'Petitioner & spouse',
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: 'None',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: 'domestic',
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: 'None',
+          state: 'TN',
+          title: 'Executor',
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...mockPrivatePractitioners[0],
+          representing: [
+            '3805d1ab-18d0-43ec-bafb-654e83405416',
+            '7805d1ab-18d0-43ec-bafb-654e83405416',
+          ],
+        },
+      ],
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseToReturn);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockImplementation(
+        ({ caseToUpdate }) => caseToUpdate,
+      );
+
+    const updatedCase = await deleteCounselFromCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        userId: mockPrivatePractitioners[0].userId,
+      },
+    );
+    expect(getContactSecondary(updatedCase).serviceIndicator).toEqual('Paper');
   });
 });

@@ -9,6 +9,8 @@ const { UserCase } = require('../../entities/UserCase');
 /**
  * addExistingUserToCase
  *
+ * @param {object} options the options object
+ * @param {object} options.applicationContext the applicationContext
  * @param {object} options.caseEntity the case entity to modify and return
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
@@ -44,7 +46,7 @@ exports.addExistingUserToCase = async ({
       userId: userIdFromCognito,
     });
 
-  const { contactPrimary } = caseEntity;
+  const contactPrimary = caseEntity.getContactPrimary();
   if (contactPrimary.name === name) {
     contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     contactPrimary.email = email;

@@ -26,8 +26,7 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
+    'petitioners',
     'docketEntryId',
     'docketNumber',
     'docketNumberWithSuffix',
@@ -93,11 +92,7 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
 
-        fields: [
-          'caseCaption.S',
-          'contactPrimary.M.name.S',
-          'contactSecondary.M.name.S',
-        ],
+        fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
         query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },
     };

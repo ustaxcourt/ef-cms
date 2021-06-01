@@ -634,12 +634,6 @@ select[disabled] {
   }
 }
 .before-starting-case {
-  [role='listitem'] {
-    position: relative;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
-
   .caseItem__icon {
     top: 0;
     display: inline-block;
@@ -1522,11 +1516,6 @@ button.change-scanner-button {
       margin-bottom: 20px;
     }
   }
-
-  .advanced-search__button {
-    margin-top: 39px;
-    margin-bottom: 20px;
-  }
 }
 
 .hide-radio {
@@ -1674,7 +1663,7 @@ button.change-scanner-button {
       max-width: 1440px;
     }
 
-    h3.usa-footer__logo-heading {
+    .usa-footer__logo-heading {
       font-family: $font-serif;
       font-size: 18px;
       font-weight: 700;
@@ -1709,7 +1698,7 @@ button.change-scanner-button {
 
   @media only screen and (max-width: $large-screen - 1) {
     .usa-footer__secondary-section {
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 16px;
       }
     }
@@ -1727,7 +1716,7 @@ button.change-scanner-button {
         margin-bottom: 10px;
       }
 
-      h3.usa-footer__logo-heading {
+      .usa-footer__logo-heading {
         font-size: 18px;
       }
     }

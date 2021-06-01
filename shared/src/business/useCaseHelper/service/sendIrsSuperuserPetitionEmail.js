@@ -1,7 +1,11 @@
 const {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../entities/cases/Case');
+const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { Case } = require('../../entities/cases/Case');
 
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
@@ -14,16 +18,20 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     throw new Error('Cannot serve a docket entry without an index.');
   }
 
+  const caseDetail = applicationContext
+    .getUtilities()
+    .setServiceIndicatorsForCase(caseEntity);
   const {
     caseCaption,
-    contactPrimary,
-    contactSecondary,
     docketNumber,
     docketNumberWithSuffix,
     mailingDate,
     preferredTrialCity,
     privatePractitioners,
-  } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
+  } = caseDetail;
+
+  const contactPrimary = getContactPrimary(caseDetail);
+  const contactSecondary = getContactSecondary(caseDetail);
 
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 

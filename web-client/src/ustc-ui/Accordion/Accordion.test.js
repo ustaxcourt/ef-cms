@@ -214,9 +214,7 @@ describe('Accordion', () => {
     ).toThrow();
 
     act(() => {
-      testInstance
-        .findByProps({ id: 'ustc-ui-accordion-item-button-0' })
-        .props.onClick();
+      testInstance.findAllByProps({ type: 'button' })[0].props.onClick();
     });
 
     expect(() =>

@@ -4,7 +4,7 @@ module.exports = [
       'wait for #tab-case to be visible',
       'set field #docket-number to 103-20',
       'click element button#docket-search-button',
-      'wait for table.docket-record to be visible',
+      'wait for table.ustc-table to be visible',
     ],
     notes: 'checks a11y of advanced case search',
     url: 'http://localhost:5678/',

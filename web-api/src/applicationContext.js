@@ -111,7 +111,7 @@ const {
   CaseDeadline,
 } = require('../../shared/src/business/entities/CaseDeadline');
 const {
-  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearch: casePublicSearchPersistence,
 } = require('../../shared/src/persistence/elasticsearch/casePublicSearch');
 const {
   casePublicSearchInteractor,
@@ -773,6 +773,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeCoversheet,
+} = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
+const {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/removePractitionerOnCase');
@@ -1247,7 +1250,7 @@ const gatewayMethods = {
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
   caseAdvancedSearch,
-  casePublicSearchExactMatch: casePublicSearchExactMatchPersistence,
+  casePublicSearch: casePublicSearchPersistence,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseByDocketNumber,
@@ -1597,6 +1600,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
+        removeCoversheet,
         saveFileAndGenerateUrl,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,

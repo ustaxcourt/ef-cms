@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -17,7 +18,9 @@ export const docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService = test 
 
     const caseWithNoPaperService = test.getState('caseDetail');
 
-    expect(caseWithNoPaperService.contactPrimary.serviceIndicator).not.toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.serviceIndicator).not.toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
     expect(

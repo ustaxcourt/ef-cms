@@ -1,3 +1,7 @@
+const {
+  getContactPrimary,
+  getContactSecondary,
+} = require('../../../../shared/src/business/entities/cases/Case');
 const { marshallContact } = require('./marshallContact');
 const { marshallDocketEntry } = require('./marshallDocketEntry');
 const { marshallPractitioner } = require('./marshallPractitioner');
@@ -10,14 +14,16 @@ const { marshallPractitioner } = require('./marshallPractitioner');
  * @returns {object} the v2 representation of a case
  */
 exports.marshallCase = caseObject => {
+  const contactPrimary = getContactPrimary(caseObject) || undefined;
+  const contactSecondary = getContactSecondary(caseObject) || undefined;
   return {
     caseCaption: caseObject.caseCaption,
     caseType: caseObject.caseType,
-    contactPrimary: caseObject.contactPrimary
-      ? marshallContact(caseObject.contactPrimary)
+    contactPrimary: contactPrimary
+      ? marshallContact(contactPrimary)
       : undefined,
-    contactSecondary: caseObject.contactSecondary
-      ? marshallContact(caseObject.contactSecondary)
+    contactSecondary: contactSecondary
+      ? marshallContact(contactSecondary)
       : undefined,
     docketEntries: (caseObject.docketEntries || []).map(marshallDocketEntry),
     docketNumber: caseObject.docketNumber,

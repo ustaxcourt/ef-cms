@@ -1,4 +1,5 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkEditsServiceIndicatorForPetitioner = (
   test,
@@ -26,9 +27,11 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
         },
       });
 
-      expect(
-        test.getState('caseDetail.contactPrimary.serviceIndicator'),
-      ).toEqual(SERVICE_INDICATOR_TYPES.SI_NONE);
+      const contactPrimary = contactPrimaryFromState(test);
+
+      expect(contactPrimary.serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      );
     }
 
     await test.runSequence('updateFormValueSequence', {
@@ -38,7 +41,9 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
 
     await test.runSequence('updatePetitionerInformationFormSequence');
 
-    expect(test.getState('caseDetail.contactPrimary.serviceIndicator')).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });

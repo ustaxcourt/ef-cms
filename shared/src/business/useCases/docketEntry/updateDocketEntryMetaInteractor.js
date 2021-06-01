@@ -122,12 +122,14 @@ exports.updateDocketEntryMetaInteractor = async (
   const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
     editableFields.eventCode,
   );
-  const originalEntryDoesNotRequireCoversheet = !COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+  const originalEntryRequiresCoversheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
     originalDocketEntry.eventCode,
   );
-
   const shouldAddNewCoverSheet =
-    originalEntryDoesNotRequireCoversheet && entryRequiresCoverSheet;
+    !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
+
+  const shouldRemoveExistingCoverSheet =
+    originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
 
   const documentTitleUpdated =
     getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
@@ -151,11 +153,10 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      filedBy: undefined, // allow constructor to re-generate
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
+      // allow constructor to re-generate
+      contactPrimary: caseEntity.getContactPrimary(),
+      contactSecondary: caseEntity.getContactSecondary(),
+      filedBy: undefined,
     },
     { applicationContext },
   ).validate();
@@ -182,6 +183,21 @@ exports.updateDocketEntryMetaInteractor = async (
         filingDateUpdated,
       });
 
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  } else if (shouldRemoveExistingCoverSheet) {
+    await applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber,
+      document: docketEntryEntity.validate(),
+    });
+    const updatedDocketEntry = await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet(applicationContext, {
+        docketEntryId: originalDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
+      });
     caseEntity.updateDocketEntry(updatedDocketEntry);
   }
 

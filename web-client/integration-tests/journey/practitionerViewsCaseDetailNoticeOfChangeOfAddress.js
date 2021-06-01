@@ -23,6 +23,8 @@ export const practitionerViewsCaseDetailNoticeOfChangeOfAddress = (
       address1: test.updatedPractitionerAddress,
     });
 
+    expect(privatePractitioner.firmName).toBe('My Awesome Law Firm');
+
     const documents = test.getState('caseDetail.docketEntries');
 
     const changeOfAddressDocument = documents.find(

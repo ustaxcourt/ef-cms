@@ -10,9 +10,12 @@ const getDocumentInfo = ({ applicationContext, documentData }) => {
   return {
     attachments: doc.attachments,
     certificateOfService: doc.certificateOfService,
-    certificateOfServiceDate: doc.certificateOfServiceDate,
     documentTitle: doc.documentTitle,
     filedBy: doc.filedBy,
+    filingDate: doc.filingDate,
+    formattedCertificateOfServiceDate: applicationContext
+      .getUtilities()
+      .formatDateString(doc.certificateOfServiceDate, 'MMDDYY'),
     objections: doc.objections,
     receivedAt: doc.receivedAt,
   };
@@ -48,6 +51,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
     doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
+  primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 
   const filingReceiptDocumentParams = { document: primaryDocument };
 
@@ -80,7 +84,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
       filedAt: applicationContext
         .getUtilities()
-        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+        .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
       filedBy: primaryDocument.filedBy,
       ...filingReceiptDocumentParams,
     },

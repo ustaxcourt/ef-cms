@@ -22,6 +22,11 @@ export const practitionerUpdatesAddress = test => {
       value: test.updatedPractitionerAddress,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'firmName',
+      value: 'My Awesome Law Firm',
+    });
+
     await test.runSequence('submitUpdateUserContactInformationSequence');
 
     expect(test.getState('validationErrors')).toEqual({});

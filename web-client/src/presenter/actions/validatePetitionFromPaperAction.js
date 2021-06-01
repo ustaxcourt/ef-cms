@@ -1,7 +1,9 @@
+import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }) => {
   let newErrorStatistics;
+  let statisticsErrorMessages = [];
 
   Object.keys(errors).forEach(key => {
     if (/statistics\[\d+\]/.test(errors[key])) {
@@ -12,31 +14,45 @@ export const aggregateStatisticsErrors = ({ errors, get }) => {
     newErrorStatistics = [];
     const formStatistics = get(state.form.statistics);
 
-    formStatistics.forEach((formStatistic, index) => {
-      const errorStatistic = errors.statistics.find(s => s.index === index);
-      if (errorStatistic) {
-        if (formStatistic.yearOrPeriod === 'Year') {
+    if (formStatistics.length) {
+      formStatistics.forEach((formStatistic, index) => {
+        const errorStatistic = errors.statistics.find(s => s.index === index);
+        if (errorStatistic) {
+          const messageYearOrPeriod =
+            formStatistic.yearOrPeriod === 'Year' ? 'year' : 'period';
+          const errMessage = `Enter ${messageYearOrPeriod}, deficiency amount, and total penalties`;
+
           newErrorStatistics.push({
-            enterAllValues:
-              'Enter year, deficiency amount, and total penalties',
+            enterAllValues: errMessage,
             index,
           });
+
+          statisticsErrorMessages.push(errMessage);
         } else {
-          newErrorStatistics.push({
-            enterAllValues:
-              'Enter period, deficiency amount, and total penalties',
-            index,
-          });
+          newErrorStatistics.push({});
         }
+      });
+
+      errors.statistics = newErrorStatistics;
+    } else {
+      statisticsErrorMessages = [errors.statistics];
+    }
+  }
+  return { errors, statisticsErrorMessages };
+};
+
+export const aggregatePetitionerErrors = ({ errors }) => {
+  if (errors?.petitioners) {
+    errors.petitioners.forEach(e => {
+      if (e.index === 0) {
+        errors.contactPrimary = omit(e, 'index');
       } else {
-        newErrorStatistics.push({});
+        errors.contactSecondary = omit(e, 'index');
       }
     });
-
-    errors.statistics = newErrorStatistics;
+    delete errors.petitioners;
   }
-
-  return newErrorStatistics;
+  return errors;
 };
 
 /**
@@ -59,7 +75,7 @@ export const validatePetitionFromPaperAction = ({
 
   const form = get(state.form);
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor({
       applicationContext,
@@ -78,10 +94,12 @@ export const validatePetitionFromPaperAction = ({
       statistics: 'Statistics',
     };
 
-    const statisticsErrors = aggregateStatisticsErrors({ errors, get });
-    if (statisticsErrors) {
-      errors.statistics = statisticsErrors;
-    }
+    const { errors: formattedErrors } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
+
+    errors = aggregatePetitionerErrors({ errors: formattedErrors });
 
     return path.error({
       alertError: {

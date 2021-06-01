@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   batchDownloadTrialSessionInteractor,
+  generateValidDocketEntryFilename,
 } = require('./batchDownloadTrialSessionInteractor');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -10,9 +11,10 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let user;
+  let mockCase;
 
   beforeEach(() => {
-    const mockCase = {
+    mockCase = {
       ...MOCK_CASE,
     };
 
@@ -75,8 +77,43 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor.mockResolvedValue({});
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
   });
 
+  describe('file name generation', () => {
+    it('truncates filenames if long document title causes them to exceed 255 characters', () => {
+      const docketEntry = {
+        documentTitle:
+          'Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged through him; he stiffened, wriggled, and felt himself glide out of his body, hover incorporeally in the air between his now soulless shell and the alien bound opposite.',
+        filingDate: '2020-06-20T15:43:12.000Z',
+        index: '7',
+      };
+      const expectedName =
+        '2020-06-20_0007_Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged throug.pdf';
+      const filename = generateValidDocketEntryFilename(docketEntry);
+      expect(filename.length).toBe(200);
+      expect(filename).toBe(expectedName);
+    });
+    it('generates a filename without any truncation when overall length is 255 characters or less', () => {
+      const docketEntry = {
+        documentTitle:
+          "Harrell met the downcrashing blow of the alien's broad-sword fully; the shock of impact sent numbing shivers up his arm as far as his shoulder but he held on and turned aside the b",
+        filingDate: '2020-06-20T15:43:12.000Z',
+        index: '7',
+      };
+
+      const maxTitleLength = 180; // when not accounting for length of date, docket entry number, and file extension components
+      expect(docketEntry.documentTitle.length).toBe(maxTitleLength); // asserting we are starting with a string exactly of max length
+
+      const expectedName = `2020-06-20_0007_${docketEntry.documentTitle}.pdf`;
+      const filename = generateValidDocketEntryFilename(docketEntry);
+      expect(filename.length).toBe(200);
+      expect(filename).toBe(expectedName);
+    });
+  });
   it('skips DocketEntry that are not in docketrecord or have documents in S3', async () => {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId: '123',
@@ -90,6 +127,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       extraFiles: expect.anything(),
       fileNames: expect.anything(),
       onEntry: expect.anything(),
+      onError: expect.anything(),
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
@@ -99,6 +137,76 @@ describe('batchDownloadTrialSessionInteractor', () => {
       uploadToTempBucket: true,
       zipName: 'September_26_2019-Birmingham.zip',
     });
+  });
+
+  it('checks that the files to be zipped exist in persistence when verifyFiles param is true', async () => {
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+      verifyFiles: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalledTimes(2);
+  });
+
+  it('throws an error if a file to be zipped does not exist in persistence when verifyFiles param is true', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+      verifyFiles: true,
+    });
+
+    const errorCall = applicationContext.getNotificationGateway()
+      .sendNotificationToUser.mock.calls[0];
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalled();
+    expect(errorCall).toBeTruthy();
+    expect(errorCall[0].message.error.message).toEqual(
+      `Batch Download Error: File ${mockCase.docketEntries[0].docketEntryId} for case ${mockCase.docketNumber} does not exist!`,
+    );
+  });
+
+  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is false', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+      verifyFiles: false,
+    });
+
+    const errorCall = applicationContext.getNotificationGateway()
+      .sendNotificationToUser.mock.calls[0];
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+    expect(errorCall[0].message.error).toBeUndefined();
+  });
+
+  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is undefined', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(false);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    const errorCall = applicationContext.getNotificationGateway()
+      .sendNotificationToUser.mock.calls[0];
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+    expect(errorCall[0].message.error).toBeUndefined();
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -170,6 +278,45 @@ describe('batchDownloadTrialSessionInteractor', () => {
       extraFiles: [],
       fileNames: [],
       onEntry: expect.anything(),
+      onError: expect.anything(),
+      onProgress: expect.anything(),
+      onUploadStart: expect.anything(),
+      s3Ids: [],
+      uploadToTempBucket: true,
+      zipName: 'September_26_2019-Birmingham.zip',
+    });
+  });
+
+  it('should filter removed cases from batch', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          removedFromTrial: true,
+        },
+      ]);
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getCalendaredCasesForTrialSession,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().zipDocuments,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      extraFileNames: [],
+      extraFiles: [],
+      fileNames: [],
+      onEntry: expect.anything(),
+      onError: expect.anything(),
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [],

@@ -1,4 +1,7 @@
-import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
+import {
+  aggregatePetitionerErrors,
+  aggregateStatisticsErrors,
+} from './validatePetitionFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -55,6 +58,8 @@ export const validateCaseDetailAction = ({
     });
   }
 
+  errors = aggregatePetitionerErrors({ errors });
+
   store.set(state.validationErrors, errors || {});
 
   if (!errors) {
@@ -66,11 +71,11 @@ export const validateCaseDetailAction = ({
       statistics: 'Statistics',
     };
 
-    const statisticsErrors = aggregateStatisticsErrors({ errors, get });
-    if (statisticsErrors) {
-      errors.statistics = statisticsErrors;
-    }
+    const { errors: formattedErrors } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
 
-    return path.error({ errorDisplayMap, errors });
+    return path.error({ errorDisplayMap, errors: formattedErrors });
   }
 };

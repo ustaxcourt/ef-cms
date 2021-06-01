@@ -1,3 +1,4 @@
+import { contactPrimaryFromState } from '../helpers';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -21,15 +22,10 @@ export const petitionerEditsCasePrimaryContactAddress = test => {
 
     await test.runSequence('submitEditPrimaryContactSequence');
 
-    expect(test.getState('caseDetail.contactPrimary.address1')).toEqual(
-      '100 Main St.',
-    );
-    expect(test.getState('caseDetail.contactPrimary.address2')).toEqual(
-      'Grand View Apartments',
-    );
-    expect(test.getState('caseDetail.contactPrimary.address3')).toEqual(
-      'Apt. 104',
-    );
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.address1).toEqual('100 Main St.');
+    expect(contactPrimary.address2).toEqual('Grand View Apartments');
+    expect(contactPrimary.address3).toEqual('Apt. 104');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),

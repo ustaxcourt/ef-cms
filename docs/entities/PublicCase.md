@@ -24,14 +24,6 @@
             type: "any"
             flags: 
               presence: "forbidden"
-          contactPrimary: 
-            type: "any"
-            flags: 
-              presence: "forbidden"
-          contactSecondary: 
-            type: "any"
-            flags: 
-              presence: "forbidden"
           createdAt: 
             type: "any"
             flags: 
@@ -83,6 +75,10 @@
             type: "any"
             flags: 
               presence: "forbidden"
+          petitioners: 
+            type: "any"
+            flags: 
+              presence: "forbidden"
           receivedAt: 
             type: "any"
             flags: 
@@ -101,68 +97,11 @@
           name: "max"
           args: 
             limit: 4700
-    contactPrimary: 
-      type: "object"
-      flags: 
-        presence: "required"
-      keys: 
-        name: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-            - 
-              name: "max"
-              args: 
-                limit: 500
-        state: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
-      keys: 
-        name: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-            - 
-              name: "max"
-              args: 
-                limit: 500
-        state: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
     createdAt: 
       type: "date"
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
     docketEntries: 
       type: "array"
@@ -212,7 +151,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
               whens: 
                 - 
                   ref: 
@@ -242,7 +180,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "When the Document was added to the system."
             docketEntryId: 
@@ -670,7 +607,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
                 description: "Date that this Document was filed."
               rules: 
@@ -755,7 +691,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "required"
               rules: 
                 - 
@@ -767,7 +702,6 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
               rules: 
                 - 
@@ -858,12 +792,56 @@
         - "Surviving spouse"
         - "Transferee"
         - "Trust"
+    petitioners: 
+      type: "array"
+      flags: 
+        presence: "required"
+      items: 
+        - 
+          type: "object"
+          keys: 
+            contactType: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "primary"
+                - "secondary"
+                - "otherFilers"
+                - "otherPetitioners"
+            name: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 500
+            state: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
     receivedAt: 
       type: "date"
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
 
  ```

@@ -103,7 +103,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     { applicationContext },
   );
 
-  docketEntryEntity.setAsServed(servedParties.all);
+  docketEntryEntity.setAsServed(servedParties.all).validate();
 
   const servedDocketEntryWorkItem = new WorkItem(
     {

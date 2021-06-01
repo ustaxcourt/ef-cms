@@ -2,6 +2,7 @@
 const faker = require('faker');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   FILING_TYPES,
   PARTY_TYPES,
@@ -109,21 +110,24 @@ const createCase = async ({
       petitionMetadata: {
         caseCaption: petitionerName,
         caseType: CASE_TYPES_MAP.cdp,
-        contactPrimary: {
-          address1: faker.address.streetAddress(),
-          address2: faker.address.secondaryAddress(),
-          address3: faker.address.streetSuffix(),
-          city: faker.address.city(),
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: faker.internet.email(),
-          name: petitionerName,
-          phone: faker.phone.phoneNumber(),
-          postalCode: faker.address.zipCode(),
-          state: faker.address.stateAbbr(),
-        },
         filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: faker.address.streetAddress(),
+            address2: faker.address.secondaryAddress(),
+            address3: faker.address.streetSuffix(),
+            city: faker.address.city(),
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: faker.internet.email(),
+            name: petitionerName,
+            phone: faker.phone.phoneNumber(),
+            postalCode: faker.address.zipCode(),
+            state: faker.address.stateAbbr(),
+          },
+        ],
         preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
         procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
       },
@@ -193,10 +197,31 @@ const getUserPoolId = async ({ cognito, env }) => {
   return userPoolId;
 };
 
+const disableUser = async ({ cognito, env, username }) => {
+  const userPoolId = await getUserPoolId({ cognito, env });
+  await cognito
+    .adminDisableUser({
+      UserPoolId: userPoolId,
+      Username: username,
+    })
+    .promise();
+};
+
+const enableUser = async ({ cognito, env, username }) => {
+  const userPoolId = await getUserPoolId({ cognito, env });
+  await cognito
+    .adminEnableUser({
+      UserPoolId: userPoolId,
+      Username: username,
+    })
+    .promise();
+};
+
 const getUserToken = async ({ cognito, env, password, username }) => {
   const userPoolId = await getUserPoolId({ cognito, env });
   const clientId = await getClientId({ cognito, userPoolId });
 
+  await enableUser({ cognito, env, username });
   const response = await cognito
     .adminInitiateAuth({
       AuthFlow: 'ADMIN_NO_SRP_AUTH',
@@ -215,6 +240,8 @@ module.exports = {
   addCaseToTrialSession,
   createCase,
   createTrialSession,
+  disableUser,
+  enableUser,
   getClientId,
   getUserPoolId,
   getUserToken,

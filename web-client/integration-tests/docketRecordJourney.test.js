@@ -336,6 +336,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       servedAtFormatted: undefined,
       showNotServed: false,
       showServed: false,
+      trialLocation: 'Birmingham, AL',
     });
   });
 

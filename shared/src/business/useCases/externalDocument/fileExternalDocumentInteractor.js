@@ -114,6 +114,8 @@ exports.fileExternalDocumentInteractor = async (
         {
           ...baseMetadata,
           ...metadata,
+          contactPrimary: caseEntity.getContactPrimary(),
+          contactSecondary: caseEntity.getContactSecondary(),
           docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
@@ -124,13 +126,9 @@ exports.fileExternalDocumentInteractor = async (
             documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
-          ...caseEntity.getCaseContacts({
-            contactPrimary: true,
-            contactSecondary: true,
-          }),
         },
         { applicationContext },
-      );
+      ).validate();
 
       const highPriorityWorkItem =
         caseEntity.status === CASE_STATUS_TYPES.calendared;
@@ -156,7 +154,7 @@ exports.fileExternalDocumentInteractor = async (
           trialDate: caseEntity.trialDate,
         },
         { applicationContext },
-      );
+      ).validate();
 
       docketEntryEntity.setWorkItem(workItem);
 

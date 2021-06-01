@@ -1,4 +1,7 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
@@ -28,6 +31,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -42,6 +46,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -53,6 +58,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: true,
@@ -67,6 +73,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.privatePractitioner,
       userId: '1234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -78,6 +85,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -92,6 +100,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -103,6 +112,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -117,6 +127,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.irsPractitioner,
       userId: '789',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -128,6 +139,7 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -142,6 +154,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitioner,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -149,12 +162,16 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '123',
-          },
+          petitioners: [
+            {
+              contactId: '123',
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -169,6 +186,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitioner,
       userId: '234',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -176,15 +194,20 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '123',
-          },
-          contactSecondary: {
-            contactId: '234',
-          },
+          petitioners: [
+            {
+              contactId: '123',
+              contactType: CONTACT_TYPES.primary,
+            },
+            {
+              contactId: '234',
+              contactType: CONTACT_TYPES.secondary,
+            },
+          ],
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,
@@ -206,19 +229,17 @@ describe('getCaseAssociation', () => {
       props: {},
       state: {
         caseDetail: {
-          contactPrimary: {
-            contactId: '456',
-          },
+          petitioners: [
+            {
+              contactId: '456',
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
           userId: '123',
-        },
-        contactPrimary: {
-          userId: '123',
-        },
-        contactSecondary: {
-          userId: '234',
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
@@ -233,6 +254,7 @@ describe('getCaseAssociation', () => {
       role: ROLES.petitionsClerk,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -244,13 +266,14 @@ describe('getCaseAssociation', () => {
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: false,
       pendingAssociation: false,
     });
   });
 
-  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and the petition document is not served', async () => {
+  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and no docket entry on the case is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -274,11 +297,12 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and the petition document is served', async () => {
+  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and a single docket entry on the case is served', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
     });
+
     const results = await runAction(getCaseAssociationAction, {
       modules: {
         presenter,
@@ -287,11 +311,15 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           docketEntries: [
-            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+            {
+              documentType: 'Legacy Petition',
+              servedAt: '2019-03-01T21:40:46.415Z',
+            },
           ],
         },
       },
     });
+
     expect(results.output).toEqual({
       isAssociated: true,
       pendingAssociation: false,

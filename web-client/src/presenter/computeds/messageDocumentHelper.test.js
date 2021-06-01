@@ -4,41 +4,41 @@ import { messageDocumentHelper as messageDocumentHeperComputed } from './message
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { USER_ROLES } = applicationContext.getConstants();
-
-const messageDocumentHelper = withAppContextDecorator(
-  messageDocumentHeperComputed,
-  applicationContext,
-);
-
-const getBaseState = user => {
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
-const docketClerkUser = {
-  role: USER_ROLES.docketClerk,
-  userId: '123',
-};
-const petitionsClerkUser = {
-  role: USER_ROLES.petitionsClerk,
-  userId: '123',
-};
-const clerkOfCourtUser = {
-  role: USER_ROLES.clerkOfCourt,
-  userId: '123',
-};
-const judgeUser = {
-  role: USER_ROLES.judge,
-  userId: '123',
-};
-const petitionerUser = {
-  role: USER_ROLES.petitioner,
-  userId: '123',
-};
-
 describe('messageDocumentHelper', () => {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  const messageDocumentHelper = withAppContextDecorator(
+    messageDocumentHeperComputed,
+    applicationContext,
+  );
+
+  const getBaseState = user => {
+    return {
+      permissions: getUserPermissions(user),
+    };
+  };
+
+  const docketClerkUser = {
+    role: USER_ROLES.docketClerk,
+    userId: '123',
+  };
+  const petitionsClerkUser = {
+    role: USER_ROLES.petitionsClerk,
+    userId: '123',
+  };
+  const clerkOfCourtUser = {
+    role: USER_ROLES.clerkOfCourt,
+    userId: '123',
+  };
+  const judgeUser = {
+    role: USER_ROLES.judge,
+    userId: '123',
+  };
+  const petitionerUser = {
+    role: USER_ROLES.petitioner,
+    userId: '123',
+  };
+
   const baseDocketEntry = {
     docketEntryId: '123',
     entityName: 'Document',
@@ -57,7 +57,7 @@ describe('messageDocumentHelper', () => {
     docketEntries: [],
   };
 
-  it('return empty object if viewerDocumentToDisplay is not set', () => {
+  it('should return an empty object when viewerDocumentToDisplay is not set', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(messageDocumentHelper, {
@@ -638,7 +638,7 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('showEditCorrespondenceButton', () => {
-    it('returns true for a correspondence document when the user has permission to edit', () => {
+    it('should be true for a correspondence document when the user has permission to edit', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
       const result = runCompute(messageDocumentHelper, {
@@ -662,7 +662,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showEditCorrespondenceButton).toBeTruthy();
     });
 
-    it('returns false for a correspondence document when the user does not have permission to edit', () => {
+    it('should be false for a correspondence document when the user does not have permission to edit', () => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
       const result = runCompute(messageDocumentHelper, {
@@ -686,7 +686,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showEditCorrespondenceButton).toBeFalsy();
     });
 
-    it('return showEditCorrespondenceButton false for a non-correspondence document', () => {
+    it('should be false for a non-correspondence document', () => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
       const result = runCompute(messageDocumentHelper, {

@@ -28,6 +28,7 @@ export const TrialSessions = connect(
           <Tabs
             bind="currentViewMetadata.trialSessions.tab"
             defaultActiveTab={defaultTab || 'open'}
+            headingLevel="2"
             id="trial-sessions-tabs"
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">

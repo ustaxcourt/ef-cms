@@ -109,7 +109,6 @@ export const PractitionerContactForm = connect(
             </FormGroup>
           </div>
         </div>
-
         {createPractitionerUserHelper.isAddingPractitioner && (
           <FormGroup errorText={validationErrors.email}>
             <label className="usa-label" htmlFor="email">
