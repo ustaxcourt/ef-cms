@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
- * @param {object} providers.store the cerebral store object
+ * @param {object} providers.props the cerebral props object
  */
 export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   applicationContext,
