@@ -156,10 +156,6 @@
     "*.{css,scss}": [
       "stylelint"
     ],
-    "**/entities/**/*.js": [
-      "npm run build:entity:docs",
-      "git add **/*md"
-    ],
     "swagger.json,v1.yaml,v2.yaml": [
       "swagger-cli validate"
     ]
@@ -172,7 +168,6 @@
     "build:client": "USTC_ENV=prod webpack --config webpack.config.client.prod.js",
     "build:lambda:api": "USTC_ENV=prod webpack --config webpack.config.lambda.api.js",
     "build:lambda:migration": "USTC_ENV=prod webpack --config webpack.config.lambda.migration.js",
-    "build:entity:docs": "node shared/src/tools/generateMarkdownSchema.js",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
     "build:public": "USTC_ENV=prod webpack --config webpack.config.client.public.prod.js",
     "clean:public": "rm -rf dist-public/",
