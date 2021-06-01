@@ -3,15 +3,15 @@ import { formattedMessageDetail as formattedMessageDetailComputed } from '../../
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-const formattedMessageDetail = withAppContextDecorator(
-  formattedMessageDetailComputed,
-);
-
 export const docketClerkEditsOrderFromMessage = test => {
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+
+  const formattedMessageDetail = withAppContextDecorator(
+    formattedMessageDetailComputed,
+  );
+
   return it('docket clerk edits a signed order from a message', async () => {
     await test.runSequence('gotoMessageDetailSequence', {
       docketNumber: test.docketNumber,
@@ -35,6 +35,11 @@ export const docketClerkEditsOrderFromMessage = test => {
 
     expect(test.getState('currentPage')).toEqual('CreateOrder');
     expect(test.getState('form.documentTitle')).toEqual('Order');
+
+    await test.runSequence('openEditOrderTitleModalSequence');
+
+    expect(test.getState('modal.eventCode')).toEqual('O');
+    expect(test.getState('modal.documentTitle')).toEqual('Order');
 
     await test.runSequence('updateFormValueSequence', {
       key: 'richText',

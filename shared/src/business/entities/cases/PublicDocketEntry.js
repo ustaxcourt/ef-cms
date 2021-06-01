@@ -45,6 +45,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
   this.servedAt = rawDocketEntry.servedAt;
+  this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
 };
 
 PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
@@ -69,8 +70,8 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
     .required()
     .description('Date that this Document was filed.'),
   index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
-  isFileAttached: joi.boolean().optional(),
-  isLegacyServed: joi.boolean().optional(),
+  isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
+  isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
   isMinuteEntry: joi.boolean().optional(),
   isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
   isSealed: joi.boolean().invalid(true).required(), // value of true is forbidden
@@ -84,6 +85,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   processingStatus: JoiValidationConstants.STRING.optional(),
   receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
   servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
+  servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
 });
 
 joiValidationDecorator(
