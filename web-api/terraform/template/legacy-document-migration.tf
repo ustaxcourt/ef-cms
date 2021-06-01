@@ -1,7 +1,17 @@
 data "archive_file" "legacy_documents_migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/legacy-documents-migration.js.zip"
-  source_file = "${path.module}/lambdas/dist/legacy-documents-migration.js"
+  source_file = "${path.module}/lambdas/dist"
+  excludes    = [
+                  "${path.module}/lambdas/dist/api-public.js",
+                  "${path.module}/lambdas/dist/api.js",
+                  "${path.module}/lambdas/dist/cognito-authorizer.js",
+                  "${path.module}/lambdas/dist/cognito-triggers.js",
+                  "${path.module}/lambdas/dist/cron.js",
+                  "${path.module}/lambdas/dist/report.html",
+                  "${path.module}/lambdas/dist/streams.js",
+                  "${path.module}/lambdas/dist/websockets.js",
+                ]
 }
 
 resource "aws_lambda_function" "legacy_documents_migration_lambda" {
@@ -10,6 +20,10 @@ resource "aws_lambda_function" "legacy_documents_migration_lambda" {
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler          = "legacy-documents-migration.handler"
   source_code_hash = data.archive_file.legacy_documents_migration_zip.output_base64sha256
+
+  layers = [
+    module.api-east-green.puppeteer_layer
+  ]
 
   runtime     = "nodejs14.x"
   timeout     = "900"
