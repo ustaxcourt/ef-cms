@@ -2048,6 +2048,8 @@ Case.prototype.deleteStatistic = function (statisticId) {
  * @param {string} serviceType the serviceIndicator type to check for
  * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
  */
+// NOTE: This method will have to be changed to account for all petitioners on the case
+// (instead of just primary and secondary) once the User Management Batch 1 stories have been mered.
 const hasPartyWithServiceType = function (rawCase, serviceType) {
   const contactPrimary = getContactPrimary(rawCase);
   const contactSecondary = getContactSecondary(rawCase);
