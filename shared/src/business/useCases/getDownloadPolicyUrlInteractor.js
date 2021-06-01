@@ -175,22 +175,17 @@ exports.getDownloadPolicyUrlInteractor = async (
         );
       }
 
+      const unAuthorizedToViewNonCourtIssued =
+        selectedIsStin ||
+        !userAssociatedWithCase ||
+        docketEntryEntity.isLegacySealed;
+
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
-      } else if (selectedIsStin) {
+      } else if (unAuthorizedToViewNonCourtIssued) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
         );
-      } else {
-        if (!userAssociatedWithCase) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (docketEntryEntity.isLegacySealed) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        }
       }
     }
   }
