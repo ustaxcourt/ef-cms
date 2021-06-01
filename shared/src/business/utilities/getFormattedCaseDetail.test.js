@@ -9,7 +9,6 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   REVISED_TRANSCRIPT_EVENT_CODE,
-  ROLES,
   SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -126,6 +125,7 @@ describe('getFormattedCaseDetail', () => {
           isLegacySealed: true,
           isOnDocketRecord: true,
           servedAt: getDateISO(),
+          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
           workItem: {
             completedAt: getDateISO(),
           },
@@ -943,35 +943,6 @@ describe('getFormattedCaseDetail', () => {
 
       expect(result.isTranscript).toEqual(false);
       expect(result.isStipDecision).toEqual(false);
-    });
-
-    it('should set the servedPartiesCode to `B` if servedParties is an array', () => {
-      const results = formatDocketEntry(applicationContext, {
-        servedParties: ['someone', 'someone else'],
-        servedPartiesCode: 'BANANAS',
-      });
-      expect(results).toMatchObject({
-        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
-      });
-    });
-
-    it('should set the servedPartiesCode to `P` if servedPartiesCode was already set to `P` on docket entry', () => {
-      const results = formatDocketEntry(applicationContext, {
-        servedParties: ['someone', 'someone else'],
-        servedPartiesCode: 'P',
-      });
-      expect(results).toMatchObject({
-        servedPartiesCode: SERVED_PARTIES_CODES.PETITIONER,
-      });
-    });
-
-    it('should set the servedPartiesCode to `R` if servedParties is an array of length 1 with role irsSuperuser', () => {
-      const results = formatDocketEntry(applicationContext, {
-        servedParties: [{ role: ROLES.irsSuperuser }],
-      });
-      expect(results).toMatchObject({
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
-      });
     });
 
     it('should set isCourtIssuedDocument to false when document.eventCode is not present in the list of court issued documents', () => {
