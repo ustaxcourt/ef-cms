@@ -80,6 +80,9 @@ export const petitionsClerkAddsDeficiencyStatisticToCase = test => {
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(
+      test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
+    ).toEqual('statistics');
 
     const statisticsAfter = test.getState('caseDetail.statistics');
 

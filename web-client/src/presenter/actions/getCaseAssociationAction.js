@@ -40,15 +40,12 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
       .getUtilities()
       .getPetitionerById(caseDetail, user.userId);
   } else if (user.role === USER_ROLES.irsSuperuser) {
-    const docketEntries = get(state.caseDetail.docketEntries);
-    const petitionDocketEntry = docketEntries.find(
-      doc => doc.documentType === 'Petition',
-    );
-    const isPetitionServed = applicationContext
+    const caseDetail = get(state.caseDetail);
+    const caseHasServedDocketEntries = applicationContext
       .getUtilities()
-      .isServed(petitionDocketEntry);
+      .caseHasServedDocketEntries(caseDetail);
 
-    isAssociated = isPetitionServed;
+    isAssociated = caseHasServedDocketEntries;
   }
 
   return { isAssociated, pendingAssociation };
