@@ -373,6 +373,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
                 d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
               )[0],
               documentType: 'Order that case is assigned',
+              eventCode: 'OAJ',
               isLegacyServed: true,
               servedAt: undefined,
             },
@@ -384,7 +385,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
           docketNumber: mockCase.docketNumber,
           key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         }),
-      ).toBeDefined();
+      ).resolves.toBeDefined();
     });
 
     it('throws an error for a privatePractitioner who is NOT associated with the case and viewing a served Stipulated Decision', async () => {
