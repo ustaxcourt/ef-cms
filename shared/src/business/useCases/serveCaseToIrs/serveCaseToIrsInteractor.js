@@ -177,11 +177,6 @@ exports.serveCaseToIrsInteractor = async (
   initializeCaseWorkItem.docketNumberWithSuffix =
     caseEntity.docketNumberWithSuffix;
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
-
   initializeCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
     user,
@@ -191,12 +186,12 @@ exports.serveCaseToIrsInteractor = async (
     applicationContext,
     section: PETITIONS_SECTION,
     userId: user.userId,
-    workItem: initializeCaseWorkItem,
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
-    workItemToUpdate: initializeCaseWorkItem,
+    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
   });
   const caseWithServedDocketEntryInformation = await applicationContext
     .getUseCaseHelpers()
