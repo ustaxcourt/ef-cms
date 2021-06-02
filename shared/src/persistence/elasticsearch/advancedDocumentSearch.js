@@ -202,7 +202,7 @@ exports.advancedDocumentSearch = async ({
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort,
     },
-    index: process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry-more-shards',
+    index: 'efcms-docket-entry-more-shards',
   };
 
   const { results, total } = await search({
