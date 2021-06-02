@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { computePetitionDatesAction } from './StartCaseInternal/computePetitionDatesAction';
+import { computePetitionDatesAction } from './computePetitionDatesAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
