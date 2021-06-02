@@ -7,6 +7,7 @@ import {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  hasPartyWithServiceType,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -655,6 +656,7 @@ const applicationContext = {
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
+      hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPending: DocketEntry.isPending,
