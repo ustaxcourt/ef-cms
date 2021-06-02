@@ -64,10 +64,7 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  let includeCaseQuery = false;
-
   if (omitSealed) {
-    includeCaseQuery = true;
     caseMustNot.push({
       term: { 'isSealed.BOOL': true },
     });
@@ -88,12 +85,10 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (docketNumber) {
-    includeCaseQuery = true;
     caseQueryParams.has_parent.query.bool.must = {
       term: { 'docketNumber.S': docketNumber },
     };
   } else if (caseTitleOrPetitioner) {
-    includeCaseQuery = true;
     caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
         default_operator: 'and',
@@ -104,9 +99,7 @@ exports.advancedDocumentSearch = async ({
     };
   }
 
-  if (includeCaseQuery && false) {
-    docketEntryQueryParams.push(caseQueryParams);
-  }
+  docketEntryQueryParams.push(caseQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
@@ -209,7 +202,7 @@ exports.advancedDocumentSearch = async ({
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort,
     },
-    index: 'efcms-docket-entry',
+    index: 'efcms-docket-entry-3-shard',
   };
 
   const { results, total } = await search({
