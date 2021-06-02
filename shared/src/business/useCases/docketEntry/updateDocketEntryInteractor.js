@@ -98,19 +98,6 @@ exports.updateDocketEntryInteractor = async (
     const { workItem } = docketEntryEntity;
 
     if (!isSavingForLater) {
-      const workItemToDelete =
-        currentDocketEntry.workItem &&
-        !currentDocketEntry.workItem.docketEntry.isFileAttached;
-
-      if (workItemToDelete) {
-        await applicationContext
-          .getPersistenceGateway()
-          .deleteWorkItemFromInbox({
-            applicationContext,
-            workItem: workItemToDelete,
-          });
-      }
-
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
@@ -188,12 +175,10 @@ exports.updateDocketEntryInteractor = async (
         sentByUserId: user.userId,
       });
 
-      await applicationContext
-        .getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress({
-          applicationContext,
-          workItem: workItem.validate().toRawObject(),
-        });
+      await applicationContext.getPersistenceGateway().saveWorkItem({
+        applicationContext,
+        workItem: workItem.validate().toRawObject(),
+      });
     }
     caseEntity.updateDocketEntry(docketEntryEntity);
 
@@ -231,12 +216,10 @@ exports.updateDocketEntryInteractor = async (
       sentByUserId: user.userId,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketEntryInProgress({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    });
   }
 
   caseEntity.updateDocketEntry(docketEntryEntity);

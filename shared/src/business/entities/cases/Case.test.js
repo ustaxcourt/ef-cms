@@ -4635,7 +4635,7 @@ describe('Case entity', () => {
     });
   });
 
-  describe('hasPartyWithPaperService', () => {
+  describe('hasPartyWithServiceType', () => {
     it('should return true if contactPrimary service indicator is paper', () => {
       const myCase = new Case(
         {
@@ -4650,7 +4650,9 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+      const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
 
       expect(hasPartyWithPaperService).toBeTruthy();
     });
@@ -4675,7 +4677,9 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+      const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
 
       expect(hasPartyWithPaperService).toBeTruthy();
     });
@@ -4695,7 +4699,9 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+      const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
 
       expect(hasPartyWithPaperService).toBeTruthy();
     });
@@ -4715,7 +4721,9 @@ describe('Case entity', () => {
         { applicationContext },
       );
 
-      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+      const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
 
       expect(hasPartyWithPaperService).toBeTruthy();
     });
@@ -4723,7 +4731,9 @@ describe('Case entity', () => {
     it('should return false if no contacts or practitioners have paper service indicator', () => {
       const myCase = new Case(MOCK_CASE, { applicationContext });
 
-      const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+      const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+        SERVICE_INDICATOR_TYPES.SI_PAPER,
+      );
 
       expect(hasPartyWithPaperService).toBeFalsy();
     });

@@ -10,10 +10,9 @@ describe('setWorkItemAsRead', () => {
     });
   });
 
-  it('invokes the persistence layer with pk of {userId}|workItem and other expected params', async () => {
+  it('invokes the persistence layer with pk of work-item|{workItemId} and other expected params', async () => {
     await setWorkItemAsRead({
       applicationContext,
-      userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
       workItemId: 'abc',
     });
 
@@ -21,7 +20,7 @@ describe('setWorkItemAsRead', () => {
       applicationContext.getDocumentClient().update.mock.calls[0][0],
     ).toMatchObject({
       Key: {
-        pk: 'user|15adf875-8c3c-4e94-91e9-a4c1bff51291',
+        pk: 'work-item|abc',
         sk: 'work-item|abc',
       },
     });
