@@ -936,9 +936,6 @@ const {
   updateCaseHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
 const {
-  updateCaseTrialSortMappingRecords,
-} = require('../../shared/src/persistence/dynamo/cases/updateCaseTrialSortMappingRecords');
-const {
   updateCaseTrialSortTagsInteractor,
 } = require('../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor');
 const {
@@ -1232,7 +1229,6 @@ const gatewayMethods = {
     setWorkItemAsRead,
     updateCase,
     updateCaseHearing,
-    updateCaseTrialSortMappingRecords,
     updateDocketEntry,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,

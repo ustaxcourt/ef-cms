@@ -115,7 +115,7 @@ exports.updatePetitionDetailsInteractor = async (
   ) {
     await applicationContext
       .getPersistenceGateway()
-      .updateCaseTrialSortMappingRecords({
+      .createCaseTrialSortMappingRecords({
         applicationContext,
         caseSortTags: newCase.generateTrialSortTags(),
         docketNumber: newCase.validate().toRawObject().docketNumber,

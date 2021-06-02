@@ -456,7 +456,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
-    updateCaseTrialSortMappingRecords: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem,
     updateWorkItemInCase,
