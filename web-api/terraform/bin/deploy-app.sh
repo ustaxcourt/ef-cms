@@ -65,24 +65,24 @@ set -eo pipefail
 npm run build:lambda:api
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
+  BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+  GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-    GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
   else
-    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-    BLUE_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
   fi
 fi
 

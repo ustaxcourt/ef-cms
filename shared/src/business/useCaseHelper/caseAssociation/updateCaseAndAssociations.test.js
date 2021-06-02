@@ -573,4 +573,99 @@ describe('updateCaseAndAssociations', () => {
       });
     });
   });
+
+  describe('user case mappings', () => {
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getUserCaseMappingsByDocketNumber.mockReturnValue([
+          { pk: 'abc|987', sk: 'user-case|123' },
+        ]);
+    });
+    it('exits without calling any persistence methods if non-mapping attributes are update', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: validMockCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('updates mappings if the "status" mapping-related attribute is modified', async () => {
+      const updatedCase = {
+        ...validMockCase,
+        status: 'Submitted',
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).toHaveBeenCalled();
+    });
+    it('updates mappings if the "docketNumberSuffix" mapping-related attribute is modified', async () => {
+      const updatedCase = {
+        ...validMockCase,
+        caseType: CASE_TYPES_MAP.disclosure,
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).toHaveBeenCalled();
+    });
+    it('updates mappings if the "caseCaption" mapping-related attribute is modified', async () => {
+      const updatedCase = {
+        ...validMockCase,
+        caseCaption: "Look at me, I'm the Caption Now",
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).toHaveBeenCalled();
+    });
+    it('updates mappings if the "leadDocketNumber" mapping-related attribute is modified', async () => {
+      const updatedCase = {
+        ...validMockCase,
+        leadDocketNumber: '888-20',
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).toHaveBeenCalled();
+    });
+  });
 });
