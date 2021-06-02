@@ -14,11 +14,18 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
       'ConfirmInitiatePaperDocumentServiceModal',
     );
 
+    const documentUrlWithoutServedStamp = test.getState('iframeSrc');
+
     await test.runSequence('serveCourtIssuedDocumentSequence', {});
 
     expect(test.getState('alertSuccess')).toEqual({
       message: 'Document served. ',
     });
     expect(test.getState('currentPage')).toBe('MessageDetail');
+
+    const documentUrlWithServedStamp = test.getState('iframeSrc');
+    expect(documentUrlWithoutServedStamp).not.toEqual(
+      documentUrlWithServedStamp,
+    );
   });
 };
