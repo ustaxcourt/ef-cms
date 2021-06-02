@@ -70,7 +70,5 @@ exports.orderAdvancedSearchInteractor = async (
     MAX_SEARCH_RESULTS,
   );
 
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
-    applicationContext,
-  });
+  return filteredResults;
 };
