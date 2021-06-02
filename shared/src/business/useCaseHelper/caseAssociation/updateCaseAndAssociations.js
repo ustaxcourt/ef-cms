@@ -3,6 +3,7 @@ const { Case } = require('../../entities/cases/Case');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
@@ -329,6 +330,49 @@ const updateCaseWorkItems = async ({
   return workItemUpdates;
 };
 
+const updateUserCaseMappings = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const userCaseMappingUpdates = [];
+
+  const userCaseMappingsRequireUpdate =
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
+
+  if (!userCaseMappingsRequireUpdate) {
+    return userCaseMappingUpdates;
+  }
+
+  const userCaseMappings = await applicationContext
+    .getPersistenceGateway()
+    .getUserCaseMappingsByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  const updatedAttributeValues = pick(caseToUpdate, [
+    'caseCaption',
+    'closedDate',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'leadDocketNumber',
+    'status',
+  ]);
+
+  const mappingUpdateRequests = userCaseMappings.map(ucItem =>
+    applicationContext.getPersistenceGateway().updateUserCaseMapping({
+      applicationContext,
+      userCaseItem: { ...ucItem, ...updatedAttributeValues },
+    }),
+  );
+
+  return mappingUpdateRequests;
+};
+
 /**
  * updateCaseAndAssociations
  *
@@ -365,6 +409,7 @@ exports.updateCaseAndAssociations = async ({
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
+    updateUserCaseMappings,
   ];
 
   const requests = RELATED_CASE_OPERATIONS.map(fn =>

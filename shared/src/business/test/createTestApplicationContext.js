@@ -461,6 +461,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
+    getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     getWorkItemMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
