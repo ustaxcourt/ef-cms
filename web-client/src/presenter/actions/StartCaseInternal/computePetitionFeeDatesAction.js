@@ -11,39 +11,21 @@ import { state } from 'cerebral';
 export const computePetitionFeeDatesAction = ({ applicationContext, get }) => {
   const form = get(state.form);
 
-  let petitionPaymentDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
-      )
-  ) {
-    petitionPaymentDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateDay,
-        month: form.paymentDateMonth,
-        year: form.paymentDateYear,
-      });
-  }
+  const petitionPaymentDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.paymentDateDay,
+      month: form.paymentDateMonth,
+      year: form.paymentDateYear,
+    });
 
-  let petitionPaymentWaivedDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
-      )
-  ) {
-    petitionPaymentWaivedDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateWaivedDay,
-        month: form.paymentDateWaivedMonth,
-        year: form.paymentDateWaivedYear,
-      });
-  }
+  const petitionPaymentWaivedDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.paymentDateWaivedDay,
+      month: form.paymentDateWaivedMonth,
+      year: form.paymentDateWaivedYear,
+    });
 
   return { petitionPaymentDate, petitionPaymentWaivedDate };
 };

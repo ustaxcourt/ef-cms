@@ -296,12 +296,18 @@ const computeDate = ({ day, month, year }) => {
   return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
 
-const validateDateAndCreateISO = ({ day, month, year }) => {
-  if (isValidDateString(`${month}-${day}-${year}`)) {
+/**
+ * Formats date object into ISO string only if date is valid
+ *
+ * @param {object} date the date object containing year, month, day
+ * @returns {string} a formatted ISO date string if date object is valid
+ */
+const validateDateAndCreateISO = date => {
+  if (isValidDateString(`${date.month}-${date.day}-${date.year}`)) {
     return createISODateStringFromObject({
-      day,
-      month,
-      year,
+      day: date.day,
+      month: date.month,
+      year: date.year,
     });
   }
 };
