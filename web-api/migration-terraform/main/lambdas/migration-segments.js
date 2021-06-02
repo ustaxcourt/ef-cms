@@ -67,6 +67,8 @@ const migrateRecords = async ({ documentClient, items }) => {
   return items;
 };
 
+exports.migrateRecords = migrateRecords;
+
 const processItems = async ({ documentClient, items }) => {
   try {
     items = await migrateRecords({ documentClient, items });
