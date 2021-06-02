@@ -1,4 +1,4 @@
-/* eslint-disable security/detect-object-injection, security/detect-child-process, spellcheck/spell-checker, max-lines */
+/* eslint-disable max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const barNumberGenerator = require('../../shared/src/persistence/dynamo/users/barNumberGenerator');
@@ -654,6 +654,9 @@ const {
   getUserByIdInteractor,
 } = require('../../shared/src/business/useCases/getUserByIdInteractor');
 const {
+  getUserCaseMappingsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
+const {
   getUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/getUserCaseNote');
 const {
@@ -1052,6 +1055,9 @@ const {
   updateUser,
 } = require('../../shared/src/persistence/dynamo/users/updateUser');
 const {
+  updateUserCaseMapping,
+} = require('../../shared/src/persistence/dynamo/cases/updateUserCaseMapping');
+const {
   updateUserCaseNote,
 } = require('../../shared/src/persistence/dynamo/userCaseNotes/updateUserCaseNote');
 const {
@@ -1358,6 +1364,7 @@ const gatewayMethods = {
   getUploadPolicy,
   getUserByEmail,
   getUserById,
+  getUserCaseMappingsByDocketNumber,
   getUserCaseNote,
   getUserCaseNoteForCases,
   getUserInboxMessages,
@@ -1375,6 +1382,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
+  updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
   updateWorkItemCaseStatus,
   updateWorkItemCaseTitle,
@@ -1507,7 +1515,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
         return {
           getSendStatistics: () => {
-            // mock this out so the health checks pass on smoketests
+            // mock this out so the health checks pass on smoke tests
             return {
               promise: async () => ({
                 SendDataPoints: [

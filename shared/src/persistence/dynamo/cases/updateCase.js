@@ -5,41 +5,8 @@ const {
 const { Case } = require('../../../business/entities/cases/Case');
 const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 const { fieldsToOmitBeforePersisting } = require('./createCase');
-const { omit, pick } = require('lodash');
+const { omit } = require('lodash');
 const { updateMessage } = require('../messages/updateMessage');
-
-const updateUserCaseMappings = ({
-  applicationContext,
-  caseToUpdate,
-  userCaseMappings,
-}) => {
-  const updatedAttributeValues = pick(caseToUpdate, [
-    'caseCaption',
-    'closedDate',
-    'docketNumberSuffix',
-    'docketNumberWithSuffix',
-    'leadDocketNumber',
-    'status',
-  ]);
-
-  const updatedUserCases = userCaseMappings.map(userCaseItem =>
-    Object.assign({}, userCaseItem, updatedAttributeValues),
-  );
-
-  const gsi1pk = `user-case|${caseToUpdate.docketNumber}`;
-
-  const mappingUpdateRequests = updatedUserCases.map(userCaseItem =>
-    client.put({
-      Item: {
-        ...userCaseItem,
-        gsi1pk,
-      },
-      applicationContext,
-    }),
-  );
-
-  return mappingUpdateRequests;
-};
 
 /**
  * updateCase
@@ -102,34 +69,6 @@ exports.updateCase = async ({ applicationContext, caseToUpdate, oldCase }) => {
       });
     });
     requests.push(...updatedDeadlineRequests);
-  }
-
-  // update user-case mappings
-  if (
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
-    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber
-  ) {
-    const userCaseMappings = await client.query({
-      ExpressionAttributeNames: {
-        '#gsi1pk': 'gsi1pk',
-      },
-      ExpressionAttributeValues: {
-        ':gsi1pk': `user-case|${caseToUpdate.docketNumber}`,
-      },
-      IndexName: 'gsi1',
-      KeyConditionExpression: '#gsi1pk = :gsi1pk',
-      applicationContext,
-    });
-
-    requests.push(
-      ...updateUserCaseMappings({
-        applicationContext,
-        caseToUpdate,
-        userCaseMappings,
-      }),
-    );
   }
 
   const setLeadCase = caseToUpdate.leadDocketNumber
