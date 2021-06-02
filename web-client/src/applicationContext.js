@@ -83,6 +83,7 @@ import {
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
+  validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
 import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
@@ -688,6 +689,7 @@ const applicationContext = {
       replaceBracketed,
       setServiceIndicatorsForCase,
       sortDocketEntries,
+      validateDateAndCreateISO,
     };
   },
   setCurrentUser,

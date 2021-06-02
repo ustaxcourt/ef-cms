@@ -296,6 +296,16 @@ const computeDate = ({ day, month, year }) => {
   return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
 
+const validateDateAndCreateISO = ({ day, month, year }) => {
+  if (isValidDateString(`${month}-${day}-${year}`)) {
+    return createISODateStringFromObject({
+      day,
+      month,
+      year,
+    });
+  }
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -317,4 +327,5 @@ module.exports = {
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
+  validateDateAndCreateISO,
 };
