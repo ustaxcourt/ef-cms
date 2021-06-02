@@ -16,33 +16,15 @@ export const validatePetitionDetailsAction = ({
   applicationContext,
   get,
   path,
+  props,
 }) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-
-  const petitionPaymentWaivedDate = applicationContext
-    .getUtilities()
-    .validateDateAndCreateISO({
-      day: form.paymentDateWaivedDay,
-      month: form.paymentDateWaivedMonth,
-      year: form.paymentDateWaivedYear,
-    });
-
-  const petitionPaymentDate = applicationContext
-    .getUtilities()
-    .validateDateAndCreateISO({
-      day: form.paymentDateDay,
-      month: form.paymentDateMonth,
-      year: form.paymentDateYear,
-    });
-
-  const irsNoticeDate = applicationContext
-    .getUtilities()
-    .validateDateAndCreateISO({
-      day: form.irsDay,
-      month: form.irsMonth,
-      year: form.irsYear,
-    });
+  const {
+    irsNoticeDate,
+    petitionPaymentDate,
+    petitionPaymentWaivedDate,
+  } = props;
 
   let errors = applicationContext
     .getUseCases()

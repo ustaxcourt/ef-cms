@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * computes the petitionPaymentDate and petitionPaymentWaivedDate from the form
+ * computes the petitionPaymentDate, petitionPaymentWaivedDate, and irsNoticeDate from the form
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @returns {object} props object
  */
-export const computePetitionFeeDatesAction = ({ applicationContext, get }) => {
+export const computePetitionDatesAction = ({ applicationContext, get }) => {
   const form = get(state.form);
 
   const petitionPaymentDate = applicationContext
@@ -27,5 +27,13 @@ export const computePetitionFeeDatesAction = ({ applicationContext, get }) => {
       year: form.paymentDateWaivedYear,
     });
 
-  return { petitionPaymentDate, petitionPaymentWaivedDate };
+  const irsNoticeDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.irsDay,
+      month: form.irsMonth,
+      year: form.irsYear,
+    });
+
+  return { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate };
 };
