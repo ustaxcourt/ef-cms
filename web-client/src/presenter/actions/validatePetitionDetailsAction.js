@@ -24,7 +24,7 @@ export const validatePetitionDetailsAction = ({
     .getUtilities()
     .validateDateAndCreateISO({
       day: form.paymentDateWaivedDay,
-      month: form.paymentDateWaivedDay,
+      month: form.paymentDateWaivedMonth,
       year: form.paymentDateWaivedYear,
     });
 
