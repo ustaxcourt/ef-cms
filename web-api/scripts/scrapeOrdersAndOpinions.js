@@ -24,7 +24,6 @@ const findDocketEntries = async () => {
       'eventCode.S',
       'servedAt.S',
       'docketEntryId.S',
-      'documentId.S',
       'docketNumber.S',
     ],
     body: {

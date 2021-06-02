@@ -13,12 +13,10 @@ module.exports = {
       type: 'text',
     },
     'docketEntryId.S': {
+      index: false,
       type: 'keyword',
     },
     'docketNumber.S': {
-      type: 'keyword',
-    },
-    'docketNumberSuffix.S': {
       type: 'keyword',
     },
     'docketNumberWithSuffix.S': {
@@ -41,10 +39,15 @@ module.exports = {
     'eventCode.S': {
       type: 'keyword',
     },
+    'filedBy.S': {
+      index: false,
+      type: 'keyword',
+    },
     'filingDate.S': {
       type: 'date',
     },
     'indexedTimestamp.N': {
+      index: false,
       type: 'text',
     },
     'irsPractitioners.L.M.userId.S': {
@@ -57,6 +60,7 @@ module.exports = {
       type: 'boolean',
     },
     'isStricken.BOOL': {
+      index: false,
       type: 'boolean',
     },
     'judge.S': {
@@ -72,15 +76,14 @@ module.exports = {
       type: 'text',
     },
     'pk.S': {
+      index: false,
       type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
       type: 'keyword',
     },
-    'receivedAt.S': {
-      type: 'date',
-    },
     'sealedDate.S': {
+      index: false,
       type: 'date',
     },
     'servedAt.S': {
@@ -93,6 +96,7 @@ module.exports = {
       type: 'text',
     },
     'sk.S': {
+      index: false,
       type: 'keyword',
     },
   },
