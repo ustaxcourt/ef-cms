@@ -11,33 +11,15 @@ import { state } from 'cerebral';
 export const updatePetitionDetailsAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
-
-  const petitionPaymentWaivedDate = applicationContext
-    .getUtilities()
-    .createISODateStringFromObject({
-      day: form.paymentDateWaivedDay,
-      month: form.paymentDateWaivedMonth,
-      year: form.paymentDateWaivedYear,
-    });
-
-  const petitionPaymentDate = applicationContext
-    .getUtilities()
-    .createISODateStringFromObject({
-      day: form.paymentDateDay,
-      month: form.paymentDateMonth,
-      year: form.paymentDateYear,
-    });
-
-  const irsNoticeDate = applicationContext
-    .getUtilities()
-    .createISODateStringFromObject({
-      day: form.irsDay,
-      month: form.irsMonth,
-      year: form.irsYear,
-    });
+  const {
+    irsNoticeDate,
+    petitionPaymentDate,
+    petitionPaymentWaivedDate,
+  } = props;
 
   const updatedCase = await applicationContext
     .getUseCases()
