@@ -11,6 +11,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
+
 export const validatePetitionDetailsAction = ({
   applicationContext,
   get,
@@ -19,54 +20,29 @@ export const validatePetitionDetailsAction = ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  let petitionPaymentWaivedDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
-      )
-  ) {
-    petitionPaymentWaivedDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateWaivedDay,
-        month: form.paymentDateWaivedMonth,
-        year: form.paymentDateWaivedYear,
-      });
-  }
+  const petitionPaymentWaivedDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.paymentDateWaivedDay,
+      month: form.paymentDateWaivedDay,
+      year: form.paymentDateWaivedYear,
+    });
 
-  let petitionPaymentDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
-      )
-  ) {
-    petitionPaymentDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateDay,
-        month: form.paymentDateMonth,
-        year: form.paymentDateYear,
-      });
-  }
+  const petitionPaymentDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.paymentDateDay,
+      month: form.paymentDateMonth,
+      year: form.paymentDateYear,
+    });
 
-  let irsNoticeDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(`${form.irsMonth}-${form.irsDay}-${form.irsYear}`)
-  ) {
-    irsNoticeDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.irsDay,
-        month: form.irsMonth,
-        year: form.irsYear,
-      });
-  }
+  const irsNoticeDate = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: form.irsDay,
+      month: form.irsMonth,
+      year: form.irsYear,
+    });
 
   let errors = applicationContext
     .getUseCases()

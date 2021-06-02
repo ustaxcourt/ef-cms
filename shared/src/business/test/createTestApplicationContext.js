@@ -339,6 +339,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
+    validateDateAndCreateISO: jest
+      .fn()
+      .mockImplementation(DateHandler.validateDateAndCreateISO),
   });
 
   const mockGetHttpClientReturnValue = {
