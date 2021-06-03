@@ -31,12 +31,12 @@ describe('validatePetitionDetailsAction', () => {
       modules: {
         presenter,
       },
+      props: {
+        petitionPaymentDate: '2019-09-06T04:00:00.000Z',
+      },
       state: {
         caseDetail: MOCK_CASE,
         form: {
-          paymentDateDay: '01',
-          paymentDateMonth: '01',
-          paymentDateYear: '2001',
           petitionPaymentMethod: 'check',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
@@ -47,7 +47,7 @@ describe('validatePetitionDetailsAction', () => {
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
         .calls[0][1].caseDetail,
     ).toMatchObject({
-      petitionPaymentDate: '2001-01-01T05:00:00.000Z',
+      petitionPaymentDate: '2019-09-06T04:00:00.000Z',
       petitionPaymentMethod: 'check',
       petitionPaymentStatus: PAYMENT_STATUS.PAID,
     });
@@ -81,12 +81,10 @@ describe('validatePetitionDetailsAction', () => {
       modules: {
         presenter,
       },
+      props: { petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: MOCK_CASE,
         form: {
-          paymentDateWaivedDay: '01',
-          paymentDateWaivedMonth: '01',
-          paymentDateWaivedYear: '2001',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
@@ -107,13 +105,10 @@ describe('validatePetitionDetailsAction', () => {
       modules: {
         presenter,
       },
+      props: { irsNoticeDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: MOCK_CASE,
-        form: {
-          irsDay: '01',
-          irsMonth: '01',
-          irsYear: '2001',
-        },
+        form: {},
       },
     });
 
