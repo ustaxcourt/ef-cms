@@ -1,26 +1,14 @@
 const {
-  CASE_STATUS_TYPES,
-  MINUTE_ENTRIES_MAP,
-  PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  MINUTE_ENTRIES_MAP,
+  PAYMENT_STATUS,
+} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
-
-const getShouldHaveTrialSortMappingRecords = caseDetail => {
-  return (
-    (caseDetail.highPriority ||
-      caseDetail.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
-    caseDetail.preferredTrialCity &&
-    !caseDetail.blocked &&
-    (!caseDetail.automaticBlocked ||
-      (caseDetail.automaticBlocked && caseDetail.highPriority))
-  );
-};
 
 /**
  * updatePetitionDetailsInteractor
@@ -115,7 +103,7 @@ exports.updatePetitionDetailsInteractor = async (
     }
   }
 
-  if (getShouldHaveTrialSortMappingRecords(newCaseEntity)) {
+  if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
     const oldCaseEntity = new Case(oldCase, { applicationContext });
     const oldTrialSortTag = oldCaseEntity.generateTrialSortTags();
     const newTrialSortTag = newCaseEntity.generateTrialSortTags();
