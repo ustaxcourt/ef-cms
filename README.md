@@ -24,9 +24,9 @@ DAWSON is in active use and is continually updated to deploy enhancements and ne
 | Backlog | Location
 |---------|----------
 | User stories and feature work <br>(Primary backlog) | [GitHub issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues#workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/board?repos=152320868); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/extension).
-| Refactoring and bugs | [Trello cards in Flexion’s OpEx/DevEx board](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex).
+| Refactoring and bugs | [Trello cards in Flexion’s OpEx/DevEx board](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex). 🔒
 | Court-related decisions, processes, and environment work | [GitHub issues in this repository](https://github.com/ustaxcourt/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
-| Data migration script work | [GitHub issues in this repository](https://github.com/ustaxcourt/ef-cms-migration/issues); scrum board using [GitHub projects](https://github.com/ustaxcourt/ef-cms-migration/projects).
+| Court’s Authority to Operate process | [GitHub issues in this repository](https://github.com/ustaxcourt/ato/projects). 🔒
 
 ### Screenshots
 
