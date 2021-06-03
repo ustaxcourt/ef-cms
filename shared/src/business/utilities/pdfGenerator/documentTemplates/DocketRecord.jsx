@@ -10,10 +10,6 @@ const RenderAddress = ({ contact, countryTypes }) => {
 
   return (
     <>
-      {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
-      {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
-      {contact.title && <div>{contact.title}</div>}
-      {contact.additionalName && <div>{contact.additionalName}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
       {contact.address3 && <div>{contact.address3}</div>}
@@ -43,7 +39,13 @@ const RenderContact = ({ contact, countryTypes }) => {
       <tbody>
         <tr className="party-details">
           <td>{contact.contactType}</td>
-          <td>{contact.name}</td>
+          <td>
+            {contact.name}
+            {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
+            {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
+            {contact.title && <div>{contact.title}</div>}
+            {contact.additionalName && <div>{contact.additionalName}</div>}
+          </td>
           <td>
             {!contact.isAddressSealed && (
               <RenderAddress contact={contact} countryTypes={countryTypes} />
@@ -52,53 +54,48 @@ const RenderContact = ({ contact, countryTypes }) => {
               <p className="address-sealed-text">Address sealed</p>
             )}
           </td>
-          <td>{/* add more things */}</td>
-          <td></td>
-          <div>
-            {contact.isAddressSealed && (
-              <div className="sealed-icon-container">
-                <div className="sealed-icon" />
-              </div>
-            )}
-            <p className="margin-bottom-0">{contact.name}</p>
-            {!contact.isAddressSealed && (
-              <RenderAddress contact={contact} countryTypes={countryTypes} />
-            )}
-            {contact.isAddressSealed && (
-              <p className="address-sealed-text">Address sealed</p>
-            )}
-          </div>
+          <td>{practitioner.formattedName || practitioner.name}</td>
+          <td>
+            {' '}
+            <RenderAddress
+              contact={{
+                ...practitioner.contact,
+                name: practitioner.name,
+              }}
+              countryTypes={countryTypes}
+            />
+          </td>
         </tr>
       </tbody>
     </>
   );
 };
 
-const RenderPractitioner = ({ countryTypes, practitioner }) => {
-  return (
-    <div className="party-details">
-      <p className="margin-bottom-0">
-        {practitioner.formattedName || practitioner.name}
-      </p>
-      <RenderAddress
-        contact={{
-          ...practitioner.contact,
-          name: practitioner.name,
-        }}
-        countryTypes={countryTypes}
-      />
-      {practitioner.representingFormatted && (
-        <div className="extra-margin-top">
-          <strong>Representing</strong>
-          <br />
-          {practitioner.representingFormatted.map(p => (
-            <div key={p.name}>{p.name}</div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+// const RenderPractitioner = ({ countryTypes, practitioner }) => {
+//   return (
+//     <div className="party-details">
+//       <p className="margin-bottom-0">
+//         {practitioner.formattedName || practitioner.name}
+//       </p>
+//       <RenderAddress
+//         contact={{
+//           ...practitioner.contact,
+//           name: practitioner.name,
+//         }}
+//         countryTypes={countryTypes}
+//       />
+//       {practitioner.representingFormatted && (
+//         <div className="extra-margin-top">
+//           <strong>Representing</strong>
+//           <br />
+//           {practitioner.representingFormatted.map(p => (
+//             <div key={p.name}>{p.name}</div>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 const RecordDescription = ({ entry }) => {
   let additionalDescription = entry.filingsAndProceedings
@@ -166,12 +163,16 @@ export const DocketRecord = ({
           <div className="party-info-header">{caseDetail.partyType}</div>
           <table className="party-info-content">
             {caseDetail.petitioners.map(p => {
+              const privatePractitioner = caseDetail.privatePractitioners.find(
+                practitioner => practitioner.representing.includes(p.contactId),
+              );
               return (
                 <RenderContact
                   caseTitle={options.caseTitle}
                   contact={p}
                   countryTypes={countryTypes}
                   key={p.contactId}
+                  practitioner={privatePractitioner}
                 />
               );
             })}
@@ -179,7 +180,7 @@ export const DocketRecord = ({
         </div>
       )}
 
-      <div className="party-info" id="private-practitioner-contacts">
+      {/* <div className="party-info" id="private-practitioner-contacts">
         <div className="party-info-header">Petitioner Counsel</div>
         <div className="party-info-content">
           {caseDetail.privatePractitioners.length == 0 && 'Pro Se'}
@@ -195,8 +196,8 @@ export const DocketRecord = ({
             }
           })}
         </div>
-      </div>
-
+      </div> */}
+      {/*
       <div className="party-info" id="irs-practitioner-contacts">
         <div className="party-info-header">Respondent Counsel</div>
         <div className="party-info-content">
@@ -211,7 +212,7 @@ export const DocketRecord = ({
             );
           })}
         </div>
-      </div>
+      </div> */}
 
       <table id="documents">
         <thead>
