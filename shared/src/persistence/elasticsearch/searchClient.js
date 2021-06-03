@@ -48,7 +48,10 @@ exports.search = async ({ applicationContext, searchParameters }) => {
   try {
     body = await applicationContext.getSearchClient().search(searchParameters);
   } catch (searchError) {
-    applicationContext.logger.error(searchError);
+    applicationContext.logger.error(
+      'error fetching entries from elasticsearch',
+      searchError,
+    );
     throw new Error('Search client encountered an error.');
   }
 
