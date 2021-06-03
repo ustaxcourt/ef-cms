@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
@@ -239,6 +240,50 @@ describe('updatePetitionDetailsInteractor', () => {
         highPriority: true,
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should call createCaseTrialSortMappingRecords if the case type is changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        caseType: CASE_TYPES_MAP.cdp,
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        caseType: CASE_TYPES_MAP.deficiency,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Regular',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Small',
       },
     });
 
