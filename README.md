@@ -8,6 +8,14 @@
 
 **Flexion** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a digital service team that has paired with the U.S. Tax Court since the inception of DAWSON. 
 
+### User types
+
+- **Petitioners** - Citizens filing a petition with the court; if filing without legal representation, referred to as pro-se petitioner
+- **Practitioners** - Attorneys who file a petition on behalf of a petitioner
+- **Internal court users** - System users responsible for managing cases within the system, work at Tax Court
+- **IRS attorneys** - Work for IRS and file answers to petitions
+- **General public** - Can search for a case on public website and see certain details about it that are open to the public
+
 ### Project status
 
 DAWSON is in active use and is continually updated to deploy enhancements and new features.
