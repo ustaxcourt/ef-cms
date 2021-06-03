@@ -97,17 +97,17 @@ exports.addServedStampToDocument = async ({
 
   const { pageHeight, pageWidth, startingY } = getPageDimensionsWithTrim(page);
 
-  const helveticaBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.HelveticaBold,
+  const timesRomanBoldFont = pdfDoc.embedStandardFont(
+    StandardFonts.TimesRomanBold,
   );
 
   const textSize = 14 * scale;
   const padding = 3 * scale;
-  const serviceStampWidth = helveticaBoldFont.widthOfTextAtSize(
+  const serviceStampWidth = timesRomanBoldFont.widthOfTextAtSize(
     serviceStampText,
     textSize,
   );
-  const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
+  const textHeight = timesRomanBoldFont.sizeAtHeight(textSize);
   const boxWidth = serviceStampWidth + padding * 2;
   const boxHeight = textHeight + padding * 2;
   const posY = startingY + padding * 2;
@@ -136,7 +136,7 @@ exports.addServedStampToDocument = async ({
     y: rectangleY + padding,
   });
   page.drawText(serviceStampText, {
-    font: helveticaBoldFont,
+    font: timesRomanBoldFont,
     rotate,
     size: textSize,
     x: rectangleX + padding,
