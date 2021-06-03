@@ -296,6 +296,10 @@ docker run -p 3030:3030 -d appbaseio/mirage
   http.cors.allow-credentials: true
   ```
 
+## Load testing
+
+See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Maven load tests.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
