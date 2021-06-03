@@ -5002,4 +5002,98 @@ describe('Case entity', () => {
       ).toEqual(false);
     });
   });
+
+  describe('getShouldHaveTrialSortMappingRecords', () => {
+    it('returns true if the case is high priority, has a preferred trial city, and is not blocked', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: false,
+          highPriority: true,
+          preferredTrialCity: 'Somecity',
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(true);
+    });
+
+    it('returns true if the case is high priority, has a preferred trial city, is not blocked, and has automatic block', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          blocked: false,
+          highPriority: true,
+          preferredTrialCity: 'Somecity',
+          status: CASE_STATUS_TYPES.generalDocket,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(true);
+    });
+
+    it('returns true if the case status is ready for trial, has a preferred trial city, is not blocked, and has NO automatic block', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: false,
+          highPriority: false,
+          preferredTrialCity: 'Somecity',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(true);
+    });
+
+    it('returns false if the case is blocked', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: true,
+          highPriority: false,
+          preferredTrialCity: 'Somecity',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(false);
+    });
+
+    it('returns false if the case does not have a prefered trial city', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          blocked: false,
+          highPriority: false,
+          preferredTrialCity: undefined,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(false);
+    });
+
+    it('returns false if the case status is ready for trial, has a preferred trial city, is not blocked, and has automatic block', () => {
+      const caseEntity = new Case(
+        {
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          blocked: true,
+          highPriority: false,
+          preferredTrialCity: 'Somecity',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        },
+        { applicationContext },
+      );
+
+      expect(caseEntity.getShouldHaveTrialSortMappingRecords()).toEqual(false);
+    });
+  });
 });

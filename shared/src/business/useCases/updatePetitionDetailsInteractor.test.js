@@ -293,6 +293,27 @@ describe('updatePetitionDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should NOT call createCaseTrialSortMappingRecords if there are no changes that would alter the trial sort tags', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Regular',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+  });
+
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {
     applicationContext
       .getPersistenceGateway()
