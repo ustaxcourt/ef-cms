@@ -1,4 +1,5 @@
 import {
+  CASE_TYPES_MAP,
   FILING_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -244,5 +245,46 @@ describe('start a case computed', () => {
     });
 
     expect(result.contactSecondaryLabel).toEqual('Contact Information');
+  });
+
+  describe('formattedCaseType', () => {
+    it('should be Disclosure if form.caseType is Disclosure1', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: 'Disclosure1',
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.disclosure);
+    });
+
+    it('should be Disclosure if form.caseType is Disclosure2', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: 'Disclosure2',
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.disclosure);
+    });
+
+    it('should be form.caseType if form.caseType is not Disclosure1 or Disclosure2', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: CASE_TYPES_MAP.deficiency,
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.deficiency);
+    });
   });
 });

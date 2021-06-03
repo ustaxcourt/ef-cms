@@ -17,13 +17,12 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   REVISED_TRANSCRIPT_EVENT_CODE,
-  SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
+const { isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
@@ -152,13 +151,6 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
-
-  if (formattedEntry.servedPartiesCode !== SERVED_PARTIES_CODES.PETITIONER) {
-    // Served parties code - R = Respondent, P = Petitioner, B = Both
-    formattedEntry.servedPartiesCode = getServedPartiesCode(
-      formattedEntry.servedParties,
-    );
-  }
 
   if (
     formattedEntry.isCourtIssuedDocument &&

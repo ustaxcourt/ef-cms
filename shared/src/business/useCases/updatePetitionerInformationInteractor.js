@@ -7,6 +7,7 @@ const {
 } = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
@@ -132,12 +133,10 @@ const createWorkItemForChange = async ({
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemAndAddToSectionInbox({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
+  });
 };
 
 const generatePaperServicePdf = async ({
@@ -371,7 +370,9 @@ exports.updatePetitionerInformationInteractor = async (
     (primaryChange && !newContactPrimary.isAddressSealed) ||
     (secondaryChange && !newContactSecondary.isAddressSealed)
   ) {
-    const partyWithPaperService = caseEntity.hasPartyWithPaperService();
+    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     if (primaryChange) {
       const privatePractitionersRepresentingContact = caseEntity.privatePractitioners.some(

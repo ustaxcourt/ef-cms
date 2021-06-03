@@ -2,16 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
   DOCKET_SECTION,
-  PARTY_TYPES,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -26,47 +24,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     caseRecord = {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
-      createdAt: '',
+      ...MOCK_CASE,
       docketEntries: [
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: '45678-18',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          userId: mockUserId,
-        },
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: '45678-18',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          userId: mockUserId,
-        },
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: '45678-18',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          userId: mockUserId,
-        },
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
           docketNumber: '45678-18',
@@ -98,13 +57,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           userId: mockUserId,
         },
       ],
-      docketNumber: '45678-18',
-      filingType: 'Myself',
-      partyType: PARTY_TYPES.petitioner,
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      role: ROLES.petitioner,
-      userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
     applicationContext
@@ -144,7 +96,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call countPagesInDocument, updateCase, createUserInboxRecord, and createSectionInboxRecord', async () => {
+  it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
@@ -167,10 +119,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().createUserInboxRecord,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createSectionInboxRecord,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
   });
 
@@ -240,7 +189,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should delete the draftOrderState from the docketEntry', async () => {
-    const docketEntryToUpdate = caseRecord.docketEntries[5];
+    const docketEntryToUpdate = caseRecord.docketEntries[2];
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: docketEntryToUpdate.docketEntryId,
