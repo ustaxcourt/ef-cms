@@ -44,15 +44,42 @@ exports.advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const docketEntryQueryParams = [
+  const filter = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    { term: { 'isStricken.BOOL': false } },
+    { terms: { 'eventCode.S': documentEventCodes } },
     {
-      bool: {
-        must: [{ terms: { 'eventCode.S': documentEventCodes } }],
-        must_not: [{ term: { 'isStricken.BOOL': true } }],
+      exists: {
+        field: 'servedAt',
       },
     },
   ];
-  const caseMustNot = [];
+  if (opinionType) {
+    filter.push({ term: { 'documentType.S': opinionType } });
+  }
+
+  if (endDate && startDate) {
+    filter.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+  } else if (startDate) {
+    filter.push({
+      range: {
+        'filingDate.S': {
+          format: 'strict_date_time', // ISO-8601 time stamp
+          gte: startDate,
+        },
+      },
+    });
+  }
+
+  const docketEntryQueryParams = [];
 
   if (keyword) {
     docketEntryQueryParams.push({
@@ -64,9 +91,28 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
+  const caseFilter = [];
+  const caseTextQuery = [];
+
   if (omitSealed) {
-    caseMustNot.push({
-      term: { 'isSealed.BOOL': true },
+    caseFilter.push({
+      term: { 'isSealed.BOOL': false },
+    });
+  }
+  if (docketNumber) {
+    caseFilter.push({
+      term: { 'docketNumber.S': docketNumber },
+    });
+  }
+
+  if (caseTitleOrPetitioner) {
+    caseTextQuery.push({
+      simple_query_string: {
+        default_operator: 'and',
+
+        fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
+        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
+      },
     });
   }
 
@@ -79,25 +125,10 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { bool: { must_not: caseMustNot } },
+      query: { bool: { filter: caseFilter, must: caseTextQuery } },
       score: true,
     },
   };
-
-  if (docketNumber) {
-    caseQueryParams.has_parent.query.bool.must = {
-      term: { 'docketNumber.S': docketNumber },
-    };
-  } else if (caseTitleOrPetitioner) {
-    caseQueryParams.has_parent.query.bool.must = {
-      simple_query_string: {
-        default_operator: 'and',
-
-        fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
-        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
-      },
-    };
-  }
 
   docketEntryQueryParams.push(caseQueryParams);
 
@@ -130,34 +161,6 @@ exports.advancedDocumentSearch = async ({
     }
   }
 
-  if (opinionType) {
-    docketEntryQueryParams.push({
-      term: { 'documentType.S': opinionType },
-    });
-  }
-
-  if (startDate) {
-    docketEntryQueryParams.push({
-      range: {
-        'filingDate.S': {
-          format: 'strict_date_time', // ISO-8601 time stamp
-          gte: startDate,
-        },
-      },
-    });
-  }
-
-  if (endDate && startDate) {
-    docketEntryQueryParams.push({
-      range: {
-        'filingDate.S': {
-          format: 'strict_date_time', // ISO-8601 time stamp
-          lte: endDate,
-        },
-      },
-    });
-  }
-
   let sort;
   let sortOrder = 'desc';
 
@@ -188,15 +191,8 @@ exports.advancedDocumentSearch = async ({
       from,
       query: {
         bool: {
-          must: [
-            { term: { 'entityName.S': 'DocketEntry' } },
-            {
-              exists: {
-                field: 'servedAt',
-              },
-            },
-            ...docketEntryQueryParams,
-          ],
+          filter,
+          must: docketEntryQueryParams,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
