@@ -50,7 +50,7 @@ const RenderContact = ({
               <p className="address-sealed-text">Address sealed</p>
             )}
           </td>
-          <td>{practitioner?.formattedName || practitioner?.name || 'None'}</td>
+          <td>{practitioner?.formattedName || 'None'}</td>
           <td>
             {practitioner ? (
               <>
@@ -190,33 +190,27 @@ export const DocketRecord = ({
       )}
 
       <div className="party-info" id="irs-practitioner-contacts">
-        <div className="party-info-header">Respondent Counsel</div>
-        <div className="party-info-content">
-          <table>
-            {caseDetail.irsPractitioners.length == 0 && 'None'}
-            {caseDetail.irsPractitioners.map(practitioner => {
-              <>
-                <thead>
-                  <tr>
-                    <th>Respondent Counsel</th>
-                    <th>Respondent Counsel Contact</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="party-details">
-                    <td>{practitioner.name}</td>
-                    <td>
-                      {practitioner.email && practitioner.email}
-                      {practitioner.contact?.phone &&
-                        practitioner.contact.phone}
-                    </td>
-                  </tr>
-                </tbody>
-                );
-              </>;
+        <table>
+          <thead>
+            <tr>
+              <th>Respondent Counsel</th>
+              <th>Respondent Counsel Contact</th>
+            </tr>
+          </thead>
+          {caseDetail.irsPractitioners.length === 0 && 'None'}
+
+          <tbody>
+            {caseDetail.irsPractitioners.forEach(pppp => {
+              <tr>
+                <td>{pppp.name}</td>
+                <td>
+                  {pppp.email && pppp.email}
+                  {pppp.contact?.phone && pppp.contact.phone}
+                </td>
+              </tr>;
             })}
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
 
       <table id="documents">
