@@ -60,7 +60,6 @@ module.exports = {
       type: 'boolean',
     },
     'isStricken.BOOL': {
-      index: false,
       type: 'boolean',
     },
     'judge.S': {
