@@ -48,7 +48,7 @@ exports.advancedDocumentSearch = async ({
     {
       bool: {
         must: [{ terms: { 'eventCode.S': documentEventCodes } }],
-        // must_not: [{ term: { 'isStricken.BOOL': true } }],
+        must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
@@ -202,7 +202,7 @@ exports.advancedDocumentSearch = async ({
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort,
     },
-    index: 'efcms-docket-entry-more-shards',
+    index: process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry',
   };
 
   const { results, total } = await search({
