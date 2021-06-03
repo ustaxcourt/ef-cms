@@ -160,7 +160,7 @@ export const DocketRecord = ({
           <table>
             <thead>
               <tr>
-                <th aria-label="docket number">Role</th>
+                <th>Role</th>
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Counsel</th>
@@ -171,8 +171,6 @@ export const DocketRecord = ({
               const privatePractitioner = caseDetail.privatePractitioners.find(
                 practitioner => practitioner.representing.includes(p.contactId),
               );
-
-              console.log('yo', caseDetail);
 
               return (
                 <RenderContact
@@ -197,18 +195,30 @@ export const DocketRecord = ({
               <th>Respondent Counsel Contact</th>
             </tr>
           </thead>
-          {caseDetail.irsPractitioners.length === 0 && 'None'}
 
           <tbody>
-            {caseDetail.irsPractitioners.forEach(pppp => {
+            {caseDetail.irsPractitioners.length > 0 ? (
+              caseDetail.irsPractitioners.map(irsPractitioner => {
+                return (
+                  <tr key={irsPractitioner.index}>
+                    <td>{irsPractitioner.name}</td>
+                    <td>
+                      <div>
+                        {irsPractitioner.email && irsPractitioner.email}
+                      </div>
+                      <div>
+                        {irsPractitioner.contact?.phone &&
+                          irsPractitioner.contact.phone}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
               <tr>
-                <td>{pppp.name}</td>
-                <td>
-                  {pppp.email && pppp.email}
-                  {pppp.contact?.phone && pppp.contact.phone}
-                </td>
-              </tr>;
-            })}
+                <td>None</td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
