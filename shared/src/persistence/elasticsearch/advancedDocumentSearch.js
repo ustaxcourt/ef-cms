@@ -48,7 +48,7 @@ exports.advancedDocumentSearch = async ({
     {
       bool: {
         must: [{ terms: { 'eventCode.S': documentEventCodes } }],
-        must_not: [{ term: { 'isStricken.BOOL': true } }],
+        // must_not: [{ term: { 'isStricken.BOOL': true } }],
       },
     },
   ];
