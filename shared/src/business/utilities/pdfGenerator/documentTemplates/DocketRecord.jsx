@@ -24,7 +24,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, countryTypes }) => {
+const RenderContact = ({ contact, countryTypes, practitioner }) => {
   return (
     <>
       <thead>
@@ -56,14 +56,12 @@ const RenderContact = ({ contact, countryTypes }) => {
           </td>
           <td>{practitioner.formattedName || practitioner.name}</td>
           <td>
-            {' '}
-            <RenderAddress
-              contact={{
-                ...practitioner.contact,
-                name: practitioner.name,
-              }}
-              countryTypes={countryTypes}
-            />
+            <div>
+              {practitioner.contact.phone && (
+                <p>{practitioner.contact.phone}</p>
+              )}
+              {practitioner.contact.email && <p>{practitioner.email}</p>}
+            </div>
           </td>
         </tr>
       </tbody>
@@ -160,12 +158,13 @@ export const DocketRecord = ({
 
       {options.includePartyDetail && (
         <div className="party-info" id="petitioner-contacts">
-          <div className="party-info-header">{caseDetail.partyType}</div>
-          <table className="party-info-content">
+          <table>
             {caseDetail.petitioners.map(p => {
-              const privatePractitioner = caseDetail.privatePractitioners.find(
-                practitioner => practitioner.representing.includes(p.contactId),
-              );
+              const privatePractitioner =
+                caseDetail.privatePractitioners.find(practitioner =>
+                  practitioner.representing.includes(p.contactId),
+                ) || {};
+              console.log('privatePractitioner', privatePractitioner);
               return (
                 <RenderContact
                   caseTitle={options.caseTitle}
