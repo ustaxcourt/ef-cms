@@ -50,10 +50,16 @@ const RenderContact = ({
               <p className="address-sealed-text">Address sealed</p>
             )}
           </td>
-          <td>{practitioner.formattedName || practitioner.name}</td>
+          <td>{practitioner?.formattedName || practitioner?.name || 'None'}</td>
           <td>
-            {practitioner.email && practitioner.email}
-            {practitioner.contact?.phone && practitioner.contact.phone}
+            {practitioner ? (
+              <>
+                {practitioner.email && practitioner.email}
+                {practitioner.contact?.phone && practitioner.contact.phone}
+              </>
+            ) : (
+              <>None</>
+            )}
           </td>
         </tr>
       </tbody>
@@ -162,14 +168,12 @@ export const DocketRecord = ({
               </tr>
             </thead>
             {caseDetail.petitioners.map(p => {
-              const privatePractitioner =
-                caseDetail.privatePractitioners.find(practitioner =>
-                  practitioner.representing.includes(p.contactId),
-                ) || {};
+              const privatePractitioner = caseDetail.privatePractitioners.find(
+                practitioner => practitioner.representing.includes(p.contactId),
+              );
 
-              {
-                console.log(caseDetail);
-              }
+              console.log('yo', caseDetail);
+
               return (
                 <RenderContact
                   caseTitle={options.caseTitle}
