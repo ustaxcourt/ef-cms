@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {object} providers.get the cerebral store used for getting state.form
+ * @param {object} providers.props the cerebral props object containing props.irsNoticeDate, props.petitionPaymentDate, and props.petitionPaymentWaivedDate
  * @returns {object} alertSuccess, docketNumber, tab, caseDetail
  */
 export const updatePetitionDetailsAction = async ({
