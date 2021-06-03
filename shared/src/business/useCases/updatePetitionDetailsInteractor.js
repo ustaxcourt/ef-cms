@@ -11,6 +11,17 @@ const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
+const getShouldHaveTrialSortMappingRecords = caseDetail => {
+  return (
+    (caseDetail.highPriority ||
+      caseDetail.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    caseDetail.preferredTrialCity &&
+    !caseDetail.blocked &&
+    (!caseDetail.automaticBlocked ||
+      (caseDetail.automaticBlocked && caseDetail.highPriority))
+  );
+};
+
 /**
  * updatePetitionDetailsInteractor
  *
@@ -51,7 +62,7 @@ exports.updatePetitionDetailsInteractor = async (
   const isWaived =
     editableFields.petitionPaymentStatus === PAYMENT_STATUS.WAIVED;
 
-  const newCase = new Case(
+  const newCaseEntity = new Case(
     {
       ...oldCase,
       ...editableFields,
@@ -68,13 +79,13 @@ exports.updatePetitionDetailsInteractor = async (
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCase.addDocketEntry(
+      newCaseEntity.addDocketEntry(
         new DocketEntry(
           {
             documentTitle: 'Filing Fee Paid',
             documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
-            filingDate: newCase.petitionPaymentDate,
+            filingDate: newCaseEntity.petitionPaymentDate,
             isFileAttached: false,
             isMinuteEntry: true,
             isOnDocketRecord: true,
@@ -85,13 +96,13 @@ exports.updatePetitionDetailsInteractor = async (
         ),
       );
     } else if (isWaived) {
-      newCase.addDocketEntry(
+      newCaseEntity.addDocketEntry(
         new DocketEntry(
           {
             documentTitle: 'Filing Fee Waived',
             documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
             eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
-            filingDate: newCase.petitionPaymentWaivedDate,
+            filingDate: newCaseEntity.petitionPaymentWaivedDate,
             isFileAttached: false,
             isMinuteEntry: true,
             isOnDocketRecord: true,
@@ -104,29 +115,30 @@ exports.updatePetitionDetailsInteractor = async (
     }
   }
 
-  if (
-    oldCase.preferredTrialCity !== newCase.preferredTrialCity &&
-    (newCase.highPriority ||
-      newCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
-    newCase.preferredTrialCity &&
-    !newCase.blocked &&
-    (!newCase.automaticBlocked ||
-      (newCase.automaticBlocked && newCase.highPriority))
-  ) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: newCase.generateTrialSortTags(),
-        docketNumber: newCase.validate().toRawObject().docketNumber,
-      });
+  if (getShouldHaveTrialSortMappingRecords(newCaseEntity)) {
+    const oldCaseEntity = new Case(oldCase, { applicationContext });
+    const oldTrialSortTag = oldCaseEntity.generateTrialSortTags();
+    const newTrialSortTag = newCaseEntity.generateTrialSortTags();
+
+    // The nonHybrid sort tag will be comprised of the trial city, procedure type, and case type
+    // so we can simply check if this tag changes to determine if new records should be created
+    // rather than looking at the changed fields directly
+    if (oldTrialSortTag.nonHybrid !== newTrialSortTag.nonHybrid) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseSortTags: newCaseEntity.generateTrialSortTags(),
+          docketNumber: newCaseEntity.validate().toRawObject().docketNumber,
+        });
+    }
   }
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase,
+      caseToUpdate: newCaseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
