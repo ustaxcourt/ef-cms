@@ -30,22 +30,47 @@ const RenderAddress = ({ contact, countryTypes }) => {
 
 const RenderContact = ({ contact, countryTypes }) => {
   return (
-    <div className="party-details">
-      <div>
-        {contact.isAddressSealed && (
-          <div className="sealed-icon-container">
-            <div className="sealed-icon" />
+    <>
+      <thead>
+        <tr>
+          <th aria-label="docket number">Role</th>
+          <th>Name</th>
+          <th>Contact</th>
+          <th>Counsel</th>
+          <th>Counsel contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr className="party-details">
+          <td>{contact.contactType}</td>
+          <td>{contact.name}</td>
+          <td>
+            {!contact.isAddressSealed && (
+              <RenderAddress contact={contact} countryTypes={countryTypes} />
+            )}
+            {contact.isAddressSealed && (
+              <p className="address-sealed-text">Address sealed</p>
+            )}
+          </td>
+          <td>{/* add more things */}</td>
+          <td></td>
+          <div>
+            {contact.isAddressSealed && (
+              <div className="sealed-icon-container">
+                <div className="sealed-icon" />
+              </div>
+            )}
+            <p className="margin-bottom-0">{contact.name}</p>
+            {!contact.isAddressSealed && (
+              <RenderAddress contact={contact} countryTypes={countryTypes} />
+            )}
+            {contact.isAddressSealed && (
+              <p className="address-sealed-text">Address sealed</p>
+            )}
           </div>
-        )}
-        <p className="margin-bottom-0">{contact.name}</p>
-        {!contact.isAddressSealed && (
-          <RenderAddress contact={contact} countryTypes={countryTypes} />
-        )}
-        {contact.isAddressSealed && (
-          <p className="address-sealed-text">Address sealed</p>
-        )}
-      </div>
-    </div>
+        </tr>
+      </tbody>
+    </>
   );
 };
 
@@ -139,7 +164,7 @@ export const DocketRecord = ({
       {options.includePartyDetail && (
         <div className="party-info" id="petitioner-contacts">
           <div className="party-info-header">{caseDetail.partyType}</div>
-          <div className="party-info-content">
+          <table className="party-info-content">
             {caseDetail.petitioners.map(p => {
               return (
                 <RenderContact
@@ -150,7 +175,7 @@ export const DocketRecord = ({
                 />
               );
             })}
-          </div>
+          </table>
         </div>
       )}
 
