@@ -217,12 +217,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
             }
 
             saveWorkItems.push(
-              applicationContext
-                .getPersistenceGateway()
-                .saveWorkItemAndAddToSectionInbox({
-                  applicationContext,
-                  workItem: workItem.validate().toRawObject(),
-                }),
+              applicationContext.getPersistenceGateway().saveWorkItem({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              }),
             );
           }
 

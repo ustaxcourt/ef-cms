@@ -24,5 +24,5 @@ exports.setWorkItemAsReadInteractor = async (
 
   return await applicationContext
     .getPersistenceGateway()
-    .setWorkItemAsRead({ applicationContext, userId: user.userId, workItemId });
+    .setWorkItemAsRead({ applicationContext, workItemId });
 };

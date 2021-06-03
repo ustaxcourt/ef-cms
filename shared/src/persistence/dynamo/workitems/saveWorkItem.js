@@ -1,19 +1,27 @@
 const { put } = require('../../dynamodbClientService');
 
 /**
- * createUserInboxRecord
+ * saveWorkItem
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
  */
-exports.createUserInboxRecord = async ({ applicationContext, workItem }) => {
+exports.saveWorkItem = async ({ applicationContext, workItem }) => {
   await put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
-      pk: `user|${workItem.assigneeId}`,
+      pk: `work-item|${workItem.workItemId}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,
+    },
+    applicationContext,
+  });
+
+  await put({
+    Item: {
+      pk: `case|${workItem.docketNumber}`,
+      sk: `work-item|${workItem.workItemId}`,
     },
     applicationContext,
   });

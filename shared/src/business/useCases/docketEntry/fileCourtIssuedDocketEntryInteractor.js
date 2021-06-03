@@ -144,11 +144,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     );
   } else {
     saveItems.push(
-      applicationContext.getPersistenceGateway().createUserInboxRecord({
-        applicationContext,
-        workItem: rawValidWorkItem,
-      }),
-      applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext.getPersistenceGateway().saveWorkItem({
         applicationContext,
         workItem: rawValidWorkItem,
       }),

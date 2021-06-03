@@ -92,11 +92,7 @@ exports.updateCourtIssuedDocketEntryInteractor = async (
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().createUserInboxRecord({
-      applicationContext,
-      workItem: rawValidWorkItem,
-    }),
-    applicationContext.getPersistenceGateway().createSectionInboxRecord({
+    applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
       workItem: rawValidWorkItem,
     }),

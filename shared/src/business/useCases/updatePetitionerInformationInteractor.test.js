@@ -530,8 +530,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -570,8 +569,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -606,8 +604,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).not.toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -643,8 +640,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).not.toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -680,8 +676,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -718,8 +713,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -759,8 +753,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -809,8 +802,7 @@ describe('update petitioner contact information on a case', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(

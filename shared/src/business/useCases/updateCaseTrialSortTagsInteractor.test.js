@@ -35,7 +35,7 @@ describe('Update case trial sort tags', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).not.toBeCalled();
   });
 
@@ -48,7 +48,7 @@ describe('Update case trial sort tags', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toBeCalled();
   });
 

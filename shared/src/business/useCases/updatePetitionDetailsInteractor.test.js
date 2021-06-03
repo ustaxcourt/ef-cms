@@ -97,7 +97,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is ready for trial and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is ready for trial and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
@@ -112,7 +112,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -120,7 +120,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -140,7 +140,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -220,7 +220,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(wavedDocument).toBeTruthy();
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -244,7 +244,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
 
