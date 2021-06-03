@@ -24,21 +24,17 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, countryTypes, practitioner }) => {
+const RenderContact = ({
+  contact,
+  contactTitles,
+  countryTypes,
+  practitioner,
+}) => {
   return (
     <>
-      <thead>
-        <tr>
-          <th aria-label="docket number">Role</th>
-          <th>Name</th>
-          <th>Contact</th>
-          <th>Counsel</th>
-          <th>Counsel contact</th>
-        </tr>
-      </thead>
       <tbody>
         <tr className="party-details">
-          <td>{contact.contactType}</td>
+          <td>{contactTitles[contact.contactType]}</td>
           <td>
             {contact.name}
             {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
@@ -56,12 +52,8 @@ const RenderContact = ({ contact, countryTypes, practitioner }) => {
           </td>
           <td>{practitioner.formattedName || practitioner.name}</td>
           <td>
-            <div>
-              {practitioner.contact.phone && (
-                <p>{practitioner.contact.phone}</p>
-              )}
-              {practitioner.contact.email && <p>{practitioner.email}</p>}
-            </div>
+            {practitioner.email && practitioner.email}
+            {practitioner.contact?.phone && practitioner.contact.phone}
           </td>
         </tr>
       </tbody>
@@ -142,6 +134,7 @@ const ServedDate = ({ document }) => {
 
 export const DocketRecord = ({
   caseDetail,
+  contactTitles,
   countryTypes,
   entries,
   options,
@@ -159,16 +152,29 @@ export const DocketRecord = ({
       {options.includePartyDetail && (
         <div className="party-info" id="petitioner-contacts">
           <table>
+            <thead>
+              <tr>
+                <th aria-label="docket number">Role</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th>Counsel</th>
+                <th>Counsel contact</th>
+              </tr>
+            </thead>
             {caseDetail.petitioners.map(p => {
               const privatePractitioner =
                 caseDetail.privatePractitioners.find(practitioner =>
                   practitioner.representing.includes(p.contactId),
                 ) || {};
-              console.log('privatePractitioner', privatePractitioner);
+
+              {
+                console.log(caseDetail);
+              }
               return (
                 <RenderContact
                   caseTitle={options.caseTitle}
                   contact={p}
+                  contactTitles={contactTitles}
                   countryTypes={countryTypes}
                   key={p.contactId}
                   practitioner={privatePractitioner}
@@ -179,39 +185,35 @@ export const DocketRecord = ({
         </div>
       )}
 
-      {/* <div className="party-info" id="private-practitioner-contacts">
-        <div className="party-info-header">Petitioner Counsel</div>
-        <div className="party-info-content">
-          {caseDetail.privatePractitioners.length == 0 && 'Pro Se'}
-          {caseDetail.privatePractitioners.map(practitioner => {
-            if (practitioner.formattedName) {
-              return (
-                <RenderPractitioner
-                  countryTypes={countryTypes}
-                  key={practitioner.barNumber}
-                  practitioner={practitioner}
-                />
-              );
-            }
-          })}
-        </div>
-      </div> */}
-      {/*
       <div className="party-info" id="irs-practitioner-contacts">
         <div className="party-info-header">Respondent Counsel</div>
         <div className="party-info-content">
-          {caseDetail.irsPractitioners.length == 0 && 'None'}
-          {caseDetail.irsPractitioners.map(practitioner => {
-            return (
-              <RenderPractitioner
-                countryTypes={countryTypes}
-                key={practitioner.barNumber}
-                practitioner={practitioner}
-              />
-            );
-          })}
+          <table>
+            {caseDetail.irsPractitioners.length == 0 && 'None'}
+            {caseDetail.irsPractitioners.map(practitioner => {
+              <>
+                <thead>
+                  <tr>
+                    <th>Respondent Counsel</th>
+                    <th>Respondent Counsel Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="party-details">
+                    <td>{practitioner.name}</td>
+                    <td>
+                      {practitioner.email && practitioner.email}
+                      {practitioner.contact?.phone &&
+                        practitioner.contact.phone}
+                    </td>
+                  </tr>
+                </tbody>
+                );
+              </>;
+            })}
+          </table>
         </div>
-      </div> */}
+      </div>
 
       <table id="documents">
         <thead>

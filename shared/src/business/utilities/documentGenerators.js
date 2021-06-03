@@ -1,8 +1,11 @@
 const {
+  CONTACT_TYPE_TITLES,
+  COUNTRY_TYPES,
+} = require('../entities/EntityConstants');
+const {
   reactTemplateGenerator,
 } = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { COUNTRY_TYPES } = require('../entities/EntityConstants');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
 
 const addressLabelCoverSheet = async ({ applicationContext, data }) => {
@@ -131,6 +134,7 @@ const coverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+//here 2
 const docketRecord = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
@@ -145,6 +149,7 @@ const docketRecord = async ({ applicationContext, data }) => {
     componentName: 'DocketRecord',
     data: {
       caseDetail,
+      contactTitles: CONTACT_TYPE_TITLES,
       countryTypes: COUNTRY_TYPES,
       entries,
       options: {

@@ -56,6 +56,7 @@ exports.generateDocketRecordPdfInteractor = async (
     caseEntity = new Case(caseSource, { applicationContext });
   }
 
+  //here is where we generate
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
