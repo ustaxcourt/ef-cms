@@ -75,6 +75,9 @@ exports.applicationContext = applicationContext;
 
 exports.handler = async event => {
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
+    applicationContext.logger.info(
+      '------------we are here during practitioner new accct creation',
+    );
     const { email, name, sub: userId } = event.request.userAttributes;
 
     const user = await applicationContext
@@ -90,6 +93,9 @@ exports.handler = async event => {
       user,
     });
   } else if (event.triggerSource === 'PostAuthentication_Authentication') {
+    applicationContext.logger.info(
+      '------------we are SECONDD here during practitioner new accct creation',
+    );
     const { email, sub } = event.request.userAttributes;
     const userId = event.request.userAttributes['custom:userId'] || sub;
 
