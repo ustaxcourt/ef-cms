@@ -8,11 +8,17 @@ exports.getPageDimensions = page => {
 };
 
 exports.getCropBoxCoordinates = page => {
-  const { x = 0, y = 0 } = page.getCropBox();
-  return { x, y };
+  const sizeCropBox = page.getCropBox();
+
+  return {
+    pageHeight: sizeCropBox.height,
+    pageWidth: sizeCropBox.width,
+    x: sizeCropBox.x,
+    y: sizeCropBox.y,
+  };
 };
 
-const computeCoordinates = ({
+exports.computeCoordinates = ({
   boxHeight,
   boxWidth,
   cropBoxCoordinates,
@@ -27,7 +33,7 @@ const computeCoordinates = ({
   textHeight,
   titleTextWidth,
 }) => {
-  let rotationRads = (pageRotation * Math.PI) / 180;
+  const rotationRads = (pageRotation * Math.PI) / 180;
   let coordsFromBottomLeft = {
     x: posX / scale,
   };
@@ -102,8 +108,6 @@ const computeCoordinates = ({
   };
 };
 
-exports.computeCoordinates = computeCoordinates;
-
 /**
  * generateSignedDocumentInteractor
  *
@@ -170,7 +174,7 @@ exports.generateSignedDocumentInteractor = async ({
     sigNameY,
     sigTitleX,
     sigTitleY,
-  } = computeCoordinates({
+  } = this.computeCoordinates({
     boxHeight,
     boxWidth,
     cropBoxCoordinates: exports.getCropBoxCoordinates(page),

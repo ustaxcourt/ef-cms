@@ -1,37 +1,22 @@
-const getPageDimensionsWithTrim = page => {
-  const sizeCropBox = page.getCropBox();
-  const sizeTrimBox = page.getTrimBox();
-  return {
-    pageHeight: sizeCropBox.height,
-    pageWidth: sizeTrimBox.width,
-    startingY: sizeCropBox.y,
-  };
-};
+const {
+  getCropBoxCoordinates,
+} = require('../generateSignedDocumentInteractor');
 
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
+  cropBoxCoordinates,
   pageHeight,
   pageRotation,
   pageWidth,
-  posY,
 }) => {
-  let rotationRads = (pageRotation * Math.PI) / 180;
-  let coordsFromBottomLeft = {};
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.x = pageHeight / 2 - boxWidth / 2;
-  } else {
-    coordsFromBottomLeft.x = pageWidth / 2 - boxWidth / 2;
-  }
-
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  } else {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  }
+  const rotationRads = (pageRotation * Math.PI) / 180;
+  const coordsFromBottomLeft = {
+    x: pageWidth / 2 - boxWidth / 2,
+    y: cropBoxCoordinates.y + boxHeight + PADDING * 2,
+  };
 
   let rectangleX, rectangleY;
-
   if (pageRotation === 90) {
     rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
@@ -61,8 +46,14 @@ const computeCoordinates = ({
     rectangleX = coordsFromBottomLeft.x;
     rectangleY = coordsFromBottomLeft.y;
   }
-  return { rectangleX, rectangleY };
+  return {
+    rectangleX: rectangleX + cropBoxCoordinates.x,
+    rectangleY: rectangleY + cropBoxCoordinates.y,
+  };
 };
+
+const TEXT_SIZE = 14;
+const PADDING = 3;
 
 /**
  * addServedStampToDocument
@@ -75,14 +66,10 @@ const computeCoordinates = ({
 exports.addServedStampToDocument = async ({
   applicationContext,
   pdfData,
-  serviceStampText,
+  serviceStampText = `SERVED ${applicationContext
+    .getUtilities()
+    .formatNow('MM/DD/YY')}`,
 }) => {
-  if (!serviceStampText) {
-    serviceStampText = `SERVED ${applicationContext
-      .getUtilities()
-      .formatNow('MM/DD/YY')}`;
-  }
-
   const {
     degrees,
     PDFDocument,
@@ -90,57 +77,51 @@ exports.addServedStampToDocument = async ({
     StandardFonts,
   } = await applicationContext.getPdfLib();
 
-  const scale = 1;
   const pdfDoc = await PDFDocument.load(pdfData);
   const pages = pdfDoc.getPages();
   const page = pages[0];
-
-  const { pageHeight, pageWidth, startingY } = getPageDimensionsWithTrim(page);
 
   const timesRomanBoldFont = pdfDoc.embedStandardFont(
     StandardFonts.TimesRomanBold,
   );
 
-  const textSize = 14 * scale;
-  const padding = 3 * scale;
   const serviceStampWidth = timesRomanBoldFont.widthOfTextAtSize(
     serviceStampText,
-    textSize,
+    TEXT_SIZE,
   );
-  const textHeight = timesRomanBoldFont.sizeAtHeight(textSize);
-  const boxWidth = serviceStampWidth + padding * 2;
-  const boxHeight = textHeight + padding * 2;
-  const posY = startingY + padding * 2;
+  const textHeight = timesRomanBoldFont.sizeAtHeight(TEXT_SIZE);
+  const boxWidth = serviceStampWidth + PADDING * 2;
+  const boxHeight = textHeight + PADDING * 2;
 
   const rotationAngle = page.getRotation().angle;
-  const shouldRotateStamp = rotationAngle !== 0;
-  const rotateSignatureDegrees = degrees(rotationAngle);
+  const rotateStampDegrees = degrees(rotationAngle || 0);
+
+  const { pageHeight, pageWidth, x, y } = getCropBoxCoordinates(page);
 
   const { rectangleX, rectangleY } = computeCoordinates({
     boxHeight,
     boxWidth,
+    cropBoxCoordinates: { x, y },
     pageHeight,
     pageRotation: rotationAngle,
     pageWidth,
-    posY,
   });
-
-  const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
 
   page.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
-    rotate,
+    rotate: rotateStampDegrees,
     width: boxWidth,
     x: rectangleX,
-    y: rectangleY + padding,
+    y: rectangleY + PADDING,
   });
+
   page.drawText(serviceStampText, {
     font: timesRomanBoldFont,
-    rotate,
-    size: textSize,
-    x: rectangleX + padding,
-    y: rectangleY + padding * 2,
+    rotate: rotateStampDegrees,
+    size: TEXT_SIZE,
+    x: rectangleX + PADDING,
+    y: rectangleY + PADDING * 2,
   });
 
   const pdfBytes = await pdfDoc.save({
