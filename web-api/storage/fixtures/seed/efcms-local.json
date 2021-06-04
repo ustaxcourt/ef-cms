@@ -14095,7 +14095,8 @@
     },
     "name": "Test Private Practitioner",
     "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "case|102-20"
+    "pk": "case|102-20",
+    "email": "privatePractitioner1@example.com"
   },
   {
     "sk": "work-item|77d8449a-ffe1-48e5-b056-a6112a819a4b",
@@ -16629,7 +16630,8 @@
     "middleName": "Private",
     "firmName": "Bogus Barristers",
     "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "originalBarState": "Oregon"
+    "originalBarState": "Oregon",
+    "email": "privatePractitioner1@example.com"
   },
   {
     "sk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
