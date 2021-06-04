@@ -14,7 +14,9 @@ const {
  * @returns {string} the generated docket number
  */
 exports.getNextDocketNumber = async ({ applicationContext, year }) => {
-  const id = await applicationContext.getPersistenceGateway().incrementCounter({
+  const {
+    id,
+  } = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
     key: 'docketNumberCounter',
     year,

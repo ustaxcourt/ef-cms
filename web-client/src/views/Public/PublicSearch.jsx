@@ -69,12 +69,7 @@ export const PublicSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab
-              disabled
-              id="tab-order"
-              tabName="order"
-              title="Order (Coming Soon)"
-            >
+            <Tab id="tab-order" tabName="order" title="Order">
               <OrderSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOrderAdvancedSearchSequence
@@ -82,12 +77,7 @@ export const PublicSearch = connect(
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab
-              disabled
-              id="tab-opinion"
-              tabName="opinion"
-              title="Opinion (Coming Soon)"
-            >
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOpinionAdvancedSearchSequence

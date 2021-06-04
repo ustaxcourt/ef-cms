@@ -6,7 +6,9 @@
  * @returns {string} the generated bar number
  */
 exports.createBarNumber = async ({ applicationContext, initials }) => {
-  const id = await applicationContext.getPersistenceGateway().incrementCounter({
+  const {
+    id,
+  } = await applicationContext.getPersistenceGateway().incrementCounter({
     applicationContext,
     key: 'barNumberCounter',
   });

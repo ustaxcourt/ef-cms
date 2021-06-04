@@ -2,10 +2,9 @@ const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middl
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
-const LimitStore = require('./limitStore');
 const logger = require('./logger');
-const slowDown = require('express-slow-down');
 const { lambdaWrapper } = require('./lambdaWrapper');
+const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const app = express();
 
 app.use(cors());
@@ -22,20 +21,6 @@ app.use((req, res, next) => {
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
 app.use(logger());
-
-const requestsPerSecond = 7;
-const windowSizeMillis = 10 * 1000; // 10 seconds
-
-const searchKey = 'SEARCH_SPEED_LIMITER';
-const searchSpeedLimiter = slowDown({
-  ...{
-    delayAfter: requestsPerSecond, // this many requests to go at full-speed, then...
-    delayMs: 1000 / requestsPerSecond, // next request has a 100ms delay, 7th has a 200ms delay, 8th gets 300ms, etc.
-    windowMs: windowSizeMillis,
-  },
-  keyGenerator: () => searchKey,
-  store: new LimitStore({ key: searchKey, windowMs: windowSizeMillis }),
-});
 
 const {
   casePublicSearchLambda,
@@ -67,36 +52,36 @@ const {
  */
 app.get(
   '/public-api/search',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(casePublicSearchLambda),
 );
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
 app.get(
   '/public-api/order-search',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(orderPublicSearchLambda),
 );
 app.get(
   '/public-api/opinion-search',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(opinionPublicSearchLambda),
 );
 
 app.get(
   '/public-api/judges',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(getPublicJudgesLambda),
 );
 
 app.get(
   '/public-api/todays-opinions',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(todaysOpinionsLambda),
 );
 app.get(
   '/public-api/todays-orders/:page/:todaysOrdersSort',
-  searchSpeedLimiter,
+  slowDownLimiter,
   lambdaWrapper(todaysOrdersLambda),
 );
 

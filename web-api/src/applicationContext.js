@@ -222,6 +222,7 @@ const {
   decrementKeyCount,
   deleteKeyCount,
   incrementKeyCount,
+  setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
 const {
   deleteCaseByDocketNumber,
@@ -1331,6 +1332,7 @@ const gatewayMethods = {
   isFileExists,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setExpiresAt,
   updateCaseCorrespondence,
   verifyCaseForUser,
   verifyPendingCaseForUser,

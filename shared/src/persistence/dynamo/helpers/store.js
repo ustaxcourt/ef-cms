@@ -20,8 +20,25 @@ exports.incrementKeyCount = ({ applicationContext, key }) =>
       pk: `${key}`,
       sk: `${key}`,
     },
-    ReturnValues: 'UPDATED_NEW',
+    ReturnValues: 'ALL_NEW',
     UpdateExpression: 'ADD #id :value',
+    applicationContext,
+  });
+
+exports.setExpiresAt = ({ applicationContext, expiresAt, key }) =>
+  client.updateConsistent({
+    ExpressionAttributeNames: {
+      '#expiresAt': 'expiresAt',
+    },
+    ExpressionAttributeValues: {
+      ':value': expiresAt,
+    },
+    Key: {
+      pk: `${key}`,
+      sk: `${key}`,
+    },
+    ReturnValues: 'ALL_NEW',
+    UpdateExpression: 'SET #expiresAt = :value',
     applicationContext,
   });
 
@@ -37,10 +54,10 @@ exports.decrementKeyCount = ({ applicationContext, key }) =>
       pk: `${key}`,
       sk: `${key}`,
     },
-    ReturnValues: 'UPDATED_NEW',
+    ReturnValues: 'ALL_NEW',
     UpdateExpression: 'ADD #id :value',
     applicationContext,
   });
 
 exports.deleteKeyCount = ({ applicationContext, key }) =>
-  client.delete({ applicationContext, key });
+  client.delete({ applicationContext, key: { pk: key, sk: key } });
