@@ -13,16 +13,16 @@ describe('hasUpdatedEmailAction', () => {
     };
   });
 
-  it('returns the yes path when updatedEmail is defined on state.form', async () => {
+  it('returns the yes path when pendingEmail is defined on state.form', async () => {
     runAction(hasUpdatedEmailAction, {
       modules: { presenter },
-      state: { form: { updatedEmail: 'blah@example.com' } },
+      state: { form: { pendingEmail: 'blah@example.com' } },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when updatedEmail is not defined on state.form', async () => {
+  it('returns the no path when pendingEmail is not defined on state.form', async () => {
     runAction(hasUpdatedEmailAction, {
       modules: { presenter },
       state: { form: {} },
