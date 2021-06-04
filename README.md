@@ -22,6 +22,7 @@ DAWSON is in active use and is continually updated to deploy enhancements and ne
 
 - [Release notes](https://www.ustaxcourt.gov/release_notes.html) for DAWSON
 - [How we work](./docs/how-we-work.md) has our principles, product team, technical strategy, meetings cadence, tools, etc.
+- [Onboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=onboarding.md) or [offboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=offboarding.md) a teammate
 - [Documentation](./docs/README.md) about the CI/CD setup, API, style guide, UX, code review, etc.
 - [Ongoing development documentation](./wikiwiki/README.md) such as designs, research data, user workflows, etc.
 - [Product roadmap](https://docs.google.com/document/d/1g3D1zPNQqVsWhJ6uGIVcHA04IdBHgYcOCm9roaSfFNk/edit) 🔒
