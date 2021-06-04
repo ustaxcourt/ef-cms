@@ -24,12 +24,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({
-  contact,
-  contactTitles,
-  countryTypes,
-  practitioner,
-}) => {
+const RenderContact = ({ contact, contactTitles, countryTypes }) => {
   return (
     <>
       <tbody>
@@ -50,48 +45,17 @@ const RenderContact = ({
               <p className="address-sealed-text">Address sealed</p>
             )}
           </td>
-          <td>{practitioner?.formattedName || 'None'}</td>
+          <td>{contact.formattedCounsel[0].formattedName}</td>
           <td>
-            {practitioner ? (
-              <>
-                {practitioner.email && practitioner.email}
-                {practitioner.contact?.phone && practitioner.contact.phone}
-              </>
-            ) : (
-              <>None</>
-            )}
+            {contact.formattedCounsel[0].formattedEmail}
+            {contact.formattedCounsel[0].contact?.phone &&
+              contact.formattedCounsel[0].contact.phone}
           </td>
         </tr>
       </tbody>
     </>
   );
 };
-
-// const RenderPractitioner = ({ countryTypes, practitioner }) => {
-//   return (
-//     <div className="party-details">
-//       <p className="margin-bottom-0">
-//         {practitioner.formattedName || practitioner.name}
-//       </p>
-//       <RenderAddress
-//         contact={{
-//           ...practitioner.contact,
-//           name: practitioner.name,
-//         }}
-//         countryTypes={countryTypes}
-//       />
-//       {practitioner.representingFormatted && (
-//         <div className="extra-margin-top">
-//           <strong>Representing</strong>
-//           <br />
-//           {practitioner.representingFormatted.map(p => (
-//             <div key={p.name}>{p.name}</div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
 
 const RecordDescription = ({ entry }) => {
   let additionalDescription = entry.filingsAndProceedings
@@ -168,10 +132,6 @@ export const DocketRecord = ({
               </tr>
             </thead>
             {caseDetail.petitioners.map(p => {
-              const privatePractitioner = caseDetail.privatePractitioners.find(
-                practitioner => practitioner.representing.includes(p.contactId),
-              );
-
               return (
                 <RenderContact
                   caseTitle={options.caseTitle}
@@ -179,7 +139,6 @@ export const DocketRecord = ({
                   contactTitles={contactTitles}
                   countryTypes={countryTypes}
                   key={p.contactId}
-                  practitioner={privatePractitioner}
                 />
               );
             })}

@@ -134,7 +134,6 @@ const coverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-//here 2
 const docketRecord = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,

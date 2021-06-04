@@ -1,8 +1,12 @@
 const {
+  Case,
+  getPractitionersRepresenting,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case, isSealedCase } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -56,7 +60,6 @@ exports.generateDocketRecordPdfInteractor = async (
     caseEntity = new Case(caseSource, { applicationContext });
   }
 
-  //here is where we generate
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
@@ -64,6 +67,17 @@ exports.generateDocketRecordPdfInteractor = async (
       caseDetail: caseEntity,
       docketRecordSort,
     });
+
+  formattedCaseDetail.petitioners.forEach(petitioner => {
+    petitioner.formattedCounsel = getPractitionersRepresenting(
+      formattedCaseDetail,
+      petitioner.contactId,
+    ).map(prac => ({
+      ...prac,
+      formattedEmail: prac ? prac.email : 'None',
+      formattedName: prac.formattedName || prac.name || 'None',
+    }));
+  });
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
