@@ -13,7 +13,7 @@ const updateUserPendingEmail = async ({ applicationContext, user }) => {
     .getPersistenceGateway()
     .isEmailAvailable({
       applicationContext,
-      email: user.pendingEmail,
+      email: user.updatedEmail,
     });
 
   if (!isEmailAvailable) {
@@ -22,6 +22,7 @@ const updateUserPendingEmail = async ({ applicationContext, user }) => {
 
   const pendingEmailVerificationToken = applicationContext.getUniqueId();
   user.pendingEmailVerificationToken = pendingEmailVerificationToken;
+  user.pendingEmail = user.updatedEmail;
 };
 
 const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
@@ -75,7 +76,7 @@ exports.updatePractitionerUserInteractor = async (
     .getPractitionerByBarNumber({ applicationContext, barNumber });
 
   const userHasAccount = !!oldUser.email;
-  const userIsUpdatingEmail = !!user.pendingEmail;
+  const userIsUpdatingEmail = !!user.updatedEmail;
 
   if (oldUser.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
@@ -94,7 +95,7 @@ exports.updatePractitionerUserInteractor = async (
     {
       ...user,
       barNumber: oldUser.barNumber,
-      email: oldUser.email,
+      email: oldUser.email || user.updatedEmail,
     },
     { applicationContext },
   )
@@ -109,16 +110,12 @@ exports.updatePractitionerUserInteractor = async (
         applicationContext,
         user: validatedUserData,
       });
-  } else if (!oldUser.email && user.pendingEmail) {
+  } else if (!oldUser.email && user.updatedEmail) {
     updatedUser = await applicationContext
       .getPersistenceGateway()
       .createNewPractitionerUser({
         applicationContext,
-        user: {
-          ...validatedUserData,
-          email: undefined,
-          pendingEmail: user.pendingEmail,
-        },
+        user: validatedUserData,
       });
   } else {
     await applicationContext.getUseCaseHelpers().updateUserRecords({
@@ -167,8 +164,8 @@ exports.updatePractitionerUserInteractor = async (
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
       firmName: validatedUserData.firmName,
-      pendingEmail: validatedUserData.email,
       requestUserId: requestUser.userId,
+      updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
       user: oldUser,
       websocketMessagePrefix: 'admin',

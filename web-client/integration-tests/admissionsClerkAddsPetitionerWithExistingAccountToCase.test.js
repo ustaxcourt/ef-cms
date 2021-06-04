@@ -42,11 +42,11 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     expect(test.getState('currentPage')).toEqual(
       'EditPetitionerInformationInternal',
     );
-    expect(test.getState('form.pendingEmail')).toBeUndefined();
+    expect(test.getState('form.updatedEmail')).toBeUndefined();
     expect(test.getState('form.confirmEmail')).toBeUndefined();
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contact.pendingEmail',
+      key: 'contact.updatedEmail',
       value: EMAIL_TO_ADD,
     });
 

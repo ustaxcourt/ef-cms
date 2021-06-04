@@ -41,13 +41,13 @@ describe('admissions clerk creates user for case', () => {
       'EditPetitionerInformationInternal',
     );
 
-    expect(test.getState('form.contact.pendingEmail')).toBeUndefined();
+    expect(test.getState('form.contact.updatedEmail')).toBeUndefined();
     expect(test.getState('form.contact.serviceIndicator')).toBe('Paper');
   });
 
   it('admissions clerk adds an existing email address for petitioner on case', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'contact.pendingEmail',
+      key: 'contact.updatedEmail',
       value: 'petitioner@example.com',
     });
 
@@ -69,7 +69,7 @@ describe('admissions clerk creates user for case', () => {
 
   it('admissions clerk adds a new email address for petitioner on case', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'contact.pendingEmail',
+      key: 'contact.updatedEmail',
       value: validEmail,
     });
 

@@ -597,7 +597,7 @@ describe('generateChangeOfAddress', () => {
       contactInfo: {
         ...mockPrivatePractitioner.contact,
       },
-      pendingEmail: UPDATED_EMAIL,
+      updatedEmail: UPDATED_EMAIL,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,

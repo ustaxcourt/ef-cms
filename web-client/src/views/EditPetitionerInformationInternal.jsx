@@ -265,16 +265,16 @@ export const EditPetitionerInformationInternal = connect(
                       validationErrors.contact && validationErrors.contact.email
                     }
                   >
-                    <label className="usa-label" htmlFor="pendingEmail">
+                    <label className="usa-label" htmlFor="updatedEmail">
                       New email address
                     </label>
                     <input
                       autoCapitalize="none"
                       className="usa-input"
-                      id="pendingEmail"
-                      name="contact.pendingEmail"
+                      id="updatedEmail"
+                      name="contact.updatedEmail"
                       type="text"
-                      value={form.contact.pendingEmail || ''}
+                      value={form.contact.updatedEmail || ''}
                       onBlur={() => validatePetitionerSequence()}
                       onChange={e =>
                         updateFormValueSequence({

@@ -219,36 +219,36 @@ describe('Practitioner', () => {
     expect(user.serviceIndicator).toEqual('CARRIER_PIGEON');
   });
 
-  describe('pendingEmail/confirmEmail', () => {
-    it('passes validation when pendingEmail and confirmEmail are undefined', () => {
-      validPractitioner.pendingEmail = undefined;
+  describe('updatedEmail/confirmEmail', () => {
+    it('passes validation when updatedEmail and confirmEmail are undefined', () => {
+      validPractitioner.updatedEmail = undefined;
       validPractitioner.confirmEmail = undefined;
 
       expect(validPractitioner.isValid()).toBeTruthy();
     });
 
-    it('passes validation when pendingEmail and confirmEmail match and are valid email addresses', () => {
+    it('passes validation when updatedEmail and confirmEmail match and are valid email addresses', () => {
       validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.pendingEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeTruthy();
     });
 
-    it('fails validation when pendingEmail is not a valid email address and confirmEmail is a valid email address', () => {
+    it('fails validation when updatedEmail is not a valid email address and confirmEmail is a valid email address', () => {
       validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.pendingEmail = invalidEmail;
+      validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail:
           Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        pendingEmail: Practitioner.VALIDATION_ERROR_MESSAGES.pendingEmail,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
 
-    it('fails validation when pendingEmail is defined and valid and confirmEmail is undefined', () => {
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is undefined', () => {
       validPractitioner.confirmEmail = undefined;
-      validPractitioner.pendingEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
@@ -257,9 +257,9 @@ describe('Practitioner', () => {
       });
     });
 
-    it('fails validation when pendingEmail is defined and valid and confirmEmail is not a valid email address', () => {
+    it('fails validation when updatedEmail is defined and valid and confirmEmail is not a valid email address', () => {
       validPractitioner.confirmEmail = invalidEmail;
-      validPractitioner.pendingEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
@@ -268,9 +268,9 @@ describe('Practitioner', () => {
       });
     });
 
-    it('fails validation when pendingEmail and confirmEmail do not match and both are valid', () => {
+    it('fails validation when updatedEmail and confirmEmail do not match and both are valid', () => {
       validPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
-      validPractitioner.pendingEmail = mockUpdatedEmail;
+      validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
@@ -279,25 +279,25 @@ describe('Practitioner', () => {
       });
     });
 
-    it('should fail validation when pendingEmail is undefined and confirmEmail is a valid email address', () => {
+    it('should fail validation when updatedEmail is undefined and confirmEmail is a valid email address', () => {
       validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.pendingEmail = undefined;
+      validPractitioner.updatedEmail = undefined;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        pendingEmail: Practitioner.VALIDATION_ERROR_MESSAGES.pendingEmail,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
 
-    it('should fail validation when pendingEmail is invalid and confirmEmail is undefined', () => {
+    it('should fail validation when updatedEmail is invalid and confirmEmail is undefined', () => {
       validPractitioner.confirmEmail = undefined;
-      validPractitioner.pendingEmail = invalidEmail;
+      validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail:
           Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        pendingEmail: Practitioner.VALIDATION_ERROR_MESSAGES.pendingEmail,
+        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
       });
     });
   });
@@ -351,7 +351,7 @@ describe('Practitioner', () => {
   });
 
   describe('toRawObject', () => {
-    it('returns a raw practitioner object with pendingEmail and confirmEmail set to undefined', () => {
+    it('returns a raw practitioner object with updatedEmail and confirmEmail set to undefined', () => {
       const rawPractitionerObject = new Practitioner(
         validPractitioner,
       ).toRawObject();
@@ -359,7 +359,7 @@ describe('Practitioner', () => {
       expect(rawPractitionerObject).toMatchObject({
         ...validPractitioner,
         confirmEmail: undefined,
-        pendingEmail: undefined,
+        updatedEmail: undefined,
       });
     });
   });
