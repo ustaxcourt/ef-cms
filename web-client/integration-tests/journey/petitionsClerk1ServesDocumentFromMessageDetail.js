@@ -14,7 +14,7 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
       'ConfirmInitiatePaperDocumentServiceModal',
     );
 
-    const documentUrlWithoutServedStamp = test.getState('iframeSrc');
+    await test.setState('iframeSrc', undefined);
 
     await test.runSequence('serveCourtIssuedDocumentSequence', {});
 
@@ -23,9 +23,6 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
     });
     expect(test.getState('currentPage')).toBe('MessageDetail');
 
-    const documentUrlWithServedStamp = test.getState('iframeSrc');
-    expect(documentUrlWithoutServedStamp).not.toEqual(
-      documentUrlWithServedStamp,
-    );
+    expect(test.getState('iframeSrc')).not.toBeUndefined();
   });
 };
