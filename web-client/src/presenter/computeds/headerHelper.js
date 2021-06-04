@@ -35,6 +35,9 @@ export const headerHelper = (get, applicationContext) => {
     ].includes(userRole) &&
       pageIsMessages);
 
+  const userHasPendingEmail =
+    !!user?.pendingEmail && user.pendingEmail !== user.email;
+
   return {
     defaultQCBoxPath: isOtherUser(userRole)
       ? '/document-qc/section/inbox'
@@ -68,7 +71,7 @@ export const headerHelper = (get, applicationContext) => {
       ].includes(userRole),
     showSearchNavItem: userRole && userRole === USER_ROLES.irsSuperuser,
     showTrialSessions: permissions && permissions.TRIAL_SESSIONS,
-    showVerifyEmailWarningNotification: !!user?.pendingEmail,
+    showVerifyEmailWarningNotification: userHasPendingEmail,
     unreadMessageCount,
     userName: user && user.name,
   };
