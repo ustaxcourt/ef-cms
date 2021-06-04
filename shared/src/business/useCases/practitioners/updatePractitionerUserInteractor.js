@@ -95,7 +95,7 @@ exports.updatePractitionerUserInteractor = async (
     {
       ...user,
       barNumber: oldUser.barNumber,
-      email: oldUser.email,
+      email: oldUser.email || user.updatedEmail,
     },
     { applicationContext },
   )

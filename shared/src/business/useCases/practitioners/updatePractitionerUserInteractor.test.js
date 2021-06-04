@@ -146,6 +146,10 @@ describe('updatePractitionerUserInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
+        .calls[0][0].user.email,
+    ).toEqual('admissionsclerk@example.com');
+    expect(
+      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
         .calls[0][0].user.pendingEmail,
     ).toEqual('admissionsclerk@example.com');
   });
