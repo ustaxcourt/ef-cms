@@ -2,7 +2,9 @@ const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middl
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const LimitStore = require('./limitStore');
 const logger = require('./logger');
+const slowDown = require('express-slow-down');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
@@ -20,6 +22,20 @@ app.use((req, res, next) => {
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
 app.use(logger());
+
+const requestsPerSecond = 7;
+const windowSizeMillis = 10 * 1000; // 10 seconds
+
+const searchKey = 'SEARCH_SPEED_LIMITER';
+const searchSpeedLimiter = slowDown({
+  ...{
+    delayAfter: requestsPerSecond, // this many requests to go at full-speed, then...
+    delayMs: 1000 / requestsPerSecond, // next request has a 100ms delay, 7th has a 200ms delay, 8th gets 300ms, etc.
+    windowMs: windowSizeMillis,
+  },
+  keyGenerator: () => searchKey,
+  store: new LimitStore({ key: searchKey, windowMs: windowSizeMillis }),
+});
 
 const {
   casePublicSearchLambda,
@@ -39,29 +55,48 @@ const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
-// Temporarily disabled for story 7387
-// const {
-//   opinionPublicSearchLambda,
-// } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
+const {
+  opinionPublicSearchLambda,
+} = require('./public-api/opinionPublicSearchLambda');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
  */
-app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
+app.get(
+  '/public-api/search',
+  searchSpeedLimiter,
+  lambdaWrapper(casePublicSearchLambda),
+);
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
-// Temporarily disabled for story 7387
-// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+app.get(
+  '/public-api/order-search',
+  searchSpeedLimiter,
+  lambdaWrapper(orderPublicSearchLambda),
+);
+app.get(
+  '/public-api/opinion-search',
+  searchSpeedLimiter,
+  lambdaWrapper(opinionPublicSearchLambda),
+);
 
-app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
+app.get(
+  '/public-api/judges',
+  searchSpeedLimiter,
+  lambdaWrapper(getPublicJudgesLambda),
+);
 
-app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
+app.get(
+  '/public-api/todays-opinions',
+  searchSpeedLimiter,
+  lambdaWrapper(todaysOpinionsLambda),
+);
 app.get(
   '/public-api/todays-orders/:page/:todaysOrdersSort',
+  searchSpeedLimiter,
   lambdaWrapper(todaysOrdersLambda),
 );
 

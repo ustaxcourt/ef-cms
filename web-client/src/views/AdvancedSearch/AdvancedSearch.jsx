@@ -79,7 +79,6 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled
               id="tab-order"
               tabName={searchTabs.ORDER}
               title="Order (Coming Soon)"
@@ -90,7 +89,6 @@ export const AdvancedSearch = connect(
               <DocumentSearchResults />
             </Tab>
             <Tab
-              disabled
               id="tab-opinion"
               tabName={searchTabs.OPINION}
               title="Opinion (Coming Soon)"
