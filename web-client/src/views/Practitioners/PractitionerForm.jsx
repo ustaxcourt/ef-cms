@@ -265,12 +265,11 @@ export const PractitionerForm = connect(
                       />
                     </FormGroup>
                   )}
-                  {console.log('practitioner form', validateSequence)}
                   <PractitionerContactForm
                     bind="form"
                     changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                     type="contact"
-                    onBlurSequenceName={validateSequence}
+                    onBlurSequenceName="validateSequence"
                     onChangeSequenceName="updateFormValueSequence"
                   />
                 </div>
