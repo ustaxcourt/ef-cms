@@ -307,7 +307,7 @@ describe('headerHelper', () => {
   });
 
   describe('showVerifyEmailWarningNotification', () => {
-    it('should be true when the user has a pending email', () => {
+    it('should be true when the user has a pending email that is not the same as their current email', () => {
       const result = runCompute(headerHelper, {
         state: {
           ...getBaseState({
@@ -319,6 +319,21 @@ describe('headerHelper', () => {
       });
 
       expect(result.showVerifyEmailWarningNotification).toBeTruthy();
+    });
+
+    it('should be false when the user has a pending email that is the same as their current email', () => {
+      const result = runCompute(headerHelper, {
+        state: {
+          ...getBaseState({
+            email: 'test@example.com',
+            pendingEmail: 'test@example.com',
+            role: ROLES.irsPractitioner,
+          }),
+          currentPage: 'DashboardRespondent',
+        },
+      });
+
+      expect(result.showVerifyEmailWarningNotification).toBeFalsy();
     });
 
     it('should be false when the user does not have a pending email', () => {

@@ -32,12 +32,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const contactsNeedingPaperService = [];
 
   const roleToDisplay = party => {
-    if (party.contactType) {
-      return CONTACT_TYPE_TITLES[party.contactType];
-    } else if (party.role === ROLES.privatePractitioner) {
+    if (party.role === ROLES.privatePractitioner) {
       return 'Petitioner Counsel';
     } else if (party.role === ROLES.irsPractitioner) {
       return 'Respondent Counsel';
+    } else {
+      return CONTACT_TYPE_TITLES[party.contactType];
     }
   };
 
