@@ -57,12 +57,16 @@ exports.updateCounselOnCaseInteractor = async (
       ...editableFields,
     });
 
-    editableFields.representing.forEach(
-      contactId =>
-        (caseEntity.petitioners.find(
-          petitioner => petitioner.contactId === contactId,
-        ).serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE),
-    );
+    caseEntity.petitioners.map(petitioner => {
+      if (editableFields.representing.includes(petitioner.contactId)) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      } else {
+        const serviceIsPaper = !petitioner.email;
+        petitioner.serviceIndicator = serviceIsPaper
+          ? SERVICE_INDICATOR_TYPES.SI_PAPER
+          : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+    });
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
       serviceIndicator: editableFields.serviceIndicator,

@@ -111,11 +111,10 @@ describe('updateCounselOnCaseInteractor', () => {
             contactId: '3d914ca2-7876-43a7-acfa-ccb645717e11',
             contactType: CONTACT_TYPES.secondary,
             countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'fieri@example.com',
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
             state: 'CA',
           },
         ],
@@ -212,7 +211,27 @@ describe('updateCounselOnCaseInteractor', () => {
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
     expect(results.petitioners[1].serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+  });
+
+  it('reverts the service indicator on the contacts when they are no longer being represented', async () => {
+    const results = await updateCounselOnCaseInteractor(applicationContext, {
+      docketNumber: '123-19',
+      userData: {
+        email: 'not.editable@example.com',
+        name: 'Saul Goodman',
+        representing: ['b7315e1b-b804-4e09-84c5-e0f3b4f229c5'],
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
+    });
+
+    expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+    expect(results.petitioners[1].serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 
