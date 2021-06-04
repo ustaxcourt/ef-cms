@@ -6,7 +6,7 @@
 
 **DAWSON (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) that kept meticulous records.
 
-**Flexion** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a digital service team that has paired with the U.S. Tax Court since the inception of DAWSON. 
+**Flexion** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a federal digital service team serving as advisors to the U.S. Tx Court and have paired with the U.S. Tax Court since the inception of DAWSON.
 
 ### User types
 
