@@ -56,7 +56,7 @@ Practitioner.prototype.init = function init(
   this.serviceIndicator =
     rawUser.serviceIndicator ||
     Practitioner.getDefaultServiceIndicator(rawUser);
-  this.pendingEmail = rawUser.pendingEmail;
+  this.updatedEmail = rawUser.updatedEmail;
   if (this.admissionsStatus === 'Active') {
     this.role = roleMap[this.employer];
   } else {
@@ -90,7 +90,7 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   confirmEmail: [
     {
-      contains: 'must be [ref:pendingEmail]',
+      contains: 'must be [ref:updatedEmail]',
       message: 'Email addresses do not match',
     },
     { contains: 'is required', message: 'Enter a valid email address' },
@@ -98,7 +98,6 @@ const VALIDATION_ERROR_MESSAGES = {
   ],
   employer: 'Select an employer',
   originalBarState: 'Select an original bar state',
-  pendingEmail: 'Enter a valid email address',
   practitionerNotes: [
     {
       contains: 'must be less than or equal to',
@@ -107,6 +106,7 @@ const VALIDATION_ERROR_MESSAGES = {
     'Enter valid notes',
   ],
   practitionerType: 'Select a practitioner type',
+  updatedEmail: 'Enter a valid email address',
 };
 
 const practitionerValidation = {
@@ -133,10 +133,10 @@ const practitionerValidation = {
   birthYear: JoiValidationConstants.YEAR_MAX_CURRENT.required().description(
     'The year the practitioner was born.',
   ),
-  confirmEmail: JoiValidationConstants.EMAIL.when('pendingEmail', {
+  confirmEmail: JoiValidationConstants.EMAIL.when('updatedEmail', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: joi.valid(joi.ref('pendingEmail')).required(),
+    then: joi.valid(joi.ref('updatedEmail')).required(),
   }),
   employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
     .required()
@@ -161,11 +161,6 @@ const practitionerValidation = {
     .description(
       'The state in which the practitioner passed their bar examination.',
     ),
-  pendingEmail: joi.alternatives().conditional('confirmEmail', {
-    is: joi.exist().not(null),
-    otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
-    then: JoiValidationConstants.EMAIL.required(),
-  }),
   practitionerNotes: JoiValidationConstants.STRING.max(500)
     .optional()
     .allow(null, '')
@@ -191,6 +186,11 @@ const practitionerValidation = {
     .optional()
     .allow('')
     .description('The name suffix of the practitioner.'),
+  updatedEmail: joi.alternatives().conditional('confirmEmail', {
+    is: joi.exist().not(null),
+    otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
+    then: JoiValidationConstants.EMAIL.required(),
+  }),
 };
 
 joiValidationDecorator(
@@ -206,7 +206,7 @@ Practitioner.prototype.toRawObject = function () {
 
   // We don't want to persist these values as they are only used for validation
   result.confirmEmail = undefined;
-  result.pendingEmail = undefined;
+  result.updatedEmail = undefined;
 
   return result;
 };

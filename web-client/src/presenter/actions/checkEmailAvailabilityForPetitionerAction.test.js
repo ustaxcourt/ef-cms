@@ -21,13 +21,13 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     };
   });
 
-  it('should call checkEmailAvailabilityInteractor with state.form.pendingEmail', async () => {
+  it('should call checkEmailAvailabilityInteractor with state.form.updatedEmail', async () => {
     await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { contact: { pendingEmail: mockEmail } },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
@@ -37,13 +37,13 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
     ).toMatchObject({ email: mockEmail });
   });
 
-  it('should call checkEmailAvailabilityInteractor with state.form.email when state.form.pendingEmail is undefined', async () => {
+  it('should call checkEmailAvailabilityInteractor with state.form.email when state.form.updatedEmail is undefined', async () => {
     await runAction(checkEmailAvailabilityForPetitionerAction, {
       modules: {
         presenter,
       },
       state: {
-        form: { contact: { pendingEmail: mockEmail } },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
@@ -59,7 +59,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { contact: { pendingEmail: mockEmail } },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 
@@ -96,7 +96,7 @@ describe('checkEmailAvailabilityForPetitionerAction', () => {
         presenter,
       },
       state: {
-        form: { contact: { pendingEmail: mockEmail } },
+        form: { contact: { updatedEmail: mockEmail } },
       },
     });
 

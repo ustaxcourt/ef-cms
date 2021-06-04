@@ -43,7 +43,7 @@ export const validatePractitionerAction = ({
       'originalBarState',
       'admissionsStatus',
       'admissionsDate',
-      'pendingEmail',
+      'updatedEmail',
       'confirmEmail',
     ];
 

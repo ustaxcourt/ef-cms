@@ -16,7 +16,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     };
   });
 
-  it('returns the yes path when form.contact.pendingEmail is defined', async () => {
+  it('returns the yes path when form.contact.updatedEmail is defined', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -25,14 +25,14 @@ describe('hasUpdatedPetitionerEmailAction', () => {
             { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
           ],
         },
-        form: { contact: { pendingEmail: UPDATED_EMAIL } },
+        form: { contact: { updatedEmail: UPDATED_EMAIL } },
       },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when orm.contact.pendingEmail is not defined', async () => {
+  it('returns the no path when orm.contact.updatedEmail is not defined', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -42,7 +42,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
           ],
         },
         form: {
-          contact: { pendingEmail: undefined },
+          contact: { updatedEmail: undefined },
         },
       },
     });

@@ -27,7 +27,7 @@ export const NoMatchingEmailFoundModal = connect(
           <p>
             {form.contact.name}
             <br />
-            {form.contact.pendingEmail}
+            {form.contact.updatedEmail}
           </p>
 
           <p>

@@ -65,7 +65,7 @@ describe('admissions clerk practitioner journey', () => {
     );
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'pendingEmail',
+      key: 'updatedEmail',
       value: 'privatePractitioner99@example.com',
     });
 
@@ -85,7 +85,7 @@ describe('admissions clerk practitioner journey', () => {
   const validEmail = `${faker.internet.userName()}_no_error@example.com`;
   it('admissions clerk updates practitioner email', async () => {
     await test.runSequence('updateFormValueSequence', {
-      key: 'pendingEmail',
+      key: 'updatedEmail',
       value: validEmail,
     });
 
@@ -114,7 +114,7 @@ describe('admissions clerk practitioner journey', () => {
     expect(test.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
-    expect(test.getState('form.pendingEmail')).toBeUndefined();
+    expect(test.getState('form.updatedEmail')).toBeUndefined();
     expect(test.getState('form.confirmEmail')).toBeUndefined();
   });
 

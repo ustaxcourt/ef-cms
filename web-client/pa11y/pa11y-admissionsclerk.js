@@ -3,8 +3,8 @@ module.exports = [
   'http://localhost:1234/mock-login?token=admissionsclerk&path=/users/edit-practitioner/PT1234',
   {
     actions: [
-      'wait for #pendingEmail to be visible',
-      'set field #pendingEmail to petitioner1@example.com',
+      'wait for #updatedEmail to be visible',
+      'set field #updatedEmail to petitioner1@example.com',
       'set field #confirm-email to petitioner1@example.com',
       'click element #submit-edit-petitioner-information',
       'wait for #matching-email-modal to be visible',
@@ -15,8 +15,8 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #pendingEmail to be visible',
-      'set field #pendingEmail to available@example.com',
+      'wait for #updatedEmail to be visible',
+      'set field #updatedEmail to available@example.com',
       'set field #confirm-email to available@example.com',
       'click element #submit-edit-petitioner-information',
       'wait for #no-matching-email-modal to be visible',

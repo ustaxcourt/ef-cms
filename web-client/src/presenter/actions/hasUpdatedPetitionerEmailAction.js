@@ -12,7 +12,7 @@ import { state } from 'cerebral';
 export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
   const { contact: formContact } = get(state.form);
 
-  if (formContact.pendingEmail) {
+  if (formContact.updatedEmail) {
     return path.yes();
   }
 

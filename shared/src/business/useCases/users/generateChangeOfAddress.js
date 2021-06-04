@@ -39,8 +39,8 @@ exports.generateChangeOfAddress = async ({
   bypassDocketEntry = false,
   contactInfo,
   firmName,
-  pendingEmail,
   requestUserId,
+  updatedEmail,
   updatedName,
   user,
   websocketMessagePrefix = 'user',
@@ -101,10 +101,10 @@ exports.generateChangeOfAddress = async ({
       practitionerObject.firmName = firmName;
       practitionerObject.name = practitionerName;
 
-      if (!oldData.email && pendingEmail) {
+      if (!oldData.email && updatedEmail) {
         practitionerObject.serviceIndicator =
           SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-        practitionerObject.email = pendingEmail;
+        practitionerObject.email = updatedEmail;
       }
 
       // we do this again so that it will convert '' to null
