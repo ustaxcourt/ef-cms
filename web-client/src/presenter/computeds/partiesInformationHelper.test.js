@@ -938,4 +938,59 @@ describe('partiesInformationHelper', () => {
       );
     });
   });
+
+  describe('showIntervenorRole', () => {
+    it('should be true when there are no intervenors on the case', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
+
+      const { showIntervenorRole } = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
+            petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(showIntervenorRole).toBeTruthy();
+    });
+
+    it('should be false when there is an intervenor on the case', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
+
+      const { showIntervenorRole } = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
+            petitioners: [
+              mockPetitioner,
+              { ...mockPetitioner, contactType: CONTACT_TYPES.intervenor },
+            ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
+          },
+        },
+      });
+
+      expect(showIntervenorRole).toBeFalsy();
+    });
+  });
 });
