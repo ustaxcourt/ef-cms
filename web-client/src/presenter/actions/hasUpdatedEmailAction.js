@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * takes the yes path if form.updatedEmail is set; takes the no path otherwise
+ * takes the yes path if form.pendingEmail is set; takes the no path otherwise
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {object} continue path for the sequence
  */
 export const hasUpdatedEmailAction = async ({ get, path }) => {
-  const { updatedEmail } = get(state.form);
+  const { pendingEmail } = get(state.form);
 
-  return updatedEmail ? path.yes() : path.no();
+  return pendingEmail ? path.yes() : path.no();
 };

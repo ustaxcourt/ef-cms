@@ -391,14 +391,14 @@ exports.updatePetitionerInformationInteractor = async (
   }
 
   if (
-    updatedPetitionerData.updatedEmail &&
-    updatedPetitionerData.updatedEmail !== oldCaseContact.email
+    updatedPetitionerData.pendingEmail &&
+    updatedPetitionerData.pendingEmail !== oldCaseContact.email
   ) {
     const isEmailAvailable = await applicationContext
       .getPersistenceGateway()
       .isEmailAvailable({
         applicationContext,
-        email: updatedPetitionerData.updatedEmail,
+        email: updatedPetitionerData.pendingEmail,
       });
     if (isEmailAvailable) {
       caseEntity = await applicationContext
@@ -407,7 +407,7 @@ exports.updatePetitionerInformationInteractor = async (
           applicationContext,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
+          email: updatedPetitionerData.pendingEmail,
           name: updatedCaseContact.name,
         });
     } else {
@@ -417,7 +417,7 @@ exports.updatePetitionerInformationInteractor = async (
           applicationContext,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
-          email: updatedPetitionerData.updatedEmail,
+          email: updatedPetitionerData.pendingEmail,
           name: updatedCaseContact.name,
         });
     }

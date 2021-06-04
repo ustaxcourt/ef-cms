@@ -38,7 +38,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'updatedEmail',
+      key: 'pendingEmail',
       value: mockAvailableEmail,
     });
     await test.runSequence('updateFormValueSequence', {
@@ -62,7 +62,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'updatedEmail',
+      key: 'pendingEmail',
       value: mockAvailableEmail,
     });
     await test.runSequence('updateFormValueSequence', {

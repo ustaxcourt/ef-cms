@@ -14,12 +14,12 @@ export const checkEmailAvailabilityAction = async ({
   get,
   path,
 }) => {
-  const { email, updatedEmail } = get(state.form);
+  const { email, pendingEmail } = get(state.form);
 
   const isEmailAvailable = await applicationContext
     .getUseCases()
     .checkEmailAvailabilityInteractor(applicationContext, {
-      email: updatedEmail || email,
+      email: pendingEmail || email,
     });
 
   return isEmailAvailable

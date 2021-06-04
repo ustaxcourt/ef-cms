@@ -20,9 +20,9 @@ exports.validatePetitionerInteractor = (
   }).getFormattedValidationErrors();
 
   let updateUserEmailErrors;
-  if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
+  if (contactInfo.pendingEmail || contactInfo.confirmEmail) {
     updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
+      { ...contactInfo, email: contactInfo.pendingEmail },
       { applicationContext },
     ).getFormattedValidationErrors();
   }

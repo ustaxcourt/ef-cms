@@ -64,7 +64,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           barNumber: 'AB1111',
-          updatedEmail: 'bc@example.com',
+          pendingEmail: 'bc@example.com',
           userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
         },
       }),
@@ -86,7 +86,7 @@ describe('updatePractitionerUserInteractor', () => {
           ...mockPractitioner,
           barNumber: 'AB2222',
           confirmEmail: 'bc@example.com',
-          updatedEmail: 'bc@example.com',
+          pendingEmail: 'bc@example.com',
         },
       },
     );
@@ -105,7 +105,7 @@ describe('updatePractitionerUserInteractor', () => {
           ...mockPractitioner,
           barNumber: 'AB2222',
           confirmEmail: 'bc@example.com',
-          updatedEmail: 'bc@example.com',
+          pendingEmail: 'bc@example.com',
         },
       },
     );
@@ -135,7 +135,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'admissionsclerk@example.com',
-          updatedEmail: 'admissionsclerk@example.com',
+          pendingEmail: 'admissionsclerk@example.com',
         },
       },
     );
@@ -164,7 +164,7 @@ describe('updatePractitionerUserInteractor', () => {
       ).rejects.toThrow('Unauthorized for updating practitioner user');
     });
 
-    it('should throw an error when updatedEmail is not available in cognito', async () => {
+    it('should throw an error when pendingEmail is not available in cognito', async () => {
       applicationContext
         .getPersistenceGateway()
         .isEmailAvailable.mockReturnValue(false);
@@ -174,18 +174,18 @@ describe('updatePractitionerUserInteractor', () => {
           user: {
             ...mockPractitioner,
             confirmEmail: 'exists@example.com',
-            updatedEmail: 'exists@example.com',
+            pendingEmail: 'exists@example.com',
           },
         }),
       ).rejects.toThrow('Email is not available');
     });
 
-    it('should update the user with the new user.updatedEmail value', async () => {
+    it('should update the user with the new user.pendingEmail value', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -203,7 +203,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -222,7 +222,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -236,7 +236,7 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -259,8 +259,8 @@ describe('updatePractitionerUserInteractor', () => {
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
           practitionerNotes: 'wow, real good notes',
-          updatedEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -276,7 +276,7 @@ describe('updatePractitionerUserInteractor', () => {
             ...mockPractitioner.contact,
             address1: 'yeahhhhh',
           },
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 
@@ -290,7 +290,7 @@ describe('updatePractitionerUserInteractor', () => {
           confirmEmail: 'free-email-to-use@example.com',
           firstName: 'Helen',
           lastName: 'Hunt',
-          updatedEmail: 'free-email-to-use@example.com',
+          pendingEmail: 'free-email-to-use@example.com',
         },
       });
 

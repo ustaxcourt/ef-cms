@@ -25,11 +25,11 @@ describe('validatePetitionerInteractor', () => {
       contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Wilbur Rayou',
+      pendingEmail: 'night@example.com',
       phone: '1111111111',
       postalCode: '55352',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'MN',
-      updatedEmail: 'night@example.com',
     };
   });
 
@@ -41,11 +41,11 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('should not return validation errors when contact is valid and updatedEmail and confirmEmail are not present', async () => {
+  it('should not return validation errors when contact is valid and pendingEmail and confirmEmail are not present', async () => {
     mockContact = {
       ...mockContact,
       confirmEmail: undefined,
-      updatedEmail: undefined,
+      pendingEmail: undefined,
     };
 
     const errors = validatePetitionerInteractor(applicationContext, {
@@ -58,7 +58,7 @@ describe('validatePetitionerInteractor', () => {
   it('runs validation on a contact with invalid properties', async () => {
     mockContact = {
       ...mockContact,
-      confirmEmail: undefined, // required when updatedEmail is present
+      confirmEmail: undefined, // required when pendingEmail is present
       postalCode: 'what is love', // invalid postal code
       serviceIndicator: undefined, // required
     };
@@ -95,12 +95,12 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('returns a validation error when confirmEmail is present without updatedEmail', async () => {
+  it('returns a validation error when confirmEmail is present without pendingEmail', async () => {
     const contact = {
       ...mockContact,
       confirmEmail: 'night@example.com',
+      pendingEmail: undefined,
       postalCode: '',
-      updatedEmail: undefined,
     };
 
     const errors = validatePetitionerInteractor(applicationContext, {

@@ -64,7 +64,7 @@ describe('Petitioner Service Indicator Journey', () => {
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contact.updatedEmail',
+      key: 'contact.pendingEmail',
       value: 'petitioner@example.com',
     });
 

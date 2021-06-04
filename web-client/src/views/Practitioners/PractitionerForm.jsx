@@ -302,19 +302,19 @@ export const PractitionerForm = connect(
                 <h4>Change Login & Service Email</h4>
                 <FormGroup
                   errorText={
-                    validationErrors.updatedEmail || validationErrors.email
+                    validationErrors.pendingEmail || validationErrors.email
                   }
                 >
-                  <label className="usa-label" htmlFor="updatedEmail">
+                  <label className="usa-label" htmlFor="pendingEmail">
                     New email address
                   </label>
                   <input
                     autoCapitalize="none"
                     className="usa-input"
-                    id="updatedEmail"
-                    name="updatedEmail"
+                    id="pendingEmail"
+                    name="pendingEmail"
                     type="text"
-                    value={form.updatedEmail || ''}
+                    value={form.pendingEmail || ''}
                     onBlur={() => validateSequence()}
                     onChange={e =>
                       updateFormValueSequence({

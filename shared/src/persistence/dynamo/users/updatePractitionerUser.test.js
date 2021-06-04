@@ -6,11 +6,11 @@ const { updatePractitionerUser } = require('./updatePractitionerUser');
 
 describe('updatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-  const updatedEmail = 'test@example.com';
+  const pendingEmail = 'test@example.com';
 
   const updatedUser = {
     barNumber: 'PT1234',
-    email: updatedEmail,
+    email: pendingEmail,
     name: 'Test Practitioner',
     role: ROLES.inactivePractitioner,
     section: 'inactivePractitioner',
@@ -81,7 +81,7 @@ describe('updatePractitionerUser', () => {
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
-        Username: updatedEmail,
+        Username: pendingEmail,
       }),
     );
   });

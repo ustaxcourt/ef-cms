@@ -8,12 +8,12 @@ export const EmailVerificationModal = connect(
     cancelSequence: sequences.clearModalSequence,
     closeVerifyEmailModalAndNavigateToPractitionerDetailSequence:
       sequences.closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
-    updatedEmail: state.form.updatedEmail,
+    pendingEmail: state.form.pendingEmail,
   },
   function EmailVerificationModal({
     cancelSequence,
     closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
-    updatedEmail,
+    pendingEmail,
   }) {
     return (
       <ModalDialog
@@ -25,7 +25,7 @@ export const EmailVerificationModal = connect(
         title="Verification Email Sent"
       >
         <div className="margin-bottom-4" id="verify-new-email-modal">
-          <p>A verification email has been sent to {updatedEmail}.</p>
+          <p>A verification email has been sent to {pendingEmail}.</p>
           <p>
             User will need to verify the new email before it is active and
             applied to all cases.

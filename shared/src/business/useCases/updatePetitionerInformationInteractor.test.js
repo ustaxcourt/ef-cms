@@ -887,7 +887,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          updatedEmail: 'changed-email@example.com',
+          pendingEmail: 'changed-email@example.com',
         },
       });
 
@@ -928,7 +928,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          updatedEmail: 'changed-email@example.com',
+          pendingEmail: 'changed-email@example.com',
         },
       });
 
@@ -958,7 +958,7 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          updatedEmail: 'changed-email@example.com',
+          pendingEmail: 'changed-email@example.com',
         },
       });
 

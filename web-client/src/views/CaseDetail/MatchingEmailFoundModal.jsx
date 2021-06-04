@@ -23,7 +23,7 @@ export const MatchingEmailFoundModal = connect(
           <p>
             {form.contact.name}
             <br />
-            {form.contact.updatedEmail}
+            {form.contact.pendingEmail}
           </p>
 
           <p>This case will be added to the matching email account.</p>
