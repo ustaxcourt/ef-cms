@@ -160,22 +160,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should throw an error if the docket entry is already on the docket record', async () => {
-    caseRecord.docketEntries[1].isOnDocketRecord = true;
-
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
-          docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
-          documentType: 'Order',
-        },
-      }),
-    ).rejects.toThrow(
-      'Docket entry has already been added to docket record or served',
-    );
-  });
-
   it('should throw an error if the docket entry is already served', async () => {
     caseRecord.docketEntries[1].servedAt = createISODateString();
 
@@ -187,9 +171,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           documentType: 'Order',
         },
       }),
-    ).rejects.toThrow(
-      'Docket entry has already been added to docket record or served',
-    );
+    ).rejects.toThrow('Docket entry has already been served');
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
