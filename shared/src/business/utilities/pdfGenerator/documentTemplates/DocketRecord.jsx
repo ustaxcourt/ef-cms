@@ -54,8 +54,9 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
             {contact.formattedCounsel[0].contact?.phone &&
               contact.formattedCounsel[0].contact.phone}
           </td> */}
+          {/* rosie words of wisdom - neither of these sols */}
           <td>
-            {['Rosie', 'Mrinalini'].map(p => {
+            {contact.counselNames.map(p => {
               return (
                 <>
                   <table>
@@ -71,10 +72,7 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
           </td>
 
           <td>
-            {[
-              { email: 'Rosie', phone: 'Rufio' },
-              { email: 'Mrinalini', phone: 'Odis' },
-            ].map(p => {
+            {contact.counselContacts.map(p => {
               return (
                 <>
                   <table>
