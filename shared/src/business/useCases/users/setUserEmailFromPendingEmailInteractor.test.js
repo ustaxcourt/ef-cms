@@ -15,7 +15,7 @@ const {
   setUserEmailFromPendingEmailInteractor,
 } = require('./setUserEmailFromPendingEmailInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { validUser } = require('../../../test/mockUsers');
+const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
   let mockUser;
@@ -48,6 +48,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
+        privatePractitioners: [MOCK_PRACTITIONER],
       },
     ];
 
@@ -219,6 +220,26 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     });
     expect(caseToUpdate).toMatchObject({
       docketNumber: '101-21',
+    });
+  });
+
+  it('should update the user cases with the new email and electronic service for a practitioner', async () => {
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      user: {
+        ...mockUser,
+        barNumber: 'PT5555',
+        role: ROLES.privatePractitioner,
+      },
+    });
+
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+
+    expect(applicationContext.logger.error).not.toBeCalled();
+    expect(getContactPrimary(caseToUpdate)).toMatchObject({
+      email: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
 });
