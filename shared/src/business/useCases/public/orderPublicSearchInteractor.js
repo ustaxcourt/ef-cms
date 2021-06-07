@@ -3,9 +3,6 @@ const {
   ORDER_EVENT_CODES,
   ORDER_JUDGE_FIELD,
 } = require('../../entities/EntityConstants');
-const {
-  PublicDocumentSearchResult,
-} = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { filterForPublic } = require('./publicHelpers');
 
@@ -54,7 +51,5 @@ exports.orderPublicSearchInteractor = async (
     })
   ).slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
-    applicationContext,
-  });
+  return filteredResults;
 };
