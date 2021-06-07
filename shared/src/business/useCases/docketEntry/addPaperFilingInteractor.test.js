@@ -293,8 +293,8 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
       caseTitle: Case.getCaseTitle(mockCase.caseCaption),
     });
