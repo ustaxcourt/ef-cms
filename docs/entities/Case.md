@@ -7881,7 +7881,7 @@
             limit: 1
       allow: 
         - "Paid"
-        - "Not Paid"
+        - "Not paid"
         - "Waived"
     petitionPaymentDate: 
       type: "date"
