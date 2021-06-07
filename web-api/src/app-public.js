@@ -68,11 +68,7 @@ app.get(
   lambdaWrapper(opinionPublicSearchLambda),
 );
 
-app.get(
-  '/public-api/judges',
-  slowDownLimiter,
-  lambdaWrapper(getPublicJudgesLambda),
-);
+app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
 app.get(
   '/public-api/todays-opinions',
