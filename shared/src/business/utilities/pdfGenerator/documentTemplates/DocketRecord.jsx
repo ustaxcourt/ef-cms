@@ -28,7 +28,7 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
   return (
     <>
       <tbody>
-        <tr className="party-details">
+        <tr className="party-details" key={contact.index}>
           <td>{contactTitles[contact.contactType]}</td>
           <td>
             {contact.name}
@@ -45,11 +45,49 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
               <p className="address-sealed-text">Address sealed</p>
             )}
           </td>
-          <td>{contact.formattedCounsel[0].formattedName}</td>
+
+          {/* <td>{contact.formattedCounsel[0].formattedName}</td>
+
+
           <td>
             {contact.formattedCounsel[0].formattedEmail}
             {contact.formattedCounsel[0].contact?.phone &&
               contact.formattedCounsel[0].contact.phone}
+          </td> */}
+          <td>
+            {['Rosie', 'Mrinalini'].map(p => {
+              return (
+                <>
+                  <table>
+                    <tbody>
+                      <tr key={p.index}>
+                        <td>{p}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              );
+            })}
+          </td>
+
+          <td>
+            {[
+              { email: 'Rosie', phone: 'Rufio' },
+              { email: 'Mrinalini', phone: 'Odis' },
+            ].map(p => {
+              return (
+                <>
+                  <table>
+                    <tbody>
+                      <tr key={p.index}>
+                        <td>{p.email}</td>
+                        <td>{p.phone}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </>
+              );
+            })}
           </td>
         </tr>
       </tbody>
