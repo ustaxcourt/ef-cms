@@ -114,6 +114,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
     };
   });
 
+  const showIntervenorRole = !formattedParties.some(
+    party => party.contactType === CONTACT_TYPES.intervenor,
+  );
+
   const formattedPetitioners = formattedParties.filter(
     petitioner => !otherContactTypes.includes(petitioner.contactType),
   );
@@ -134,6 +138,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     formattedParticipants,
     formattedPetitioners,
     formattedRespondents,
+    showIntervenorRole,
     showParticipantsTab: formattedParticipants.length > 0,
   };
 };
