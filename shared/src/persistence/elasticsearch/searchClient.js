@@ -10,7 +10,8 @@ exports.search = async ({ applicationContext, searchParameters }) => {
     sourceUnmarshalled['_score'] = hit['_score'];
 
     if (
-      hit['_index'] === 'efcms-docket-entry' &&
+      hit['_index'] ===
+        (process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings']
     ) {
