@@ -66,10 +66,8 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
-  if (docketEntry.isOnDocketRecord || docketEntry.servedAt) {
-    throw new Error(
-      'Docket entry has already been added to docket record or served',
-    );
+  if (docketEntry.servedAt) {
+    throw new Error('Docket entry has already been served');
   }
 
   const user = await applicationContext
