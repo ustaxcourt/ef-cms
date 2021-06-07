@@ -127,11 +127,6 @@ exports.saveCaseDetailInternalEditInteractor = async (
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: initializeCaseWorkItem.validate().toRawObject(),
-    });
-
     const workItemEntity = new WorkItem(
       {
         ...initializeCaseWorkItem,
@@ -142,12 +137,10 @@ exports.saveCaseDetailInternalEditInteractor = async (
       { applicationContext },
     );
 
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox({
-        applicationContext,
-        workItem: workItemEntity.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    });
   }
 
   const updatedCase = await applicationContext
