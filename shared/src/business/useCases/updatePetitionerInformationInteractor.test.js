@@ -605,8 +605,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -643,8 +642,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -677,8 +675,7 @@ describe('updatePetitionerInformationInteractor', () => {
         d => d.eventCode === 'NCA',
       );
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).not.toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -712,8 +709,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).not.toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -748,8 +744,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -784,8 +779,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -823,8 +817,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
@@ -871,8 +864,7 @@ describe('updatePetitionerInformationInteractor', () => {
       );
 
       expect(
-        applicationContext.getPersistenceGateway()
-          .saveWorkItemAndAddToSectionInbox,
+        applicationContext.getPersistenceGateway().saveWorkItem,
       ).toHaveBeenCalled();
       expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
       expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(

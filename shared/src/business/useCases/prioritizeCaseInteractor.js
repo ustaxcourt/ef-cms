@@ -45,7 +45,7 @@ exports.prioritizeCaseInteractor = async (
   if (caseEntity.preferredTrialCity && !caseEntity.blocked) {
     await applicationContext
       .getPersistenceGateway()
-      .updateCaseTrialSortMappingRecords({
+      .createCaseTrialSortMappingRecords({
         applicationContext,
         caseSortTags: caseEntity.generateTrialSortTags(),
         docketNumber: caseEntity.docketNumber,

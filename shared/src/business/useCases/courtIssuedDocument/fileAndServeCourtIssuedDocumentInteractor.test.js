@@ -483,7 +483,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it("should delete the work item from the user's inbox when a work item previously existed on the docket entry", async () => {
+  it('should update the work item and set as completed when a work item previously existed on the docket entry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
@@ -495,8 +495,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().updateWorkItem.mock
+        .calls[0][0],
+    ).toMatchObject({
+      workItemToUpdate: { completedAt: expect.anything() },
+    });
   });
 
   it('should delete the draftOrderState from the docketEntry', async () => {
@@ -597,9 +600,5 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
   });
 });

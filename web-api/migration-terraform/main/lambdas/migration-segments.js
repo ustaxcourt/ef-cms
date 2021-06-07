@@ -1,8 +1,15 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
+
 const {
-  migrateItems: migration0027,
+  migrateItems: migration0001,
+} = require('./migrations/0001-filing-fee-text-casing');
+const {
+  migrateItems: migration0027A,
+} = require('./migrations/0027-delete-work-item-records');
+const {
+  migrateItems: migration0027B,
 } = require('./migrations/0027-require-service-indicator-for-petitioner');
 const {
   migrateItems: migration0030,
@@ -43,8 +50,14 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0027');
-  items = await migration0027(items, documentClient);
+  applicationContext.logger.info('about to run migration 0001');
+  items = await migration0001(items, documentClient);
+
+  applicationContext.logger.info('about to run migration 0027A');
+  items = await migration0027A(items, documentClient);
+
+  applicationContext.logger.info('about to run migration 0027B');
+  items = await migration0027B(items, documentClient);
 
   applicationContext.logger.debug('about to run migration 0030');
   items = await migration0030(items);
