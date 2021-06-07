@@ -6,13 +6,7 @@ const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
-const {
-  getCropBoxCoordinates,
-} = require('../generateSignedDocumentInteractor');
 const { degrees, PDFDocument } = require('pdf-lib');
-jest.mock('../generateSignedDocumentInteractor', () => ({
-  getCropBoxCoordinates: jest.fn(),
-}));
 
 describe('addServedStampToDocument', () => {
   let degreesMock;
@@ -54,7 +48,7 @@ describe('addServedStampToDocument', () => {
       rgb: () => {},
     });
 
-    getCropBoxCoordinates.mockReturnValue({
+    applicationContext.getUtilities().getCropBoxCoordinates.mockReturnValue({
       pageHeight: 200,
       pageWidth: 0,
       y: 0,
@@ -129,6 +123,7 @@ describe('addServedStampToDocument', () => {
 
 describe('computeCoordinates', () => {
   let args = {
+    applicationContext,
     boxHeight: 1,
     boxWidth: 2,
     pageRotation: 0,
@@ -136,7 +131,7 @@ describe('computeCoordinates', () => {
   };
 
   beforeEach(() => {
-    getCropBoxCoordinates.mockReturnValue({
+    applicationContext.getUtilities().getCropBoxCoordinates.mockReturnValue({
       pageHeight: 150,
       pageWidth: 100,
       x: 10,

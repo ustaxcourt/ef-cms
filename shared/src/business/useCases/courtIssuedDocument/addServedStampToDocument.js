@@ -1,16 +1,18 @@
-const {
-  getCropBoxCoordinates,
-} = require('../generateSignedDocumentInteractor');
-
 const computeCoordinates = ({
+  applicationContext,
   boxHeight,
   boxWidth,
   pageRotation,
   pageToApplyStampTo,
 }) => {
-  const { pageHeight, pageWidth, x, y } = getCropBoxCoordinates(
-    pageToApplyStampTo,
-  );
+  const {
+    pageHeight,
+    pageWidth,
+    x,
+    y,
+  } = applicationContext
+    .getUtilities()
+    .getCropBoxCoordinates(pageToApplyStampTo);
 
   const rotationRads = (pageRotation * Math.PI) / 180;
   const coordsFromBottomLeft = {
@@ -109,6 +111,7 @@ exports.addServedStampToDocument = async ({
   const rotateStampDegrees = degrees(rotationAngle || 0);
 
   const { rectangleX, rectangleY } = computeCoordinates({
+    applicationContext,
     boxHeight,
     boxWidth,
     pageRotation: rotationAngle,

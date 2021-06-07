@@ -1,32 +1,10 @@
-/**
- * @param {PDFPage} page the page to get dimensions for
- * @returns {Array} [width, height]
- */
-const getPageDimensions = page => {
-  const sizeCropBox = page.getCropBox();
-  return [sizeCropBox.width, sizeCropBox.height];
-};
-
-const getCropBoxCoordinates = page => {
-  const sizeCropBox = page.getCropBox();
-
-  return {
-    pageHeight: sizeCropBox.height,
-    pageWidth: sizeCropBox.width,
-    x: sizeCropBox.x || 0,
-    y: sizeCropBox.y || 0,
-  };
-};
-
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
   cropBoxCoordinates,
   lineHeight,
   nameTextWidth,
-  pageHeight,
   pageRotation,
-  pageWidth,
   posX,
   posY,
   scale,
@@ -38,9 +16,11 @@ const computeCoordinates = ({
     x: posX / scale,
   };
   if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = pageWidth - (posY + boxHeight) / scale;
+    coordsFromBottomLeft.y =
+      cropBoxCoordinates.pageWidth - (posY + boxHeight) / scale;
   } else {
-    coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
+    coordsFromBottomLeft.y =
+      cropBoxCoordinates.pageHeight - (posY + boxHeight) / scale;
   }
 
   let rectangleX, rectangleY, sigTitleX, sigTitleY, sigNameX, sigNameY;
@@ -49,7 +29,7 @@ const computeCoordinates = ({
     rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
       coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
+      cropBoxCoordinates.pageWidth;
     rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads);
@@ -61,16 +41,18 @@ const computeCoordinates = ({
     rectangleX =
       coordsFromBottomLeft.x * Math.cos(rotationRads) -
       coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
+      cropBoxCoordinates.pageWidth;
     rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
+      cropBoxCoordinates.pageHeight;
 
-    sigNameX = pageWidth - posX - (boxWidth - nameTextWidth) / 2;
+    sigNameX =
+      cropBoxCoordinates.pageWidth - posX - (boxWidth - nameTextWidth) / 2;
     sigNameY = posY - boxHeight / 2 + boxHeight;
 
-    sigTitleX = pageWidth - posX - (boxWidth - titleTextWidth) / 2;
+    sigTitleX =
+      cropBoxCoordinates.pageWidth - posX - (boxWidth - titleTextWidth) / 2;
     sigTitleY =
       posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
   } else if (pageRotation === 270) {
@@ -80,20 +62,20 @@ const computeCoordinates = ({
     rectangleY =
       coordsFromBottomLeft.x * Math.sin(rotationRads) +
       coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-    sigNameX = pageWidth - posY - textHeight * 2;
-    sigNameY = pageHeight - posX - textHeight;
-    sigTitleX = pageWidth - posY - textHeight * 3;
-    sigTitleY = pageHeight - posX - textHeight * 4;
+      cropBoxCoordinates.pageHeight;
+    sigNameX = cropBoxCoordinates.pageWidth - posY - textHeight * 2;
+    sigNameY = cropBoxCoordinates.pageHeight - posX - textHeight;
+    sigTitleX = cropBoxCoordinates.pageWidth - posY - textHeight * 3;
+    sigTitleY = cropBoxCoordinates.pageHeight - posX - textHeight * 4;
   } else {
     rectangleX = coordsFromBottomLeft.x;
     rectangleY = coordsFromBottomLeft.y;
     sigNameX = posX + (boxWidth - nameTextWidth) / 2;
-    sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
+    sigNameY = cropBoxCoordinates.pageHeight - posY + boxHeight / 2 - boxHeight;
 
     sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
     sigTitleY =
-      pageHeight -
+      cropBoxCoordinates.pageHeight -
       posY +
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
@@ -140,8 +122,6 @@ const generateSignedDocumentInteractor = async ({
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];
 
-  const [pageWidth, pageHeight] = getPageDimensions(page);
-
   const { signatureName, signatureTitle } = sigTextData;
 
   const helveticaBoldFont = pdfDoc.embedStandardFont(
@@ -177,12 +157,12 @@ const generateSignedDocumentInteractor = async ({
   } = computeCoordinates({
     boxHeight,
     boxWidth,
-    cropBoxCoordinates: getCropBoxCoordinates(page),
+    cropBoxCoordinates: applicationContext
+      .getUtilities()
+      .getCropBoxCoordinates(page),
     lineHeight,
     nameTextWidth,
-    pageHeight,
     pageRotation: rotationAngle,
-    pageWidth,
     posX,
     posY,
     scale,
@@ -225,6 +205,4 @@ const generateSignedDocumentInteractor = async ({
 module.exports = {
   computeCoordinates,
   generateSignedDocumentInteractor,
-  getCropBoxCoordinates,
-  getPageDimensions,
 };
