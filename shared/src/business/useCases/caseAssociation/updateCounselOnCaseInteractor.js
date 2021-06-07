@@ -58,10 +58,13 @@ exports.updateCounselOnCaseInteractor = async (
     });
 
     caseEntity.petitioners.map(petitioner => {
-      // todo: account for when multiple counsel are representing petitioners
       if (editableFields.representing.includes(petitioner.contactId)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-      } else {
+      } else if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitioner.contactId,
+        )
+      ) {
         const serviceIsPaper = !petitioner.email;
         petitioner.serviceIndicator = serviceIsPaper
           ? SERVICE_INDICATOR_TYPES.SI_PAPER

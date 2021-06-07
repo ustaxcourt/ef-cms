@@ -21,6 +21,7 @@ describe('updateCounselOnCaseInteractor', () => {
     new PrivatePractitioner({
       barNumber: 'BN1234',
       name: 'Saul Goodman',
+      representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
       role: ROLES.privatePractitioner,
       userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
     }),
