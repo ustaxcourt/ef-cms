@@ -926,6 +926,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - master
