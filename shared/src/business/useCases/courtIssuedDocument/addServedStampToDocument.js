@@ -5,15 +5,17 @@ const {
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
-  cropBoxCoordinates,
-  pageHeight,
   pageRotation,
-  pageWidth,
+  pageToApplyStampTo,
 }) => {
+  const { pageHeight, pageWidth, x, y } = getCropBoxCoordinates(
+    pageToApplyStampTo,
+  );
+
   const rotationRads = (pageRotation * Math.PI) / 180;
   const coordsFromBottomLeft = {
     x: pageWidth / 2 - boxWidth / 2,
-    y: cropBoxCoordinates.y + boxHeight + PADDING * 2,
+    y: y + boxHeight + PADDING * 2,
   };
 
   let rectangleX, rectangleY;
@@ -47,13 +49,33 @@ const computeCoordinates = ({
     rectangleY = coordsFromBottomLeft.y;
   }
   return {
-    rectangleX: rectangleX + cropBoxCoordinates.x,
-    rectangleY: rectangleY + cropBoxCoordinates.y,
+    rectangleX: rectangleX + x,
+    rectangleY: rectangleY + y,
   };
 };
 
 const TEXT_SIZE = 14;
 const PADDING = 3;
+
+const getBoxWidth = ({ font, text }) => {
+  const serviceStampWidth = font.widthOfTextAtSize(text, TEXT_SIZE);
+  return serviceStampWidth + PADDING * 2;
+};
+
+const getBoxHeight = ({ font }) => {
+  const textHeight = font.sizeAtHeight(TEXT_SIZE);
+  return textHeight + PADDING * 2;
+};
+
+const setupPdfDocument = async ({ applicationContext, pdfData }) => {
+  const { PDFDocument, StandardFonts } = await applicationContext.getPdfLib();
+  const pdfDoc = await PDFDocument.load(pdfData);
+  const pages = pdfDoc.getPages();
+
+  const textFont = pdfDoc.embedStandardFont(StandardFonts.TimesRomanBold);
+
+  return { pageToApplyStampTo: pages[0], pdfDoc, textFont };
+};
 
 /**
  * addServedStampToDocument
@@ -70,44 +92,30 @@ exports.addServedStampToDocument = async ({
     .getUtilities()
     .formatNow('MM/DD/YY')}`,
 }) => {
-  const {
-    degrees,
-    PDFDocument,
-    rgb,
-    StandardFonts,
-  } = await applicationContext.getPdfLib();
+  const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const pages = pdfDoc.getPages();
-  const page = pages[0];
+  const { pageToApplyStampTo, pdfDoc, textFont } = await setupPdfDocument({
+    applicationContext,
+    pdfData,
+  });
 
-  const timesRomanBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.TimesRomanBold,
-  );
+  const boxWidth = getBoxWidth({
+    font: textFont,
+    text: serviceStampText,
+  });
+  const boxHeight = getBoxHeight({ font: textFont });
 
-  const serviceStampWidth = timesRomanBoldFont.widthOfTextAtSize(
-    serviceStampText,
-    TEXT_SIZE,
-  );
-  const textHeight = timesRomanBoldFont.sizeAtHeight(TEXT_SIZE);
-  const boxWidth = serviceStampWidth + PADDING * 2;
-  const boxHeight = textHeight + PADDING * 2;
-
-  const rotationAngle = page.getRotation().angle;
+  const rotationAngle = pageToApplyStampTo.getRotation().angle;
   const rotateStampDegrees = degrees(rotationAngle || 0);
-
-  const { pageHeight, pageWidth, x, y } = getCropBoxCoordinates(page);
 
   const { rectangleX, rectangleY } = computeCoordinates({
     boxHeight,
     boxWidth,
-    cropBoxCoordinates: { x, y },
-    pageHeight,
     pageRotation: rotationAngle,
-    pageWidth,
+    pageToApplyStampTo,
   });
 
-  page.drawRectangle({
+  pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
     rotate: rotateStampDegrees,
@@ -116,19 +124,17 @@ exports.addServedStampToDocument = async ({
     y: rectangleY + PADDING,
   });
 
-  page.drawText(serviceStampText, {
-    font: timesRomanBoldFont,
+  pageToApplyStampTo.drawText(serviceStampText, {
+    font: textFont,
     rotate: rotateStampDegrees,
     size: TEXT_SIZE,
     x: rectangleX + PADDING,
     y: rectangleY + PADDING * 2,
   });
 
-  const pdfBytes = await pdfDoc.save({
+  return await pdfDoc.save({
     useObjectStreams: false,
   });
-
-  return pdfBytes;
 };
 
 exports.computeCoordinates = computeCoordinates;
