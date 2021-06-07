@@ -80,8 +80,11 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
                   <table>
                     <tbody>
                       <tr key={p.index}>
-                        <td>{p.email}</td>
-                        <td>{p.phone}</td>
+                        <td>
+                          {p.email}
+                          <br />
+                          {p.phone}
+                        </td>
                       </tr>
                     </tbody>
                   </table>
