@@ -184,8 +184,8 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
       caseTitle: caseRecord.caseCaption,
     });

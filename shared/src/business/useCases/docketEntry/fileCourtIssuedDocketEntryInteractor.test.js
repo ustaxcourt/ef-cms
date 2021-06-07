@@ -9,6 +9,7 @@ const {
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
@@ -229,10 +230,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createUserInboxRecord.mock
-        .calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
-      caseTitle: caseRecord.caseCaption,
+      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
     });
   });
 });
