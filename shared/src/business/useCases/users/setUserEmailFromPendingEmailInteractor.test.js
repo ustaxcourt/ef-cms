@@ -18,6 +18,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
+  let mockPractitioner;
   let mockUser;
   let userCases;
   const UPDATED_EMAIL = 'other@example.com';
@@ -36,6 +37,13 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       userId: USER_ID,
     };
 
+    mockPractitioner = {
+      ...MOCK_PRACTITIONER,
+      email: undefined,
+      pendingEmail: UPDATED_EMAIL,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    };
+
     userCases = [
       {
         ...MOCK_CASE,
@@ -48,7 +56,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
-        privatePractitioners: [MOCK_PRACTITIONER],
+        privatePractitioners: [mockPractitioner],
       },
     ];
 
@@ -224,12 +232,12 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
   });
 
   it('should update the user cases with the new email and electronic service for a practitioner', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue(userCases);
+
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: {
-        ...mockUser,
-        barNumber: 'PT5555',
-        role: ROLES.privatePractitioner,
-      },
+      user: mockPractitioner,
     });
 
     const {
@@ -237,9 +245,25 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
 
     expect(applicationContext.logger.error).not.toBeCalled();
-    expect(getContactPrimary(caseToUpdate)).toMatchObject({
+    expect(caseToUpdate.privatePractitioners[0]).toMatchObject({
       email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
+  });
+
+  it('should log an error when the the user is not found on one of their associated cases by userId', async () => {
+    const mockErrorMessage = 'updateCaseAndAssociations failure';
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockRejectedValueOnce(
+        new Error(mockErrorMessage),
+      );
+
+    await expect(
+      setUserEmailFromPendingEmailInteractor(applicationContext, {
+        user: mockPractitioner,
+      }),
+    ).rejects.toThrow(mockErrorMessage);
   });
 });
