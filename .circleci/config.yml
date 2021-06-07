@@ -922,7 +922,7 @@ workflows:
       #           - experimental4
       - switch-colors:
           requires:
-            - deploy
+            - migrate
           filters:
             branches:
               only:
