@@ -436,6 +436,9 @@ const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
 const {
+  getCropBoxCoordinates,
+} = require('../../shared/src/business/utilities/getCropBoxCoordinates');
+const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
@@ -866,6 +869,9 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
+  setupPdfDocument,
+} = require('../../shared/src/business/utilities/setupPdfDocument');
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
@@ -1768,6 +1774,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
+        getCropBoxCoordinates,
         getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
@@ -1776,6 +1783,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         prepareDateFromString,
         scrapePdfContents,
         setServiceIndicatorsForCase,
+        setupPdfDocument,
       };
     },
     isAuthorized,

@@ -6,113 +6,140 @@ const {
   computeCoordinates,
   generateSignedDocumentInteractor,
 } = require('./generateSignedDocumentInteractor');
-const { degrees, PDFDocument } = require('pdf-lib');
 
 describe('generateSignedDocument', () => {
-  let rotatedTestPdfDoc;
+  let drawTextMock;
+  let drawRectangleMock;
+  let rotationReturnValue;
+  let saveMock;
 
-  beforeAll(async () => {
-    const pdfDoc = await PDFDocument.load(testPdfDoc);
-    const pages = pdfDoc.getPages();
-    const page = pages[0];
+  const mockSignatureName = '(Signed) Dr. Guy Fieri';
+  const mockTitle = 'Chief Judge';
 
-    page.setRotation(degrees(90));
+  beforeEach(() => {
+    drawTextMock = jest.fn();
+    drawRectangleMock = jest.fn();
+    rotationReturnValue = { angle: 270 };
+    saveMock = jest.fn();
 
-    rotatedTestPdfDoc = await pdfDoc.save({
+    applicationContext.getUtilities().getCropBoxCoordinates.mockReturnValue({
+      pageHeight: 200,
+      pageWidth: 0,
+      y: 0,
+    });
+
+    applicationContext.getUtilities().setupPdfDocument.mockReturnValue({
+      pdfDoc: {
+        getPages: () => [
+          {
+            drawRectangle: drawRectangleMock,
+            drawText: drawTextMock,
+            getRotation: jest
+              .fn()
+              .mockImplementation(() => rotationReturnValue),
+          },
+        ],
+        save: saveMock,
+      },
+      textFont: {
+        sizeAtHeight: jest.fn().mockReturnValue(50),
+        widthOfTextAtSize: jest.fn().mockReturnValue(100),
+      },
+    });
+  });
+
+  it('should generate a pdf document with the provided signature text', async () => {
+    const args = {
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    };
+
+    await generateSignedDocumentInteractor(args);
+
+    expect(drawTextMock.mock.calls[0][0]).toEqual(mockSignatureName);
+    expect(drawTextMock.mock.calls[1][0]).toEqual(mockTitle);
+    expect(saveMock.mock.calls[0][0]).toEqual({
       useObjectStreams: false,
     });
   });
 
-  const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
-  const rotatedPdfDocumentLoadMock = async () =>
-    await PDFDocument.load(rotatedTestPdfDoc);
-
-  beforeEach(() => {
-    jest.setTimeout(30000);
-
-    applicationContext.getPdfLib.mockReturnValue({
-      PDFDocument: {
-        load: pdfDocumentLoadMock,
-      },
-      StandardFonts: {
-        TimesRomanBold: 'Times-Bold',
-      },
-      degrees: () => {},
-      rgb: () => {},
-    });
-  });
-
-  it('generates a pdf document with the provided signature text attached', async () => {
-    const args = {
-      applicationContext,
-      pageIndex: 0,
-      pdfData: testPdfDoc,
-      posX: 200,
-      posY: 200,
-      scale: 1,
-      sigTextData: {
-        signatureName: '(Signed) Dr. Guy Fieri',
-        signatureTitle: 'Chief Judge',
-      },
-    };
-
-    const newPdfData = await generateSignedDocumentInteractor(args);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
-  });
-
   it('generates a pdf document with the provided signature text attached with rotated PDF', async () => {
-    applicationContext.getPdfLib.mockReturnValue({
-      PDFDocument: {
-        load: rotatedPdfDocumentLoadMock,
-      },
-      StandardFonts: {
-        TimesRomanBold: 'Times-Bold',
-      },
-      degrees: () => {},
-      rgb: () => {},
-    });
-
+    const mockPageRotation = 90;
+    rotationReturnValue = { angle: mockPageRotation };
     const args = {
       applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
       posY: 200,
-      scale: 1,
       sigTextData: {
         signatureName: '(Signed) Dr. Guy Fieri',
         signatureTitle: 'Chief Judge',
       },
     };
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
+    await generateSignedDocumentInteractor(args);
 
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: {
+        angle: mockPageRotation,
+      },
+    });
+    expect(drawTextMock.mock.calls[1][1]).toMatchObject({
+      rotate: {
+        angle: mockPageRotation,
+      },
+    });
   });
 
-  it('uses a default scale value of 1 if not provided in args', async () => {
+  it('should use a default scale value of 1 when one has not been provided', async () => {
     const args = {
       applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
       posY: 200,
+      scale: undefined,
       sigTextData: {
         signatureName: '(Signed) Dr. Guy Fieri',
         signatureTitle: 'Chief Judge',
       },
     };
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
+    await generateSignedDocumentInteractor(args);
 
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      height: 126, // height is calculated using scale
+    });
+  });
+
+  it('should default the stamp rotation angle to 0 degrees when the page rotation angle is undefined', async () => {
+    rotationReturnValue = { angle: undefined };
+    const args = {
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      scale: undefined,
+      sigTextData: {
+        signatureName: '(Signed) Dr. Guy Fieri',
+        signatureTitle: 'Chief Judge',
+      },
+    };
+
+    await generateSignedDocumentInteractor(args);
+
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: { angle: 0 },
+    });
   });
 });
 

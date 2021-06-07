@@ -1,3 +1,6 @@
+const TEXT_SIZE = 15;
+const PADDING = 13;
+
 const computeCoordinates = ({
   boxHeight,
   boxWidth,
@@ -111,41 +114,32 @@ const generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
-  const {
-    degrees,
-    PDFDocument,
-    rgb,
-    StandardFonts,
-  } = await applicationContext.getPdfLib();
+  const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const pages = pdfDoc.getPages();
-  const page = pages[pageIndex];
+  const {
+    pdfDoc,
+    textFont,
+  } = await applicationContext.getUtilities().setupPdfDocument({
+    applicationContext,
+    pdfData,
+  });
+
+  const pageToApplyStampTo = pdfDoc.getPages()[pageIndex];
 
   const { signatureName, signatureTitle } = sigTextData;
 
-  const timesRomanBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.TimesRomanBold,
-  );
+  const textSize = TEXT_SIZE * scale;
+  const padding = PADDING * scale;
 
-  const textSize = 15 * scale;
-  const padding = 13 * scale;
-  const nameTextWidth = timesRomanBoldFont.widthOfTextAtSize(
-    signatureName,
-    textSize,
-  );
-  const titleTextWidth = timesRomanBoldFont.widthOfTextAtSize(
-    signatureTitle,
-    textSize,
-  );
-  const textHeight = timesRomanBoldFont.sizeAtHeight(textSize);
+  const nameTextWidth = textFont.widthOfTextAtSize(signatureName, textSize);
+  const titleTextWidth = textFont.widthOfTextAtSize(signatureTitle, textSize);
+  const textHeight = textFont.sizeAtHeight(textSize);
   const lineHeight = textHeight / 10;
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
 
-  const rotationAngle = page.getRotation().angle;
-  const shouldRotateSignature = rotationAngle !== 0;
-  const rotateSignatureDegrees = degrees(rotationAngle);
+  const rotationAngle = pageToApplyStampTo.getRotation().angle;
+  const rotateSignatureDegrees = degrees(rotationAngle || 0);
 
   const {
     rectangleX,
@@ -159,7 +153,7 @@ const generateSignedDocumentInteractor = async ({
     boxWidth,
     cropBoxCoordinates: applicationContext
       .getUtilities()
-      .getCropBoxCoordinates(page),
+      .getCropBoxCoordinates(pageToApplyStampTo),
     lineHeight,
     nameTextWidth,
     pageRotation: rotationAngle,
@@ -170,36 +164,34 @@ const generateSignedDocumentInteractor = async ({
     titleTextWidth,
   });
 
-  const rotate = shouldRotateSignature ? rotateSignatureDegrees : degrees(0);
-
-  page.drawRectangle({
+  pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
-    rotate,
+    rotate: rotateSignatureDegrees,
     width: boxWidth,
     x: rectangleX,
     y: rectangleY,
   });
-  page.drawText(signatureName, {
-    font: timesRomanBoldFont,
-    rotate,
+
+  pageToApplyStampTo.drawText(signatureName, {
+    font: textFont,
+    rotate: rotateSignatureDegrees,
     size: textSize,
     x: sigNameX,
     y: sigNameY,
   });
-  page.drawText(signatureTitle, {
-    font: timesRomanBoldFont,
-    rotate,
+
+  pageToApplyStampTo.drawText(signatureTitle, {
+    font: textFont,
+    rotate: rotateSignatureDegrees,
     size: textSize,
     x: sigTitleX,
     y: sigTitleY,
   });
 
-  const pdfBytes = await pdfDoc.save({
+  return await pdfDoc.save({
     useObjectStreams: false,
   });
-
-  return pdfBytes;
 };
 
 module.exports = {
