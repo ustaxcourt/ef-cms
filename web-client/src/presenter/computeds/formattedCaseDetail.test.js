@@ -1,5 +1,6 @@
 import {
   CONTACT_TYPES,
+  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
@@ -2951,7 +2952,7 @@ describe('formattedCaseDetail', () => {
         otherFilers: [],
         otherPetitioners: [],
         partyType: 'Petitioner',
-        petitionPaymentStatus: 'Not Paid',
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
         petitioners: [
           {
             address1: '734 Cowley Parkway',
@@ -3329,7 +3330,7 @@ describe('formattedCaseDetail', () => {
       otherFilers: [],
       otherPetitioners: [],
       partyType: 'Petitioner',
-      petitionPaymentStatus: 'Not Paid',
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       petitioners: [
         {
           address1: '734 Cowley Parkway',
