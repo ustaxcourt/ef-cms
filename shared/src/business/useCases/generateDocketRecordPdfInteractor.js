@@ -69,14 +69,21 @@ exports.generateDocketRecordPdfInteractor = async (
     });
 
   formattedCaseDetail.petitioners.forEach(petitioner => {
-    petitioner.formattedCounsel = getPractitionersRepresenting(
+    petitioner.counselNames = [];
+    petitioner.counselContacts = [];
+
+    getPractitionersRepresenting(
       formattedCaseDetail,
       petitioner.contactId,
-    ).map(prac => ({
-      ...prac,
-      formattedEmail: prac ? prac.email : 'None',
-      formattedName: prac.formattedName || prac.name || 'None',
-    }));
+    ).forEach(practitioner => {
+      petitioner.counselNames.push(
+        practitioner.formattedName || practitioner.name || 'None',
+      );
+      petitioner.counselContacts.push({
+        email: practitioner.email || 'None',
+        phone: practitioner.contact.phone,
+      });
+    });
   });
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
