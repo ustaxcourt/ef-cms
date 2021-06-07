@@ -5,7 +5,6 @@ const {
 const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
-  CASE_TYPES_MAP,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -20,12 +19,14 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
 
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
+  const mockServedDocketEntryId = '736a68f4-d08d-4ba1-8185-117359f46804';
 
   const mockUser = {
     name: 'Docket Clerk',
@@ -77,18 +78,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   const mockCases = [
     {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'contact@example.com',
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
+      ...MOCK_CASE,
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -111,27 +101,28 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
           workItem: mockWorkItem,
         },
+        {
+          docketEntryId: mockServedDocketEntryId,
+          documentType: 'Order that case is assigned',
+          eventCode: 'OAJ',
+          servedAt: createISODateString(),
+          servedParties: [
+            {
+              name: 'Bernard Lowe',
+            },
+          ],
+          signedAt: createISODateString(),
+          signedByUserId: uuidv4(),
+          signedJudgeName: 'Chief Judge',
+          userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
+          workItem: mockWorkItem,
+        },
         ...docketEntriesWithCaseClosingEventCodes,
       ],
       docketNumber: '101-20',
-      filingType: 'Myself',
-      partyType: PARTY_TYPES.petitioner,
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
     {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Primary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
+      ...MOCK_CASE,
       contactSecondary: {
         address1: '123 Main St',
         city: 'Somewhere',
@@ -167,13 +158,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         ...docketEntriesWithCaseClosingEventCodes,
       ],
       docketNumber: '102-20',
-      filingType: 'Myself',
-      isPaper: true,
-      mailingDate: 'testing',
       partyType: PARTY_TYPES.petitionerSpouse,
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     },
   ];
 
@@ -272,6 +257,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         docketNumber: '101-20',
       }),
     ).rejects.toThrow('Docket entry 000 was not found');
+  });
+
+  it('should throw an error if the docket entry has already been served', async () => {
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: mockServedDocketEntryId,
+        docketNumber: '101-20',
+      }),
+    ).rejects.toThrow('Docket entry has already been served');
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
