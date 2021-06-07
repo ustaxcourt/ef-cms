@@ -2049,7 +2049,7 @@ Case.prototype.deleteStatistic = function (statisticId) {
  * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
  */
 // NOTE: This method will have to be changed to account for all petitioners on the case
-// (instead of just primary and secondary) once the User Management Batch 1 stories have been mered.
+// (instead of just primary and secondary) once the User Management Batch 1 stories have been merged.
 const hasPartyWithServiceType = function (rawCase, serviceType) {
   const contactPrimary = getContactPrimary(rawCase);
   const contactSecondary = getContactSecondary(rawCase);
@@ -2073,6 +2073,21 @@ const hasPartyWithServiceType = function (rawCase, serviceType) {
  */
 Case.prototype.hasPartyWithServiceType = function (serviceType) {
   return hasPartyWithServiceType(this, serviceType);
+};
+
+/**
+ * Returns true if the case should be displayed as eligible for trial sessions
+ *
+ * @returns {Boolean} true if the case is eligible
+ */
+Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
+  return !!(
+    (this.highPriority ||
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
+  );
 };
 
 const isSealedCase = rawCase => {
