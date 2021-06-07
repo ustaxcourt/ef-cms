@@ -2,23 +2,23 @@
  * @param {PDFPage} page the page to get dimensions for
  * @returns {Array} [width, height]
  */
-exports.getPageDimensions = page => {
+const getPageDimensions = page => {
   const sizeCropBox = page.getCropBox();
   return [sizeCropBox.width, sizeCropBox.height];
 };
 
-exports.getCropBoxCoordinates = page => {
+const getCropBoxCoordinates = page => {
   const sizeCropBox = page.getCropBox();
 
   return {
     pageHeight: sizeCropBox.height,
     pageWidth: sizeCropBox.width,
-    x: sizeCropBox.x,
-    y: sizeCropBox.y,
+    x: sizeCropBox.x || 0,
+    y: sizeCropBox.y || 0,
   };
 };
 
-exports.computeCoordinates = ({
+const computeCoordinates = ({
   boxHeight,
   boxWidth,
   cropBoxCoordinates,
@@ -120,7 +120,7 @@ exports.computeCoordinates = ({
  * @param {object} providers.sigTextData // Signature text data including the name and title
  * @returns {ByteArray} PDF data after signature is added
  */
-exports.generateSignedDocumentInteractor = async ({
+const generateSignedDocumentInteractor = async ({
   applicationContext,
   pageIndex,
   pdfData,
@@ -140,7 +140,7 @@ exports.generateSignedDocumentInteractor = async ({
   const pages = pdfDoc.getPages();
   const page = pages[pageIndex];
 
-  const [pageWidth, pageHeight] = exports.getPageDimensions(page);
+  const [pageWidth, pageHeight] = getPageDimensions(page);
 
   const { signatureName, signatureTitle } = sigTextData;
 
@@ -174,10 +174,10 @@ exports.generateSignedDocumentInteractor = async ({
     sigNameY,
     sigTitleX,
     sigTitleY,
-  } = this.computeCoordinates({
+  } = computeCoordinates({
     boxHeight,
     boxWidth,
-    cropBoxCoordinates: exports.getCropBoxCoordinates(page),
+    cropBoxCoordinates: getCropBoxCoordinates(page),
     lineHeight,
     nameTextWidth,
     pageHeight,
@@ -220,4 +220,11 @@ exports.generateSignedDocumentInteractor = async ({
   });
 
   return pdfBytes;
+};
+
+module.exports = {
+  computeCoordinates,
+  generateSignedDocumentInteractor,
+  getCropBoxCoordinates,
+  getPageDimensions,
 };
