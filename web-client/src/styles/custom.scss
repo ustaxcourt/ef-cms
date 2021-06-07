@@ -1114,9 +1114,11 @@ hr.lighter {
     padding: 10px;
     border: 1px solid #eee;
     background-color: rgba(255, 255, 255, 0.8);
+    font-family: 'Times New Roman', Times, serif;
     font-weight: $font-bold;
     text-align: center;
   }
+
   #signature-warning {
     display: block;
     width: 612px;
@@ -1133,6 +1135,7 @@ hr.lighter {
     overflow-y: overlay;
     text-align: center;
   }
+
   #sign-pdf-canvas {
     display: block;
     margin: auto;
