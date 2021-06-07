@@ -36,6 +36,7 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
+import { getCropBoxCoordinates } from '../../shared/src/business/utilities/getCropBoxCoordinates';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 const {
   getDocQcSectionForUser,
@@ -645,6 +646,7 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
       getContactSecondary,
+      getCropBoxCoordinates,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,

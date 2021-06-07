@@ -84,6 +84,9 @@ const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
+  getCropBoxCoordinates,
+} = require('../../../src/business/utilities/getCropBoxCoordinates');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../utilities/getWorkQueueFilters');
@@ -269,6 +272,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
+    getCropBoxCoordinates: jest.fn().mockImplementation(getCropBoxCoordinates),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
