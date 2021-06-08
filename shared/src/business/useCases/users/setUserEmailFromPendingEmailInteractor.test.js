@@ -30,7 +30,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
-      originalBarState: 'Florida',
+      originalBarState: 'FL',
       pendingEmail: UPDATED_EMAIL,
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
