@@ -72,18 +72,25 @@ exports.generateDocketRecordPdfInteractor = async (
     petitioner.counselNames = [];
     petitioner.counselContacts = [];
 
-    getPractitionersRepresenting(
+    const practitioners = getPractitionersRepresenting(
       formattedCaseDetail,
       petitioner.contactId,
-    ).forEach(practitioner => {
-      petitioner.counselNames.push(
-        practitioner.formattedName || practitioner.name || 'None',
-      );
-      petitioner.counselContacts.push({
-        email: practitioner.email || 'None',
-        phone: practitioner.contact.phone,
+    );
+
+    if (practitioners.length > 0) {
+      practitioners.forEach(practitioner => {
+        petitioner.counselNames.push(
+          practitioner.formattedName || practitioner.name,
+        );
+        petitioner.counselContacts.push({
+          email: practitioner.email,
+          phone: practitioner.contact.phone,
+        });
       });
-    });
+    } else {
+      petitioner.counselNames.push('None');
+      petitioner.counselContacts.push({ email: 'None' });
+    }
   });
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
