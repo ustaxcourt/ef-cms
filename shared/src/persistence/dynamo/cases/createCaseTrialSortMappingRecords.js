@@ -1,4 +1,7 @@
-const { put } = require('../../dynamodbClientService');
+const {
+  deleteCaseTrialSortMappingRecords,
+} = require('./deleteCaseTrialSortMappingRecords');
+const { put, query } = require('../../dynamodbClientService');
 
 /**
  * createCaseTrialSortMappingRecords
@@ -14,6 +17,27 @@ exports.createCaseTrialSortMappingRecords = async ({
   docketNumber,
 }) => {
   const { hybrid, nonHybrid } = caseSortTags;
+
+  const oldSortRecords = await query({
+    ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
+      '#pk': 'pk',
+    },
+    ExpressionAttributeValues: {
+      ':gsi1pk': `eligible-for-trial-case-catalog|${docketNumber}`,
+      ':pk': 'eligible-for-trial-case-catalog',
+    },
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk AND #pk = :pk',
+    applicationContext,
+  });
+
+  if (oldSortRecords.length) {
+    await deleteCaseTrialSortMappingRecords({
+      applicationContext,
+      docketNumber,
+    });
+  }
 
   await put({
     Item: {

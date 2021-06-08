@@ -33,9 +33,9 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+  await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
+    workItemToUpdate: workItemToUpdate.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({

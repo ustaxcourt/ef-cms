@@ -170,6 +170,7 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
 
   return validCasesToUpdate;
 };
+exports.updatePractitionerCases = updatePractitionerCases;
 
 /**
  * verifyUserPendingEmailInteractor
