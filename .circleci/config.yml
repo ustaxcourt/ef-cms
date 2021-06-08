@@ -1047,3 +1047,7 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - build-client-coverage
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - deploy
