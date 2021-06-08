@@ -67,7 +67,7 @@ describe('getUsersInSectionAction', () => {
       .getUsersInSectionInteractor.mockReturnValue(mockUsers);
 
     const result = await runAction(
-      await getUsersInSectionAction({ section: 'judge' }),
+      getUsersInSectionAction({ section: 'judge' }),
       {
         modules: {
           presenter,
