@@ -47,45 +47,29 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
           </td>
 
           <td>
-            {contact.counselNames.map(p => {
+            {contact.counselNames.map(practitionerName => {
               return (
                 <div
-                  key={p}
-                  style={{
-                    minHeight: '50px',
-                  }}
+                  className="counsel-name"
+                  key={practitionerName + contact.contactId}
                 >
-                  <p
-                    style={{
-                      marginTop: 0,
-                    }}
-                  >
-                    {p}
-                  </p>
+                  <p className="margin-top-0">{practitionerName}</p>
                 </div>
               );
             })}
           </td>
 
           <td>
-            {contact.counselContacts.map(p => {
+            {contact.counselContacts.map(practitioner => {
               return (
-                <div key={p.email} style={{ marginTop: 0, minHeight: '50px' }}>
-                  <p
-                    style={{
-                      marginBottom: 0,
-                      marginTop: 0,
-                    }}
-                  >
-                    {p.email}
+                <div
+                  className="practitioner-contact"
+                  key={practitioner.email + contact.contactId}
+                >
+                  <p className="margin-top-0 margin-bottom-0">
+                    {practitioner.email}
                   </p>
-                  <p
-                    style={{
-                      marginTop: 0,
-                    }}
-                  >
-                    {p.phone}
-                  </p>
+                  <p className="margin-top-0">{practitioner.phone}</p>
                 </div>
               );
             })}

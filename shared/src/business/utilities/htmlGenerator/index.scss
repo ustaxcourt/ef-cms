@@ -494,11 +494,20 @@ th {
   }
 
   .petitioner-name-column {
-    min-width: 20%;
+    min-width: 120px;
   }
 
   .docket-record-table {
     margin-top: 30px;
+  }
+
+  .practitioner-contact {
+    min-height: 50px;
+    margin-top: 0;
+  }
+
+  .counsel-name {
+    min-height: 50px;
   }
 }
 
