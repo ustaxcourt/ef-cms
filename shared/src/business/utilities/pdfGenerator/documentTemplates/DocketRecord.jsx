@@ -30,7 +30,7 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
       <tbody>
         <tr className="party-details" key={contact.index}>
           <td>{contactTitles[contact.contactType]}</td>
-          <td className="petitioner-name-column">
+          <td>
             {contact.name}
             {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
             {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
@@ -148,7 +148,7 @@ export const DocketRecord = ({
             <thead>
               <tr>
                 <th>Role</th>
-                <th className="petitioner-name-column">Name</th>
+                <th>Name</th>
                 <th>Contact</th>
                 <th>Counsel</th>
                 <th>Counsel contact</th>
