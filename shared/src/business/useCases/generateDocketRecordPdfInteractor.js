@@ -79,9 +79,7 @@ exports.generateDocketRecordPdfInteractor = async (
 
     if (practitioners.length > 0) {
       practitioners.forEach(practitioner => {
-        petitioner.counselNames.push(
-          practitioner.formattedName || practitioner.name,
-        );
+        petitioner.counselNames.push(practitioner.formattedName);
         petitioner.counselContacts.push({
           email: practitioner.email,
           phone: practitioner.contact.phone,
