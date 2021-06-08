@@ -119,8 +119,7 @@ describe('updates the contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
   });
 
@@ -149,8 +148,7 @@ describe('updates the contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toBeCalled();
   });
 
@@ -275,8 +273,8 @@ describe('updates the contact on a case', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
       caseTitle: 'Test Petitioner',
     });

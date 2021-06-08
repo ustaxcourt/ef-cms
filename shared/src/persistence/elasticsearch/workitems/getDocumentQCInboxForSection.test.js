@@ -26,9 +26,10 @@ describe('getDocumentQCInboxForSection', () => {
             bool: {
               must: [
                 {
-                  term: {
-                    'pk.S': 'section|docket',
-                  },
+                  prefix: { 'pk.S': 'work-item|' },
+                },
+                {
+                  prefix: { 'sk.S': 'work-item|' },
                 },
                 {
                   term: {
@@ -69,7 +70,7 @@ describe('getDocumentQCInboxForSection', () => {
     });
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[2],
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[3],
     ).toEqual({
       match: {
         'associatedJudge.S': mockJudgeName,
