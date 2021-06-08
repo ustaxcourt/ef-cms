@@ -182,7 +182,7 @@ export const DocketRecord = ({
             {caseDetail.irsPractitioners.length > 0 ? (
               caseDetail.irsPractitioners.map(irsPractitioner => {
                 return (
-                  <tr key={irsPractitioner.index}>
+                  <tr key={irsPractitioner.userId}>
                     <td>{irsPractitioner.name}</td>
                     <td>
                       <div>
