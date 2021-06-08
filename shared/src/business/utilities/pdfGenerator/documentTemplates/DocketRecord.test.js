@@ -8,6 +8,7 @@ const {
 } = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
+const { v4: uuidv4 } = require('uuid');
 
 describe('DocketRecord', () => {
   let caseDetail;
@@ -32,8 +33,10 @@ describe('DocketRecord', () => {
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
-      contactId: '1f033442-2962-42cd-8fd8-a393dc754ae1',
+      contactId: uuidv4(),
       contactType: CONTACT_TYPES.primary,
+      counselContacts: [{ email: 'jeff@holo.com', phone: '867.5309' }],
+      counselNames: ['Jeff Yu'],
       country: 'USA',
       name: 'Test Petitioner',
       phone: '123-124-1234',
@@ -47,8 +50,10 @@ describe('DocketRecord', () => {
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
-      contactId: '04b71da8-a63e-44c2-ad3d-018b584210ee',
+      contactId: uuidv4(),
       contactType: CONTACT_TYPES.secondary,
+      counselContacts: [{ email: 'jeff@holo.com', phone: '867.5309' }],
+      counselNames: ['Jeff Yu'],
       country: 'USA',
       name: 'Test Petitioner 2',
       phone: '123-124-5678',
@@ -71,6 +76,7 @@ describe('DocketRecord', () => {
       formattedName: 'Test Private Practitioner (PT20001)',
       name: 'Test Private Practitioner',
       representingFormatted: [],
+      userId: uuidv4(),
     };
 
     irsPractitioner = {
@@ -86,6 +92,7 @@ describe('DocketRecord', () => {
         state: 'AL',
       },
       name: 'Test IRS Practitioner',
+      userId: uuidv4(),
     };
 
     caseDetail = {
@@ -125,9 +132,6 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      PARTY_TYPES.petitioner,
-    );
     expect(contacts.find('.party-details').length).toEqual(1);
 
     const contactPrimaryEl = contacts.find('.party-details').text();
