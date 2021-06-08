@@ -9,6 +9,7 @@ export const StateDrivenFileInput = connect(
   {
     ariaDescribedBy: props.ariaDescribedBy,
     constants: state.constants,
+    file: props.file,
     fileInputName: props.name,
     form: state.form,
     id: props.id,
@@ -18,6 +19,7 @@ export const StateDrivenFileInput = connect(
   function StateDrivenFileInput({
     ariaDescribedBy,
     constants,
+    file,
     fileInputName,
     form,
     id,
@@ -25,6 +27,8 @@ export const StateDrivenFileInput = connect(
     validationSequence,
   }) {
     let inputRef;
+
+    const fileOnForm = file || form[fileInputName];
 
     return (
       <React.Fragment>
@@ -36,14 +40,14 @@ export const StateDrivenFileInput = connect(
           name={fileInputName}
           ref={ref => (inputRef = ref)}
           style={{
-            display: form[fileInputName] ? 'none' : 'block',
+            display: fileOnForm ? 'none' : 'block',
           }}
           type="file"
           onChange={e => {
             const { name: inputName } = e.target;
             limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
-              const file = e.target.files[0];
-              cloneFile(file)
+              const uploadedFile = e.target.files[0];
+              cloneFile(uploadedFile)
                 .then(clonedFile => {
                   updateFormValueSequence({
                     key: inputName,
@@ -61,16 +65,16 @@ export const StateDrivenFileInput = connect(
             });
           }}
           onClick={e => {
-            if (form[fileInputName]) e.preventDefault();
+            if (fileOnForm) e.preventDefault();
           }}
         />
 
-        {form[fileInputName] && (
+        {fileOnForm && (
           <div>
             <span className="success-message icon-upload margin-right-1">
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
-            <span className="mr-1">{form[fileInputName].name}</span>
+            <span className="mr-1">{fileOnForm.name}</span>
             <Button
               link
               className="ustc-button--mobile-inline margin-left-1"
