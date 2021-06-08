@@ -28,7 +28,7 @@ export const OtherFilerInformation = connect(
                     <div className="grid-row header-row">
                       <div
                         className="grid-col-6 display-flex"
-                        id="secondary-label"
+                        id="other-filer-label"
                       >
                         <h3>Other Filer Info</h3>
                       </div>
@@ -41,7 +41,7 @@ export const OtherFilerInformation = connect(
                               className="grid-col-12 margin-top-1 margin-bottom-1"
                               key={`otherFilers-${otherFiler.name}`}
                             >
-                              <address aria-labelledby="primary-label">
+                              <address aria-labelledby="other-filer-label">
                                 <AddressDisplay
                                   contact={otherFiler}
                                   nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
@@ -77,7 +77,7 @@ export const OtherFilerInformation = connect(
                                 )}
                                 key={`otherFilers-${otherFiler.name}`}
                               >
-                                <address aria-labelledby="primary-label">
+                                <address aria-labelledby="other-filer-label">
                                   <AddressDisplay
                                     contact={otherFiler}
                                     nameOverride={`${otherFiler.name}, ${otherFiler.otherFilerType}`}
