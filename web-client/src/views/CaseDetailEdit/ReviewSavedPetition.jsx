@@ -92,12 +92,12 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <span
                           className="usa-label usa-label-display"
-                          htmlFor="filing-contact-primary"
+                          id="filing-contact-primary"
                         >
                           Petitioner’s information
                         </span>
                         {form.contactPrimary && (
-                          <address aria-labelledby="primary-label">
+                          <address aria-labelledby="filing-contact-primary">
                             <AddressDisplay contact={form.contactPrimary} />
                           </address>
                         )}
@@ -107,11 +107,13 @@ export const ReviewSavedPetition = connect(
                           <>
                             <span
                               className="usa-label usa-label-display"
-                              htmlFor="filing-contact-secondary"
+                              id="filing-contact-secondary"
                             >
                               Spouse’s information
                             </span>
-                            <AddressDisplay contact={form.contactSecondary} />
+                            <address aria-labelledby="filing-contact-secondary">
+                              <AddressDisplay contact={form.contactSecondary} />
+                            </address>
                           </>
                         )}
                       </div>
