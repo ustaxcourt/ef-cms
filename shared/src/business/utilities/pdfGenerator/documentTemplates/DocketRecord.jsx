@@ -46,27 +46,22 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
             )}
           </td>
 
-          {/* <td>{contact.formattedCounsel[0].formattedName}</td>
-
-
-          <td>
-            {contact.formattedCounsel[0].formattedEmail}
-            {contact.formattedCounsel[0].contact?.phone &&
-              contact.formattedCounsel[0].contact.phone}
-          </td> */}
-          {/* rosie words of wisdom - neither of these sols */}
           <td>
             {contact.counselNames.map(p => {
               return (
                 <div
                   key={p}
                   style={{
-                    background: 'blue',
-                    marginTop: 0,
                     minHeight: '50px',
                   }}
                 >
-                  <p>{p}</p>
+                  <p
+                    style={{
+                      marginTop: 0,
+                    }}
+                  >
+                    {p}
+                  </p>
                 </div>
               );
             })}
@@ -75,13 +70,9 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
           <td>
             {contact.counselContacts.map(p => {
               return (
-                <div
-                  key={p.email}
-                  style={{ background: 'red', marginTop: 0, minHeight: '50px' }}
-                >
+                <div key={p.email} style={{ marginTop: 0, minHeight: '50px' }}>
                   <p
                     style={{
-                      background: 'red',
                       marginTop: 0,
                     }}
                   >
@@ -89,7 +80,6 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
                   </p>
                   <p
                     style={{
-                      background: 'red',
                       marginTop: 0,
                     }}
                   >
