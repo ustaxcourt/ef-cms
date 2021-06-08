@@ -25,10 +25,10 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.documentMeta the document metadata
- * @returns {object} the url of the document that was served
+ * @param {Object} applicationContext the application context
+ * @param {Object} providers the providers object
+ * @param {String} providers.documentMeta the document metadata
+ * @returns {Object} the url of the document that was served
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
@@ -104,41 +104,32 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   docketEntryEntity.setAsServed(servedParties.all).validate();
 
-  const servedDocketEntryWorkItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      associatedJudge: caseToUpdate.associatedJudge,
-      caseIsInProgress: caseEntity.inProgress,
-      caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
+  if (!docketEntryEntity.workItem) {
+    docketEntryEntity.workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseToUpdate.associatedJudge,
+        caseIsInProgress: caseEntity.inProgress,
+        caseStatus: caseToUpdate.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+        hideFromPendingMessages: true,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
       },
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-      hideFromPendingMessages: true,
-      inProgress: true,
-      section: DOCKET_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  if (docketEntry.workItem) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: docketEntry.workItem,
-    });
+      { applicationContext },
+    );
   }
 
-  servedDocketEntryWorkItem.setAsCompleted({ message: 'completed', user });
-  docketEntryEntity.setWorkItem(servedDocketEntryWorkItem);
-  caseEntity.updateDocketEntry(docketEntryEntity);
-
-  servedDocketEntryWorkItem.assignToUser({
+  docketEntryEntity.workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
     section: user.section,
@@ -147,14 +138,21 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     sentByUserId: user.userId,
   });
 
+  docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: docketEntryEntity.workItem.validate().toRawObject(),
+  });
+
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
     section: user.section,
     userId: user.userId,
-    workItem: servedDocketEntryWorkItem.validate().toRawObject(),
+    workItem: docketEntryEntity.workItem.validate().toRawObject(),
   });
 
-  // SERVE
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

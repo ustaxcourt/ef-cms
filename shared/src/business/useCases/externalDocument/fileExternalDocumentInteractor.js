@@ -181,12 +181,10 @@ exports.fileExternalDocumentInteractor = async (
   });
 
   for (let workItem of workItems) {
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToSectionInbox({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItem.validate().toRawObject(),
+    });
   }
 
   return caseEntity.toRawObject();

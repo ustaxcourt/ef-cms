@@ -833,3 +833,7 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - deploy

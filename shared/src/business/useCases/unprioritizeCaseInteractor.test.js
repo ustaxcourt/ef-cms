@@ -45,7 +45,7 @@ describe('unprioritizeCaseInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should set the highPriority flag to false and remove the highPriorityReason and call updateCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
+  it('should set the highPriority flag to false and remove the highPriorityReason and call createCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -71,11 +71,11 @@ describe('unprioritizeCaseInteractor', () => {
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -101,7 +101,7 @@ describe('unprioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
