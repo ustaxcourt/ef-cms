@@ -1,5 +1,6 @@
 const React = require('react');
 const {
+  CONTACT_TYPE_TITLES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -116,6 +117,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -150,6 +152,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -167,6 +170,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -186,6 +190,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -201,6 +206,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -221,6 +227,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -239,6 +246,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -280,6 +288,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -309,6 +318,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -327,6 +337,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -356,6 +367,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -382,6 +394,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -400,6 +413,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -417,6 +431,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -434,6 +449,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -452,6 +468,7 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
+        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
