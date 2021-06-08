@@ -57,15 +57,16 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
           <td>
             {['Rosie', 'Mrinalini'].map(p => {
               return (
-                <>
-                  <table>
-                    <tbody>
-                      <tr key={p.index}>
-                        <td>{p}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </>
+                <div
+                  key={p}
+                  style={{
+                    background: 'blue',
+                    marginTop: 0,
+                    minHeight: '50px',
+                  }}
+                >
+                  <p>{p}</p>
+                </div>
               );
             })}
           </td>
@@ -76,19 +77,27 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
               { email: 'Mrinalini', phone: 'Odis' },
             ].map(p => {
               return (
-                <>
-                  <table>
-                    <tbody>
-                      <tr key={p.index}>
-                        <td>
-                          {p.email}
-                          <br />
-                          {p.phone}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </>
+                <div
+                  key={p.email}
+                  style={{ background: 'red', marginTop: 0, minHeight: '50px' }}
+                >
+                  <p
+                    style={{
+                      background: 'red',
+                      marginTop: 0,
+                    }}
+                  >
+                    {p.email}
+                  </p>
+                  <p
+                    style={{
+                      background: 'red',
+                      marginTop: 0,
+                    }}
+                  >
+                    {p.phone}
+                  </p>
+                </div>
               );
             })}
           </td>
