@@ -66,6 +66,9 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
+  if (docketEntry.servedAt) {
+    throw new Error('Docket entry has already been served');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()
