@@ -22,8 +22,14 @@ describe('getDocumentQCInboxForUser', () => {
               must: [
                 {
                   term: {
-                    'pk.S': 'user|123',
+                    'assigneeId.S': '123',
                   },
+                },
+                {
+                  prefix: { 'pk.S': 'work-item|' },
+                },
+                {
+                  prefix: { 'sk.S': 'work-item|' },
                 },
               ],
               must_not: {

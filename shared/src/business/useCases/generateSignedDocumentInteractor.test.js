@@ -37,7 +37,7 @@ describe('generateSignedDocument', () => {
         load: pdfDocumentLoadMock,
       },
       StandardFonts: {
-        HelveticaBold: 'Helvetica-Bold',
+        TimesRomanBold: 'Times-Bold',
       },
       degrees: () => {},
       rgb: () => {},
@@ -73,7 +73,7 @@ describe('generateSignedDocument', () => {
         load: rotatedPdfDocumentLoadMock,
       },
       StandardFonts: {
-        HelveticaBold: 'Helvetica-Bold',
+        TimesRomanBold: 'Times-Bold',
       },
       degrees: () => {},
       rgb: () => {},

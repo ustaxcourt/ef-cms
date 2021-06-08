@@ -8,8 +8,14 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
           must: [
             {
               term: {
-                'pk.S': `user|${userId}`,
+                'assigneeId.S': userId,
               },
+            },
+            {
+              prefix: { 'pk.S': 'work-item|' },
+            },
+            {
+              prefix: { 'sk.S': 'work-item|' },
             },
           ],
           must_not: {

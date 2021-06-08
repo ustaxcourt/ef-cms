@@ -293,7 +293,7 @@ export const FileDocumentReview = connect(
                         Parties Filing The Document(s)
                       </h3>
                       <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
+                        <div className="tablet:grid-col-12 margin-bottom-1">
                           <label className="usa-label" htmlFor="filing-parties">
                             Filing parties
                           </label>
