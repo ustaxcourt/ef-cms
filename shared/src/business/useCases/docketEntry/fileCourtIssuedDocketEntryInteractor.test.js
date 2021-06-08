@@ -15,20 +15,24 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
+  const docketClerkUser = {
+    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+    role: ROLES.docketClerk,
+    section: DOCKET_SECTION,
+    userId: mockUserId,
+  };
 
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     caseRecord = {
       ...MOCK_CASE,
       docketEntries: [
         {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketEntryId: 'a01afa63-931e-4999-99f0-c892c51292d6',
           docketNumber: '45678-18',
           documentTitle: 'Order',
           documentType: 'Order',
@@ -71,7 +75,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           docketNumber: caseRecord.docketNumber,
           documentType: 'Memorandum in Support',
         },
@@ -80,12 +84,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw an error if the document is not found on the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
@@ -97,17 +95,24 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+  it('should throw an error if the document has already been added to the docket record', async () => {
+    caseRecord.docketEntries[1].isOnDocketRecord = true;
 
+    await expect(
+      fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        documentMeta: {
+          docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+          docketNumber: caseRecord.docketNumber,
+          documentType: 'Order',
+        },
+      }),
+    ).rejects.toThrow('Docket entry has already been added to docket record');
+  });
+
+  it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order',
         documentType: 'Order',
@@ -125,16 +130,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
-
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        docketEntryId: caseRecord.docketEntries[1].docketEntryId,
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
@@ -151,10 +149,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       caseToUpdate,
     } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
-      d => d.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
     expect(docketEntryInCaseToUpdate).toMatchObject({
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
       filingDate: '2011-03-01T21:40:46.415Z',
       pending: true,
     });
@@ -164,7 +162,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        docketEntryId: caseRecord.docketEntries[2].docketEntryId,
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
