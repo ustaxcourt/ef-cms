@@ -225,8 +225,8 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
   });
 
-  it('renders "Pro Se" when no private practitioner is given', () => {
-    caseDetail.privatePractitioners = []; // No private practitioners
+  it('renders "None" when no private practitioner is given', () => {
+    caseDetail.petitioners[0].counselNames = ['None']; // No private practitioners
 
     const wrapper = mount(
       <DocketRecord
@@ -238,15 +238,13 @@ describe('DocketRecord', () => {
       />,
     );
 
-    expect(wrapper.find('#private-practitioner-contacts').length).toEqual(1);
+    expect(wrapper.find('.counsel-name').length).toEqual(1);
 
-    const contacts = wrapper.find('#private-practitioner-contacts');
-    expect(contacts.find('.party-info-content').text()).toEqual('Pro Se');
+    const contacts = wrapper.find('.counsel-name');
+    expect(contacts.text()).toEqual('None');
   });
 
   it('renders private practitioner contact info when present', () => {
-    caseDetail.privatePractitioners = [privatePractitioner];
-
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
@@ -257,13 +255,10 @@ describe('DocketRecord', () => {
       />,
     );
 
-    const contacts = wrapper.find('#private-practitioner-contacts');
+    const contacts = wrapper.find('.counsel-name');
     expect(contacts.length).toEqual(1);
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      'Petitioner Counsel',
-    );
 
-    const contactEl = contacts.find('.party-details').text();
+    const contactEl = contacts.find('.counsel-name').text();
 
     expect(contactEl).toContain(privatePractitioner.formattedName);
     expect(contactEl).toContain(privatePractitioner.contact.address1);
