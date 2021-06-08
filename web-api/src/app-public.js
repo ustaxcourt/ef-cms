@@ -59,7 +59,7 @@ app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
 app.get(
   '/public-api/order-search',
-  slowDownLimiter,
+  // slowDownLimiter,
   lambdaWrapper(orderPublicSearchLambda),
 );
 app.get(
