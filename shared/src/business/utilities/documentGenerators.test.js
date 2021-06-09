@@ -248,17 +248,6 @@ describe('documentGenerators', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseDetail: {
-            contactPrimary: {
-              address1: 'Address 1',
-              address2: 'Address 2',
-              address3: 'Address 3',
-              city: 'City',
-              country: 'USA',
-              name: 'Test Petitioner',
-              phone: '123-124-1234',
-              postalCode: '12345',
-              state: 'AL',
-            },
             irsPractitioners: [
               {
                 barNumber: 'PT20002',
@@ -276,6 +265,21 @@ describe('documentGenerators', () => {
               },
             ],
             partyType: PARTY_TYPES.petitioner,
+            petitioners: [
+              {
+                address1: 'Address 1',
+                address2: 'Address 2',
+                address3: 'Address 3',
+                city: 'City',
+                contactId: '65c932cc-8ada-4c2c-9a8c-7314b05fd0c0',
+                counselDetails: [{ name: 'Test Private Practitioner' }],
+                country: 'USA',
+                name: 'Test Petitioner',
+                phone: '123-124-1234',
+                postalCode: '12345',
+                state: 'AL',
+              },
+            ],
             privatePractitioners: [
               {
                 barNumber: 'PT20001',

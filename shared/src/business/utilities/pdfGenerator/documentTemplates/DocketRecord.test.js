@@ -113,7 +113,7 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl).not.toContain(contactPrimary.country);
   });
 
-  it('does not render the primary contact information when options.includePartyDetail is false', () => {
+  it('does not render petitioner contact information when options.includePartyDetail is false', () => {
     options.includePartyDetail = false;
 
     const wrapper = mount(
@@ -125,7 +125,7 @@ describe('DocketRecord', () => {
       />,
     );
 
-    const contacts = wrapper.find('#petitioner-contacts');
+    const contacts = wrapper.find('#petitioner-contacts .address-info');
     expect(contacts.length).toEqual(0);
   });
 
