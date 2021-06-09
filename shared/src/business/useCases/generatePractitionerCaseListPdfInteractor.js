@@ -2,9 +2,10 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { partition } = require('lodash');
+const { sortByDocketNumber } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
-
 /**
  * generatePractitionerCaseListPdfInteractor
  *
@@ -25,14 +26,16 @@ exports.generatePractitionerCaseListPdfInteractor = async (
 
   const cases = await applicationContext
     .getPersistenceGateway()
-    .getDocketNumbersByUser({
+    .getCasesAssociatedWithUser({
       applicationContext,
       userId,
     });
 
+  cases.sort(sortByDocketNumber).reverse();
+
   const [closedCases, openCases] = partition(
     cases,
-    theCase => theCase.status === 'Closed',
+    theCase => theCase.status === CASE_STATUS_TYPES.closed,
   );
 
   const pdf = await applicationContext
