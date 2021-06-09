@@ -1,9 +1,7 @@
-import { state } from 'cerebral';
 /**
- * get the pdf file and pdf blob url from the passed in htmlString
+ * generates a PDF of the user's open and closed cases and returns pdfUrl
  *
  * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  * @returns {object} the pdfUrl
  */
