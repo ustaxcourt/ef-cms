@@ -418,7 +418,7 @@ describe('partiesInformationHelper', () => {
     });
   });
 
-  describe.only('formattedRespondents', () => {
+  describe('formattedRespondents', () => {
     it("should set formattedEmail to the counsel's email when it is defined and there is no pending email", () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -543,6 +543,26 @@ describe('partiesInformationHelper', () => {
             pendingEmails: {
               [mockIrsPractitioner.userId]: undefined,
             },
+          },
+        },
+      });
+
+      expect(
+        result.formattedRespondents[0].formattedPendingEmail,
+      ).toBeUndefined();
+    });
+
+    it('should not set formattedPendingEmail when screenMetadata.pendingEmails is undefined', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [mockIrsPractitioner],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: undefined,
           },
         },
       });
