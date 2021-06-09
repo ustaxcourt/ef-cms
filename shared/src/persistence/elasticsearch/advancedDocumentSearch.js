@@ -158,6 +158,8 @@ exports.advancedDocumentSearch = async ({
     index: process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry-no-parent',
   };
 
+  applicationContext.logger.info('query', documentQuery);
+
   const { results, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
