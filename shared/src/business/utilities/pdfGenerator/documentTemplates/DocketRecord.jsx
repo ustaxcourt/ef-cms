@@ -46,7 +46,7 @@ const RenderContact = ({ contact, countryTypes }) => {
           </td>
 
           <td>
-            {contact.counsel.map(practitioner => {
+            {contact.counselDetails.map(practitioner => {
               return (
                 <div
                   className="practitioner-contact"
@@ -116,7 +116,6 @@ const ServedDate = ({ document }) => {
 
 export const DocketRecord = ({
   caseDetail,
-  contactTitles,
   countryTypes,
   entries,
   options,
@@ -146,7 +145,6 @@ export const DocketRecord = ({
                 <RenderContact
                   caseTitle={options.caseTitle}
                   contact={p}
-                  contactTitles={contactTitles}
                   countryTypes={countryTypes}
                   key={p.contactId}
                 />
