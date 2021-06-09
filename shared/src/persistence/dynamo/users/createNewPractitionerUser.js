@@ -50,7 +50,7 @@ exports.createNewPractitionerUser = async ({ applicationContext, user }) => {
         },
         {
           Name: 'email',
-          Value: user.pendingEmail,
+          Value: user.email,
         },
         {
           Name: 'custom:role',
@@ -66,7 +66,7 @@ exports.createNewPractitionerUser = async ({ applicationContext, user }) => {
         },
       ],
       UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
+      Username: user.email,
     })
     .promise();
 

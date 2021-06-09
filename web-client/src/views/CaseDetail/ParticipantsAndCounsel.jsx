@@ -107,6 +107,7 @@ const ParticipantsAndCounsel = connect(
                           <span className="address-line">
                             {privatePractitioner.formattedEmail}
                           </span>
+                          {privatePractitioner.formattedPendingEmail}
                           <span className="address-line">
                             {privatePractitioner.contact.phone}
                           </span>
