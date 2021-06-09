@@ -17,7 +17,7 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
         id="order-content"
       />
       {signatureText && (
-        <div className="signature text-center" id="order-signature">
+        <div className="signature float-right mr-1" id="order-signature">
           <p>
             {signatureText}
             <br />
