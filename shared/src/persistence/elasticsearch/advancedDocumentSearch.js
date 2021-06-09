@@ -10,12 +10,15 @@ const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
   applicationContext,
+  caseTitleOrPetitioner,
+  docketNumber,
   documentEventCodes,
   endDate,
   from = 0,
   judge,
   judgeType,
   keyword,
+  omitSealed,
   opinionType,
   overrideResultSize,
   sortOrder: sortField,
@@ -44,7 +47,6 @@ exports.advancedDocumentSearch = async ({
   const filter = [
     { term: { 'entityName.S': 'DocketEntry' } },
     { term: { 'isStricken.BOOL': false } },
-    { term: { 'isCaseSealed.BOOL': false } },
     { terms: { 'eventCode.S': documentEventCodes } },
     {
       exists: {
@@ -88,6 +90,47 @@ exports.advancedDocumentSearch = async ({
       },
     });
   }
+
+  const caseFilter = [];
+  const caseTextQuery = [];
+
+  if (omitSealed) {
+    caseFilter.push({
+      term: { 'isSealed.BOOL': false },
+    });
+  }
+  if (docketNumber) {
+    caseFilter.push({
+      term: { 'docketNumber.S': docketNumber },
+    });
+  }
+
+  if (caseTitleOrPetitioner) {
+    caseTextQuery.push({
+      simple_query_string: {
+        default_operator: 'and',
+
+        fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
+        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
+      },
+    });
+  }
+
+  const caseQueryParams = {
+    has_parent: {
+      inner_hits: {
+        _source: {
+          includes: sourceFields,
+        },
+        name: 'case-mappings',
+      },
+      parent_type: 'case',
+      query: { bool: { filter: caseFilter, must: caseTextQuery } },
+      score: true,
+    },
+  };
+
+  docketEntryQueryParams.push(caseQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
@@ -155,10 +198,8 @@ exports.advancedDocumentSearch = async ({
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort,
     },
-    index: process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry-no-parent',
+    index: process.env.DOCKET_ENTRY_INDEX || 'efcms-docket-entry',
   };
-
-  applicationContext.logger.info('query', documentQuery);
 
   const { results, total } = await search({
     applicationContext,
