@@ -24,12 +24,11 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, contactTitles, countryTypes }) => {
+const RenderContact = ({ contact, countryTypes }) => {
   return (
     <>
       <tbody>
         <tr className="party-details" key={contact.index}>
-          <td>{contactTitles[contact.contactType]}</td>
           <td>
             {contact.name}
             {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
@@ -47,28 +46,16 @@ const RenderContact = ({ contact, contactTitles, countryTypes }) => {
           </td>
 
           <td>
-            {contact.counselNames.map(practitionerName => {
-              return (
-                <div
-                  className="counsel-name"
-                  key={practitionerName + contact.contactId}
-                >
-                  <p className="margin-top-0">{practitionerName}</p>
-                </div>
-              );
-            })}
-          </td>
-
-          <td>
-            {contact.counselContacts.map(practitioner => {
+            {contact.counsel.map(practitioner => {
               return (
                 <div
                   className="practitioner-contact"
                   key={practitioner.email + contact.contactId}
                 >
                   <p className="margin-top-0 margin-bottom-0">
-                    {practitioner.email}
+                    {practitioner.name}
                   </p>
+                  <p className="margin-top-0">{practitioner.email}</p>
                   <p className="margin-top-0">{practitioner.phone}</p>
                 </div>
               );
@@ -147,11 +134,9 @@ export const DocketRecord = ({
           <table>
             <thead>
               <tr>
-                <th>Role</th>
                 <th>Name</th>
                 <th>Contact</th>
                 <th>Counsel</th>
-                <th>Counsel contact</th>
               </tr>
             </thead>
             {caseDetail.petitioners.map(p => {
