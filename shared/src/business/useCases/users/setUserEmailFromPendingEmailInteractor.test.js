@@ -65,6 +65,9 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => userCases[0]);
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {

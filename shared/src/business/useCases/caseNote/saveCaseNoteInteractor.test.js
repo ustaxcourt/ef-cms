@@ -31,6 +31,9 @@ describe('saveCaseNoteInteractor', () => {
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
       .updateCase.mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
 
     const result = await saveCaseNoteInteractor(applicationContext, {
