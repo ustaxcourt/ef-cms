@@ -47,12 +47,7 @@ exports.orderPublicSearchInteractor = async (
     omitSealed: true,
   });
 
-  const filteredResults = (
-    await filterForPublic({
-      applicationContext,
-      unfiltered: results,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
+  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
 
   return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,
