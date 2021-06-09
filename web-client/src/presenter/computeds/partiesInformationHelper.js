@@ -11,14 +11,13 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
     } (Pending)`;
   }
 
-  const emailNotProvidedMessage = counsel.email
-    ? undefined
-    : 'No email provided';
-
-  counsel.formattedEmail =
-    counsel.email === counsel.formattedPendingEmail
-      ? emailNotProvidedMessage
-      : counsel.email;
+  if (counsel.email) {
+    counsel.formattedEmail = counsel.email;
+  } else {
+    counsel.formattedEmail = counsel.formattedPendingEmail
+      ? undefined
+      : 'No email provided';
+  }
 
   return counsel;
 };
