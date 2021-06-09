@@ -1,15 +1,23 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerDetail = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
+    showModal: state.modal.showModal,
   },
-  function PractitionerDetail({ practitionerDetailHelper }) {
+  function PractitionerDetail({
+    gotoPrintPractitionerCasesSequence,
+    practitionerDetailHelper,
+    showModal,
+  }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -44,7 +52,11 @@ export const PractitionerDetail = connect(
                   link
                   className="push-right margin-bottom-1"
                   icon="print"
-                  onClick={() => {}}
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerDetailHelper.userId,
+                    });
+                  }}
                 >
                   Print case list
                 </Button>
@@ -262,6 +274,10 @@ export const PractitionerDetail = connect(
             </div>
           </div>
         </div>
+
+        {showModal === 'OpenPractitionerCaseListPdfModal' && (
+          <OpenPractitionerCaseListPdfModal />
+        )}
       </React.Fragment>
     );
   },
