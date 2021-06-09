@@ -124,7 +124,6 @@ export const DocketRecord = ({
 }) => {
   return (
     <div id="document-docket-record">
-      {console.log('options', options)}
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
@@ -133,7 +132,6 @@ export const DocketRecord = ({
         h3="Printable Docket Record"
       />
 
-      {/* {options.includePartyDetail && ( */}
       <div className="party-info" id="petitioner-contacts">
         <table>
           <thead>
