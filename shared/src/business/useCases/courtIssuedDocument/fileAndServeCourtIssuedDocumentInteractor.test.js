@@ -126,6 +126,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({

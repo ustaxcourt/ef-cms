@@ -135,6 +135,12 @@ describe('verifyUserPendingEmailInteractor', () => {
         ...MOCK_CASE,
         privatePractitioners: [mockUser],
       });
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        privatePractitioners: [mockUser],
+      });
 
     await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
@@ -483,6 +489,9 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockResolvedValue(casesMock[0]);
+      applicationContext
+        .getPersistenceGateway()
+        .getFullCaseByDocketNumber.mockResolvedValue(casesMock[0]);
 
       await updatePetitionerCases({
         applicationContext,
@@ -537,8 +546,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
-        .mockReturnValueOnce(userCases[1])
-        .mockReturnValueOnce(MOCK_CASE);
+        .mockReturnValueOnce(userCases[1]);
 
       await expect(
         updatePetitionerCases({
