@@ -69,8 +69,7 @@ exports.generateDocketRecordPdfInteractor = async (
     });
 
   formattedCaseDetail.petitioners.forEach(petitioner => {
-    petitioner.counselNames = [];
-    petitioner.counselContacts = [];
+    petitioner.counsel = [];
 
     const practitioners = getPractitionersRepresenting(
       formattedCaseDetail,
@@ -79,15 +78,16 @@ exports.generateDocketRecordPdfInteractor = async (
 
     if (practitioners.length > 0) {
       practitioners.forEach(practitioner => {
-        petitioner.counselNames.push(practitioner.formattedName);
-        petitioner.counselContacts.push({
+        petitioner.counsel.push({
           email: practitioner.email,
+          name: practitioner.formattedName,
           phone: practitioner.contact.phone,
         });
       });
     } else {
-      petitioner.counselNames.push('None');
-      petitioner.counselContacts.push({ email: 'None' });
+      petitioner.counsel.push({
+        name: 'None',
+      });
     }
   });
 
