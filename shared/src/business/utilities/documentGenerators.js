@@ -31,6 +31,39 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const practitionerCaseList = async ({
+  applicationContext,
+  closedCases,
+  openCases,
+}) => {
+  const template = reactTemplateGenerator({
+    componentName: 'PractitionerCaseList',
+    data: {
+      closedCases,
+      openCases,
+    },
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: template,
+    options: {
+      overwriteMain: true,
+      title: '',
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor(applicationContext, {
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: false,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const changeOfAddress = async ({ applicationContext, content }) => {
   const {
     caseCaptionExtension,
@@ -791,6 +824,7 @@ module.exports = {
   noticeOfTrialIssued,
   order,
   pendingReport,
+  practitionerCaseList,
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,
