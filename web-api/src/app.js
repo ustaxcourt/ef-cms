@@ -123,6 +123,9 @@ const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
+  generatePractitionerCaseListPdfLambda,
+} = require('./cases/generatePractitionerCaseListPdfLambda');
+const {
   generatePrintableCaseInventoryReportLambda,
 } = require('./reports/generatePrintableCaseInventoryReportLambda');
 const {
@@ -811,6 +814,10 @@ app.post(
   app.put(
     '/async/practitioners/:barNumber',
     lambdaWrapper(updatePractitionerUserLambda),
+  );
+  app.get(
+    '/practitioners/:userId/printable-case-list',
+    lambdaWrapper(generatePractitionerCaseListPdfLambda),
   );
   app.get('/practitioners', lambdaWrapper(getPractitionersByNameLambda));
   app.post('/practitioners', lambdaWrapper(createPractitionerUserLambda));
