@@ -36,8 +36,9 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
-import { getCropBoxCoordinates } from '../../shared/src/business/utilities/getCropBoxCoordinates';
+import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
@@ -647,7 +648,7 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
       getContactSecondary,
-      getCropBoxCoordinates,
+      getCropBox,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
@@ -657,6 +658,7 @@ const applicationContext = {
       getOtherFilers,
       getOtherPetitioners,
       getServedPartiesCode,
+      getStampBoxCoordinates,
       getTrialSessionStatus,
       getWorkQueueFilters,
       hasPartyWithServiceType,

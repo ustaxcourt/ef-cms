@@ -2,9 +2,10 @@ const TEXT_SIZE = 15;
 const PADDING = 13;
 
 const computeCoordinates = ({
+  applicationContext,
   boxHeight,
   boxWidth,
-  cropBoxCoordinates,
+  cropBox,
   lineHeight,
   nameTextWidth,
   pageRotation,
@@ -14,82 +15,64 @@ const computeCoordinates = ({
   textHeight,
   titleTextWidth,
 }) => {
-  const rotationRads = (pageRotation * Math.PI) / 180;
-  let coordsFromBottomLeft = {
+  const bottomLeftBoxCoordinates = {
     x: posX / scale,
   };
   if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y =
-      cropBoxCoordinates.pageWidth - (posY + boxHeight) / scale;
+    bottomLeftBoxCoordinates.y = cropBox.pageWidth - (posY + boxHeight) / scale;
   } else {
-    coordsFromBottomLeft.y =
-      cropBoxCoordinates.pageHeight - (posY + boxHeight) / scale;
+    bottomLeftBoxCoordinates.y =
+      cropBox.pageHeight - (posY + boxHeight) / scale;
   }
 
-  let rectangleX, rectangleY, sigTitleX, sigTitleY, sigNameX, sigNameY;
+  const boxCoordinates = applicationContext
+    .getUtilities()
+    .getStampBoxCoordinates({
+      bottomLeftBoxCoordinates,
+      cropBox: { x: cropBox.x, y: cropBox.y },
+      pageHeight: cropBox.pageHeight,
+      pageRotation,
+      pageWidth: cropBox.pageWidth,
+    });
 
+  let sigTitleX, sigTitleY, sigNameX, sigNameY;
   if (pageRotation === 90) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      cropBoxCoordinates.pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads);
     sigNameX = posY + textHeight * 2;
     sigNameY = posX + textHeight;
+
     sigTitleX = posY + textHeight * 3;
     sigTitleY = posX + textHeight * 4;
   } else if (pageRotation === 180) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      cropBoxCoordinates.pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      cropBoxCoordinates.pageHeight;
-
-    sigNameX =
-      cropBoxCoordinates.pageWidth - posX - (boxWidth - nameTextWidth) / 2;
+    sigNameX = cropBox.pageWidth - posX - (boxWidth - nameTextWidth) / 2;
     sigNameY = posY - boxHeight / 2 + boxHeight;
 
-    sigTitleX =
-      cropBoxCoordinates.pageWidth - posX - (boxWidth - titleTextWidth) / 2;
+    sigTitleX = cropBox.pageWidth - posX - (boxWidth - titleTextWidth) / 2;
     sigTitleY =
       posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
   } else if (pageRotation === 270) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads);
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      cropBoxCoordinates.pageHeight;
-    sigNameX = cropBoxCoordinates.pageWidth - posY - textHeight * 2;
-    sigNameY = cropBoxCoordinates.pageHeight - posX - textHeight;
-    sigTitleX = cropBoxCoordinates.pageWidth - posY - textHeight * 3;
-    sigTitleY = cropBoxCoordinates.pageHeight - posX - textHeight * 4;
+    sigNameX = cropBox.pageWidth - posY - textHeight * 2;
+    sigNameY = cropBox.pageHeight - posX - textHeight;
+
+    sigTitleX = cropBox.pageWidth - posY - textHeight * 3;
+    sigTitleY = cropBox.pageHeight - posX - textHeight * 4;
   } else {
-    rectangleX = coordsFromBottomLeft.x;
-    rectangleY = coordsFromBottomLeft.y;
     sigNameX = posX + (boxWidth - nameTextWidth) / 2;
-    sigNameY = cropBoxCoordinates.pageHeight - posY + boxHeight / 2 - boxHeight;
+    sigNameY = cropBox.pageHeight - posY + boxHeight / 2 - boxHeight;
 
     sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
     sigTitleY =
-      cropBoxCoordinates.pageHeight -
+      cropBox.pageHeight -
       posY +
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
   return {
-    rectangleX: rectangleX + cropBoxCoordinates.x,
-    rectangleY: rectangleY + cropBoxCoordinates.y,
-    sigNameX: sigNameX + cropBoxCoordinates.x,
-    sigNameY: sigNameY + cropBoxCoordinates.y,
-    sigTitleX: sigTitleX + cropBoxCoordinates.x,
-    sigTitleY: sigTitleY + cropBoxCoordinates.y,
+    rectangleX: boxCoordinates.x,
+    rectangleY: boxCoordinates.y,
+    sigNameX: sigNameX + cropBox.x,
+    sigNameY: sigNameY + cropBox.y,
+    sigTitleX: sigTitleX + cropBox.x,
+    sigTitleY: sigTitleY + cropBox.y,
   };
 };
 
@@ -149,11 +132,10 @@ const generateSignedDocumentInteractor = async ({
     sigTitleX,
     sigTitleY,
   } = computeCoordinates({
+    applicationContext,
     boxHeight,
     boxWidth,
-    cropBoxCoordinates: applicationContext
-      .getUtilities()
-      .getCropBoxCoordinates(pageToApplyStampTo),
+    cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
     lineHeight,
     nameTextWidth,
     pageRotation: rotationAngle,
@@ -195,6 +177,7 @@ const generateSignedDocumentInteractor = async ({
 };
 
 module.exports = {
+  TEXT_SIZE,
   computeCoordinates,
   generateSignedDocumentInteractor,
 };

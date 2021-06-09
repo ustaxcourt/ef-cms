@@ -1,6 +1,6 @@
-const { getCropBoxCoordinates } = require('./getCropBoxCoordinates');
+const { getCropBox } = require('./getCropBox');
 
-describe('getCropBoxCoordinates', () => {
+describe('getCropBox', () => {
   let mockCropBoxValue;
 
   const mockPage = {
@@ -15,7 +15,7 @@ describe('getCropBoxCoordinates', () => {
       y: 8,
     };
 
-    const result = getCropBoxCoordinates(mockPage);
+    const result = getCropBox(mockPage);
 
     expect(result).toEqual({
       pageHeight: mockCropBoxValue.height,
@@ -33,7 +33,7 @@ describe('getCropBoxCoordinates', () => {
       y: undefined,
     };
 
-    const result = getCropBoxCoordinates(mockPage);
+    const result = getCropBox(mockPage);
 
     expect(result).toEqual({
       x: 0,
