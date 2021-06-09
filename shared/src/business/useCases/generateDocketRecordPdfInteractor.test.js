@@ -100,7 +100,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counsel[0],
+        .data.caseDetail.petitioners[0].counselDetails[0],
     ).toMatchObject({
       email: 'ab@example.com',
       name: 'Test Attorney (AB1111)',
@@ -123,7 +123,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counsel[0],
+        .data.caseDetail.petitioners[0].counselDetails[0],
     ).toMatchObject({
       name: 'None',
     });
