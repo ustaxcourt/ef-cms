@@ -32,12 +32,13 @@ exports.casePublicSearch = async ({
   const sourceFields = [
     'caseCaption',
     'contactId',
-    'petitioners',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',
     'irsPractitioners',
     'partyType',
+    'petitioners',
+    'petitioners',
     'receivedAt',
     'sealedDate',
   ];
