@@ -19,7 +19,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
         {contact.postalCode && <span>{contact.postalCode}</span>}
       </div>
       {isInternational && <span>{contact.country}</span>}
-      {contact.phone && <p>{contact.phone}</p>}
+      {contact.phone && <p className="margin-top-5">{contact.phone}</p>}
     </>
   );
 };
@@ -55,8 +55,10 @@ const RenderContact = ({ contact, countryTypes }) => {
                   <p className="margin-top-0 margin-bottom-0">
                     {practitioner.name}
                   </p>
-                  <p className="margin-top-0">{practitioner.email}</p>
-                  <p className="margin-top-0">{practitioner.phone}</p>
+                  <p className="margin-top-5 margin-bottom-0">
+                    {practitioner.email}
+                  </p>
+                  <p className="margin-top-5">{practitioner.phone}</p>
                 </div>
               );
             })}

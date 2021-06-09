@@ -482,13 +482,6 @@ th {
     font-weight: bold;
   }
 
-  .party-info-content {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-    padding: 0 10px 10px 10px;
-  }
-
   .party-details {
     width: 25%;
   }
@@ -500,10 +493,6 @@ th {
   .practitioner-contact {
     min-height: 50px;
     margin-top: 0;
-  }
-
-  .counsel-name {
-    min-height: 50px;
   }
 }
 
