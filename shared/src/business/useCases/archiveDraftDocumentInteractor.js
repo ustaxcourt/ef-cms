@@ -43,7 +43,7 @@ exports.archiveDraftDocumentInteractor = async (
 
   if (workItem) {
     await Promise.all([
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+      applicationContext.getPersistenceGateway().deleteWorkItem({
         applicationContext,
         workItem,
       }),
