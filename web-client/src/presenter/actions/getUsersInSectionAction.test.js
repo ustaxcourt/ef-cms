@@ -14,7 +14,7 @@ describe('getUsersInSectionAction', () => {
       .getUseCases()
       .getUsersInSectionInteractor.mockReturnValue([]);
 
-    await runAction(await getUsersInSectionAction({ section: mockSection }), {
+    await runAction(getUsersInSectionAction({ section: mockSection }), {
       modules: {
         presenter,
       },
@@ -35,7 +35,7 @@ describe('getUsersInSectionAction', () => {
       .getUseCases()
       .getUsersInSectionInteractor.mockReturnValue([]);
 
-    await runAction(await getUsersInSectionAction({ section: undefined }), {
+    await runAction(getUsersInSectionAction({ section: undefined }), {
       modules: {
         presenter,
       },
