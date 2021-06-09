@@ -10,8 +10,8 @@ const { UnauthorizedError } = require('../../errors/errors');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number for the docket record to be generated
- * @returns {Uint8Array} docket record pdf
+ * @param {string} providers.userId the practitioner's user id
+ * @returns {Object} returns an object of the PDF's fileId and url
  */
 exports.generatePractitionerCaseListPdfInteractor = async (
   applicationContext,
