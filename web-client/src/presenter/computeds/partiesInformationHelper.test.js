@@ -419,7 +419,7 @@ describe('partiesInformationHelper', () => {
   });
 
   describe('formattedRespondents', () => {
-    it("should set formattedEmail to the counsel's email when it is defined", () => {
+    it("should set formattedEmail to the counsel's email when it is defined and there is no pending email", () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
@@ -457,7 +457,7 @@ describe('partiesInformationHelper', () => {
       );
     });
 
-    it('should set formattedEmail to undefined when the respondent does not have an email but has a pending email', () => {
+    it('should set formattedEmail to undefined, and set formattedPending email when the respondent does not have an email but has a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
@@ -475,14 +475,19 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.formattedRespondents[0].formattedEmail).toBeUndefined();
+      expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
+        `${mockEmail} (Pending)`,
+      );
     });
 
-    it('should set formattedPendingEmail when the respondent has a pending email', () => {
+    it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to email when it is defined', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
           caseDetail: {
-            irsPractitioners: [mockIrsPractitioner],
+            irsPractitioners: [
+              { ...mockIrsPractitioner, email: 'lalal@example' },
+            ],
             petitioners: [],
             privatePractitioners: [],
           },
@@ -497,6 +502,32 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
         `${mockEmail} (Pending)`,
       );
+      expect(result.formattedRespondents[0].formattedEmail).toBe(
+        'lalal@example',
+      );
+    });
+
+    it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to undefined when it is the same as the pending email', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [{ ...mockIrsPractitioner, email: mockEmail }],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {
+              [mockIrsPractitioner.userId]: mockEmail,
+            },
+          },
+        },
+      });
+
+      expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
+        `${mockEmail} (Pending)`,
+      );
+      expect(result.formattedRespondents[0].formattedEmail).toBeUndefined();
     });
 
     it('should not set formattedPendingEmail when the respondent has no pending email', () => {
@@ -512,6 +543,26 @@ describe('partiesInformationHelper', () => {
             pendingEmails: {
               [mockIrsPractitioner.userId]: undefined,
             },
+          },
+        },
+      });
+
+      expect(
+        result.formattedRespondents[0].formattedPendingEmail,
+      ).toBeUndefined();
+    });
+
+    it('should not set formattedPendingEmail when screenMetadata.pendingEmails is undefined', () => {
+      const result = runCompute(partiesInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: {
+            irsPractitioners: [mockIrsPractitioner],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: undefined,
           },
         },
       });
