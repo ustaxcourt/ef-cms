@@ -216,7 +216,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order',
         documentType: 'Order',
