@@ -100,19 +100,15 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counselNames[0],
-    ).toEqual('Test Attorney (AB1111)');
-
-    expect(
-      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counselContacts[0],
+        .data.caseDetail.petitioners[0].counsel[0],
     ).toMatchObject({
       email: 'ab@example.com',
+      name: 'Test Attorney (AB1111)',
       phone: '+1 (555) 555-5555',
     });
   });
 
-  it('sets counsel name and counselContact to `None` when there is no counsel representing the petitioner', async () => {
+  it('sets counsel name to `None` when there is no counsel representing the petitioner', async () => {
     const mockPractitionerOnCase = {
       ...MOCK_PRACTITIONER,
       representing: ['b4302f61-2cff-4a57-bacf-1f817ffbaf8d'],
@@ -127,14 +123,9 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counselNames[0],
-    ).toEqual('None');
-
-    expect(
-      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-        .data.caseDetail.petitioners[0].counselContacts[0],
+        .data.caseDetail.petitioners[0].counsel[0],
     ).toMatchObject({
-      email: 'None',
+      name: 'None',
     });
   });
 

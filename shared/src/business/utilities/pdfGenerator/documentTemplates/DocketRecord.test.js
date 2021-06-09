@@ -1,6 +1,5 @@
 const React = require('react');
 const {
-  CONTACT_TYPE_TITLES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -33,8 +32,9 @@ describe('DocketRecord', () => {
       city: 'City',
       contactId: uuidv4(),
       contactType: CONTACT_TYPES.primary,
-      counselContacts: [{ email: 'jeff@holo.com', phone: '867.5309' }],
-      counselNames: ['Jeff Yu'],
+      counselDetails: [
+        { email: 'jeff@holo.com', name: 'Jeff Yu', phone: '867.5309' },
+      ],
       country: 'USA',
       name: 'Test Petitioner',
       phone: '123-124-1234',
@@ -88,7 +88,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -120,7 +119,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -138,7 +136,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -158,7 +155,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -174,7 +170,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -190,44 +185,35 @@ describe('DocketRecord', () => {
   });
 
   it('renders "None" when no private practitioner is given', () => {
-    caseDetail.petitioners[0].counselNames = ['None']; // No private practitioners
+    caseDetail.petitioners[0].counselDetails = [{ name: 'None' }]; // No private practitioners
 
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
     );
 
-    expect(wrapper.find('.counsel-name').length).toEqual(1);
+    expect(wrapper.find('.practitioner-contact').length).toEqual(1);
 
-    const contacts = wrapper.find('.counsel-name');
+    const contacts = wrapper.find('.practitioner-contact');
     expect(contacts.text()).toEqual('None');
   });
-
   it('renders private practitioner contact info when present', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
       />,
     );
 
-    const counselName = wrapper.find('.counsel-name');
-    expect(counselName.length).toEqual(1);
-
-    expect(counselName.text()).toContain('Jeff Yu');
-
-    const counselContacts = wrapper.find('.practitioner-contact');
-    expect(counselContacts.length).toEqual(1);
-
-    expect(counselContacts.text()).toContain('jeff@holo.com');
+    const counselDetails = wrapper.find('.practitioner-contact');
+    expect(counselDetails.length).toEqual(1);
+    expect(counselDetails.text()).toContain('Jeff Yu', 'jeff@holo.com');
   });
 
   it('renders "None" when no IRS practitioner is given', () => {
@@ -236,7 +222,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -255,7 +240,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -272,7 +256,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -299,7 +282,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -318,7 +300,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -336,7 +317,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -354,7 +334,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
@@ -373,7 +352,6 @@ describe('DocketRecord', () => {
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
-        contactTitles={CONTACT_TYPE_TITLES}
         countryTypes={COUNTRY_TYPES}
         entries={entries}
         options={options}
