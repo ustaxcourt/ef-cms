@@ -18,6 +18,10 @@ describe('sealCaseContactAddressInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to seal a case contact address', async () => {

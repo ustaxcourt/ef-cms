@@ -181,6 +181,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        const theCase = mockCases.find(
+          mockCase => mockCase.docketNumber === docketNumber,
+        );
+        if (theCase) {
+          return {
+            ...theCase,
+            ...extendCase,
+          };
+        }
+      });
+    applicationContext
+      .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
     applicationContext
       .getUseCaseHelpers()

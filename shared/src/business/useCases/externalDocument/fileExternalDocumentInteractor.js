@@ -40,7 +40,7 @@ exports.fileExternalDocumentInteractor = async (
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
-    .getCaseByDocketNumber({
+    .getFullCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });

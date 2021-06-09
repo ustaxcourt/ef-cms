@@ -33,6 +33,13 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
         ...MOCK_CASE,
         correspondence: [mockCorrespondence],
       });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        correspondence: [mockCorrespondence],
+      });
   });
 
   it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {

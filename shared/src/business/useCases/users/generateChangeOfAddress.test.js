@@ -94,6 +94,9 @@ describe('generateChangeOfAddress', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('should run a change of address when address1 changes for a private practitioner', async () => {

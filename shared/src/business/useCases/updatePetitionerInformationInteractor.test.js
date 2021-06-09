@@ -101,6 +101,9 @@ describe('update petitioner contact information on a case', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('updates case even if no change of address or phone is detected', async () => {
