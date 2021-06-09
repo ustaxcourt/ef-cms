@@ -1563,7 +1563,7 @@ button.change-scanner-button {
 }
 
 .document-viewer--documents {
-  height: 1000px;
+  min-height: 1000px;
 
   iframe {
     border: none;
