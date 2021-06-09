@@ -436,8 +436,8 @@ const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
 const {
-  getCropBoxCoordinates,
-} = require('../../shared/src/business/utilities/getCropBoxCoordinates');
+  getCropBox,
+} = require('../../shared/src/business/utilities/getCropBox');
 const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
@@ -592,6 +592,9 @@ const {
 const {
   getSesStatus,
 } = require('../../shared/src/persistence/ses/getSesStatus');
+const {
+  getStampBoxCoordinates,
+} = require('../../shared/src/business/utilities/getStampBoxCoordinates');
 const {
   getTableStatus,
 } = require('../../shared/src/persistence/dynamo/getTableStatus');
@@ -1774,10 +1777,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatNow,
         formattedTrialSessionDetails,
         getAddressPhoneDiff,
-        getCropBoxCoordinates,
+        getCropBox,
         getDocQcSectionForUser,
         getDocumentTypeForAddressChange,
         getFormattedCaseDetail,
+        getStampBoxCoordinates,
         getWorkQueueFilters,
         isPending: DocketEntry.isPending,
         prepareDateFromString,

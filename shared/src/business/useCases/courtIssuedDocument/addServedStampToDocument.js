@@ -13,50 +13,24 @@ const computeCoordinates = ({
     pageWidth,
     x,
     y,
-  } = applicationContext
-    .getUtilities()
-    .getCropBoxCoordinates(pageToApplyStampTo);
+  } = applicationContext.getUtilities().getCropBox(pageToApplyStampTo);
 
-  const rotationRads = (pageRotation * Math.PI) / 180;
-  const coordsFromBottomLeft = {
+  const bottomLeftBoxCoordinates = {
     x: pageWidth / 2 - boxWidth / 2,
     y: y + boxHeight + PADDING * 2,
   };
 
-  let rectangleX, rectangleY;
-  if (pageRotation === 90) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads);
-  } else if (pageRotation === 180) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-  } else if (pageRotation === 270) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads);
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-  } else {
-    rectangleX = coordsFromBottomLeft.x;
-    rectangleY = coordsFromBottomLeft.y;
-  }
-  return {
-    rectangleX: rectangleX + x,
-    rectangleY: rectangleY + y,
-  };
+  const boxCoordinates = applicationContext
+    .getUtilities()
+    .getStampBoxCoordinates({
+      bottomLeftBoxCoordinates,
+      cropBox: { x, y },
+      pageHeight,
+      pageRotation,
+      pageWidth,
+    });
+
+  return boxCoordinates;
 };
 
 const getBoxWidth = ({ font, text }) => {
@@ -77,7 +51,7 @@ const getBoxHeight = ({ font }) => {
  * @param {string} providers.serviceStampText the service stamp text to add to the document
  * @returns {object} the new pdf with the stamp at the bottom center of the document
  */
-exports.addServedStampToDocument = async ({
+const addServedStampToDocument = async ({
   applicationContext,
   pdfData,
   serviceStampText = `SERVED ${applicationContext
@@ -106,7 +80,7 @@ exports.addServedStampToDocument = async ({
   const rotationAngle = pageToApplyStampTo.getRotation().angle;
   const rotateStampDegrees = degrees(rotationAngle || 0);
 
-  const { rectangleX, rectangleY } = computeCoordinates({
+  const boxCoordinates = computeCoordinates({
     applicationContext,
     boxHeight,
     boxWidth,
@@ -119,16 +93,16 @@ exports.addServedStampToDocument = async ({
     height: boxHeight,
     rotate: rotateStampDegrees,
     width: boxWidth,
-    x: rectangleX,
-    y: rectangleY + PADDING,
+    x: boxCoordinates.x,
+    y: boxCoordinates.y + PADDING,
   });
 
   pageToApplyStampTo.drawText(serviceStampText, {
     font: textFont,
     rotate: rotateStampDegrees,
     size: TEXT_SIZE,
-    x: rectangleX + PADDING,
-    y: rectangleY + PADDING * 2,
+    x: boxCoordinates.x + PADDING,
+    y: boxCoordinates.y + PADDING * 2,
   });
 
   return await pdfDoc.save({
@@ -136,4 +110,4 @@ exports.addServedStampToDocument = async ({
   });
 };
 
-exports.computeCoordinates = computeCoordinates;
+module.exports = { PADDING, addServedStampToDocument, computeCoordinates };

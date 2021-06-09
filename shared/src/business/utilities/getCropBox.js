@@ -1,4 +1,4 @@
-exports.getCropBoxCoordinates = page => {
+exports.getCropBox = page => {
   const sizeCropBox = page.getCropBox();
 
   return {
