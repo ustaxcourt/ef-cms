@@ -49,6 +49,9 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
+  if (docketEntry.isOnDocketRecord) {
+    throw new Error('Docket entry has already been added to docket record');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()
