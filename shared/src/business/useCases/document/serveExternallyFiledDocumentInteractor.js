@@ -72,11 +72,6 @@ exports.serveExternallyFiledDocumentInteractor = async (
   const workItemToUpdate = currentDocketEntry.workItem;
 
   if (workItemToUpdate) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-
     workItemToUpdate.setAsCompleted({
       message: 'completed',
       user,
