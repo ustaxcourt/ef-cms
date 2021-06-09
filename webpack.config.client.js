@@ -46,7 +46,6 @@ module.exports = {
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
       NO_SCANNER: null,
-      PUBLIC_SITE_URL: null,
       SCANNER_RESOURCE_URI: null,
       SESSION_MODAL_TIMEOUT: null,
       SESSION_TIMEOUT: null,
