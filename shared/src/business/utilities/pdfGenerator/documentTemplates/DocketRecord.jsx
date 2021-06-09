@@ -24,7 +24,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderContact = ({ contact, countryTypes }) => {
+const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
   return (
     <>
       <tbody>
@@ -36,14 +36,16 @@ const RenderContact = ({ contact, countryTypes }) => {
             {contact.title && <div>{contact.title}</div>}
             {contact.additionalName && <div>{contact.additionalName}</div>}
           </td>
-          <td>
-            {!contact.isAddressSealed && (
+          {!contact.isAddressSealed && showContactDetails && (
+            <td>
               <RenderAddress contact={contact} countryTypes={countryTypes} />
-            )}
-            {contact.isAddressSealed && (
+            </td>
+          )}
+          {contact.isAddressSealed && showContactDetails && (
+            <td>
               <p className="address-sealed-text">Address sealed</p>
-            )}
-          </td>
+            </td>
+          )}
 
           <td>
             {contact.counselDetails.map(practitioner => {
@@ -122,6 +124,7 @@ export const DocketRecord = ({
 }) => {
   return (
     <div id="document-docket-record">
+      {console.log('options', options)}
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
@@ -130,29 +133,29 @@ export const DocketRecord = ({
         h3="Printable Docket Record"
       />
 
-      {options.includePartyDetail && (
-        <div className="party-info" id="petitioner-contacts">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Contact</th>
-                <th>Counsel</th>
-              </tr>
-            </thead>
-            {caseDetail.petitioners.map(p => {
-              return (
-                <RenderContact
-                  caseTitle={options.caseTitle}
-                  contact={p}
-                  countryTypes={countryTypes}
-                  key={p.contactId}
-                />
-              );
-            })}
-          </table>
-        </div>
-      )}
+      {/* {options.includePartyDetail && ( */}
+      <div className="party-info" id="petitioner-contacts">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              {options.includePartyDetail && <th>Contact</th>}
+              <th>Counsel</th>
+            </tr>
+          </thead>
+          {caseDetail.petitioners.map(p => {
+            return (
+              <RenderContact
+                caseTitle={options.caseTitle}
+                contact={p}
+                countryTypes={countryTypes}
+                key={p.contactId}
+                showContactDetails={options.includePartyDetail}
+              />
+            );
+          })}
+        </table>
+      </div>
 
       <div className="party-info" id="irs-practitioner-contacts">
         <table>
@@ -189,7 +192,6 @@ export const DocketRecord = ({
           </tbody>
         </table>
       </div>
-
       <table id="documents">
         <thead>
           <tr>
