@@ -38,7 +38,11 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
           </td>
           {!contact.isAddressSealed && showContactDetails && (
             <td>
-              <RenderAddress contact={contact} countryTypes={countryTypes} />
+              <RenderAddress
+                className="address-info"
+                contact={contact}
+                countryTypes={countryTypes}
+              />
             </td>
           )}
           {contact.isAddressSealed && showContactDetails && (
