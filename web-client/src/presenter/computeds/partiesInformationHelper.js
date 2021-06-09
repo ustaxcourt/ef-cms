@@ -17,6 +17,8 @@ const formatCounsel = ({ counsel, screenMetadata }) => {
     counsel.formattedEmail = counsel.formattedPendingEmail
       ? undefined
       : 'No email provided';
+
+    //no pending or no email, show no email privded ONCE
   }
 
   return counsel;
