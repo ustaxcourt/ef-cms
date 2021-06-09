@@ -34,11 +34,22 @@ export const PractitionerDetail = connect(
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <div className="grid-col-9">
+            <div className="grid-col-8">
               <SuccessNotification />
             </div>
-            {practitionerDetailHelper.showEditLink && (
-              <div className="grid-col-3">
+
+            <div className="grid-col-4">
+              {practitionerDetailHelper.showPrintCaseListLink && (
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  icon="print"
+                  onClick={() => {}}
+                >
+                  Print case list
+                </Button>
+              )}
+              {practitionerDetailHelper.showEditLink && (
                 <Button
                   link
                   className="push-right margin-bottom-1"
@@ -47,8 +58,8 @@ export const PractitionerDetail = connect(
                 >
                   Edit
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-4 margin-bottom-4">
