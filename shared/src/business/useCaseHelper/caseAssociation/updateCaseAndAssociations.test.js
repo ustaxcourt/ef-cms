@@ -61,7 +61,7 @@ describe('updateCaseAndAssociations', () => {
       .toRawObject();
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(validMockCase);
+      .getCaseByDocketNumber.mockReturnValue(validMockCase);
 
     applicationContext
       .getPersistenceGateway()
@@ -77,7 +77,7 @@ describe('updateCaseAndAssociations', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(oldCase);
+      .getCaseByDocketNumber.mockReturnValue(oldCase);
 
     await updateCaseAndAssociations({
       applicationContext,
@@ -85,7 +85,7 @@ describe('updateCaseAndAssociations', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -102,7 +102,7 @@ describe('updateCaseAndAssociations', () => {
       caseToUpdate: validMockCase,
     });
     expect(
-      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber,
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(updateCaseMock).toHaveBeenCalled();
     const updateArgs = updateCaseMock.mock.calls[0][0];
@@ -136,7 +136,7 @@ describe('updateCaseAndAssociations', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(oldCase);
+      .getCaseByDocketNumber.mockReturnValue(oldCase);
 
     await updateCaseAndAssociations({
       applicationContext,
@@ -173,7 +173,7 @@ describe('updateCaseAndAssociations', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(caseToUpdate);
+        .getCaseByDocketNumber.mockReturnValue(caseToUpdate);
 
       await updateCaseAndAssociations({
         applicationContext,
@@ -209,7 +209,7 @@ describe('updateCaseAndAssociations', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(oldCase);
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
 
       await updateCaseAndAssociations({
         applicationContext,
@@ -230,7 +230,7 @@ describe('updateCaseAndAssociations', () => {
     it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(validMockCase);
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: validMockCase,
@@ -298,9 +298,7 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(
-          mockCaseWithIrsPractitioners,
-        );
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
     });
 
     it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
@@ -392,9 +390,7 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(
-          mockCaseWithIrsPractitioners,
-        );
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
     });
 
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {

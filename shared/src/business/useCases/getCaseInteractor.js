@@ -97,7 +97,7 @@ const getCaseForExternalUser = async ({
 exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
-    .getFullCaseByDocketNumber({
+    .getCaseByDocketNumber({
       applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
     });
