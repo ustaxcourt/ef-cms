@@ -20,14 +20,6 @@ describe('unblockCaseFromTrialInteractor', () => {
           status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
         }),
       );
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        }),
-      );
 
     const result = await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,

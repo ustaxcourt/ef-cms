@@ -101,9 +101,6 @@ describe('update petitioner contact information on a case', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('updates case even if no change of address or phone is detected', async () => {
@@ -215,9 +212,8 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
 
-    const {
-      caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     expect(getContactPrimary(caseToUpdate).address2).toBeUndefined();
 
     expect(getContactSecondary(caseToUpdate).address2).toBeUndefined();
@@ -244,9 +240,8 @@ describe('update petitioner contact information on a case', () => {
       },
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-      d => d.eventCode === 'NCA',
-    );
+    const noticeOfChangeDocketEntryWithWorkItem =
+      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
     expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
   });
@@ -369,8 +364,9 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
     });
 
-    const updatedPetitioners = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+    const updatedPetitioners =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.petitioners;
 
     const updatedContactSecondary = updatedPetitioners.find(
       p => p.contactType === CONTACT_TYPES.secondary,
@@ -392,8 +388,9 @@ describe('update petitioner contact information on a case', () => {
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
     });
 
-    const updatedPetitioners = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+    const updatedPetitioners =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.petitioners;
 
     const updatedContactSecondary = updatedPetitioners.find(
       p => p.contactType === CONTACT_TYPES.secondary,
@@ -528,9 +525,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -567,9 +563,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -602,9 +597,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -638,9 +632,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -674,9 +667,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -711,9 +703,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -751,9 +742,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,
@@ -800,9 +790,8 @@ describe('update petitioner contact information on a case', () => {
         },
       );
 
-      const noticeOfChangeDocketEntryWithWorkItem = result.updatedCase.docketEntries.find(
-        d => d.eventCode === 'NCA',
-      );
+      const noticeOfChangeDocketEntryWithWorkItem =
+        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
 
       expect(
         applicationContext.getPersistenceGateway().saveWorkItem,

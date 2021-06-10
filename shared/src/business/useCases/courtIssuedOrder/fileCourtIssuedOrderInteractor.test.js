@@ -86,10 +86,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -215,8 +211,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(4);
-    const result = applicationContext.getPersistenceGateway().updateCase.mock
-      .calls[0][0].caseToUpdate.docketEntries[3];
+    const result =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });
@@ -363,10 +360,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,

@@ -135,12 +135,6 @@ describe('verifyUserPendingEmailInteractor', () => {
         ...MOCK_CASE,
         privatePractitioners: [mockUser],
       });
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        privatePractitioners: [mockUser],
-      });
 
     await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
@@ -489,9 +483,6 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockResolvedValue(casesMock[0]);
-      applicationContext
-        .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockResolvedValue(casesMock[0]);
 
       await updatePetitionerCases({
         applicationContext,
@@ -546,7 +537,8 @@ describe('verifyUserPendingEmailInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
-        .mockReturnValueOnce(userCases[1]);
+        .mockReturnValueOnce(userCases[1])
+        .mockReturnValueOnce(MOCK_CASE);
 
       await expect(
         updatePetitionerCases({
@@ -627,9 +619,9 @@ describe('verifyUserPendingEmailInteractor', () => {
         user: mockPetitionerUser,
       });
 
-      const {
-        caseToUpdate,
-      } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+      const { caseToUpdate } =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0];
       expect(getContactSecondary(caseToUpdate).email).toBe(UPDATED_EMAIL);
       expect(caseToUpdate.docketNumber).toBe('102-21');
     });
