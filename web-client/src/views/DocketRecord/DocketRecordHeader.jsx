@@ -71,6 +71,7 @@ export const DocketRecordHeader = connect(
                   aria-label="printable docket record"
                   className="margin-right-0"
                   icon="print"
+                  id="printable-docket-record-button"
                   onClick={() => {
                     gotoPrintableDocketRecordSequence({
                       docketNumber: formattedCaseDetail.docketNumber,
