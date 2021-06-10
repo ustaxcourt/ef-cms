@@ -561,8 +561,8 @@ describe('serveCaseToIrsInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updateCaseCall =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls;
+    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
+      .mock.calls;
 
     expect(
       updateCaseCall[0][0].caseToUpdate.docketEntries.find(
