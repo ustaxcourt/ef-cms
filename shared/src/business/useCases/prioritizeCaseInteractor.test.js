@@ -10,9 +10,19 @@ describe('prioritizeCaseInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           status: CASE_STATUS_TYPES.generalDocketReadyForTrial,

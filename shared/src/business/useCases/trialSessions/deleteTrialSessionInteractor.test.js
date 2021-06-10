@@ -122,6 +122,10 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
     await deleteTrialSessionInteractor(applicationContext, {
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

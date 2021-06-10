@@ -81,6 +81,9 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(caseRecord);
+    applicationContext
+      .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerWithCaseInteractor(applicationContext, {

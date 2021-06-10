@@ -84,6 +84,15 @@ describe('deleteCounselFromCaseInteractor', () => {
         irsPractitioners: mockIrsPractitioners,
         privatePractitioners: mockPrivatePractitioners,
       }));
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
+        ...MOCK_CASE,
+        docketNumber,
+        irsPractitioners: mockIrsPractitioners,
+        privatePractitioners: mockPrivatePractitioners,
+      }));
   });
 
   it('returns an unauthorized error for a petitioner user', async () => {
