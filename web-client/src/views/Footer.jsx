@@ -98,7 +98,7 @@ export const Footer = connect(
                   <div className="grid-row">
                     <div className="grid-col-4 footer-left">
                       <div className="grid-row grid-gap-1 usa-footer__logo">
-                        <div className="">
+                        <div>
                           <div className="usa-logo">
                             <a href="/">
                               <img alt="USTC Seal" src={seal} />

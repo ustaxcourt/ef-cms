@@ -36,7 +36,6 @@ export const RemovePetitionerModal = connect(
             contactType: form.contact.contactType,
           })
         }
-        className=""
         confirmLabel="Yes, Remove"
         confirmSequence={confirmSequence}
         title="Remove Petitioner and Update Caption"

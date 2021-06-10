@@ -32,7 +32,7 @@ export const FileDocumentReview = connect(
       <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
         <div className="tablet:grid-col-6 margin-bottom-1">
           <div className="tablet:margin-bottom-0 margin-bottom-205">
-            <div className="">
+            <div>
               <label className="usa-label" htmlFor="secondary-filing">
                 {form.secondaryDocument.documentTitle}{' '}
               </label>

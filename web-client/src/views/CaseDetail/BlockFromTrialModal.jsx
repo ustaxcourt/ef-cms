@@ -25,7 +25,6 @@ export const BlockFromTrialModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Block Case"
         confirmSequence={confirmSequence}
         title="Block From Trial"
