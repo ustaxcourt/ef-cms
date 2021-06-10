@@ -391,7 +391,7 @@ exports.updateCaseAndAssociations = async ({
 
   const oldCaseEntity = await applicationContext
     .getPersistenceGateway()
-    .getCaseByDocketNumber({
+    .getFullCaseByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });

@@ -102,7 +102,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getFullCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -130,7 +130,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow('The DocketEntry entity was invalid.');
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -159,7 +159,7 @@ describe('fileExternalDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
@@ -279,7 +279,7 @@ describe('fileExternalDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber,
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,

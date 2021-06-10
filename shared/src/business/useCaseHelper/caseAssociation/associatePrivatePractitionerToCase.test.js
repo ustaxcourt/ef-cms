@@ -95,9 +95,14 @@ describe('associatePrivatePractitionerToCase', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {

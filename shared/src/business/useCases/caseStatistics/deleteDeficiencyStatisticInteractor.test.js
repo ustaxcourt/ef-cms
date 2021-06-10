@@ -32,6 +32,12 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve({ ...MOCK_CASE, statistics: [statistic] }),
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({ ...MOCK_CASE, statistics: [statistic] }),
+      );
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {

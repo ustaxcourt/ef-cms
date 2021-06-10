@@ -91,6 +91,10 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {

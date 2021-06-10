@@ -151,6 +151,10 @@ describe('updateDocketEntryMetaInteractor', () => {
       });
 
     applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+    applicationContext
       .getUseCases()
       .addCoversheetInteractor.mockImplementation(() => ({
         createdAt: '2011-02-22T00:01:00.000Z',
