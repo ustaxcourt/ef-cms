@@ -133,8 +133,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -163,8 +162,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -186,8 +184,8 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
       caseTitle: caseRecord.caseCaption,
     });
@@ -284,8 +282,7 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -312,12 +309,10 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
     });
@@ -338,12 +333,10 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemAndAddToSectionInbox.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: false },
     });

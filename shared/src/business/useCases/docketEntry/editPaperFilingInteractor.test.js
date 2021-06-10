@@ -130,13 +130,6 @@ describe('editPaperFilingInteractor', () => {
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox.mock
-        .calls[0][0].workItem,
-    ).toMatchObject({ workItemId: mockWorkItemId });
-    expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
@@ -244,8 +237,7 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -271,8 +263,7 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });

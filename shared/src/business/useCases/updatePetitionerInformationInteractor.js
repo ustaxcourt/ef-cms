@@ -10,6 +10,7 @@ const {
   CASE_STATUS_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   copyToNewPdf,
@@ -138,12 +139,10 @@ const createWorkItemForChange = async ({
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemAndAddToSectionInbox({
-      applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItem.validate().toRawObject(),
+  });
 };
 
 const generatePaperServicePdf = async ({
@@ -362,7 +361,9 @@ exports.updatePetitionerInformationInteractor = async (
   );
 
   if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
-    const partyWithPaperService = caseEntity.hasPartyWithPaperService();
+    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     const privatePractitionersRepresentingContact = caseEntity.isUserIdRepresentedByPrivatePractitioner(
       updatedCaseContact.contactId,

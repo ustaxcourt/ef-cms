@@ -1,5 +1,8 @@
 module.exports = {
   properties: {
+    'assigneeId.S': {
+      type: 'keyword',
+    },
     'associatedJudge.S': {
       type: 'text',
     },
