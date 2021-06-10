@@ -83,6 +83,9 @@ exports.serveCourtIssuedDocumentInteractor = async (
   if (!courtIssuedDocument) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
+  if (courtIssuedDocument.servedAt) {
+    throw new Error('Docket entry has already been served');
+  }
 
   courtIssuedDocument.numberOfPages = await applicationContext
     .getUseCaseHelpers()

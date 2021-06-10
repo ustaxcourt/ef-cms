@@ -139,7 +139,7 @@ const RespondentInformation = connect(
           <div className="card">
             <div className="content-wrapper">
               <div className="grid-row header-row">
-                <div className="grid-col-6 display-flex" id="secondary-label">
+                <div className="grid-col-6 display-flex" id="respondent-label">
                   <h3>Respondent Counsel</h3>
                   {caseInformationHelper.showEditIrsPractitioners && (
                     <Button

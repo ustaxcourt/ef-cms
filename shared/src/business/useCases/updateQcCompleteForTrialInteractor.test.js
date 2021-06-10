@@ -15,6 +15,9 @@ describe('updateQcCompleteForTrialInteractor', () => {
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    applicationContext
+      .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) =>
         Promise.resolve(caseToUpdate),
       );

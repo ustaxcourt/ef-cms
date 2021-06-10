@@ -54,6 +54,11 @@ describe('removeConsolidatedCasesInteractor', () => {
       });
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+        return mockCases[docketNumber];
+      });
+    applicationContext
+      .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
         return Object.keys(mockCases)
           .map(key => mockCases[key])
