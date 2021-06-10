@@ -165,23 +165,23 @@ describe('migrateItems', () => {
     expect(results).toEqual(items);
   });
 
-  it('should throw an error if originalBarState is not a valid state', async () => {
+  it("should set originalBarState to 'N/A' when originalBarState is not a valid state", async () => {
     const items = [
       {
         ...validPractitioner,
-        originalBarState: 'Something Else',
+        originalBarState: 'CM',
         pk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
         role: ROLES.inactivePractitioner,
         sk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
       },
     ];
 
-    expect(() => migrateItems(items)).toThrow(
-      'The Practitioner entity was invalid',
-    );
+    const results = migrateItems(items);
+
+    expect(results).toEqual([{ ...items[0], originalBarState: 'N/A' }]);
   });
 
-  it('should throw an error if originalBarState is undefined', async () => {
+  it("should set originalBarState to 'N/A' when originalBarState is undefined", async () => {
     const items = [
       {
         ...validPractitioner,
@@ -192,8 +192,40 @@ describe('migrateItems', () => {
       },
     ];
 
-    expect(() => migrateItems(items)).toThrow(
-      'The Practitioner entity was invalid',
-    );
+    const results = migrateItems(items);
+
+    expect(results).toEqual([{ ...items[0], originalBarState: 'N/A' }]);
+  });
+
+  it("should set originalBarState to 'FM' when originalBarState is 'TT", async () => {
+    const items = [
+      {
+        ...validPractitioner,
+        originalBarState: 'TT',
+        pk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+        role: ROLES.inactivePractitioner,
+        sk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+      },
+    ];
+
+    const results = migrateItems(items);
+
+    expect(results).toEqual([{ ...items[0], originalBarState: 'FM' }]);
+  });
+
+  it("should set originalBarState to 'MP' when originalBarState is 'CM", async () => {
+    const items = [
+      {
+        ...validPractitioner,
+        originalBarState: 'CM',
+        pk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+        role: ROLES.inactivePractitioner,
+        sk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+      },
+    ];
+
+    const results = migrateItems(items);
+
+    expect(results).toEqual([{ ...items[0], originalBarState: 'MP' }]);
   });
 });
