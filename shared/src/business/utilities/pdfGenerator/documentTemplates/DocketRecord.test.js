@@ -100,7 +100,6 @@ describe('DocketRecord', () => {
     const contactPrimaryEl = contacts.find('.party-details').text();
 
     expect(contactPrimaryEl).toContain(contactPrimary.name);
-    expect(contactPrimaryEl).toContain(`c/o ${contactPrimary.secondaryName}`);
     expect(contactPrimaryEl).toContain(contactPrimary.additionalName);
     expect(contactPrimaryEl).toContain(contactPrimary.address1);
     expect(contactPrimaryEl).toContain(contactPrimary.address2);
@@ -165,25 +164,6 @@ describe('DocketRecord', () => {
     expect(docketRecord.find('.stricken-docket-record').length).toEqual(2);
   });
 
-  it('renders party info in care of if present', () => {
-    contactPrimary.inCareOf = 'Test Care Of';
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const contactPrimaryEl = wrapper
-      .find('#petitioner-contacts')
-      .find('.party-details')
-      .at(0);
-
-    expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
-  });
-
   it('renders "None" when no private practitioner is given', () => {
     caseDetail.petitioners[0].counselDetails = [{ name: 'None' }]; // No private practitioners
 
@@ -201,6 +181,7 @@ describe('DocketRecord', () => {
     const contacts = wrapper.find('.practitioner-contact');
     expect(contacts.text()).toEqual('None');
   });
+
   it('renders private practitioner contact info when present', () => {
     const wrapper = mount(
       <DocketRecord
