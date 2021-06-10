@@ -35,6 +35,9 @@ describe('unprioritizeCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
 
     await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -49,6 +52,16 @@ describe('unprioritizeCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'because',
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           highPriority: true,
@@ -83,6 +96,16 @@ describe('unprioritizeCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          highPriority: true,
+          highPriorityReason: 'because',
+          status: CASE_STATUS_TYPES.new,
+        }),
+      );
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           highPriority: true,
