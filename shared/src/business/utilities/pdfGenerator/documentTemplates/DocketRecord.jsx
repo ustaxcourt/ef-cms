@@ -31,9 +31,6 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
         <tr className="party-details" key={contact.index}>
           <td>
             {contact.name}
-            {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
-            {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
-            {contact.title && <div>{contact.title}</div>}
             {contact.additionalName && <div>{contact.additionalName}</div>}
           </td>
           {!contact.isAddressSealed && showContactDetails && (
