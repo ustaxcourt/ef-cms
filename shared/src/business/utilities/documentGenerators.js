@@ -33,14 +33,18 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
 
 const practitionerCaseList = async ({
   applicationContext,
+  barNumber,
   closedCases,
   openCases,
+  practitionerName,
 }) => {
   const template = reactTemplateGenerator({
     componentName: 'PractitionerCaseList',
     data: {
+      barNumber,
       closedCases,
       openCases,
+      practitionerName,
     },
   });
 

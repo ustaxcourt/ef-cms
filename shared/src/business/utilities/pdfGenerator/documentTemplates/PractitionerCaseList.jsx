@@ -26,7 +26,7 @@ export const PractitionerCaseList = ({
           {openCases &&
             openCases.map(openCase => {
               return (
-                <tr key={openCase.docketNumberWithSuffix}>
+                <tr key={openCase.caseTitle}>
                   <td>{openCase.docketNumberWithSuffix}</td>
                   <td>{openCase.caseTitle}</td>
                   <td>{openCase.status}</td>
@@ -49,7 +49,7 @@ export const PractitionerCaseList = ({
           {closedCases &&
             closedCases.map(closedCase => {
               return (
-                <tr key={closedCase.docketNumberWithSuffix}>
+                <tr key={closedCase.caseTitle}>
                   <td>{closedCase.docketNumberWithSuffix}</td>
                   <td>{closedCase.caseTitle}</td>
                   <td>{closedCase.status}</td>
