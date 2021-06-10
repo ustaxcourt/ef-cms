@@ -52,10 +52,6 @@ describe('updateSecondaryContactInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
-
-    applicationContext
       .getChromiumBrowser()
       .newPage()
       .pdf.mockReturnValue(fakeData);
