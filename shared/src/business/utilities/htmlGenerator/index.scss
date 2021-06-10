@@ -20,6 +20,18 @@ h2 {
   text-align: center;
 }
 
+.text-align-left {
+  text-align: left;
+}
+
+.text-no-underline {
+  text-decoration: none;
+}
+
+.text-size-small {
+  font-size: 12px;
+}
+
 .bu {
   font-weight: bold;
   text-decoration: underline;
@@ -110,6 +122,14 @@ th {
 
 .width-half {
   width: 49%;
+}
+
+.width-100 {
+  width: 100px;
+}
+
+.width-250 {
+  width: 250px;
 }
 
 .margin-top-40 {

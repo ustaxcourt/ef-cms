@@ -47,11 +47,19 @@ const practitionerCaseList = async ({ applicationContext, data }) => {
     },
   });
 
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
+      displayHeaderFooter: true,
+      footerHtml,
       overwriteHeader: true,
     });
 
