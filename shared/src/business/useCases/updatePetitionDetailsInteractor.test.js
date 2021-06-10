@@ -37,9 +37,6 @@ describe('updatePetitionDetailsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {

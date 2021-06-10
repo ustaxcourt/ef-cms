@@ -10,7 +10,6 @@ import {
 } from './helpers';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
-import { getFullCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getFullCaseByDocketNumber';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
@@ -37,7 +36,6 @@ const callCognitoTriggerForPendingEmail = async userId => {
     getPersistenceGateway: () => ({
       getCaseByDocketNumber,
       getDocketNumbersByUser,
-      getFullCaseByDocketNumber,
       getUserById,
       updateCase,
       updateUser,

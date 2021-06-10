@@ -130,12 +130,6 @@ describe('updateDocketEntryMetaInteractor', () => {
       });
 
     applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return caseByDocketNumber[docketNumber];
-      });
-
-    applicationContext
       .getUseCases()
       .addCoversheetInteractor.mockImplementation(() => ({
         createdAt: '2011-02-22T00:01:00.000Z',

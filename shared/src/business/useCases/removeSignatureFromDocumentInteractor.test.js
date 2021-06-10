@@ -33,9 +33,6 @@ describe('removeSignatureFromDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should retrieve the original, unsigned document from S3', async () => {

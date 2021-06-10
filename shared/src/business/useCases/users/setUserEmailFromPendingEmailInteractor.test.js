@@ -65,9 +65,6 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => userCases[0]);
   });
 
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
@@ -91,9 +88,9 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       user: mockUser,
     });
 
-    const {
-      caseToUpdate,
-    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
 
     expect(applicationContext.logger.error).not.toBeCalled();
     expect(getContactPrimary(caseToUpdate)).toMatchObject({
@@ -174,9 +171,9 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       user: mockUser,
     });
 
-    const {
-      caseToUpdate,
-    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
