@@ -88,9 +88,9 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       user: mockUser,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
 
     expect(applicationContext.logger.error).not.toBeCalled();
     expect(getContactPrimary(caseToUpdate)).toMatchObject({
@@ -171,9 +171,9 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       user: mockUser,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const {
+      caseToUpdate,
+    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
