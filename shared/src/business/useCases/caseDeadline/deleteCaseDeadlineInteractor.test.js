@@ -25,6 +25,10 @@ describe('deleteCaseDeadlineInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
+
+    applicationContext
+      .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
 
