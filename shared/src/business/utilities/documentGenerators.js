@@ -31,21 +31,11 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-const practitionerCaseList = async ({
-  applicationContext,
-  barNumber,
-  closedCases,
-  openCases,
-  practitionerName,
-}) => {
+const practitionerCaseList = async ({ applicationContext, data }) => {
+  // data: barNumber, closedCases, openCases, practitionerName,
   const template = reactTemplateGenerator({
     componentName: 'PractitionerCaseList',
-    data: {
-      barNumber,
-      closedCases,
-      openCases,
-      practitionerName,
-    },
+    data,
   });
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
