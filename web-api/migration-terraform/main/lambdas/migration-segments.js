@@ -5,8 +5,8 @@ const {
   migrateItems: migration0001,
 } = require('./migrations/0001-filing-fee-text-casing');
 const {
-  migrateItems: migration0002,
-} = require('./migrations/0002-original-bar-state');
+  migrateItems: migration0003,
+} = require('./migrations/0003-original-bar-state');
 const {
   migrateItems: migration0027,
 } = require('./migrations/0027-delete-work-item-records');
@@ -36,8 +36,8 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0001');
   items = await migration0001(items, documentClient);
-  applicationContext.logger.info('about to run migration 0002');
-  items = await migration0002(items, documentClient);
+  applicationContext.logger.info('about to run migration 0003');
+  items = await migration0003(items, documentClient);
   applicationContext.logger.info('about to run migration 0027');
   items = await migration0027(items, documentClient);
 

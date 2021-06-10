@@ -4,7 +4,7 @@ const {
   SERVICE_INDICATOR_TYPES,
   US_STATES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0002-original-bar-state');
+const { migrateItems } = require('./0003-original-bar-state');
 
 describe('migrateItems', () => {
   const validPractitioner = {
@@ -169,7 +169,7 @@ describe('migrateItems', () => {
     const items = [
       {
         ...validPractitioner,
-        originalBarState: 'CM',
+        originalBarState: 'An Invalid State',
         pk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
         role: ROLES.inactivePractitioner,
         sk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
