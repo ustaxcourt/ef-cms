@@ -31,17 +31,11 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
-const practitionerCaseList = async ({
-  applicationContext,
-  closedCases,
-  openCases,
-}) => {
+const practitionerCaseList = async ({ applicationContext, data }) => {
+  // data: barNumber, closedCases, openCases, practitionerName,
   const template = reactTemplateGenerator({
     componentName: 'PractitionerCaseList',
-    data: {
-      closedCases,
-      openCases,
-    },
+    data,
   });
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
@@ -53,11 +47,19 @@ const practitionerCaseList = async ({
     },
   });
 
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
-      displayHeaderFooter: false,
+      displayHeaderFooter: true,
+      footerHtml,
       overwriteHeader: true,
     });
 
