@@ -43,9 +43,6 @@ describe('createCaseDeadlineInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseDeadlinesByDocketNumber.mockReturnValue([
         { deadline: 'something' },
       ]);
