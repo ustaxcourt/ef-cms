@@ -170,6 +170,33 @@ describe('aggregateCommonQueryParams', () => {
     });
   });
 
+  it('should trim spaces from beginning and end of yearFiledMin and yearFiledMax if present in the query', () => {
+    const queryParams = {
+      applicationContext,
+      yearFiledMax: ' 2017 ',
+      yearFiledMin: '            2016',
+    };
+
+    const result = aggregateCommonQueryParams(queryParams);
+
+    expect(result).toMatchObject({
+      commonQuery: [
+        {
+          range: {
+            'receivedAt.S': {
+              format: 'yyyy',
+              gte: '2016||/y',
+              lte: '2017||/y',
+            },
+          },
+        },
+        { match: { 'entityName.S': 'Case' } },
+      ],
+      exactMatchesQuery: [],
+      nonExactMatchesQuery: [],
+    });
+  });
+
   it('should include search params for yearFiledMin if present in query and default yearFiledMax if not present in query', () => {
     const queryParams = {
       applicationContext,
