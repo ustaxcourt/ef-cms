@@ -4,7 +4,6 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-  US_STATES,
 } = require('./EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case, getContactPrimary } = require('./cases/Case');
@@ -90,7 +89,7 @@ describe('PrivatePractitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
@@ -122,7 +121,7 @@ describe('PrivatePractitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
@@ -156,7 +155,7 @@ describe('PrivatePractitioner', () => {
       firstName: 'Test',
       lastName: 'Practitioner',
       name: 'Test Practitioner',
-      originalBarState: US_STATES.IL,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       serviceIndicator: 'CARRIER_PIGEON',
