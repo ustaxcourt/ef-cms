@@ -690,7 +690,7 @@ describe('documentGenerators', () => {
               status: CASE_STATUS_TYPES.generalDocket,
             },
           ],
-          practitionerName: 'John Matlock',
+          practitionerName: 'Ben Matlock',
         },
       });
 

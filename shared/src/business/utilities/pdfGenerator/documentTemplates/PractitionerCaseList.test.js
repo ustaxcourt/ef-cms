@@ -113,6 +113,5 @@ describe('PractitionerCaseList', () => {
     expect(tableData.find('tr').at(0).text()).toContain(
       closedCases[0].caseTitle,
     );
-    expect(tableData.find('tr').at(0).text()).toContain(closedCases[0].status);
   });
 });
