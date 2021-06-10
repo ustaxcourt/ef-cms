@@ -22,11 +22,12 @@ export const PublicDocketRecordHeader = connect(
       <React.Fragment>
         <div className="title">
           <h1>Docket Record</h1>
-          {!publicCaseDetailHelper.formattedCaseDetail.isStatusNew && (
+          {publicCaseDetailHelper.showPrintableDocketRecord && (
             <Button
               link
               className="hide-on-mobile float-right margin-right-0 margin-top-1"
               icon="print"
+              id="printable-docket-record-button"
               onClick={() => {
                 gotoPublicPrintableDocketRecordSequence({
                   docketNumber,
