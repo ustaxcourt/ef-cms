@@ -71,6 +71,25 @@ describe('migrateItems', () => {
     });
   });
 
+  it('should update privatePractitioner record originalBarState from lowercase abbreviation to uppercase abbreviation', () => {
+    const items = [
+      {
+        ...validPractitioner,
+        originalBarState: 'ny',
+        pk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+        role: ROLES.privatePractitioner,
+        sk: 'user|ed10070b-ce23-46b4-9a34-4f500f768a98',
+      },
+    ];
+
+    const results = migrateItems(items);
+
+    expect(results[0]).toMatchObject({
+      ...items[0],
+      originalBarState: 'NY',
+    });
+  });
+
   it('should update irsPractitioner record originalBarState from full state name to abbreviation', () => {
     const testState = 'TX';
 
