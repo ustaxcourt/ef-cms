@@ -84,10 +84,6 @@ describe('associatePrivatePractitionerToCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(caseRecord);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
