@@ -27,11 +27,24 @@ const migrateItems = items => {
     ) {
       if (
         item.originalBarState &&
+        validStateAbbreviations.includes(item.originalBarState.toUpperCase())
+      ) {
+        item.originalBarState = item.originalBarState.toUpperCase();
+      } else if (
+        item.originalBarState &&
         !validStateAbbreviations.includes(item.originalBarState)
       ) {
-        const stateAbbreviation = invert(US_STATES)[item.originalBarState];
+        if (item.originalBarState === 'TT') {
+          item.originalBarState = 'FM';
+        } else if (item.originalBarState === 'CM') {
+          item.originalBarState = 'MP';
+        } else {
+          const stateAbbreviation = invert(US_STATES)[item.originalBarState];
 
-        item.originalBarState = stateAbbreviation;
+          item.originalBarState = stateAbbreviation || 'N/A';
+        }
+      } else {
+        item.originalBarState = 'N/A';
       }
 
       new Practitioner(item, { applicationContext }).validateForMigration();
