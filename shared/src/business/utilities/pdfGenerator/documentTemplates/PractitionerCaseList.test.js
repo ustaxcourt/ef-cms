@@ -1,9 +1,9 @@
 const React = require('react');
 const { CASE_STATUS_TYPES } = require('../../../entities/EntityConstants.js');
 const { mount, shallow } = require('enzyme');
-const { PractitionerCases } = require('./PractitionerCases.jsx');
+const { PractitionerCaseList } = require('./PractitionerCaseList.jsx');
 
-describe('PractitionerCases', () => {
+describe('PractitionerCaseList', () => {
   let openCases;
   let closedCases;
 
@@ -32,7 +32,7 @@ describe('PractitionerCases', () => {
 
   it('renders a document header with the practitioner name and bar number', () => {
     const wrapper = mount(
-      <PractitionerCases
+      <PractitionerCaseList
         barNumber="PT1234"
         closedCases={closedCases}
         openCases={openCases}
@@ -46,7 +46,7 @@ describe('PractitionerCases', () => {
 
   it('renders the open cases count', () => {
     const wrapper = shallow(
-      <PractitionerCases
+      <PractitionerCaseList
         barNumber="PT1234"
         closedCases={closedCases}
         openCases={openCases}
@@ -61,7 +61,7 @@ describe('PractitionerCases', () => {
 
   it('renders a table with open case information', () => {
     const wrapper = shallow(
-      <PractitionerCases
+      <PractitionerCaseList
         barNumber="PT1234"
         closedCases={closedCases}
         openCases={openCases}
@@ -80,7 +80,7 @@ describe('PractitionerCases', () => {
 
   it('renders the closed cases count', () => {
     const wrapper = shallow(
-      <PractitionerCases
+      <PractitionerCaseList
         barNumber="PT1234"
         closedCases={closedCases}
         openCases={openCases}
@@ -97,7 +97,7 @@ describe('PractitionerCases', () => {
 
   it('renders a table with closed case information', () => {
     const wrapper = shallow(
-      <PractitionerCases
+      <PractitionerCaseList
         barNumber="PT1234"
         closedCases={closedCases}
         openCases={openCases}
