@@ -27,6 +27,11 @@ const migrateItems = items => {
     ) {
       if (
         item.originalBarState &&
+        validStateAbbreviations.includes(item.originalBarState.toUpperCase())
+      ) {
+        item.originalBarState = item.originalBarState.toUpperCase();
+      } else if (
+        item.originalBarState &&
         !validStateAbbreviations.includes(item.originalBarState)
       ) {
         const stateAbbreviation = invert(US_STATES)[item.originalBarState];
