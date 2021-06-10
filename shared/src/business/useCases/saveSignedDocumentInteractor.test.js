@@ -29,6 +29,10 @@ describe('saveSignedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
 
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
+
     applicationContext.getUniqueId.mockReturnValue(
       mockDocumentIdBeforeSignature,
     );

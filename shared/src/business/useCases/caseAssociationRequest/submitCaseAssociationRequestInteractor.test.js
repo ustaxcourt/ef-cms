@@ -52,6 +52,10 @@ describe('submitCaseAssociationRequest', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
