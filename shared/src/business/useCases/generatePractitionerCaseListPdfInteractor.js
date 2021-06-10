@@ -24,6 +24,16 @@ exports.generatePractitionerCaseListPdfInteractor = async (
     throw new UnauthorizedError('Unauthorized to view practitioners cases');
   }
 
+  const practitionerUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId });
+
+  if (!practitionerUser || !practitionerUser.barNumber) {
+    throw new UnauthorizedError('Practitioner not found');
+  }
+
+  const { barNumber, name } = practitionerUser;
+
   const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesAssociatedWithUser({
@@ -43,8 +53,10 @@ exports.generatePractitionerCaseListPdfInteractor = async (
     .practitionerCaseList({
       applicationContext,
       data: {
+        barNumber,
         closedCases,
         openCases,
+        practitionerName: name,
       },
     });
 
