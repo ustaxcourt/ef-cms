@@ -9,7 +9,7 @@ const {
 const { Case, getContactPrimary } = require('./Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('hasPartyWithPaperService', () => {
+describe('hasPartyWithServiceType', () => {
   it('should return true if contactPrimary service indicator is paper', () => {
     const myCase = new Case(
       {
@@ -24,7 +24,9 @@ describe('hasPartyWithPaperService', () => {
       { applicationContext },
     );
 
-    const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+    const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     expect(hasPartyWithPaperService).toBeTruthy();
   });
@@ -49,7 +51,9 @@ describe('hasPartyWithPaperService', () => {
       { applicationContext },
     );
 
-    const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+    const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     expect(hasPartyWithPaperService).toBeTruthy();
   });
@@ -69,7 +73,9 @@ describe('hasPartyWithPaperService', () => {
       { applicationContext },
     );
 
-    const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+    const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     expect(hasPartyWithPaperService).toBeTruthy();
   });
@@ -89,7 +95,9 @@ describe('hasPartyWithPaperService', () => {
       { applicationContext },
     );
 
-    const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+    const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     expect(hasPartyWithPaperService).toBeTruthy();
   });
@@ -108,7 +116,9 @@ describe('hasPartyWithPaperService', () => {
       { applicationContext },
     );
 
-    const hasPartyWithPaperService = myCase.hasPartyWithPaperService();
+    const hasPartyWithPaperService = myCase.hasPartyWithServiceType(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
 
     expect(hasPartyWithPaperService).toBeFalsy();
   });

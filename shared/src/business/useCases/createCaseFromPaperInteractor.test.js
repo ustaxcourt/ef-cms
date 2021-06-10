@@ -50,7 +50,7 @@ describe('createCaseFromPaperInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox.mockResolvedValue(null);
+      .saveWorkItem.mockResolvedValue(null);
 
     applicationContext.getUniqueId.mockReturnValue(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
