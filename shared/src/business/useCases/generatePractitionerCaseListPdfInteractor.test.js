@@ -11,6 +11,14 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       role: ROLES.docketClerk,
     });
   });
+
+  beforeEach(() => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      barNumber: 'PT1234',
+      name: 'Ben Matlock',
+    });
+  });
+
   it('returns an unauthorized error on non internal users', async () => {
     applicationContext.getCurrentUser.mockReturnValueOnce({
       role: ROLES.petitioner,
@@ -21,6 +29,53 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
         userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
+  });
+
+  it('looks up the practitioner by the given userId', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesAssociatedWithUser.mockResolvedValue([
+        {
+          ...MOCK_CASE,
+          docketNumber: '108-07',
+          status: CASE_STATUS_TYPES.closed,
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '101-17',
+          status: CASE_STATUS_TYPES.closed,
+        },
+        { ...MOCK_CASE, docketNumber: '201-07' },
+        { ...MOCK_CASE, docketNumber: '202-17' },
+      ]);
+
+    applicationContext.getDocumentGenerators().practitionerCaseList = jest
+      .fn()
+      .mockResolvedValue('pdf');
+
+    await generatePractitionerCaseListPdfInteractor(applicationContext, {
+      userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getUserById,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+  });
+
+  it('throws an error if a practitioner user with the given userId does not exist', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      firstName: 'Nadia',
+      lastName: 'Practitioner',
+    });
+
+    await expect(
+      generatePractitionerCaseListPdfInteractor(applicationContext, {
+        userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Practitioner not found');
   });
 
   it('sorts open and closed cases before sending them to document generator', async () => {
