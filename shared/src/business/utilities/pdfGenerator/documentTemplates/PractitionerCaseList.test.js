@@ -40,8 +40,8 @@ describe('PractitionerCaseList', () => {
       />,
     );
 
-    expect(wrapper.find('#reports-header h2').text()).toEqual('John Matlock');
-    expect(wrapper.find('#reports-header h3').text()).toEqual('PT1234');
+    expect(wrapper.find('#case-list-header h2').text()).toEqual('John Matlock');
+    expect(wrapper.find('#case-list-header p').text()).toEqual('PT1234');
   });
 
   it('renders the open cases count', () => {
