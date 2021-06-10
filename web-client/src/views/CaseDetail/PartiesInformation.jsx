@@ -36,7 +36,7 @@ const PartiesInformation = connect(
               <div className="grid-row padding-left-205 grid-header">
                 Parties & Counsel
               </div>
-              <div className="">
+              <div>
                 <Button
                   className={classNames(
                     'usa-button--unstyled attachment-viewer-button',
