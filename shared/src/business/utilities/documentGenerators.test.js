@@ -669,27 +669,29 @@ describe('documentGenerators', () => {
     it('generates a Pending Report document', async () => {
       const pdf = await practitionerCaseList({
         applicationContext,
-        barNumber: 'PT1234',
-        closedCases: [
-          {
-            caseTitle: 'Test Closed Case 1',
-            docketNumberWithSuffix: '123-45S',
-            status: CASE_STATUS_TYPES.closed,
-          },
-          {
-            caseTitle: 'Test Closed Case 2',
-            docketNumberWithSuffix: '223-45S',
-            status: CASE_STATUS_TYPES.closed,
-          },
-        ],
-        openCases: [
-          {
-            caseTitle: 'Test Open Case 1',
-            docketNumberWithSuffix: '323-45S',
-            status: CASE_STATUS_TYPES.generalDocket,
-          },
-        ],
-        practitionerName: 'John Matlock',
+        data: {
+          barNumber: 'PT1234',
+          closedCases: [
+            {
+              caseTitle: 'Test Closed Case 1',
+              docketNumberWithSuffix: '123-45S',
+              status: CASE_STATUS_TYPES.closed,
+            },
+            {
+              caseTitle: 'Test Closed Case 2',
+              docketNumberWithSuffix: '223-45S',
+              status: CASE_STATUS_TYPES.closed,
+            },
+          ],
+          openCases: [
+            {
+              caseTitle: 'Test Open Case 1',
+              docketNumberWithSuffix: '323-45S',
+              status: CASE_STATUS_TYPES.generalDocket,
+            },
+          ],
+          practitionerName: 'John Matlock',
+        },
       });
 
       // Do not write PDF when running on CircleCI
