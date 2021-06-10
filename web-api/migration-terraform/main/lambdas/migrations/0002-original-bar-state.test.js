@@ -4,7 +4,7 @@ const {
   SERVICE_INDICATOR_TYPES,
   US_STATES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0003-original-bar-state');
+const { migrateItems } = require('./0002-original-bar-state');
 
 describe('migrateItems', () => {
   const validPractitioner = {
