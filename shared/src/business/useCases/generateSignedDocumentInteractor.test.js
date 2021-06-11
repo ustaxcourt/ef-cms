@@ -5,167 +5,368 @@ const {
 const {
   computeCoordinates,
   generateSignedDocumentInteractor,
-  getCropBoxCoordinates,
-  getPageDimensions,
+  TEXT_SIZE,
 } = require('./generateSignedDocumentInteractor');
-const { degrees, PDFDocument } = require('pdf-lib');
 
 describe('generateSignedDocument', () => {
-  let rotatedTestPdfDoc;
+  let drawRectangleMock;
 
-  beforeAll(async () => {
-    const pdfDoc = await PDFDocument.load(testPdfDoc);
-    const pages = pdfDoc.getPages();
-    const page = pages[0];
+  let drawTextMock;
+  let rotationReturnValue;
+  let saveMock;
 
-    page.setRotation(degrees(90));
-
-    rotatedTestPdfDoc = await pdfDoc.save({
-      useObjectStreams: false,
-    });
-  });
-
-  const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
-  const rotatedPdfDocumentLoadMock = async () =>
-    await PDFDocument.load(rotatedTestPdfDoc);
+  const mockSignatureName = '(Signed) Dr. Guy Fieri';
+  const mockTitle = 'Chief Judge';
 
   beforeEach(() => {
-    jest.setTimeout(30000);
+    rotationReturnValue = { angle: 270 };
 
-    applicationContext.getPdfLib.mockReturnValue({
-      PDFDocument: {
-        load: pdfDocumentLoadMock,
+    drawTextMock = jest.fn();
+    drawRectangleMock = jest.fn();
+    saveMock = jest.fn();
+
+    applicationContext.getUtilities().setupPdfDocument.mockReturnValue({
+      pdfDoc: {
+        getPages: () => [
+          {
+            drawRectangle: drawRectangleMock,
+            drawText: drawTextMock,
+            getRotation: jest
+              .fn()
+              .mockImplementation(() => rotationReturnValue),
+          },
+        ],
+        save: saveMock,
       },
-      StandardFonts: {
-        TimesRomanBold: 'Times-Bold',
+      textFont: {
+        sizeAtHeight: jest.fn(),
+        widthOfTextAtSize: jest.fn(),
       },
-      degrees: () => {},
-      rgb: () => {},
+    });
+
+    applicationContext.getUtilities().getCropBox.mockReturnValue({});
+
+    applicationContext.getUtilities().getStampBoxCoordinates.mockReturnValue({
+      x: 0,
+      y: 0,
     });
   });
 
-  it('generates a pdf document with the provided signature text attached', async () => {
-    const args = {
+  it('should make a call to load and setup the PDF', async () => {
+    await generateSignedDocumentInteractor({
       applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
       posY: 200,
-      scale: 1,
       sigTextData: {
-        signatureName: '(Signed) Dr. Guy Fieri',
-        signatureTitle: 'Chief Judge',
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
       },
-    };
-
-    const newPdfData = await generateSignedDocumentInteractor(args);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
-  });
-
-  it('generates a pdf document with the provided signature text attached with rotated PDF', async () => {
-    applicationContext.getPdfLib.mockReturnValue({
-      PDFDocument: {
-        load: rotatedPdfDocumentLoadMock,
-      },
-      StandardFonts: {
-        TimesRomanBold: 'Times-Bold',
-      },
-      degrees: () => {},
-      rgb: () => {},
     });
 
-    const args = {
-      applicationContext,
-      pageIndex: 0,
+    expect(
+      applicationContext.getUtilities().setupPdfDocument.mock.calls[0][0],
+    ).toMatchObject({
       pdfData: testPdfDoc,
-      posX: 200,
-      posY: 200,
-      scale: 1,
-      sigTextData: {
-        signatureName: '(Signed) Dr. Guy Fieri',
-        signatureTitle: 'Chief Judge',
-      },
-    };
-
-    const newPdfData = await generateSignedDocumentInteractor(args);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
+    });
   });
 
-  it('uses a default scale value of 1 if not provided in args', async () => {
-    const args = {
+  it('should draw the signature and title text on the pdf document', async () => {
+    await generateSignedDocumentInteractor({
       applicationContext,
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
       posY: 200,
       sigTextData: {
-        signatureName: '(Signed) Dr. Guy Fieri',
-        signatureTitle: 'Chief Judge',
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
       },
-    };
+    });
 
-    const newPdfData = await generateSignedDocumentInteractor(args);
-
-    const newPdfDoc = await PDFDocument.load(newPdfData);
-    const newPdfDocPages = newPdfDoc.getPages();
-    expect(newPdfDocPages.length).toEqual(1);
+    expect(drawTextMock.mock.calls[0][0]).toEqual(mockSignatureName);
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      font: expect.anything(),
+      rotate: expect.anything(),
+      size: expect.anything(),
+      x: expect.anything(),
+      y: expect.anything(),
+    });
+    expect(drawTextMock.mock.calls[1][0]).toEqual(mockTitle);
+    expect(drawTextMock.mock.calls[1][1]).toMatchObject({
+      font: expect.anything(),
+      rotate: expect.anything(),
+      size: expect.anything(),
+      x: expect.anything(),
+      y: expect.anything(),
+    });
   });
-});
 
-describe('getPageDimensions', () => {
-  it('returns the page dimensions for the given pdf', async () => {
-    const pdfDoc = await PDFDocument.load(testPdfDoc);
-    const pages = pdfDoc.getPages();
-    const page = pages[0];
+  it('should draw the rectangular stamp on the pdf document', async () => {
+    await generateSignedDocumentInteractor({
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    });
 
-    expect(getPageDimensions(page)).toMatchObject([612, 792]);
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      color: expect.anything(),
+      height: expect.anything(),
+      rotate: expect.anything(),
+      width: expect.anything(),
+      x: expect.anything(),
+      y: expect.anything(),
+    });
   });
-});
 
-describe('getCropBoxCoordinates', () => {
-  it('returns x and y coordinates from the getCropBox method of the page parameter', () => {
-    const coords = { x: 99, y: 37 };
-    const page = { getCropBox: () => coords };
-    const result = getCropBoxCoordinates(page);
-    expect(result).toEqual(coords);
+  it('should set the stamp rotation to 0 degrees when the page rotation angle is undefined', async () => {
+    rotationReturnValue = { angle: undefined };
+
+    await generateSignedDocumentInteractor({
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    });
+
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      rotate: { angle: 0 },
+    });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: {
+        angle: 0,
+      },
+    });
+    expect(drawTextMock.mock.calls[1][1]).toMatchObject({
+      rotate: {
+        angle: 0,
+      },
+    });
   });
-  it('returns default values of zero for coordinates if not defined on page', () => {
-    const coords = { yellow: 'hamburger' };
-    const page = { getCropBox: () => coords };
-    const result = getCropBoxCoordinates(page);
-    expect(result).toEqual({ x: 0, y: 0 });
+
+  it('should set the stamp rotation equal to the page rotation when the PDF has been rotated', async () => {
+    const mockRotationAngle = 80;
+    rotationReturnValue = { angle: mockRotationAngle };
+
+    await generateSignedDocumentInteractor({
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    });
+
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      rotate: { angle: mockRotationAngle },
+    });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: {
+        angle: mockRotationAngle,
+      },
+    });
+    expect(drawTextMock.mock.calls[1][1]).toMatchObject({
+      rotate: {
+        angle: mockRotationAngle,
+      },
+    });
+  });
+
+  it('should use a default scale value of 1 when one has not been provided', async () => {
+    await generateSignedDocumentInteractor({
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      scale: undefined,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    });
+
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      size: TEXT_SIZE, // textSize is calculated using scale
+    });
+  });
+
+  it('should save the pdf', async () => {
+    await generateSignedDocumentInteractor({
+      applicationContext,
+      pageIndex: 0,
+      pdfData: testPdfDoc,
+      posX: 200,
+      posY: 200,
+      scale: undefined,
+      sigTextData: {
+        signatureName: mockSignatureName,
+        signatureTitle: mockTitle,
+      },
+    });
+
+    expect(saveMock.mock.calls[0][0]).toMatchObject({
+      useObjectStreams: false,
+    });
   });
 });
 
 describe('computeCoordinates', () => {
-  describe('when cropbox coordinates are {x: 0, y: 0}', () => {
-    let args = {
-      boxHeight: 1,
-      boxWidth: 2,
-      cropBoxCoordinates: { x: 0, y: 0 },
-      lineHeight: 1,
-      nameTextWidth: 2,
-      pageHeight: 150,
-      pageRotation: 0,
-      pageWidth: 100,
-      posX: 10,
-      posY: 12,
-      scale: 1,
-      textHeight: 4,
-      titleTextWidth: 4,
+  const baseArguments = {
+    applicationContext,
+    boxHeight: 1,
+    boxWidth: 2,
+    lineHeight: 1,
+    nameTextWidth: 2,
+    pageRotation: 0,
+    posX: 10,
+    posY: 12,
+    scale: 1,
+    textHeight: 4,
+    titleTextWidth: 4,
+  };
+
+  it('should calculate the x, y coordinates on the page of the bottom left hand corner of the signature box when the page is rotated 90', () => {
+    const mockCropBox = {
+      pageHeight: 10,
+      pageWidth: 20,
+      x: 5,
+      y: 10,
     };
-    it('computes signature coordinates when the page rotation is 0 degrees', () => {
+
+    computeCoordinates({
+      ...baseArguments,
+      cropBox: mockCropBox,
+      pageRotation: 90,
+    });
+
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: {
+        x: baseArguments.posX / baseArguments.scale,
+        y:
+          mockCropBox.pageWidth -
+          (baseArguments.posY + baseArguments.boxHeight) / baseArguments.scale,
+      },
+    });
+  });
+
+  it('should calculate the x, y coordinates on the page of the bottom left hand corner of the signature box when the page is rotated 270', () => {
+    const mockCropBox = {
+      pageHeight: 10,
+      pageWidth: 20,
+      x: 5,
+      y: 10,
+    };
+
+    computeCoordinates({
+      ...baseArguments,
+      cropBox: mockCropBox,
+      pageRotation: 270,
+    });
+
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: {
+        x: baseArguments.posX / baseArguments.scale,
+        y:
+          mockCropBox.pageWidth -
+          (baseArguments.posY + baseArguments.boxHeight) / baseArguments.scale,
+      },
+    });
+  });
+
+  it('should calculate the x, y coordinates on the page of the bottom left hand corner of the signature box when the page is NOT rotated 90 or 270 degrees', () => {
+    const mockCropBox = {
+      pageHeight: 10,
+      pageWidth: 20,
+      x: 5,
+      y: 10,
+    };
+
+    computeCoordinates({
+      ...baseArguments,
+      cropBox: mockCropBox,
+      pageRotation: 30,
+    });
+
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: {
+        x: baseArguments.posX / baseArguments.scale,
+        y:
+          mockCropBox.pageHeight -
+          (baseArguments.posY + baseArguments.boxHeight) / baseArguments.scale,
+      },
+    });
+  });
+
+  it('should call getStampBoxCoordinates to generate the x, y coordinates of where to place the signature box on the page', () => {
+    const mockCropBox = {
+      pageHeight: 10,
+      pageWidth: 20,
+      x: 5,
+      y: 10,
+    };
+    const mockStampBoxCoordinates = { x: 50, y: 10 };
+    applicationContext
+      .getUtilities()
+      .getStampBoxCoordinates.mockReturnValue(mockStampBoxCoordinates);
+
+    const result = computeCoordinates({
+      ...baseArguments,
+      cropBox: mockCropBox,
+    });
+
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: expect.anything(),
+      cropBox: { x: expect.anything(), y: expect.anything() },
+      pageHeight: expect.anything(),
+      pageRotation: expect.anything(),
+      pageWidth: expect.anything(),
+    });
+    expect(result).toMatchObject({
+      rectangleX: mockStampBoxCoordinates.x,
+      rectangleY: mockStampBoxCoordinates.y,
+    });
+  });
+
+  describe('when cropbox coordinates are { x: 0, y: 0 }', () => {
+    let args;
+
+    const mockCropBox = { pageHeight: 150, pageWidth: 100, x: 0, y: 0 };
+
+    beforeEach(() => {
+      args = {
+        ...baseArguments,
+        cropBox: mockCropBox,
+      };
+    });
+
+    it('should compute signature coordinates when the page rotation is 0 degrees', () => {
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 10,
-        rectangleY: 137,
+      expect(result).toMatchObject({
         sigNameX: 10,
         sigNameY: 137.5,
         sigTitleX: 9,
@@ -173,13 +374,12 @@ describe('computeCoordinates', () => {
       });
     });
 
-    it('computes signature coordinates when the page rotation is 90 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 90 degrees', () => {
       args.pageRotation = 90;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 13,
-        rectangleY: 10.000000000000005,
+      expect(result).toMatchObject({
         sigNameX: 20,
         sigNameY: 14,
         sigTitleX: 24,
@@ -187,13 +387,12 @@ describe('computeCoordinates', () => {
       });
     });
 
-    it('computes signature coordinates when the page rotation is 180 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 180 degrees', () => {
       args.pageRotation = 180;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 89.99999999999999,
-        rectangleY: 13,
+      expect(result).toMatchObject({
         sigNameX: 90,
         sigNameY: 12.5,
         sigTitleX: 91,
@@ -201,13 +400,12 @@ describe('computeCoordinates', () => {
       });
     });
 
-    it('computes signature coordinates when the page rotation is 270 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 270 degrees', () => {
       args.pageRotation = 270;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 87,
-        rectangleY: 139.99999999999997,
+      expect(result).toMatchObject({
         sigNameX: 80,
         sigNameY: 136,
         sigTitleX: 76,
@@ -215,75 +413,66 @@ describe('computeCoordinates', () => {
       });
     });
   });
-  describe('when cropbox coordinates are non-zero {x: 605, y: 0.5}', () => {
-    const cropBoxCoordinates = { x: 605, y: 0.5 };
-    let args = {
-      boxHeight: 1,
-      boxWidth: 2,
-      cropBoxCoordinates,
-      lineHeight: 1,
-      nameTextWidth: 2,
-      pageHeight: 150,
-      pageRotation: 0,
-      pageWidth: 100,
-      posX: 10,
-      posY: 12,
-      scale: 1,
-      textHeight: 4,
-      titleTextWidth: 4,
-    };
-    it('computes signature coordinates when the page rotation is 0 degrees', () => {
+
+  describe('when cropbox coordinates are non-zero { x: 605, y: 0.5 }', () => {
+    let args;
+
+    const mockCropBox = { pageHeight: 150, pageWidth: 100, x: 0, y: 0 };
+
+    beforeEach(() => {
+      args = {
+        ...baseArguments,
+        cropBox: mockCropBox,
+      };
+    });
+
+    it('should compute signature coordinates when the page rotation is 0 degrees', () => {
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 10 + cropBoxCoordinates.x,
-        rectangleY: 137 + cropBoxCoordinates.y,
-        sigNameX: 10 + cropBoxCoordinates.x,
-        sigNameY: 137.5 + cropBoxCoordinates.y,
-        sigTitleX: 9 + cropBoxCoordinates.x,
-        sigTitleY: 133 + cropBoxCoordinates.y,
+      expect(result).toMatchObject({
+        sigNameX: 10 + mockCropBox.x,
+        sigNameY: 137.5 + mockCropBox.y,
+        sigTitleX: 9 + mockCropBox.x,
+        sigTitleY: 133 + mockCropBox.y,
       });
     });
 
-    it('computes signature coordinates when the page rotation is 90 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 90 degrees', () => {
       args.pageRotation = 90;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 13 + cropBoxCoordinates.x,
-        rectangleY: 10.000000000000005 + cropBoxCoordinates.y,
-        sigNameX: 20 + cropBoxCoordinates.x,
-        sigNameY: 14 + cropBoxCoordinates.y,
-        sigTitleX: 24 + cropBoxCoordinates.x,
-        sigTitleY: 26 + cropBoxCoordinates.y,
+      expect(result).toMatchObject({
+        sigNameX: 20 + mockCropBox.x,
+        sigNameY: 14 + mockCropBox.y,
+        sigTitleX: 24 + mockCropBox.x,
+        sigTitleY: 26 + mockCropBox.y,
       });
     });
 
-    it('computes signature coordinates when the page rotation is 180 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 180 degrees', () => {
       args.pageRotation = 180;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 89.99999999999999 + cropBoxCoordinates.x,
-        rectangleY: 13 + cropBoxCoordinates.y,
-        sigNameX: 90 + cropBoxCoordinates.x,
-        sigNameY: 12.5 + cropBoxCoordinates.y,
-        sigTitleX: 91 + cropBoxCoordinates.x,
-        sigTitleY: 17 + cropBoxCoordinates.y,
+      expect(result).toMatchObject({
+        sigNameX: 90 + mockCropBox.x,
+        sigNameY: 12.5 + mockCropBox.y,
+        sigTitleX: 91 + mockCropBox.x,
+        sigTitleY: 17 + mockCropBox.y,
       });
     });
 
-    it('computes signature coordinates when the page rotation is 270 degrees', () => {
+    it('should compute signature coordinates when the page rotation is 270 degrees', () => {
       args.pageRotation = 270;
+
       const result = computeCoordinates(args);
 
-      expect(result).toEqual({
-        rectangleX: 87 + cropBoxCoordinates.x,
-        rectangleY: 139.99999999999997 + cropBoxCoordinates.y,
-        sigNameX: 80 + cropBoxCoordinates.x,
-        sigNameY: 136 + cropBoxCoordinates.y,
-        sigTitleX: 76 + cropBoxCoordinates.x,
-        sigTitleY: 124 + cropBoxCoordinates.y,
+      expect(result).toMatchObject({
+        sigNameX: 80 + mockCropBox.x,
+        sigNameY: 136 + mockCropBox.y,
+        sigTitleX: 76 + mockCropBox.x,
+        sigTitleY: 124 + mockCropBox.y,
       });
     });
   });

@@ -103,6 +103,9 @@ const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
 const {
+  getStampBoxCoordinates,
+} = require('../../../src/business/utilities/getStampBoxCoordinates');
+const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
 const {
@@ -120,6 +123,9 @@ const {
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
+const {
+  setupPdfDocument,
+} = require('../../../src/business/utilities/setupPdfDocument');
 const {
   setWorkItemAsRead,
 } = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
@@ -150,6 +156,7 @@ const { DocketEntry } = require('../entities/DocketEntry');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
+const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
@@ -266,6 +273,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
+    getCropBox: jest.fn().mockImplementation(getCropBox),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
@@ -286,6 +294,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
     getOtherPetitioners: jest.fn().mockImplementation(getOtherPetitioners),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getStampBoxCoordinates: jest
+      .fn()
+      .mockImplementation(getStampBoxCoordinates),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
@@ -304,6 +315,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
+    setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
   });
 
