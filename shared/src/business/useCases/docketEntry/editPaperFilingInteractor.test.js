@@ -63,9 +63,14 @@ describe('editPaperFilingInteractor', () => {
       section: DOCKET_SECTION,
       userId: 'b266b7dc-e3b3-41a2-8c66-27e2680d58f0',
     });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
