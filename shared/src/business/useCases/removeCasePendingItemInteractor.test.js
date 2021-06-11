@@ -23,9 +23,6 @@ describe('removeCasePendingItemInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
       .updateCase.mockImplementation(v => v);
   });
 

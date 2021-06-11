@@ -126,47 +126,6 @@ describe('updateCounselOnCaseInteractor', () => {
         procedureType: 'Regular',
         userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
       }));
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
-        caseCaption: 'Caption',
-        caseType: CASE_TYPES_MAP.deficiency,
-        docketEntries: MOCK_CASE.docketEntries,
-        docketNumber,
-        filingType: 'Myself',
-        irsPractitioners: mockIrsPractitioners,
-        partyType: PARTY_TYPES.petitionerSpouse,
-        petitioners: [
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactType: CONTACT_TYPES.primary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-            phone: '1234567890',
-            postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            state: 'CA',
-          },
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactType: CONTACT_TYPES.secondary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-            phone: '1234567890',
-            postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            state: 'CA',
-          },
-        ],
-        preferredTrialCity: 'Fresno, California',
-        privatePractitioners: mockPrivatePractitioners,
-        procedureType: 'Regular',
-        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-      }));
   });
 
   it('returns an unauthorized error for a petitioner user', async () => {

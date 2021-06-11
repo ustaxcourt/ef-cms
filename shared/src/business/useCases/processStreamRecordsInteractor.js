@@ -313,7 +313,7 @@ exports.processStreamRecordsInteractor = async (
   { recordsToProcess },
 ) => {
   const getCase = ({ applicationContext: appContext, docketNumber }) =>
-    appContext.getPersistenceGateway().getFullCaseByDocketNumber({
+    appContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext: appContext,
       docketNumber,
     });
