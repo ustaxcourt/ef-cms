@@ -40,7 +40,5 @@ exports.getUsersPendingEmailInteractor = async (
     usersMapping[validatedUserRaw.userId] = validatedUserRaw.pendingEmail;
   });
 
-  applicationContext.logger.error(`~~~~ usersMapping is: ${usersMapping}`);
-
   return usersMapping;
 };
