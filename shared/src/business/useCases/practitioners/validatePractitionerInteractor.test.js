@@ -4,7 +4,7 @@ const {
 const {
   validatePractitionerInteractor,
 } = require('./validatePractitionerInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
@@ -39,7 +39,7 @@ describe('validatePractitionerInteractor', () => {
         employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
-        originalBarState: US_STATES.TX,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         userId: '195e31b6-20f7-4fa4-980e-4236b771cced',

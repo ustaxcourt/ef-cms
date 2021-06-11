@@ -80,8 +80,8 @@ export const WorkingCopySessionList = connect(
                 </Button>
               </th>
               <th aria-label="manually added indicator"></th>
-              <th className="no-wrap">Case Title</th>
-              <th className="no-wrap">
+              <th>Case Title</th>
+              <th>
                 <Button
                   link
                   className="sortable-header-button margin-right-0"
@@ -112,10 +112,8 @@ export const WorkingCopySessionList = connect(
                   )}
                 </Button>
               </th>
-              <th className="no-wrap">Respondent Counsel</th>
-              <th className="no-wrap" colSpan="2">
-                Trial Status
-              </th>
+              <th>Respondent Counsel</th>
+              <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
           {trialSessionWorkingCopyHelper.formattedCases.map(item => {
