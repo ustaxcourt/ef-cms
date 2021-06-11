@@ -26,9 +26,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
@@ -43,9 +40,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(undefined);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(undefined);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
@@ -64,9 +58,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
@@ -85,21 +76,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            processingStatus: 'pending',
-            userId: 'petitioner',
-          },
-        ],
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         docketEntries: [
           {
@@ -139,12 +115,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.generalDocket,
       });
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
@@ -164,13 +134,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        preferredTrialCity: null,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         preferredTrialCity: null,
         status: CASE_STATUS_TYPES.generalDocket,

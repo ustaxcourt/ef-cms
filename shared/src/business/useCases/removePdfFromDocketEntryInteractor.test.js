@@ -72,10 +72,6 @@ describe('removePdfFromDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext
-      .getPersistenceGateway()
       .updateCase.mockImplementation(caseDetail => caseDetail);
   });
 

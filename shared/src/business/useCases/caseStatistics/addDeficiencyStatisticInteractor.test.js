@@ -17,9 +17,6 @@ describe('addDeficiencyStatisticInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
   });
 
   it('should throw an error if the user is unauthorized to update case statistics', async () => {

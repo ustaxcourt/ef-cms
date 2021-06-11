@@ -99,10 +99,6 @@ describe('updateCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {

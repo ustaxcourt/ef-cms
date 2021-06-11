@@ -24,9 +24,6 @@ describe('archiveDraftDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await archiveDraftDocumentInteractor(applicationContext, {
       docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',

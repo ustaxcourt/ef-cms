@@ -48,9 +48,6 @@ describe('addCaseToTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
