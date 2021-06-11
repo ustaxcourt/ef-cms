@@ -10,5 +10,7 @@ if [ ! -e ".dynamodb/dynamo.tar.gz" ]; then
   cd .dynamodb && tar -xvf dynamo.tar.gz && cd ..
 fi
 
-# start dynamo
-cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+# start dynamo 
+export AWS_ACCESS_KEY_ID=S3RVER
+export AWS_SECRET_ACCESS_KEY=S3RVER
+cd .dynamodb && java -Djava.library.path=.dynamodb/DynamoDBLocal_lib -jar DynamoDBLocal.jar -inMemory
