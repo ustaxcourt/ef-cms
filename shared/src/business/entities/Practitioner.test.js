@@ -2,7 +2,6 @@ const {
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-  US_STATES,
 } = require('./EntityConstants');
 const { over1000Characters } = require('../test/createTestApplicationContext');
 const { Practitioner } = require('./Practitioner');
@@ -34,7 +33,7 @@ describe('Practitioner', () => {
     firstName: 'Test',
     lastName: 'Practitioner',
     name: 'Test Practitioner',
-    originalBarState: US_STATES.IL,
+    originalBarState: 'IL',
     practitionerNotes: '',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,

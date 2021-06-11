@@ -1,67 +1,46 @@
-const getPageDimensionsWithTrim = page => {
-  const sizeCropBox = page.getCropBox();
-  const sizeTrimBox = page.getTrimBox();
-  return {
-    pageHeight: sizeCropBox.height,
-    pageWidth: sizeTrimBox.width,
-    startingY: sizeCropBox.y,
-  };
-};
+const TEXT_SIZE = 14;
+const PADDING = 3;
 
 const computeCoordinates = ({
+  applicationContext,
   boxHeight,
   boxWidth,
-  pageHeight,
   pageRotation,
-  pageWidth,
-  posY,
+  pageToApplyStampTo,
 }) => {
-  let rotationRads = (pageRotation * Math.PI) / 180;
-  let coordsFromBottomLeft = {};
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.x = pageHeight / 2 - boxWidth / 2;
-  } else {
-    coordsFromBottomLeft.x = pageWidth / 2 - boxWidth / 2;
-  }
+  const {
+    pageHeight,
+    pageWidth,
+    x,
+    y,
+  } = applicationContext.getUtilities().getCropBox(pageToApplyStampTo);
 
-  if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  } else {
-    coordsFromBottomLeft.y = posY + boxHeight;
-  }
+  const bottomLeftBoxCoordinates = {
+    x: pageWidth / 2 - boxWidth / 2,
+    y: y + boxHeight + PADDING * 2,
+  };
 
-  let rectangleX, rectangleY;
+  const boxCoordinates = applicationContext
+    .getUtilities()
+    .getStampBoxCoordinates({
+      bottomLeftBoxCoordinates,
+      cropBox: { x, y },
+      pageHeight,
+      pageRotation,
+      pageWidth,
+    });
 
-  if (pageRotation === 90) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads);
-  } else if (pageRotation === 180) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-  } else if (pageRotation === 270) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads);
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-  } else {
-    rectangleX = coordsFromBottomLeft.x;
-    rectangleY = coordsFromBottomLeft.y;
-  }
-  return { rectangleX, rectangleY };
+  return boxCoordinates;
+};
+
+const getBoxWidth = ({ font, text }) => {
+  const serviceStampWidth = font.widthOfTextAtSize(text, TEXT_SIZE);
+  return serviceStampWidth + PADDING * 2;
+};
+
+const getBoxHeight = ({ font }) => {
+  const textHeight = font.sizeAtHeight(TEXT_SIZE);
+  return textHeight + PADDING * 2;
 };
 
 /**
@@ -72,82 +51,63 @@ const computeCoordinates = ({
  * @param {string} providers.serviceStampText the service stamp text to add to the document
  * @returns {object} the new pdf with the stamp at the bottom center of the document
  */
-exports.addServedStampToDocument = async ({
+const addServedStampToDocument = async ({
   applicationContext,
   pdfData,
-  serviceStampText,
+  serviceStampText = `SERVED ${applicationContext
+    .getUtilities()
+    .formatNow('MM/DD/YY')}`,
 }) => {
-  if (!serviceStampText) {
-    serviceStampText = `SERVED ${applicationContext
-      .getUtilities()
-      .formatNow('MM/DD/YY')}`;
-  }
+  const { degrees, rgb } = await applicationContext.getPdfLib();
 
   const {
-    degrees,
-    PDFDocument,
-    rgb,
-    StandardFonts,
-  } = await applicationContext.getPdfLib();
+    pdfDoc,
+    textFont,
+  } = await applicationContext.getUtilities().setupPdfDocument({
+    applicationContext,
+    pdfData,
+  });
 
-  const scale = 1;
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const pages = pdfDoc.getPages();
-  const page = pages[0];
+  const pageToApplyStampTo = pdfDoc.getPages()[0];
 
-  const { pageHeight, pageWidth, startingY } = getPageDimensionsWithTrim(page);
+  const boxWidth = getBoxWidth({
+    font: textFont,
+    text: serviceStampText,
+  });
 
-  const helveticaBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.HelveticaBold,
-  );
+  const boxHeight = getBoxHeight({ font: textFont });
 
-  const textSize = 14 * scale;
-  const padding = 3 * scale;
-  const serviceStampWidth = helveticaBoldFont.widthOfTextAtSize(
-    serviceStampText,
-    textSize,
-  );
-  const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
-  const boxWidth = serviceStampWidth + padding * 2;
-  const boxHeight = textHeight + padding * 2;
-  const posY = startingY + padding * 2;
+  const rotationAngle = pageToApplyStampTo.getRotation().angle;
+  const rotateStampDegrees = degrees(rotationAngle || 0);
 
-  const rotationAngle = page.getRotation().angle;
-  const shouldRotateStamp = rotationAngle !== 0;
-  const rotateSignatureDegrees = degrees(rotationAngle);
-
-  const { rectangleX, rectangleY } = computeCoordinates({
+  const boxCoordinates = computeCoordinates({
+    applicationContext,
     boxHeight,
     boxWidth,
-    pageHeight,
     pageRotation: rotationAngle,
-    pageWidth,
-    posY,
+    pageToApplyStampTo,
   });
 
-  const rotate = shouldRotateStamp ? rotateSignatureDegrees : degrees(0);
-
-  page.drawRectangle({
+  pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
-    rotate,
+    rotate: rotateStampDegrees,
     width: boxWidth,
-    x: rectangleX,
-    y: rectangleY + padding,
-  });
-  page.drawText(serviceStampText, {
-    font: helveticaBoldFont,
-    rotate,
-    size: textSize,
-    x: rectangleX + padding,
-    y: rectangleY + padding * 2,
+    x: boxCoordinates.x,
+    y: boxCoordinates.y + PADDING,
   });
 
-  const pdfBytes = await pdfDoc.save({
+  pageToApplyStampTo.drawText(serviceStampText, {
+    font: textFont,
+    rotate: rotateStampDegrees,
+    size: TEXT_SIZE,
+    x: boxCoordinates.x + PADDING,
+    y: boxCoordinates.y + PADDING * 2,
+  });
+
+  return await pdfDoc.save({
     useObjectStreams: false,
   });
-
-  return pdfBytes;
 };
 
-exports.computeCoordinates = computeCoordinates;
+module.exports = { PADDING, addServedStampToDocument, computeCoordinates };

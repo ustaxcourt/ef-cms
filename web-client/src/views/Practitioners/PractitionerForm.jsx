@@ -378,7 +378,7 @@ export const PractitionerForm = connect(
                         {Object.keys(usStates).map(abbrev => {
                           const fullStateName = usStates[abbrev];
                           return (
-                            <option key={fullStateName} value={fullStateName}>
+                            <option key={fullStateName} value={abbrev}>
                               {fullStateName}
                             </option>
                           );

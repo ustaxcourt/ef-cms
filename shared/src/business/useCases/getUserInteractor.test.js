@@ -129,7 +129,7 @@ describe('getUserInteractor', () => {
       firstName: 'Bob',
       lastName: 'Ross',
       name: 'Bob Ross',
-      originalBarState: 'Oregon',
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.irsPractitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',

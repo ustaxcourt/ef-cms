@@ -23,7 +23,7 @@ describe('updateUserPendingEmailInteractor', () => {
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
-      originalBarState: 'Florida',
+      originalBarState: 'FL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
     };
