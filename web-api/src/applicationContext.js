@@ -497,9 +497,6 @@ const {
   getFormattedCaseDetail,
 } = require('../../shared/src/business/utilities/getFormattedCaseDetail');
 const {
-  getFullCaseByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/getFullCaseByDocketNumber');
-const {
   getHealthCheckInteractor,
 } = require('../../shared/src/business/useCases/health/getHealthCheckInteractor');
 const {
@@ -1198,7 +1195,6 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     fetchPendingItems,
-    getFullCaseByDocketNumber,
     getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
