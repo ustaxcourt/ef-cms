@@ -136,7 +136,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
