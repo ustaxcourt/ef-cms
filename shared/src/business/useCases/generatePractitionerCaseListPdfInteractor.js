@@ -5,7 +5,6 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { partition } = require('lodash');
-const { sortByDocketNumber } = require('../entities/cases/Case');
 const { UnauthorizedError } = require('../../errors/errors');
 /**
  * generatePractitionerCaseListPdfInteractor
@@ -46,10 +45,8 @@ exports.generatePractitionerCaseListPdfInteractor = async (
     aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
   );
 
-  cases.sort(sortByDocketNumber).reverse();
-
   const [closedCases, openCases] = partition(
-    cases,
+    Case.sortByDocketNumber(cases).reverse(),
     theCase => theCase.status === CASE_STATUS_TYPES.closed,
   );
 
