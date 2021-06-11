@@ -17,7 +17,6 @@ export const CompleteSelectDocumentModalDialog = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
         title={`You selected: ${this.props.form.documentType}`}

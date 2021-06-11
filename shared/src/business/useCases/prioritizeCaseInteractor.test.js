@@ -10,6 +10,7 @@ describe('prioritizeCaseInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
