@@ -14,6 +14,6 @@ exports.validateDocketEntryInteractor = (
   applicationContext,
   { entryMetadata },
 ) => {
-  const docketEntry = DocketEntryFactory(entryMetadata, { applicationContext });
+  const docketEntry = DocketEntryFactory(entryMetadata);
   return docketEntry.getFormattedValidationErrors();
 };

@@ -8,8 +8,9 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setEditOrderTitleDataOnModalAction = ({ get, store }) => {
-  const { documentTitle, eventCode } = get(state.form);
+  const { documentTitle, documentType, eventCode } = get(state.form);
 
   store.set(state.modal.eventCode, eventCode);
   store.set(state.modal.documentTitle, documentTitle);
+  store.set(state.modal.documentType, documentType);
 };

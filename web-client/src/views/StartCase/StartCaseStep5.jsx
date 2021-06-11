@@ -171,12 +171,12 @@ export const StartCaseStep5 = connect(
                     <div className="tablet:grid-col-4 margin-bottom-1 party-information">
                       <span
                         className="usa-label usa-label-display margin-bottom-0"
-                        htmlFor="filing-contact-primary"
+                        id="filing-contact-primary"
                       >
                         {startCaseHelper.contactPrimaryLabel}
                       </span>
                       {form.contactPrimary && (
-                        <address aria-labelledby="primary-label">
+                        <address aria-labelledby="filing-contact-primary">
                           <AddressDisplay
                             contact={form.contactPrimary}
                             noMargin={true}
@@ -189,11 +189,13 @@ export const StartCaseStep5 = connect(
                         <>
                           <span
                             className="usa-label usa-label-display margin-bottom-0"
-                            htmlFor="filing-contact-secondary"
+                            id="filing-contact-secondary"
                           >
                             {startCaseHelper.contactSecondaryLabel}
                           </span>
-                          <AddressDisplay contact={form.contactSecondary} />
+                          <address aria-labelledby="filing-contact-secondary">
+                            <AddressDisplay contact={form.contactSecondary} />
+                          </address>
                         </>
                       )}
                     </div>

@@ -19,7 +19,6 @@ export const UnblockFromTrialModal = connect(
       <ModalDialog
         cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Remove Block"
         confirmSequence={confirmSequence}
         title="Are You Sure You Want to Remove This Block?"
