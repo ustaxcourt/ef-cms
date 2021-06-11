@@ -47,6 +47,7 @@ describe('associateIrsPractitionerToCase', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(caseRecord);
