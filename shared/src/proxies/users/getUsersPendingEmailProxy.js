@@ -11,6 +11,6 @@ const { get } = require('../requests');
 exports.getUsersPendingEmailInteractor = (applicationContext, { userIds }) => {
   return get({
     applicationContext,
-    endpoint: `/users/pending-email/userIds?=${userIds.join(',')}`,
+    endpoint: `/users/pending-email?userIds=${userIds.join(',')}`,
   });
 };
