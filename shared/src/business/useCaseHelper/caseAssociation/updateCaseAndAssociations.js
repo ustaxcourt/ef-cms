@@ -86,6 +86,10 @@ const updateCaseMessages = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
+  if (!caseMessages) {
+    return [];
+  }
+
   caseMessages.forEach(message => {
     message.caseStatus = caseToUpdate.status;
     message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
