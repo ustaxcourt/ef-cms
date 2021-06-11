@@ -32,9 +32,6 @@ describe('addPaperFilingInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
   it('should throw an error if not authorized', async () => {

@@ -112,9 +112,6 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('should throw an error when the user making the request does not have permission to edit petition details', async () => {

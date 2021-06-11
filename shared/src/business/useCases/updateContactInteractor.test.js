@@ -26,10 +26,6 @@ describe('updates the contact on a case', () => {
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
-
-    applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockReturnValue(fakeData);
 
