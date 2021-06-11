@@ -55,9 +55,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
   beforeEach(() => {
     const case0 = {

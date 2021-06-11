@@ -103,9 +103,6 @@ const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
 const {
-  getFullCaseByDocketNumber,
-} = require('../../persistence/dynamo/cases/getFullCaseByDocketNumber');
-const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
 const {
@@ -410,9 +407,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
     getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
-    getFullCaseByDocketNumber: jest
-      .fn()
-      .mockImplementation(getFullCaseByDocketNumber),
     getItem: jest.fn().mockImplementation(getItem),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),

@@ -120,10 +120,6 @@ describe('completeDocketEntryQCInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(caseRecord);
-
     applicationContext.getUniqueId.mockReturnValue(
       'b6f835aa-bf95-4996-b858-c8e94566db47',
     );
