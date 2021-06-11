@@ -36,7 +36,7 @@ describe('getPendingEmailsOnCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersPendingEmailInteractor.mock
-        .calls[0][0].userIds,
+        .calls[0][1].userIds,
     ).toEqual([
       mockUserId,
       mockSecondUserId,
@@ -73,7 +73,7 @@ describe('getPendingEmailsOnCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersPendingEmailInteractor.mock
-        .calls[0][0].userIds,
+        .calls[0][1].userIds,
     ).toEqual([
       mockUserId,
       mockSecondUserId,
