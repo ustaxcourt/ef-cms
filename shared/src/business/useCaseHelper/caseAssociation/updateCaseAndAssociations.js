@@ -3,6 +3,7 @@ const { Case } = require('../../entities/cases/Case');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { Message } = require('../../entities/Message');
 const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
@@ -51,6 +52,54 @@ const updateCaseDocketEntries = ({
       docketEntryId: doc.docketEntryId,
       docketNumber: caseToUpdate.docketNumber,
       document: doc,
+    }),
+  );
+};
+
+/**
+ * Identifies case messages which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCaseMessages = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const messageUpdatesNecessary =
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
+
+  if (!messageUpdatesNecessary) {
+    return [];
+  }
+
+  const caseMessages = await applicationContext
+    .getPersistenceGateway()
+    .getMessagesByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  caseMessages.forEach(message => {
+    message.caseStatus = caseToUpdate.status;
+    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
+    message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
+  });
+
+  const validMessages = Message.validateRawCollection(caseMessages, {
+    applicationContext,
+  });
+
+  return validMessages.map(message =>
+    applicationContext.getPersistenceGateway().updateMessage({
+      applicationContext,
+      message,
     }),
   );
 };
@@ -404,6 +453,7 @@ exports.updateCaseAndAssociations = async ({
 
   const RELATED_CASE_OPERATIONS = [
     updateCaseDocketEntries,
+    updateCaseMessages,
     updateCaseWorkItems,
     updateCorrespondence,
     updateHearings,

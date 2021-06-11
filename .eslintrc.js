@@ -136,6 +136,7 @@ module.exports = {
       { name: 'name' },
       { name: 'document' },
     ],
+    'no-return-await': 'error',
     'no-shadow': ['error', { builtinGlobals: false }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
