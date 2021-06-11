@@ -2023,11 +2023,12 @@ Case.sortByDocketNumber = function (cases) {
     const bSplit = b.docketNumber.split('-');
 
     if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same
+      // compare years if they aren't the same;
+      // compare as strings, because they *might* have suffix
       return aSplit[1].localeCompare(bSplit[1]);
     } else {
-      // compare index if years are the same
-      return aSplit[0].localeCompare(bSplit[0]);
+      // compare index if years are the same, compare as integers
+      return +aSplit[0] - +bSplit[0];
     }
   });
 };
