@@ -12,6 +12,6 @@ exports.getUsersPendingEmailLambda = event =>
     return await applicationContext
       .getUseCases()
       .getUsersPendingEmailInteractor(applicationContext, {
-        userIds: event.queryStringParameters.userIds,
+        ...event.queryStringParameters,
       });
   });
