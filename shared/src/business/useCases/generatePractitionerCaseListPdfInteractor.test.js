@@ -89,11 +89,17 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
         },
         {
           ...MOCK_CASE,
-          docketNumber: '101-17',
+          docketNumber: '2001-17',
+          status: CASE_STATUS_TYPES.closed,
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '501-17',
           status: CASE_STATUS_TYPES.closed,
         },
         { ...MOCK_CASE, docketNumber: '201-07' },
-        { ...MOCK_CASE, docketNumber: '202-17' },
+        { ...MOCK_CASE, docketNumber: '1002-17' },
+        { ...MOCK_CASE, docketNumber: '902-17' },
       ]);
 
     applicationContext.getDocumentGenerators().practitionerCaseList = jest
@@ -114,11 +120,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     // sends cases sorted by descending docket number
     expect(caseData).toMatchObject({
       closedCases: expect.arrayContaining([
+        expect.objectContaining({ docketNumber: '2001-17' }),
+        expect.objectContaining({ docketNumber: '501-17' }),
         expect.objectContaining({ docketNumber: '108-07' }),
-        expect.objectContaining({ docketNumber: '101-17' }),
       ]),
       openCases: expect.arrayContaining([
-        expect.objectContaining({ docketNumber: '202-17' }),
+        expect.objectContaining({ docketNumber: '1002-17' }),
+        expect.objectContaining({ docketNumber: '902-17' }),
         expect.objectContaining({ docketNumber: '201-07' }),
       ]),
     });

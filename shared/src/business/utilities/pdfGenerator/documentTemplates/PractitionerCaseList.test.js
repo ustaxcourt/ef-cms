@@ -78,6 +78,19 @@ describe('PractitionerCaseList', () => {
     expect(tableData.find('tr').at(0).text()).toContain(openCases[0].status);
   });
 
+  it('does not render the open cases table if there are no open cases', () => {
+    const wrapper = shallow(
+      <PractitionerCaseList
+        barNumber="PT1234"
+        closedCases={closedCases}
+        openCases={[]}
+        practitionerName="John Matlock"
+      />,
+    );
+
+    expect(wrapper.find('table#open-cases').length).toEqual(0);
+  });
+
   it('renders the closed cases count', () => {
     const wrapper = shallow(
       <PractitionerCaseList
@@ -113,5 +126,18 @@ describe('PractitionerCaseList', () => {
     expect(tableData.find('tr').at(0).text()).toContain(
       closedCases[0].caseTitle,
     );
+  });
+
+  it('does not render the open cases table if there are no closed cases', () => {
+    const wrapper = shallow(
+      <PractitionerCaseList
+        barNumber="PT1234"
+        closedCases={[]}
+        openCases={openCases}
+        practitionerName="John Matlock"
+      />,
+    );
+
+    expect(wrapper.find('table#closed-cases').length).toEqual(0);
   });
 });
