@@ -1,108 +1,80 @@
-/**
- * @param {PDFPage} page the page to get dimensions for
- * @returns {Array} [width, height]
- */
-exports.getPageDimensions = page => {
-  const sizeCropBox = page.getCropBox();
-  return [sizeCropBox.width, sizeCropBox.height];
-};
-
-exports.getCropBoxCoordinates = page => {
-  const { x = 0, y = 0 } = page.getCropBox();
-  return { x, y };
-};
+const TEXT_SIZE = 15;
+const PADDING = 13;
 
 const computeCoordinates = ({
+  applicationContext,
   boxHeight,
   boxWidth,
-  cropBoxCoordinates,
+  cropBox,
   lineHeight,
   nameTextWidth,
-  pageHeight,
   pageRotation,
-  pageWidth,
   posX,
   posY,
   scale,
   textHeight,
   titleTextWidth,
 }) => {
-  let rotationRads = (pageRotation * Math.PI) / 180;
-  let coordsFromBottomLeft = {
+  const bottomLeftBoxCoordinates = {
     x: posX / scale,
   };
   if (pageRotation === 90 || pageRotation === 270) {
-    coordsFromBottomLeft.y = pageWidth - (posY + boxHeight) / scale;
+    bottomLeftBoxCoordinates.y = cropBox.pageWidth - (posY + boxHeight) / scale;
   } else {
-    coordsFromBottomLeft.y = pageHeight - (posY + boxHeight) / scale;
+    bottomLeftBoxCoordinates.y =
+      cropBox.pageHeight - (posY + boxHeight) / scale;
   }
 
-  let rectangleX, rectangleY, sigTitleX, sigTitleY, sigNameX, sigNameY;
+  const boxCoordinates = applicationContext
+    .getUtilities()
+    .getStampBoxCoordinates({
+      bottomLeftBoxCoordinates,
+      cropBox: { x: cropBox.x, y: cropBox.y },
+      pageHeight: cropBox.pageHeight,
+      pageRotation,
+      pageWidth: cropBox.pageWidth,
+    });
 
+  let sigTitleX, sigTitleY, sigNameX, sigNameY;
   if (pageRotation === 90) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads);
     sigNameX = posY + textHeight * 2;
     sigNameY = posX + textHeight;
+
     sigTitleX = posY + textHeight * 3;
     sigTitleY = posX + textHeight * 4;
   } else if (pageRotation === 180) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads) +
-      pageWidth;
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-
-    sigNameX = pageWidth - posX - (boxWidth - nameTextWidth) / 2;
+    sigNameX = cropBox.pageWidth - posX - (boxWidth - nameTextWidth) / 2;
     sigNameY = posY - boxHeight / 2 + boxHeight;
 
-    sigTitleX = pageWidth - posX - (boxWidth - titleTextWidth) / 2;
+    sigTitleX = cropBox.pageWidth - posX - (boxWidth - titleTextWidth) / 2;
     sigTitleY =
       posY - (boxHeight - textHeight * 2 - lineHeight) / 2 + boxHeight;
   } else if (pageRotation === 270) {
-    rectangleX =
-      coordsFromBottomLeft.x * Math.cos(rotationRads) -
-      coordsFromBottomLeft.y * Math.sin(rotationRads);
-    rectangleY =
-      coordsFromBottomLeft.x * Math.sin(rotationRads) +
-      coordsFromBottomLeft.y * Math.cos(rotationRads) +
-      pageHeight;
-    sigNameX = pageWidth - posY - textHeight * 2;
-    sigNameY = pageHeight - posX - textHeight;
-    sigTitleX = pageWidth - posY - textHeight * 3;
-    sigTitleY = pageHeight - posX - textHeight * 4;
+    sigNameX = cropBox.pageWidth - posY - textHeight * 2;
+    sigNameY = cropBox.pageHeight - posX - textHeight;
+
+    sigTitleX = cropBox.pageWidth - posY - textHeight * 3;
+    sigTitleY = cropBox.pageHeight - posX - textHeight * 4;
   } else {
-    rectangleX = coordsFromBottomLeft.x;
-    rectangleY = coordsFromBottomLeft.y;
     sigNameX = posX + (boxWidth - nameTextWidth) / 2;
-    sigNameY = pageHeight - posY + boxHeight / 2 - boxHeight;
+    sigNameY = cropBox.pageHeight - posY + boxHeight / 2 - boxHeight;
 
     sigTitleX = posX + (boxWidth - titleTextWidth) / 2;
     sigTitleY =
-      pageHeight -
+      cropBox.pageHeight -
       posY +
       (boxHeight - textHeight * 2 - lineHeight) / 2 -
       boxHeight;
   }
   return {
-    rectangleX: rectangleX + cropBoxCoordinates.x,
-    rectangleY: rectangleY + cropBoxCoordinates.y,
-    sigNameX: sigNameX + cropBoxCoordinates.x,
-    sigNameY: sigNameY + cropBoxCoordinates.y,
-    sigTitleX: sigTitleX + cropBoxCoordinates.x,
-    sigTitleY: sigTitleY + cropBoxCoordinates.y,
+    rectangleX: boxCoordinates.x,
+    rectangleY: boxCoordinates.y,
+    sigNameX: sigNameX + cropBox.x,
+    sigNameY: sigNameY + cropBox.y,
+    sigTitleX: sigTitleX + cropBox.x,
+    sigTitleY: sigTitleY + cropBox.y,
   };
 };
-
-exports.computeCoordinates = computeCoordinates;
 
 /**
  * generateSignedDocumentInteractor
@@ -116,7 +88,7 @@ exports.computeCoordinates = computeCoordinates;
  * @param {object} providers.sigTextData // Signature text data including the name and title
  * @returns {ByteArray} PDF data after signature is added
  */
-exports.generateSignedDocumentInteractor = async ({
+const generateSignedDocumentInteractor = async ({
   applicationContext,
   pageIndex,
   pdfData,
@@ -125,43 +97,32 @@ exports.generateSignedDocumentInteractor = async ({
   scale = 1,
   sigTextData,
 }) => {
+  const { degrees, rgb } = await applicationContext.getPdfLib();
+
   const {
-    degrees,
-    PDFDocument,
-    rgb,
-    StandardFonts,
-  } = await applicationContext.getPdfLib();
+    pdfDoc,
+    textFont,
+  } = await applicationContext.getUtilities().setupPdfDocument({
+    applicationContext,
+    pdfData,
+  });
 
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const pages = pdfDoc.getPages();
-  const page = pages[pageIndex];
-
-  const [pageWidth, pageHeight] = exports.getPageDimensions(page);
+  const pageToApplyStampTo = pdfDoc.getPages()[pageIndex];
 
   const { signatureName, signatureTitle } = sigTextData;
 
-  const timesRomanBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.TimesRomanBold,
-  );
+  const textSize = TEXT_SIZE * scale;
+  const padding = PADDING * scale;
 
-  const textSize = 15 * scale;
-  const padding = 13 * scale;
-  const nameTextWidth = timesRomanBoldFont.widthOfTextAtSize(
-    signatureName,
-    textSize,
-  );
-  const titleTextWidth = timesRomanBoldFont.widthOfTextAtSize(
-    signatureTitle,
-    textSize,
-  );
-  const textHeight = timesRomanBoldFont.sizeAtHeight(textSize);
+  const nameTextWidth = textFont.widthOfTextAtSize(signatureName, textSize);
+  const titleTextWidth = textFont.widthOfTextAtSize(signatureTitle, textSize);
+  const textHeight = textFont.sizeAtHeight(textSize);
   const lineHeight = textHeight / 10;
   const boxWidth = Math.max(nameTextWidth, titleTextWidth) + padding * 2;
   const boxHeight = textHeight * 2 + padding * 2;
 
-  const rotationAngle = page.getRotation().angle;
-  const shouldRotateSignature = rotationAngle !== 0;
-  const rotateSignatureDegrees = degrees(rotationAngle);
+  const rotationAngle = pageToApplyStampTo.getRotation().angle;
+  const rotateSignatureDegrees = degrees(rotationAngle || 0);
 
   const {
     rectangleX,
@@ -171,14 +132,13 @@ exports.generateSignedDocumentInteractor = async ({
     sigTitleX,
     sigTitleY,
   } = computeCoordinates({
+    applicationContext,
     boxHeight,
     boxWidth,
-    cropBoxCoordinates: exports.getCropBoxCoordinates(page),
+    cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
     lineHeight,
     nameTextWidth,
-    pageHeight,
     pageRotation: rotationAngle,
-    pageWidth,
     posX,
     posY,
     scale,
@@ -186,34 +146,38 @@ exports.generateSignedDocumentInteractor = async ({
     titleTextWidth,
   });
 
-  const rotate = shouldRotateSignature ? rotateSignatureDegrees : degrees(0);
-
-  page.drawRectangle({
+  pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
-    rotate,
+    rotate: rotateSignatureDegrees,
     width: boxWidth,
     x: rectangleX,
     y: rectangleY,
   });
-  page.drawText(signatureName, {
-    font: timesRomanBoldFont,
-    rotate,
+
+  pageToApplyStampTo.drawText(signatureName, {
+    font: textFont,
+    rotate: rotateSignatureDegrees,
     size: textSize,
     x: sigNameX,
     y: sigNameY,
   });
-  page.drawText(signatureTitle, {
-    font: timesRomanBoldFont,
-    rotate,
+
+  pageToApplyStampTo.drawText(signatureTitle, {
+    font: textFont,
+    rotate: rotateSignatureDegrees,
     size: textSize,
     x: sigTitleX,
     y: sigTitleY,
   });
 
-  const pdfBytes = await pdfDoc.save({
+  return await pdfDoc.save({
     useObjectStreams: false,
   });
+};
 
-  return pdfBytes;
+module.exports = {
+  TEXT_SIZE,
+  computeCoordinates,
+  generateSignedDocumentInteractor,
 };

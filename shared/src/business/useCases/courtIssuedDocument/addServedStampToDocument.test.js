@@ -1,74 +1,69 @@
 const {
   addServedStampToDocument,
   computeCoordinates,
+  PADDING,
 } = require('./addServedStampToDocument.js');
 const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
-const { degrees, PDFDocument } = require('pdf-lib');
 
 describe('addServedStampToDocument', () => {
+  let rotationReturnValue;
+
   let drawTextMock;
+  let drawRectangleMock;
   let saveMock;
-  let getTrimBoxMock;
-  let getCropBoxMock;
-  let trimBoxReturnValue;
-  let cropBoxReturnValue;
-
-  beforeAll(async () => {
-    const pdfDoc = await PDFDocument.load(testPdfDoc);
-    const pages = pdfDoc.getPages();
-    const page = pages[0];
-
-    page.setRotation(degrees(90));
-  });
-
-  const pdfDocumentLoadMock = jest.fn(); //async () => await PDFDocument.load(testPdfDoc);
 
   beforeEach(() => {
-    trimBoxReturnValue = { height: 200, width: 0, y: 0 };
-    cropBoxReturnValue = { height: 200, width: 0, y: 0 };
+    rotationReturnValue = { angle: 270 };
 
     drawTextMock = jest.fn();
+    drawRectangleMock = jest.fn();
     saveMock = jest.fn();
-    getTrimBoxMock = jest.fn().mockImplementation(() => trimBoxReturnValue);
-    getCropBoxMock = jest.fn().mockImplementation(() => cropBoxReturnValue);
 
-    applicationContext.getPdfLib.mockReturnValue({
-      PDFDocument: {
-        load: pdfDocumentLoadMock,
+    applicationContext.getUtilities().setupPdfDocument.mockReturnValue({
+      pdfDoc: {
+        getPages: () => [
+          {
+            drawRectangle: drawRectangleMock,
+            drawText: drawTextMock,
+            getRotation: jest
+              .fn()
+              .mockImplementation(() => rotationReturnValue),
+          },
+        ],
+        save: saveMock,
       },
-      StandardFonts: {
-        HelveticaBold: 'Helvetica-Bold',
+      textFont: {
+        sizeAtHeight: jest.fn(),
+        widthOfTextAtSize: jest.fn(),
       },
-      degrees: () => {},
-      rgb: () => {},
     });
 
-    pdfDocumentLoadMock.mockReturnValue(
-      Promise.resolve({
-        embedStandardFont: jest.fn().mockReturnValue({
-          sizeAtHeight: jest.fn().mockReturnValue(50),
-          widthOfTextAtSize: jest.fn().mockReturnValue(100),
-        }),
-        getPages: jest.fn().mockReturnValue([
-          {
-            drawRectangle: jest.fn(),
-            drawText: drawTextMock,
-            getCropBox: getCropBoxMock,
-            getRotation() {
-              return { angle: 270 };
-            },
-            getTrimBox: getTrimBoxMock,
-          },
-        ]),
-        save: saveMock,
-      }),
-    );
+    applicationContext.getUtilities().getCropBox.mockReturnValue({});
+
+    applicationContext.getUtilities().getStampBoxCoordinates.mockReturnValue({
+      x: 0,
+      y: 0,
+    });
   });
 
-  it('adds a served stamp to a pdf document', async () => {
+  it('should make a call to load and setup the PDF', async () => {
+    await addServedStampToDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      serviceStampText: 'Test',
+    });
+
+    expect(
+      applicationContext.getUtilities().setupPdfDocument.mock.calls[0][0],
+    ).toMatchObject({
+      pdfData: testPdfDoc,
+    });
+  });
+
+  it('should draw the served text on the pdf document', async () => {
     await addServedStampToDocument({
       applicationContext,
       pdfData: testPdfDoc,
@@ -76,87 +71,153 @@ describe('addServedStampToDocument', () => {
     });
 
     expect(drawTextMock.mock.calls[0][0]).toEqual('Test');
-    expect(saveMock).toHaveBeenCalled();
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      font: expect.anything(),
+      rotate: expect.anything(),
+      size: expect.anything(),
+      x: expect.anything(),
+      y: expect.anything(),
+    });
   });
 
-  it('adds a default SERVED label and date if serviceStampText is not given', async () => {
-    applicationContext.getUtilities().formatNow.mockReturnValue('01/01/20');
+  it('should draw the rectangular stamp on the pdf document', async () => {
+    await addServedStampToDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      serviceStampText: 'Test',
+    });
+
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      color: expect.anything(),
+      height: expect.anything(),
+      rotate: expect.anything(),
+      width: expect.anything(),
+      x: expect.anything(),
+      y: expect.anything(),
+    });
+  });
+
+  it('should generate a served stamp when serviceStampText is not provided', async () => {
+    const mockTodaysDate = '01/01/20';
+    applicationContext.getUtilities().formatNow.mockReturnValue(mockTodaysDate);
 
     await addServedStampToDocument({
       applicationContext,
       pdfData: testPdfDoc,
+      serviceStampText: undefined,
     });
 
-    expect(drawTextMock.mock.calls[0][0]).toEqual('SERVED 01/01/20');
-    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 159 });
+    expect(drawTextMock.mock.calls[0][0]).toEqual(`SERVED ${mockTodaysDate}`);
   });
 
-  it('increases the y value of the rectangle and stamp when the image in the pdf exceeds the pages size', async () => {
-    trimBoxReturnValue = { height: 200, width: 0, y: 20 };
-
-    applicationContext.getUtilities().formatNow.mockReturnValue('01/01/20');
+  it('should set the stamp rotation to 0 degrees when the page rotation angle is undefined', async () => {
+    rotationReturnValue = { angle: undefined };
 
     await addServedStampToDocument({
       applicationContext,
       pdfData: testPdfDoc,
+      serviceStampText: 'Test',
     });
 
-    expect(drawTextMock.mock.calls[0][1]).toMatchObject({ y: 159 });
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      rotate: { angle: 0 },
+    });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: { angle: 0 },
+    });
+  });
+
+  it('should set the stamp rotation equal to the page rotation when the PDF has been rotated', async () => {
+    const mockRotationAngle = 50;
+    rotationReturnValue = { angle: mockRotationAngle };
+
+    await addServedStampToDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      serviceStampText: 'Test',
+    });
+
+    expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
+      rotate: { angle: mockRotationAngle },
+    });
+    expect(drawTextMock.mock.calls[0][1]).toMatchObject({
+      rotate: { angle: mockRotationAngle },
+    });
+  });
+
+  it('should save the pdf', async () => {
+    await addServedStampToDocument({
+      applicationContext,
+      pdfData: testPdfDoc,
+      serviceStampText: 'Test',
+    });
+
+    expect(saveMock.mock.calls[0][0]).toMatchObject({
+      useObjectStreams: false,
+    });
   });
 });
 
 describe('computeCoordinates', () => {
+  const mockPageHeight = 150;
+  const mockPageWidth = 100;
+  const mockBoxHeight = 1;
+  const mockBoxWidth = 2;
+  const mockCropBoxY = 20;
+
   let args = {
-    boxHeight: 1,
-    boxWidth: 2,
-    lineHeight: 1,
-    nameTextWidth: 2,
-    pageHeight: 150,
+    applicationContext,
+    boxHeight: mockBoxHeight,
+    boxWidth: mockBoxWidth,
     pageRotation: 0,
-    pageWidth: 100,
-    posX: 10,
-    posY: 12,
-    scale: 1,
-    textHeight: 4,
-    titleTextWidth: 4,
+    pageToApplyStampTo: {},
   };
 
-  it('computes served stamp coordinates when the page rotation is 0 degrees', () => {
-    const result = computeCoordinates(args);
-
-    expect(result).toEqual({
-      rectangleX: 49,
-      rectangleY: 13,
+  beforeEach(() => {
+    applicationContext.getUtilities().getCropBox.mockReturnValue({
+      pageHeight: mockPageHeight,
+      pageWidth: mockPageWidth,
+      x: 10,
+      y: mockCropBoxY,
     });
   });
 
-  it('computes served stamp coordinates when the page rotation is 90 degrees', () => {
-    args.pageRotation = 90;
-    const result = computeCoordinates(args);
+  it('should make a call to get the cropBox values of the page to apply the stamp to', () => {
+    computeCoordinates(args);
 
-    expect(result).toEqual({
-      rectangleX: 87,
-      rectangleY: 74,
+    expect(applicationContext.getUtilities().getCropBox).toHaveBeenCalled();
+  });
+
+  it('should calculate the x, y coordinates on the page of the bottom left hand corner of the stamp box', () => {
+    computeCoordinates(args);
+
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: {
+        x: mockPageWidth / 2 - mockBoxWidth / 2,
+        y: mockCropBoxY + mockBoxHeight + PADDING * 2,
+      },
     });
   });
 
-  it('computes served stamp coordinates when the page rotation is 180 degrees', () => {
-    args.pageRotation = 180;
-    const result = computeCoordinates(args);
+  it('should make a call to calculate the x, y coordinates of the stamp on the page', () => {
+    computeCoordinates(args);
 
-    expect(result).toEqual({
-      rectangleX: 51,
-      rectangleY: 137,
-    });
-  });
-
-  it('computes served stamp coordinates when the page rotation is 270 degrees', () => {
-    args.pageRotation = 270;
-    const result = computeCoordinates(args);
-
-    expect(result).toEqual({
-      rectangleX: 12.999999999999986,
-      rectangleY: 76,
+    expect(
+      applicationContext.getUtilities().getStampBoxCoordinates.mock.calls[0][0],
+    ).toMatchObject({
+      bottomLeftBoxCoordinates: {
+        x: mockPageWidth / 2 - mockBoxWidth / 2,
+        y: mockCropBoxY + mockBoxHeight + PADDING * 2,
+      },
+      cropBox: {
+        x: expect.anything(),
+        y: mockCropBoxY,
+      },
+      pageHeight: mockPageHeight,
+      pageRotation: expect.anything(),
+      pageWidth: mockPageWidth,
     });
   });
 });
