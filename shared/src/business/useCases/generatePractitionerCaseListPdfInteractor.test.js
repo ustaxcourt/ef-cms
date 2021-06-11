@@ -157,10 +157,16 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().practitionerCaseList.mock
         .calls[0][0].data.closedCases,
-    ).toEqual([{ ...MOCK_CASE, status: CASE_STATUS_TYPES.closed }]);
+    ).toEqual([
+      {
+        ...MOCK_CASE,
+        caseTitle: 'Test Petitioner',
+        status: CASE_STATUS_TYPES.closed,
+      },
+    ]);
     expect(
       applicationContext.getDocumentGenerators().practitionerCaseList.mock
         .calls[0][0].data.openCases,
-    ).toEqual([{ ...MOCK_CASE }]);
+    ).toEqual([{ ...MOCK_CASE, caseTitle: 'Test Petitioner' }]);
   });
 });
