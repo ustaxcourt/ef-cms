@@ -21,7 +21,6 @@ export const ArchiveDraftDocumentModal = connect(
       <ModalDialog
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Delete"
         confirmSequence={confirmSequence}
         message={message}

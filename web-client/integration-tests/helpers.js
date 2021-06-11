@@ -436,8 +436,6 @@ export const loginAs = (test, user) => {
       path: '/',
     });
 
-    await wait(500);
-
     expect(test.getState('user.email')).toBeDefined();
   });
 };

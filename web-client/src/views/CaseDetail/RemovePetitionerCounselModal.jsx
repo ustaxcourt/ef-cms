@@ -18,7 +18,6 @@ export const RemovePetitionerCounselModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Remove"
         confirmSequence={confirmSequence}
         title="Remove Counsel"

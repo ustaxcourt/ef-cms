@@ -47,6 +47,10 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    applicationContext
+      .getPersistenceGateway()
       .deleteUserFromCase.mockImplementation(() => null);
   });
 

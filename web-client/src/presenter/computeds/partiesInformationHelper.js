@@ -2,23 +2,21 @@ import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 const formatCounsel = ({ counsel, screenMetadata }) => {
-  if (
-    screenMetadata.pendingEmails &&
-    screenMetadata.pendingEmails[counsel.userId]
-  ) {
-    counsel.formattedPendingEmail = `${
-      screenMetadata.pendingEmails[counsel.userId]
-    } (Pending)`;
+  const counselPendingEmail = screenMetadata.pendingEmails
+    ? screenMetadata.pendingEmails[counsel.userId]
+    : undefined;
+
+  if (counselPendingEmail) {
+    counsel.formattedPendingEmail = `${counselPendingEmail} (Pending)`;
   }
 
-  const emailNotProvidedMessage = counsel.email
-    ? undefined
-    : 'No email provided';
-
-  counsel.formattedEmail =
-    counsel.email === counsel.formattedPendingEmail
-      ? emailNotProvidedMessage
-      : counsel.email;
+  if (counsel.email && counselPendingEmail !== counsel.email) {
+    counsel.formattedEmail = counsel.email;
+  } else {
+    counsel.formattedEmail = counsel.formattedPendingEmail
+      ? undefined
+      : 'No email provided';
+  }
 
   return counsel;
 };

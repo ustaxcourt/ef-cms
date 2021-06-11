@@ -38,6 +38,13 @@ describe('addPetitionerToCaseInteractor', () => {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.generalDocket,
       });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFullCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
   });
 
   it('should throw an unauthorized error when the user is not authorized to add petitioner to case', async () => {
