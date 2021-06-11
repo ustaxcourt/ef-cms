@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { partition } = require('lodash');
 const { sortByDocketNumber } = require('../entities/cases/Case');
@@ -40,6 +41,10 @@ exports.generatePractitionerCaseListPdfInteractor = async (
       applicationContext,
       userId,
     });
+
+  cases.forEach(
+    aCase => (aCase.caseTitle = Case.getCaseTitle(aCase.caseCaption)),
+  );
 
   cases.sort(sortByDocketNumber).reverse();
 
