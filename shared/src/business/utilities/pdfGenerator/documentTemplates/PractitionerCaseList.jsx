@@ -21,26 +21,28 @@ export const PractitionerCaseList = ({
       >
         Open Cases ({openCases.length})
       </h3>
-      <table id="open-cases">
-        <thead>
-          <tr>
-            <th className="width-100">Docket No.</th>
-            <th>Case Title</th>
-            <th className="width-250">Case Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {openCases.map(openCase => {
-            return (
-              <tr key={openCase.caseTitle}>
-                <td>{openCase.docketNumberWithSuffix}</td>
-                <td>{openCase.caseTitle}</td>
-                <td>{openCase.status}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {openCases.length > 0 && (
+        <table id="open-cases">
+          <thead>
+            <tr>
+              <th className="width-100">Docket No.</th>
+              <th>Case Title</th>
+              <th className="width-250">Case Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {openCases.map(openCase => {
+              return (
+                <tr key={openCase.caseTitle}>
+                  <td>{openCase.docketNumberWithSuffix}</td>
+                  <td>{openCase.caseTitle}</td>
+                  <td>{openCase.status}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
 
       <h3
         className="text-align-left text-no-underline margin-bottom-5"
@@ -48,24 +50,26 @@ export const PractitionerCaseList = ({
       >
         Closed Cases ({closedCases.length})
       </h3>
-      <table id="closed-cases">
-        <thead>
-          <tr>
-            <th className="width-100">Docket No.</th>
-            <th>Case Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          {closedCases.map(closedCase => {
-            return (
-              <tr key={closedCase.caseTitle}>
-                <td>{closedCase.docketNumberWithSuffix}</td>
-                <td>{closedCase.caseTitle}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      {closedCases.length > 0 && (
+        <table id="closed-cases">
+          <thead>
+            <tr>
+              <th className="width-100">Docket No.</th>
+              <th>Case Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {closedCases.map(closedCase => {
+              return (
+                <tr key={closedCase.caseTitle}>
+                  <td>{closedCase.docketNumberWithSuffix}</td>
+                  <td>{closedCase.caseTitle}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </>
   );
 };
