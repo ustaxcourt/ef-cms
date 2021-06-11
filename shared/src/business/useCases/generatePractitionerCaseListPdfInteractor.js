@@ -41,12 +41,15 @@ exports.generatePractitionerCaseListPdfInteractor = async (
       userId,
     });
 
-  cases.sort(sortByDocketNumber).reverse();
-
   const [closedCases, openCases] = partition(
     cases,
     theCase => theCase.status === CASE_STATUS_TYPES.closed,
   );
+
+  closedCases.sort(sortByDocketNumber).reverse();
+  openCases.sort(sortByDocketNumber).reverse();
+
+  console.log(JSON.stringify(openCases, null, 2));
 
   const pdf = await applicationContext
     .getDocumentGenerators()
