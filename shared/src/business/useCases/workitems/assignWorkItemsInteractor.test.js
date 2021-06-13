@@ -5,12 +5,9 @@ const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-  PETITIONS_SECTION,
 } = require('../../entities/EntityConstants');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
 
 describe('assignWorkItemsInteractor', () => {
   const MOCK_WORK_ITEM = {
@@ -62,35 +59,5 @@ describe('assignWorkItemsInteractor', () => {
         userId: 'docketclerk',
       }),
     ).rejects.toThrow();
-  });
-
-  it('should call deleteWorkItemFromInbox with the original work item to delete', async () => {
-    const mockUser = {
-      name: 'Alex Petitionsclerk',
-      role: ROLES.petitionsClerk,
-      section: PETITIONS_SECTION,
-      userId: '7ee8c5f1-2879-4204-823d-d2c5f577347b',
-    };
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .getWorkItemById.mockReturnValue(MOCK_WORK_ITEM);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ ...MOCK_CASE });
-    applicationContext
-      .getPersistenceGateway()
-      .updateWorkItemInCase.mockResolvedValue(true);
-
-    await assignWorkItemsInteractor(applicationContext, {
-      userId: 'docketclerk',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toBeCalled();
   });
 });

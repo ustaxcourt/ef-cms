@@ -18,6 +18,7 @@ export const AddPetitionerToCase = connect(
     constants: state.constants,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    partiesInformationHelper: state.partiesInformationHelper,
     petitionerAddresses: state.screenMetadata.petitionerAddresses,
     setSelectedAddressOnFormSequence:
       sequences.setSelectedAddressOnFormSequence,
@@ -34,6 +35,7 @@ export const AddPetitionerToCase = connect(
     COUNTRY_TYPES,
     form,
     formCancelToggleCancelSequence,
+    partiesInformationHelper,
     petitionerAddresses,
     setSelectedAddressOnFormSequence,
     showModal,
@@ -77,7 +79,9 @@ export const AddPetitionerToCase = connect(
               >
                 <option value="">- Select -</option>
                 <option value="petitioner">Petitioner</option>
-                <option value="intervenor">Intervenor</option>
+                {partiesInformationHelper.showIntervenorRole && (
+                  <option value="intervenor">Intervenor</option>
+                )}
                 <option value="participant">Participant</option>
               </select>
             </FormGroup>

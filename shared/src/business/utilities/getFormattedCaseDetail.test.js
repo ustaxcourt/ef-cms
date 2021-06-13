@@ -841,6 +841,6 @@ describe('getFormattedCaseDetail', () => {
       caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },
     });
 
-    expect(result.filingFee).toEqual('Not Paid  ');
+    expect(result.filingFee).toEqual(`${PAYMENT_STATUS.UNPAID}  `);
   });
 });

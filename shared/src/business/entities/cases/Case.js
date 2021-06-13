@@ -21,7 +21,6 @@ const {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
@@ -2182,19 +2181,47 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
-Case.prototype.hasPartyWithPaperService = function () {
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {Object} rawCase the raw case object
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+const hasPartyWithServiceType = function (rawCase, serviceType) {
   return (
-    this.petitioners.some(
-      p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-    ) ||
-    (this.privatePractitioners &&
-      this.privatePractitioners.find(
-        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+    rawCase.petitioners.some(p => p.serviceIndicator === serviceType) ||
+    (rawCase.privatePractitioners &&
+      rawCase.privatePractitioners.find(
+        pp => pp.serviceIndicator === serviceType,
       )) ||
-    (this.irsPractitioners &&
-      this.irsPractitioners.find(
-        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      ))
+    (rawCase.irsPractitioners &&
+      rawCase.irsPractitioners.find(ip => ip.serviceIndicator === serviceType))
+  );
+};
+
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+Case.prototype.hasPartyWithServiceType = function (serviceType) {
+  return hasPartyWithServiceType(this, serviceType);
+};
+
+/**
+ * Returns true if the case should be displayed as eligible for trial sessions
+ *
+ * @returns {Boolean} true if the case is eligible
+ */
+Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
+  return !!(
+    (this.highPriority ||
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
   );
 };
 
@@ -2222,6 +2249,7 @@ module.exports = {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  hasPartyWithServiceType,
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,

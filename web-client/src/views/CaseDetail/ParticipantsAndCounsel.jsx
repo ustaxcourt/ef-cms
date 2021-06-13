@@ -1,8 +1,9 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
+import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const ParticipantsAndCounsel = connect(
@@ -10,11 +11,16 @@ const ParticipantsAndCounsel = connect(
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
     partiesInformationHelper: state.partiesInformationHelper,
+    showModal: state.modal.showModal,
+    showViewPetitionerCounselModalSequence:
+      sequences.showViewPetitionerCounselModalSequence,
   },
   function ParticipantsAndCounsel({
     caseDetail,
     caseInformationHelper,
     partiesInformationHelper,
+    showModal,
+    showViewPetitionerCounselModalSequence,
   }) {
     return (
       <>
@@ -85,9 +91,13 @@ const ParticipantsAndCounsel = connect(
                                 <Button
                                   link
                                   className="margin-left-1 padding-0"
-                                  href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-counsel/${privatePractitioner.barNumber}`}
                                   icon="eye"
                                   overrideMargin={true}
+                                  onClick={() => {
+                                    showViewPetitionerCounselModalSequence({
+                                      privatePractitioner,
+                                    });
+                                  }}
                                 >
                                   View
                                 </Button>
@@ -95,8 +105,9 @@ const ParticipantsAndCounsel = connect(
                             </span>
                           </span>
                           <span className="address-line">
-                            {privatePractitioner.email}
+                            {privatePractitioner.formattedEmail}
                           </span>
+                          {privatePractitioner.formattedPendingEmail}
                           <span className="address-line">
                             {privatePractitioner.contact.phone}
                           </span>
@@ -109,6 +120,10 @@ const ParticipantsAndCounsel = connect(
             </div>
           ))}
         </div>
+
+        {showModal === 'ViewPetitionerCounselModal' && (
+          <ViewPetitionerCounselModal />
+        )}
       </>
     );
   },

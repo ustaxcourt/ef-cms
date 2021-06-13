@@ -1,3 +1,4 @@
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 /**
@@ -30,6 +31,16 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const contactsNeedingPaperService = [];
 
+  const roleToDisplay = party => {
+    if (party.role === ROLES.privatePractitioner) {
+      return 'Petitioner Counsel';
+    } else if (party.role === ROLES.irsPractitioner) {
+      return 'Respondent Counsel';
+    } else {
+      return CONTACT_TYPE_TITLES[party.contactType];
+    }
+  };
+
   Object.keys(parties).forEach(key => {
     parties[key].forEach(party => {
       if (
@@ -37,7 +48,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
         party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
       ) {
         contactsNeedingPaperService.push({
-          name: `${party.name}, ${CONTACT_TYPE_TITLES[party.contactType]}`,
+          name: `${party.name}, ${roleToDisplay(party)}`,
         });
       }
     });

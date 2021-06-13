@@ -2,11 +2,21 @@ import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
 const formatCounsel = ({ counsel, screenMetadata }) => {
-  counsel.formattedEmail = counsel.email || 'No email provided';
-  counsel.formattedPendingEmail =
-    screenMetadata.pendingEmails && screenMetadata.pendingEmails[counsel.userId]
-      ? `${screenMetadata.pendingEmails[counsel.userId]} (Pending)`
-      : undefined;
+  const counselPendingEmail = screenMetadata.pendingEmails
+    ? screenMetadata.pendingEmails[counsel.userId]
+    : undefined;
+
+  if (counselPendingEmail) {
+    counsel.formattedPendingEmail = `${counselPendingEmail} (Pending)`;
+  }
+
+  if (counsel.email && counselPendingEmail !== counsel.email) {
+    counsel.formattedEmail = counsel.email;
+  } else {
+    counsel.formattedEmail = counsel.formattedPendingEmail
+      ? undefined
+      : 'No email provided';
+  }
 
   return counsel;
 };
@@ -102,6 +112,10 @@ export const partiesInformationHelper = (get, applicationContext) => {
     };
   });
 
+  const showIntervenorRole = !formattedParties.some(
+    party => party.contactType === CONTACT_TYPES.intervenor,
+  );
+
   const formattedPetitioners = formattedParties.filter(
     petitioner => !otherContactTypes.includes(petitioner.contactType),
   );
@@ -122,6 +136,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
     formattedParticipants,
     formattedPetitioners,
     formattedRespondents,
+    showIntervenorRole,
     showParticipantsTab: formattedParticipants.length > 0,
   };
 };

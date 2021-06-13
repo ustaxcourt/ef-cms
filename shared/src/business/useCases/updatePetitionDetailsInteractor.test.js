@@ -1,5 +1,6 @@
 const {
   CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
@@ -97,7 +98,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.PAID);
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is ready for trial and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is ready for trial and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
@@ -112,7 +113,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -120,7 +121,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is high priority and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -140,7 +141,7 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -220,7 +221,7 @@ describe('updatePetitionDetailsInteractor', () => {
     expect(wavedDocument).toBeTruthy();
   });
 
-  it('should call updateCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
+  it('should call createCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -244,8 +245,73 @@ describe('updatePetitionDetailsInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('should call createCaseTrialSortMappingRecords if the case type is changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        caseType: CASE_TYPES_MAP.cdp,
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        caseType: CASE_TYPES_MAP.deficiency,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Regular',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Small',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should NOT call createCaseTrialSortMappingRecords if there are no changes that would alter the trial sort tags', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Regular',
+      });
+
+    await updatePetitionDetailsInteractor(applicationContext, {
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+      petitionDetails: {
+        ...generalDocketReadyForTrialCase,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
   });
 
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {

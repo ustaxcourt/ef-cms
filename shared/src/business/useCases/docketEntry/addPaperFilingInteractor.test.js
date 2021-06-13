@@ -86,6 +86,9 @@ describe('addPaperFilingInteractor', () => {
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
@@ -143,8 +146,7 @@ describe('addPaperFilingInteractor', () => {
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).not.toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -168,12 +170,14 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).not.toBeCalled();
+    expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -289,8 +293,8 @@ describe('addPaperFilingInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketEntryInProgress.mock.calls[0][0].workItem,
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
     ).toMatchObject({
       caseTitle: Case.getCaseTitle(mockCase.caseCaption),
     });

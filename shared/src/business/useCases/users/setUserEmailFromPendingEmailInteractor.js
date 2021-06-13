@@ -1,6 +1,8 @@
 const {
   updateCasesForPetitioner,
+  updatePractitionerCases,
 } = require('./verifyUserPendingEmailInteractor');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 /**
@@ -59,10 +61,22 @@ exports.setUserEmailFromPendingEmailInteractor = async (
     user: rawUser,
   });
 
-  await updatePetitionerCases({
-    applicationContext,
-    user: rawUser,
-  });
+  try {
+    if (userEntity.role === ROLES.petitioner) {
+      await updatePetitionerCases({
+        applicationContext,
+        user: rawUser,
+      });
+    } else {
+      await updatePractitionerCases({
+        applicationContext,
+        user: rawUser,
+      });
+    }
+  } catch (error) {
+    applicationContext.logger.error(error);
+    throw error;
+  }
 
   return rawUser;
 };

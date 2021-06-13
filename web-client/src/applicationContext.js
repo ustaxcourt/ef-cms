@@ -9,6 +9,7 @@ import {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  hasPartyWithServiceType,
   isUserIdRepresentedByPrivatePractitioner,
 } from '../../shared/src/business/entities/cases/Case';
 import {
@@ -83,6 +84,7 @@ import {
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
+  validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
 import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
@@ -676,6 +678,7 @@ const applicationContext = {
       getServedPartiesCode,
       getTrialSessionStatus,
       getWorkQueueFilters,
+      hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPending: DocketEntry.isPending,
@@ -688,6 +691,7 @@ const applicationContext = {
       replaceBracketed,
       setServiceIndicatorsForCase,
       sortDocketEntries,
+      validateDateAndCreateISO,
     };
   },
   setCurrentUser,
