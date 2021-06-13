@@ -49,6 +49,9 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
+  if (docketEntry.isOnDocketRecord) {
+    throw new Error('Docket entry has already been added to docket record');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -143,11 +146,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     );
   } else {
     saveItems.push(
-      applicationContext.getPersistenceGateway().createUserInboxRecord({
-        applicationContext,
-        workItem: rawValidWorkItem,
-      }),
-      applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext.getPersistenceGateway().saveWorkItem({
         applicationContext,
         workItem: rawValidWorkItem,
       }),

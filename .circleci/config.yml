@@ -7,7 +7,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -46,15 +46,15 @@ jobs:
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              SKIP_CACHE_INVALIDATION=true \
-             AWS_ACCESS_KEY_ID=noop \
-             AWS_SECRET_ACCESS_KEY=noop \
+             AWS_ACCESS_KEY_ID=S3RVER \
+             AWS_SECRET_ACCESS_KEY=S3RVER \
              npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:4000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             CI=true NO_SCANNER=true \
              SKIP_VIRUS_SCAN=true \
-             AWS_ACCESS_KEY_ID=noop \
-             AWS_SECRET_ACCESS_KEY=noop \
+             AWS_ACCESS_KEY_ID=S3RVER \
+             AWS_SECRET_ACCESS_KEY=S3RVER \
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
@@ -74,7 +74,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -136,7 +136,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -196,7 +196,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -264,7 +264,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -833,3 +833,7 @@ workflows:
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - deploy

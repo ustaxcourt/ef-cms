@@ -17,7 +17,7 @@ export const generateDocketRecordPdfUrlAction = async ({
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
 
-  const { shouldIncludePartyDetail } = props;
+  const { isAssociated: shouldIncludePartyDetail } = props;
 
   const {
     url,

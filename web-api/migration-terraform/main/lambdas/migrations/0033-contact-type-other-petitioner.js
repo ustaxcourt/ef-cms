@@ -5,7 +5,6 @@ const {
 const {
   CONTACT_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-
 const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {

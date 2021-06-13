@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -45,9 +44,6 @@ exports.assignWorkItemsInteractor = async (
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
   const workItemEntity = new WorkItem(fullWorkItem, { applicationContext });
-  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem), {
-    applicationContext,
-  });
 
   workItemEntity.assignToUser({
     assigneeId,
@@ -58,24 +54,15 @@ exports.assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  // This must run BEFORE saveWorkItemAndAddToUserAndSectionInbox
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    deleteFromSection: false,
-    workItem: originalWorkItem.validate().toRawObject(),
-  });
-
   await Promise.all([
     applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
       caseToUpdate: caseToUpdate.validate().toRawObject(),
       workItem: workItemEntity.validate().toRawObject(),
     }),
-    applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemAndAddToUserAndSectionInbox({
-        applicationContext,
-        workItem: workItemEntity.validate().toRawObject(),
-      }),
+    applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemEntity.validate().toRawObject(),
+    }),
   ]);
 };

@@ -215,8 +215,6 @@ describe('requestAccessHelper', () => {
         state,
       });
 
-      console.log('representingPartiesNames', representingPartiesNames);
-
       expect(representingPartiesNames).toEqual([
         'bob, Petitioner',
         `rick, ${capitalize(CONTACT_TYPES.participant)}`,

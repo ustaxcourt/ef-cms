@@ -10,15 +10,11 @@ exports.putWorkItemInUsersOutbox = async ({
   await createUserOutboxRecord({
     applicationContext,
     userId,
-    workItem: {
-      ...workItem,
-    },
+    workItem,
   });
   await createSectionOutboxRecord({
     applicationContext,
     section,
-    workItem: {
-      ...workItem,
-    },
+    workItem,
   });
 };

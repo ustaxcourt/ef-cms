@@ -124,7 +124,10 @@ exports.getScannerInterface = () => {
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
-        if (count === 0) reject(new Error('no images in buffer'));
+        if (count === 0) {
+          reject(new Error('no images in buffer'));
+          return;
+        }
         const promises = [];
         const response = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
