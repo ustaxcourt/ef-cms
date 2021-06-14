@@ -14,7 +14,6 @@ exports.getUsersPendingEmailStatusesInteractor = ({
 }) => {
   return get({
     applicationContext,
-    endpoint: '/users/pending-email-status',
-    params: { userIds },
+    endpoint: `/users/pending-email-status?userIds=${userIds.join(',')}`,
   });
 };

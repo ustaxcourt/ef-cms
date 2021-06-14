@@ -9,9 +9,11 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getUsersPendingEmailStatusesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const userIds = event.queryStringParameters.userIds?.split(',') || [];
+
     return await applicationContext
       .getUseCases()
       .getUsersPendingEmailStatusesInteractor(applicationContext, {
-        userIds: event.queryStringParameters.userIds,
+        userIds,
       });
   });
