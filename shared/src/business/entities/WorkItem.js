@@ -121,4 +121,16 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   return this;
 };
 
+/**
+ *
+ * @param {object} props the props object
+ * @param {string} props.message the message the user entered when setting as completed
+ * @param {object} props.user the user who triggered the complete action
+ * @returns {WorkItem} the updated work item
+ */
+WorkItem.prototype.markAsRead = function () {
+  this.isRead = true;
+  return this;
+};
+
 exports.WorkItem = validEntityDecorator(WorkItem);
