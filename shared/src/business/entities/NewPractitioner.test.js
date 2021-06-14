@@ -1,4 +1,4 @@
-const { COUNTRY_TYPES, ROLES, US_STATES } = require('./EntityConstants');
+const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 const { NewPractitioner } = require('./NewPractitioner');
 
 describe('NewPractitioner', () => {
@@ -22,7 +22,7 @@ describe('NewPractitioner', () => {
     firmName: 'GW Law Offices',
     firstName: 'Test',
     lastName: 'Practitioner',
-    originalBarState: US_STATES.IL,
+    originalBarState: 'IL',
     practitionerType: 'Attorney',
     role: ROLES.NewPractitioner,
   };
