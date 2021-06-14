@@ -122,10 +122,8 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
 };
 
 /**
+ * marks the work item as read
  *
- * @param {object} props the props object
- * @param {string} props.message the message the user entered when setting as completed
- * @param {object} props.user the user who triggered the complete action
  * @returns {WorkItem} the updated work item
  */
 WorkItem.prototype.markAsRead = function () {
