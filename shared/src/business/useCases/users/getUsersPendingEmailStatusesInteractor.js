@@ -11,13 +11,15 @@ const { User } = require('../../entities/User');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {array} providers.userIds an array of userIds
- * @returns {object} a map of userIds and their corresponding emails
+ * @returns {object} a map of userIds boolean values whether email is pending
  */
 exports.getUsersPendingEmailStatusesInteractor = async (
   applicationContext,
   { userIds },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
+
+  // FIXME this is broken
 
   if (
     !isAuthorized(
