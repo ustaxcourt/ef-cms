@@ -11,15 +11,13 @@ const { User } = require('../../entities/User');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {array} providers.userIds an array of userIds
- * @returns {object} a map of userIds boolean values whether email is pending
+ * @returns {object} a map of userIds and pendingEmails
  */
 exports.getUsersPendingEmailStatusesInteractor = async (
   applicationContext,
   { userIds },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-
-  // FIXME this is broken
 
   if (
     !isAuthorized(
@@ -44,7 +42,7 @@ exports.getUsersPendingEmailStatusesInteractor = async (
   usersRaw.forEach(userRaw => {
     const validatedUserRaw = new User(userRaw).validate().toRawObject();
 
-    usersMapping[validatedUserRaw.userId] = !!validatedUserRaw.pendingEmail;
+    usersMapping[validatedUserRaw.userId] = validatedUserRaw.pendingEmail;
   });
 
   return usersMapping;

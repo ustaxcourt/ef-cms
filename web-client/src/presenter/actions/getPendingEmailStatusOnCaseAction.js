@@ -27,10 +27,7 @@ export const getPendingEmailStatusOnCaseAction = async ({
   if (userIds.length) {
     pendingEmails = await applicationContext
       .getUseCases()
-      .getUsersPendingEmailStatusesInteractor({
-        applicationContext, // TODO make this first argument
-        userIds,
-      });
+      .getUsersPendingEmailStatusesInteractor(applicationContext, { userIds });
   }
 
   return { pendingEmails };
