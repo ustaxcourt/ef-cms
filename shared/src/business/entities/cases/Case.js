@@ -186,7 +186,6 @@ Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUs
   this.judgeUserId = rawCase.judgeUserId;
   this.litigationCosts = rawCase.litigationCosts;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-  this.status = rawCase.status || CASE_STATUS_TYPES.new;
 
   this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
   this.orderDesignatingPlaceOfTrial =
@@ -231,6 +230,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
+  this.status = rawCase.status || CASE_STATUS_TYPES.new;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
   this.trialDate = rawCase.trialDate;
