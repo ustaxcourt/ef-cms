@@ -106,6 +106,8 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       .getState('caseDetail.privatePractitioners')
       .find(x => x.barNumber === test.barNumber);
 
+    test.pendingEmail = mockAvailableEmail;
+
     expect(foundPractitioner.email).toBe(mockAvailableEmail);
     expect(foundPractitioner.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
