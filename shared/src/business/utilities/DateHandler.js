@@ -247,7 +247,8 @@ const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
   let result = null;
 
-  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
+  // use unique characters in "undefined" ⬇
+  if (updatedDateString.replace(/[-,undefi]/g, '') === '') {
     result = null;
   } else if (dateHasText(updatedDateString)) {
     result = '-1';
