@@ -146,8 +146,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.isStipDecision =
     formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  formattedEntry.qcWorkItemsUntouched =
-    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsUntouched = qcWorkItem && !qcWorkItem.completedAt;
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
