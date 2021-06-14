@@ -1,3 +1,7 @@
+import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
@@ -21,7 +25,18 @@ describe('private practitioner views pending email journey', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(test, {
+      contactSecondary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Jimothy Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });
@@ -37,6 +52,24 @@ describe('private practitioner views pending email journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkAddsPractitionerEmail(test, true);
+
+  it('admission clerk views pending email for counsel on case', () => {
+    const partiesInformationHelper = withAppContextDecorator(
+      partiesInformationHelperComputed,
+    );
+
+    const partiesHelper = runCompute(partiesInformationHelper, {
+      state: test.getState(),
+    });
+
+    const practitionerWithPendingEmail = partiesHelper.formattedPetitioners[0].representingPractitioners.find(
+      prac => prac.barNumber === test.barNumber,
+    );
+
+    expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
+      `${test.pendingEmail} (Pending)`,
+    );
+  });
 
   loginAs(test, 'privatePractitioner@example.com');
   practitionerRequestsAccessToCase(test, fakeFile);
@@ -54,6 +87,8 @@ describe('private practitioner views pending email journey', () => {
       prac => prac.barNumber === test.barNumber,
     );
 
-    expect(practitionerWithPendingEmail.pendingEmail).toBe(test.pendingEmail);
+    expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
+      `${test.pendingEmail} (Pending)`,
+    );
   });
 });
