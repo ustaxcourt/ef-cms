@@ -78,6 +78,19 @@ describe('DocketEntry entity', () => {
       expect(myDoc.signedAt).toBeTruthy();
     });
 
+    it('should not change an already signedAt Notice', () => {
+      const myDoc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'NOT',
+          signedAt: '2019-08-25T05:00:00.000Z',
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(myDoc.signedAt).toEqual('2019-08-25T05:00:00.000Z');
+    });
+
     it('should NOT implicitly set a signedAt for non Notice event codes', () => {
       const myDoc = new DocketEntry(
         {

@@ -7,7 +7,6 @@ const {
 const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
-  US_STATES,
 } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
@@ -49,7 +48,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
         lastName: 'Practitioner',
         name: 'Private Practitioner',
-        originalBarState: US_STATES.OK,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         section: ROLES.privatePractitioner,
@@ -80,7 +79,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'Private Practitioner',
-      originalBarState: US_STATES.OK,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: ROLES.privatePractitioner,
@@ -111,7 +110,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         firstName: 'IRS',
         lastName: 'Practitioner',
         name: 'IRS Practitioner',
-        originalBarState: US_STATES.OK,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
         role: ROLES.irsPractitioner,
         section: ROLES.privatePractitioner,
@@ -140,7 +139,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'IRS Practitioner',
-      originalBarState: US_STATES.OK,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: 'irsPractitioner',

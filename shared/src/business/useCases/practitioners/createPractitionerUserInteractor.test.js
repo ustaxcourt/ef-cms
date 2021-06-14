@@ -4,7 +4,7 @@ const {
 const {
   createPractitionerUserInteractor,
 } = require('./createPractitionerUserInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const mockUser = {
@@ -17,7 +17,7 @@ const mockUser = {
   firstName: 'bob',
   lastName: 'sagot',
   name: 'Test Attorney',
-  originalBarState: US_STATES.OK,
+  originalBarState: 'IL',
   practitionerType: 'Attorney',
   role: ROLES.privatePractitioner,
   userId: '07044afe-641b-4d75-a84f-0698870b7650',
