@@ -171,7 +171,7 @@ DocketEntry.prototype.init = function init(
   }
 
   if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocketEntry.eventCode)) {
-    this.signedAt = createISODateString();
+    this.signedAt = rawDocketEntry.signedAt || createISODateString();
   }
 
   this.generateFiledBy(petitioners);
