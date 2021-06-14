@@ -41,7 +41,7 @@ describe('getPendingEmailStatusOnCaseAction', () => {
     });
 
     const userIdsArgument = applicationContext.getUseCases()
-      .getUsersPendingEmailStatusesInteractor.mock.calls[0][0].userIds;
+      .getUsersPendingEmailStatusesInteractor.mock.calls[0][1].userIds;
     expect(userIdsArgument).toEqual(
       expect.arrayContaining([
         mockUserId,
@@ -91,7 +91,7 @@ describe('getPendingEmailStatusOnCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().getUsersPendingEmailStatusesInteractor
-        .mock.calls[0][0].userIds,
+        .mock.calls[0][1].userIds,
     ).toEqual(expect.arrayContaining(Object.keys(returnValue)));
     expect(output.pendingEmails).toEqual(returnValue);
   });

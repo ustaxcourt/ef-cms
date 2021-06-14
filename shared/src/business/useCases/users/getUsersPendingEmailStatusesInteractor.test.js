@@ -40,16 +40,18 @@ describe('getUsersPendingEmailStatusesInteractor', () => {
   });
 
   it("should return user's pending email", async () => {
+    const mockPendingEmail = 'pending@example.com';
+
     applicationContext.getPersistenceGateway().getUsersById.mockResolvedValue([
       {
         name: 'Guy Fieri',
-        pendingEmail: 'pending@example.com',
+        pendingEmail: mockPendingEmail,
         role: ROLES.petitioner,
         userId: USER_IDS[0],
       },
       {
         name: 'Lori Fieri',
-        pendingEmail: 'pending@example.com',
+        pendingEmail: mockPendingEmail,
         role: ROLES.petitioner,
         userId: USER_IDS[1],
       },
@@ -63,8 +65,8 @@ describe('getUsersPendingEmailStatusesInteractor', () => {
     );
 
     expect(result).toEqual({
-      [USER_IDS[0]]: true,
-      [USER_IDS[1]]: true,
+      [USER_IDS[0]]: mockPendingEmail,
+      [USER_IDS[1]]: mockPendingEmail,
     });
   });
 
@@ -90,8 +92,8 @@ describe('getUsersPendingEmailStatusesInteractor', () => {
     );
 
     expect(result).toEqual({
-      [USER_IDS[0]]: false,
-      [USER_IDS[1]]: false,
+      [USER_IDS[0]]: undefined,
+      [USER_IDS[1]]: undefined,
     });
   });
 

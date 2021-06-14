@@ -8,10 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.userId the userIds to check for pending email statuses
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUsersPendingEmailStatusesInteractor = ({
+exports.getUsersPendingEmailStatusesInteractor = (
   applicationContext,
-  userIds,
-}) => {
+  { userIds },
+) => {
   return get({
     applicationContext,
     endpoint: `/users/pending-email-status?userIds=${userIds.join(',')}`,
