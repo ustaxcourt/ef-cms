@@ -5,6 +5,9 @@ const {
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  STATE_NOT_AVAILABLE,
+  US_STATES,
+  US_STATES_OTHER,
 } = require('./EntityConstants');
 const {
   JoiValidationConstants,
@@ -156,7 +159,11 @@ const practitionerValidation = {
     .optional()
     .allow(null)
     .description('The optional middle name of the practitioner.'),
-  originalBarState: JoiValidationConstants.STRING.max(100)
+  originalBarState: JoiValidationConstants.STRING.valid(
+    ...Object.keys(US_STATES),
+    ...US_STATES_OTHER,
+    STATE_NOT_AVAILABLE,
+  )
     .required()
     .description(
       'The state in which the practitioner passed their bar examination.',
