@@ -4,11 +4,9 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
 } = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
 jest.mock('../messages/updateMessage');
-const { updateMessage } = require('../messages/updateMessage');
 jest.mock('../caseDeadlines/getCaseDeadlinesByDocketNumber');
 const {
   getCaseDeadlinesByDocketNumber,
@@ -116,31 +114,6 @@ describe('updateCase', () => {
       sk: 'case|101-18',
       status: CASE_STATUS_TYPES.generalDocket,
       userId: 'petitioner',
-    });
-  });
-
-  it('updates fields on case messages', async () => {
-    await updateCase({
-      applicationContext,
-      caseToUpdate: {
-        associatedJudge: 'Judge Buch',
-        caseCaption: 'Johnny Joe Jacobson, Petitioner',
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        inProgress: true,
-        status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2019-03-01T21:40:46.415Z',
-        userId: 'petitioner',
-      },
-      oldCase,
-    });
-
-    expect(updateMessage).toHaveBeenCalled();
-    expect(updateMessage.mock.calls[0][0].message).toEqual({
-      caseStatus: 'Calendared',
-      caseTitle: 'Johnny Joe Jacobson',
-      docketNumberSuffix: 'W',
-      sk: '123',
     });
   });
 

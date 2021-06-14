@@ -1,3 +1,4 @@
+jest.mock('../../entities/Message');
 const faker = require('faker');
 const {
   applicationContext,
@@ -9,6 +10,7 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { Message } = require('../../entities/Message');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
@@ -571,6 +573,77 @@ describe('updateCaseAndAssociations', () => {
         docketNumber: validMockCase.docketNumber,
         userId: practitionerId,
       });
+    });
+  });
+
+  describe('user case messages', () => {
+    beforeAll(() => {
+      const mockMessages = [{ messageId: 'abc' }];
+      applicationContext
+        .getPersistenceGateway()
+        .updateMessage.mockResolvedValue(true);
+      applicationContext
+        .getPersistenceGateway()
+        .getMessagesByDocketNumber.mockResolvedValue(mockMessages);
+    });
+    it('completes without altering message records if no message updates are necessary', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: validMockCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateMessage,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('gets messages and throws validation errors if updates are not valid', async () => {
+      const mockValidatorRejects = () => {
+        throw new Error('Message entity was invalid mock-implementation');
+      };
+      Message.validateRawCollection.mockImplementationOnce(
+        mockValidatorRejects,
+      );
+      await expect(
+        updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: {
+            ...validMockCase,
+            caseCaption: 'Some other caption',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            status: 'Submitted',
+          },
+        }),
+      ).rejects.toThrow('entity was invalid');
+      expect(
+        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateMessage,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('gets messages and persists them if valid', async () => {
+      Message.validateRawCollection.mockImplementation(messages => messages);
+      await expect(
+        updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: {
+            ...validMockCase,
+            caseCaption: 'Some other caption',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            status: 'Submitted',
+          },
+        }),
+      ).resolves.not.toThrow();
+      expect(
+        applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateMessage,
+      ).toHaveBeenCalled();
     });
   });
 
