@@ -3,11 +3,15 @@ import { practitionerDetailHelper } from '../../src/presenter/computeds/practiti
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import faker from 'faker';
 
-export const admissionsClerkAddsPractitionerEmail = test => {
+export const admissionsClerkAddsPractitionerEmail = (
+  test,
+  isGrantingEAccess,
+) => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
-  const mockAvailableEmail = 'test+available@example.com';
+  const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
 
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
@@ -108,9 +112,11 @@ export const admissionsClerkAddsPractitionerEmail = test => {
 
     test.pendingEmail = mockAvailableEmail;
 
-    expect(foundPractitioner.email).toBe(mockAvailableEmail);
-    expect(foundPractitioner.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+    if (!isGrantingEAccess) {
+      expect(foundPractitioner.email).toBe(mockAvailableEmail);
+      expect(foundPractitioner.serviceIndicator).toBe(
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      );
+    }
   });
 };
