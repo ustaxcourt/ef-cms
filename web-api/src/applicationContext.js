@@ -690,9 +690,6 @@ const {
   getUsersPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersPendingEmailInteractor');
 const {
-  getUsersPendingEmailStatusesInteractor,
-} = require('../../shared/src/business/useCases/users/getUsersPendingEmailStatusesInteractor');
-const {
   getWebSocketConnectionByConnectionId,
 } = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
 const {
@@ -1748,7 +1745,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUserPendingEmailStatusInteractor,
         getUsersInSectionInteractor,
         getUsersPendingEmailInteractor,
-        getUsersPendingEmailStatusesInteractor,
         getWorkItemInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
