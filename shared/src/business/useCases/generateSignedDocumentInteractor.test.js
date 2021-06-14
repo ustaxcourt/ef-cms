@@ -53,8 +53,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should make a call to load and setup the PDF', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -104,8 +103,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should draw the rectangular stamp on the pdf document', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -129,8 +127,7 @@ describe('generateSignedDocument', () => {
   it('should set the stamp rotation to 0 degrees when the page rotation angle is undefined', async () => {
     rotationReturnValue = { angle: undefined };
 
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
