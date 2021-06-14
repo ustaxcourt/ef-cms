@@ -76,8 +76,11 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
 
+  const showPrintableDocketRecord = !formattedCaseDetail.isStatusNew;
+
   return {
     formattedCaseDetail,
     formattedDocketEntriesOnDocketRecord,
+    showPrintableDocketRecord,
   };
 };

@@ -491,7 +491,6 @@ th {
 #document-docket-record {
   // TODO: These are basically cards, and could be refactored for more reusability
   .party-info {
-    border: 1px solid #ccc;
     margin: 12px 0 12px 0;
   }
 
@@ -503,19 +502,17 @@ th {
     font-weight: bold;
   }
 
-  .party-info-content {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-    padding: 0 10px 10px 10px;
-  }
-
   .party-details {
     width: 25%;
   }
 
   .docket-record-table {
     margin-top: 30px;
+  }
+
+  .practitioner-contact {
+    min-height: 50px;
+    margin-top: 0;
   }
 }
 
