@@ -190,7 +190,6 @@ import { getUserPendingEmailInteractor } from '../../shared/src/proxies/users/ge
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailProxy';
-import { getUsersPendingEmailStatusesInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailStatusesProxy';
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
@@ -420,7 +419,6 @@ const allUseCases = {
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
-  getUsersPendingEmailStatusesInteractor,
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,

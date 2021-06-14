@@ -29,7 +29,7 @@ describe('getUsersPendingEmailInteractor', () => {
   it('should throw an error when not authorized', async () => {
     currentLoggedInUser = {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitioner,
+      role: ROLES.admin,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
