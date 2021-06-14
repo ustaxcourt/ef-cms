@@ -32,6 +32,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       firstName: 'Alden',
       lastName: 'Rivas',
       name: 'Alden Rivas',
+      originalBarState: 'FL',
       pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
