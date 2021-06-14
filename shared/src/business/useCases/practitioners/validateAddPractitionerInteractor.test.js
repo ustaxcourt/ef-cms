@@ -4,7 +4,6 @@ const {
 const {
   validateAddPractitionerInteractor,
 } = require('./validateAddPractitionerInteractor');
-const { US_STATES } = require('../../entities/EntityConstants');
 
 describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
@@ -35,7 +34,7 @@ describe('validateAddPractitionerInteractor', () => {
         employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
-        originalBarState: US_STATES.TX,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
       },
     });

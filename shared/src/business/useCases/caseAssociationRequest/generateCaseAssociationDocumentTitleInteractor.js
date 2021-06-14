@@ -14,9 +14,6 @@ exports.generateCaseAssociationDocumentTitleInteractor = (
   applicationContext,
   { caseAssociationRequest, petitioners },
 ) => {
-  const caseAssociation = CaseAssociationRequestFactory(
-    caseAssociationRequest,
-    { applicationContext },
-  );
+  const caseAssociation = CaseAssociationRequestFactory(caseAssociationRequest);
   return caseAssociation.getDocumentTitle(petitioners);
 };
