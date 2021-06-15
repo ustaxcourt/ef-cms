@@ -716,23 +716,23 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-public:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
       - deploy:
-          # requires:
-          #   - build-client-integration
-          #   - e2e-pa11y
-          #   - e2e-pa11y-public
-          #   - e2e-cypress
-          #   - e2e-cypress-public
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-cypress
+            - e2e-cypress-public
           filters:
             branches:
               only:
@@ -758,21 +758,21 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
-      # - smoketests:
-      #     requires:
-      #       - migrate
-      #     filters:
-      #       branches:
-      #         only:
-      #           - irs
-      #           - staging
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      - switch-colors:
+      - smoketests:
           requires:
             - migrate
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+      - switch-colors:
+          requires:
+            - smoketests
           filters:
             branches:
               only:
