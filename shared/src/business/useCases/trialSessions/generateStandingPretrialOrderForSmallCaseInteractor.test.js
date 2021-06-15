@@ -93,9 +93,9 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       },
     );
 
-    const {
-      data,
-    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
+    const { data } =
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0];
     expect(data.docketNumberWithSuffix).toEqual('234-56S');
   });
 
@@ -108,9 +108,9 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       },
     );
 
-    const {
-      data,
-    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
+    const { data } =
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0];
     expect(data.trialInfo.formattedStartDateWithDayOfWeek).toEqual(
       'Sunday, August 25, 2019',
     );

@@ -16,10 +16,8 @@ export const validateEditPetitionerCounselAction = ({
   path,
   store,
 }) => {
-  const {
-    SERVICE_INDICATOR_ERROR,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   const practitioner = get(state.form);
 

@@ -7,8 +7,8 @@ import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPar
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removePetitionerAndUpdateCaptionSequence = showProgressSequenceDecorator(
-  [
+export const removePetitionerAndUpdateCaptionSequence =
+  showProgressSequenceDecorator([
     clearModalAction,
     removePetitionerAndUpdateCaptionAction,
     setPartyViewTabAfterUpdatingPetitionersAction,
@@ -16,5 +16,4 @@ export const removePetitionerAndUpdateCaptionSequence = showProgressSequenceDeco
     setSaveAlertsForNavigationAction,
     setAlertSuccessAction,
     navigateToCaseDetailCaseInformationActionFactory('parties'),
-  ],
-);
+  ]);

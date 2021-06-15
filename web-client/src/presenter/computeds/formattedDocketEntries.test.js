@@ -19,10 +19,8 @@ export const mockDocketEntry = {
 
 describe('formattedDocketEntries', () => {
   let globalUser;
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, USER_ROLES } =
+    applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
     formattedDocketEntriesComputed,

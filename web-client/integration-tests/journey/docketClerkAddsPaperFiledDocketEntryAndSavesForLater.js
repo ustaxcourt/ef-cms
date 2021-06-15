@@ -7,10 +7,8 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
   fakeFile,
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-  const {
-    DOCUMENT_RELATIONSHIPS,
-    OBJECTIONS_OPTIONS_MAP,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_RELATIONSHIPS, OBJECTIONS_OPTIONS_MAP } =
+    applicationContext.getConstants();
 
   return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
