@@ -1,6 +1,6 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
-const { CaseDeadline } = require('../../entities/cases/CaseDeadline');
+const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');

@@ -1,4 +1,5 @@
 jest.mock('../../entities/Message');
+jest.mock('../../entities/CaseDeadline');
 const faker = require('faker');
 const {
   applicationContext,
@@ -10,6 +11,7 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Message } = require('../../entities/Message');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
@@ -65,6 +67,9 @@ describe('updateCaseAndAssociations', () => {
     )
       .validate()
       .toRawObject();
+
+    CaseDeadline.validateRawCollection.mockReturnValue([{ some: 'deadline' }]);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(validMockCase);
@@ -99,7 +104,7 @@ describe('updateCaseAndAssociations', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-    ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+    ).toMatchObject({ applicationContext, caseToUpdate });
   });
 
   it('always sends valid entities to the updateCase persistence method', async () => {
@@ -114,7 +119,6 @@ describe('updateCaseAndAssociations', () => {
     const updateArgs = updateCaseMock.mock.calls[0][0];
 
     expect(updateArgs.caseToUpdate.isValidated).toBe(true);
-    expect(updateArgs.oldCase.isValidated).toBe(true);
   });
 
   it('updates hearings, removing old ones from the given case', async () => {
@@ -151,7 +155,7 @@ describe('updateCaseAndAssociations', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-    ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+    ).toMatchObject({ applicationContext, caseToUpdate });
     expect(
       applicationContext.getPersistenceGateway().removeCaseFromHearing,
     ).toHaveBeenCalledTimes(2);
@@ -191,7 +195,7 @@ describe('updateCaseAndAssociations', () => {
       ).not.toHaveBeenCalled();
       expect(
         applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+      ).toMatchObject({ applicationContext, caseToUpdate });
     });
 
     it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
@@ -224,7 +228,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate, oldCase });
+      ).toMatchObject({ applicationContext, caseToUpdate });
 
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -743,6 +747,7 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('case deadlines', () => {
+    const mockDeadline = new CaseDeadline(applicationContext, {});
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
@@ -750,10 +755,11 @@ describe('updateCaseAndAssociations', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseDeadlinesByDocketNumber.mockReturnValue([
-          { pk: 'abc|987', sk: 'user-case|123' },
+          { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
         ]);
     });
-    it('should return an empty array if no change is required', async () => {
+
+    it('should not fetch or persist any case deadline data if associated judge is unchanged', async () => {
       const updatedCase = {
         ...validMockCase,
       };
@@ -763,11 +769,33 @@ describe('updateCaseAndAssociations', () => {
       });
       expect(
         applicationContext.getPersistenceGateway()
-          .getUserCaseMappingsByDocketNumber,
-      ).toHaveBeenCalled();
+          .getCaseDeadlinesByDocketNumber,
+      ).not.toHaveBeenCalled();
       expect(
-        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+        applicationContext.getPersistenceGateway().createCaseDeadline,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should fetch and persist case deadline data when associated judge has changed', async () => {
+      const updatedCase = {
+        ...validMockCase,
+        associatedJudge: 'Judge Phoebe Judge',
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getCaseDeadlinesByDocketNumber,
       ).toHaveBeenCalled();
+      expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().createCaseDeadline,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        caseDeadline: { some: 'deadline' },
+      });
     });
   });
 });
