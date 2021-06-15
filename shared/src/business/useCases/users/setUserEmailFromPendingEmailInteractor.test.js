@@ -76,6 +76,25 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => userCases[0]);
   });
 
+  it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined with a practitioner user', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue(userCases);
+
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      user: { ...mockPractitioner, email: UPDATED_EMAIL },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      email: UPDATED_EMAIL,
+      entityName: 'Practitioner',
+      pendingEmail: undefined,
+    });
+  });
+
   it('should call updateUser with email set to pendingEmail and pendingEmail set to undefined', async () => {
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
