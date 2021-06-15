@@ -138,7 +138,7 @@ const processCaseEntries = async ({
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
       'the case or docket entry records that failed to index',
-      failedRecords,
+      { failedRecords },
     );
     throw new Error('failed to index case entry or docket entry records');
   }
@@ -224,7 +224,7 @@ const processDocketEntries = async ({
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
       'the docket entry records that failed to index',
-      failedRecords,
+      { failedRecords },
     );
     throw new Error('failed to index docket entry records');
   }
@@ -248,10 +248,9 @@ const processWorkItemEntries = async ({
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the records that failed to index',
+    applicationContext.logger.error('the records that failed to index', {
       failedRecords,
-    );
+    });
     throw new Error('failed to index records');
   }
 };
@@ -271,10 +270,9 @@ const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the records that failed to index',
+    applicationContext.logger.error('the records that failed to index', {
       failedRecords,
-    );
+    });
     throw new Error('failed to index records');
   }
 };
@@ -294,10 +292,9 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the records that failed to delete',
+    applicationContext.logger.error('the records that failed to delete', {
       failedRecords,
-    );
+    });
     throw new Error('failed to delete records');
   }
 };
