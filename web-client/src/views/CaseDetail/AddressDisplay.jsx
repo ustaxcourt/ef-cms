@@ -59,9 +59,9 @@ export const AddressDisplay = connect(
             {contact.phone}
           </span>
         )}
-        {contact.email && showEmail && (
+        {contact.formattedEmail && showEmail && (
           <span className="address-line">
-            {contact.email}
+            {contact.formattedEmail}
             {contact.showEAccessFlag && (
               <FontAwesomeIcon
                 aria-label="has e-access"
@@ -71,6 +71,9 @@ export const AddressDisplay = connect(
               />
             )}
           </span>
+        )}
+        {contact.formattedPendingEmail && showEmail && (
+          <span className="address-line">{contact.formattedPendingEmail}</span>
         )}
         {showSealAddressLink && !contact.isAddressSealed && (
           <span className="sealed-address">
