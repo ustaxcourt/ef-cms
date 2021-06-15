@@ -237,9 +237,6 @@ const {
   getUsersPendingEmailLambda,
 } = require('./users/getUsersPendingEmailLambda');
 const {
-  getUsersPendingEmailStatusesLambda,
-} = require('./users/getUsersPendingEmailStatusesLambda');
-const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
 const {
@@ -958,10 +955,6 @@ app.get(
   lambdaWrapper(getUserPendingEmailLambda),
 );
 app.get('/users/pending-email', lambdaWrapper(getUsersPendingEmailLambda));
-app.get(
-  '/users/pending-email-status',
-  lambdaWrapper(getUsersPendingEmailStatusesLambda),
-);
 app.get(
   '/users/:userId/pending-email-status',
   lambdaWrapper(getUserPendingEmailStatusLambda),

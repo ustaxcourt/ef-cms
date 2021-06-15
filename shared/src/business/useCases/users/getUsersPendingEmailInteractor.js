@@ -19,7 +19,12 @@ exports.getUsersPendingEmailInteractor = async (
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL)) {
+  if (
+    !isAuthorized(
+      authorizedUser,
+      ROLE_PERMISSIONS.GET_USER_PENDING_EMAIL_STATUS,
+    )
+  ) {
     throw new UnauthorizedError("Unauthorized to get users' pending emails");
   }
 
