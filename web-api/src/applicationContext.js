@@ -859,6 +859,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  serveCaseDocument,
+} = require('../../shared/src/business/utilities/serveCaseDocument');
+const {
   serveCaseToIrsInteractor,
 } = require('../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor');
 const {
@@ -1835,6 +1838,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
+        serveCaseDocument,
         setServiceIndicatorsForCase,
         setupPdfDocument,
       };
