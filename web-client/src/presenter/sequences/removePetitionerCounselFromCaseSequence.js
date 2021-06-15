@@ -5,12 +5,11 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const removePetitionerCounselFromCaseSequence = showProgressSequenceDecorator(
-  [
+export const removePetitionerCounselFromCaseSequence =
+  showProgressSequenceDecorator([
     clearModalAction,
     removePetitionerCounselFromCaseAction,
     setSaveAlertsForNavigationAction,
     setAlertSuccessAction,
     navigateToCaseDetailCaseInformationActionFactory('parties'),
-  ],
-);
+  ]);

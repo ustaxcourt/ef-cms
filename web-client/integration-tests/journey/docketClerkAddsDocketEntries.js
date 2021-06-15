@@ -4,10 +4,8 @@ import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsDocketEntries = (test, fakeFile) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-  const {
-    DOCUMENT_RELATIONSHIPS,
-    OBJECTIONS_OPTIONS_MAP,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_RELATIONSHIPS, OBJECTIONS_OPTIONS_MAP } =
+    applicationContext.getConstants();
 
   return it('Docketclerk adds docket entries', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
