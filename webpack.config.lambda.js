@@ -22,7 +22,7 @@ module.exports = {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: 'node_modules/pdfjs-dist/legcy/build', to: '.' },
+        { from: 'node_modules/pdfjs-dist/legacy/build', to: '.' },
         { from: 'node_modules/pdf-lib/dist', to: '.' },
       ],
     }),
