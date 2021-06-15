@@ -39,7 +39,7 @@ const ParticipantsAndCounsel = connect(
                       <Button
                         link
                         className="edit-participant width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
-                        href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                        href={petitioner.editPetitionerLink}
                         icon="edit"
                         overrideMargin={true}
                       >
