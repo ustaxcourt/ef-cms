@@ -3,7 +3,6 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -116,44 +115,11 @@ exports.serveCaseToIrsInteractor = async (
   }
 
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
-
-    const initialDocketEntry = caseEntity.docketEntries.find(
-      doc => doc.documentType === initialDocumentType.documentType,
-    );
-
-    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
-      initialDocketEntry.setAsServed([
-        {
-          name: 'IRS',
-          role: ROLES.irsSuperuser,
-        },
-      ]);
-      caseEntity.updateDocketEntry(initialDocketEntry);
-
-      if (
-        initialDocketEntry.documentType ===
-        INITIAL_DOCUMENT_TYPES.petition.documentType
-      ) {
-        await applicationContext
-          .getUseCaseHelpers()
-          .sendIrsSuperuserPetitionEmail({
-            applicationContext,
-            caseEntity,
-            docketEntryId: initialDocketEntry.docketEntryId,
-          });
-      } else {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: initialDocketEntry.docketEntryId,
-          servedParties: {
-            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-            electronic: [],
-          },
-        });
-      }
-    }
+    await applicationContext.getUtilities().serveCaseDocument({
+      applicationContext,
+      caseEntity,
+      initialDocumentTypeKey,
+    });
   }
 
   exports.addDocketEntryForPaymentStatus({
