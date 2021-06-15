@@ -1,7 +1,10 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkEditsServiceIndicatorForPetitioner = test => {
+export const docketClerkEditsServiceIndicatorForPetitioner = (
+  test,
+  expectedServiceIndicator = null,
+) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
     let contactPrimary = contactPrimaryFromState(test);
 
@@ -11,18 +14,12 @@ export const docketClerkEditsServiceIndicatorForPetitioner = test => {
     });
 
     expect(test.getState('form.contact.serviceIndicator')).toEqual(
-      SERVICE_INDICATOR_TYPES.SI_NONE,
-    );
-
-    const contactPrimaryResult = contactPrimaryFromState(test);
-
-    expect(contactPrimaryResult.serviceIndicator).toEqual(
-      SERVICE_INDICATOR_TYPES.SI_NONE,
+      expectedServiceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
     );
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
-      value: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     await test.runSequence('submitEditPetitionerSequence');
@@ -30,7 +27,7 @@ export const docketClerkEditsServiceIndicatorForPetitioner = test => {
     contactPrimary = contactPrimaryFromState(test);
 
     expect(contactPrimary.serviceIndicator).toEqual(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 };
