@@ -28,9 +28,8 @@ export const petitionerEditsCasePrimaryContactAddressAndPhone = test => {
     expect(contactPrimary.address3).toEqual('Apt. 101');
     expect(contactPrimary.phone).toEqual('1111111111');
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>

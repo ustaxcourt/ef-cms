@@ -105,9 +105,8 @@ export const docketClerkEditsDocketEntryMeta = (
 
     expect(pendingDocketEntry.pending).toEqual(true);
 
-    const {
-      formattedPendingDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedPendingDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 

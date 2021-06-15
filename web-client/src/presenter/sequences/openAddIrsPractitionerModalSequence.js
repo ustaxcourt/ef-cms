@@ -9,8 +9,8 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator(
-  [
+export const openAddIrsPractitionerModalSequence =
+  showProgressSequenceDecorator([
     clearAlertsAction,
     clearModalStateAction,
     setDefaultServiceIndicatorAction('modal'),
@@ -30,5 +30,4 @@ export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator
         },
       ],
     },
-  ],
-);
+  ]);

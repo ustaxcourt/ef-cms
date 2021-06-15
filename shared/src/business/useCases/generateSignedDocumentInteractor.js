@@ -95,13 +95,12 @@ const generateSignedDocumentInteractor = async (
 ) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const {
-    pdfDoc,
-    textFont,
-  } = await applicationContext.getUtilities().setupPdfDocument({
-    applicationContext,
-    pdfData,
-  });
+  const { pdfDoc, textFont } = await applicationContext
+    .getUtilities()
+    .setupPdfDocument({
+      applicationContext,
+      pdfData,
+    });
 
   const pageToApplyStampTo = pdfDoc.getPages()[pageIndex];
 
@@ -120,27 +119,21 @@ const generateSignedDocumentInteractor = async (
   const rotationAngle = pageToApplyStampTo.getRotation().angle;
   const rotateSignatureDegrees = degrees(rotationAngle || 0);
 
-  const {
-    rectangleX,
-    rectangleY,
-    sigNameX,
-    sigNameY,
-    sigTitleX,
-    sigTitleY,
-  } = computeCoordinates({
-    applicationContext,
-    boxHeight,
-    boxWidth,
-    cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
-    lineHeight,
-    nameTextWidth,
-    pageRotation: rotationAngle,
-    posX,
-    posY,
-    scale,
-    textHeight,
-    titleTextWidth,
-  });
+  const { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY } =
+    computeCoordinates({
+      applicationContext,
+      boxHeight,
+      boxWidth,
+      cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
+      lineHeight,
+      nameTextWidth,
+      pageRotation: rotationAngle,
+      posX,
+      posY,
+      scale,
+      textHeight,
+      titleTextWidth,
+    });
 
   pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),

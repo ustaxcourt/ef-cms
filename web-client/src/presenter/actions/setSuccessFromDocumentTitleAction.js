@@ -24,9 +24,8 @@ export const setSuccessFromDocumentTitleAction = ({
     };
   }
 
-  const {
-    PROPOSED_STIPULATED_DECISION_EVENT_CODE,
-  } = applicationContext.getConstants();
+  const { PROPOSED_STIPULATED_DECISION_EVENT_CODE } =
+    applicationContext.getConstants();
   const { docketEntries } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const order = docketEntries.find(d => d.docketEntryId === docketEntryId);
