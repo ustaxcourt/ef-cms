@@ -1,5 +1,6 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
@@ -52,8 +53,20 @@ const PetitionersAndCounsel = connect(
                       ...petitioner,
                       name: undefined,
                     }}
-                    showEmail={true}
+                    showEmail={false}
                   />
+                  <span className="address-line">
+                    {petitioner.formattedEmail}
+                    {petitioner.showEAccessFlag && (
+                      <FontAwesomeIcon
+                        aria-label="has e-access"
+                        className="margin-left-05 fa-icon-blue"
+                        icon="flag"
+                        size="1x"
+                      />
+                    )}
+                  </span>
+                  {petitioner.formattedPendingEmail}
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">
