@@ -741,4 +741,33 @@ describe('updateCaseAndAssociations', () => {
       ).toHaveBeenCalled();
     });
   });
+
+  describe('case deadlines', () => {
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(validMockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseDeadlinesByDocketNumber.mockReturnValue([
+          { pk: 'abc|987', sk: 'user-case|123' },
+        ]);
+    });
+    it('should return an empty array if no change is required', async () => {
+      const updatedCase = {
+        ...validMockCase,
+      };
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: updatedCase,
+      });
+      expect(
+        applicationContext.getPersistenceGateway()
+          .getUserCaseMappingsByDocketNumber,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateUserCaseMapping,
+      ).toHaveBeenCalled();
+    });
+  });
 });
