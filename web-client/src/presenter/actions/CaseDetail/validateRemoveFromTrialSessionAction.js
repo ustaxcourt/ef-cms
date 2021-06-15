@@ -16,9 +16,8 @@ export const validateRemoveFromTrialSessionAction = ({
   path,
 }) => {
   const { associatedJudge, caseStatus, disposition } = get(state.modal);
-  const {
-    STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
-  } = applicationContext.getConstants();
+  const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
+    applicationContext.getConstants();
 
   let errors = {};
   if (!disposition) {

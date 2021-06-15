@@ -24,9 +24,7 @@ export const setPdfPreviewUrlForEditPaperFilingAction = async ({
   );
 
   if (caseDocument && caseDocument.isFileAttached) {
-    const {
-      url,
-    } = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,

@@ -90,9 +90,8 @@ export const docketClerkAddsDocketEntryWithoutFile = (test, overrides = {}) => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     test.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Administrative Record',

@@ -15,9 +15,7 @@ export const generateCaseConfirmationPdfUrlAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    url,
-  } = await applicationContext
+  const { url } = await applicationContext
     .getUseCases()
     .getDocumentDownloadUrlInteractor(applicationContext, {
       docketNumber,
