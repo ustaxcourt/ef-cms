@@ -163,7 +163,8 @@ describe('CaseAssociationRequestFactory', () => {
           expect(
             errors().supportingDocuments[0].certificateOfServiceDate,
           ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-          rawEntity.supportingDocuments[0].certificateOfServiceDate = createISODateString();
+          rawEntity.supportingDocuments[0].certificateOfServiceDate =
+            createISODateString();
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });

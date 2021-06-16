@@ -55,15 +55,15 @@ exports.orderAdvancedSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const {
-    results,
-  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
-    applicationContext,
-    documentEventCodes: ORDER_EVENT_CODES,
-    judgeType: ORDER_JUDGE_FIELD,
-    omitSealed,
-    ...rawSearch,
-  });
+  const { results } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: ORDER_EVENT_CODES,
+      judgeType: ORDER_JUDGE_FIELD,
+      omitSealed,
+      ...rawSearch,
+    });
 
   const filteredResults = caseSearchFilter(results, authorizedUser).slice(
     0,

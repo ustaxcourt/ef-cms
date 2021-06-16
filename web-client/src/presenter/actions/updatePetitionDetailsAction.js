@@ -16,11 +16,8 @@ export const updatePetitionDetailsAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
-  const {
-    irsNoticeDate,
-    petitionPaymentDate,
-    petitionPaymentWaivedDate,
-  } = props;
+  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
+    props;
 
   const updatedCase = await applicationContext
     .getUseCases()

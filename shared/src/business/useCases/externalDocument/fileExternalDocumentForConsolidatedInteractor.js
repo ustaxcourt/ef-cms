@@ -239,9 +239,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
           }
         }
 
-        saveCasesMap[
-          caseEntity.docketNumber
-        ] = await applicationContext
+        saveCasesMap[caseEntity.docketNumber] = await applicationContext
           .getUseCaseHelpers()
           .updateCaseAndAssociations({
             applicationContext,

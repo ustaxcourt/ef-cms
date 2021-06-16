@@ -6,12 +6,10 @@ import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';
 
 describe('submitCaseAssociationRequestAction', () => {
-  const {
-    submitCaseAssociationRequestInteractor,
-  } = applicationContext.getUseCases();
-  const {
-    submitPendingCaseAssociationRequestInteractor,
-  } = applicationContext.getUseCases();
+  const { submitCaseAssociationRequestInteractor } =
+    applicationContext.getUseCases();
+  const { submitPendingCaseAssociationRequestInteractor } =
+    applicationContext.getUseCases();
 
   presenter.providers.applicationContext = applicationContext;
 

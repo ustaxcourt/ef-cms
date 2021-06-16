@@ -6,14 +6,13 @@ import { state } from 'cerebral';
  * @param {String} stateLocation the providers object
  * @returns {Function} action
  */
-export const setRepresentingFromRepresentingMapActionFactory = stateLocation => ({
-  get,
-  store,
-}) => {
-  const form = get(state[stateLocation]);
-  const representing = Object.keys(form.representingMap)
-    .map(contactId => (form.representingMap[contactId] ? contactId : null))
-    .filter(Boolean);
+export const setRepresentingFromRepresentingMapActionFactory =
+  stateLocation =>
+  ({ get, store }) => {
+    const form = get(state[stateLocation]);
+    const representing = Object.keys(form.representingMap)
+      .map(contactId => (form.representingMap[contactId] ? contactId : null))
+      .filter(Boolean);
 
-  store.set(state[stateLocation].representing, representing);
-};
+    store.set(state[stateLocation].representing, representing);
+  };
