@@ -128,12 +128,12 @@ const processCaseEntries = async ({
 
   const indexRecords = await Promise.all(caseEntityRecords.map(indexCaseEntry));
 
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records: flattenDeep(indexRecords),
+  });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -214,12 +214,12 @@ const processDocketEntries = async ({
     }),
   );
 
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: newDocketEntryRecords,
-    });
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records: newDocketEntryRecords,
+  });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -237,12 +237,12 @@ const processEntries = async ({ applicationContext, records, recordType }) => {
     `going to index ${records.length} ${recordType}`,
   );
 
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records,
-    });
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records,
+  });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
@@ -274,12 +274,12 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkDeleteRecords({
-      applicationContext,
-      records: removeRecords,
-    });
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkDeleteRecords({
+    applicationContext,
+    records: removeRecords,
+  });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
