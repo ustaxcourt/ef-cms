@@ -2,9 +2,6 @@ jest.mock('../../entities/Message');
 jest.mock('../../entities/CaseDeadline');
 const faker = require('faker');
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
@@ -15,7 +12,12 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Message } = require('../../entities/Message');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+
 const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
+
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 
 describe('updateCaseAndAssociations', () => {
   const MOCK_TRIAL_SESSION = {
@@ -69,6 +71,7 @@ describe('updateCaseAndAssociations', () => {
       .toRawObject();
 
     CaseDeadline.validateRawCollection.mockReturnValue([{ some: 'deadline' }]);
+    Message.validateRawCollection.mockImplementation(collection => collection);
 
     applicationContext
       .getPersistenceGateway()
@@ -119,6 +122,51 @@ describe('updateCaseAndAssociations', () => {
     const updateArgs = updateCaseMock.mock.calls[0][0];
 
     expect(updateArgs.caseToUpdate.isValidated).toBe(true);
+  });
+
+  it.skip('does not attempt to make any update calls to persistence if any validation functions fail', async () => {
+    const practitionerId = applicationContext.getUniqueId();
+    const mockCaseWithIrsPractitioners = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: [
+          {
+            barNumber: 'BT007',
+            name: 'Billie Jean',
+            role: 'privatePractitioner',
+            userId: practitionerId,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+    const updatedPractitioner = {
+      barNumber: 'BT007',
+      name: 'William Denim', // changed name
+      role: 'privatePractitioner',
+      userId: practitionerId,
+    };
+
+    // const mockValidationProblem = () =>
+    //   throw new Error('this is a mock validation failure');
+    // validation routine called by one of the last "update" functions
+    // PrivatePractitioner.validateRawCollection.mockImplementationOnce(
+    //   mockValidationProblem,
+    // );
+
+    await expect(
+      updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          associatedJudge: 'Judge Arnold',
+          privatePractitioners: [updatedPractitioner],
+        },
+      }),
+    ).rejects.toThrow('mock validation failure');
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
   });
 
   it('updates hearings, removing old ones from the given case', async () => {
@@ -630,7 +678,6 @@ describe('updateCaseAndAssociations', () => {
     });
 
     it('gets messages and persists them if valid', async () => {
-      Message.validateRawCollection.mockImplementation(messages => messages);
       await expect(
         updateCaseAndAssociations({
           applicationContext,
