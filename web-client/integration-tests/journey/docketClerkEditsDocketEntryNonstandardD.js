@@ -8,9 +8,8 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardD = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard D scenario', async () => {
-    let {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
@@ -67,9 +66,8 @@ export const docketClerkEditsDocketEntryNonstandardD = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    ({
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test));
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

@@ -6,13 +6,12 @@ import { state } from 'cerebral';
  * @param {string} statePath the state path
  * @returns {Function} returns action that takes the next action in the sequence's path
  */
-export const chooseByTruthyStateActionFactory = statePath => ({
-  get,
-  path,
-}) => {
-  if (get(state[statePath])) {
-    return path.yes();
-  } else {
-    return path.no();
-  }
-};
+export const chooseByTruthyStateActionFactory =
+  statePath =>
+  ({ get, path }) => {
+    if (get(state[statePath])) {
+      return path.yes();
+    } else {
+      return path.no();
+    }
+  };

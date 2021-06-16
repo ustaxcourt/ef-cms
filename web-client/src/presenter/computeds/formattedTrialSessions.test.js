@@ -11,10 +11,8 @@ import {
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const {
-  SESSION_STATUS_GROUPS,
-  USER_ROLES: ROLES,
-} = applicationContext.getConstants();
+const { SESSION_STATUS_GROUPS, USER_ROLES: ROLES } =
+  applicationContext.getConstants();
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,

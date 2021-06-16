@@ -48,12 +48,12 @@ export const petitionsClerkAddsNoticeToCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    const {
-      draftDocuments,
-    } = applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: test.getState('caseDetail'),
-    });
+    const { draftDocuments } = applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: test.getState('caseDetail'),
+      });
 
     const firstDraftDocument = first(draftDocuments);
     test.docketEntryId = firstDraftDocument
