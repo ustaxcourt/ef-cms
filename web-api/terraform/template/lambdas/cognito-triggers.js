@@ -1,4 +1,6 @@
 const AWS = require('aws-sdk');
+const connectionClass = require('http-aws-es');
+const elasticsearch = require('elasticsearch');
 const {
   createLogger,
 } = require('../../../../shared/src/utilities/createLogger');
@@ -8,6 +10,9 @@ const {
 const {
   getCaseByDocketNumber,
 } = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
+const {
+  getCasesByUserId,
+} = require('../../../../shared/src/persistence/elasticsearch/getCasesByUserId');
 const {
   getDocketNumbersByUser,
 } = require('../../../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
@@ -30,7 +35,8 @@ const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
 
-const { DynamoDB } = AWS;
+const { DynamoDB, EnvironmentCredentials } = AWS;
+
 const logger = createLogger({
   defaultMeta: {
     environment: {
@@ -38,6 +44,14 @@ const logger = createLogger({
     },
   },
 });
+
+let searchClientCache = null;
+
+const environment = {
+  elasticsearchEndpoint:
+    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
+  region: process.env.AWS_REGION || 'us-east-1',
+};
 
 const applicationContext = {
   getCurrentUser: () => ({}),
@@ -53,12 +67,31 @@ const applicationContext = {
   }),
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
+    getCasesByUserId,
     getDocketNumbersByUser,
     getUserById,
     persistUser,
     updateCase,
     updateUser,
   }),
+  getSearchClient: () => {
+    if (!searchClientCache) {
+      searchClientCache = new elasticsearch.Client({
+        amazonES: {
+          credentials: new EnvironmentCredentials('AWS'),
+          region: environment.region,
+        },
+        apiVersion: '7.4',
+        awsConfig: new AWS.Config({ region: 'us-east-1' }),
+        connectionClass,
+        host: environment.elasticsearchEndpoint,
+        log: 'warning',
+        port: 443,
+        protocol: 'https',
+      });
+    }
+    return searchClientCache;
+  },
   getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
   getUseCases: () => ({
     createPetitionerAccountInteractor,
@@ -74,8 +107,12 @@ const applicationContext = {
 exports.applicationContext = applicationContext;
 
 exports.handler = async event => {
+  applicationContext.logger.info('we got an event', event);
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
+    applicationContext.logger.info(
+      'we are here at PostConfirmation_ConfirmSignUp',
+    );
 
     const user = await applicationContext
       .getUseCases()
@@ -92,10 +129,15 @@ exports.handler = async event => {
   } else if (event.triggerSource === 'PostAuthentication_Authentication') {
     const { email, sub } = event.request.userAttributes;
     const userId = event.request.userAttributes['custom:userId'] || sub;
+    applicationContext.logger.info('email', email);
+    applicationContext.logger.info('sub', sub);
+    applicationContext.logger.info('userId', userId);
 
     const userFromPersistence = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
+
+    applicationContext.logger.info('userFromPersistence', userFromPersistence);
 
     if (
       userFromPersistence &&
