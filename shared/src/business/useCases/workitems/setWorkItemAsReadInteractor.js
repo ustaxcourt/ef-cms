@@ -2,7 +2,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { Case } = require('../../entities/cases/Case');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * setWorkItemAsReadInteractor
@@ -22,7 +23,43 @@ exports.setWorkItemAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext
+  const workItemRecord = await applicationContext
     .getPersistenceGateway()
-    .setWorkItemAsRead({ applicationContext, workItemId });
+    .getWorkItemById({ applicationContext, workItemId });
+
+  const { docketNumber } = workItemRecord;
+  const { docketEntryId } = workItemRecord.docketEntry;
+
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(
+      `Docket entry ${docketEntryId} was not found on the case ${docketNumber}`,
+    );
+  }
+
+  docketEntryEntity.workItem.markAsRead();
+
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
+    applicationContext,
+    docketEntryId,
+    docketNumber,
+    document: docketEntryEntity.validate().toRawObject(),
+  });
+
+  return await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: docketEntryEntity.workItem.validate().toRawObject(),
+  });
 };
