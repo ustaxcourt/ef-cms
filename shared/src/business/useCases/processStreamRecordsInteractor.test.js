@@ -3,6 +3,7 @@ const {
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
+  processMessageEntries,
   processOtherEntries,
   processRemoveEntries,
 } = require('./processStreamRecordsInteractor');
@@ -714,6 +715,171 @@ describe('processStreamRecordsInteractor', () => {
           eventName: 'MODIFY',
         },
       ]);
+    });
+  });
+
+  describe('processMessageEntries', () => {
+    const utils = {};
+    let mockGetMessage;
+
+    const messageData = {
+      docketNumber: '123-45',
+      entityName: 'Message',
+      isRepliedTo: false,
+      messageId: '09b15337-e9db-45e9-9c8b-2946049965d1',
+      pk: 'case|123-45',
+      sk: 'message|09b15337-e9db-45e9-9c8b-2946049965d1',
+    };
+
+    const messageDataMarshalled = {
+      docketNumber: { S: '123-45' },
+      entityName: { S: 'Message' },
+      isRepliedTo: { BOOL: false },
+      messageId: { S: '09b15337-e9db-45e9-9c8b-2946049965d1' },
+      pk: { S: 'case|123-45' },
+      sk: { S: 'message|09b15337-e9db-45e9-9c8b-2946049965d1' },
+    };
+
+    beforeEach(() => {
+      mockGetMessage = jest.fn().mockReturnValue({
+        ...messageData,
+      });
+
+      utils.getMessage = mockGetMessage;
+    });
+
+    it('does nothing when no message records are found', async () => {
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [],
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('attempts to bulk index the records passed in', async () => {
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: messageData.pk },
+                sk: { S: messageData.sk },
+              },
+              NewImage: messageDataMarshalled,
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetMessage).toHaveBeenCalled();
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: messageData.pk }, sk: { S: messageData.sk } },
+            NewImage: messageDataMarshalled,
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+
+    it('calls getMessage to get the latest message if the messageNewImage.isRepliedTo is false', async () => {
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: messageData.pk },
+                sk: { S: messageData.sk },
+              },
+              NewImage: {
+                ...messageDataMarshalled,
+                isRepliedTo: { BOOL: false },
+              },
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetMessage).toHaveBeenCalled();
+    });
+
+    it('attempts to bulk index the data returned from getMessage instead of the NewImage if the messageNewImage.isRepliedTo is false', async () => {
+      mockGetMessage = jest.fn().mockReturnValue({
+        ...messageData,
+        isRepliedTo: true,
+      });
+      utils.getMessage = mockGetMessage;
+
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: messageData.pk },
+                sk: { S: messageData.sk },
+              },
+              NewImage: {
+                ...messageDataMarshalled,
+                isRepliedTo: { BOOL: false },
+              },
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([
+        {
+          dynamodb: {
+            Keys: { pk: { S: messageData.pk }, sk: { S: messageData.sk } },
+            NewImage: { ...messageDataMarshalled, isRepliedTo: { BOOL: true } },
+          },
+          eventName: 'MODIFY',
+        },
+      ]);
+    });
+
+    it('does not call getMessage to get the latest message if the messageNewImage.isRepliedTo is true', async () => {
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: messageData.pk },
+                sk: { S: messageData.sk },
+              },
+              NewImage: {
+                ...messageDataMarshalled,
+                isRepliedTo: { BOOL: true },
+              },
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(mockGetMessage).not.toHaveBeenCalled();
     });
   });
 

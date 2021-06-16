@@ -45,16 +45,24 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
-  const [workItemRecords, otherRecords] = partition(
+  const [workItemRecords, nonWorkItemRecords] = partition(
     nonCaseEntityRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
+  const [messageRecords, otherRecords] = partition(
+    nonWorkItemRecords,
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Message',
+  );
+
   return {
     caseEntityRecords,
     docketEntryRecords,
+    messageRecords,
     otherRecords,
     removeRecords,
     workItemRecords,
@@ -255,6 +263,69 @@ const processWorkItemEntries = async ({
   }
 };
 
+const processMessageEntries = async ({
+  applicationContext,
+  messageRecords,
+  utils,
+}) => {
+  if (!messageRecords.length) return;
+
+  applicationContext.logger.debug(
+    `going to index ${messageRecords.length} message records`,
+  );
+
+  const indexMessageEntry = async messageRecord => {
+    const messageNewImage = messageRecord.dynamodb.NewImage;
+
+    // go get the latest message if we're indexing a message with isRepliedTo set to false - it might
+    // have been updated in dynamo since this record was created to be processed
+    if (!messageNewImage.isRepliedTo.BOOL) {
+      const latestMessageData = await utils.getMessage({
+        applicationContext,
+        docketNumber: messageNewImage.docketNumber.S,
+        messageId: messageNewImage.messageId.S,
+      });
+
+      const marshalledMessage = AWS.DynamoDB.Converter.marshall(
+        latestMessageData,
+      );
+
+      return {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: messageNewImage.pk.S,
+            },
+            sk: {
+              S: messageNewImage.sk.S,
+            },
+          },
+          NewImage: marshalledMessage,
+        },
+        eventName: 'MODIFY',
+      };
+    }
+
+    return messageRecord;
+  };
+
+  const indexRecords = await Promise.all(messageRecords.map(indexMessageEntry));
+
+  const {
+    failedRecords,
+  } = await applicationContext.getPersistenceGateway().bulkIndexRecords({
+    applicationContext,
+    records: indexRecords,
+  });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error('the records that failed to index', {
+      failedRecords,
+    });
+    throw new Error('failed to index records');
+  }
+};
+
 const processOtherEntries = async ({ applicationContext, otherRecords }) => {
   if (!otherRecords.length) return;
 
@@ -326,11 +397,23 @@ exports.processStreamRecordsInteractor = async (
       useTempBucket: false,
     });
 
+  const getMessage = ({
+    applicationContext: appContext,
+    docketNumber,
+    messageId,
+  }) =>
+    appContext.getPersistenceGateway().getMessageById({
+      applicationContext: appContext,
+      docketNumber,
+      messageId,
+    });
+
   recordsToProcess = recordsToProcess.filter(filterRecords);
 
   const {
     caseEntityRecords,
     docketEntryRecords,
+    messageRecords,
     otherRecords,
     removeRecords,
     workItemRecords,
@@ -339,6 +422,7 @@ exports.processStreamRecordsInteractor = async (
   const utils = {
     getCase,
     getDocument,
+    getMessage,
   };
 
   try {
@@ -378,6 +462,18 @@ exports.processStreamRecordsInteractor = async (
       },
     );
 
+    await processMessageEntries({
+      applicationContext,
+      messageRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error(
+        "failed to process message records',",
+        err,
+      );
+      throw err;
+    });
+
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
         applicationContext.logger.error("failed to processOtherEntries',", err);
@@ -397,5 +493,6 @@ exports.filterRecords = filterRecords;
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
 exports.processDocketEntries = processDocketEntries;
+exports.processMessageEntries = processMessageEntries;
 exports.processOtherEntries = processOtherEntries;
 exports.processRemoveEntries = processRemoveEntries;
