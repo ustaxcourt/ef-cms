@@ -44,17 +44,15 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       docketEntry: { documentTitle: 'Notice of Change of Address' },
     });
 
-    let {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     noticeOfChangeOfAddressQCItem.index =
       noticeOfChangeOfAddressQCItem.index || lastIndex;
 
-    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[
-      noticeOfChangeOfAddressQCItem.index
-    ];
+    const { docketEntryId } =
+      formattedDocketEntriesOnDocketRecord[noticeOfChangeOfAddressQCItem.index];
 
     await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
@@ -75,9 +73,8 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    ({
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test));
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

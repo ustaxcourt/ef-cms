@@ -69,10 +69,8 @@ const getCalendarDetailsForTrialSession = ({
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
 
-  const {
-    formatCase,
-    setServiceIndicatorsForCase,
-  } = applicationContext.getUtilities();
+  const { formatCase, setServiceIndicatorsForCase } =
+    applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
 

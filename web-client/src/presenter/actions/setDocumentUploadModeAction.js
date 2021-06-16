@@ -5,7 +5,8 @@ import { state } from 'cerebral';
  * @param {string} documentUploadMode the value of documentUploadMode to be set
  * @returns {Function} returns a callback function that sets currentViewMetadata.documentUploadMode on state
  */
-export const setDocumentUploadModeAction = documentUploadMode =>
+export const setDocumentUploadModeAction =
+  documentUploadMode =>
   /**
    * sets the value of state.currentViewMetadata.documentUploadMode entry to the value passed in
    *

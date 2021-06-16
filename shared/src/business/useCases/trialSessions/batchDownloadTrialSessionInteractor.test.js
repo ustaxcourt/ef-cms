@@ -160,8 +160,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
       verifyFiles: true,
     });
 
-    const errorCall = applicationContext.getNotificationGateway()
-      .sendNotificationToUser.mock.calls[0];
+    const errorCall =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0];
 
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
@@ -182,8 +183,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
       verifyFiles: false,
     });
 
-    const errorCall = applicationContext.getNotificationGateway()
-      .sendNotificationToUser.mock.calls[0];
+    const errorCall =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0];
 
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
@@ -200,8 +202,9 @@ describe('batchDownloadTrialSessionInteractor', () => {
       trialSessionId: '123',
     });
 
-    const errorCall = applicationContext.getNotificationGateway()
-      .sendNotificationToUser.mock.calls[0];
+    const errorCall =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0];
 
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
