@@ -5,7 +5,8 @@ import { state } from 'cerebral';
  * @param {string} party the party on the form to be set to true
  * @returns {Function} returns a callback function that sets form[party] to true
  */
-export const setFormPartyTrueAction = party =>
+export const setFormPartyTrueAction =
+  party =>
   /**
    * sets the value of state.form[party] to true
    *

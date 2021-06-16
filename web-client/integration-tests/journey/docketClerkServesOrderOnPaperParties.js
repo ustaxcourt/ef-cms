@@ -5,9 +5,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 

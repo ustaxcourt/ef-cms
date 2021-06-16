@@ -44,8 +44,9 @@ describe('getPdfUrlAction', () => {
     ).toBeCalled();
     expect(result.output.pdfUrl).toBe(mockPdf.url);
 
-    const args = applicationContext.getUseCases()
-      .createCourtIssuedOrderPdfFromHtmlInteractor.mock.calls[0][1];
+    const args =
+      applicationContext.getUseCases()
+        .createCourtIssuedOrderPdfFromHtmlInteractor.mock.calls[0][1];
     expect(args).toEqual(
       expect.objectContaining({
         contentHtml: '<p>hi</p>',
