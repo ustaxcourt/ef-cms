@@ -11,10 +11,8 @@ import { state } from 'cerebral';
  * view options
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const {
-    CONTACT_TYPE_TITLES,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { CONTACT_TYPE_TITLES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const formattedCase = applicationContext

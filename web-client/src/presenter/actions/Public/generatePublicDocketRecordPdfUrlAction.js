@@ -12,9 +12,7 @@ export const generatePublicDocketRecordPdfUrlAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    url,
-  } = await applicationContext
+  const { url } = await applicationContext
     .getUseCases()
     .generatePublicDocketRecordPdfInteractor(applicationContext, {
       docketNumber,
