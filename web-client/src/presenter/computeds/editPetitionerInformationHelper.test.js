@@ -200,4 +200,62 @@ describe('editPetitionerInformationHelper', () => {
     });
     expect(result.showSealAddress).toEqual(false);
   });
+
+  describe('showIntervenorRole', () => {
+    it('should be true when the only intervenor on the case is the petitioner being edited', () => {
+      const { showIntervenorRole } = runCompute(
+        editPetitionerInformationHelper,
+        {
+          state: {
+            caseDetail: {
+              petitioners: [
+                {
+                  contactType: CONTACT_TYPES.petitioner,
+                },
+                {
+                  contactType: CONTACT_TYPES.intervenor,
+                },
+              ],
+            },
+            form: {
+              contact: {
+                contactType: CONTACT_TYPES.intervenor,
+              },
+            },
+            permissions: {},
+          },
+        },
+      );
+
+      expect(showIntervenorRole).toBeTruthy();
+    });
+
+    it('should be false when there is an intervenor who is not the petitioner being edited', () => {
+      const { showIntervenorRole } = runCompute(
+        editPetitionerInformationHelper,
+        {
+          state: {
+            caseDetail: {
+              petitioners: [
+                {
+                  contactType: CONTACT_TYPES.petitioner,
+                },
+                {
+                  contactType: CONTACT_TYPES.intervenor,
+                },
+              ],
+            },
+            form: {
+              contact: {
+                contactType: CONTACT_TYPES.petitioner,
+              },
+            },
+            permissions: {},
+          },
+        },
+      );
+
+      expect(showIntervenorRole).toBeFalsy();
+    });
+  });
 });
