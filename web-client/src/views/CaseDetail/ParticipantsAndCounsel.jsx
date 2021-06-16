@@ -1,5 +1,6 @@
 import { AddressDisplay } from './AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PartiesInformationContentHeader } from './PartiesInformationContentHeader';
 import { ViewPetitionerCounselModal } from './ViewPetitionerCounselModal';
 import { connect } from '@cerebral/react';
@@ -39,7 +40,7 @@ const ParticipantsAndCounsel = connect(
                       <Button
                         link
                         className="edit-participant width-auto margin-top-1 margin-left-1 padding-0 margin-right-0 float-right"
-                        href={`/case-detail/${caseDetail.docketNumber}/edit-petitioner-information/${petitioner.contactId}`}
+                        href={petitioner.editPetitionerLink}
                         icon="edit"
                         overrideMargin={true}
                       >
@@ -55,8 +56,20 @@ const ParticipantsAndCounsel = connect(
                       ...petitioner,
                       name: undefined,
                     }}
-                    showEmail={true}
+                    showEmail={false}
                   />
+                  <span className="address-line">
+                    {petitioner.formattedEmail}
+                    {petitioner.showEAccessFlag && (
+                      <FontAwesomeIcon
+                        aria-label="has e-access"
+                        className="margin-left-05 fa-icon-blue"
+                        icon="flag"
+                        size="1x"
+                      />
+                    )}
+                  </span>
+                  {petitioner.formattedPendingEmail}
                   {petitioner.serviceIndicator && (
                     <div className="margin-top-4">
                       <p className="semi-bold margin-bottom-0">
