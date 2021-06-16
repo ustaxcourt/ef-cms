@@ -220,7 +220,7 @@ const PetitionerInformation = connect(
                     )}
                     key={otherPetitioner.name}
                   >
-                    <address aria-labelledby="secondary-label">
+                    <address aria-labelledby="other-petitioners-label">
                       {otherPetitioner.name && (
                         <AddressDisplay
                           contact={otherPetitioner}

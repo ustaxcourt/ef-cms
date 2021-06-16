@@ -7,6 +7,7 @@ import {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  hasPartyWithServiceType,
 } from '../../shared/src/business/entities/cases/Case';
 import {
   DocketEntry,
@@ -35,7 +36,10 @@ import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
+import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
+import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -644,6 +648,7 @@ const applicationContext = {
       getCaseCaption: Case.getCaseCaption,
       getContactPrimary,
       getContactSecondary,
+      getCropBox,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
@@ -653,8 +658,10 @@ const applicationContext = {
       getOtherFilers,
       getOtherPetitioners,
       getServedPartiesCode,
+      getStampBoxCoordinates,
       getTrialSessionStatus,
       getWorkQueueFilters,
+      hasPartyWithServiceType,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isPending: DocketEntry.isPending,
@@ -665,6 +672,7 @@ const applicationContext = {
       prepareDateFromString,
       replaceBracketed,
       setServiceIndicatorsForCase,
+      setupPdfDocument,
       sortDocketEntries,
     };
   },

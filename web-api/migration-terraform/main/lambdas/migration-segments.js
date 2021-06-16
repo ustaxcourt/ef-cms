@@ -2,8 +2,14 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
-  migrateItems: migration0025,
-} = require('./migrations/0025-add-contacts-to-petitioners-array');
+  migrateItems: migration0001,
+} = require('./migrations/0001-filing-fee-text-casing');
+const {
+  migrateItems: migration0002,
+} = require('./migrations/0002-original-bar-state');
+const {
+  migrateItems: migration0027,
+} = require('./migrations/0027-delete-work-item-records');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
@@ -27,15 +33,21 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
-export const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run migration 0025');
-  items = await migration0025(items, documentClient);
+const migrateRecords = async ({ documentClient, items }) => {
+  applicationContext.logger.info('about to run migration 0001');
+  items = await migration0001(items, documentClient);
+  applicationContext.logger.info('about to run migration 0002');
+  items = await migration0002(items, documentClient);
+  applicationContext.logger.info('about to run migration 0027');
+  items = await migration0027(items, documentClient);
 
   applicationContext.logger.info('about to run validation migration');
   items = await validationMigration(items, documentClient);
 
   return items;
 };
+
+exports.migrateRecords = migrateRecords;
 
 const processItems = async ({ documentClient, items }) => {
   try {

@@ -634,7 +634,6 @@ select[disabled] {
   }
 }
 .before-starting-case {
-
   .caseItem__icon {
     top: 0;
     display: inline-block;
@@ -1115,9 +1114,11 @@ hr.lighter {
     padding: 10px;
     border: 1px solid #eee;
     background-color: rgba(255, 255, 255, 0.8);
+    font-family: 'Times New Roman', Times, serif;
     font-weight: $font-bold;
     text-align: center;
   }
+
   #signature-warning {
     display: block;
     width: 612px;
@@ -1134,6 +1135,7 @@ hr.lighter {
     overflow-y: overlay;
     text-align: center;
   }
+
   #sign-pdf-canvas {
     display: block;
     margin: auto;
@@ -1517,11 +1519,6 @@ button.change-scanner-button {
       margin-bottom: 20px;
     }
   }
-
-  .advanced-search__button {
-    margin-top: 39px;
-    margin-bottom: 20px;
-  }
 }
 
 .hide-radio {
@@ -1566,7 +1563,7 @@ button.change-scanner-button {
 }
 
 .document-viewer--documents {
-  height: 1000px;
+  min-height: 1000px;
 
   iframe {
     border: none;

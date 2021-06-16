@@ -87,7 +87,7 @@ exports.MOCK_PRACTITIONER = {
   firstName: 'Test',
   lastName: 'Attorney',
   name: 'Test Attorney',
-  originalBarState: 'Oklahoma',
+  originalBarState: 'OK',
   practitionerType: 'Attorney',
   role: ROLES.privatePractitioner,
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',

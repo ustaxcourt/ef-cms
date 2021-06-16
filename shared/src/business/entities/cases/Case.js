@@ -19,7 +19,6 @@ const {
   PAYMENT_STATUS,
   PROCEDURE_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   UNIQUE_OTHER_FILER_TYPE,
@@ -2042,21 +2041,52 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
-Case.prototype.hasPartyWithPaperService = function () {
-  const contactSecondary = this.getContactSecondary();
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {Object} rawCase the raw case object
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+// NOTE: This method will have to be changed to account for all petitioners on the case
+// (instead of just primary and secondary) once the User Management Batch 1 stories have been merged.
+const hasPartyWithServiceType = function (rawCase, serviceType) {
+  const contactPrimary = getContactPrimary(rawCase);
+  const contactSecondary = getContactSecondary(rawCase);
   return (
-    this.getContactPrimary().serviceIndicator ===
-      SERVICE_INDICATOR_TYPES.SI_PAPER ||
-    (contactSecondary &&
-      contactSecondary.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER) ||
-    (this.privatePractitioners &&
-      this.privatePractitioners.find(
-        pp => pp.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+    contactPrimary.serviceIndicator === serviceType ||
+    (contactSecondary && contactSecondary.serviceIndicator === serviceType) ||
+    (rawCase.privatePractitioners &&
+      rawCase.privatePractitioners.find(
+        pp => pp.serviceIndicator === serviceType,
       )) ||
-    (this.irsPractitioners &&
-      this.irsPractitioners.find(
-        ip => ip.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      ))
+    (rawCase.irsPractitioners &&
+      rawCase.irsPractitioners.find(ip => ip.serviceIndicator === serviceType))
+  );
+};
+
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+Case.prototype.hasPartyWithServiceType = function (serviceType) {
+  return hasPartyWithServiceType(this, serviceType);
+};
+
+/**
+ * Returns true if the case should be displayed as eligible for trial sessions
+ *
+ * @returns {Boolean} true if the case is eligible
+ */
+Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
+  return !!(
+    (this.highPriority ||
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
   );
 };
 
@@ -2082,6 +2112,7 @@ module.exports = {
   getContactSecondary,
   getOtherFilers,
   getOtherPetitioners,
+  hasPartyWithServiceType,
   isAssociatedUser,
   isSealedCase,
   updatePetitioner,

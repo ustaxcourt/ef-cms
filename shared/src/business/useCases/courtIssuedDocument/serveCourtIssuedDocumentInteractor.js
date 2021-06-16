@@ -33,9 +33,9 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+  await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
+    workItemToUpdate: workItemToUpdate.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
@@ -82,6 +82,9 @@ exports.serveCourtIssuedDocumentInteractor = async (
 
   if (!courtIssuedDocument) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  }
+  if (courtIssuedDocument.servedAt) {
+    throw new Error('Docket entry has already been served');
   }
 
   courtIssuedDocument.numberOfPages = await applicationContext

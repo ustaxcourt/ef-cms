@@ -3,7 +3,7 @@ import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { StatisticsForm } from '../StartCaseInternal/StatisticsForm';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const IRSNotice = connect(
@@ -16,7 +16,7 @@ export const IRSNotice = connect(
     showModal: state.modal.showModal,
     statisticsFormHelper: state.statisticsFormHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateCaseDetailSequence: sequences.validateCaseDetailSequence,
+    validation: sequences[props.validationName],
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
@@ -25,11 +25,13 @@ export const IRSNotice = connect(
     form,
     refreshStatisticsSequence,
     setIrsNoticeFalseSequence,
+    shouldStartWithBlankStatistic = true,
     showModal,
     statisticsFormHelper,
     updateFormValueSequence,
-    validateCaseDetailSequence,
+    validation,
     validationErrors,
+    validationName,
   }) {
     const renderIrsNoticeRadios = () => {
       return (
@@ -51,7 +53,9 @@ export const IRSNotice = connect(
                   key: e.target.name,
                   value: true,
                 });
-                refreshStatisticsSequence();
+                if (shouldStartWithBlankStatistic) {
+                  refreshStatisticsSequence();
+                }
               }}
             />
             <label
@@ -105,21 +109,21 @@ export const IRSNotice = connect(
             month: form.irsMonth,
             year: form.irsYear,
           }}
-          onBlur={validateCaseDetailSequence}
+          onBlur={validation}
           onChange={updateFormValueSequence}
         />
       );
     };
 
     return (
-      <div className="blue-container">
+      <section>
         {renderIrsNoticeRadios()}
 
         <CaseTypeSelect
           allowDefaultOption={true}
           caseTypes={CASE_TYPES}
           legend="Type of case"
-          validation="validateCaseDetailSequence"
+          validation={validationName}
           value={form.caseType}
           onChange="updateFormValueSequence"
           onChangePreValidation="refreshStatisticsSequence"
@@ -130,7 +134,7 @@ export const IRSNotice = connect(
         {statisticsFormHelper.showStatisticsForm && <StatisticsForm />}
 
         {showModal === 'CalculatePenaltiesModal' && <CalculatePenaltiesModal />}
-      </div>
+      </section>
     );
   },
 );

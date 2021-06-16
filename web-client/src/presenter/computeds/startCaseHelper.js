@@ -42,6 +42,12 @@ export const startCaseHelper = (get, applicationContext) => {
     applicationContext.getUtilities().getCaseCaption(form) || '';
   const caseTitle = applicationContext.getCaseTitle(caseCaption);
 
+  const formattedCaseType = ['Disclosure1', 'Disclosure2'].includes(
+    form.caseType,
+  )
+    ? CASE_TYPES_MAP.disclosure
+    : form.caseType;
+
   return {
     caseTitle,
     contactPrimaryLabel,
@@ -51,6 +57,7 @@ export const startCaseHelper = (get, applicationContext) => {
         ? 'Is your spouse deceased?'
         : 'Is the spouse deceased?',
     filingTypes: FILING_TYPES[user.role] || FILING_TYPES[USER_ROLES.petitioner],
+    formattedCaseType,
     hasContactSecondary,
     minorIncompetentLegend:
       user.role === USER_ROLES.petitioner
