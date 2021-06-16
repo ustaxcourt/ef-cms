@@ -10,9 +10,8 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard H scenario', async () => {
-    let {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
@@ -68,9 +67,8 @@ export const docketClerkEditsDocketEntryNonstandardH = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    ({
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test));
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

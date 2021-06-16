@@ -9,9 +9,8 @@ export const docketClerkServesOrderWithPaperService = (
 ) => {
   return it('Docket Clerk serves the order after the docket entry has been created (with parties with paper service)', async () => {
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,

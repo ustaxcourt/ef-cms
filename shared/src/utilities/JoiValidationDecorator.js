@@ -155,26 +155,27 @@ exports.joiValidationDecorator = function (
     return isEmpty(validationErrors);
   };
 
-  entityConstructor.prototype.validateForMigration = function validateForMigration() {
-    let { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
+  entityConstructor.prototype.validateForMigration =
+    function validateForMigration() {
+      let { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
 
-    if (error) {
-      console.log('entity with error-------------', this);
-      throw new InvalidEntityError(
-        this.entityName,
-        JSON.stringify(
-          error.details.map(detail => {
-            return detail.message.replace(/"/g, "'");
-          }),
-        ),
-      );
-    }
-    setIsValidated(this);
-    return this;
-  };
+      if (error) {
+        console.log('entity with error-------------', this);
+        throw new InvalidEntityError(
+          this.entityName,
+          JSON.stringify(
+            error.details.map(detail => {
+              return detail.message.replace(/"/g, "'");
+            }),
+          ),
+        );
+      }
+      setIsValidated(this);
+      return this;
+    };
 
   entityConstructor.prototype.validate = function validate(options) {
     const applicationContext = options?.applicationContext;
@@ -207,32 +208,32 @@ exports.joiValidationDecorator = function (
     return this;
   };
 
-  entityConstructor.prototype.validateWithLogging = function validateWithLogging(
-    applicationContext,
-  ) {
-    return this.validate({ applicationContext, logErrors: true });
-  };
+  entityConstructor.prototype.validateWithLogging =
+    function validateWithLogging(applicationContext) {
+      return this.validate({ applicationContext, logErrors: true });
+    };
 
   entityConstructor.prototype.getFormattedValidationErrors = function () {
     return getFormattedValidationErrors(this);
   };
 
-  entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    const { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
-    if (!error) return null;
-    const errors = {};
-    error.details.forEach(detail => {
-      if (!Number.isInteger(detail.context.key)) {
-        errors[detail.context.key || detail.type] = detail.message;
-      } else {
-        errors[detail.context.label] = detail.message;
-      }
-    });
-    return errors;
-  };
+  entityConstructor.prototype.getValidationErrors =
+    function getValidationErrors() {
+      const { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      if (!error) return null;
+      const errors = {};
+      error.details.forEach(detail => {
+        if (!Number.isInteger(detail.context.key)) {
+          errors[detail.context.key || detail.type] = detail.message;
+        } else {
+          errors[detail.context.label] = detail.message;
+        }
+      });
+      return errors;
+    };
 
   const toRawObjectPrototype = function () {
     return toRawObject(this);

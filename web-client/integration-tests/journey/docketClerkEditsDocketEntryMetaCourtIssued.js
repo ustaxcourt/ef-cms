@@ -86,9 +86,8 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
 
     expect(pendingDocketEntry.pending).toEqual(true);
 
-    const {
-      formattedPendingDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedPendingDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([

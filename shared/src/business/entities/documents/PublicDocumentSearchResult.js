@@ -50,9 +50,8 @@ PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES = {
 };
 
 PublicDocumentSearchResult.schema = joi.object().keys({
-  caseCaption: JoiValidationConstants.STRING.description(
-    'The case caption',
-  ).required(),
+  caseCaption:
+    JoiValidationConstants.STRING.description('The case caption').required(),
   docketEntryId: JoiValidationConstants.UUID.description(
     'The UUID of the corresponding document in S3',
   ).required(),
