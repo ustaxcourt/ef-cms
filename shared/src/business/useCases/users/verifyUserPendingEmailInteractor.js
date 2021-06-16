@@ -108,6 +108,7 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       applicationContext,
       userId: user.userId,
     });
+
   const casesToUpdate = await Promise.all(
     practitionerCases.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
@@ -115,6 +116,11 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
         docketNumber,
       }),
     ),
+  );
+
+  applicationContext.logger.info(
+    'cases to update',
+    casesToUpdate.map(c => c.docketNumber),
   );
 
   const validCasesToUpdate = casesToUpdate
