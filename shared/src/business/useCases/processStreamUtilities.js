@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk');
 const { flattenDeep, get, partition } = require('lodash');
-const { omit } = require('lodash');
 
 const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
@@ -81,13 +80,14 @@ const processCaseEntries = async ({
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
 
-    // We fetch this to get practitioners arrays (possible performance improvement here)
-    const fullCase = await utils.getCase({
+    const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({
       applicationContext,
       docketNumber: caseNewImage.docketNumber.S,
     });
 
-    const marshalledCase = AWS.DynamoDB.Converter.marshall(fullCase);
+    const marshalledCase = AWS.DynamoDB.Converter.marshall(
+      caseMetadataWithCounsel,
+    );
 
     caseRecords.push({
       dynamodb: {
@@ -100,7 +100,7 @@ const processCaseEntries = async ({
           },
         },
         NewImage: {
-          ...omit(marshalledCase, 'docketEntries'), // we don't need to store the docket entry list onto the case docket entry mapping
+          ...marshalledCase,
           case_relations: { name: 'case' },
           entityName: { S: 'CaseDocketEntryMapping' },
         }, // Create a mapping record on the docket-entry index for parent-child relationships
