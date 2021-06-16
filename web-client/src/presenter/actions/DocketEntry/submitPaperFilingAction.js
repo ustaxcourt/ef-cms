@@ -65,10 +65,7 @@ export const submitPaperFilingAction = async ({
   let caseDetail, paperServicePdfUrl;
 
   if (isEditingDocketEntry) {
-    ({
-      caseDetail,
-      paperServicePdfUrl,
-    } = await applicationContext
+    ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .editPaperFilingInteractor(applicationContext, {
         documentMetadata,
@@ -76,10 +73,7 @@ export const submitPaperFilingAction = async ({
         primaryDocumentFileId: docketEntryId,
       }));
   } else {
-    ({
-      caseDetail,
-      paperServicePdfUrl,
-    } = await applicationContext
+    ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
         documentMetadata,

@@ -157,8 +157,9 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    const updatedCase = applicationContext.getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();
@@ -184,8 +185,9 @@ describe('associatePrivatePractitionerToCase', () => {
       user: practitionerUser,
     });
 
-    const updatedCase = applicationContext.getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate;
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toHaveBeenCalled();

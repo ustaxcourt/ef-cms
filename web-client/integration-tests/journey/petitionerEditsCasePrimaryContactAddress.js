@@ -27,9 +27,8 @@ export const petitionerEditsCasePrimaryContactAddress = test => {
     expect(contactPrimary.address2).toEqual('Grand View Apartments');
     expect(contactPrimary.address3).toEqual('Apt. 104');
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>

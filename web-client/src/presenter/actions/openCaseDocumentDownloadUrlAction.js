@@ -22,9 +22,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  const {
-    url,
-  } = await applicationContext
+  const { url } = await applicationContext
     .getUseCases()
     .getDocumentDownloadUrlInteractor(applicationContext, {
       docketNumber,

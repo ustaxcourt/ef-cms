@@ -8,11 +8,8 @@ describe('formatWorkItem', () => {
     .getUtilities()
     .calculateISODate({ dateString: currentTime, howMuch: -1 });
 
-  const {
-    DOCKET_NUMBER_SUFFIXES,
-    DOCKET_SECTION,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
+    applicationContext.getConstants();
 
   const baseWorkItem = {
     assigneeId: docketClerkUser.userId,

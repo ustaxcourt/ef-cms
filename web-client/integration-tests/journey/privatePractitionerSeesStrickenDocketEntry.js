@@ -8,9 +8,8 @@ export const privatePractitionerSeesStrickenDocketEntry = (
   docketRecordIndex,
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const contactPrimary = contactPrimaryFromState(test);
     expect(contactPrimary.name).toBeDefined();

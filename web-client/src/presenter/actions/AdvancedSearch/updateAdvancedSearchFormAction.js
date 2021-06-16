@@ -5,7 +5,8 @@ import { state } from 'cerebral';
  * @param {string} formName the value of formName to be set
  * @returns {Function} returns a callback function that sets advancedSearchForm on state
  */
-export const updateAdvancedSearchFormAction = formName =>
+export const updateAdvancedSearchFormAction =
+  formName =>
   /**
    * sets the value of state.advancedSearchForm entry to the value passed in
    *

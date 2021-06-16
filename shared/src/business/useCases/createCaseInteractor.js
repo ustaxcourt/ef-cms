@@ -79,17 +79,15 @@ exports.createCaseInteractor = async (
     applicationContext,
   }).validate();
 
-  const updatedCaseWithServiceIndicators = setServiceIndicatorsForCase(
-    petitionEntity,
-  );
+  const updatedCaseWithServiceIndicators =
+    setServiceIndicatorsForCase(petitionEntity);
 
   petitionEntity.petitioners = updatedCaseWithServiceIndicators.petitioners;
 
-  const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
-    {
+  const docketNumber =
+    await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,
-    },
-  );
+    });
 
   let privatePractitioners = [];
   if (user.role === ROLES.privatePractitioner) {
