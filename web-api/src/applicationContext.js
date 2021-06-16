@@ -901,9 +901,6 @@ const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
 const {
-  setWorkItemAsRead,
-} = require('../../shared/src/persistence/dynamo/workitems/setWorkItemAsRead');
-const {
   setWorkItemAsReadInteractor,
 } = require('../../shared/src/business/useCases/workitems/setWorkItemAsReadInteractor');
 const {
@@ -1259,7 +1256,6 @@ const gatewayMethods = {
     saveWorkItemForDocketClerkFilingExternalDocument,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
-    setWorkItemAsRead,
     updateCase,
     updateCaseHearing,
     updateDocketEntry,
