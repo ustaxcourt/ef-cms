@@ -953,6 +953,32 @@ describe('getFormattedCaseDetail', () => {
       expect(results.isCourtIssuedDocument).toBeFalsy();
     });
 
+    it('should set qcWorkItemsUntouched to true when the work item has not been completed', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'PMT',
+        workItem: {},
+      });
+
+      expect(results.qcWorkItemsUntouched).toBeTruthy();
+    });
+
+    it('should set qcWorkItemsUntouched to false when the work item has been completed', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'PMT',
+        workItem: { completedAt: '2019-08-25T05:00:00.000Z' },
+      });
+
+      expect(results.qcWorkItemsUntouched).toBeFalsy();
+    });
+
+    it('should set qcWorkItemsUntouched to false when the docket entry does not have a work item', () => {
+      const results = formatDocketEntry(applicationContext, {
+        eventCode: 'PMT',
+      });
+
+      expect(results.qcWorkItemsUntouched).toBeFalsy();
+    });
+
     describe('isInProgress', () => {
       it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
         const results = formatDocketEntry(applicationContext, {
