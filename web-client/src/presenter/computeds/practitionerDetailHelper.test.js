@@ -142,4 +142,34 @@ describe('practitionerDetailHelper', () => {
     });
     expect(practitionerNotes).toEqual(mockNote);
   });
+
+  it('should show the print case list link if the user is an internal user', () => {
+    const { showPrintCaseListLink } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          admissionsDate: '2020-01-27',
+        },
+        user: { role: 'admissionsclerk' },
+      },
+    });
+    expect(showPrintCaseListLink).toBeTruthy();
+  });
+
+  it('should not show the print case list link if the user is an external user', () => {
+    const { showPrintCaseListLink } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          admissionsDate: '2020-01-27',
+        },
+        user: { role: 'irsPractitioner' },
+      },
+    });
+    expect(showPrintCaseListLink).toBeFalsy();
+  });
 });

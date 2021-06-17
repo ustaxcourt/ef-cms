@@ -18,5 +18,6 @@ export const practitionerDetailHelper = (get, applicationContext) => {
     firmNameFormatted: practitionerDetail.firmName || 'None',
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
+    showPrintCaseListLink: isInternalUser,
   };
 };

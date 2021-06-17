@@ -205,7 +205,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return false for isAssociated and pendingAssociation if the user is not an external user', async () => {
+  it('should return true for isAssociated and false for pendingAssociation if the user is an internal user', async () => {
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
@@ -227,7 +227,7 @@ describe('getCaseAssociation', () => {
     });
 
     expect(results.output).toEqual({
-      isAssociated: false,
+      isAssociated: true,
       pendingAssociation: false,
     });
   });
