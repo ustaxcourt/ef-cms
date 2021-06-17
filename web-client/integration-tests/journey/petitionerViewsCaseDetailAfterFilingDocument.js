@@ -4,10 +4,8 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
+  applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   test,
@@ -29,9 +27,8 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       },
     );
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     expect(test.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(test.docketNumber);

@@ -10,11 +10,8 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const test = setupTest();
-const {
-  COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-  PARTY_TYPES,
-} = applicationContext.getConstants();
+const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, PARTY_TYPES } =
+  applicationContext.getConstants();
 
 describe('Modify Petitioner Contact Information', () => {
   beforeAll(() => {

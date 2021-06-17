@@ -8,12 +8,9 @@ const computeCoordinates = ({
   pageRotation,
   pageToApplyStampTo,
 }) => {
-  const {
-    pageHeight,
-    pageWidth,
-    x,
-    y,
-  } = applicationContext.getUtilities().getCropBox(pageToApplyStampTo);
+  const { pageHeight, pageWidth, x, y } = applicationContext
+    .getUtilities()
+    .getCropBox(pageToApplyStampTo);
 
   const bottomLeftBoxCoordinates = {
     x: pageWidth / 2 - boxWidth / 2,
@@ -60,13 +57,12 @@ const addServedStampToDocument = async ({
 }) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const {
-    pdfDoc,
-    textFont,
-  } = await applicationContext.getUtilities().setupPdfDocument({
-    applicationContext,
-    pdfData,
-  });
+  const { pdfDoc, textFont } = await applicationContext
+    .getUtilities()
+    .setupPdfDocument({
+      applicationContext,
+      pdfData,
+    });
 
   const pageToApplyStampTo = pdfDoc.getPages()[0];
 

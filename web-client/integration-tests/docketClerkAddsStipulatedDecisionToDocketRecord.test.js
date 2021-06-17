@@ -47,23 +47,23 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views Stipulated Decision on docket record', async () => {
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
-    const stipulatedDecisionDocument = formattedDocketEntriesOnDocketRecord.find(
-      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-    );
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument =
+      formattedDocketEntriesOnDocketRecord.find(
+        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+      );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
   loginAs(test, 'privatePractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
-    const stipulatedDecisionDocument = formattedDocketEntriesOnDocketRecord.find(
-      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-    );
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument =
+      formattedDocketEntriesOnDocketRecord.find(
+        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+      );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);
   });
 });

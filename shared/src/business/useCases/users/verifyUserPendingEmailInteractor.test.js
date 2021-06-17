@@ -615,9 +615,9 @@ describe('verifyUserPendingEmailInteractor', () => {
         user: mockPetitionerUser,
       });
 
-      const {
-        caseToUpdate,
-      } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+      const { caseToUpdate } =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0];
       expect(caseToUpdate.petitioners[1].email).toBe(UPDATED_EMAIL);
       expect(caseToUpdate.docketNumber).toBe('102-21');
     });
