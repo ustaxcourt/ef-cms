@@ -9,9 +9,7 @@ export const generatePractitionerCaseListPdfUrlAction = async ({
   applicationContext,
   props,
 }) => {
-  const {
-    url,
-  } = await applicationContext
+  const { url } = await applicationContext
     .getUseCases()
     .generatePractitionerCaseListPdfInteractor(applicationContext, {
       userId: props.userId,
