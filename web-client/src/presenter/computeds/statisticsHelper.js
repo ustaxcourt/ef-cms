@@ -19,17 +19,19 @@ export const formatStatistic = ({
     .getUtilities()
     .formatDollars(statistic.irsTotalPenalties);
 
-  const formattedDeterminationDeficiencyAmount = statistic.determinationDeficiencyAmount
-    ? applicationContext
-        .getUtilities()
-        .formatDollars(statistic.determinationDeficiencyAmount)
-    : 'TBD';
+  const formattedDeterminationDeficiencyAmount =
+    statistic.determinationDeficiencyAmount
+      ? applicationContext
+          .getUtilities()
+          .formatDollars(statistic.determinationDeficiencyAmount)
+      : 'TBD';
 
-  const formattedDeterminationTotalPenalties = statistic.determinationTotalPenalties
-    ? applicationContext
-        .getUtilities()
-        .formatDollars(statistic.determinationTotalPenalties)
-    : 'TBD';
+  const formattedDeterminationTotalPenalties =
+    statistic.determinationTotalPenalties
+      ? applicationContext
+          .getUtilities()
+          .formatDollars(statistic.determinationTotalPenalties)
+      : 'TBD';
 
   const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
 

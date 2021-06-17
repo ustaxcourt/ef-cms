@@ -20,11 +20,8 @@ export const validatePetitionDetailsAction = ({
 }) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  const {
-    irsNoticeDate,
-    petitionPaymentDate,
-    petitionPaymentWaivedDate,
-  } = props;
+  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
+    props;
 
   let errors = applicationContext
     .getUseCases()
@@ -48,13 +45,11 @@ export const validatePetitionDetailsAction = ({
       statistics: 'Statistics',
     };
 
-    const {
-      errors: formattedErrors,
-      statisticsErrorMessages,
-    } = aggregateStatisticsErrors({
-      errors,
-      get,
-    });
+    const { errors: formattedErrors, statisticsErrorMessages } =
+      aggregateStatisticsErrors({
+        errors,
+        get,
+      });
 
     const errorMessags = [
       ...Object.values(omit(errors, 'statistics')),

@@ -2,9 +2,8 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkQCsDocketEntry = (test, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
-    let {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
@@ -20,9 +19,8 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    ({
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test));
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

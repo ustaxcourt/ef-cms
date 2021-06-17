@@ -1,10 +1,8 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  STATUS_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =
+  applicationContext.getConstants();
 
 export const petitionsClerkBlocksCase = (
   test,
