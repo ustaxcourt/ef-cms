@@ -68,7 +68,6 @@ exports.setUserEmailFromPendingEmailInteractor = async (
   }
 
   const rawUser = userEntity.validate().toRawObject();
-  applicationContext.logger.info('rawUser', rawUser);
 
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
@@ -82,7 +81,6 @@ exports.setUserEmailFromPendingEmailInteractor = async (
         user: rawUser,
       });
     } else {
-      applicationContext.logger.info('updatePractitionerCases');
       await updatePractitionerCases({
         applicationContext,
         user: rawUser,
