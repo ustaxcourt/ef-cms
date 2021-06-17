@@ -13,9 +13,7 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    parentMessageId,
-  } = await applicationContext
+  const { parentMessageId } = await applicationContext
     .getUseCases()
     .forwardMessageInteractor(applicationContext, {
       docketNumber,
