@@ -4,7 +4,7 @@ The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based leg
 
 ### Build Status
 
-#### develop
+[![DeepScan grade](https://deepscan.io/api/teams/8976/projects/17137/branches/383813/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8976&pid=17137&bid=383813)
 
 | develop | prod | staging | test |
 | ------- | ------ | ------- | ---- |
