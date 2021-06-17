@@ -3,17 +3,16 @@ const { put } = require('../requests');
 /**
  * updateCourtIssuedOrderProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.docketEntryIdToEdit the id of the docket entry to edit
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCourtIssuedOrderInteractor = ({
+exports.updateCourtIssuedOrderInteractor = (
   applicationContext,
-  docketEntryIdToEdit,
-  documentMetadata,
-}) => {
+  { docketEntryIdToEdit, documentMetadata },
+) => {
   const { docketNumber } = documentMetadata;
   return put({
     applicationContext,

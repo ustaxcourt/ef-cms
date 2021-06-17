@@ -72,9 +72,11 @@ export const petitionsClerkSubmitsPaperCaseToIrs = test => {
     //check that documents were served
     const documents = test.getState('caseDetail.docketEntries');
     for (const document of documents) {
-      expect(document.servedAt).toBeDefined();
-      expect(document.servedParties.length).toEqual(1);
-      expect(document.servedParties[0].role).toEqual(ROLES.irsSuperuser);
+      if (!document.isMinuteEntry) {
+        expect(document.servedAt).toBeDefined();
+        expect(document.servedParties.length).toEqual(1);
+        expect(document.servedParties[0].role).toEqual(ROLES.irsSuperuser);
+      }
     }
   });
 };

@@ -43,7 +43,7 @@ describe('replyToMessageAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().replyToMessageInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       attachments: [
         {
@@ -59,7 +59,7 @@ describe('replyToMessageAction', () => {
     expect(result.output).toHaveProperty('alertSuccess');
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
-      viewerDocumentToDisplay: {
+      messageViewerDocumentToDisplay: {
         documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
       },
     });

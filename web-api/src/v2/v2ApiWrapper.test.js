@@ -1,11 +1,13 @@
 const { v2ApiWrapper } = require('./v2ApiWrapper');
 
 describe('v2ApiWrapper', () => {
-  const throwWithStatus = (statusCode, message = 'Test error') => () => {
-    const err = new Error(message);
-    err.statusCode = statusCode;
-    throw err;
-  };
+  const throwWithStatus =
+    (statusCode, message = 'Test error') =>
+    () => {
+      const err = new Error(message);
+      err.statusCode = statusCode;
+      throw err;
+    };
 
   test('errors thrown during execution are 500s and serialized as the expected v1 error object', async () => {
     try {

@@ -25,8 +25,7 @@ export const addCaseToTrialSessionAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .addCaseToTrialSessionInteractor({
-      applicationContext,
+    .addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes,
       docketNumber,
       trialSessionId,

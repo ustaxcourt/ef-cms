@@ -1,5 +1,6 @@
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
@@ -54,7 +55,6 @@ describe('createCaseInteractor', () => {
     applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
       '00101-00',
     );
-    applicationContext.environment.stage = 'local';
 
     applicationContext
       .getPersistenceGateway()
@@ -272,5 +272,66 @@ describe('createCaseInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
+  });
+
+  it('should set serviceIndicators for each petitioner on the case', async () => {
+    user = new PrivatePractitioner({
+      barNumber: 'BN1234',
+      name: 'Carole Baskin',
+      role: ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const result = await createCaseInteractor(applicationContext, {
+      ownershipDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+      petitionMetadata: {
+        caseType: CASE_TYPES_MAP.other,
+        contactPrimary: {
+          address1: '99 South Oak Lane',
+          address2: 'Culpa numquam saepe ',
+          address3: 'Eaque voluptates com',
+          city: 'Dignissimos voluptat',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'petitioner1@example.com',
+          name: 'Diana Prince',
+          phone: '+1 (215) 128-6587',
+          postalCode: '69580',
+          serviceIndicator: undefined,
+          state: 'AR',
+        },
+        contactSecondary: {
+          address1: '99 South Oak Lane',
+          address2: 'Culpa numquam saepe ',
+          address3: 'Eaque voluptates com',
+          city: 'Dignissimos voluptat',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Bob Prince',
+          phone: '+1 (215) 128-6587',
+          postalCode: '69580',
+          serviceIndicator: undefined,
+          state: 'AR',
+        },
+        filedBy: 'Resp.',
+        filingType: 'Myself and my spouse',
+        hasIrsNotice: true,
+        isSpouseDeceased: 'No',
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 1,
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Small',
+        signature: true,
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 1,
+      },
+      stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+    });
+
+    result.petitioners.forEach(p => {
+      expect(p.serviceIndicator).not.toBeUndefined();
+    });
   });
 });

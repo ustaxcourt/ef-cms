@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json');
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
@@ -25,6 +26,12 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
   remote: 'Remote',
 };
 
+const PARTY_VIEW_TABS = {
+  participantsAndCounsel: 'Intervenor/Participant(s)',
+  petitionersAndCounsel: 'Petitioner(s) & Counsel',
+  respondentCounsel: 'Respondent Counsel',
+};
+
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
 const SERVICE_INDICATOR_TYPES = {
@@ -46,9 +53,8 @@ const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
   },
   { documentType: 'Notice of Change of Telephone Number', eventCode: 'NCP' },
 ];
-const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(
-  n => n.eventCode,
-);
+const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
 
 const CHIEF_JUDGE = 'Chief Judge';
 
@@ -176,9 +182,8 @@ const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
 const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
   DOCUMENT_INTERNAL_CATEGORIES_MAP,
 );
-const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET = COURT_ISSUED_EVENT_CODES.filter(
-  d => d.requiresCoversheet,
-).map(pickEventCode);
+const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
+  COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -460,9 +465,8 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     eventCode: 'NOEI',
   },
 ];
-const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(
-  d => d.documentType,
-);
+const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
+  PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
 const PAYMENT_STATUS = {
   PAID: 'Paid',
@@ -731,11 +735,31 @@ const OTHER_TYPES = {
 };
 
 const CONTACT_TYPES = {
+  intervenor: 'intervenor',
+  otherFiler: 'otherFilers', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  otherPetitioner: 'otherPetitioner',
+  otherPetitioners: 'otherPetitioners', // TODO 8135: This can be deleted once 0033 migration script has run on all ENVs
+  participant: 'participant',
+  petitioner: 'petitioner',
   primary: 'primary',
   secondary: 'secondary',
-  otherFiler: 'otherFilers',
-  otherPetitioner: 'otherPetitioners',
 };
+
+const CONTACT_TYPE_TITLES = {
+  intervenor: 'Intervenor',
+  petitioner: 'Petitioner',
+  otherFilers: 'Petitioner',
+  otherPetitioner: 'Petitioner',
+  participant: 'Participant',
+  primary: 'Petitioner',
+  secondary: 'Petitioner',
+};
+
+const PETITIONER_CONTACT_TYPES = [
+  CONTACT_TYPES.primary,
+  CONTACT_TYPES.secondary,
+  CONTACT_TYPES.otherPetitioner,
+];
 
 const COMMON_CITIES = [
   { city: 'Birmingham', state: 'Alabama' },
@@ -873,165 +897,6 @@ const IRS_SYSTEM_SECTION = 'irsSystem';
 const PETITIONS_SECTION = 'petitions';
 const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 const TRIAL_CLERKS_SECTION = 'trialClerks';
-
-const JUDGES_CHAMBERS = {
-  ASHFORDS_CHAMBERS_SECTION: {
-    label: 'Ashford’s Chambers',
-    section: 'ashfordsChambers',
-  },
-  BUCHS_CHAMBERS_SECTION: {
-    label: 'Buch’s Chambers',
-    section: 'buchsChambers',
-  },
-  CARLUZZOS_CHAMBERS_SECTION: {
-    label: 'Carluzzo’s Chambers',
-    section: 'carluzzosChambers',
-  },
-  COHENS_CHAMBERS_SECTION: {
-    label: 'Cohen’s Chambers',
-    section: 'cohensChambers',
-  },
-  COLVINS_CHAMBERS_SECTION: {
-    label: 'Colvin’s Chambers',
-    section: 'colvinsChambers',
-  },
-  COPELANDS_CHAMBERS_SECTION: {
-    label: 'Copeland’s Chambers',
-    section: 'copelandsChambers',
-  },
-  FOLEYS_CHAMBERS_SECTION: {
-    label: 'Foley’s Chambers',
-    section: 'foleysChambers',
-  },
-  GALES_CHAMBERS_SECTION: {
-    label: 'Gale’s Chambers',
-    section: 'galesChambers',
-  },
-  GOEKES_CHAMBERS_SECTION: {
-    label: 'Goeke’s Chambers',
-    section: 'goekesChambers',
-  },
-  GREAVES_CHAMBESR_SECTION: {
-    label: 'Greaves’ Chambers',
-    section: 'greavesChambers',
-  },
-  GUSTAFSONS_CHAMBERS_SECTION: {
-    label: 'Gustafson’s Chambers',
-    section: 'gustafsonsChambers',
-  },
-  GUYS_CHAMBERS_SECTION: {
-    label: 'Guy’s Chambers',
-    section: 'guysChambers',
-  },
-  HALPERNS_CHAMBERS_SECTION: {
-    label: 'Halpern’s Chambers',
-    section: 'halpernsChambers',
-  },
-  HOLMES_CHAMBERS_SECTION: {
-    label: 'Holmes’ Chambers',
-    section: 'holmesChambers',
-  },
-  JONES_CHAMBERS_SECTION: {
-    label: 'Jones’ Chambers',
-    section: 'jonesChambers',
-  },
-  KERRIGANS_CHAMBERS_SECTION: {
-    label: 'Kerrigan’s Chambers',
-    section: 'kerrigansChambers',
-  },
-  LAUBERS_CHAMBERS_SECTION: {
-    label: 'Lauber’s Chambers',
-    section: 'laubersChambers',
-  },
-  LEYDENS_CHAMBERS_SECTION: {
-    label: 'Leyden’s Chambers',
-    section: 'leydensChambers',
-  },
-  MARSHALLS_CHAMBERS_SECTION: {
-    label: 'Marshall’s Chambers',
-    section: 'marshallsChambers',
-  },
-  MARVELS_CHAMBERS_SECTION: {
-    label: 'Marvel’s Chambers',
-    section: 'marvelsChambers',
-  },
-  MORRISONS_CHAMBERS_SECTION: {
-    label: 'Morrison’s Chambers',
-    section: 'morrisonsChambers',
-  },
-  NEGAS_CHAMBERS_SECTION: {
-    label: 'Nega’s Chambers',
-    section: 'negasChambers',
-  },
-  PANUTHOS_CHAMBERS_SECTION: {
-    label: 'Panuthos’ Chambers',
-    section: 'panuthosChambers',
-  },
-  PARIS_CHAMBERS_SECTION: {
-    label: 'Paris’ Chambers',
-    section: 'parisChambers',
-  },
-  PUGHS_CHAMBERS_SECTION: {
-    label: 'Pugh’s Chambers',
-    section: 'pughsChambers',
-  },
-  RUWES_CHAMBERS_SECTION: {
-    label: 'Ruwe’s Chambers',
-    section: 'ruwesChambers',
-  },
-  THORNTONS_CHAMBERS_SECTION: {
-    label: 'Thornton’s Chambers',
-    section: 'thorntonsChambers',
-  },
-  TOROS_CHAMBERS_SECTION: {
-    label: 'Toro’s Chambers',
-    section: 'torosChambers',
-  },
-  URDAS_CHAMBERS_SECTION: {
-    label: 'Urda’s Chambers',
-    section: 'urdasChambers',
-  },
-  VASQUEZS_CHAMBERS_SECTION: {
-    label: 'Vasquez’s Chambers',
-    section: 'vasquezsChambers',
-  },
-  WEILERS_CHAMBERS_SECTION: {
-    label: 'Weiler’s Chambers',
-    section: 'weilersChambers',
-  },
-  WELLS_CHAMBERS_SECTION: {
-    label: 'Wells’ Chambers',
-    section: 'wellsChambers',
-  },
-};
-
-const JUDGES_CHAMBERS_WITH_LEGACY = {
-  ...JUDGES_CHAMBERS,
-  LEGACY_JUDGES_CHAMBERS_SECTION: {
-    label: 'Legacy Judges Chambers',
-    section: 'legacyJudgesChambers',
-  },
-};
-
-const chambersSections = [];
-
-const chambersSectionsLabels = [];
-
-Object.keys(JUDGES_CHAMBERS).forEach(k => {
-  const chambers = JUDGES_CHAMBERS[k];
-
-  chambersSections.push(chambers.section);
-  chambersSectionsLabels[chambers.section] = chambers.label;
-});
-
-const chambersSectionsWithLegacy = [
-  ...chambersSections,
-  'legacyJudgesChambers',
-];
-
-const CHAMBERS_SECTIONS = sortBy(chambersSections);
-const CHAMBERS_SECTIONS_WITH_LEGACY = sortBy(chambersSectionsWithLegacy);
-const CHAMBERS_SECTIONS_LABELS = chambersSectionsLabels;
 
 const SECTIONS = sortBy([
   ADC_SECTION,
@@ -1179,13 +1044,12 @@ module.exports = deepFreeze({
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
-  CHAMBERS_SECTIONS,
-  CHAMBERS_SECTIONS_WITH_LEGACY,
-  CHAMBERS_SECTIONS_LABELS,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
+  PETITIONER_CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_DOCUMENT_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -1220,8 +1084,6 @@ module.exports = deepFreeze({
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
-  JUDGES_CHAMBERS,
-  JUDGES_CHAMBERS_WITH_LEGACY,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
@@ -1242,6 +1104,7 @@ module.exports = deepFreeze({
   OTHER_TYPES,
   ORDER_JUDGE_FIELD,
   PARTY_TYPES,
+  PARTY_VIEW_TABS,
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,

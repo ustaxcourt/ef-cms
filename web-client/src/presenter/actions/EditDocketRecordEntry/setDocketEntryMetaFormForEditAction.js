@@ -43,33 +43,31 @@ export const setDocketEntryMetaFormForEditAction = ({
 
   store.set(state.docketRecordIndex, docketRecordIndex);
 
-  if (documentDetail) {
-    documentDetail.servedPartiesCode =
-      documentDetail.servedPartiesCode ||
-      applicationContext
-        .getUtilities()
-        .getServedPartiesCode(documentDetail.servedParties);
+  documentDetail.filersMap = {};
+  documentDetail.filers.forEach(
+    filer => (documentDetail.filersMap[filer] = true),
+  );
 
-    store.set(state.form, {
-      ...documentDetail,
-      lodged: !!documentDetail.lodged,
-      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
-      ...deconstructDateWrapper(
-        documentDetail.certificateOfServiceDate,
-        'certificateOfService',
-      ),
-      ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
-      ...deconstructDateWrapper(documentDetail.date),
-    });
+  documentDetail.servedPartiesCode =
+    documentDetail.servedPartiesCode ||
+    applicationContext
+      .getUtilities()
+      .getServedPartiesCode(documentDetail.servedParties);
 
-    return {
-      key: 'initEventCode',
-      value: documentDetail.eventCode,
-    };
-  } else {
-    store.set(state.form, {
-      ...documentDetail,
-      ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
-    });
-  }
+  store.set(state.form, {
+    ...documentDetail,
+    lodged: !!documentDetail.lodged,
+    ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
+    ...deconstructDateWrapper(
+      documentDetail.certificateOfServiceDate,
+      'certificateOfService',
+    ),
+    ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
+    ...deconstructDateWrapper(documentDetail.date),
+  });
+
+  return {
+    key: 'initEventCode',
+    value: documentDetail.eventCode,
+  };
 };

@@ -46,7 +46,6 @@ export const EditPractitionerUser = connect(
           <h1 className="margin-bottom-1">Edit Practitioner Details</h1>
           <SuccessNotification />
           <ErrorNotification />
-
           <PractitionerForm
             validateSequence={validateUpdatePractitionerSequence}
           />

@@ -68,9 +68,7 @@ describe('creation form', () => {
       .scrollIntoView()
       .should('not.have.class', 'validated');
 
-    // select first file
-    cy.upload_file('w3-dummy.pdf', 'input#stin-file');
-
+    cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
     cy.get('label#stin-file-label').should('have.class', 'validated');
   });
 
@@ -88,8 +86,7 @@ describe('creation form', () => {
       .scrollIntoView()
       .should('not.have.class', 'validated');
 
-    // select first file
-    cy.upload_file('w3-dummy.pdf', 'input#petition-file');
+    cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
 
     cy.get('label#petition-file-label').should('have.class', 'validated');
   });
@@ -185,13 +182,10 @@ describe('creation form', () => {
   it('submits forms and redirects to the file petition success page', () => {
     cy.get('button#submit-case').scrollIntoView().click();
 
-    cy.server();
-    cy.route('POST', '**/cases').as('postCase');
-    cy.wait('@postCase');
-    cy.get('@postCase').should(xhr => {
-      // eslint-disable-next-line jest/valid-expect
-      expect(xhr.responseBody).to.have.property('docketNumber');
-      createdDocketNumber = xhr.responseBody.docketNumber;
+    cy.intercept('POST', '**/cases').as('postCase');
+    cy.wait('@postCase').then(({ response }) => {
+      expect(response.body).to.have.property('docketNumber');
+      createdDocketNumber = response.body.docketNumber;
     });
 
     // wait for elasticsearch to refresh

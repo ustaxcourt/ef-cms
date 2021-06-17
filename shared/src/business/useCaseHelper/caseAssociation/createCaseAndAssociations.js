@@ -15,9 +15,11 @@ const createCaseDocketEntries = ({
   applicationContext,
   docketEntries,
   docketNumber,
+  petitioners,
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
     applicationContext,
+    petitioners,
   });
 
   return validDocketEntries.map(doc =>
@@ -120,6 +122,7 @@ exports.createCaseAndAssociations = async ({
       applicationContext,
       docketEntries,
       docketNumber,
+      petitioners: caseToCreate.petitioners,
     }),
     ...connectIrsPractitioners({
       applicationContext,

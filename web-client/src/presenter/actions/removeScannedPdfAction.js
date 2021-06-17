@@ -8,7 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  * @returns {object} the new documentUploadMode
- *
  */
 export const removeScannedPdfAction = async ({
   applicationContext,
@@ -29,11 +28,12 @@ export const removeScannedPdfAction = async ({
   const isFileAttached = get(state.form.isFileAttached);
 
   if (isFileAttached) {
-    applicationContext.getUseCases().removePdfFromDocketEntryInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-    });
+    applicationContext
+      .getUseCases()
+      .removePdfFromDocketEntryInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
 
     store.set(state.form.isFileAttached, false);
   }

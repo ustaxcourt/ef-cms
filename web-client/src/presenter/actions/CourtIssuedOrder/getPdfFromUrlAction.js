@@ -8,5 +8,5 @@
 export const getPdfFromUrlAction = async ({ applicationContext, props }) => {
   return await applicationContext
     .getUseCases()
-    .getPdfFromUrlInteractor({ applicationContext, pdfUrl: props.pdfUrl });
+    .getPdfFromUrlInteractor(applicationContext, { pdfUrl: props.pdfUrl });
 };

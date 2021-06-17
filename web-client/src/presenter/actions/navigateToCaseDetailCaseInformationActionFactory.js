@@ -9,23 +9,25 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {Promise} async action
  */
-export const navigateToCaseDetailCaseInformationActionFactory = caseInformationTab => async ({
-  get,
-  props,
-  router,
-}) => {
-  const docketNumber =
-    props.docketNumber ||
-    (props.caseDetail
-      ? props.caseDetail.docketNumber
-      : get(state.caseDetail.docketNumber));
+export const navigateToCaseDetailCaseInformationActionFactory =
+  (caseInformationTab, partiesTab) =>
+  async ({ get, props, router }) => {
+    const docketNumber =
+      props.docketNumber ||
+      (props.caseDetail
+        ? props.caseDetail.docketNumber
+        : get(state.caseDetail.docketNumber));
 
-  if (docketNumber) {
-    let url = `/case-detail/${docketNumber}/case-information`;
+    if (docketNumber) {
+      let url = `/case-detail/${docketNumber}/case-information`;
 
-    if (caseInformationTab) {
-      url += `?caseInformationTab=${caseInformationTab}`;
+      if (caseInformationTab) {
+        url += `?caseInformationTab=${caseInformationTab}`;
+
+        if (partiesTab) {
+          url += `&partiesTab=${partiesTab}`;
+        }
+      }
+      await router.route(url);
     }
-    await router.route(url);
-  }
-};
+  };

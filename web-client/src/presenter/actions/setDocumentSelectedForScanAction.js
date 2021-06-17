@@ -6,7 +6,8 @@ import { state } from 'cerebral';
  * @param {string} documentType the documentType value to set on state
  * @returns {Promise} async action
  */
-export const setDocumentSelectedForScanAction = documentType =>
+export const setDocumentSelectedForScanAction =
+  documentType =>
   /**
    * sets the value of state.currentViewMetadata.documentSelectedForScan entry to the value passed in
    *

@@ -7,18 +7,18 @@ export const PartiesRepresenting = connect(
   {
     form: state.form,
     formattedCaseDetail: state.formattedCaseDetail,
-    requestAccessHelper: state.requestAccessHelper,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence:
       sequences.validateCaseAssociationRequestSequence,
+    validationErrors: state.validationErrors,
   },
   function PartiesRepresenting({
     form,
     formattedCaseDetail,
-    requestAccessHelper,
     updateCaseAssociationFormValueSequence,
     validateCaseAssociationRequestSequence,
+    validationErrors,
   }) {
     return (
       <React.Fragment>
@@ -26,43 +26,19 @@ export const PartiesRepresenting = connect(
           Tell Us About the Parties You’re Representing
         </h2>
         <div className="blue-container">
-          <FormGroup errorText={requestAccessHelper.partyValidationError}>
+          <FormGroup errorText={validationErrors.filers}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
                 Who are you representing?
               </legend>
               <span className="usa-hint">Check all that apply</span>
-              <div className="usa-checkbox">
-                <input
-                  aria-describedby="who-legend"
-                  checked={form.representingPrimary || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name="representingPrimary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateCaseAssociationFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateCaseAssociationRequestSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-primary"
-                >
-                  {formattedCaseDetail.contactPrimary.name}, Petitioner
-                </label>
-              </div>
-              {requestAccessHelper.showSecondaryParty && (
-                <div className="usa-checkbox">
+              {formattedCaseDetail.petitioners.map(petitioner => (
+                <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
-                    aria-describedby="who-legend"
-                    checked={form.representingSecondary || false}
+                    checked={form.filersMap[petitioner.contactId] || false}
                     className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="representingSecondary"
+                    id={`filing-${petitioner.contactId}`}
+                    name={`filersMap.${petitioner.contactId}`}
                     type="checkbox"
                     onChange={e => {
                       updateCaseAssociationFormValueSequence({
@@ -74,12 +50,12 @@ export const PartiesRepresenting = connect(
                   />
                   <label
                     className="usa-checkbox__label inline-block"
-                    htmlFor="party-secondary"
+                    htmlFor={`filing-${petitioner.contactId}`}
                   >
-                    {formattedCaseDetail.contactSecondary.name}, Petitioner
+                    {petitioner.displayName}
                   </label>
                 </div>
-              )}
+              ))}
             </fieldset>
           </FormGroup>
         </div>

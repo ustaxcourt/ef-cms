@@ -16,12 +16,9 @@ export const setTrialSessionJudgeAction = async ({
   const { caseDetail } = props;
 
   if (caseDetail && caseDetail.trialSessionId) {
-    const {
-      judge,
-    } = await applicationContext
+    const { judge } = await applicationContext
       .getUseCases()
-      .getTrialSessionDetailsInteractor({
-        applicationContext,
+      .getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: caseDetail.trialSessionId,
       });
 
