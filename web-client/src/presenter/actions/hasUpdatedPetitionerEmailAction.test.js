@@ -51,4 +51,20 @@ describe('hasUpdatedPetitionerEmailAction', () => {
 
     expect(pathNoStub).toHaveBeenCalled();
   });
+
+  it('returns the no path when caseDetail.contactPrimary.email is the same as form.contactPrimary.email but with whitespace', async () => {
+    runAction(hasUpdatedPetitionerEmailAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
+        },
+        form: { contactPrimary: { email: ` ${INITIAL_EMAIL} ` } },
+      },
+    });
+
+    expect(pathNoStub).toHaveBeenCalled();
+  });
 });

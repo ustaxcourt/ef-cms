@@ -20,6 +20,8 @@ export const hasUpdatedPetitionerEmailAction = async ({
     .getContactPrimary(caseDetail);
   const { contactPrimary: formContactPrimary } = get(state.form);
 
+  formContactPrimary.email = formContactPrimary.email.trim();
+
   if (contactPrimary.email !== formContactPrimary.email) {
     return path.yes();
   }
