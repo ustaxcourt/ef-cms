@@ -709,13 +709,13 @@ workflows:
       - switch-colors:
           requires:
             - smoketests
-    # triggers:
-    #   - schedule:
-    #       cron: '0 13-22 * * 1-5'
-    #       filters:
-    #         branches:
-    #           only:
-    #             - develop
+    triggers:
+      - schedule:
+          cron: '0 13-22 * * 1-5'
+          filters:
+            branches:
+              only:
+                - develop
   build-and-deploy:
     jobs:
       - build-client-integration:
