@@ -21,6 +21,9 @@ const {
   getUserCaseMappingsByDocketNumber,
 } = require('../../../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
 const {
+  getWebSocketConnectionsByUserId,
+} = require('../../../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
+const {
   persistUser,
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
 const {
@@ -65,6 +68,14 @@ const applicationContext = {
     dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
     stage: process.env.STAGE,
   }),
+  getNotificationClient: ({ endpoint }) => {
+    return new AWS.ApiGatewayManagementApi({
+      endpoint,
+      httpOptions: {
+        timeout: 900000, // 15 minutes
+      },
+    });
+  },
   getNotificationGateway: () => ({
     sendNotificationToUser,
   }),
@@ -74,6 +85,7 @@ const applicationContext = {
     getDocketNumbersByUser,
     getUserById,
     getUserCaseMappingsByDocketNumber,
+    getWebSocketConnectionsByUserId,
     persistUser,
     updateCase,
     updateIrsPractitionerOnCase,
