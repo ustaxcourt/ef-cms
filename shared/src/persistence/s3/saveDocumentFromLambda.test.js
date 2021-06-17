@@ -8,23 +8,30 @@ describe('saveDocumentFromLambda', () => {
     promise: () => Promise.resolve(true),
   });
 
+  const expectedDocketEntryId = 'abc';
+  const expectedArray = new Uint8Array(['a']);
+  const defaultBucketName = 'aBucket';
+
+  beforeEach(() => {
+    applicationContext.getDocumentsBucketName.mockReturnValue(
+      defaultBucketName,
+    );
+  });
+
   it('saves the document', async () => {
     applicationContext.getStorageClient = () => ({
       putObject: putObjectStub,
     });
-    applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
-    const expectedDocketEntryId = 'abc';
-    const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
-      document: new Uint8Array(['a']),
+      document: expectedArray,
       key: expectedDocketEntryId,
     });
 
     expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
-      Bucket: 'aBucket',
+      Bucket: defaultBucketName,
       ContentType: 'application/pdf',
       Key: expectedDocketEntryId,
     });
@@ -37,12 +44,10 @@ describe('saveDocumentFromLambda', () => {
     applicationContext.getTempDocumentsBucketName.mockReturnValue(
       'aTempBucket',
     );
-    const expectedDocketEntryId = 'abc';
-    const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
-      document: new Uint8Array(['a']),
+      document: expectedArray,
       key: expectedDocketEntryId,
       useTempBucket: true,
     });
@@ -59,22 +64,62 @@ describe('saveDocumentFromLambda', () => {
     applicationContext.getStorageClient = () => ({
       putObject: putObjectStub,
     });
-    applicationContext.getDocumentsBucketName.mockReturnValue('aBucket');
-    const expectedDocketEntryId = 'abc';
-    const expectedArray = new Uint8Array(['a']);
 
     await saveDocumentFromLambda({
       applicationContext,
       contentType: 'text/plain',
-      document: new Uint8Array(['a']),
+      document: expectedArray,
       key: expectedDocketEntryId,
     });
 
     expect(putObjectStub).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
-      Bucket: 'aBucket',
+      Bucket: defaultBucketName,
       ContentType: 'text/plain',
       Key: expectedDocketEntryId,
     });
+  });
+
+  it('should retry putObject call if it fails the first time', async () => {
+    const putObjectStub = jest
+      .fn()
+      .mockReturnValueOnce(new Error('fail'))
+      .mockReturnValueOnce({
+        promise: () => Promise.resolve(true),
+      });
+
+    applicationContext.getStorageClient = () => ({
+      putObject: putObjectStub,
+    });
+
+    await saveDocumentFromLambda({
+      applicationContext,
+      contentType: 'text/plain',
+      document: expectedArray,
+      key: expectedDocketEntryId,
+    });
+
+    expect(putObjectStub).toHaveBeenCalledTimes(2);
+  });
+
+  it('should log and rethrow error if putObject fails every time', async () => {
+    const putObjectStub = jest.fn().mockImplementation(() => {
+      throw new Error('fail');
+    });
+
+    applicationContext.getStorageClient = () => ({
+      putObject: putObjectStub,
+    });
+
+    await expect(
+      saveDocumentFromLambda({
+        applicationContext,
+        contentType: 'text/plain',
+        document: expectedArray,
+        key: expectedDocketEntryId,
+      }),
+    ).rejects.toThrow('fail');
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 });
