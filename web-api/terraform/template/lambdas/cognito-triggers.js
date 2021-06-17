@@ -1,6 +1,4 @@
 const AWS = require('aws-sdk');
-const connectionClass = require('http-aws-es');
-const elasticsearch = require('elasticsearch');
 const {
   createLogger,
 } = require('../../../../shared/src/utilities/createLogger');
@@ -35,7 +33,7 @@ const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
 
-const { DynamoDB, EnvironmentCredentials } = AWS;
+const { DynamoDB } = AWS;
 
 const logger = createLogger({
   defaultMeta: {
@@ -44,14 +42,6 @@ const logger = createLogger({
     },
   },
 });
-
-let searchClientCache = null;
-
-const environment = {
-  elasticsearchEndpoint:
-    process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
-  region: process.env.AWS_REGION || 'us-east-1',
-};
 
 const applicationContext = {
   getCurrentUser: () => ({}),
@@ -74,24 +64,6 @@ const applicationContext = {
     updateCase,
     updateUser,
   }),
-  getSearchClient: () => {
-    if (!searchClientCache) {
-      searchClientCache = new elasticsearch.Client({
-        amazonES: {
-          credentials: new EnvironmentCredentials('AWS'),
-          region: environment.region,
-        },
-        apiVersion: '7.4',
-        awsConfig: new AWS.Config({ region: 'us-east-1' }),
-        connectionClass,
-        host: environment.elasticsearchEndpoint,
-        log: 'warning',
-        port: 443,
-        protocol: 'https',
-      });
-    }
-    return searchClientCache;
-  },
   getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
   getUseCases: () => ({
     createPetitionerAccountInteractor,
