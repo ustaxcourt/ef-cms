@@ -9,9 +9,6 @@ const {
   getCaseByDocketNumber,
 } = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
-  getCasesByUserId,
-} = require('../../../../shared/src/persistence/elasticsearch/getCasesByUserId');
-const {
   getDocketNumbersByUser,
 } = require('../../../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
@@ -81,7 +78,6 @@ const applicationContext = {
   }),
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
-    getCasesByUserId,
     getDocketNumbersByUser,
     getUserById,
     getUserCaseMappingsByDocketNumber,
