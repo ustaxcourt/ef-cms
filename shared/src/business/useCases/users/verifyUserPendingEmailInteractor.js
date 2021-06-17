@@ -118,11 +118,6 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
     ),
   );
 
-  applicationContext.logger.info(
-    'cases to update',
-    casesToUpdate.map(c => c.docketNumber),
-  );
-
   const validCasesToUpdate = casesToUpdate
     .map(caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { applicationContext });

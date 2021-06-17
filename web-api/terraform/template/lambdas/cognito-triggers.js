@@ -79,12 +79,8 @@ const applicationContext = {
 exports.applicationContext = applicationContext;
 
 exports.handler = async event => {
-  applicationContext.logger.info('we got an event', event);
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
-    applicationContext.logger.info(
-      'we are here at PostConfirmation_ConfirmSignUp',
-    );
 
     const user = await applicationContext
       .getUseCases()
@@ -101,15 +97,10 @@ exports.handler = async event => {
   } else if (event.triggerSource === 'PostAuthentication_Authentication') {
     const { email, sub } = event.request.userAttributes;
     const userId = event.request.userAttributes['custom:userId'] || sub;
-    applicationContext.logger.info('email', email);
-    applicationContext.logger.info('sub', sub);
-    applicationContext.logger.info('userId', userId);
 
     const userFromPersistence = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
-
-    applicationContext.logger.info('userFromPersistence', userFromPersistence);
 
     if (
       userFromPersistence &&
