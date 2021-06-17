@@ -38,8 +38,17 @@ const updateCasesForPetitioner = async ({
         );
         return;
       }
+
       petitionerObject.email = user.email;
-      petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
+      if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitionerObject.contactId,
+        )
+      ) {
+        petitionerObject.serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
 
       const newCase = new Case(caseEntity, { applicationContext }).validate();
       return newCase;
