@@ -114,8 +114,9 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       applicationContext.getPersistenceGateway().getCasesAssociatedWithUser,
     ).toHaveBeenCalled();
 
-    const caseData = applicationContext.getDocumentGenerators()
-      .practitionerCaseList.mock.calls[0][0].data;
+    const caseData =
+      applicationContext.getDocumentGenerators().practitionerCaseList.mock
+        .calls[0][0].data;
 
     // sends cases sorted by descending docket number
     expect(caseData).toMatchObject({

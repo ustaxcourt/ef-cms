@@ -168,40 +168,38 @@ Case.prototype.init = function init(
   this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
 };
 
-Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
-  applicationContext,
-  rawCase,
-}) {
-  this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
-  this.caseNote = rawCase.caseNote;
-  this.damages = rawCase.damages;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
-  this.judgeUserId = rawCase.judgeUserId;
-  this.litigationCosts = rawCase.litigationCosts;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
+Case.prototype.assignFieldsForInternalUsers =
+  function assignFieldsForInternalUsers({ applicationContext, rawCase }) {
+    this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+    this.automaticBlocked = rawCase.automaticBlocked;
+    this.automaticBlockedDate = rawCase.automaticBlockedDate;
+    this.automaticBlockedReason = rawCase.automaticBlockedReason;
+    this.blocked = rawCase.blocked;
+    this.blockedDate = rawCase.blockedDate;
+    this.blockedReason = rawCase.blockedReason;
+    this.caseNote = rawCase.caseNote;
+    this.damages = rawCase.damages;
+    this.highPriority = rawCase.highPriority;
+    this.highPriorityReason = rawCase.highPriorityReason;
+    this.judgeUserId = rawCase.judgeUserId;
+    this.litigationCosts = rawCase.litigationCosts;
+    this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
 
-  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
-  this.orderDesignatingPlaceOfTrial =
-    rawCase.orderDesignatingPlaceOfTrial || false;
-  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
-  this.orderForAmendedPetitionAndFilingFee =
-    rawCase.orderForAmendedPetitionAndFilingFee || false;
-  this.orderForFilingFee = rawCase.orderForFilingFee || false;
-  this.orderForOds = rawCase.orderForOds || false;
-  this.orderForRatification = rawCase.orderForRatification || false;
-  this.orderToShowCause = rawCase.orderToShowCause || false;
+    this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+    this.orderDesignatingPlaceOfTrial =
+      rawCase.orderDesignatingPlaceOfTrial || false;
+    this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
+    this.orderForAmendedPetitionAndFilingFee =
+      rawCase.orderForAmendedPetitionAndFilingFee || false;
+    this.orderForFilingFee = rawCase.orderForFilingFee || false;
+    this.orderForOds = rawCase.orderForOds || false;
+    this.orderForRatification = rawCase.orderForRatification || false;
+    this.orderToShowCause = rawCase.orderToShowCause || false;
 
-  this.assignArchivedDocketEntries({ applicationContext, rawCase });
-  this.assignStatistics({ applicationContext, rawCase });
-  this.assignCorrespondences({ applicationContext, rawCase });
-};
+    this.assignArchivedDocketEntries({ applicationContext, rawCase });
+    this.assignStatistics({ applicationContext, rawCase });
+    this.assignCorrespondences({ applicationContext, rawCase });
+  };
 
 Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   rawCase,
@@ -303,22 +301,20 @@ Case.prototype.assignHearings = function assignHearings({
   }
 };
 
-Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntries({
-  applicationContext,
-  rawCase,
-}) {
-  if (Array.isArray(rawCase.archivedDocketEntries)) {
-    this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
-      docketEntry =>
-        new DocketEntry(docketEntry, {
-          applicationContext,
-          petitioners: this.petitioners,
-        }),
-    );
-  } else {
-    this.archivedDocketEntries = [];
-  }
-};
+Case.prototype.assignArchivedDocketEntries =
+  function assignArchivedDocketEntries({ applicationContext, rawCase }) {
+    if (Array.isArray(rawCase.archivedDocketEntries)) {
+      this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
+        docketEntry =>
+          new DocketEntry(docketEntry, {
+            applicationContext,
+            petitioners: this.petitioners,
+          }),
+      );
+    } else {
+      this.archivedDocketEntries = [];
+    }
+  };
 
 Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
   return this.privatePractitioners.length > 0;
