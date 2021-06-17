@@ -4676,6 +4676,66 @@
         }
       }
     },
+    "/work-items/{workItemId}/read": {
+      "parameters": [
+        {
+          "name": "workItemId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": [
+          "workitems"
+        ],
+        "summary": "marks the work item as read",
+        "description": "marks the work item as read.\n",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/case-documents/{docketNumber}/{docketEntryId}/coversheet": {
       "parameters": [
         {

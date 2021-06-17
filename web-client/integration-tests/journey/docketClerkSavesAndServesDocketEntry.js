@@ -6,9 +6,8 @@ export const docketClerkSavesAndServesDocketEntry = test => {
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     test.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'ADMR',

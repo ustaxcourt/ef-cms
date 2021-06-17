@@ -49,9 +49,8 @@ export const petitionsClerkAddsDocketEntryFromOrder = test => {
       'Your entry has been added to docket record.',
     );
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const newDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,

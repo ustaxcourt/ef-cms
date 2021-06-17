@@ -55,9 +55,7 @@ export const completeDocumentSigningAction = async ({
         onUploadProgress: () => {},
       });
 
-    ({
-      signedDocketEntryId: docketEntryId,
-    } = await applicationContext
+    ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
       .saveSignedDocumentInteractor(applicationContext, {
         docketNumber,

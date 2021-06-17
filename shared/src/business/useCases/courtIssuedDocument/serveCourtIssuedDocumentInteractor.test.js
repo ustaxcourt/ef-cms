@@ -44,8 +44,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   const dynamicallyGeneratedDocketEntries = [];
-  const docketEntriesWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
-    eventCode => {
+  const docketEntriesWithCaseClosingEventCodes =
+    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
       const docketEntryId = uuidv4();
       const docketRecordId = uuidv4();
 
@@ -76,8 +76,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
         workItem: mockWorkItem,
       };
-    },
-  );
+    });
 
   const mockCases = [
     {
@@ -286,8 +285,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
         docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -312,8 +312,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
@@ -335,8 +336,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
@@ -453,8 +455,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         docketNumber: '101-20',
       });
 
-      const updatedCase = applicationContext.getPersistenceGateway().updateCase
-        .mock.calls[0][0].caseToUpdate;
+      const updatedCase =
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate;
 
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(

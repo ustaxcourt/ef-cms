@@ -38,8 +38,9 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '2001-01-01',
     });
 
-    const searchArgs = applicationContext.getPersistenceGateway()
-      .advancedDocumentSearch.mock.calls[0][0];
+    const searchArgs =
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0];
     expect(searchArgs.documentEventCodes).toMatchObject(
       OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     );

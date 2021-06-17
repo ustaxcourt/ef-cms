@@ -8,9 +8,8 @@ describe('completeDocumentSigningAction', () => {
     generateSignedDocumentInteractor,
     getInboxMessagesForUserInteractor,
   } = applicationContext.getUseCases();
-  const {
-    uploadDocumentFromClient,
-  } = applicationContext.getPersistenceGateway();
+  const { uploadDocumentFromClient } =
+    applicationContext.getPersistenceGateway();
 
   const docketNumber = '123';
 
