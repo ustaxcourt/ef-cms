@@ -38,7 +38,7 @@ const {
 const {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
-} = require('../../../../shared/src/persistence/dynamo/cases/updateIrsPractitionerOnCase');
+} = require('../../../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
