@@ -2,10 +2,8 @@ import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
+    applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
 
   const formatCaseDetail = caseToFormat => ({
