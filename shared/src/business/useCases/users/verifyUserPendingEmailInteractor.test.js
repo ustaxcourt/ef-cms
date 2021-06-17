@@ -5,12 +5,16 @@ const {
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} = require('../../../test/mockCase');
 const {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -619,6 +623,102 @@ describe('verifyUserPendingEmailInteractor', () => {
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
           .calls[0][0];
       expect(caseToUpdate.petitioners[1].email).toBe(UPDATED_EMAIL);
+      expect(caseToUpdate.docketNumber).toBe('102-21');
+    });
+
+    it('should update the petitioner service indicator when they are not represented', async () => {
+      userCases = [
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-21',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...MOCK_CASE.petitioners[0],
+              contactId: mockPetitionerUser.userId,
+              contactType: CONTACT_TYPES.secondary,
+              inCareOf: 'Barney',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+            },
+          ],
+          privatePractitioners: [
+            {
+              ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+              representing: [],
+            },
+          ],
+        },
+      ];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue(userCases);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      const { caseToUpdate } =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0];
+
+      expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      );
+      expect(caseToUpdate.docketNumber).toBe('102-21');
+    });
+
+    it('should update the petitioner service indicator when they are not represented', async () => {
+      userCases = [
+        {
+          ...MOCK_CASE,
+          docketNumber: '102-21',
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+          petitioners: [
+            ...MOCK_CASE.petitioners,
+            {
+              ...MOCK_CASE.petitioners[0],
+              contactId: mockPetitionerUser.userId,
+              contactType: CONTACT_TYPES.secondary,
+              inCareOf: 'Barney',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+            },
+          ],
+          privatePractitioners: [
+            {
+              ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+              representing: [mockPetitionerUser.userId],
+            },
+          ],
+        },
+      ];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser.mockReturnValue(userCases);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+
+      await updatePetitionerCases({
+        applicationContext,
+        user: mockPetitionerUser,
+      });
+
+      const { caseToUpdate } =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0];
+
+      expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
+        SERVICE_INDICATOR_TYPES.SI_NONE,
+      );
       expect(caseToUpdate.docketNumber).toBe('102-21');
     });
   });
