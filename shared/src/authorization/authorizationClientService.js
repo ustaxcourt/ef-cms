@@ -255,9 +255,8 @@ exports.isAuthorized = (user, action, owner) => {
 
   const roleActionIndex = AUTHORIZATION_MAP[userRole].indexOf(action);
 
-  const actionInRoleAuthorization = !!AUTHORIZATION_MAP[userRole][
-    roleActionIndex
-  ];
+  const actionInRoleAuthorization =
+    !!AUTHORIZATION_MAP[userRole][roleActionIndex];
 
   return actionInRoleAuthorization;
 };
