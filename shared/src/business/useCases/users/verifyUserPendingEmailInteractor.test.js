@@ -5,11 +5,13 @@ const {
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { validUser } = require('../../../test/mockUsers');
 
@@ -39,22 +41,45 @@ describe('verifyUserPendingEmailInteractor', () => {
       role: ROLES.privatePractitioner,
     };
 
+    userCases = [
+      {
+        ...MOCK_CASE,
+        docketNumber: '101-21',
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: mockUser.userId,
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        privatePractitioners: [mockUser],
+      },
+    ];
+
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
+
     applicationContext
       .getPersistenceGateway()
       .updateUser.mockImplementation(() => mockUser);
+
     applicationContext
       .getPersistenceGateway()
       .updateUserEmail.mockImplementation(() => mockUser);
+
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([MOCK_CASE]);
+      .getDocketNumbersByUser.mockImplementation(() => {
+        return userCases.map(c => c.docketNumber);
+      });
+
     applicationContext
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -173,7 +198,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     ];
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+      .getDocketNumbersByUser.mockReturnValue([userCases[0].docketNumber]);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
@@ -215,12 +240,16 @@ describe('verifyUserPendingEmailInteractor', () => {
         ],
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockImplementation(() => {
+        return userCases.map(c => c.docketNumber);
+      });
 
     await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
@@ -253,13 +282,12 @@ describe('verifyUserPendingEmailInteractor', () => {
       pendingEmail: 'other@example.com',
       pendingEmailVerificationToken: TOKEN,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
       .mockReturnValueOnce(userCases[1]);
+
     await verifyUserPendingEmailInteractor(applicationContext, {
       token: TOKEN,
     });
@@ -301,9 +329,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         privatePractitioners: [{ ...mockUser, email: 'test@example.com' }],
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
@@ -350,9 +376,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         privatePractitioners: [{ ...mockUser, email: 'test@example.com' }],
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
@@ -389,9 +413,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         privatePractitioners: [{ ...mockUser, email: 'test@example.com' }],
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(userCases);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
