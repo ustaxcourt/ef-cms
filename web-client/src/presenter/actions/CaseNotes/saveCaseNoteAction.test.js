@@ -28,7 +28,7 @@ describe('saveCaseNote', () => {
       applicationContext.getUseCases().saveCaseNoteInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().saveCaseNoteInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().saveCaseNoteInteractor.mock.calls[0][1],
     ).toMatchObject({
       caseNote: 'This is a procedural note',
       docketNumber,

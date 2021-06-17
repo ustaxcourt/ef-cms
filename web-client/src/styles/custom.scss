@@ -46,6 +46,10 @@ hr {
   max-width: 200px;
 }
 
+.max-width-400 {
+  max-width: 400px;
+}
+
 .max-width-50 {
   max-width: 50%;
 }
@@ -1497,8 +1501,18 @@ button.change-scanner-button {
   }
 }
 
+.represented-text {
+  color: $color-primary-alt;
+}
+
 .minw-30 {
   min-width: 15rem;
+}
+
+.white-edit-link {
+  &.usa-button--unstyled {
+    color: $color-white;
+  }
 }
 
 .advanced-search {

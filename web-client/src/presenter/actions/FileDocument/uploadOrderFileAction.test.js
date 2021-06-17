@@ -52,7 +52,7 @@ describe('uploadOrderFileAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadOrderDocumentInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ documentFile: fakeFile });
   });
 

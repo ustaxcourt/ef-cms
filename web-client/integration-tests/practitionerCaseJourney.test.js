@@ -121,7 +121,7 @@ describe('Practitioner requests access to case', () => {
 
   loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
-  practitionerViewsCaseDetailWithPublicOrder(test, false);
+  practitionerViewsCaseDetailWithPublicOrder(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
 

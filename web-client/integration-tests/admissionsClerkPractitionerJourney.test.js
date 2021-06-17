@@ -1,10 +1,11 @@
-import { admissionsClerVerifiesPractitionerServiceIndicator } from './journey/admissionsClerVerifiesPractitionerServiceIndicator';
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
+import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
@@ -18,11 +19,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 const test = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -82,7 +80,7 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkMigratesPractitionerWithoutEmail(test);
-  admissionsClerVerifiesPractitionerServiceIndicator(
+  admissionsClerkVerifiesPractitionerServiceIndicator(
     test,
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
@@ -97,8 +95,25 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkAddsPractitionerEmail(test);
-  admissionsClerVerifiesPractitionerServiceIndicator(
+  admissionsClerkVerifiesPractitionerServiceIndicator(
     test,
     SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   );
+
+  // show Practitioners only, and not case-users (bug ref: #8081)
+  it('searches for indexed Practitioners only and not CaseUser records', async () => {
+    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'practitionerSearchByName',
+      key: 'practitionerName',
+      value: 'Buch',
+    });
+
+    await test.runSequence('submitPractitionerNameSearchSequence');
+
+    expect(
+      test.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
+      ),
+    ).toEqual('Ronald Buch Jr.');
+  });
 });

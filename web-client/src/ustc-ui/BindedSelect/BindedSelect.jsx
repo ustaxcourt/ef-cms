@@ -14,14 +14,8 @@ export const BindedSelect = connect(
     value: state[props.bind],
   },
   function BindedSelect(componentProps) {
-    const {
-      bind,
-      children,
-      className,
-      onChange,
-      simpleSetter,
-      value,
-    } = componentProps;
+    const { bind, children, className, onChange, simpleSetter, value } =
+      componentProps;
     let activeOption, setSelect;
 
     if (bind) {

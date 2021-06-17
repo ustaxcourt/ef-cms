@@ -1,129 +1,5 @@
 version: 2.1
 jobs:
-  build-api:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Web API - Test
-          command: npm run test:api:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d web-api/coverage web-api/coverage/coverage-final.json
-      # - run:
-      #     name: Web API - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${API_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="web-api" \
-      #       -Dproject.settings="web-api/sonar-project.properties" \
-      #       -Dsonar.login="${API_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io"
-
-  build-shared:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Shared - Test
-          command: npm run test:shared:ci
-      - run:
-          name: Normalize Coverage for SonarQube
-          command: npx istanbul-combine -d shared/coverage shared/coverage/coverage-final.json
-      # - run:
-      #     name: Shared - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${SHARED_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="shared" \
-      #       -Dproject.settings="shared/sonar-project.properties" \
-      #       -Dsonar.login="${SHARED_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io"
-
-  build-client-unit:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
-          name: Web Client - Unit Test
-          command: npm run build:assets && CI=false npm run test:client:unit:ci
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/web-client/coverage-unit
-
   build-client-integration:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -131,7 +7,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -170,19 +46,19 @@ jobs:
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              SKIP_CACHE_INVALIDATION=true \
-             AWS_ACCESS_KEY_ID=noop \
-             AWS_SECRET_ACCESS_KEY=noop \
+             AWS_ACCESS_KEY_ID=S3RVER \
+             AWS_SECRET_ACCESS_KEY=S3RVER \
              npm run start:api:ci > /tmp/web-client/server-output.txt &
             ./wait-until.sh http://localhost:4000/api/swagger
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             CI=true NO_SCANNER=true \
              SKIP_VIRUS_SCAN=true \
-             AWS_ACCESS_KEY_ID=noop \
-             AWS_SECRET_ACCESS_KEY=noop \
+             AWS_ACCESS_KEY_ID=S3RVER \
+             AWS_SECRET_ACCESS_KEY=S3RVER \
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
-             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES}
+             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -191,48 +67,6 @@ jobs:
             - project/web-client
             - project/web-client/coverage-integration-*
 
-  build-client-coverage:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Combine Coverage
-          command: |
-            npx istanbul-combine -d combined-coverage -p both -r lcov \
-            ./web-client/coverage-integration-0/coverage-final.json \
-            ./web-client/coverage-integration-1/coverage-final.json \
-            ./web-client/coverage-integration-2/coverage-final.json \
-            ./web-client/coverage-integration-3/coverage-final.json \
-            ./web-client/coverage-integration-4/coverage-final.json \
-            ./web-client/coverage-integration-5/coverage-final.json \
-            ./web-client/coverage-integration-6/coverage-final.json \
-            ./web-client/coverage-integration-7/coverage-final.json \
-            ./web-client/coverage-unit/coverage-final.json
-      - run:
-          name: Check Coverage
-          command: |
-            npx istanbul check-coverage --include=combined-coverage/coverage-final.json \
-            --statements 95 --functions 95 --branches 95 --lines 95
-      # - run:
-      #     name: Web Client - SonarQube
-      #     command: |
-      #       export SONAR_SCANNER_OPTS="-Xmx2048m"
-      #       /home/app/sonar_home/bin/sonar-scanner \
-      #       -Dsonar.projectKey="${UI_SONAR_KEY}" \
-      #       -Dsonar.branch.name="${CIRCLE_BRANCH}" \
-      #       -Dsonar.organization="${SONAR_ORG}" \
-      #       -Dsonar.projectBaseDir="web-client" \
-      #       -Dproject.settings="web-client/sonar-project.properties" \
-      #       -Dsonar.login="${UI_SONAR_TOKEN}" \
-      #       -Dsonar.host.url="https://sonarcloud.io" \
-      #       -Dsonar.verbose=true
-
   e2e-pa11y:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -240,7 +74,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -283,7 +117,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all
-            npx run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
+            npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 10
@@ -302,7 +136,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -345,7 +179,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npm run build:all
-            npx run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
@@ -362,7 +196,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -409,7 +243,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -430,7 +264,7 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
       - image: amazon/dynamodb-local
-        command: ['-jar', 'DynamoDBLocal.jar', '-sharedDb']
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -477,7 +311,7 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
+            npx --no-install run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
@@ -495,17 +329,17 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
             echo "export CIRCLE_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export IRS_SUPERUSER_EMAIL=$(./get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export BOUNCED_EMAIL_RECIPIENT=$(./get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export IRS_SUPERUSER_EMAIL=$(./scripts/get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export BOUNCED_EMAIL_RECIPIENT=$(./scripts/get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -514,20 +348,21 @@ jobs:
             docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Dynamsoft Keys
-          command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+          command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./scripts/get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: Setup ES Instance Count
-          command: echo "export ES_INSTANCE_COUNT='$(./get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+          command: echo "export ES_INSTANCE_COUNT='$(./scripts/get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: Setup ES Instance Type
-          command: echo "export ES_INSTANCE_TYPE='$(./get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+          command: echo "export ES_INSTANCE_TYPE='$(./scripts/get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: Setup Disable Emails
-          command: echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+          command: echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: Setup ES Volume Size
-          command: echo "export ES_VOLUME_SIZE='$(./get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+          command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
@@ -551,6 +386,7 @@ jobs:
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
+          no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
             docker run \
@@ -681,14 +517,14 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./get-source-table.sh $ENV)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -779,12 +615,12 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DISABLE_EMAILS='$(./get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
@@ -815,12 +651,12 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./get-env.sh $CIRCLE_BRANCH)
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
             echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
       - run:
           name: 'Switch Colors'
@@ -852,27 +688,18 @@ workflows:
   version: 2
   hourly:
     jobs:
-      - build-shared
-      - build-api
-      - build-client-unit
       - build-client-integration
       - e2e-pa11y
       - e2e-pa11y-public
       - e2e-cypress
       - e2e-cypress-public
-      - build-client-coverage:
+      - deploy:
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
       - migrate:
           requires:
             - deploy
@@ -891,12 +718,6 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-defaults
-      - build-api:
-          <<: *build-and-deploy-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-defaults
       - build-client-integration:
           <<: *build-and-deploy-defaults
       - e2e-pa11y:
@@ -907,20 +728,13 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
-      - build-client-coverage:
-          <<: *build-and-deploy-defaults
+      - deploy:
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-coverage
           filters:
             branches:
               only:
@@ -974,12 +788,6 @@ workflows:
                 - dawson
   build-and-deploy-without-smoketests:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - build-api:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-without-smoketests-defaults
       - build-client-integration:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-pa11y:
@@ -990,21 +798,14 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-without-smoketests-defaults
-      - build-client-coverage:
+      - deploy:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - build-client-coverage
       - migrate:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
@@ -1016,12 +817,6 @@ workflows:
 
   build-and-deploy-with-context:
     jobs:
-      - build-shared:
-          <<: *build-and-deploy-with-context-defaults
-      - build-api:
-          <<: *build-and-deploy-with-context-defaults
-      - build-client-unit:
-          <<: *build-and-deploy-with-context-defaults
       - build-client-integration:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y:
@@ -1032,21 +827,14 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
-      - build-client-coverage:
+      - deploy:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - build-shared
-            - build-api
-            - build-client-unit
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
             - e2e-cypress-public
-      - deploy:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - build-client-coverage
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:

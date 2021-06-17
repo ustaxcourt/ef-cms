@@ -17,8 +17,7 @@ export const removeCaseDetailPendingItemAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .removeCasePendingItemInteractor({
-      applicationContext,
+    .removeCasePendingItemInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });

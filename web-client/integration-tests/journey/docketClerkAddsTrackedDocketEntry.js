@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsTrackedDocketEntry = (
   test,
@@ -12,19 +13,17 @@ export const docketClerkAddsTrackedDocketEntry = (
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
@@ -53,8 +52,10 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -65,9 +66,7 @@ export const docketClerkAddsTrackedDocketEntry = (
 
     expect(test.getState('form.documentType')).toEqual('Application');
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
@@ -78,9 +77,7 @@ export const docketClerkAddsTrackedDocketEntry = (
       value: 'Application for Flavortown',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

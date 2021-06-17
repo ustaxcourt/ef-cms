@@ -69,13 +69,9 @@ export const SearchResults = connect(
                       <td className="center-column">{idx + 1}</td>
                       <NonMobile>
                         <td>
-                          {result.contactPrimaryName}
-                          {result.contactSecondaryName && (
-                            <>
-                              <br />
-                              {result.contactSecondaryName}
-                            </>
-                          )}
+                          {result.petitioners.map(p => (
+                            <div key={p.contactId}>{p.name}</div>
+                          ))}
                         </td>
                       </NonMobile>
                       <td>
@@ -85,13 +81,9 @@ export const SearchResults = connect(
                         <td>{result.formattedFiledDate}</td>
                         <td>{result.caseTitle}</td>
                         <td>
-                          {result.fullStateNamePrimary}
-                          {result.fullStateNameSecondary && (
-                            <>
-                              <br />
-                              {result.fullStateNameSecondary}
-                            </>
-                          )}
+                          {result.petitionerFullStateNames.map(p => (
+                            <div key={p.contactId}>{p.state}</div>
+                          ))}
                         </td>
                       </NonMobile>
                       <Mobile>

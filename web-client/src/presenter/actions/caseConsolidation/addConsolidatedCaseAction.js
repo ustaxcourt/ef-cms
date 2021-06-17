@@ -15,11 +15,12 @@ export const addConsolidatedCaseAction = async ({
   const docketNumberToConsolidateWith = caseDetail.docketNumber;
   const caseToConsolidateDocketNumber = caseToConsolidate.docketNumber;
 
-  await applicationContext.getUseCases().addConsolidatedCaseInteractor({
-    applicationContext,
-    docketNumber: caseToConsolidateDocketNumber,
-    docketNumberToConsolidateWith,
-  });
+  await applicationContext
+    .getUseCases()
+    .addConsolidatedCaseInteractor(applicationContext, {
+      docketNumber: caseToConsolidateDocketNumber,
+      docketNumberToConsolidateWith,
+    });
 
   return {
     caseToConsolidateDocketNumber,

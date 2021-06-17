@@ -26,7 +26,7 @@ describe('unblockCaseFromTrialAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().unblockCaseFromTrialInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({ docketNumber: mockDocketNumber });
   });
 

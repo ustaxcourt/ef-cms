@@ -27,8 +27,7 @@ describe('canConsolidateInteractor', () => {
   });
 
   it('should return true when cases are consolidatable', () => {
-    const result = canConsolidateInteractor({
-      applicationContext,
+    const result = canConsolidateInteractor(applicationContext, {
       caseToConsolidate,
       currentCase,
     });
@@ -39,8 +38,7 @@ describe('canConsolidateInteractor', () => {
   it('should return false when cases are not consolidatable', () => {
     caseToConsolidate.status = CASE_STATUS_TYPES.closed;
 
-    const result = canConsolidateInteractor({
-      applicationContext,
+    const result = canConsolidateInteractor(applicationContext, {
       caseToConsolidate,
       currentCase,
     });

@@ -106,9 +106,8 @@ exports.getDownloadPolicyUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } = getUserRoles(
-    user,
-  );
+  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } =
+    getUserRoles(user);
 
   const caseData = await applicationContext
     .getPersistenceGateway()
@@ -161,9 +160,8 @@ exports.getDownloadPolicyUrlInteractor = async (
         );
       }
 
-      const documentIsAvailable = documentMeetsAgeRequirements(
-        docketEntryEntity,
-      );
+      const documentIsAvailable =
+        documentMeetsAgeRequirements(docketEntryEntity);
 
       const selectedIsStin =
         docketEntryEntity.documentType ===
@@ -175,22 +173,17 @@ exports.getDownloadPolicyUrlInteractor = async (
         );
       }
 
+      const unAuthorizedToViewNonCourtIssued =
+        selectedIsStin ||
+        !userAssociatedWithCase ||
+        docketEntryEntity.isLegacySealed;
+
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
-      } else if (selectedIsStin) {
+      } else if (unAuthorizedToViewNonCourtIssued) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
         );
-      } else {
-        if (!userAssociatedWithCase) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (docketEntryEntity.isLegacySealed) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        }
       }
     }
   }

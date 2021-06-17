@@ -15,6 +15,10 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {

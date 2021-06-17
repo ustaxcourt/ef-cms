@@ -42,12 +42,12 @@ export const chambersUserAddsOrderToCase = test => {
       docketNumber: test.docketNumber,
     });
 
-    const {
-      draftDocuments,
-    } = applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: test.getState('caseDetail'),
-    });
+    const { draftDocuments } = applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: test.getState('caseDetail'),
+      });
 
     test.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId

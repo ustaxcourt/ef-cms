@@ -10,8 +10,8 @@ import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
+import { getPendingEmailsOnCaseAction } from '../actions/getPendingEmailsOnCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction';
 import { parallel } from 'cerebral/factories';
 import { resetHeaderAccordionsSequence } from './resetHeaderAccordionsSequence';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
@@ -27,9 +27,9 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -46,14 +46,22 @@ const gotoCaseDetailInternal = [
   showModalFromQueryAction,
   getCaseDeadlinesForCaseAction,
   getMessagesForCaseAction,
-  getUserPendingEmailAction,
-  setUserPendingEmailAction,
+  getPendingEmailsOnCaseAction,
+  setPendingEmailsOnCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
 ];
 
 const gotoCaseDetailExternal = [
   getCaseAssociationAction,
   setCaseAssociationAction,
+  setCurrentPageAction('CaseDetail'),
+];
+
+const gotoCaseDetailExternalPractitioners = [
+  getCaseAssociationAction,
+  setCaseAssociationAction,
+  getPendingEmailsOnCaseAction,
+  setPendingEmailsOnCaseAction,
   setCurrentPageAction('CaseDetail'),
 ];
 
@@ -95,13 +103,12 @@ export const gotoCaseDetailSequence = [
       [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
     ),
     ...takePathForRoles(
-      [
-        USER_ROLES.petitioner,
-        USER_ROLES.privatePractitioner,
-        USER_ROLES.irsPractitioner,
-        USER_ROLES.irsSuperuser,
-      ],
+      [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
       gotoCaseDetailExternal,
+    ),
+    ...takePathForRoles(
+      [USER_ROLES.privatePractitioner, USER_ROLES.irsPractitioner],
+      gotoCaseDetailExternalPractitioners,
     ),
     chambers: gotoCaseDetailInternalWithNotes,
     judge: gotoCaseDetailInternalWithNotes,
