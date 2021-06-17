@@ -18,8 +18,14 @@ const {
   getUserById,
 } = require('../../../../shared/src/persistence/dynamo/users/getUserById');
 const {
+  getUserCaseMappingsByDocketNumber,
+} = require('../../../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
+const {
   persistUser,
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
+const {
+  sendNotificationToUser,
+} = require('../../../../shared/src/notifications/sendNotificationToUser');
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
@@ -29,6 +35,10 @@ const {
 const {
   updateCaseAndAssociations,
 } = require('../../../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
+const {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} = require('../../../../shared/src/persistence/dynamo/cases/updateIrsPractitionerOnCase');
 const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
@@ -55,13 +65,19 @@ const applicationContext = {
     dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
     stage: process.env.STAGE,
   }),
+  getNotificationGateway: () => ({
+    sendNotificationToUser,
+  }),
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
     getCasesByUserId,
     getDocketNumbersByUser,
     getUserById,
+    getUserCaseMappingsByDocketNumber,
     persistUser,
     updateCase,
+    updateIrsPractitionerOnCase,
+    updatePrivatePractitionerOnCase,
     updateUser,
   }),
   getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
