@@ -150,6 +150,9 @@ const {
   updateDocketEntry,
 } = require('../../persistence/dynamo/documents/updateDocketEntry');
 const {
+  updateUserRecords,
+} = require('../../persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -358,6 +361,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
   const getDocumentGeneratorsReturnMock = {

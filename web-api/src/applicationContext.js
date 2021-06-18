@@ -218,9 +218,6 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
-  deleteCaseByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
-const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -407,6 +404,9 @@ const {
 const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
+const {
+  getCaseMetadataWithCounsel,
+} = require('../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel');
 const {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
@@ -694,9 +694,6 @@ const {
 const {
   getUsersPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersPendingEmailInteractor');
-const {
-  getWebSocketConnectionByConnectionId,
-} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
 const {
   getWebSocketConnectionsByUserId,
 } = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
@@ -1283,7 +1280,6 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   createNewPetitionerUser,
   createNewPractitionerUser,
-  deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
@@ -1303,6 +1299,7 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
+  getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
@@ -1348,7 +1345,6 @@ const gatewayMethods = {
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,
-  getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
   getWorkItemMappingsByDocketNumber,
