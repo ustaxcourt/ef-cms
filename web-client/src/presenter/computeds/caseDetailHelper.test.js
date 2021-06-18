@@ -427,7 +427,7 @@ describe('case detail computed', () => {
     expect(result.hasConsolidatedCases).toEqual(false);
   });
 
-  it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
+  it('should show edit case details button if user has EDIT_CASE_DETAILS permission', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',
@@ -438,13 +438,13 @@ describe('case detail computed', () => {
         caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: true },
+        permissions: { EDIT_CASE_DETAILS: true },
       },
     });
-    expect(result.showEditPetitionDetailsButton).toEqual(true);
+    expect(result.showEditCaseDetailsButton).toEqual(true);
   });
 
-  it('should not show edit petition details button if user does not have EDIT_PETITION_DETAILS permission', () => {
+  it('should not show edit case details button if user does not have EDIT_CASE_DETAILS permission', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',
@@ -455,10 +455,10 @@ describe('case detail computed', () => {
         caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
-    expect(result.showEditPetitionDetailsButton).toEqual(false);
+    expect(result.showEditCaseDetailsButton).toEqual(false);
   });
 
   it('should show the filing fee section for a petitioner user', () => {
@@ -593,7 +593,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasIrsPractitioners).toEqual(false);
@@ -614,7 +614,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasIrsPractitioners).toEqual(true);
@@ -632,7 +632,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(false);
@@ -654,7 +654,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(true);

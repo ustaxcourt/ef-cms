@@ -336,9 +336,6 @@ const {
   updateOtherStatisticsLambda,
 } = require('./cases/updateOtherStatisticsLambda');
 const {
-  updatePetitionDetailsLambda,
-} = require('./cases/updatePetitionDetailsLambda');
-const {
   updatePetitionerInformationLambda,
 } = require('./cases/updatePetitionerInformationLambda');
 const {
@@ -403,6 +400,7 @@ const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
+const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
@@ -696,8 +694,8 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     lambdaWrapper(deleteCounselFromCaseLambda),
   );
   app.put(
-    '/case-parties/:docketNumber/petition-details',
-    lambdaWrapper(updatePetitionDetailsLambda),
+    '/case-parties/:docketNumber/case-details',
+    lambdaWrapper(updateCaseDetailsLambda),
   );
   app.put(
     '/case-parties/:docketNumber/petitioner-info',
