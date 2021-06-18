@@ -44,7 +44,6 @@ import { chooseWizardStepSequence } from './sequences/chooseWizardStepSequence';
 import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
-import { clearDocumentViewerDataSequence } from './sequences/clearDocumentViewerDataSequence';
 import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
@@ -523,7 +522,6 @@ export const presenter = {
     chooseWorkQueueSequence,
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
-    clearDocumentViewerDataSequence,
     clearDropDownMenuStateSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
