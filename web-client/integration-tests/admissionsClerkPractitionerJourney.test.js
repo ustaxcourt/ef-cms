@@ -19,11 +19,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 const test = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);

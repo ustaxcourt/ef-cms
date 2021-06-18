@@ -62,9 +62,10 @@ describe('private practitioner views pending email journey', () => {
       state: test.getState(),
     });
 
-    const practitionerWithPendingEmail = partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-      prac => prac.barNumber === test.barNumber,
-    );
+    const practitionerWithPendingEmail =
+      partiesHelper.formattedPetitioners[0].representingPractitioners.find(
+        prac => prac.barNumber === test.barNumber,
+      );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
       `${test.pendingEmail} (Pending)`,
@@ -83,9 +84,10 @@ describe('private practitioner views pending email journey', () => {
       state: test.getState(),
     });
 
-    const practitionerWithPendingEmail = partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-      prac => prac.barNumber === test.barNumber,
-    );
+    const practitionerWithPendingEmail =
+      partiesHelper.formattedPetitioners[0].representingPractitioners.find(
+        prac => prac.barNumber === test.barNumber,
+      );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
       `${test.pendingEmail} (Pending)`,
