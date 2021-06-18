@@ -4,10 +4,10 @@ describe('sortByDocketNumber', () => {
   it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {
     const result = Case.sortByDocketNumber([
       {
-        docketNumber: '110-19',
+        docketNumber: '910-19',
       },
       {
-        docketNumber: '100-19',
+        docketNumber: '1000-19',
       },
       {
         docketNumber: '120-19',
@@ -16,13 +16,13 @@ describe('sortByDocketNumber', () => {
 
     expect(result).toEqual([
       {
-        docketNumber: '100-19',
-      },
-      {
-        docketNumber: '110-19',
-      },
-      {
         docketNumber: '120-19',
+      },
+      {
+        docketNumber: '910-19',
+      },
+      {
+        docketNumber: '1000-19',
       },
     ]);
   });
