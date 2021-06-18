@@ -28,7 +28,7 @@ describe('docket clerk edits a petition payment fee', () => {
   loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case petition payment fee', async () => {
-    await test.runSequence('gotoEditPetitionDetailsSequence', {
+    await test.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -48,7 +48,7 @@ describe('docket clerk edits a petition payment fee', () => {
       value: PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       hasVerifiedIrsNotice:
@@ -80,7 +80,7 @@ describe('docket clerk edits a petition payment fee', () => {
       value: 'check',
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
