@@ -27,10 +27,6 @@ export const admissionsClerkAddsNewPractitioner = test => {
       value: 'caroleBaskinH8r@example.com',
     });
     await test.runSequence('updateFormValueSequence', {
-      key: 'confirmEmail',
-      value: 'caroleBaskinH8r@example.com',
-    });
-    await test.runSequence('updateFormValueSequence', {
       key: 'month',
       value: '1',
     });
@@ -85,8 +81,19 @@ export const admissionsClerkAddsNewPractitioner = test => {
 
     await test.runSequence('submitAddPractitionerSequence');
 
-    test.barNumber = test.getState('practitionerDetail.barNumber');
+    expect(Object.keys(test.getState('validationErrors'))).toEqual([
+      'confirmEmail',
+    ]);
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
+      value: 'caroleBaskinH8r@example.com',
+    });
+
+    await test.runSequence('submitAddPractitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
+
+    test.barNumber = test.getState('practitionerDetail.barNumber');
   });
 };
