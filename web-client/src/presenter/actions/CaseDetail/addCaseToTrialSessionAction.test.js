@@ -32,7 +32,7 @@ describe('addCaseToTrialSessionAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().addCaseToTrialSessionInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       calendarNotes: 'Test',
       docketNumber: '123-45',

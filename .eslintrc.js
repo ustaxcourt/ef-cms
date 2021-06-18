@@ -42,6 +42,15 @@ module.exports = {
         'jest/expect-expect': 'off',
       },
     },
+    {
+      files: ['**/*.test.js'],
+      rules: {
+        'max-lines': [
+          'error',
+          { max: 1000, skipBlankLines: true, skipComments: true },
+        ],
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -113,6 +122,10 @@ module.exports = {
         },
       },
     ],
+    'max-lines': [
+      'error',
+      { max: 900, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+    ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
     'no-restricted-globals': [
@@ -123,7 +136,7 @@ module.exports = {
       { name: 'name' },
       { name: 'document' },
     ],
-    'no-shadow': ['warn', { builtinGlobals: false }],
+    'no-shadow': ['error', { builtinGlobals: false }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
@@ -408,7 +421,7 @@ module.exports = {
       },
     },
     react: {
-      version: '17.0.1',
+      version: '17.0.2',
     },
   },
 };

@@ -1,36 +1,24 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 export const docketClerkEditsDocketEntryNonstandardE = test => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard E scenario', async () => {
-    let caseDetailFormatted;
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const { docketEntryId } = caseDetailFormatted.formattedDocketEntries[0];
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
 
-    const docketEntriesBefore =
-      caseDetailFormatted.formattedDocketEntries.length;
+    const docketEntriesBefore = formattedDocketEntriesOnDocketRecord.length;
 
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId,
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('docketEntryId')).toEqual(docketEntryId);
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -38,7 +26,7 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'M057',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -51,31 +39,26 @@ export const docketClerkEditsDocketEntryNonstandardE = test => {
       value: 'Boise, Idaho',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
-    const docketEntriesAfter =
-      caseDetailFormatted.formattedDocketEntries.length;
+    const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 
     expect(docketEntriesBefore).toEqual(docketEntriesAfter);
 
-    const updatedDocketEntry = caseDetailFormatted.formattedDocketEntries[0];
+    const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
         'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho some additional info',
     });
 
-    const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
     expect(updatedDocument).toMatchObject({

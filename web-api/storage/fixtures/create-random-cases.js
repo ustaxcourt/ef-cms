@@ -42,7 +42,7 @@ const main = () => {
 
   for (let i = 0; i < numToCreate; i++) {
     const preferredTrialCityObject =
-      TRIAL_CITIES.ALL[faker.random.number() % 74];
+      TRIAL_CITIES.ALL[faker.datatype.number() % 74];
 
     const preferredTrialCity =
       preferredTrialCityObject.city + ', ' + preferredTrialCityObject.state;
@@ -51,7 +51,7 @@ const main = () => {
     const randomlyGeneratedData = {
       petitionFileId,
       petitionMetadata: {
-        caseType: CASE_TYPES[faker.random.number() % 13],
+        caseType: CASE_TYPES[faker.datatype.number() % 13],
         contactPrimary: {
           address1: faker.address.streetAddress(),
           city: faker.address.city(),
@@ -76,7 +76,7 @@ const main = () => {
         partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity,
         privatePractitioners: [],
-        procedureType: PROCEDURE_TYPES[faker.random.number() % 2],
+        procedureType: PROCEDURE_TYPES[faker.datatype.number() % 2],
       },
       stinFileId,
     };

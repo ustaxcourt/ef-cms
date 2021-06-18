@@ -10,10 +10,12 @@ const {
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns default errors on empty entryMetadata', () => {
-    const errors = validateCourtIssuedDocketEntryInteractor({
+    const errors = validateCourtIssuedDocketEntryInteractor(
       applicationContext,
-      entryMetadata: {},
-    });
+      {
+        entryMetadata: {},
+      },
+    );
 
     expect(errors).toEqual({
       documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
@@ -22,12 +24,14 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('returns expected errors when only scenario is set', () => {
-    const errors = validateCourtIssuedDocketEntryInteractor({
+    const errors = validateCourtIssuedDocketEntryInteractor(
       applicationContext,
-      entryMetadata: {
-        scenario: 'Type A',
+      {
+        entryMetadata: {
+          scenario: 'Type A',
+        },
       },
-    });
+    );
 
     expect(errors).toEqual({
       documentType: VALIDATION_ERROR_MESSAGES.documentType,
@@ -35,29 +39,33 @@ describe('validateCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('returns expected errors when event code requires filing date but no date is provided', () => {
-    const errors = validateCourtIssuedDocketEntryInteractor({
+    const errors = validateCourtIssuedDocketEntryInteractor(
       applicationContext,
-      entryMetadata: {
-        eventCode: 'USCA',
-        scenario: 'Type A',
+      {
+        entryMetadata: {
+          eventCode: 'USCA',
+          scenario: 'Type A',
+        },
       },
-    });
+    );
 
     expect(errors.filingDate).toEqual(VALIDATION_ERROR_MESSAGES.filingDate);
   });
 
   it('returns no errors when all required data fields are set', () => {
-    const errors = validateCourtIssuedDocketEntryInteractor({
+    const errors = validateCourtIssuedDocketEntryInteractor(
       applicationContext,
-      entryMetadata: {
-        attachments: false,
-        documentTitle: 'Order fixing amount of bond at [Anything]',
-        documentType: 'OFAB - Order fixing amount of bond',
-        eventCode: 'OFAB',
-        freeText: 'something',
-        scenario: 'Type A',
+      {
+        entryMetadata: {
+          attachments: false,
+          documentTitle: 'Order fixing amount of bond at [Anything]',
+          documentType: 'OFAB - Order fixing amount of bond',
+          eventCode: 'OFAB',
+          freeText: 'something',
+          scenario: 'Type A',
+        },
       },
-    });
+    );
 
     expect(errors).toEqual(null);
   });

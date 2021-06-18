@@ -3,15 +3,15 @@ const { post } = require('../requests');
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.documentMeta the document metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = ({
+exports.fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const { docketNumber } = documentMeta;
   return post({
     applicationContext,

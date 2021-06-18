@@ -6,9 +6,6 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 
 - [Amazon Web Services](https://portal.aws.amazon.com/gp/aws/developer/registration/) — hosting.
 - [CircleCI](https://circleci.com/signup/) — test running and code deployment.
-- [SonarCloud](https://sonarcloud.io/) — static code analysis.
-  - Create a [organization](https://sonarcloud.io/create-organization). Make note of the name chosen for CircleCI configuration later.
-  - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Make note of each project’s key and token for CircleCI configuration later.
 
 ## 2. Configure your local developer machine.
 

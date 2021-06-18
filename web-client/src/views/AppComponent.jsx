@@ -1,7 +1,7 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
-import { AddDocketEntry } from './AddDocketEntry/AddDocketEntry';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
+import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
@@ -16,6 +16,7 @@ import { CaseInventoryReportModal } from './CaseInventoryReport/CaseInventoryRep
 import { CaseSearchNoMatches } from './CaseSearchNoMatches';
 import { ChangeLoginAndServiceEmail } from './ChangeLoginAndServiceEmail';
 import { Contact } from './Contact';
+import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
@@ -26,14 +27,16 @@ import { DashboardJudge } from './Dashboards/DashboardJudge';
 import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
+import { DocketEntryQc } from './DocketEntryQc';
 import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
-import { EditDocketEntry } from './EditDocketEntry/EditDocketEntry';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
 import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
-import { EditPetitionerInformation } from './CaseDetail/EditPetitionerInformation';
+import { EditPetitionerCounsel } from './EditPetitionerCounsel';
+import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
+import { EditRespondentCounsel } from './EditRespondentCounsel';
 import { EditTrialSession } from './TrialSessions/EditTrialSession';
 import { EditUploadCourtIssuedDocument } from './EditUploadCourtIssuedDocument/EditUploadCourtIssuedDocument';
 import { ErrorView } from './Error';
@@ -49,11 +52,10 @@ import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
 import { Messages } from './Messages/Messages';
 import { MyAccount } from './MyAccount';
-import { OtherFilerInformation } from './CaseDetail/OtherFilerInformation';
+import { PaperFiling } from './PaperFiling/PaperFiling';
 import { PendingReport } from './PendingReport/PendingReport';
 import { PetitionQc } from './PetitionQc/PetitionQc';
 import { PractitionerDetail } from './Practitioners/PractitionerDetail';
-import { PrimaryContactEdit } from './PrimaryContactEdit';
 import { PrintPaperPetitionReceipt } from './PetitionQc/PrintPaperPetitionReceipt';
 import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
@@ -63,7 +65,6 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
-import { SecondaryContactEdit } from './SecondaryContactEdit';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
@@ -89,8 +90,8 @@ import React, { useEffect } from 'react';
 const pages = {
   AccessibilityStatement,
   AddDeficiencyStatistics,
-  AddDocketEntry,
   AddOtherStatistics,
+  AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
   BeforeStartingCase,
@@ -103,6 +104,7 @@ const pages = {
   CaseSearchNoMatches,
   ChangeLoginAndServiceEmail,
   Contact,
+  ContactEdit,
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
@@ -113,14 +115,16 @@ const pages = {
   DashboardPetitioner,
   DashboardPractitioner,
   DashboardRespondent,
+  DocketEntryQc,
   EditCorrespondenceDocument,
   EditDeficiencyStatistic,
-  EditDocketEntry,
   EditDocketEntryMeta,
   EditOtherStatistics,
   EditPetitionDetails,
-  EditPetitionerInformation,
+  EditPetitionerCounsel,
+  EditPetitionerInformationInternal,
   EditPractitionerUser,
+  EditRespondentCounsel,
   EditTrialSession,
   EditUploadCourtIssuedDocument,
   ErrorView,
@@ -133,11 +137,10 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
-  OtherFilerInformation,
+  PaperFiling,
   PendingReport,
   PetitionQc,
   PractitionerDetail,
-  PrimaryContactEdit,
   PrintPaperPetitionReceipt,
   PrintPaperService,
   PrintPaperTrialNotices,
@@ -147,7 +150,6 @@ const pages = {
   Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
-  SecondaryContactEdit,
   SelectDocumentType,
   SignOrder,
   SimplePdfPreviewPage,

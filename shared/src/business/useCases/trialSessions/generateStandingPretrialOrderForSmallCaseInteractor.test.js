@@ -64,11 +64,13 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   });
 
   it('should fetch case and trial information and call the document generator', async () => {
-    await generateStandingPretrialOrderForSmallCaseInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,
-      docketNumber: '123-45',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    });
+      {
+        docketNumber: '123-45',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -83,30 +85,32 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    await generateStandingPretrialOrderForSmallCaseInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,
-      docketNumber: '234-56',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    });
+      {
+        docketNumber: '234-56',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+    );
 
-    const {
-      data,
-    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
-
+    const { data } =
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0];
     expect(data.docketNumberWithSuffix).toEqual('234-56S');
   });
 
   it('should format trial start info', async () => {
-    await generateStandingPretrialOrderForSmallCaseInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,
-      docketNumber: '234-56',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    });
+      {
+        docketNumber: '234-56',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+    );
 
-    const {
-      data,
-    } = applicationContext.getDocumentGenerators().standingPretrialOrderForSmallCase.mock.calls[0][0];
-
+    const { data } =
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0];
     expect(data.trialInfo.formattedStartDateWithDayOfWeek).toEqual(
       'Sunday, August 25, 2019',
     );
@@ -114,11 +118,14 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   });
 
   it('should add a served stamp to the document', async () => {
-    await generateStandingPretrialOrderForSmallCaseInteractor({
+    await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,
-      docketNumber: '234-56',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    });
+      {
+        docketNumber: '234-56',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+    );
+
     expect(
       applicationContext.getUseCaseHelpers().addServedStampToDocument,
     ).toHaveBeenCalled();

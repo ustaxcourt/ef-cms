@@ -2,9 +2,10 @@ const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
-const getDocumentInfo = ({ applicationContext, documentData }) => {
+const getDocumentInfo = ({ applicationContext, documentData, petitioners }) => {
   const doc = new DocketEntry(documentData, {
     applicationContext,
+    petitioners,
   });
 
   return {
@@ -45,6 +46,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
   const primaryDocument = getDocumentInfo({
     applicationContext,
     documentData: documentsFiled,
+    petitioners: caseRecord.petitioners,
   });
 
   const primaryDocumentRecord = caseEntity.docketEntries.find(
@@ -56,9 +58,10 @@ exports.generatePrintableFilingReceiptInteractor = async (
   const filingReceiptDocumentParams = { document: primaryDocument };
 
   if (documentsFiled.hasSupportingDocuments) {
-    filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
-      doc => getDocumentInfo({ applicationContext, documentData: doc }),
-    );
+    filingReceiptDocumentParams.supportingDocuments =
+      documentsFiled.supportingDocuments.map(doc =>
+        getDocumentInfo({ applicationContext, documentData: doc }),
+      );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
@@ -69,9 +72,10 @@ exports.generatePrintableFilingReceiptInteractor = async (
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
-    filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      doc => getDocumentInfo({ applicationContext, documentData: doc }),
-    );
+    filingReceiptDocumentParams.secondarySupportingDocuments =
+      documentsFiled.secondarySupportingDocuments.map(doc =>
+        getDocumentInfo({ applicationContext, documentData: doc }),
+      );
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -99,13 +103,13 @@ exports.generatePrintableFilingReceiptInteractor = async (
     useTempBucket: true,
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key,
+      useTempBucket: true,
+    });
 
   return url;
 };

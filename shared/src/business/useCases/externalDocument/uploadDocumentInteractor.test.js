@@ -12,8 +12,7 @@ describe('uploadDocumentInteractor', () => {
     });
 
     await expect(
-      uploadDocumentInteractor({
-        applicationContext,
+      uploadDocumentInteractor(applicationContext, {
         documentFiles: [
           {
             primary: 'something',
@@ -31,8 +30,7 @@ describe('uploadDocumentInteractor', () => {
     });
 
     await expect(
-      uploadDocumentInteractor({
-        applicationContext,
+      uploadDocumentInteractor(applicationContext, {
         documentFiles: {
           primary: 'something',
         },
@@ -51,8 +49,7 @@ describe('uploadDocumentInteractor', () => {
     });
 
     await expect(
-      uploadDocumentInteractor({
-        applicationContext,
+      uploadDocumentInteractor(applicationContext, {
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',
@@ -82,8 +79,7 @@ describe('uploadDocumentInteractor', () => {
     });
 
     await expect(
-      uploadDocumentInteractor({
-        applicationContext,
+      uploadDocumentInteractor(applicationContext, {
         documentFiles: {
           primary: 'something',
           primarySupporting0: 'something3',

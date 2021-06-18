@@ -18,13 +18,9 @@ export const getDocumentContentsAction = async ({
     );
 
     if (documentContentsId) {
-      const {
-        documentContents,
-        richText,
-      } = await applicationContext
+      const { documentContents, richText } = await applicationContext
         .getUseCases()
-        .getDocumentContentsForDocketEntryInteractor({
-          applicationContext,
+        .getDocumentContentsForDocketEntryInteractor(applicationContext, {
           documentContentsId,
         });
 

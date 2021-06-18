@@ -95,13 +95,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     // Notice of Trial Issued
     const noticeOfTrialIssuedFile = await applicationContext
       .getUseCases()
-      .generateNoticeOfTrialIssuedInteractor({
-        applicationContext,
+      .generateNoticeOfTrialIssuedInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
         trialSessionId: trialSessionEntity.trialSessionId,
       });
 
-    const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
+    const newNoticeOfTrialIssuedDocketEntryId =
+      applicationContext.getUniqueId();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
@@ -152,11 +152,13 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       // Generate Standing Pretrial Notice
       standingPretrialFile = await applicationContext
         .getUseCases()
-        .generateStandingPretrialOrderForSmallCaseInteractor({
+        .generateStandingPretrialOrderForSmallCaseInteractor(
           applicationContext,
-          docketNumber: caseEntity.docketNumber,
-          trialSessionId: trialSessionEntity.trialSessionId,
-        });
+          {
+            docketNumber: caseEntity.docketNumber,
+            trialSessionId: trialSessionEntity.trialSessionId,
+          },
+        );
 
       standingPretrialDocumentTitle =
         SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
@@ -168,8 +170,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       // Generate Standing Pretrial Order
       standingPretrialFile = await applicationContext
         .getUseCases()
-        .generateStandingPretrialOrderInteractor({
-          applicationContext,
+        .generateStandingPretrialOrderInteractor(applicationContext, {
           docketNumber: caseEntity.docketNumber,
           trialSessionId: trialSessionEntity.trialSessionId,
         });

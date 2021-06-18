@@ -22,9 +22,10 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
   returnData.documentTypesForSelectSorted = documentTypesForSelect.sort(
     getSortFunction(searchText),
   );
-  returnData.documentTypesForSecondarySelectSorted = returnData.documentTypesForSelectSorted.filter(
-    entry => entry.scenario !== 'Nonstandard H',
-  );
+  returnData.documentTypesForSecondarySelectSorted =
+    returnData.documentTypesForSelectSorted.filter(
+      entry => entry.scenario !== 'Nonstandard H',
+    );
 
   const selectedDocumentCategory = form.category;
   const selectedDocumentType = form.documentType;

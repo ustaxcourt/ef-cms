@@ -23,7 +23,6 @@ export const generateCourtIssuedDocumentTitleAction = ({
   let documentTitle = applicationContext
     .getUseCases()
     .generateCourtIssuedDocumentTitleInteractor({
-      applicationContext,
       documentMetadata,
     });
 

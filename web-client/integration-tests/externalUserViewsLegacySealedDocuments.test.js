@@ -34,7 +34,7 @@ describe('External user views legacy sealed documents', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionersToCase(test, true);
-  petitionsClerkAddsRespondentsToCase(test, true);
+  petitionsClerkAddsRespondentsToCase(test);
 
   loginAs(test, 'petitioner@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);

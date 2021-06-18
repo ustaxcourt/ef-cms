@@ -5,6 +5,7 @@ import { generateTitleForPaperFilingAction } from '../actions/FileDocument/gener
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -22,6 +23,7 @@ export const openConfirmPaperServiceModalSequence = [
   setComputeFormDateFactoryAction('dateReceived'),
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [
