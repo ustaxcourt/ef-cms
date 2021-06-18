@@ -154,7 +154,14 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </span>
-                        {practitionerDetailHelper.emailFormatted}
+                        <div className="margin-bottom-2">
+                          {practitionerDetailHelper.emailFormatted}
+                        </div>
+                        {practitionerDetailHelper.pendingEmailFormatted && (
+                          <div>
+                            {practitionerDetailHelper.pendingEmailFormatted}
+                          </div>
+                        )}
                         {practitionerDetailHelper.showEAccessFlag && (
                           <FontAwesomeIcon
                             className="margin-left-05 fa-icon-blue"
