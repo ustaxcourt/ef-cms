@@ -17,13 +17,12 @@ export const getDocumentUrlForPreviewAction = async ({
   const { docketNumber } = get(state.form);
   const { documentInS3 } = props;
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    docketNumber,
-    key: documentInS3.docketEntryId,
-  });
+  const { url } = await applicationContext
+    .getUseCases()
+    .getDocumentDownloadUrlInteractor(applicationContext, {
+      docketNumber,
+      key: documentInS3.docketEntryId,
+    });
 
   return { docketEntryId: documentInS3.docketEntryId, pdfUrl: url };
 };

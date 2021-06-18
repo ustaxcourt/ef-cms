@@ -44,12 +44,12 @@ export const petitionsClerkAddsGenericOrderToCase = test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
-    const {
-      draftDocuments,
-    } = applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: test.getState('caseDetail'),
-    });
+    const { draftDocuments } = applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: test.getState('caseDetail'),
+      });
 
     const createdOrder = first(draftDocuments);
 
@@ -58,6 +58,6 @@ export const petitionsClerkAddsGenericOrderToCase = test => {
     expect(createdOrder.draftOrderState.documentTitle).toEqual(test.freeText);
     expect(createdOrder.freeText).toEqual(test.freeText);
 
-    test.docketEntryId = createdOrder ? createdOrder.docketEntryId : undefined;
+    test.docketEntryId = createdOrder.docketEntryId;
   });
 };

@@ -1,5 +1,9 @@
-const { Case } = require('../../entities/cases/Case');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
+const {
+  updateCasesForPetitioner,
+  updatePractitionerCases,
+} = require('./verifyUserPendingEmailInteractor');
+const { Practitioner } = require('../../entities/Practitioner');
+const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 /**
@@ -20,49 +24,15 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  const casesToUpdate = await Promise.all(
-    petitionerDocketNumbers.map(docketNumber =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
+  const petitionerCases = petitionerDocketNumbers.map(docketNumber => ({
+    docketNumber,
+  }));
 
-  const validatedCasesToUpdate = casesToUpdate
-    .map(caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, {
-        applicationContext,
-      });
-
-      const contactPrimary = caseEntity.getContactPrimary();
-
-      if (contactPrimary.contactId !== user.userId) {
-        applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
-        );
-        return;
-      }
-      // This updates the case by reference!
-      contactPrimary.email = user.email;
-      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-
-      // we do this again so that it will convert '' to null
-      return new Case(caseEntity, { applicationContext }).validate();
-    })
-    // if petitioner is not found on the case, function exits early and returns `undefined`.
-    // if this happens, continue with remaining cases and do not throw exception, but discard
-    // any undefined values by filtering for truthy objects.
-    .filter(Boolean);
-
-  return Promise.all(
-    validatedCasesToUpdate.map(caseToUpdate =>
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate,
-      }),
-    ),
-  );
+  return await updateCasesForPetitioner({
+    applicationContext,
+    petitionerCases,
+    user,
+  });
 };
 
 exports.updatePetitionerCases = updatePetitionerCases;
@@ -70,20 +40,32 @@ exports.updatePetitionerCases = updatePetitionerCases;
 /**
  * setUserEmailFromPendingEmailInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the user
  * @returns {Promise} the updated user object
  */
-exports.setUserEmailFromPendingEmailInteractor = async ({
+exports.setUserEmailFromPendingEmailInteractor = async (
   applicationContext,
-  user,
-}) => {
-  const userEntity = new User({
-    ...user,
-    email: user.pendingEmail,
-    pendingEmail: undefined,
-  });
+  { user },
+) => {
+  let userEntity;
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner
+  ) {
+    userEntity = new Practitioner({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+    });
+  } else {
+    userEntity = new User({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+    });
+  }
 
   const rawUser = userEntity.validate().toRawObject();
 
@@ -92,10 +74,22 @@ exports.setUserEmailFromPendingEmailInteractor = async ({
     user: rawUser,
   });
 
-  await updatePetitionerCases({
-    applicationContext,
-    user: rawUser,
-  });
+  try {
+    if (userEntity.role === ROLES.petitioner) {
+      await updatePetitionerCases({
+        applicationContext,
+        user: rawUser,
+      });
+    } else {
+      await updatePractitionerCases({
+        applicationContext,
+        user: rawUser,
+      });
+    }
+  } catch (error) {
+    applicationContext.logger.error(error);
+    throw error;
+  }
 
   return rawUser;
 };

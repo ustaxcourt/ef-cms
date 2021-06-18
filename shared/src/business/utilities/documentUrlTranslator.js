@@ -4,7 +4,6 @@
  * @param {string} documentUrl URL to the document in regionalEndpoint.com/bucket/path format
  * @param {boolean} useTempBucket If the document is in the temporary documents or not
  * @param {object} applicationContext the application context
- *
  * @returns {string} the translated URL
  */
 exports.documentUrlTranslator = ({

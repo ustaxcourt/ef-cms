@@ -8,7 +8,7 @@ import classNames from 'classnames';
 
 export const DocumentViewer = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     loadDefaultDocketViewerDocumentToDisplaySequence:
       sequences.loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence:
@@ -16,7 +16,7 @@ export const DocumentViewer = connect(
     viewDocumentId: state.viewerDocumentToDisplay.docketEntryId,
   },
   function DocumentViewer({
-    formattedCaseDetail,
+    formattedDocketEntries,
     loadDefaultDocketViewerDocumentToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     viewDocumentId,
@@ -38,7 +38,7 @@ export const DocumentViewer = connect(
                 <div className="grid-col-2"></div>
               </div>
               <div className="document-viewer--documents-list">
-                {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
+                {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
                   entry => {
                     // TODO: should live in a computed
                     if (entry.isFileAttached) {

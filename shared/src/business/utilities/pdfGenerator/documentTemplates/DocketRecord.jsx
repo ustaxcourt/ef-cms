@@ -13,6 +13,7 @@ const RenderAddress = ({ contact, countryTypes }) => {
       {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
       {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
       {contact.title && <div>{contact.title}</div>}
+      {contact.additionalName && <div>{contact.additionalName}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
       {contact.address3 && <div>{contact.address3}</div>}
@@ -48,17 +49,7 @@ const RenderContact = ({ contact, countryTypes }) => {
   );
 };
 
-const RenderPractitioner = ({
-  contactPrimary,
-  contactSecondary,
-  countryTypes,
-  practitioner,
-}) => {
-  const { representingPrimary, representingSecondary } = practitioner;
-  const showRepresentingPrimary = representingPrimary && contactPrimary;
-  const showRepresentingSecondary =
-    representingSecondary && contactSecondary && contactSecondary.name;
-
+const RenderPractitioner = ({ countryTypes, practitioner }) => {
   return (
     <div className="party-details">
       <p className="margin-bottom-0">
@@ -71,13 +62,13 @@ const RenderPractitioner = ({
         }}
         countryTypes={countryTypes}
       />
-
-      {(showRepresentingPrimary || showRepresentingSecondary) && (
+      {practitioner.representingFormatted && (
         <div className="extra-margin-top">
           <strong>Representing</strong>
           <br />
-          {showRepresentingPrimary && <div>{contactPrimary.name}</div>}
-          {showRepresentingSecondary && <div>{contactSecondary.name}</div>}
+          {practitioner.representingFormatted.map(p => (
+            <div key={p.name}>{p.name}</div>
+          ))}
         </div>
       )}
     </div>
@@ -149,17 +140,16 @@ export const DocketRecord = ({
         <div className="party-info" id="petitioner-contacts">
           <div className="party-info-header">{caseDetail.partyType}</div>
           <div className="party-info-content">
-            <RenderContact
-              caseTitle={options.caseTitle}
-              contact={caseDetail.contactPrimary}
-              countryTypes={countryTypes}
-            />
-            {caseDetail.contactSecondary && (
-              <RenderContact
-                contact={caseDetail.contactSecondary}
-                countryTypes={countryTypes}
-              />
-            )}
+            {caseDetail.petitioners.map(p => {
+              return (
+                <RenderContact
+                  caseTitle={options.caseTitle}
+                  contact={p}
+                  countryTypes={countryTypes}
+                  key={p.contactId}
+                />
+              );
+            })}
           </div>
         </div>
       )}
@@ -172,8 +162,6 @@ export const DocketRecord = ({
             if (practitioner.formattedName) {
               return (
                 <RenderPractitioner
-                  contactPrimary={caseDetail.contactPrimary}
-                  contactSecondary={caseDetail.contactSecondary}
                   countryTypes={countryTypes}
                   key={practitioner.barNumber}
                   practitioner={practitioner}

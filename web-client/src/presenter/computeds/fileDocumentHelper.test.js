@@ -1,7 +1,11 @@
+import {
+  CONTACT_TYPES,
+  PARTY_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
-import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
+import { capitalize } from 'lodash';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -193,7 +197,7 @@ describe('fileDocumentHelper', () => {
   });
 
   it('shows party validation error if any one of the party validation errors exists', () => {
-    state.validationErrors = { partyPrimary: 'You did something bad.' };
+    state.validationErrors = { filers: 'You did something bad.' };
     const result = runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
   });
@@ -487,5 +491,53 @@ describe('fileDocumentHelper', () => {
       { docketNumber: '101-19' },
       { docketNumber: '102-19' },
     ]);
+  });
+
+  describe('filingPartiesNames', () => {
+    const mockPrimaryContactId = '4e53fade-4966-4efe-8b01-0cb5f587eb47';
+    const mockTaxMattersContactId = 'd5a09816-f01e-4c1f-bf81-f96c55c2eef5';
+    const mockIntervenorContactId = '68a1e378-6e96-4e61-b06g-2cb4e6c22f47';
+
+    beforeEach(() => {
+      state.form = {
+        filersMap: {
+          [mockIntervenorContactId]: true,
+          [mockPrimaryContactId]: true,
+          [mockTaxMattersContactId]: false,
+        },
+      };
+
+      state.caseDetail = {
+        petitioners: [
+          {
+            contactId: mockPrimaryContactId,
+            contactType: CONTACT_TYPES.primary,
+            name: 'bob',
+          },
+          {
+            contactId: mockTaxMattersContactId,
+            contactType: CONTACT_TYPES.participant,
+            name: 'sally',
+          },
+          {
+            contactId: mockIntervenorContactId,
+            contactType: CONTACT_TYPES.intervenor,
+            name: 'rick',
+          },
+        ],
+      };
+    });
+
+    it('should be set to the names of all filing petitioners and their titles', () => {
+      const { formattedFilingParties } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(formattedFilingParties).toEqual([
+        'bob, Petitioner',
+        `sally, ${capitalize(CONTACT_TYPES.participant)}`,
+        `rick, ${capitalize(CONTACT_TYPES.intervenor)}`,
+      ]);
+    });
   });
 });

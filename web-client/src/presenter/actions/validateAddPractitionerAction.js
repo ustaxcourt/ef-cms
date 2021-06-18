@@ -13,10 +13,18 @@ export const combineContactErrors = ({ errors }) => {
     errors.city ||
     errors.country ||
     errors.postalCode ||
-    errors.state
+    errors.state ||
+    errors.serviceIndicator
   ) {
     errors.contact = {};
-    ['address1', 'city', 'country', 'postalCode', 'state'].forEach(key => {
+    [
+      'address1',
+      'city',
+      'country',
+      'postalCode',
+      'state',
+      'serviceIndicator',
+    ].forEach(key => {
       if (errors[key]) {
         errors.contact[key] = errors[key];
         delete errors[key];
@@ -45,8 +53,7 @@ export const validateAddPractitionerAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddPractitionerInteractor({
-      applicationContext,
+    .validateAddPractitionerInteractor(applicationContext, {
       practitioner,
     });
 

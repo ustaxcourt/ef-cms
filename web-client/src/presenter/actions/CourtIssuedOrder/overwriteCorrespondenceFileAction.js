@@ -20,8 +20,7 @@ export const overwriteCorrespondenceFileAction = async ({
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadCorrespondenceDocumentInteractor({
-        applicationContext,
+      .uploadCorrespondenceDocumentInteractor(applicationContext, {
         documentFile: primaryDocumentFile,
         keyToOverwrite: docketEntryId,
       });

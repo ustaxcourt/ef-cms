@@ -4,9 +4,9 @@ const { ROLES } = require('../../../business/entities/EntityConstants');
 const createUserRecords = async ({ applicationContext, newUser, userId }) => {
   await client.put({
     Item: {
+      ...newUser,
       pk: `user|${userId}`,
       sk: `user|${userId}`,
-      ...newUser,
       userId,
     },
     applicationContext,

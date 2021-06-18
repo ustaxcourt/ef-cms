@@ -6,9 +6,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  makeRequiredHelper,
-} = require('../externalDocument/externalDocumentHelpers');
 const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 
 /**
@@ -18,8 +15,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 function AddPrivatePractitionerFactory() {}
 
 AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
-  representingPrimary: 'Select a represented party',
-  representingSecondary: 'Select a represented party',
+  representing: 'Select a represented party',
   serviceIndicator: [
     {
       contains: 'must be one of',
@@ -44,15 +40,18 @@ AddPrivatePractitionerFactory.get = metadata => {
   entityConstructor.prototype.init = function init(rawProps) {
     Object.assign(this, {
       email: rawProps.user?.email,
-      representingPrimary: rawProps.representingPrimary,
-      representingSecondary: rawProps.representingSecondary,
+      representing: rawProps.representing,
       serviceIndicator: rawProps.serviceIndicator,
       user: rawProps.user,
     });
   };
 
-  let schema = {
+  const schema = {
     email: JoiValidationConstants.STRING.optional(),
+    representing: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
@@ -67,26 +66,6 @@ AddPrivatePractitionerFactory.get = metadata => {
       .required(),
     user: joi.object().required(),
   };
-
-  let schemaOptionalItems = {
-    representingPrimary: joi.boolean().invalid(false),
-    representingSecondary: joi.boolean(),
-  };
-
-  const makeRequired = itemName => {
-    makeRequiredHelper({
-      itemName,
-      schema,
-      schemaOptionalItems,
-    });
-  };
-
-  if (
-    metadata.representingPrimary !== true &&
-    metadata.representingSecondary !== true
-  ) {
-    makeRequired('representingPrimary');
-  }
 
   joiValidationDecorator(
     entityConstructor,

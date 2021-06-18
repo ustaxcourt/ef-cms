@@ -1,13 +1,11 @@
 import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
+export const docketClerkEditsDocketEntryMeta = (
+  test,
+  docketRecordIndex,
+  data = {},
+) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
@@ -74,9 +72,15 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
       otherFilingParty: 'Enter other filing party name.',
     });
 
+    // note: this is not possible if the docket entry is already served
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'otherFilingParty',
       value: 'Brianna Noble',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filedBy',
+      value: data.filedBy || 'Resp. & Petr. Mona Schultz, Brianna Noble',
     });
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
@@ -101,15 +105,12 @@ export const docketClerkEditsDocketEntryMeta = (test, docketRecordIndex) => {
 
     expect(pendingDocketEntry.pending).toEqual(true);
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    const { formattedPendingDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 
-    expect(
-      caseDetailFormatted.formattedPendingDocketEntriesOnDocketRecord,
-    ).toEqual(
+    expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: pendingDocketEntry.docketEntryId,

@@ -5,41 +5,45 @@ const {
 } = require('../entities/EntityConstants');
 
 const mockDynamoUsers = {
-  ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']: {
-    email: 'docketclerk@example.com',
-    name: 'Test Docketclerk',
-    pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
-    sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
-    userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-  },
-  ['user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416']: {
-    email: 'petitionsclerk@example.com',
-    name: 'Test Petitionsclerk',
-    pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
-    sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
-    userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-  },
-  ['user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416']: {
-    email: 'petitioner@example.com',
-    name: 'Test Petitioner',
-    pk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
-    role: ROLES.petitioner,
-    sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
-    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  },
-  ['user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416']: {
-    email: 'pettitionsclerk@example.com',
-    name: 'Alex Petitionsclerk',
-    pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
-    sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
-    userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-  },
+  ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']:
+    {
+      email: 'docketclerk@example.com',
+      name: 'Test Docketclerk',
+      pk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
+      role: ROLES.docketClerk,
+      section: DOCKET_SECTION,
+      sk: 'user|1805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ['user|3805d1ab-18d0-43ec-bafb-654e83405416 user|3805d1ab-18d0-43ec-bafb-654e83405416']:
+    {
+      email: 'petitionsclerk@example.com',
+      name: 'Test Petitionsclerk',
+      pk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+      sk: 'user|3805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ['user|7805d1ab-18d0-43ec-bafb-654e83405416 user|7805d1ab-18d0-43ec-bafb-654e83405416']:
+    {
+      email: 'petitioner@example.com',
+      name: 'Test Petitioner',
+      pk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
+      role: ROLES.petitioner,
+      sk: 'user|7805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ['user|a805d1ab-18d0-43ec-bafb-654e83405416 user|a805d1ab-18d0-43ec-bafb-654e83405416']:
+    {
+      email: 'pettitionsclerk@example.com',
+      name: 'Alex Petitionsclerk',
+      pk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
+      role: ROLES.petitionsClerk,
+      section: PETITIONS_SECTION,
+      sk: 'user|a805d1ab-18d0-43ec-bafb-654e83405416',
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    },
 };
 
 const createMockDocumentClient = () => {

@@ -7,10 +7,6 @@ const {
   ROLES,
 } = require('../../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
@@ -460,7 +456,7 @@ describe('verifyUserPendingEmailInteractor', () => {
           docketNumber: '101-21',
           petitioners: [
             {
-              ...getContactPrimary(MOCK_CASE),
+              ...MOCK_CASE.petitioners[0],
               contactId: mockPetitionerUser.userId,
             },
           ],
@@ -470,7 +466,7 @@ describe('verifyUserPendingEmailInteractor', () => {
           docketNumber: '102-21',
           petitioners: [
             {
-              ...getContactPrimary(MOCK_CASE),
+              ...MOCK_CASE.petitioners[0],
               contactId: mockPetitionerUser.userId,
             },
           ],
@@ -523,7 +519,7 @@ describe('verifyUserPendingEmailInteractor', () => {
           docketNumber: '102-21',
           petitioners: [
             {
-              ...getContactPrimary(MOCK_CASE),
+              ...MOCK_CASE.petitioners[0],
               contactId: mockPetitionerUser.userId,
             },
           ],
@@ -561,7 +557,7 @@ describe('verifyUserPendingEmailInteractor', () => {
           invalidCase: 'yep',
           petitioners: [
             {
-              ...getContactPrimary(MOCK_CASE),
+              ...MOCK_CASE.petitioners[0],
               contactId: mockPetitionerUser.userId,
             },
           ],
@@ -597,7 +593,7 @@ describe('verifyUserPendingEmailInteractor', () => {
           petitioners: [
             ...MOCK_CASE.petitioners,
             {
-              ...getContactPrimary(MOCK_CASE),
+              ...MOCK_CASE.petitioners[0],
               contactId: mockPetitionerUser.userId,
               contactType: CONTACT_TYPES.secondary,
               inCareOf: 'Barney',
@@ -619,10 +615,10 @@ describe('verifyUserPendingEmailInteractor', () => {
         user: mockPetitionerUser,
       });
 
-      const {
-        caseToUpdate,
-      } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
-      expect(getContactSecondary(caseToUpdate).email).toBe(UPDATED_EMAIL);
+      const { caseToUpdate } =
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[0][0];
+      expect(caseToUpdate.petitioners[1].email).toBe(UPDATED_EMAIL);
       expect(caseToUpdate.docketNumber).toBe('102-21');
     });
   });

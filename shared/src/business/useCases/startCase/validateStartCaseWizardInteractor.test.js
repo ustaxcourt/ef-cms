@@ -9,8 +9,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('validateStartCaseWizardInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {
-    const errors = validateStartCaseWizardInteractor({
-      applicationContext,
+    const errors = validateStartCaseWizardInteractor(applicationContext, {
       petition: {},
     });
 
@@ -27,8 +26,7 @@ describe('validateStartCaseWizardInteractor', () => {
   });
 
   it('returns null for a valid petition', () => {
-    const errors = validateStartCaseWizardInteractor({
-      applicationContext,
+    const errors = validateStartCaseWizardInteractor(applicationContext, {
       petition: {
         ...MOCK_CASE,
         contactPrimary: {
