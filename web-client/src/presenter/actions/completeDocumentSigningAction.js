@@ -30,8 +30,7 @@ export const completeDocumentSigningAction = async ({
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
       .getUseCases()
-      .generateSignedDocumentInteractor({
-        applicationContext,
+      .generateSignedDocumentInteractor(applicationContext, {
         pageIndex: pageNumber - 1,
         // pdf.js starts at 1
         pdfData: await pdfjsObj.getData(),
@@ -56,16 +55,15 @@ export const completeDocumentSigningAction = async ({
         onUploadProgress: () => {},
       });
 
-    ({
-      signedDocketEntryId: docketEntryId,
-    } = await applicationContext.getUseCases().saveSignedDocumentInteractor({
-      applicationContext,
-      docketNumber,
-      nameForSigning,
-      originalDocketEntryId,
-      parentMessageId,
-      signedDocketEntryId: signedDocumentFromUploadId,
-    }));
+    ({ signedDocketEntryId: docketEntryId } = await applicationContext
+      .getUseCases()
+      .saveSignedDocumentInteractor(applicationContext, {
+        docketNumber,
+        nameForSigning,
+        originalDocketEntryId,
+        parentMessageId,
+        signedDocketEntryId: signedDocumentFromUploadId,
+      }));
   }
 
   let redirectUrl;

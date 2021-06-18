@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const externalUserFilesDocumentForOwnedCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -8,8 +9,9 @@ export const externalUserFilesDocumentForOwnedCase = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    const docketEntriesBefore = test.getState('caseDetail.docketEntries')
-      .length;
+    const docketEntriesBefore = test.getState(
+      'caseDetail.docketEntries',
+    ).length;
 
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,
@@ -77,8 +79,10 @@ export const externalUserFilesDocumentForOwnedCase = (test, fakeFile) => {
       value: fakeFile,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

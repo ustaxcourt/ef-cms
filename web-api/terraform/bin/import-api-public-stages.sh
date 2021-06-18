@@ -8,8 +8,8 @@ ENV=$1
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"0.14.9"* ]]; then
-  echo "Please set your terraform version to 0.14.9 before deploying."
+if [[ ${tf_version} != *"0.15.3"* ]]; then
+  echo "Please set your terraform version to 0.15.3 before deploying."
   exit 1
 fi
 
@@ -37,21 +37,21 @@ fi
 DESTINATION_TABLE=$(../../../get-destination-elasticsearch.sh $ENV)
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENV)
-  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENV)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENV)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENV)
+  BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+  GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENV)
-    GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENV)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENV)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENV)
+    BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+    GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENV)
   else
-    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENV)
-    BLUE_TABLE_NAME=$(../../../get-source-table.sh $ENV)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENV)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENV)
+    GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+    BLUE_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENV)
   fi
 fi
 
@@ -65,9 +65,9 @@ fi
 
 [ -z "$BRANCH" ] && BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-ES_INSTANCE_COUNT=$(../../../get-es-instance-count.sh $BRANCH)
-ES_INSTANCE_TYPE=$(../../../get-es-instance-type.sh $BRANCH)
-ES_VOLUME_SIZE=$(../../../get-es-volume-size.sh $BRANCH)
+ES_INSTANCE_COUNT=$(../../../scripts/get-es-instance-count.sh $BRANCH)
+ES_INSTANCE_TYPE=$(../../../scripts/get-es-instance-type.sh $BRANCH)
+ES_VOLUME_SIZE=$(../../../scripts/get-es-volume-size.sh $BRANCH)
 
 SNS_TOPIC_ARN=$(aws sns list-topics --region="us-east-1" --query "Topics[?contains(TopicArn, 'system_health_alarms')].TopicArn" --output=text)
 

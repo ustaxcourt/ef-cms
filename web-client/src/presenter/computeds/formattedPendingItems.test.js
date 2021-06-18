@@ -4,11 +4,8 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedPendingItems', () => {
-  const {
-    CHIEF_JUDGE,
-    DOCKET_NUMBER_SUFFIXES,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =
+    applicationContext.getConstants();
 
   const formattedPendingItems = withAppContextDecorator(
     formattedPendingItemsComputed,

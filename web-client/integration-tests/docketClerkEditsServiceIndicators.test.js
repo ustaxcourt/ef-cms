@@ -10,7 +10,7 @@ import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -45,11 +45,13 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
     test.docketNumber = caseDetail.docketNumber;
   });
 
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(test);
+
   loginAs(test, 'docketclerk@example.com');
   docketClerkEditsPetitionerInformation(test);
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
   petitionsClerkAddsPractitionersToCase(test);
   petitionsClerkAddsRespondentsToCase(test);
 

@@ -5,8 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateOpinionAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the opinionSearch', () => {
-    const errors = validateOpinionAdvancedSearchInteractor({
-      applicationContext,
+    const errors = validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch: {
         keyword: 'Joe Exotic',
         startDate: '2001-10-10',
@@ -17,8 +16,7 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
   });
 
   it('returns an error when a search term is not provided', () => {
-    const errors = validateOpinionAdvancedSearchInteractor({
-      applicationContext,
+    const errors = validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch: {
         keyword: '',
       },

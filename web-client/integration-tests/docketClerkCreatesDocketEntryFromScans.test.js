@@ -7,7 +7,6 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
-import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
@@ -51,7 +50,6 @@ describe('Create Docket Entry From Scans', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test);
 
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
@@ -65,10 +63,7 @@ describe('Create Docket Entry From Scans', () => {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(test, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  createPDFFromScannedBatches(test);
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
   docketClerkSavesAndServesDocketEntry(test);

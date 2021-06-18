@@ -5,12 +5,10 @@
  * @param {Function} onUploadProgress the progressFunction
  * @returns {Promise<string>} the key returned from a successful upload
  */
-exports.uploadDocumentAndMakeSafeInteractor = async ({
+exports.uploadDocumentAndMakeSafeInteractor = async (
   applicationContext,
-  document,
-  key,
-  onUploadProgress,
-}) => {
+  { document, key, onUploadProgress },
+) => {
   const uploadedKey = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
@@ -20,14 +18,16 @@ exports.uploadDocumentAndMakeSafeInteractor = async ({
       onUploadProgress,
     });
 
-  await applicationContext.getUseCases().virusScanPdfInteractor({
-    applicationContext,
-    key: uploadedKey,
-  });
-  await applicationContext.getUseCases().validatePdfInteractor({
-    applicationContext,
-    key: uploadedKey,
-  });
+  await applicationContext
+    .getUseCases()
+    .virusScanPdfInteractor(applicationContext, {
+      key: uploadedKey,
+    });
+  await applicationContext
+    .getUseCases()
+    .validatePdfInteractor(applicationContext, {
+      key: uploadedKey,
+    });
 
   return uploadedKey;
 };

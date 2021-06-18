@@ -9,8 +9,7 @@ export const getCompletedMessagesForUserAction = async ({
 }) => {
   const messages = await applicationContext
     .getUseCases()
-    .getCompletedMessagesForUserInteractor({
-      applicationContext,
+    .getCompletedMessagesForUserInteractor(applicationContext, {
       userId: applicationContext.getCurrentUser().userId,
     });
 

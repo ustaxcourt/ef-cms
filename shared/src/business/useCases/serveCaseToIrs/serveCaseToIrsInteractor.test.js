@@ -229,6 +229,7 @@ describe('serveCaseToIrsInteractor', () => {
           name: 'Test Petitioner Secondary',
           phone: '1234547',
           postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           state: 'TN',
           title: 'Executor',
         },
@@ -561,8 +562,8 @@ describe('serveCaseToIrsInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const updateCaseCall = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls;
+    const updateCaseCall =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls;
 
     expect(
       updateCaseCall[0][0].caseToUpdate.docketEntries.find(

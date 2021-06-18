@@ -9,11 +9,10 @@ const { post } = require('../requests');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedOrderInteractor = ({
+exports.fileCourtIssuedOrderInteractor = (
   applicationContext,
-  documentMetadata,
-  primaryDocumentFileId,
-}) => {
+  { documentMetadata, primaryDocumentFileId },
+) => {
   const { docketNumber } = documentMetadata;
   return post({
     applicationContext,

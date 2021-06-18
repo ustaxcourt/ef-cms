@@ -7,56 +7,50 @@ const {
 } = require('./createPractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-const privatePractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const irsPractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test IRS Practitioner',
-  role: ROLES.irsPractitioner,
-  section: 'privatePractitioner',
-};
-
-const inactivePractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Inactive Practitioner',
-  role: ROLES.inactivePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithSection = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithoutBarNumber = {
-  barNumber: '',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const otherUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Other',
-  role: ROLES.other,
-  section: 'other',
-};
-
 describe('createPractitionerUser', () => {
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const privatePractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const irsPractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test IRS Practitioner',
+    role: ROLES.irsPractitioner,
+    section: 'privatePractitioner',
+  };
+  const inactivePractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Inactive Practitioner',
+    role: ROLES.inactivePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithSection = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithoutBarNumber = {
+    barNumber: '',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const otherUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Other',
+    role: ROLES.other,
+    section: 'other',
+  };
+
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
       promise: async () =>
@@ -92,9 +86,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUser,
       },
     });
     expect(
@@ -126,9 +120,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUserWithoutBarNumber,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUserWithoutBarNumber,
       },
     });
 
@@ -273,9 +267,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
         },
       });
       expect(
@@ -310,9 +304,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutBarNumber,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });

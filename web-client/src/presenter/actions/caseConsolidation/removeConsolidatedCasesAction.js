@@ -18,11 +18,12 @@ export const removeConsolidatedCasesAction = async ({
     .filter(([, shouldRemove]) => shouldRemove)
     .map(([docketNumberToRemove]) => docketNumberToRemove);
 
-  await applicationContext.getUseCases().removeConsolidatedCasesInteractor({
-    applicationContext,
-    docketNumber,
-    docketNumbersToRemove,
-  });
+  await applicationContext
+    .getUseCases()
+    .removeConsolidatedCasesInteractor(applicationContext, {
+      docketNumber,
+      docketNumbersToRemove,
+    });
 
   return {
     alertSuccess: {

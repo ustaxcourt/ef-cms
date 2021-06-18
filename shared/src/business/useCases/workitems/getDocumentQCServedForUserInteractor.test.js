@@ -17,48 +17,49 @@ describe('getDocumentQCServedForUserInteractor', () => {
     };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
-    applicationContext.getPersistenceGateway().getDocumentQCServedForUser = async () => [
-      {
-        docketEntry: {
-          createdAt: '2019-03-11T21:56:01.625Z',
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'Petition',
-          entityName: 'DocketEntry',
-          eventCode: 'P',
-          filedBy: 'Lewis Dodgson',
-          filingDate: '2019-03-11T21:56:01.625Z',
-          isDraft: false,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          sentBy: 'petitioner',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+    applicationContext.getPersistenceGateway().getDocumentQCServedForUser =
+      async () => [
+        {
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'petitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          },
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+          sentBy: 'docketclerk',
         },
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
-      },
-      {
-        docketEntry: {
-          createdAt: '2019-03-11T21:56:01.625Z',
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'Petition',
-          entityName: 'DocketEntry',
-          eventCode: 'P',
-          filedBy: 'Lewis Dodgson',
-          filingDate: '2019-03-11T21:56:01.625Z',
-          isDraft: false,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          sentBy: 'petitioner',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        {
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'petitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+          },
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+          sentBy: 'docketclerk',
         },
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
-      },
-    ];
+      ];
 
     applicationContext.getUniqueId.mockReturnValue(
       '93bac4bd-d6ea-4ac7-8ff5-bf2501b1a1f2',

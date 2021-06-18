@@ -8,7 +8,7 @@
 export const getTodaysOpinionsAction = async ({ applicationContext }) => {
   const todaysOpinions = await applicationContext
     .getUseCases()
-    .getTodaysOpinionsInteractor({ applicationContext });
+    .getTodaysOpinionsInteractor(applicationContext);
 
   return { todaysOpinions };
 };

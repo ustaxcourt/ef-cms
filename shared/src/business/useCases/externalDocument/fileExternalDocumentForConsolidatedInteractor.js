@@ -158,11 +158,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
         const docketEntryEntity = new DocketEntry(
           {
             ...rawDocument,
-            contactPrimary: caseEntity.getContactPrimary(),
-            contactSecondary: caseEntity.getContactSecondary(),
           },
           {
             applicationContext,
+            petitioners: caseEntity.petitioners,
           },
         );
 
@@ -184,7 +183,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
                 associatedJudge: caseEntity.associatedJudge,
                 caseIsInProgress: caseEntity.inProgress,
                 caseStatus: caseEntity.status,
-                caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+                caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
                 docketEntry: {
                   ...docketEntryEntity.toRawObject(),
                   createdAt: docketEntryEntity.createdAt,
@@ -240,9 +239,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
           }
         }
 
-        saveCasesMap[
-          caseEntity.docketNumber
-        ] = await applicationContext
+        saveCasesMap[caseEntity.docketNumber] = await applicationContext
           .getUseCaseHelpers()
           .updateCaseAndAssociations({
             applicationContext,

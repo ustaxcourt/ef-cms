@@ -10,6 +10,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -36,6 +37,7 @@ export const completeDocketEntryQCSequence = [
   setComputeFormDateFactoryAction('dateReceived'),
   getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [

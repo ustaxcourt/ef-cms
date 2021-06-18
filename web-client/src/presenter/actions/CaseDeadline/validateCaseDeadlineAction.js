@@ -24,8 +24,7 @@ export const validateCaseDeadlineAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateCaseDeadlineInteractor({
-      applicationContext,
+    .validateCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
 

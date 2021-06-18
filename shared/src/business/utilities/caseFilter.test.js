@@ -8,11 +8,6 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
 } = require('../entities/EntityConstants');
-const {
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-} = require('../entities/cases/Case');
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
@@ -43,7 +38,6 @@ describe('caseFilter', () => {
         inCareOf: 'Friendship is Magic',
         isAddressSealed: true,
         name: 'Joe Dirt',
-        otherFilerType: 'Nail File',
         secondaryName: 'Cheeseburgers',
         serviceIndicator: 'Electronic',
         title: 'Emperor',
@@ -63,12 +57,7 @@ describe('caseFilter', () => {
         role: ROLES.petitioner,
       });
 
-      [
-        getContactPrimary(result),
-        getContactSecondary(result),
-        ...getOtherFilers(result),
-        ...getOtherFilers(result),
-      ].forEach(party => {
+      result.petitioners.forEach(party => {
         expect(Object.keys(party).sort()).toMatchObject([
           'additionalName',
           'contactId',
@@ -76,7 +65,6 @@ describe('caseFilter', () => {
           'inCareOf',
           'isAddressSealed',
           'name',
-          'otherFilerType',
           'sealedAndUnavailable',
           'secondaryName',
           'serviceIndicator',
@@ -160,7 +148,7 @@ describe('caseFilter', () => {
       });
 
       expect(result.length).toEqual(4);
-      expect(getContactPrimary(result[2])).toMatchObject({
+      expect(result[2].petitioners[0]).toMatchObject({
         isAddressSealed: true,
         name: 'Joe Walsh',
         sealedAndUnavailable: true,

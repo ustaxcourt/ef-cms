@@ -52,24 +52,21 @@ export const uploadExternalDocumentsAction = async ({
   const progressFunctions = setupPercentDone(documentFiles, store);
 
   try {
-    const {
-      caseDetail,
-      docketEntryIdsAdded,
-    } = await applicationContext
+    const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor({
-        applicationContext,
+      .uploadExternalDocumentsInteractor(applicationContext, {
         documentFiles,
         documentMetadata,
         progressFunctions,
       });
 
     const addCoversheet = docketEntryId => {
-      return applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
+      return applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
     };
 
     for (let docketEntryId of docketEntryIdsAdded) {

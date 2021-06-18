@@ -45,7 +45,7 @@ describe('loginWithCodeSequence', () => {
       code: 'abc',
     });
     expect(
-      applicationContext.getUseCases().refreshTokenInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().refreshTokenInteractor.mock.calls[0][1]
         .refreshToken,
     ).toEqual(TOKEN);
     expect(test.getState('token')).toEqual(NEW_TOKEN);

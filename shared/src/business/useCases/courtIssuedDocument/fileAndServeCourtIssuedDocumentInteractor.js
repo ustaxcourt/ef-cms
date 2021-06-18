@@ -25,10 +25,10 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * fileAndServeCourtIssuedDocumentInteractor
  *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.documentMeta the document metadata
- * @returns {object} the url of the document that was served
+ * @param {Object} applicationContext the application context
+ * @param {Object} providers the providers object
+ * @param {String} providers.documentMeta the document metadata
+ * @returns {Object} the url of the document that was served
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
@@ -91,7 +91,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       draftOrderState: null,
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
-      filedBy: undefined,
       filingDate: createISODateString(),
       freeText: documentMeta.freeText,
       isDraft: false,
@@ -116,7 +115,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
         associatedJudge: caseToUpdate.associatedJudge,
         caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
-        caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,

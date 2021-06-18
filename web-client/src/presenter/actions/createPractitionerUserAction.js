@@ -22,8 +22,7 @@ export const createPractitionerUserAction = async ({
   try {
     const practitionerUser = await applicationContext
       .getUseCases()
-      .createPractitionerUserInteractor({
-        applicationContext,
+      .createPractitionerUserInteractor(applicationContext, {
         user: practitioner,
       });
     return path.success({

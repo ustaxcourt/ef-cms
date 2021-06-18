@@ -3,8 +3,8 @@ const { Writable } = require('stream');
 
 const config = {
   credentials: {
-    accessKeyId: 'noop',
-    secretAccessKey: 'noop',
+    accessKeyId: 'S3RVER',
+    secretAccessKey: 'S3RVER',
   },
   endpoint: 'http://localhost:8000',
   region: 'us-east-1',

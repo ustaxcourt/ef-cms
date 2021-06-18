@@ -2287,7 +2287,7 @@
         }
       }
     },
-    "/case-documents/{docketNumber}/docket-entry": {
+    "/case-documents/{docketNumber}/paper-filing": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -2300,8 +2300,8 @@
         "tags": [
           "documents"
         ],
-        "summary": "file a new docket entry on a case",
-        "description": "Creates a new docket entry/document and attaches it to a case.\n",
+        "summary": "file a new paper docket entry on a case",
+        "description": "Creates a new paper docket entry/document and attaches it to a case.\n",
         "produces": [
           "application/json"
         ],
@@ -2323,8 +2323,8 @@
         "tags": [
           "documents"
         ],
-        "summary": "updates a current docket entry on a case",
-        "description": "Updates a docket entry/document and attaches it to a case.\n",
+        "summary": "updates a current paper docket entry on a case",
+        "description": "Updates a paper docket entry/document and attaches it to a case.\n",
         "produces": [
           "application/json"
         ],
@@ -6383,6 +6383,66 @@
         ],
         "summary": "updates the specified case contact address as sealed",
         "description": "updates the case contact address as sealed.\n",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-meta/{docketNumber}/add-petitioner,": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "adds a petitioner to the case",
+        "description": "adds a petitioner to the case.\n",
         "produces": [
           "application/json"
         ],

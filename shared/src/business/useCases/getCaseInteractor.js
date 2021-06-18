@@ -1,5 +1,6 @@
 const {
   Case,
+  getPetitionerById,
   isAssociatedUser,
   isSealedCase,
 } = require('../entities/cases/Case');
@@ -8,10 +9,6 @@ const {
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -19,39 +16,28 @@ const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
-const isAuthorizedForContact = ({
-  contact,
-  currentUser,
-  defaultValue,
-  permission,
-}) => {
-  return !!(
-    defaultValue ||
-    (contact && isAuthorized(currentUser, permission, contact.contactId))
-  );
-};
-
-exports.isAuthorizedForContact = isAuthorizedForContact;
-
 const getSealedCase = async ({
   applicationContext,
   caseRecord,
   isAssociatedWithCase,
 }) => {
   const currentUser = applicationContext.getCurrentUser();
+
   let isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    getContactPrimary(caseRecord).contactId,
   );
 
-  // check secondary contact if existent
-  isAuthorizedToViewSealedCase = isAuthorizedForContact({
-    contact: getContactSecondary(caseRecord),
-    currentUser,
-    defaultValue: isAuthorizedToViewSealedCase,
-    permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-  });
+  if (!isAuthorizedToViewSealedCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToViewSealedCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
+  }
 
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
     return new Case(caseRecord, { applicationContext })
@@ -109,19 +95,21 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   }
 
   const currentUser = applicationContext.getCurrentUser();
+
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    getContactPrimary(caseRecord).contactId,
   );
-
-  // check secondary contact if existent
-  isAuthorizedToGetCase = isAuthorizedForContact({
-    contact: getContactSecondary(caseRecord),
-    currentUser,
-    defaultValue: isAuthorizedToGetCase,
-    permission: ROLE_PERMISSIONS.GET_CASE,
-  });
+  if (!isAuthorizedToGetCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToGetCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.GET_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
+  }
 
   const isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
