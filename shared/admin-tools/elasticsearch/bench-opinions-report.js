@@ -1,10 +1,24 @@
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';
-const version = process.argv[3] || 'alpha';
+
+// eslint-disable-next-line @miovision/disallow-date/no-new-date
+const d = new Date();
+const year = process.argv[3] || d.getFullYear();
+let nextYear = year;
+const month = (process.argv[4] || d.getMonth() + 1 + '').padStart(2, '0');
+let nextMonth = (parseInt(month) + 1) % 12;
+if (nextMonth === 1) {
+  nextYear++;
+}
+nextMonth = (nextMonth + '').padStart(2, '0');
+
+console.log(
+  `--- generating report for ${month}, ${year} through ${nextMonth}, ${nextYear} ---`,
+);
 
 const findBenchOpinions = async (start, end) => {
-  const esClient = await getClient({ environmentName, version });
+  const esClient = await getClient({ environmentName });
   const query = {
     body: {
       _source: ['pk.S', 'sk.S'],
@@ -41,8 +55,9 @@ const findBenchOpinions = async (start, end) => {
 
 (async () => {
   const docketNumbers = await findBenchOpinions(
-    '2021-03-01T00:00:00Z',
-    '2021-04-01T00:00:00Z',
+    `${year}-${month}-01T04:00:00Z`,
+    `${nextYear}-${nextMonth}-01T04:00:00Z`,
   );
-  console.log(docketNumbers);
+  docketNumbers.forEach(num => console.log(num));
+  // console.log(docketNumbers);
 })();
