@@ -9,15 +9,10 @@ import React from 'react';
 export const PractitionerContactForm = connect(
   {
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
-    bind: props.bind,
-    changeCountryTypeSequence: props.changeCountryTypeSequence,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
-    onBlurSequenceName: props.onBlurSequenceName,
     onBlurValidationSequence: sequences[props.onBlurSequenceName],
-    onChangeSequenceName: props.onChangeSequenceName,
     onChangeUpdateSequence: sequences[props.onChangeSequenceName],
-    type: props.type,
     validationErrors: state.validationErrors,
   },
   function PractitionerContactForm({
