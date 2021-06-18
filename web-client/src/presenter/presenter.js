@@ -179,6 +179,7 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
+import { navigateToCaseDetailIfNeededSequence } from './sequences/navigateToCaseDetailIfNeededSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
@@ -657,6 +658,7 @@ export const presenter = {
     loginWithTokenSequence,
     navigateBackSequence,
     navigateToCaseDetailFromPaperServiceSequence,
+    navigateToCaseDetailIfNeededSequence,
     navigateToCaseDetailSequence,
     navigateToCaseDetailWithDraftDocumentSequence,
     navigateToEditOrderSequence,
