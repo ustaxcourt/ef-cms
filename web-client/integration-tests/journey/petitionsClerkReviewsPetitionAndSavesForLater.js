@@ -27,6 +27,11 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
       docketNumber: test.docketNumber,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: true,
+    });
+
     await test.runSequence('saveSavedCaseForLaterSequence', {});
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
