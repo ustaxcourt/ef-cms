@@ -3,7 +3,7 @@ import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerForm = connect(
@@ -16,6 +16,7 @@ export const PractitionerForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
+    validateSequence: sequences[props.validateSequenceName],
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
@@ -28,6 +29,7 @@ export const PractitionerForm = connect(
     usStates,
     usStatesOther,
     validateSequence,
+    validateSequenceName,
     validationErrors,
   }) {
     return (
@@ -269,7 +271,7 @@ export const PractitionerForm = connect(
                     bind="form"
                     changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                     type="contact"
-                    onBlurSequenceName="validateSequence"
+                    onBlurSequenceName={validateSequenceName}
                     onChangeSequenceName="updateFormValueSequence"
                   />
                 </div>

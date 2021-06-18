@@ -184,7 +184,6 @@ Case.prototype.assignFieldsForInternalUsers =
     this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.status = rawCase.status || CASE_STATUS_TYPES.new;
 
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
@@ -229,6 +228,7 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   this.procedureType = rawCase.procedureType;
   this.receivedAt = rawCase.receivedAt || createISODateString();
   this.sealedDate = rawCase.sealedDate;
+  this.status = rawCase.status || CASE_STATUS_TYPES.new;
   this.sortableDocketNumber =
     rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
   this.trialDate = rawCase.trialDate;
@@ -2019,11 +2019,12 @@ Case.sortByDocketNumber = function (cases) {
     const bSplit = b.docketNumber.split('-');
 
     if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same
+      // compare years if they aren't the same;
+      // compare as strings, because they *might* have suffix
       return aSplit[1].localeCompare(bSplit[1]);
     } else {
-      // compare index if years are the same
-      return aSplit[0].localeCompare(bSplit[0]);
+      // compare index if years are the same, compare as integers
+      return +aSplit[0] - +bSplit[0];
     }
   });
 };
