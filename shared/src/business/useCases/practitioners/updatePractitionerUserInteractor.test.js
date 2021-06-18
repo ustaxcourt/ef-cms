@@ -118,7 +118,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockPractitioner });
   });
 
-  it('updates the practitioner user and adds an email when the original user did not have an email', async () => {
+  it('updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
@@ -144,12 +144,28 @@ describe('updatePractitionerUserInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
-        .calls[0][0].user.email,
-    ).toEqual('admissionsclerk@example.com');
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
         .calls[0][0].user.pendingEmail,
     ).toEqual('admissionsclerk@example.com');
+  });
+
+  it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
+
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        name: 'Donna Harking',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateUserRecords.mock.calls[0][0],
+    ).toMatchObject({
+      updatedUser: { ...mockPractitioner, name: 'Donna Harking' },
+    });
   });
 
   describe('updating email', () => {
