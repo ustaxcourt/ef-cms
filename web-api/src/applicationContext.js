@@ -405,6 +405,9 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCaseMetadataWithCounsel,
+} = require('../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel');
+const {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
@@ -1296,6 +1299,7 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
+  getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
