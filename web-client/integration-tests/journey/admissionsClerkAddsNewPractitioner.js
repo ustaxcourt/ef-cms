@@ -8,7 +8,6 @@ export const admissionsClerkAddsNewPractitioner = test => {
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'phone',
-      'email',
       'admissionsDate',
       'birthYear',
       'employer',
