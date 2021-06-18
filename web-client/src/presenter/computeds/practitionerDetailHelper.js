@@ -16,6 +16,9 @@ export const practitionerDetailHelper = (get, applicationContext) => {
       .formatDateString(practitionerDetail.admissionsDate, 'MM/DD/YYYY'),
     emailFormatted: practitionerDetail.email || 'Not provided',
     firmNameFormatted: practitionerDetail.firmName || 'None',
+    pendingEmailFormatted: practitionerDetail.pendingEmail
+      ? `${practitionerDetail.pendingEmail} (Pending)`
+      : null,
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
     showPrintCaseListLink: isInternalUser,
