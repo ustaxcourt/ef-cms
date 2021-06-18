@@ -1542,6 +1542,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 /**
  * Computes and sets additionalName for contactPrimary depending on partyType
  *
+ * @returns {object} the object with the updated petitioners
  */
 const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);
@@ -1579,12 +1580,13 @@ const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
       default:
         break;
     }
+
+    const originalContact = obj.petitioners.find(
+      p => p.contactId === contactPrimary.contactId,
+    );
+    Object.assign(originalContact, contactPrimary);
   }
 
-  let originalContact = obj.petitioners.find(
-    p => p.contactId === contactPrimary.contactId,
-  );
-  Object.assign(originalContact, contactPrimary);
   return obj;
 };
 
