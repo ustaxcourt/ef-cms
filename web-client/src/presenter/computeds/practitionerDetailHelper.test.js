@@ -172,4 +172,19 @@ describe('practitionerDetailHelper', () => {
     });
     expect(showPrintCaseListLink).toBeFalsy();
   });
+
+  it('should set a pendingEmailFormatted if pendingEmail is set on the user', () => {
+    const { pendingEmailFormatted } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          pendingEmail: 'testing@example.com',
+        },
+        user: { role: 'irsPractitioner' },
+      },
+    });
+    expect(pendingEmailFormatted).toEqual('testing@example.com (Pending)');
+  });
 });
