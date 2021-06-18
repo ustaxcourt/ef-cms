@@ -19,8 +19,11 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 const test = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const {
+    COUNTRY_TYPES,
+    PARTY_TYPES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -95,10 +98,6 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(test, 'admissionsclerk@example.com');
   admissionsClerkAddsPractitionerEmail(test);
-  admissionsClerkVerifiesPractitionerServiceIndicator(
-    test,
-    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  );
 
   // show Practitioners only, and not case-users (bug ref: #8081)
   it('searches for indexed Practitioners only and not CaseUser records', async () => {
