@@ -57,6 +57,8 @@ export const validateAddPractitionerAction = ({
       practitioner,
     });
 
+  console.log('errors! ', errors);
+
   if (!errors) {
     return path.success();
   } else {
