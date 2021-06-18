@@ -11,21 +11,21 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updatePetitionDetailsAction } from '../actions/updatePetitionDetailsAction';
-import { validatePetitionDetailsAction } from '../actions/validatePetitionDetailsAction';
+import { updateCaseDetailsAction } from '../actions/updateCaseDetailsAction';
+import { validateCaseDetailsAction } from '../actions/validateCaseDetailsAction';
 
-export const updatePetitionDetailsSequence = [
+export const updateCaseDetailsSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeStatisticDatesAction,
   computePetitionDatesAction,
-  validatePetitionDetailsAction,
+  validateCaseDetailsAction,
   {
     error: [setAlertErrorAction, setValidationErrorsAction],
     success: [
       setCurrentPageAction('Interstitial'),
       setCaseTypeAction,
-      updatePetitionDetailsAction,
+      updateCaseDetailsAction,
       setCaseAction,
       setCaseDetailShowEditPetitionFalseAction,
       setSaveAlertsForNavigationAction,
