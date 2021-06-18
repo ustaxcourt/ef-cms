@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -38,6 +39,7 @@ describe('PublicCase', () => {
             },
           ],
           receivedAt: '2020-01-05T03:30:45.007Z',
+          status: CASE_STATUS_TYPES.calendared,
         },
         { applicationContext },
       );
@@ -96,6 +98,7 @@ describe('PublicCase', () => {
         ],
         privatePractitioners: [],
         receivedAt: 'testing',
+        status: CASE_STATUS_TYPES.new,
       },
       { applicationContext },
     );
@@ -110,6 +113,7 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isPaper: true,
       isSealed: false,
+      isStatusNew: true,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -147,6 +151,7 @@ describe('PublicCase', () => {
           },
         ],
         receivedAt: 'testing',
+        status: CASE_STATUS_TYPES.calendared,
       },
       { applicationContext },
     );
@@ -160,6 +165,7 @@ describe('PublicCase', () => {
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
       isSealed: false,
+      isStatusNew: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -199,6 +205,7 @@ describe('PublicCase', () => {
           },
         ],
         receivedAt: 'testing',
+        status: CASE_STATUS_TYPES.closed,
       },
       { applicationContext },
     );
@@ -230,6 +237,7 @@ describe('PublicCase', () => {
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
       isSealed: false,
+      isStatusNew: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {

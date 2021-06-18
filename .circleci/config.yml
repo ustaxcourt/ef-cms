@@ -768,6 +768,7 @@ workflows:
               only:
                 - irs
                 - staging
+                - test
                 - experimental1
                 - experimental2
                 - experimental3
@@ -780,6 +781,7 @@ workflows:
               only:
                 - irs
                 - staging
+                - test
                 - master
                 - experimental1
                 - experimental2

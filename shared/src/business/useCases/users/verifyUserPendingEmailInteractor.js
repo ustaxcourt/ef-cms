@@ -102,14 +102,15 @@ exports.updatePetitionerCases = updatePetitionerCases;
  * @returns {Promise} resolves upon completion of case updates
  */
 const updatePractitionerCases = async ({ applicationContext, user }) => {
-  const practitionerCases = await applicationContext
+  const practitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getDocketNumbersByUser({
       applicationContext,
       userId: user.userId,
     });
+
   const casesToUpdate = await Promise.all(
-    practitionerCases.map(({ docketNumber }) =>
+    practitionerDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -133,6 +134,8 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       practitionerObject.email = user.email;
+      practitionerObject.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();

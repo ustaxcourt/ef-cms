@@ -27,48 +27,6 @@ module.exports = {
     'closedDate.S': {
       type: 'date',
     },
-    'docketEntries.L.M.createdAt.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.docketEntryId.S': {
-      type: 'keyword',
-    },
-    'docketEntries.L.M.documentType.S': {
-      type: 'keyword',
-    },
-    'docketEntries.L.M.entityName.S': {
-      type: 'keyword',
-    },
-    'docketEntries.L.M.eventCode.S': {
-      type: 'keyword',
-    },
-    'docketEntries.L.M.filedBy.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.filingDate.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.indexedTimestamp.N': {
-      type: 'text',
-    },
-    'docketEntries.L.M.isDraft.BOOL': {
-      type: 'boolean',
-    },
-    'docketEntries.L.M.judge.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.pending.BOOL': {
-      type: 'boolean',
-    },
-    'docketEntries.L.M.receivedAt.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.servedAt.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.userId.S': {
-      type: 'keyword',
-    },
     'docketNumber.S': {
       type: 'keyword',
     },
