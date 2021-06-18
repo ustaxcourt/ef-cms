@@ -351,7 +351,7 @@ const assignContacts = ({ applicationContext, obj, rawCase }) => {
         petitioner => new Petitioner(petitioner, { applicationContext }),
       );
 
-      setAdditionalNameOnPetitioners(rawCase);
+      setAdditionalNameOnPetitioners({ obj, rawCase });
     }
   }
 };
@@ -1543,7 +1543,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
  * Computes and sets additionalName for contactPrimary depending on partyType
  *
  */
-const setAdditionalNameOnPetitioners = function (rawCase) {
+const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);
 
   if (contactPrimary && !contactPrimary.additionalName) {
@@ -1580,6 +1580,12 @@ const setAdditionalNameOnPetitioners = function (rawCase) {
         break;
     }
   }
+
+  let originalContact = obj.petitioners.find(
+    p => p.contactId === contactPrimary.contactId,
+  );
+  Object.assign(originalContact, contactPrimary);
+  return obj;
 };
 
 /**
