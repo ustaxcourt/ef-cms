@@ -140,32 +140,48 @@ Case.VALIDATION_ERROR_MESSAGES = {
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case() {}
+function Case() {
+  this.entityName = 'Case';
+}
 
 Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
+  caseDecorator(this, rawCase, { applicationContext, filtered });
+};
+
+const caseDecorator = (
+  obj,
+  rawObject,
+  { applicationContext, filtered = false },
+) => {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.entityName = 'Case';
-  this.petitioners = [];
+  obj.petitioners = [];
 
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.assignFieldsForInternalUsers({ applicationContext, rawCase });
+    obj.assignFieldsForInternalUsers({
+      applicationContext,
+      rawCase: rawObject,
+    });
   }
 
   // assignContacts needs to come first before assignDocketEntries
-  this.assignContacts({ applicationContext, filtered, rawCase });
-  this.assignDocketEntries({ applicationContext, filtered, rawCase });
-  this.assignHearings({ applicationContext, rawCase });
-  this.assignPractitioners({ applicationContext, filtered, rawCase });
-  this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  obj.assignContacts({ applicationContext, filtered, rawCase: rawObject });
+  obj.assignDocketEntries({ applicationContext, filtered, rawCase: rawObject });
+  obj.assignHearings({ applicationContext, rawCase: rawObject });
+  obj.assignPractitioners({ applicationContext, filtered, rawCase: rawObject });
+  obj.assignFieldsForAllUsers({
+    applicationContext,
+    filtered,
+    rawCase: rawObject,
+  });
 };
 
 Case.prototype.assignFieldsForInternalUsers =
