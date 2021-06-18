@@ -34,6 +34,7 @@ import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequen
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
 import { cancelFileUploadSequence } from './sequences/cancelFileUploadSequence';
 import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetitionerSequence';
+import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
@@ -179,7 +180,6 @@ import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
-import { navigateToCaseDetailIfNeededSequence } from './sequences/navigateToCaseDetailIfNeededSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
@@ -513,6 +513,7 @@ export const presenter = {
     cancelAndNavigateToCorrespondenceSequence,
     cancelFileUploadSequence,
     cancelRemovePetitionerSequence,
+    caseDetailPrimaryTabChangeSequence,
     caseInventoryReportLoadMoreSequence,
     cerebralBindSimpleSetStateSequence,
     changeTabAndSetViewerDocumentToDisplaySequence,
@@ -658,7 +659,6 @@ export const presenter = {
     loginWithTokenSequence,
     navigateBackSequence,
     navigateToCaseDetailFromPaperServiceSequence,
-    navigateToCaseDetailIfNeededSequence,
     navigateToCaseDetailSequence,
     navigateToCaseDetailWithDraftDocumentSequence,
     navigateToEditOrderSequence,
