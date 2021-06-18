@@ -37,7 +37,10 @@ export const IRSNotice = connect(
     const renderIrsNoticeRadios = () => {
       return (
         <FormGroup errorText={validationErrors.hasVerifiedIrsNotice}>
-          <fieldset className="usa-fieldset" id="irs-verified-notice-radios">
+          <fieldset
+            className="usa-fieldset margin-bottom-0"
+            id="irs-verified-notice-radios"
+          >
             <legend htmlFor="irs-verified-notice-radios">
               IRS Notice provided?
             </legend>
