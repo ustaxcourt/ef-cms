@@ -6,19 +6,13 @@ import classNames from 'classnames';
 
 export const CaseDetailSubnavTabs = connect(
   {
+    caseDetailPrimaryTabChangeSequence:
+      sequences.caseDetailPrimaryTabChangeSequence,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
-    clearAlertSequence: sequences.clearAlertSequence,
-    clearDocumentViewerDataSequence: sequences.clearDocumentViewerDataSequence,
-    navigateToCaseDetailIfNeededSequence:
-      sequences.navigateToCaseDetailIfNeededSequence,
-    setCaseDetailPrimaryTabSequence: sequences.setCaseDetailPrimaryTabSequence,
   },
   function CaseDetailSubnavTabs({
+    caseDetailPrimaryTabChangeSequence,
     caseDetailSubnavHelper,
-    clearAlertSequence,
-    clearDocumentViewerDataSequence,
-    navigateToCaseDetailIfNeededSequence,
-    setCaseDetailPrimaryTabSequence,
   }) {
     return (
       <div className="case-detail-primary-tabs__container">
@@ -27,12 +21,7 @@ export const CaseDetailSubnavTabs = connect(
             bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
             headingLevel="2"
-            onSelect={() => {
-              clearAlertSequence();
-              navigateToCaseDetailIfNeededSequence();
-              setCaseDetailPrimaryTabSequence();
-              clearDocumentViewerDataSequence();
-            }}
+            onSelect={caseDetailPrimaryTabChangeSequence}
           >
             <Tab
               className="padding-left-2"
