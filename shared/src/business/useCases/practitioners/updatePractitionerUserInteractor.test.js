@@ -151,20 +151,29 @@ describe('updatePractitionerUserInteractor', () => {
   it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
+      .getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        email: undefined,
+      });
 
     await updatePractitionerUserInteractor(applicationContext, {
       barNumber: 'AB1111',
       user: {
         ...mockPractitioner,
-        name: 'Donna Harking',
+        email: undefined,
+        firstName: 'Donna',
       },
     });
 
     expect(
       applicationContext.getUseCaseHelpers().updateUserRecords.mock.calls[0][0],
     ).toMatchObject({
-      updatedUser: { ...mockPractitioner, name: 'Donna Harking' },
+      updatedUser: {
+        ...mockPractitioner,
+        email: undefined,
+        firstName: 'Donna',
+        name: 'Donna Attorney',
+      },
     });
   });
 
