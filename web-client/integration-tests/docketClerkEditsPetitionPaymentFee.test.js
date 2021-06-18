@@ -60,7 +60,7 @@ describe('docket clerk edits a petition payment fee', () => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
-      value: true,
+      value: false,
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',

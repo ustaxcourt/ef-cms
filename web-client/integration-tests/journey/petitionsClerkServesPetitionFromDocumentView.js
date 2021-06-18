@@ -41,7 +41,7 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
-      value: true,
+      value: false,
     });
 
     expect(test.getState('currentPage')).toEqual('PetitionQc');
