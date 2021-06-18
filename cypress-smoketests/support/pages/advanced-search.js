@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
@@ -61,7 +61,9 @@ exports.createOpinion = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
-  cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+  cy.get('inputprimary-document-file').attachFile(
+    '../../fixtures/w3-dummy.pdf',
+  );
   cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 

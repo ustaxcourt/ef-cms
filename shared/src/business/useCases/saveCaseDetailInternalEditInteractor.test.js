@@ -15,6 +15,7 @@ const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
@@ -27,6 +28,7 @@ describe('updateCase', () => {
     docketEntries: [
       {
         docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '56789-18',
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
@@ -47,6 +49,7 @@ describe('updateCase', () => {
       },
       {
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '56789-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -54,6 +57,7 @@ describe('updateCase', () => {
       },
       {
         docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '56789-18',
         documentType: 'Motion for Continuance',
         eventCode: 'M006',
         filedBy: 'Test Petitioner',
@@ -241,6 +245,7 @@ describe('updateCase', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
     const mockRQT = {
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      docketNumber: MOCK_CASE.docketNumber,
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',

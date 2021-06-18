@@ -3,26 +3,26 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateTrialSessionAction } from './updateTrialSessionAction';
 
-const MOCK_TRIAL = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2019-12-01T00:00:00.000Z',
-  swingSession: true,
-  swingSessionId: '456',
-  term: 'Fall',
-  trialLocation: 'Birmingham, Alabama',
-  trialSessionId: '123',
-};
-
-const successMock = jest.fn();
-const errorMock = jest.fn();
-
-presenter.providers.path = {
-  error: errorMock,
-  success: successMock,
-};
-
 describe('updateTrialSessionAction', () => {
+  const MOCK_TRIAL = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2019-12-01T00:00:00.000Z',
+    swingSession: true,
+    swingSessionId: '456',
+    term: 'Fall',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '123',
+  };
+
+  const successMock = jest.fn();
+  const errorMock = jest.fn();
+
+  presenter.providers.path = {
+    error: errorMock,
+    success: successMock,
+  };
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
@@ -40,6 +40,7 @@ describe('updateTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
+
     expect(successMock).toHaveBeenCalled();
   });
 
@@ -52,6 +53,7 @@ describe('updateTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
+
     expect(
       applicationContext.getUseCases().updateTrialSessionInteractor,
     ).toHaveBeenCalled();
@@ -60,7 +62,7 @@ describe('updateTrialSessionAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',
@@ -71,6 +73,7 @@ describe('updateTrialSessionAction', () => {
     applicationContext
       .getUseCases()
       .updateTrialSessionInteractor.mockRejectedValue(new Error('bad'));
+
     await runAction(updateTrialSessionAction, {
       modules: {
         presenter,
@@ -79,6 +82,7 @@ describe('updateTrialSessionAction', () => {
         form: { ...MOCK_TRIAL },
       },
     });
+
     expect(errorMock).toHaveBeenCalled();
   });
 });

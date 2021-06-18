@@ -5,15 +5,18 @@ import { sortTodaysOrdersSequence } from './sortTodaysOrdersSequence';
 
 describe('sortTodaysOrdersSequence', () => {
   let test;
+
   beforeAll(() => {
-    applicationContext.getUseCases().getTodaysOrdersInteractor.mockReturnValue({
-      results: ['newly', 'sorted', 'results'],
-      totalCount: 3,
-    });
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       sortTodaysOrdersSequence,
     };
+
+    applicationContext.getUseCases().getTodaysOrdersInteractor.mockReturnValue({
+      results: ['newly', 'sorted', 'results'],
+      totalCount: 3,
+    });
+
     test = CerebralTest(presenter);
   });
 
@@ -34,15 +37,15 @@ describe('sortTodaysOrdersSequence', () => {
     expect(test.getState('sessionMetadata.todaysOrdersSort')).toBe(
       'filingDate',
     );
-
     expect(
       applicationContext.getUseCases().getTodaysOrdersInteractor,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      page: 1,
-      todaysOrdersSort: 'filingDate',
-    });
-
+    ).toHaveBeenCalledWith(
+      { context: expect.anything() },
+      {
+        page: 1,
+        todaysOrdersSort: 'filingDate',
+      },
+    );
     expect(test.getState('todaysOrders')).toMatchObject({
       page: 2,
       results: ['newly', 'sorted', 'results'],

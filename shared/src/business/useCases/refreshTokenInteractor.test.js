@@ -15,8 +15,7 @@ describe('refreshToken', () => {
       },
     });
 
-    let result = await refreshTokenInteractor({
-      applicationContext,
+    let result = await refreshTokenInteractor(applicationContext, {
       refreshToken: 'asdf',
     });
 

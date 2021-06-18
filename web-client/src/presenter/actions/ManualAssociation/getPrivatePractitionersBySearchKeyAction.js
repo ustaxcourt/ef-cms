@@ -15,8 +15,7 @@ export const getPrivatePractitionersBySearchKeyAction = async ({
 
   const privatePractitioners = await applicationContext
     .getUseCases()
-    .getPrivatePractitionersBySearchKeyInteractor({
-      applicationContext,
+    .getPrivatePractitionersBySearchKeyInteractor(applicationContext, {
       searchKey,
     });
 

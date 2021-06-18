@@ -26,7 +26,6 @@ export const EditCaseDeadlineModalDialog = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Save"
         confirmSequence={confirmSequence}
         title="Edit Deadline"

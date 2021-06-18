@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -8,6 +8,7 @@ import {
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
+import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -25,6 +26,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
+  petitionsClerkSubmitsPaperCaseToIrs(test);
 
   // verify it is paper
 
@@ -43,30 +45,35 @@ describe('Petitioner Service Indicator Journey', () => {
       },
     );
 
-    const contactPrimary = applicationContext
-      .getUtilities()
-      .getContactPrimary(caseDetailFormatted);
+    const contactPrimary = caseDetailFormatted.petitioners[0];
 
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   loginAs(test, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+      key: 'contact.updatedEmail',
       value: 'petitioner@example.com',
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+      key: 'contact.confirmEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
     expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('modal.showModal')).toEqual('MatchingEmailFoundModal');
@@ -177,16 +184,19 @@ describe('Petitioner Service Indicator Journey', () => {
   // explicitly set petitioner to Paper
   loginAs(test, 'docketclerk@example.com');
   it('Updates petitioner service indicator to paper', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    const contactToEdit = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactToEdit.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.serviceIndicator',
+      key: 'contact.serviceIndicator',
       value: 'Paper',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
@@ -212,56 +222,71 @@ describe('Petitioner Service Indicator Journey', () => {
   // explicitly set petitioner to Paper
   loginAs(test, 'docketclerk@example.com');
   it('Updates petitioner service indicator to none', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
+    let contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
       docketNumber: test.docketNumber,
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.serviceIndicator',
+      key: 'contact.serviceIndicator',
       value: 'None',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await test.runSequence('submitEditPetitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
 
-    const caseDetail = runCompute(
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: test.getState(),
       },
     );
 
-    expect(caseDetail.contactPrimary.serviceIndicator).toEqual('None');
+    contactPrimary = caseDetailFormatted.petitioners[0];
+    expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
-  // remove private practitioner
   loginAs(test, 'docketclerk@example.com');
-  it('Removes private practitioner from case and check service indicator is switched back to paper', async () => {
+  it('Removes private practitioner from case and check service indicator is electronic when contact has an email', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = test.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.removeFromCase',
-      value: true,
+    await test.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+
+    await test.runSequence('openRemovePetitionerCounselModalSequence');
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await test.runSequence('removePetitionerCounselFromCaseSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const contactPrimary = contactPrimaryFromState(test);
-    expect(contactPrimary.serviceIndicator).toEqual('Paper');
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+    expect(contactPrimary.email).toBeDefined();
   });
 
   loginAs(test, 'irsPractitioner@example.com');
-  it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
+  it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
@@ -269,6 +294,8 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(test.getState('currentPage')).toEqual('CaseDetail');
 
     const contactPrimary = contactPrimaryFromState(test);
-    expect(contactPrimary.serviceIndicator).toEqual('Paper');
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
   });
 });

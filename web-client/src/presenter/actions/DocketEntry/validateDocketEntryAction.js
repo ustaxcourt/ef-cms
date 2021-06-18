@@ -18,8 +18,7 @@ export const validateDocketEntryAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateDocketEntryInteractor({
-      applicationContext,
+    .validateDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
 
@@ -39,8 +38,7 @@ export const validateDocketEntryAction = ({
       'ordinalValue',
       'certificateOfServiceDate',
       'objections',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
     ];

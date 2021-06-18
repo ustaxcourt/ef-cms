@@ -25,8 +25,7 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
 
   const searchResults = await applicationContext
     .getUseCases()
-    .opinionPublicSearchInteractor({
-      applicationContext,
+    .opinionPublicSearchInteractor(applicationContext, {
       searchParams,
     });
 

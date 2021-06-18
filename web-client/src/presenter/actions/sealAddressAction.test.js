@@ -5,6 +5,8 @@ import { sealAddressAction } from './sealAddressAction';
 
 describe('sealAddressAction', () => {
   const caseDetail = { docketNumber: '123-20' };
+  const mockContactId = '123456';
+  const mockDocketNumber = '999-99';
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -15,8 +17,6 @@ describe('sealAddressAction', () => {
   });
 
   it('makes a call to seal the case contact using state.contactId and returns the updated case detail and success message', async () => {
-    const mockContactId = '123456';
-    const mockDocketNumber = '999-99';
     const result = await runAction(sealAddressAction, {
       modules: {
         presenter,
@@ -38,7 +38,7 @@ describe('sealAddressAction', () => {
 
     expect(
       applicationContext.getUseCases().sealCaseContactAddressInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       contactId: mockContactId,
       docketNumber: mockDocketNumber,
@@ -48,5 +48,27 @@ describe('sealAddressAction', () => {
       alertSuccess: { message: 'Address sealed for Bob Barker.' },
       caseDetail,
     });
+  });
+
+  it('sets form.isAddressSealed to true', async () => {
+    const { state } = await runAction(sealAddressAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
+        contactToSeal: {
+          contactId: mockContactId,
+          name: 'Bob Barker',
+        },
+        form: {
+          isAddressSealed: false,
+        },
+      },
+    });
+
+    expect(state.form.isAddressSealed).toBeTruthy();
   });
 });

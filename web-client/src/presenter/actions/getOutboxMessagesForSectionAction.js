@@ -9,8 +9,7 @@ export const getOutboxMessagesForSectionAction = async ({
 }) => {
   const messages = await applicationContext
     .getUseCases()
-    .getOutboxMessagesForSectionInteractor({
-      applicationContext,
+    .getOutboxMessagesForSectionInteractor(applicationContext, {
       section: applicationContext.getCurrentUser().section,
     });
 

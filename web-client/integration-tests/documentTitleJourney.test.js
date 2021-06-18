@@ -1,5 +1,10 @@
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from '../src/presenter/computeds/completeDocumentTypeSectionHelper';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
@@ -79,8 +84,10 @@ describe('Document title journey', () => {
       value: fakeFile,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -101,7 +108,7 @@ describe('Document title journey', () => {
       .getState('caseDetail.docketEntries')
       .find(entry => entry.eventCode === 'EXH');
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: exhibitDocketEntry.docketEntryId,
       docketNumber: test.docketNumber,
     });
@@ -153,13 +160,15 @@ describe('Document title journey', () => {
       docketNumber: test.docketNumber,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     const documentToSelect = {
       category: 'Miscellaneous',
       documentTitle: '[First, Second, etc.] Amendment to [anything]',
       documentType: 'Amendment [anything]',
       eventCode: 'ADMT',
+      filers: [contactPrimary.contactId],
       ordinalValue: 'First',
-      partyPrimary: true,
       primaryDocumentFile: fakeFile,
       scenario: 'Nonstandard F',
     };
@@ -198,6 +207,11 @@ describe('Document title journey', () => {
     await test.runSequence('completeDocumentSelectSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
 

@@ -20,9 +20,9 @@ describe('removeConsolidatedCasesAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().removeConsolidatedCasesInteractor,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+      applicationContext.getUseCases().removeConsolidatedCasesInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       docketNumber: '101-20',
       docketNumbersToRemove: ['123-20'],
     });

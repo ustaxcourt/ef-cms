@@ -24,8 +24,7 @@ export const validateAddDeficiencyStatisticsAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddDeficiencyStatisticsInteractor({
-      applicationContext,
+    .validateAddDeficiencyStatisticsInteractor(applicationContext, {
       statistic: {
         ...combinedForm,
       },
