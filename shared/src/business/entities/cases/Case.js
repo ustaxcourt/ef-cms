@@ -1541,13 +1541,15 @@ const isAssociatedUser = function ({ caseRaw, user }) {
 
 /**
  * Computes and sets additionalName for contactPrimary depending on partyType
- *
- * @returns {object} the object with the updated petitioners
  */
 const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
   const contactPrimary = getContactPrimary(rawCase);
 
   if (contactPrimary && !contactPrimary.additionalName) {
+    const contactPrimaryRef = obj.petitioners.find(
+      p => p.contactId === contactPrimary.contactId,
+    );
+
     switch (rawCase.partyType) {
       case PARTY_TYPES.conservator:
       case PARTY_TYPES.custodian:
@@ -1558,36 +1560,29 @@ const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
       case PARTY_TYPES.partnershipBBA:
       case PARTY_TYPES.survivingSpouse:
       case PARTY_TYPES.trust:
-        contactPrimary.additionalName = contactPrimary.secondaryName;
-        delete contactPrimary.secondaryName;
+        contactPrimaryRef.additionalName = contactPrimaryRef.secondaryName;
+        delete contactPrimaryRef.secondaryName;
         break;
       case PARTY_TYPES.estate: {
         const additionalNameFields = compact([
-          contactPrimary.secondaryName,
-          contactPrimary.title,
+          contactPrimaryRef.secondaryName,
+          contactPrimaryRef.title,
         ]);
-        contactPrimary.additionalName = additionalNameFields.join(', ');
-        delete contactPrimary.secondaryName;
-        delete contactPrimary.title;
+        contactPrimaryRef.additionalName = additionalNameFields.join(', ');
+        delete contactPrimaryRef.secondaryName;
+        delete contactPrimaryRef.title;
         break;
       }
       case PARTY_TYPES.estateWithoutExecutor:
       case PARTY_TYPES.corporation:
       case PARTY_TYPES.petitionerDeceasedSpouse:
-        contactPrimary.additionalName = `c/o ${contactPrimary.inCareOf}`;
-        delete contactPrimary.inCareOf;
+        contactPrimaryRef.additionalName = `c/o ${contactPrimaryRef.inCareOf}`;
+        delete contactPrimaryRef.inCareOf;
         break;
       default:
         break;
     }
-
-    const originalContact = obj.petitioners.find(
-      p => p.contactId === contactPrimary.contactId,
-    );
-    Object.assign(originalContact, contactPrimary);
   }
-
-  return obj;
 };
 
 /**
