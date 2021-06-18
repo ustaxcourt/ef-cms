@@ -55,6 +55,7 @@ joiValidationDecorator(
       then: JoiValidationConstants.EMAIL.required(),
     }),
     role: JoiValidationConstants.STRING.optional().allow(null),
+    updatedEmail: JoiValidationConstants.STRING.optional().allow(null),
     userId: JoiValidationConstants.STRING.optional().allow(null),
   }),
   VALIDATION_ERROR_MESSAGES,

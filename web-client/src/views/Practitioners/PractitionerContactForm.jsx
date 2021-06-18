@@ -19,7 +19,6 @@ export const PractitionerContactForm = connect(
     bind,
     changeCountryTypeSequence,
     COUNTRY_TYPES,
-    createPractitionerUserHelper,
     form,
     onBlurSequenceName,
     onBlurValidationSequence,
@@ -104,54 +103,6 @@ export const PractitionerContactForm = connect(
             </FormGroup>
           </div>
         </div>
-        {createPractitionerUserHelper.isAddingPractitioner && (
-          <>
-            {console.log('am i here???')}
-            <FormGroup errorText={validationErrors.email}>
-              <label className="usa-label" htmlFor="email">
-                Email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="email"
-                name="email"
-                value={form.email || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-            <FormGroup errorText={validationErrors.confirmEmail}>
-              <label className="usa-label" htmlFor="confirm-email">
-                Re-enter new email address
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="confirm-email"
-                name="confirmEmail"
-                type="text"
-                value={form.confirmEmail || ''}
-                onBlur={() => {
-                  onBlurValidationSequence();
-                }}
-                onChange={e => {
-                  onChangeUpdateSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-          </>
-        )}
       </>
     );
   },

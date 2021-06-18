@@ -51,7 +51,6 @@ export const validateAddPractitionerAction = ({
   const practitioner = get(state.form);
   practitioner.admissionsDate = props.computedDate;
 
-  console.log('practitioner', practitioner);
   const errors = applicationContext
     .getUseCases()
     .validateAddPractitionerInteractor(applicationContext, {
@@ -74,6 +73,7 @@ export const validateAddPractitionerAction = ({
       'contact.postalCode',
       'phone',
       'email',
+      'confirmEmail',
       'originalBarState',
       'admissionsStatus',
       'admissionsDate',
