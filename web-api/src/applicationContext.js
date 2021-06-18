@@ -44,6 +44,7 @@ const {
   noticeOfTrialIssued,
   order,
   pendingReport,
+  practitionerCaseList,
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,
@@ -343,6 +344,9 @@ const {
   generatePDFFromJPGDataInteractor,
 } = require('../../shared/src/business/useCases/generatePDFFromJPGDataInteractor');
 const {
+  generatePractitionerCaseListPdfInteractor,
+} = require('../../shared/src/business/useCases/generatePractitionerCaseListPdfInteractor');
+const {
   generatePrintableCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/generatePrintableCaseInventoryReportInteractor');
 const {
@@ -407,6 +411,10 @@ const {
   getCaseMetadataWithCounsel,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel');
 const {
+  getCasesAssociatedWithUser,
+  getDocketNumbersByUser,
+} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
+const {
   getCasesByDocketNumbers,
 } = require('../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers');
 const {
@@ -451,9 +459,6 @@ const {
 const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
-const {
-  getDocketNumbersByUser,
-} = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -1302,6 +1307,7 @@ const gatewayMethods = {
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataWithCounsel,
+  getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
@@ -1475,6 +1481,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       noticeOfTrialIssued,
       order,
       pendingReport,
+      practitionerCaseList,
       receiptOfFiling,
       standingPretrialOrder,
       standingPretrialOrderForSmallCase,
@@ -1688,6 +1695,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
+        generatePractitionerCaseListPdfInteractor,
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
