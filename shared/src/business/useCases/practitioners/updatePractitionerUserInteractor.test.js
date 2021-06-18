@@ -71,7 +71,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).rejects.toThrow('Bar number does not match user data.');
   });
 
-  it("should set the practitioner's serviceIndicator to electronic when an email is added", async () => {
+  it("should not set the practitioner's serviceIndicator to electronic when an email is added", async () => {
     mockPractitioner = {
       ...mockPractitioner,
       email: undefined,
@@ -91,9 +91,7 @@ describe('updatePractitionerUserInteractor', () => {
       },
     );
 
-    expect(updatedUser.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+    expect(updatedUser.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
