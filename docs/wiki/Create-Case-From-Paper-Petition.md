@@ -79,18 +79,18 @@
 
 ### IRS Notice
 
-**Notice attached to Petition**
+**IRS Notice provided**
 * Is required
 * No is selected as default
 * If Yes is selected, display Type of Case (required) and Date of Notice (optional)
 * If No is selected, display Type of Case (required)
 
 **Type of Case**
-* Field hidden until Notice attached to Petition selection is made
+* Field hidden until IRS Notice provided selection is made
 
 
 #### Statistics
-* Statistics fields display when "Yes" is selected for "Notice attached to petition?" and Deficiency is selected as case type
+* Statistics fields display when "Yes" is selected for "IRS Notice provided?" and Deficiency is selected as case type
 
 **Year or Period**
 * Defaults to Year
