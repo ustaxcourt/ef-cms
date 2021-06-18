@@ -29,10 +29,12 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
 
     await test.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
-      value: true,
+      value: false,
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence', {});
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 

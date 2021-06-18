@@ -48,6 +48,11 @@ describe('petitions clerk edits a petition payment fee', () => {
       value: PAYMENT_STATUS.PAID,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+
     await test.runSequence('updatePetitionDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
