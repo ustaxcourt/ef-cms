@@ -50,6 +50,7 @@ export const PractitionerLoginServiceEmailForm = connect(
                 New email address
               </label>
               <input
+                aria-label={emailFormName}
                 autoCapitalize="none"
                 className="usa-input"
                 id={emailFormName}
@@ -70,6 +71,7 @@ export const PractitionerLoginServiceEmailForm = connect(
                 Re-enter new email address
               </label>
               <input
+                aria-label="confirmEmail"
                 autoCapitalize="none"
                 className="usa-input"
                 id="confirm-email"
