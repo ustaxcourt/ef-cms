@@ -2,6 +2,8 @@ const {
   getCaseInfoTab,
   getCaseTitleContaining,
   getCaseTitleTextArea,
+  getHasIrsNoticeYesRadioButton,
+  getIrsNoticeTab,
   getReviewPetitionButton,
   getSaveForLaterButton,
   navigateTo: navigateToPetitionQc,
@@ -17,6 +19,8 @@ describe('change the case caption via the petition qc page', () => {
     );
     getCaseInfoTab().click();
     getCaseTitleTextArea().clear().type('hello world');
+    getIrsNoticeTab().click();
+    getHasIrsNoticeYesRadioButton().click();
     getReviewPetitionButton().click();
     getSaveForLaterButton().click();
   });
