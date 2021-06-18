@@ -104,6 +104,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       docketNumber: test.docketNumber,
     });
 
+    test.pendingEmail = mockAvailableEmail;
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };
