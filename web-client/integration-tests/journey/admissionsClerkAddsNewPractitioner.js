@@ -27,6 +27,10 @@ export const admissionsClerkAddsNewPractitioner = test => {
       value: 'caroleBaskinH8r@example.com',
     });
     await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
+      value: 'caroleBaskinH8r@example.com',
+    });
+    await test.runSequence('updateFormValueSequence', {
       key: 'month',
       value: '1',
     });
