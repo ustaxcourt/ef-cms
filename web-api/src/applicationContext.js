@@ -1366,7 +1366,6 @@ const gatewayMethods = {
   updateWorkItemCaseTitle,
   updateWorkItemDocketNumberSuffix,
   updateWorkItemTrialDate,
-  uploadToS3,
   verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
@@ -1845,6 +1844,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveCaseDocument,
         setServiceIndicatorsForCase,
         setupPdfDocument,
+        uploadToS3,
       };
     },
     isAuthorized,
