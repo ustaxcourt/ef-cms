@@ -5,10 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 import faker from 'faker';
 
-export const admissionsClerkAddsPractitionerEmail = (
-  test,
-  isGrantingEAccess,
-) => {
+export const admissionsClerkAddsPractitionerEmail = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
   const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
@@ -90,10 +87,13 @@ export const admissionsClerkAddsPractitionerEmail = (
     );
 
     expect(practitionerDetailHelperComputed.emailFormatted).toBe(
-      mockAvailableEmail,
+      'Not provided',
+    );
+    expect(practitionerDetailHelperComputed.pendingEmailFormatted).toBe(
+      `${mockAvailableEmail} (Pending)`,
     );
     expect(practitionerDetailHelperComputed.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
     await refreshElasticsearchIndex();
@@ -105,18 +105,5 @@ export const admissionsClerkAddsPractitionerEmail = (
     });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-
-    const foundPractitioner = test
-      .getState('caseDetail.privatePractitioners')
-      .find(x => x.barNumber === test.barNumber);
-
-    test.pendingEmail = mockAvailableEmail;
-
-    if (!isGrantingEAccess) {
-      expect(foundPractitioner.email).toBe(mockAvailableEmail);
-      expect(foundPractitioner.serviceIndicator).toBe(
-        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      );
-    }
   });
 };
