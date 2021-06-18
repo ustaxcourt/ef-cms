@@ -4,7 +4,7 @@ const {
 const { saveDocumentFromLambda } = require('./saveDocumentFromLambda');
 
 describe('saveDocumentFromLambda', () => {
-  const putObjectStub = jest.fn().mockReturnValue({
+  let putObjectStub = jest.fn().mockReturnValue({
     promise: () => Promise.resolve(true),
   });
 
@@ -81,7 +81,7 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('should retry putObject call if it fails the first time', async () => {
-    const putObjectStub = jest
+    putObjectStub = jest
       .fn()
       .mockReturnValueOnce(new Error('fail'))
       .mockReturnValueOnce({
@@ -103,7 +103,7 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('should log and rethrow error if putObject fails every time', async () => {
-    const putObjectStub = jest.fn().mockImplementation(() => {
+    putObjectStub = jest.fn().mockImplementation(() => {
       throw new Error('fail');
     });
 
