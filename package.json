@@ -258,9 +258,9 @@
     "test:shared": "npm run build:assets && node --trace-warnings --unhandled-rejections=strict ./node_modules/.bin/jest --maxWorkers=50% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint --prefix=web-client/pa11y/",
-    "verify-authorizers": "./web-api/verify-authorizers.sh",
-    "verify-private-elasticsearch": "./web-api/verify-private-elasticsearch.sh",
-    "verify-private-s3-buckets": "./web-api/verify-private-s3-buckets.sh",
+    "verify-authorizers": "./scripts/verify-authorizers.sh",
+    "verify-private-elasticsearch": "./scripts/verify-private-elasticsearch.sh",
+    "verify-private-s3-buckets": "./scripts/verify-private-s3-buckets.sh",
     "watch": "nodemon -e yml --exec sls offline start"
   },
   "resolutions": {
