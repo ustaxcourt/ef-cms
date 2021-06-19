@@ -10,17 +10,16 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 /**
  * generateStandingPretrialOrderInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docketNumber for the case
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateStandingPretrialOrderInteractor = async ({
+exports.generateStandingPretrialOrderInteractor = async (
   applicationContext,
-  docketNumber,
-  trialSessionId,
-}) => {
+  { docketNumber, trialSessionId },
+) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({

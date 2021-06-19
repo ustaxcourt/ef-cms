@@ -121,4 +121,14 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   return this;
 };
 
+/**
+ * marks the work item as read
+ *
+ * @returns {WorkItem} the updated work item
+ */
+WorkItem.prototype.markAsRead = function () {
+  this.isRead = true;
+  return this;
+};
+
 exports.WorkItem = validEntityDecorator(WorkItem);

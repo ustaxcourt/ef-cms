@@ -17,6 +17,7 @@ const {
 const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
@@ -55,8 +56,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   };
 
   const dynamicallyGeneratedDocketEntries = [];
-  const docketEntriesWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
-    eventCode => {
+  const docketEntriesWithCaseClosingEventCodes =
+    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
       const docketEntryId = uuidv4();
       const docketRecordId = uuidv4();
 
@@ -85,8 +86,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
         workItem: mockWorkItem,
       };
-    },
-  );
+    });
 
   beforeEach(() => {
     applicationContext
@@ -189,8 +189,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       },
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
         docketEntry.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
@@ -221,8 +222,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       },
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
         docketEntry.docketEntryId === caseRecord.docketEntries[0].docketEntryId,
@@ -252,8 +254,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       },
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
         docketEntry.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
@@ -392,9 +395,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    const {
-      caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
@@ -423,10 +425,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
@@ -490,14 +491,38 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       });
 
-      const updatedCase = applicationContext.getPersistenceGateway().updateCase
-        .mock.calls[0][0].caseToUpdate;
+      const updatedCase =
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate;
 
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(
         applicationContext.getPersistenceGateway()
           .deleteCaseTrialSortMappingRecords,
       ).toHaveBeenCalled();
+    });
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        freeText: 'Dogs',
+        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
+        serviceStamp: 'Served',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({
+      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
     });
   });
 

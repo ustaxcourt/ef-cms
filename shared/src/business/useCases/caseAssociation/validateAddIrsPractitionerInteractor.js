@@ -5,15 +5,15 @@ const {
 /**
  * validateAddIrsPractitionerInteractor
  *
- * @param {object} params params
- * @param {object} params.applicationContext the application context
- * @param {object} params.counsel metadata
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.counsel the practitioner to validate
  * @returns {object} errors
  */
-exports.validateAddIrsPractitionerInteractor = ({
+exports.validateAddIrsPractitionerInteractor = (
   applicationContext,
-  counsel,
-}) => {
+  { counsel },
+) => {
   const errors = new AddIrsPractitioner(counsel, {
     applicationContext,
   }).getFormattedValidationErrors();

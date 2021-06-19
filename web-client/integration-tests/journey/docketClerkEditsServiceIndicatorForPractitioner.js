@@ -6,14 +6,24 @@ export const docketClerkEditsServiceIndicatorForPractitioner = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = test.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    expect(
-      test.getState('modal.privatePractitioners.0.serviceIndicator'),
-    ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
+    await test.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
+    });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.serviceIndicator',
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+
+    expect(test.getState('form.serviceIndicator')).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
@@ -21,7 +31,7 @@ export const docketClerkEditsServiceIndicatorForPractitioner = test => {
       test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await test.runSequence('submitEditPetitionerCounselSequence');
 
     expect(
       test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),

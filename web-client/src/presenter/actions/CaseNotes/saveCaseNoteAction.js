@@ -14,8 +14,7 @@ export const saveCaseNoteAction = async ({ applicationContext, get }) => {
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .saveCaseNoteInteractor({
-      applicationContext,
+    .saveCaseNoteInteractor(applicationContext, {
       caseNote,
       docketNumber,
     });

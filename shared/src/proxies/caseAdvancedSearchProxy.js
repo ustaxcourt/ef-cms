@@ -4,15 +4,15 @@ const { get } = require('./requests');
 /**
  * caseAdvancedSearchInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.searchParams the search params (can include petitionerName, country, state, yearFiledMin, yearFiledMax)
  * @returns {Promise<*>} the promise of the api call
  */
-exports.caseAdvancedSearchInteractor = ({
+exports.caseAdvancedSearchInteractor = (
   applicationContext,
-  searchParams,
-}) => {
+  { searchParams },
+) => {
   const queryString = querystring.stringify(searchParams);
 
   return get({

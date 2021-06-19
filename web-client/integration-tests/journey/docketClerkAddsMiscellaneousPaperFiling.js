@@ -1,10 +1,12 @@
+import { contactPrimaryFromState } from '../helpers';
+
 export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
   return it('DocketClerk adds miscellaneous paper filing', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -33,8 +35,10 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -48,9 +52,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (test, fakeFile) => {
       value: 'A title',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

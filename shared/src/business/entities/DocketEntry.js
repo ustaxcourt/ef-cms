@@ -34,43 +34,44 @@ function DocketEntry() {
   this.entityName = 'DocketEntry';
 }
 
-DocketEntry.prototype.initUnfilteredForInternalUsers = function initForUnfilteredForInternalUsers(
-  rawDocketEntry,
-  { applicationContext },
-) {
-  this.editState = rawDocketEntry.editState;
-  this.draftOrderState = rawDocketEntry.draftOrderState;
-  this.isDraft = rawDocketEntry.isDraft || false;
-  this.judge = rawDocketEntry.judge;
-  this.judgeUserId = rawDocketEntry.judgeUserId;
-  this.pending =
-    rawDocketEntry.pending === undefined
-      ? DocketEntry.isPendingOnCreation(rawDocketEntry)
-      : rawDocketEntry.pending;
-  if (rawDocketEntry.previousDocument) {
-    this.previousDocument = {
-      docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
-      documentTitle: rawDocketEntry.previousDocument.documentTitle,
-      documentType: rawDocketEntry.previousDocument.documentType,
-    };
-  }
-  this.qcAt = rawDocketEntry.qcAt;
-  this.qcByUserId = rawDocketEntry.qcByUserId;
-  this.signedAt = rawDocketEntry.signedAt;
-  this.signedByUserId = rawDocketEntry.signedByUserId;
-  this.signedJudgeName = rawDocketEntry.signedJudgeName;
-  this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
-  this.strickenBy = rawDocketEntry.strickenBy;
-  this.strickenByUserId = rawDocketEntry.strickenByUserId;
-  this.userId = rawDocketEntry.userId;
-  this.workItem = rawDocketEntry.workItem
-    ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
-    : undefined;
-};
+DocketEntry.prototype.initUnfilteredForInternalUsers =
+  function initForUnfilteredForInternalUsers(
+    rawDocketEntry,
+    { applicationContext },
+  ) {
+    this.editState = rawDocketEntry.editState;
+    this.draftOrderState = rawDocketEntry.draftOrderState;
+    this.isDraft = rawDocketEntry.isDraft || false;
+    this.judge = rawDocketEntry.judge;
+    this.judgeUserId = rawDocketEntry.judgeUserId;
+    this.pending =
+      rawDocketEntry.pending === undefined
+        ? DocketEntry.isPendingOnCreation(rawDocketEntry)
+        : rawDocketEntry.pending;
+    if (rawDocketEntry.previousDocument) {
+      this.previousDocument = {
+        docketEntryId: rawDocketEntry.previousDocument.docketEntryId,
+        documentTitle: rawDocketEntry.previousDocument.documentTitle,
+        documentType: rawDocketEntry.previousDocument.documentType,
+      };
+    }
+    this.qcAt = rawDocketEntry.qcAt;
+    this.qcByUserId = rawDocketEntry.qcByUserId;
+    this.signedAt = rawDocketEntry.signedAt;
+    this.signedByUserId = rawDocketEntry.signedByUserId;
+    this.signedJudgeName = rawDocketEntry.signedJudgeName;
+    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
+    this.strickenBy = rawDocketEntry.strickenBy;
+    this.strickenByUserId = rawDocketEntry.strickenByUserId;
+    this.userId = rawDocketEntry.userId;
+    this.workItem = rawDocketEntry.workItem
+      ? new WorkItem(rawDocketEntry.workItem, { applicationContext })
+      : undefined;
+  };
 
 DocketEntry.prototype.init = function init(
   rawDocketEntry,
-  { applicationContext, filtered = false },
+  { applicationContext, petitioners = [], filtered = false },
 ) {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
@@ -122,11 +123,10 @@ DocketEntry.prototype.init = function init(
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.objections = rawDocketEntry.objections;
+  this.filers = rawDocketEntry.filers || [];
   this.ordinalValue = rawDocketEntry.ordinalValue;
   this.otherFilingParty = rawDocketEntry.otherFilingParty;
   this.partyIrsPractitioner = rawDocketEntry.partyIrsPractitioner;
-  this.partyPrimary = rawDocketEntry.partyPrimary;
-  this.partySecondary = rawDocketEntry.partySecondary;
   this.processingStatus = rawDocketEntry.processingStatus || 'pending';
   this.receivedAt = createISODateAtStartOfDayEST(rawDocketEntry.receivedAt);
   this.relationship = rawDocketEntry.relationship;
@@ -172,17 +172,25 @@ DocketEntry.prototype.init = function init(
   }
 
   if (DOCUMENT_NOTICE_EVENT_CODES.includes(rawDocketEntry.eventCode)) {
-    this.signedAt = createISODateString();
+    this.signedAt = rawDocketEntry.signedAt || createISODateString();
   }
 
-  this.generateFiledBy(rawDocketEntry);
+  this.generateFiledBy(petitioners);
 };
 
 DocketEntry.isPendingOnCreation = rawDocketEntry => {
   return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
 
-joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES);
+joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
+  filedBy: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+    'Enter a filed by',
+  ],
+});
 
 /**
  *
@@ -234,13 +242,12 @@ and contact info from the raw docket entry
  *
  * @param {object} docketEntry the docket entry
  */
-DocketEntry.prototype.generateFiledBy = function (docketEntry) {
-  const isNoticeOfContactChange = NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
-    this.eventCode,
-  );
+DocketEntry.prototype.generateFiledBy = function (petitioners) {
+  const isNoticeOfContactChange =
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(this.eventCode);
 
   const shouldGenerateFiledBy =
-    !this.filedBy && !(isNoticeOfContactChange && this.isAutoGenerated);
+    !(isNoticeOfContactChange && this.isAutoGenerated) && !isServed(this);
 
   if (shouldGenerateFiledBy) {
     let partiesArray = [];
@@ -252,27 +259,19 @@ DocketEntry.prototype.generateFiledBy = function (docketEntry) {
           partiesArray.push(`Counsel ${practitioner.name}`);
       });
 
-    if (
-      this.partyPrimary &&
-      !this.partySecondary &&
-      docketEntry.contactPrimary
-    ) {
-      partiesArray.push(`Petr. ${docketEntry.contactPrimary.name}`);
-    } else if (
-      this.partySecondary &&
-      !this.partyPrimary &&
-      docketEntry.contactSecondary
-    ) {
-      partiesArray.push(`Petr. ${docketEntry.contactSecondary.name}`);
-    } else if (
-      this.partyPrimary &&
-      this.partySecondary &&
-      docketEntry.contactPrimary &&
-      docketEntry.contactSecondary
-    ) {
-      partiesArray.push(
-        `Petrs. ${docketEntry.contactPrimary.name} & ${docketEntry.contactSecondary.name}`,
-      );
+    const petitionersArray = [];
+    this.filers.forEach(contactId =>
+      petitioners.forEach(p => {
+        if (p.contactId === contactId) {
+          petitionersArray.push(p.name);
+        }
+      }),
+    );
+
+    if (petitionersArray.length === 1) {
+      partiesArray.push(`Petr. ${petitionersArray[0]}`);
+    } else if (petitionersArray.length > 1) {
+      partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
     }
 
     const filedByArray = [];
@@ -294,7 +293,6 @@ DocketEntry.prototype.generateFiledBy = function (docketEntry) {
  *
  * @param {string} signByUserId the user id of the user who signed the document
  * @param {string} signedJudgeName the judge's signature for the document
- *
  */
 DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
@@ -328,9 +326,8 @@ DocketEntry.prototype.isAutoServed = function () {
     this.documentType,
   );
 
-  const isPractitionerAssociationDocumentType = PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(
-    this.documentType,
-  );
+  const isPractitionerAssociationDocumentType =
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(this.documentType);
 
   // if fully concatenated document title includes the word Simultaneous, do not auto-serve
   const isSimultaneous = (this.documentTitle || this.documentType).includes(

@@ -14,10 +14,11 @@ export const sealCaseAction = async ({ applicationContext, get, path }) => {
 
   let result;
   try {
-    result = await applicationContext.getUseCases().sealCaseInteractor({
-      applicationContext,
-      docketNumber,
-    });
+    result = await applicationContext
+      .getUseCases()
+      .sealCaseInteractor(applicationContext, {
+        docketNumber,
+      });
   } catch (err) {
     return path.error();
   }

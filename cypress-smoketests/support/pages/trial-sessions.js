@@ -1,15 +1,15 @@
 const faker = require('faker');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.createTrialSession = testData => {
   const createFutureDate = () => {
-    const month = faker.random.number({ max: 12, min: 1 });
-    const day = faker.random.number({ max: 28, min: 1 });
+    const month = faker.datatype.number({ max: 12, min: 1 });
+    const day = faker.datatype.number({ max: 28, min: 1 });
     const year =
       // disabled because we're generating a random year for testing.
       // eslint-disable-next-line @miovision/disallow-date/no-new-date
-      new Date().getUTCFullYear() + faker.random.number({ max: 5, min: 1 });
+      new Date().getUTCFullYear() + faker.datatype.number({ max: 5, min: 1 });
     return `${month}/${day}/${year}`;
   };
 
@@ -20,13 +20,13 @@ exports.createTrialSession = testData => {
   cy.get('#start-date-date').type(createFutureDate());
   cy.get('#start-time-hours')
     .clear()
-    .type(faker.random.number({ max: 11, min: 6 }));
+    .type(faker.datatype.number({ max: 11, min: 6 }));
   cy.get('#start-time-minutes')
     .clear()
     .type(faker.random.arrayElement(['00', '15', '30', '45']));
   cy.get('label[for="startTimeExtension-pm"]').click();
   cy.get('label[for="session-type-Hybrid"]').click();
-  cy.get('#max-cases').type(faker.random.number({ max: 100, min: 10 }));
+  cy.get('#max-cases').type(faker.datatype.number({ max: 100, min: 10 }));
 
   // location information
   cy.get('#inPerson-proceeding-label').click();
@@ -47,8 +47,8 @@ exports.createTrialSession = testData => {
   cy.get('#submit-trial-session').click();
 
   // set up listener for POST call, get trialSessionId
-  cy.wait('@postTrialSession').then(xhr => {
-    const { trialSessionId } = xhr.response.body;
+  cy.wait('@postTrialSession').then(({ response }) => {
+    const { trialSessionId } = response.body;
     testData.trialSessionIds.push(trialSessionId);
     cy.get('#new-trial-sessions-tab').click();
     cy.get(`a[href="/trial-session-detail/${trialSessionId}"]`).should('exist');

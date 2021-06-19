@@ -17,8 +17,7 @@ export const validateCaseAdvancedSearchAction = async ({
   const caseSearch = get(state.advancedSearchForm.caseSearchByName);
   const errors = applicationContext
     .getUseCases()
-    .validateCaseAdvancedSearchInteractor({
-      applicationContext,
+    .validateCaseAdvancedSearchInteractor(applicationContext, {
       caseSearch,
     });
 
