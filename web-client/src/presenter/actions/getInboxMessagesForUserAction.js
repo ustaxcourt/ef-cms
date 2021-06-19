@@ -7,8 +7,7 @@
 export const getInboxMessagesForUserAction = async ({ applicationContext }) => {
   const messages = await applicationContext
     .getUseCases()
-    .getInboxMessagesForUserInteractor({
-      applicationContext,
+    .getInboxMessagesForUserInteractor(applicationContext, {
       userId: applicationContext.getCurrentUser().userId,
     });
 

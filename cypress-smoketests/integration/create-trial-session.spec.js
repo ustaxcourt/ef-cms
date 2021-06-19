@@ -42,7 +42,7 @@ const {
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 let docketClerkToken = null;
 let petitionsClerkToken = null;
@@ -149,8 +149,7 @@ describe('Petitions Clerk', () => {
 
   describe('should be able to create two trial sessions', () => {
     beforeEach(() => {
-      cy.server();
-      cy.route({ method: 'POST', url: '/trial-sessions' }).as(
+      cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
         'postTrialSession',
       );
     });

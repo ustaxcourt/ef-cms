@@ -4,11 +4,13 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   completeDocketEntryQCInteractor,
@@ -25,12 +27,15 @@ describe('completeDocketEntryQCInteractor', () => {
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
+  const mockPrimaryId = '7815b188-3b5f-4bbb-9689-18d234f774fa';
+
   beforeEach(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
     const workItem = {
       docketEntry: {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -47,16 +52,6 @@ describe('completeDocketEntryQCInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
@@ -66,6 +61,7 @@ describe('completeDocketEntryQCInteractor', () => {
           certificateOfService: true,
           certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
           docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
@@ -80,6 +76,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
+          docketNumber: '45678-18',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -89,6 +86,7 @@ describe('completeDocketEntryQCInteractor', () => {
         },
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -100,6 +98,20 @@ describe('completeDocketEntryQCInteractor', () => {
       docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: mockPrimaryId,
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -172,7 +184,8 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'Document Title',
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
-          partyPrimary: true,
+          filedBy: 'Resp.',
+          filers: [mockPrimaryId],
         },
       }),
     ).resolves.not.toThrow();
@@ -188,16 +201,21 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
-    caseRecord.contactPrimary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'test@example.com',
-      name: 'Test Petitioner',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'AK',
-    };
+    caseRecord.petitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+        name: 'Test Petitioner',
+        phone: 'n/a',
+        postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        state: 'AK',
+      },
+    ];
 
     const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
@@ -206,7 +224,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -233,7 +252,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -256,7 +276,7 @@ describe('completeDocketEntryQCInteractor', () => {
         certificateOfService: true,
         certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
         filedBy: 'Petr. Guy Fieri',
-        partyPrimary: true,
+        filers: [mockPrimaryId],
       },
     });
 
@@ -278,7 +298,7 @@ describe('completeDocketEntryQCInteractor', () => {
         ...caseRecord.docketEntries[0],
         attachments: true,
         filedBy: 'Petr. Guy Fieri',
-        partyPrimary: true,
+        filers: [mockPrimaryId],
       },
     });
 
@@ -304,7 +324,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -329,7 +350,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Different',
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -352,7 +374,7 @@ describe('completeDocketEntryQCInteractor', () => {
         addToCoversheet: false,
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 2',
-        partyPrimary: true,
+        filers: [mockPrimaryId],
       },
     });
 
@@ -375,7 +397,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -402,7 +425,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: caseRecord.docketEntries[0].documentTitle,
         documentType: caseRecord.docketEntries[0].documentType,
         eventCode: caseRecord.docketEntries[0].eventCode,
-        partyPrimary: true,
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -419,14 +443,20 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
-    caseRecord.contactPrimary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Test Petitioner',
-      postalCode: '12345',
-      state: 'AK',
-    };
+    caseRecord.petitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Petitioner',
+        phone: 'n/a',
+        postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        state: 'AK',
+      },
+    ];
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
@@ -444,7 +474,8 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
-        partyPrimary: true,
+        filedBy: 'Resp',
+        filers: [mockPrimaryId],
       },
     });
 
@@ -475,14 +506,20 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
-    caseRecord.contactPrimary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Test Petitioner',
-      postalCode: '12345',
-      state: 'AK',
-    };
+    caseRecord.petitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Test Petitioner',
+        phone: 'n/a',
+        postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        state: 'AK',
+      },
+    ];
     caseRecord.isPaper = true;
     caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
 
@@ -493,7 +530,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'MISP',
-        partyPrimary: true,
+        filers: [mockPrimaryId],
       },
     });
 
@@ -510,16 +547,21 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('does not generate a document for paper service if the document is a Notice of Change of Address and the case has no paper service parties', async () => {
-    caseRecord.contactPrimary = {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'test@example.com',
-      name: 'Test Petitioner',
-      phone: '123 456 1234',
-      postalCode: '12345',
-      state: 'AK',
-    };
+    caseRecord.petitioners = [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: mockPrimaryId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+        name: 'Test Petitioner',
+        phone: 'n/a',
+        postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        state: 'AK',
+      },
+    ];
 
     const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
@@ -528,7 +570,7 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
-        partyPrimary: true,
+        filers: [mockPrimaryId],
       },
     });
 
@@ -552,11 +594,12 @@ describe('completeDocketEntryQCInteractor', () => {
         documentTitle: 'My Edited Document',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
+        filedBy: 'Resp.',
+        filers: [mockPrimaryId],
         freeText: 'Some text about this document',
         hasOtherFilingParty: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
-        partyPrimary: true,
       },
     });
 
@@ -585,11 +628,12 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'My Edited Document',
           documentType: 'Notice of Change of Address',
           eventCode: 'NCA',
+          filedBy: 'Resp.',
+          filers: [mockPrimaryId],
           freeText: 'Some text about this document',
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
-          partyPrimary: true,
           pending: true,
         },
       },
@@ -614,6 +658,7 @@ describe('completeDocketEntryQCInteractor', () => {
         certificateOfService: true,
         certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
         docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: '45678-18',
         documentTitle: 'Answer',
         documentType: 'Answer',
         eventCode: 'A',
@@ -636,11 +681,12 @@ describe('completeDocketEntryQCInteractor', () => {
           documentTitle: 'My Edited Document',
           documentType: 'Notice of Change of Address',
           eventCode: 'NCA',
+          filedBy: 'Resp.',
+          filers: [mockPrimaryId],
           freeText: 'Some text about this document',
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
-          partyPrimary: true,
           pending: true,
           receivedAt: '2021-01-01', // date only
         },

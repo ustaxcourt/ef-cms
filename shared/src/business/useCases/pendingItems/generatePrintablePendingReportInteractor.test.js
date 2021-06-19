@@ -99,9 +99,9 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should format the pending items', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
-    const {
-      pendingItems,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { pendingItems } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(pendingItems).toMatchObject([
       {
         associatedJudge: 'Judge Colvin',
@@ -125,9 +125,9 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should generate a subtitle with All Judges if no judge filter is applied', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual('All Judges');
   });
 
@@ -136,9 +136,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       judge: 'Colvin',
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual('Judge Colvin');
   });
 
@@ -147,9 +147,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
 
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}`);
   });
@@ -161,9 +161,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}W`);
   });
 

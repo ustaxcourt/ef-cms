@@ -24,7 +24,7 @@ exports.deleteUserCaseNoteInteractor = async (
 
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getJudgeForUserChambersInteractor(applicationContext, { user });
 
   return await applicationContext.getPersistenceGateway().deleteUserCaseNote({
     applicationContext,

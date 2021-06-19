@@ -3,17 +3,16 @@ const { put } = require('../requests');
 /**
  * updateCorrespondenceDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.correspondenceId the id of the correspondence document
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCorrespondenceDocumentInteractor = ({
+exports.updateCorrespondenceDocumentInteractor = (
   applicationContext,
-  correspondenceId,
-  documentMetadata,
-}) => {
+  { correspondenceId, documentMetadata },
+) => {
   const { docketNumber } = documentMetadata;
 
   return put({

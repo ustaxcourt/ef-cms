@@ -104,6 +104,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [{ correspondenceId: '123' }],
           docketEntries: [],
         },
@@ -123,6 +124,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [],
           docketEntries: [],
         },
@@ -142,6 +144,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [],
           docketEntries: [
             {
@@ -169,6 +172,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [],
           docketEntries: [],
         },
@@ -188,6 +192,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [],
           docketEntries: [
             { documentId: '123', documentType: 'Order', isDraft: true },
@@ -209,6 +214,7 @@ describe('messageModalHelper', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail: {
+          ...caseDetail,
           correspondence: [{ correspondenceId: '234' }],
           docketEntries: [
             {

@@ -18,8 +18,7 @@ export const validateOpinionAdvancedSearchAction = async ({
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
   const errors = applicationContext
     .getUseCases()
-    .validateOpinionAdvancedSearchInteractor({
-      applicationContext,
+    .validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch,
     });
 

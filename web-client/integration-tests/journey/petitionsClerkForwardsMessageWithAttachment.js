@@ -65,7 +65,7 @@ export const petitionsClerkForwardsMessageWithAttachment = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('viewerDocumentToDisplay')).toEqual({
+    expect(test.getState('messageViewerDocumentToDisplay')).toEqual({
       documentId: messageDocument.docketEntryId,
     });
     expect(test.getState('iframeSrc')).toBeDefined();

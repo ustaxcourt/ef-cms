@@ -13,8 +13,7 @@ describe('getPdfFromUrlInteractor', () => {
       .getPersistenceGateway()
       .getPdfFromUrl.mockReturnValue(mockFile);
 
-    const result = await getPdfFromUrlInteractor({
-      applicationContext,
+    const result = await getPdfFromUrlInteractor(applicationContext, {
       pdfUrl: mockUrl,
     });
 

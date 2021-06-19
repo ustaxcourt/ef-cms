@@ -13,7 +13,6 @@ export const OpenPrintableDocketRecordModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmHref={pdfPreviewUrl}
         confirmLabel="Open"
         confirmSequence={cancelSequence}

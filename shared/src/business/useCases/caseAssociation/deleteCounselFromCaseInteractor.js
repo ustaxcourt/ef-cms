@@ -52,24 +52,15 @@ exports.deleteCounselFromCaseInteractor = async (
     throw new Error('User is not a practitioner');
   }
 
-  if (
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      caseEntity.getContactPrimary().contactId,
-    )
-  ) {
-    caseEntity.getContactPrimary().serviceIndicator = null;
-    aggregatePartiesForService(caseEntity);
-  }
+  caseEntity.petitioners.forEach(petitioner => {
+    if (
+      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
+    ) {
+      petitioner.serviceIndicator = null;
+    }
+  });
 
-  if (
-    caseEntity.getContactSecondary() &&
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      caseEntity.getContactSecondary().contactId,
-    )
-  ) {
-    caseEntity.getContactSecondary().serviceIndicator = null;
-    aggregatePartiesForService(caseEntity);
-  }
+  aggregatePartiesForService(caseEntity);
 
   await applicationContext.getPersistenceGateway().deleteUserFromCase({
     applicationContext,

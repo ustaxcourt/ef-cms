@@ -20,6 +20,10 @@
     min-width: 132px;
   }
 
+  .width-auto {
+    width: auto;
+  }
+
   .svg-inline--fa {
     margin-right: 10px;
     &.fa-1x {
@@ -58,6 +62,7 @@
 
   &.ustc-button--unstyled {
     padding: 0.75rem 0;
+    line-height: normal;
     text-align: center;
     &.padding-top-0 {
       padding-top: 0;

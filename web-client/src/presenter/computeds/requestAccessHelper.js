@@ -1,4 +1,5 @@
 import { getDocumentTypesForSelect } from './internalTypesHelper';
+import { getFilerParties } from './getFilerParties';
 import { state } from 'cerebral';
 
 export const requestAccessHelper = (get, applicationContext) => {
@@ -7,7 +8,6 @@ export const requestAccessHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
-  const validationErrors = get(state.validationErrors);
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
@@ -90,10 +90,6 @@ export const requestAccessHelper = (get, applicationContext) => {
     'Motion to Substitute Parties and Change Caption',
   ].includes(documentType);
 
-  const partyValidationError =
-    validationErrors.representingPrimary ||
-    validationErrors.representingSecondary;
-
   const showFilingIncludes =
     form.certificateOfService || (documentWithAttachments && form.attachments);
 
@@ -104,6 +100,11 @@ export const requestAccessHelper = (get, applicationContext) => {
 
   const showPartiesRepresenting = user.role === USER_ROLES.privatePractitioner;
 
+  let representingPartiesNames = getFilerParties({
+    caseDetail,
+    filersMap: form.filersMap,
+  });
+
   let exported = {
     certificateOfServiceDateFormatted,
     documentWithAttachments,
@@ -111,7 +112,7 @@ export const requestAccessHelper = (get, applicationContext) => {
     documentWithSupportingDocuments,
     documents,
     documentsForSelect,
-    partyValidationError,
+    representingPartiesNames,
     showFilingIncludes,
     showFilingNotIncludes,
     showPartiesRepresenting,

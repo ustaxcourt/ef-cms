@@ -39,14 +39,12 @@ h2,
 
 h3,
 .heading-3 {
-  max-width: 700px;
   margin-top: 0;
   margin-bottom: 0.75em;
   font-family: $font-serif;
   font-size: 20px;
   font-weight: $font-bold;
   line-height: 1.3em;
-
 
   @media only screen and (max-width: $medium-screen) {
     font-size: 18px;

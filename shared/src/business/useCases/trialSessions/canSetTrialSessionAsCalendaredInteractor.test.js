@@ -32,19 +32,11 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
       userId: 'unauthorizedUser',
     };
 
-    let error;
-
-    try {
-      canSetTrialSessionAsCalendaredInteractor({
-        applicationContext,
+    expect(() =>
+      canSetTrialSessionAsCalendaredInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).toThrow('Unauthorized');
   });
 
   it('gets the result back from the interactor', () => {
@@ -55,10 +47,12 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
 
-    const result = canSetTrialSessionAsCalendaredInteractor({
+    const result = canSetTrialSessionAsCalendaredInteractor(
       applicationContext,
-      trialSession: MOCK_TRIAL,
-    });
+      {
+        trialSession: MOCK_TRIAL,
+      },
+    );
 
     expect(result).toEqual({
       canSetAsCalendared: false,

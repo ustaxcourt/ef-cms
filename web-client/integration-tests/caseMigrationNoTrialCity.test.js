@@ -1,10 +1,10 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
 );
 
 const test = setupTest();
@@ -27,11 +27,11 @@ describe('migrated case that is missing a preferred trial city journey', () => {
       docketNumber: seededDocketNumber,
     });
 
-    const formattedCase = runCompute(formattedCaseDetail, {
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
       state: test.getState(),
     });
 
-    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(headerHelper.showBlockedTag).toBeTruthy();
   });
 
   it('remove the deadline and verify the case is no longer blocked', async () => {
@@ -44,10 +44,10 @@ describe('migrated case that is missing a preferred trial city journey', () => {
       docketNumber: seededDocketNumber,
     });
 
-    const formattedCase = runCompute(formattedCaseDetail, {
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
       state: test.getState(),
     });
 
-    expect(formattedCase.showBlockedTag).toBeFalsy();
+    expect(headerHelper.showBlockedTag).toBeFalsy();
   });
 });

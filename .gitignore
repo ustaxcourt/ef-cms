@@ -7,8 +7,8 @@
 .nova/
 .scannerwork/
 .serverless/
-.terraform/
 .terraform.lock.hcl
+.terraform/
 .vscode
 **/*_.js
 /policy.json
@@ -48,7 +48,6 @@ web-api/terraform/template/lambdas/api.js.zip
 web-api/terraform/template/lambdas/cognito-authorizer.js.zip
 web-api/terraform/template/lambdas/cognito-triggers.js.zip
 web-api/terraform/template/lambdas/cron.js.zip
-web-api/terraform/template/lambdas/legacy-documents-migration.js.zip
 web-api/terraform/template/lambdas/log-forwarder.js.zip
 web-api/terraform/template/lambdas/streams.js.zip
 web-api/terraform/template/lambdas/websockets.js.zip

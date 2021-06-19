@@ -3,6 +3,18 @@ const {
 } = require('./InternalDocumentSearchResult');
 
 describe('Internal Document Search Result entity', () => {
+  it('returns validation errors for required fields when no data is passed in', () => {
+    const searchResult = new InternalDocumentSearchResult();
+    const validationErrors = searchResult.getFormattedValidationErrors();
+
+    expect(Object.keys(validationErrors)).toEqual([
+      'caseCaption',
+      'docketEntryId',
+      'docketNumber',
+      'documentTitle',
+    ]);
+  });
+
   it('needs only a case caption, docketEntryId, docketNumber, and documentTitle to be valid', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',

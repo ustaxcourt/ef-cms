@@ -31,7 +31,6 @@ export const EditOrderTitleModal = connect(
         cancelLabel="Cancel"
         cancelLink={true}
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Continue"
         confirmSequence={() => {
           confirmSequence({ parentMessageId });

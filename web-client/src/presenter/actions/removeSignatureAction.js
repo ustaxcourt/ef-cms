@@ -12,8 +12,7 @@ export const removeSignatureAction = async ({ applicationContext, props }) => {
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .removeSignatureFromDocumentInteractor({
-      applicationContext,
+    .removeSignatureFromDocumentInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });

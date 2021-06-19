@@ -4,16 +4,15 @@ const { get } = require('../requests');
 /**
  * fetchPendingItemsProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fetchPendingItemsInteractor = ({
+exports.fetchPendingItemsInteractor = (
   applicationContext,
-  judge,
-  page = 0,
-}) => {
+  { judge, page = 0 },
+) => {
   const queryString = qs.stringify({ judge, page });
 
   return get({

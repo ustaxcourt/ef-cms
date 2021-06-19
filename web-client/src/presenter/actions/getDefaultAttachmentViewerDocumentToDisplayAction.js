@@ -1,16 +1,18 @@
 import { state } from 'cerebral';
 /**
- * gets the first attachment document from the most recent message to set as the default viewerDocumentToDisplay
+ * gets the first attachment document from the most recent message to set as the default messageViewerDocumentToDisplay
  *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
- * @returns {object} object containing viewerDocumentToDisplay
+ * @returns {object} object containing messageViewerDocumentToDisplay
  */
 export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   get,
   props,
 }) => {
-  const viewerDocumentToDisplayFromState = get(state.viewerDocumentToDisplay);
+  const viewerDocumentToDisplayFromState = get(
+    state.messageViewerDocumentToDisplay,
+  );
   const { documentId, mostRecentMessage } = props;
 
   const existingDocumentId = viewerDocumentToDisplayFromState?.documentId;
@@ -20,14 +22,14 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
     (!existingDocumentId ||
       (existingDocumentId && existingDocumentId === documentId))
   ) {
-    return { viewerDocumentToDisplay: viewerDocumentToDisplayFromState };
+    return { messageViewerDocumentToDisplay: viewerDocumentToDisplayFromState };
   }
 
   const { attachments } = mostRecentMessage;
-  let viewerDocumentToDisplay = null;
+  let messageViewerDocumentToDisplay = null;
 
   if (attachments && attachments.length) {
-    viewerDocumentToDisplay = attachments[0];
+    messageViewerDocumentToDisplay = attachments[0];
 
     if (documentId) {
       const foundDocument = attachments.find(
@@ -35,12 +37,12 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
       );
 
       if (foundDocument) {
-        viewerDocumentToDisplay = foundDocument;
+        messageViewerDocumentToDisplay = foundDocument;
       }
     }
   }
 
   return {
-    viewerDocumentToDisplay,
+    messageViewerDocumentToDisplay,
   };
 };
