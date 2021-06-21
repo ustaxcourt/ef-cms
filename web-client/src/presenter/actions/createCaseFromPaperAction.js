@@ -118,8 +118,7 @@ export const createCaseFromPaperAction = async ({
   try {
     caseDetail = await applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor({
-        applicationContext,
+      .filePetitionFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,

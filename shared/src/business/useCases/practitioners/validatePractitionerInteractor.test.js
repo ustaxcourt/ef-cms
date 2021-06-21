@@ -8,8 +8,7 @@ const { ROLES } = require('../../entities/EntityConstants');
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validatePractitionerInteractor({
-      applicationContext,
+    const errors = validatePractitionerInteractor(applicationContext, {
       practitioner: {},
     });
 
@@ -29,8 +28,7 @@ describe('validatePractitionerInteractor', () => {
   });
 
   it('returns null on no errors', () => {
-    const errors = validatePractitionerInteractor({
-      applicationContext,
+    const errors = validatePractitionerInteractor(applicationContext, {
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',

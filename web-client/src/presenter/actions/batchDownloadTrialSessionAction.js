@@ -13,10 +13,11 @@ export const batchDownloadTrialSessionAction = async ({
   props,
 }) => {
   try {
-    await applicationContext.getUseCases().batchDownloadTrialSessionInteractor({
-      applicationContext,
-      trialSessionId: props.trialSessionId,
-    });
+    await applicationContext
+      .getUseCases()
+      .batchDownloadTrialSessionInteractor(applicationContext, {
+        trialSessionId: props.trialSessionId,
+      });
     return path.success();
   } catch (e) {
     return path.error({ showModal: 'FileCompressionErrorModal' });

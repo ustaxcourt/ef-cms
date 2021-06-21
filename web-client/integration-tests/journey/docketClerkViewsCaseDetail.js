@@ -1,4 +1,4 @@
-import { getContactPrimary } from '../../../shared/src/business/entities/cases/Case';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
   return it('Docketclerk views case detail', async () => {
@@ -10,6 +10,6 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(getContactPrimary(caseDetail).contactId).toBeDefined();
+    expect(contactPrimaryFromState(test).contactId).toBeDefined();
   });
 };

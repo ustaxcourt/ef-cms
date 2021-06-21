@@ -13,7 +13,6 @@ export const petitionsClerk1ServesPetitionFromMessageDetail = test => {
     });
 
     expect(helper.showServePetitionButton).toBeTruthy();
-    expect(helper.showNotServed).toBeTruthy();
 
     await test.runSequence('gotoPetitionQcSequence', {
       docketNumber: test.docketNumber,
@@ -41,6 +40,5 @@ export const petitionsClerk1ServesPetitionFromMessageDetail = test => {
     });
 
     expect(helper.showServePetitionButton).toBeFalsy();
-    expect(helper.showNotServed).toBeFalsy();
   });
 };

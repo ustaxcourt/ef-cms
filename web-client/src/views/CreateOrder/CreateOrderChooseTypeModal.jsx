@@ -29,7 +29,6 @@ export const CreateOrderChooseTypeModal = connect(
         cancelLabel="Cancel"
         cancelLink={true}
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Continue"
         confirmSequence={confirmSequence}
         title="Create Order or Notice"

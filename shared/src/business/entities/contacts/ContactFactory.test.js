@@ -2,81 +2,53 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-  PAYMENT_STATUS,
 } = require('../EntityConstants');
-const { Case, getContactPrimary } = require('../cases/Case');
 const { CaseExternal } = require('../cases/CaseExternal');
-const { CaseInternal } = require('../cases/CaseInternal');
 const { ContactFactory } = require('./ContactFactory');
-const { MOCK_CASE } = require('../../../test/mockCase');
-
-let caseExternal;
 
 describe('ContactFactory', () => {
-  describe('for Corporation Contacts', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(
-        () =>
-          new CaseExternal(
-            {
-              archivedDocketEntries: [],
-              caseType: CASE_TYPES_MAP.other,
-              filingType: 'Myself',
-              hasIrsNotice: true,
-              irsNoticeDate: '2009-10-13T08:06:07.539Z',
-              mailingDate: 'testing',
-              partyType: PARTY_TYPES.corporation,
-              petitionFile: {},
-              petitionFileSize: 1,
-              preferredTrialCity: 'Memphis, Tennessee',
-              procedureType: 'Small',
-              signature: true,
-              stinFile: {},
-              stinFileSize: 1,
-            },
-            {},
-          ),
-      ).toThrow();
-    });
+  const baseCaseExternal = {
+    caseType: CASE_TYPES_MAP.other,
+    filingType: 'Myself',
+    hasIrsNotice: true,
+    irsNoticeDate: '2009-10-13T08:06:07.539Z',
+    mailingDate: 'testing',
+    partyType: PARTY_TYPES.petitioner,
+    petitionFile: {},
+    petitionFileSize: 1,
+    preferredTrialCity: 'Memphis, Tennessee',
+    procedureType: 'Small',
+    signature: true,
+    stinFile: {},
+    stinFileSize: 1,
+  };
 
-    it('should not validate without contact', () => {
-      caseExternal = new CaseExternal(
+  it('should throw an error if app context is not passed in', () => {
+    expect(() => new CaseExternal(baseCaseExternal, {})).toThrow();
+  });
+
+  describe('for Corporation Contacts', () => {
+    it('should not validate without contact when the case status is new', () => {
+      const caseExternal = new CaseExternal(
         {
-          archivedDocketEntries: [],
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          irsNoticeDate: '2009-10-13T08:06:07.539Z',
-          mailingDate: 'testing',
+          ...baseCaseExternal,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: {},
-          petitionFileSize: 1,
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          signature: true,
-          stinFile: {},
-          stinFileSize: 1,
         },
         { applicationContext },
       );
       expect(caseExternal.isValid()).toEqual(false);
     });
 
-    it('can validate primary contact', () => {
-      caseExternal = new CaseExternal(
+    it('can validate primary contact when the case is not served', () => {
+      const caseExternal = new CaseExternal(
         {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          irsNoticeDate: '2009-10-13T08:06:07.539Z',
-          mailingDate: 'testing',
+          ...baseCaseExternal,
           partyType: PARTY_TYPES.corporation,
-          petitionFile: {},
-          petitionFileSize: 1,
           petitioners: [
             {
               address1: '876 12th Ave',
@@ -94,11 +66,6 @@ describe('ContactFactory', () => {
               state: 'AK',
             },
           ],
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          signature: true,
-          stinFile: {},
-          stinFileSize: 1,
         },
         { applicationContext },
       );
@@ -106,17 +73,11 @@ describe('ContactFactory', () => {
     });
   });
 
-  it('can validate Petitioner contact', () => {
-    caseExternal = new CaseExternal(
+  it('can validate Petitioner contact when the case is not served', () => {
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.petitioner,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -132,28 +93,17 @@ describe('ContactFactory', () => {
             state: 'AK',
           },
         ],
-        preferredTrialCity: 'Fresno, California',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('returns true when primary contact is defined and everything else is valid', () => {
-    caseExternal = new CaseExternal(
+  it('passes validation when primary contact is defined and everything else is valid on an unserved case', () => {
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estateWithoutExecutor,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -169,11 +119,59 @@ describe('ContactFactory', () => {
             state: 'AK',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('passes validation when primary contact is defined and everything else is valid on a served case', () => {
+    const caseExternal = new CaseExternal(
+      {
+        ...baseCaseExternal,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            inCareOf: 'USTC',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+      { applicationContext },
+    );
+    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+  });
+
+  it('passes validation when in care of is undefined and everything else is valid on a served case', () => {
+    const caseExternal = new CaseExternal(
+      {
+        ...baseCaseExternal,
+        partyType: PARTY_TYPES.estateWithoutExecutor,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       { applicationContext },
     );
@@ -181,21 +179,10 @@ describe('ContactFactory', () => {
   });
 
   it('returns false for isValid if primary contact is missing', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
@@ -203,16 +190,10 @@ describe('ContactFactory', () => {
   });
 
   it('defaults isAddressSealed to false when no value is specified', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -229,11 +210,6 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
@@ -242,16 +218,10 @@ describe('ContactFactory', () => {
   });
 
   it('sets the value of isAddressSealed when a value is specified', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -269,11 +239,6 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
@@ -281,16 +246,10 @@ describe('ContactFactory', () => {
   });
 
   it('defaults sealedAndUnavailable to false when no value is specified', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -307,11 +266,6 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
@@ -319,16 +273,10 @@ describe('ContactFactory', () => {
   });
 
   it('sets the value of sealedAndUnavailable when a value is specified', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -346,11 +294,6 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
@@ -358,16 +301,10 @@ describe('ContactFactory', () => {
   });
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
-    caseExternal = new CaseExternal(
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -384,28 +321,17 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
     expect(caseExternal.isValid()).toEqual(false);
   });
 
-  it('a valid petition returns true for isValid', () => {
-    caseExternal = new CaseExternal(
+  it('a valid case returns true for isValid when status is new', () => {
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
+        ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitionFile: {},
-        petitionFileSize: 1,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -421,51 +347,17 @@ describe('ContactFactory', () => {
             title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
       },
       { applicationContext },
     );
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('can validate invalid Partnership (BBA Regime) contact', () => {
-    caseExternal = new CaseExternal(
+  it('a valid case returns true for isValid when status is not new', () => {
+    const caseExternal = new CaseExternal(
       {
-        caseType: CASE_TYPES_MAP.other,
-
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.partnershipBBA,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-
-  it('can validate valid Partnership (BBA Regime) contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.partnershipBBA,
-        petitionFile: {},
-        petitionFileSize: 1,
+        ...baseCaseExternal,
+        partyType: PARTY_TYPES.estate,
         petitioners: [
           {
             address1: '876 12th Ave',
@@ -473,383 +365,133 @@ describe('ContactFactory', () => {
             contactType: CONTACT_TYPES.primary,
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'USTC',
             name: 'Jimmy Dean',
-            phone: '1234567890',
+            phone: '4444444444',
             postalCode: '05198',
             secondaryName: 'Jimmy Dean',
             state: 'AK',
+            title: 'Some Title',
           },
         ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
       { applicationContext },
     );
+
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('can validate invalid Trust contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.trust,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
+  [
+    PARTY_TYPES.conservator,
+    PARTY_TYPES.corporation,
+    PARTY_TYPES.custodian,
+    PARTY_TYPES.donor,
+    PARTY_TYPES.estate,
+    PARTY_TYPES.estateWithoutExecutor,
+    PARTY_TYPES.guardian,
+    PARTY_TYPES.nextFriendForIncompetentPerson,
+    PARTY_TYPES.nextFriendForMinor,
+    PARTY_TYPES.partnershipAsTaxMattersPartner,
+    PARTY_TYPES.partnershipBBA,
+    PARTY_TYPES.partnershipOtherThanTaxMatters,
+    PARTY_TYPES.petitioner,
+    PARTY_TYPES.survivingSpouse,
+    PARTY_TYPES.transferee,
+    PARTY_TYPES.trust,
+  ].forEach(partyType => {
+    it(`can validate invalid ${partyType} contact`, () => {
+      const caseExternal = new CaseExternal(
+        {
+          ...baseCaseExternal,
+          partyType,
+        },
+        { applicationContext },
+      );
+      expect(caseExternal.isValid()).toEqual(false);
+    });
+
+    it(`can validate valid ${partyType} contact`, () => {
+      const caseExternal = new CaseExternal(
+        {
+          ...baseCaseExternal,
+          partyType,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              secondaryName: 'Jimmy Dean',
+              state: 'AK',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+      expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+    });
   });
 
-  it('can validate valid Trust contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.trust,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
+  [PARTY_TYPES.petitionerDeceasedSpouse, PARTY_TYPES.petitionerSpouse].forEach(
+    partyType => {
+      it(`can validate invalid ${partyType} contact`, () => {
+        const caseExternal = new CaseExternal(
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
+            ...baseCaseExternal,
+            partyType,
           },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
+          { applicationContext },
+        );
+        expect(caseExternal.isValid()).toEqual(false);
+      });
 
-  it('can validate invalid Conservator contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.conservator,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-
-  it('can validate valid Conservator contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.conservator,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
+      it(`can validate valid ${partyType} contact`, () => {
+        const caseExternal = new CaseExternal(
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
+            ...baseCaseExternal,
+            partyType,
+            petitioners: [
+              {
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                contactType: CONTACT_TYPES.primary,
+                countryType: COUNTRY_TYPES.DOMESTIC,
+                name: 'Jimmy Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                secondaryName: 'Jimmy Dean',
+                state: 'AK',
+              },
+              {
+                address1: '876 12th Ave',
+                city: 'Nashville',
+                contactType: CONTACT_TYPES.secondary,
+                countryType: COUNTRY_TYPES.DOMESTIC,
+                inCareOf: 'Bob Dean',
+                name: 'Susan Dean',
+                phone: '1234567890',
+                postalCode: '05198',
+                secondaryName: 'Susan Dean',
+                state: 'AK',
+              },
+            ],
           },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
-  it('can validate invalid Guardian contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.guardian,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-
-  it('can validate valid Guardian contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.guardian,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
-  it('can validate invalid Custodian contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.custodian,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-
-  it('can validate valid Custodian contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.custodian,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
-  it('can validate invalid Donor contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.donor,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-
-  it('can validate valid Donor contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.donor,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
-  it('can validate invalid Transferee contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.transferee,
-        petitionFile: {},
-        petitionFileSize: 1,
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.isValid()).toEqual(false);
-  });
-  it('can validate valid Transferee contact', () => {
-    caseExternal = new CaseExternal(
-      {
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.transferee,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
+          { applicationContext },
+        );
+        expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
+      });
+    },
+  );
 
   it('throws an Error (upon construction) if `partyType` is defined but not found in the available list', () => {
     expect(() => {
-      caseExternal = new CaseExternal(
+      new CaseExternal(
         {
-          caseType: CASE_TYPES_MAP.other,
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          irsNoticeDate: '2009-10-13T08:06:07.539Z',
-          mailingDate: 'testing',
+          ...baseCaseExternal,
           partyType: 'SOME INVALID PARTY TYPE',
-          petitionFile: {},
-          petitionFileSize: 1,
           petitioners: [
             {
               address1: '876 12th Ave',
@@ -864,116 +506,10 @@ describe('ContactFactory', () => {
               state: 'AK',
             },
           ],
-          preferredTrialCity: 'Memphis, Tennessee',
-          procedureType: 'Small',
-          signature: true,
-          stinFile: {},
-          stinFileSize: 1,
         },
         { applicationContext },
       );
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
-  });
-
-  it('does not require phone number for internal cases', () => {
-    const caseInternal = new CaseInternal(
-      {
-        archivedDocketEntries: [],
-        caseCaption: 'Sisqo',
-        caseType: CASE_TYPES_MAP.other,
-        filingType: 'Myself',
-        hasIrsNotice: true,
-        irsNoticeDate: '2009-10-13T08:06:07.539Z',
-        mailingDate: 'testing',
-        partyType: PARTY_TYPES.transferee,
-        petitionFile: {},
-        petitionFileSize: 1,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
-        preferredTrialCity: 'Memphis, Tennessee',
-        procedureType: 'Small',
-        receivedAt: '2009-10-13T08:06:07.539Z',
-        requestForPlaceOfTrialFile: new File(
-          [],
-          'requestForPlaceOfTrialFile.pdf',
-        ),
-        requestForPlaceOfTrialFileSize: 1,
-        signature: true,
-        stinFile: {},
-        stinFileSize: 1,
-      },
-      { applicationContext },
-    );
-
-    expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
-  describe('Cases with otherPetitioners', () => {
-    const partyTypeKeys = Object.keys(PARTY_TYPES);
-    partyTypeKeys.forEach(partyType => {
-      it(`can validate valid contacts for a case with otherPetitioners for party type ${partyType}`, () => {
-        const caseWithOtherPetitioners = new Case(
-          {
-            ...MOCK_CASE,
-            otherPetitioners: [
-              {
-                additionalName: 'First Other Petitioner',
-                address1: '876 12th Ave',
-                city: 'Nashville',
-                country: 'USA',
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                email: 'someone@example.com',
-                name: 'Jimmy Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                state: 'AK',
-              },
-              {
-                additionalName: 'Second Other Petitioner',
-                address1: '876 12th Ave',
-                city: 'Nashville',
-                country: 'USA',
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                email: 'someone@example.com',
-                name: 'Jimmy Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                state: 'AK',
-              },
-            ],
-            partyType: PARTY_TYPES[partyType],
-            petitioners: [
-              {
-                ...getContactPrimary(MOCK_CASE),
-                secondaryName: 'Trustee Name',
-              },
-              {
-                ...getContactPrimary(MOCK_CASE),
-                contactType: CONTACT_TYPES.secondary,
-                inCareOf: 'Peter Parker',
-              },
-            ],
-          },
-          { applicationContext },
-        );
-
-        expect(caseWithOtherPetitioners.getFormattedValidationErrors()).toEqual(
-          null,
-        );
-      });
-    });
   });
 
   describe('getErrorToMessageMap', () => {
@@ -1012,24 +548,13 @@ describe('ContactFactory', () => {
         ContactFactory.internationalValidationObject,
       );
     });
-
-    it('gets validation object with phone added for isPaper = true', () => {
-      const validationObject = ContactFactory.getValidationObject({
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        isPaper: true,
-      });
-
-      expect(validationObject).toMatchObject({
-        ...ContactFactory.domesticValidationObject,
-        phone: expect.anything(),
-      });
-    });
   });
 
   describe('getContactConstructors', () => {
-    it('returns an empty object if no partyType is given', () => {
+    it('should return an empty object if no partyType is given and case has not been served', () => {
       const contactConstructor = ContactFactory.getContactConstructors({
         partyType: undefined,
+        status: CASE_STATUS_TYPES.new,
       });
 
       expect(contactConstructor).toEqual({});

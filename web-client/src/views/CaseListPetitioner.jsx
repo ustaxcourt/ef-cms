@@ -56,7 +56,7 @@ export const CaseListPetitioner = connect(
       return (
         <>
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
-          {cases.length > 0 && (
+          {cases?.length > 0 && (
             <>
               <table
                 className="usa-table responsive-table dashboard"

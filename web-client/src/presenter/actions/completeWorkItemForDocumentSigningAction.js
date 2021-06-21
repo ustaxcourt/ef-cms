@@ -21,10 +21,11 @@ export const completeWorkItemForDocumentSigningAction = async ({
   if (messageId && document) {
     const workItemIdToClose = document.workItem.workItemId;
 
-    await applicationContext.getUseCases().completeWorkItemInteractor({
-      applicationContext,
-      userId: applicationContext.getCurrentUser().userId,
-      workItemId: workItemIdToClose,
-    });
+    await applicationContext
+      .getUseCases()
+      .completeWorkItemInteractor(applicationContext, {
+        userId: applicationContext.getCurrentUser().userId,
+        workItemId: workItemIdToClose,
+      });
   }
 };

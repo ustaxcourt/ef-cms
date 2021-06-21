@@ -11,13 +11,13 @@ import classNames from 'classnames';
 export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     showModal: state.modal.showModal,
   },
 
   function DocketRecord({
     docketRecordHelper,
-    formattedCaseDetail,
+    formattedDocketEntries,
     showModal,
   }) {
     const getIcon = entry => {
@@ -88,7 +88,7 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
+            {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
               (entry, arrayIndex) => {
                 return (
                   <tr

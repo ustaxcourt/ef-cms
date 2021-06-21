@@ -21,8 +21,7 @@ export const deleteTrialSessionAction = async ({
   try {
     result = await applicationContext
       .getUseCases()
-      .deleteTrialSessionInteractor({
-        applicationContext,
+      .deleteTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   } catch (err) {

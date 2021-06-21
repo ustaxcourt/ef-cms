@@ -106,8 +106,10 @@ export const CourtIssuedDocketEntry = connect(
                         action,
                         inputValue,
                         name,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence: validateCourtIssuedDocketEntrySequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
+                        validateSequence:
+                          validateCourtIssuedDocketEntrySequence,
                       });
                       return true;
                     }}
@@ -115,7 +117,8 @@ export const CourtIssuedDocketEntry = connect(
                       onInputChange({
                         action,
                         inputText,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
                       });
                     }}
                   />

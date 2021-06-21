@@ -4,10 +4,8 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCaseCaptionForCaseInfoTabAction', () => {
-  const {
-    CASE_CAPTION_POSTFIX,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { CASE_CAPTION_POSTFIX, PARTY_TYPES } =
+    applicationContext.getConstants();
 
   presenter.providers.applicationContext = applicationContext;
 

@@ -16,9 +16,9 @@ exports.updateUserRecords = async ({
 
   await client.put({
     Item: {
+      ...updatedUser,
       pk: `user|${userId}`,
       sk: `user|${userId}`,
-      ...updatedUser,
       userId,
     },
     applicationContext,

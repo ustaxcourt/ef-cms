@@ -36,7 +36,7 @@ export const caseDetailPractitionerSearchHelper = get => {
     : undefined;
 
   const respondentSearchResultsCount = modalState
-    ? modalState?.respondentMatches?.length
+    ? modalState.respondentMatches?.length
     : undefined;
 
   const showOnePractitioner = practitionerSearchResultsCount === 1;

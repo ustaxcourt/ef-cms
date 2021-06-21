@@ -1,5 +1,6 @@
 import { addCourtIssuedDocketEntryHelper } from '../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { caseDetailHeaderHelper } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { caseDetailSubnavHelper } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
@@ -8,7 +9,6 @@ import {
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
-import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -122,14 +122,14 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
 
     await refreshElasticsearchIndex();
 
-    const formattedCase = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
+    const headerHelper = runCompute(
+      withAppContextDecorator(caseDetailHeaderHelper),
       {
         state: test.getState(),
       },
     );
 
-    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(headerHelper.showBlockedTag).toBeTruthy();
 
     const caseDetailSubnav = runCompute(
       withAppContextDecorator(caseDetailSubnavHelper),

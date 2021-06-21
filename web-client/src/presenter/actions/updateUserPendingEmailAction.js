@@ -15,8 +15,7 @@ export const updateUserPendingEmailAction = async ({
 
   const updatedUser = await applicationContext
     .getUseCases()
-    .updateUserPendingEmailInteractor({
-      applicationContext,
+    .updateUserPendingEmailInteractor(applicationContext, {
       pendingEmail,
     });
 

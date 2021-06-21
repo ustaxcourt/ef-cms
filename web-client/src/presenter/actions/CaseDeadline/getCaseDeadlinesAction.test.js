@@ -3,11 +3,11 @@ import { getCaseDeadlinesAction } from './getCaseDeadlinesAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('getCaseDeadlinesAction', () => {
   const START_DATE = '2020-01-01T05:00:00.000Z';
   const END_DATE = '2020-02-01T05:00:00.000Z';
+
+  presenter.providers.applicationContext = applicationContext;
 
   beforeAll(() => {
     applicationContext
@@ -36,7 +36,7 @@ describe('getCaseDeadlinesAction', () => {
 
     expect(
       applicationContext.getUseCases().getCaseDeadlinesInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       endDate: END_DATE,
       judge: 'Buch',
@@ -66,7 +66,7 @@ describe('getCaseDeadlinesAction', () => {
     });
     expect(
       applicationContext.getUseCases().getCaseDeadlinesInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       page: 3,
     });

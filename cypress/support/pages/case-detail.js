@@ -14,8 +14,8 @@ exports.getCaptionTextArea = () => {
   return cy.get('textarea.caption');
 };
 
-exports.getSaveButton = () => {
-  return cy.contains('button', 'Save');
+exports.getButton = buttonText => {
+  return cy.contains('button', buttonText);
 };
 
 exports.getCaseTitleContaining = text => {
@@ -25,4 +25,18 @@ exports.getCaseTitleContaining = text => {
 exports.getCaseDetailTab = tabName => {
   // tabName can be: docket-record, tracked-items, drafts, correspondence, case-information, case-messages, notes
   return cy.get(`button#tab-${tabName}`);
+};
+
+exports.hoverOverSignatureWarning = () => {
+  return cy.get('#signature-warning').realHover();
+};
+
+exports.createOrder = docketNumber => {
+  cy.goToRoute(
+    `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
+  );
+  cy.url().should('contain', '/create-order');
+  cy.get('.ql-editor').type('A created order!');
+  cy.get('#save-order-button').click();
+  cy.url().should('contain', '/sign');
 };

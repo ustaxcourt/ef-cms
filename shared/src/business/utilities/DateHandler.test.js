@@ -500,4 +500,34 @@ describe('DateHandler', () => {
       });
     });
   });
+
+  describe('validateDateAndCreateISO)', () => {
+    it('should return undefined when year, month, or day is invalid', () => {
+      const result = DateHandler.validateDateAndCreateISO({
+        day: '33',
+        month: '10',
+        year: '2002',
+      });
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return undefined when year, month, or day is not provided', () => {
+      const result = DateHandler.validateDateAndCreateISO({
+        day: '4',
+        month: '10',
+      });
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return expected ISO date when date object is valid', () => {
+      const validDate = DateHandler.createISODateStringFromObject({
+        day: '1',
+        month: '1',
+        year: '2001',
+      });
+      expect(validDate).toEqual('2001-01-01T05:00:00.000Z');
+    });
+  });
 });

@@ -28,7 +28,7 @@ ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES = {
   postalCode: [
     {
       contains: 'match',
-      message: 'Enter ZIP code.',
+      message: 'Enter ZIP code',
     },
     'Enter ZIP code',
   ],
@@ -45,48 +45,6 @@ ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES = {
   postalCode: 'Enter ZIP code',
 };
 
-ContactFactory.getValidationRules = contactType => {
-  let results = joi;
-
-  for (const partyType in PARTY_TYPES) {
-    const contactConstructor = ContactFactory.getContactConstructors({
-      partyType: PARTY_TYPES[partyType],
-    })[contactType];
-
-    if (contactConstructor) {
-      results = results.when('partyType', {
-        is: PARTY_TYPES[partyType],
-        then: joi
-          .alternatives(
-            contactConstructor({
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              isPaper: true,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.INTERNATIONAL,
-              isPaper: true,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              isPaper: false,
-            }).VALIDATION_RULES,
-            contactConstructor({
-              countryType: COUNTRY_TYPES.INTERNATIONAL,
-              isPaper: false,
-            }).VALIDATION_RULES,
-          )
-          .required(),
-      });
-    } else {
-      results = results.forbidden();
-    }
-  }
-
-  return results;
-};
-
-/* eslint-disable sort-keys-fix/sort-keys-fix */
-
 const commonValidationRequirements = {
   address1: JoiValidationConstants.STRING.max(100).required(),
   address2: JoiValidationConstants.STRING.max(100).optional(),
@@ -100,25 +58,25 @@ const commonValidationRequirements = {
   ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
-    then: joi.required(),
     otherwise: joi.optional(),
+    then: joi.required(),
   }),
-  inCareOf: JoiValidationConstants.STRING.max(100).optional(),
-  isAddressSealed: joi.boolean().required(),
-  sealedAndUnavailable: joi.boolean().optional(),
-  name: JoiValidationConstants.STRING.max(100).required(),
-  phone: JoiValidationConstants.STRING.max(100).required(),
-  secondaryName: JoiValidationConstants.STRING.max(100).optional(),
-  title: JoiValidationConstants.STRING.max(100).optional(),
-  serviceIndicator: JoiValidationConstants.STRING.valid(
-    ...Object.values(SERVICE_INDICATOR_TYPES),
-  ).optional(),
   hasEAccess: joi
     .boolean()
     .optional()
     .description(
       'Flag that indicates if the contact has credentials to both the legacy and new system.',
     ),
+  inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+  isAddressSealed: joi.boolean().required(),
+  name: JoiValidationConstants.STRING.max(100).required(),
+  phone: JoiValidationConstants.STRING.max(100).required(),
+  sealedAndUnavailable: joi.boolean().optional(),
+  secondaryName: JoiValidationConstants.STRING.max(100).optional(),
+  serviceIndicator: JoiValidationConstants.STRING.valid(
+    ...Object.values(SERVICE_INDICATOR_TYPES),
+  ).optional(),
+  title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
 const domesticValidationObject = {
@@ -126,12 +84,12 @@ const domesticValidationObject = {
     COUNTRY_TYPES.DOMESTIC,
   ).required(),
   ...commonValidationRequirements,
+  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
   state: JoiValidationConstants.STRING.valid(
     ...Object.keys(US_STATES),
     ...US_STATES_OTHER,
     STATE_NOT_AVAILABLE,
   ).required(),
-  postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
 };
 
 ContactFactory.domesticValidationObject = domesticValidationObject;
@@ -158,19 +116,10 @@ ContactFactory.internationalValidationObject = internationalValidationObject;
  */
 ContactFactory.getValidationObject = ({
   countryType = COUNTRY_TYPES.DOMESTIC,
-  isPaper = false,
 }) => {
-  const baseValidationObject =
-    countryType === COUNTRY_TYPES.DOMESTIC
-      ? cloneDeep(domesticValidationObject)
-      : cloneDeep(internationalValidationObject);
-
-  if (isPaper) {
-    baseValidationObject.phone = JoiValidationConstants.STRING.max(
-      100,
-    ).optional();
-  }
-  return baseValidationObject;
+  return countryType === COUNTRY_TYPES.DOMESTIC
+    ? cloneDeep(domesticValidationObject)
+    : cloneDeep(internationalValidationObject);
 };
 
 /**
@@ -192,10 +141,8 @@ ContactFactory.getErrorToMessageMap = ({
  * used for getting the contact constructors depending on the party type and contact type
  *
  * @param {object} options the options object
- * @param {string} options.countryType typically either 'domestic' or 'international'
- * @param {boolean} options.isPaper is paper case
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact, other petitioner contacts
+ * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact
  */
 ContactFactory.getContactConstructors = ({ partyType }) => {
   const {
@@ -234,8 +181,6 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
   const {
     getPetitionerIntermediaryContact,
   } = require('./PetitionerIntermediaryContact');
-  const { getOtherFilerContact } = require('./OtherFilerContact');
-  const { getOtherPetitionerContact } = require('./OtherPetitionerContact');
   const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
   const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
   const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
@@ -247,114 +192,81 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
       case PARTY_TYPES.transferee: // fall through
       case PARTY_TYPES.petitioner:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.conservator:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerConservatorContact,
           secondary: null,
         };
       case PARTY_TYPES.corporation:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCorporationContact,
           secondary: null,
         };
       case PARTY_TYPES.custodian:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerCustodianContact,
           secondary: null,
         };
       case PARTY_TYPES.estate:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerEstateWithExecutorPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.estateWithoutExecutor:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerIntermediaryContact,
           secondary: null,
         };
       case PARTY_TYPES.guardian:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerGuardianContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForIncompetentPerson:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForIncompetentPersonContact,
           secondary: null,
         };
       case PARTY_TYPES.nextFriendForMinor:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getNextFriendForMinorContact,
           secondary: null,
         };
-
       case PARTY_TYPES.partnershipAsTaxMattersPartner:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipAsTaxMattersPartnerPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipBBA:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipBBAPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.partnershipOtherThanTaxMatters:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPartnershipOtherThanTaxMattersPrimaryContact,
           secondary: null,
         };
       case PARTY_TYPES.petitionerDeceasedSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerDeceasedSpouseContact,
         };
       case PARTY_TYPES.petitionerSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerPrimaryContact,
           secondary: getPetitionerSpouseContact,
         };
       case PARTY_TYPES.survivingSpouse:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getSurvivingSpouseContact,
           secondary: null,
         };
       case PARTY_TYPES.trust:
         return {
-          otherFilers: getOtherFilerContact,
-          otherPetitioners: getOtherPetitionerContact,
           primary: getPetitionerTrustContact,
           secondary: null,
         };
@@ -370,70 +282,36 @@ ContactFactory.getContactConstructors = ({ partyType }) => {
 };
 
 /**
- * used for instantiating the primary, secondary, other contact objects which are later used in the Case entity.
+ * used for instantiating the primary and secondary contact objects which are later used in the Case entity.
  *
  * @param {object} options the options object
- * @param {object} options.contactInfo information on party contacts (primary, secondary, other)
- * @param {boolean} options.isPaper whether service is paper
+ * @param {object} options.contactInfo information on party contacts (primary, secondary)
  * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @returns {object} contains the primary, secondary, and other contact instances
+ * @returns {object} contains the primary and secondary contact instances
  */
 ContactFactory.createContacts = ({
   applicationContext,
   contactInfo,
-  isPaper,
   partyType,
 }) => {
-  const constructorMap = ContactFactory.getContactConstructors({ partyType });
+  const constructorMap = ContactFactory.getContactConstructors({
+    partyType,
+  });
 
   const constructors = {
     primary:
       constructorMap.primary &&
       constructorMap.primary({
         countryType: (contactInfo.primary || {}).countryType,
-        isPaper,
       }),
     secondary:
       constructorMap.secondary &&
       constructorMap.secondary({
         countryType: (contactInfo.secondary || {}).countryType,
-        isPaper,
       }),
   };
 
-  let otherPetitioners = [];
-  if (Array.isArray(contactInfo.otherPetitioners)) {
-    otherPetitioners = contactInfo.otherPetitioners.map(otherPetitioner => {
-      const otherPetitionerConstructor = constructorMap.otherPetitioners({
-        countryType: otherPetitioner.countryType,
-        isPaper,
-      });
-      return new otherPetitionerConstructor(
-        { ...otherPetitioner, contactType: CONTACT_TYPES.otherPetitioner },
-        {
-          applicationContext,
-        },
-      );
-    });
-  }
-
-  let otherFilers = [];
-  if (Array.isArray(contactInfo.otherFilers)) {
-    otherFilers = contactInfo.otherFilers.map(otherFiler => {
-      const otherFilerConstructor = constructorMap.otherFilers({
-        countryType: otherFiler.countryType,
-        isPaper,
-      });
-      return new otherFilerConstructor(
-        { ...otherFiler, contactType: CONTACT_TYPES.otherFiler },
-        { applicationContext },
-      );
-    });
-  }
-
   return {
-    otherFilers,
-    otherPetitioners,
     primary: constructors.primary
       ? new constructors.primary(
           { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
@@ -466,7 +344,7 @@ ContactFactory.createContactFactory = ({
   additionalValidation,
   contactName,
 }) => {
-  const ContactFactoryConstructor = ({ countryType, isPaper }) => {
+  const ContactFactoryConstructor = ({ countryType }) => {
     /**
      * creates a contact entity
      *
@@ -501,7 +379,6 @@ ContactFactory.createContactFactory = ({
       this.state = rawContact.state;
       this.title = rawContact.title;
       this.additionalName = rawContact.additionalName;
-      this.otherFilerType = rawContact.otherFilerType;
       this.hasEAccess = rawContact.hasEAccess || undefined;
     };
 
@@ -513,7 +390,7 @@ ContactFactory.createContactFactory = ({
     };
 
     GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
-      ...ContactFactory.getValidationObject({ countryType, isPaper }),
+      ...ContactFactory.getValidationObject({ countryType }),
       ...additionalValidation,
     });
 

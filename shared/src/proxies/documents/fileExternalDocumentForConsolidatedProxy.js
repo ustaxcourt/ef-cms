@@ -3,18 +3,16 @@ const { post } = require('../requests');
 /**
  * fileExternalDocumentForConsolidatedProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @param {object} providers.leadDocketNumber the docket number for the lead case in the consolidated set
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileExternalDocumentForConsolidatedInteractor = ({
+exports.fileExternalDocumentForConsolidatedInteractor = (
   applicationContext,
-  docketNumbersForFiling,
-  documentMetadata,
-  leadDocketNumber,
-}) => {
+  { docketNumbersForFiling, documentMetadata, leadDocketNumber },
+) => {
   return post({
     applicationContext,
     body: {

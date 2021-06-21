@@ -36,7 +36,7 @@ describe('createMessageAction', () => {
       applicationContext.getUseCases().createMessageInteractor,
     ).toBeCalled();
     expect(
-      applicationContext.getUseCases().createMessageInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().createMessageInteractor.mock.calls[0][1],
     ).toMatchObject({
       attachments: [
         {

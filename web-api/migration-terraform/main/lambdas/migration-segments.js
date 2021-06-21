@@ -1,15 +1,28 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
-const {
-  migrateItems: migration0001,
-} = require('./migrations/0001-filing-fee-text-casing');
+
 const {
   migrateItems: migration0002,
 } = require('./migrations/0002-original-bar-state');
 const {
-  migrateItems: migration0027,
-} = require('./migrations/0027-delete-work-item-records');
+  migrateItems: migration0027B,
+} = require('./migrations/0027-require-service-indicator-for-petitioner');
+const {
+  migrateItems: migration0030,
+} = require('./migrations/0030-docket-entry-docket-number-required');
+const {
+  migrateItems: migration0031,
+} = require('./migrations/0031-add-filers-to-docket-entry');
+const {
+  migrateItems: migration0032,
+} = require('./migrations/0032-contact-type-other-filers');
+const {
+  migrateItems: migration0033,
+} = require('./migrations/0033-contact-type-other-petitioner');
+const {
+  migrateItems: migration0034,
+} = require('./migrations/0034-contact-type-primary-secondary');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
@@ -35,14 +48,30 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run migration 0001');
-  items = await migration0001(items, documentClient);
-  applicationContext.logger.info('about to run migration 0002');
-  items = await migration0002(items, documentClient);
-  applicationContext.logger.info('about to run migration 0027');
-  items = await migration0027(items, documentClient);
 
-  applicationContext.logger.info('about to run validation migration');
-  items = await validationMigration(items, documentClient);
+  applicationContext.logger.info('about to run migration 0027B');
+  items = await migration0027B(items, documentClient);
+
+  applicationContext.logger.debug('about to run migration 0030');
+  items = await migration0030(items);
+
+  applicationContext.logger.debug('about to run migration 0031');
+  items = await migration0031(items, documentClient);
+
+  applicationContext.logger.debug('about to run migration 0032');
+  items = await migration0032(items);
+
+  applicationContext.logger.debug('about to run migration 0033');
+  items = await migration0033(items);
+
+  applicationContext.logger.debug('about to run migration 0034');
+  items = await migration0034(items);
+
+  applicationContext.logger.info('about to run migration 0002');
+  items = migration0002(items);
+
+  applicationContext.logger.debug('about to run validation migration');
+  items = await validationMigration(items);
 
   return items;
 };

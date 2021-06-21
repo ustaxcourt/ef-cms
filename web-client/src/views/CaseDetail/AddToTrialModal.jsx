@@ -29,7 +29,6 @@ export const AddToTrialModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Add Case"
         confirmSequence={confirmSequence}
         title={modalTitle}

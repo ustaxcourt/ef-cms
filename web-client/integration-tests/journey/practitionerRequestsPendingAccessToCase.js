@@ -1,5 +1,6 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactSecondaryFromState } from '../helpers';
 
 export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
   const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
@@ -16,8 +17,8 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
       documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
       scenario: VALIDATION_ERROR_MESSAGES.scenario,
     });
 
@@ -40,9 +41,9 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
 
     await test.runSequence('validateCaseAssociationRequestSequence');
     expect(test.getState('validationErrors')).toEqual({
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       objections: VALIDATION_ERROR_MESSAGES.objections,
       primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
     });
 
     await test.runSequence('updateCaseAssociationFormValueSequence', {
@@ -65,8 +66,9 @@ export const practitionerRequestsPendingAccessToCase = (test, fakeFile) => {
       value: fakeFile,
     });
 
+    const contactSecondary = contactSecondaryFromState(test);
     await test.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'representingSecondary',
+      key: `filersMap.${contactSecondary.contactId}`,
       value: true,
     });
 

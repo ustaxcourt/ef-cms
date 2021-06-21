@@ -8,9 +8,7 @@
 export const getTrialSessionsAction = async ({ applicationContext }) => {
   const trialSessions = await applicationContext
     .getUseCases()
-    .getTrialSessionsInteractor({
-      applicationContext,
-    });
+    .getTrialSessionsInteractor(applicationContext);
 
   return { trialSessions };
 };

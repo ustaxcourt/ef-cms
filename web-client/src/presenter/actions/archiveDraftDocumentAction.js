@@ -21,8 +21,7 @@ export const archiveDraftDocumentAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .archiveDraftDocumentInteractor({
-      applicationContext,
+    .archiveDraftDocumentInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });
