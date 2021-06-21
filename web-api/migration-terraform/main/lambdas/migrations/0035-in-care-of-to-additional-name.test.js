@@ -89,6 +89,23 @@ describe('migrateItems', () => {
     expect(results[0].petitioners[1].additionalName).toEqual('Guy Fieri');
   });
 
+  it('should NOT modify petitioners on cases that are new', async () => {
+    const mockCaseRecordWithRegularPetitioners = cloneDeep(mockCaseItem);
+    mockCaseRecordWithRegularPetitioners.status = CASE_STATUS_TYPES.new;
+    mockCaseRecordWithRegularPetitioners.petitioners[0].inCareOf =
+      'Jimothy Jazz';
+    mockCaseRecordWithRegularPetitioners.petitioners[1].inCareOf = 'Jimmy Jazz';
+
+    const items = [mockCaseRecordWithRegularPetitioners];
+
+    const results = await migrateItems(items);
+
+    expect(results[0].petitioners[0].inCareOf).toEqual('Jimothy Jazz');
+    expect(results[0].petitioners[1].inCareOf).toEqual('Jimmy Jazz');
+    expect(results[0].petitioners[0].additionalName).toBeUndefined();
+    expect(results[0].petitioners[1].additionalName).toBeUndefined();
+  });
+
   it('should NOT modify petitioners WITHOUT the inCareOf property', async () => {
     const mockCaseRecordWithRegularPetitioners = cloneDeep(mockCaseItem);
     mockCaseRecordWithRegularPetitioners.petitioners[0].inCareOf = undefined;
