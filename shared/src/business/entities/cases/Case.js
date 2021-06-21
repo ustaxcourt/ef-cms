@@ -179,6 +179,7 @@ Case.prototype.assignFieldsForInternalUsers =
     this.blockedReason = rawCase.blockedReason;
     this.caseNote = rawCase.caseNote;
     this.damages = rawCase.damages;
+    this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
     this.judgeUserId = rawCase.judgeUserId;
@@ -214,7 +215,6 @@ Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
   }
   this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
   this.filingType = rawCase.filingType;
-  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
   this.irsNoticeDate = rawCase.irsNoticeDate;
   this.isPaper = rawCase.isPaper;
   this.leadDocketNumber = rawCase.leadDocketNumber;
