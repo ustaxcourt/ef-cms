@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CaseDetailSubnavTabs } from '../CaseDetail/CaseDetailSubnavTabs';
 import { CompleteMessageModalDialog } from './CompleteMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from './ConfirmRemoveSignatureModal';
@@ -94,7 +95,9 @@ export const MessageDetail = connect(
   }) {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader className="margin-bottom-0" />
+        <CaseDetailSubnavTabs />
+
         <section className="usa-section grid-container message-detail">
           <SuccessNotification />
           <ErrorNotification />

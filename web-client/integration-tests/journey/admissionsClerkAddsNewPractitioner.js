@@ -8,7 +8,6 @@ export const admissionsClerkAddsNewPractitioner = test => {
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'phone',
-      'email',
       'admissionsDate',
       'birthYear',
       'employer',
@@ -25,6 +24,10 @@ export const admissionsClerkAddsNewPractitioner = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'email',
+      value: 'caroleBaskinH8r@example.com',
+    });
+    await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
       value: 'caroleBaskinH8r@example.com',
     });
     await test.runSequence('updateFormValueSequence', {

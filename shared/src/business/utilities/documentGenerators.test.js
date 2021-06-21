@@ -13,6 +13,7 @@ const {
   noticeOfTrialIssued,
   order,
   pendingReport,
+  practitionerCaseList,
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,
@@ -248,17 +249,6 @@ describe('documentGenerators', () => {
         data: {
           caseCaptionExtension: 'Petitioner(s)',
           caseDetail: {
-            contactPrimary: {
-              address1: 'Address 1',
-              address2: 'Address 2',
-              address3: 'Address 3',
-              city: 'City',
-              country: 'USA',
-              name: 'Test Petitioner',
-              phone: '123-124-1234',
-              postalCode: '12345',
-              state: 'AL',
-            },
             irsPractitioners: [
               {
                 barNumber: 'PT20002',
@@ -276,6 +266,21 @@ describe('documentGenerators', () => {
               },
             ],
             partyType: PARTY_TYPES.petitioner,
+            petitioners: [
+              {
+                address1: 'Address 1',
+                address2: 'Address 2',
+                address3: 'Address 3',
+                city: 'City',
+                contactId: '65c932cc-8ada-4c2c-9a8c-7314b05fd0c0',
+                counselDetails: [{ name: 'Test Private Practitioner' }],
+                country: 'USA',
+                name: 'Test Petitioner',
+                phone: '123-124-1234',
+                postalCode: '12345',
+                state: 'AL',
+              },
+            ],
             privatePractitioners: [
               {
                 barNumber: 'PT20001',
@@ -653,6 +658,49 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Pending_Report', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('practitionerCaseList', () => {
+    it('generates a Pending Report document', async () => {
+      const pdf = await practitionerCaseList({
+        applicationContext,
+        data: {
+          barNumber: 'PT1234',
+          closedCases: [
+            {
+              caseTitle: 'Test Closed Case 1',
+              docketNumberWithSuffix: '123-45S',
+              status: CASE_STATUS_TYPES.closed,
+            },
+            {
+              caseTitle: 'Test Closed Case 2',
+              docketNumberWithSuffix: '223-45S',
+              status: CASE_STATUS_TYPES.closed,
+            },
+          ],
+          openCases: [
+            {
+              caseTitle: 'Test Open Case 1',
+              docketNumberWithSuffix: '323-45S',
+              status: CASE_STATUS_TYPES.generalDocket,
+            },
+          ],
+          practitionerName: 'Ben Matlock',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Practitioner_Case_List', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
