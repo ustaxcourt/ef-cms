@@ -22,11 +22,17 @@ const updateCaseDocketEntries = ({
   caseToUpdate,
   oldCase,
 }) => {
+  console.log(oldCase.docketEntries);
+  console.log(caseToUpdate.docketEntries);
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
     caseToUpdate.docketEntries,
     'docketEntryId',
   );
+
+  console.log('addedDocketEntries', addedDocketEntries);
+  console.log('------');
+  console.log('updatedDocketEntries', updatedDocketEntries);
 
   const {
     added: addedArchivedDocketEntries,
@@ -501,6 +507,9 @@ exports.updateCaseAndAssociations = async ({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
+
+  console.log('OLD CASE HERE');
+  console.log(JSON.stringify(oldCaseEntity, null, 2));
 
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
