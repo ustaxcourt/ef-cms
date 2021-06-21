@@ -4,7 +4,10 @@ const {
 const {
   createPractitionerUserInteractor,
 } = require('./createPractitionerUserInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('create practitioner user', () => {
@@ -60,11 +63,23 @@ describe('create practitioner user', () => {
   });
 
   it('should set practitioner.pendingEmail to practitioner.email and set practitioner.email to undefined', async () => {
-    const user = await createPractitionerUserInteractor(applicationContext, {
-      user: mockUser,
+    const mockEmail = 'testing@example.com';
+
+    await createPractitionerUserInteractor(applicationContext, {
+      user: {
+        ...mockUser,
+        email: mockEmail,
+      },
     });
 
-    expect(user.email).not.toBeUndefined();
-    expect(user.pendingEmail).not.toBeUndefined();
+    const mockUserCall =
+      applicationContext.getPersistenceGateway().createPractitionerUser.mock
+        .calls[0][0].user;
+
+    expect(mockUserCall.email).toBeUndefined();
+    expect(mockUserCall.pendingEmail).toEqual(mockEmail);
+    expect(mockUserCall.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
   });
 });
