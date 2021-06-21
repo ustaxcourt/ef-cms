@@ -18,15 +18,22 @@ import {
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
+import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
@@ -68,6 +75,41 @@ export const fakeFile = (() => {
 export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
+
+export const callCognitoTriggerForPendingEmail = async userId => {
+  // mock application context similar to that in cognito-triggers.js
+  const apiApplicationContext = {
+    getCurrentUser: () => ({}),
+    getDocumentClient: () => {
+      return new DynamoDB.DocumentClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      });
+    },
+    getEnvironment: () => ({
+      dynamoDbTableName: 'efcms-local',
+      stage: process.env.STAGE,
+    }),
+    getPersistenceGateway: () => ({
+      getCaseByDocketNumber,
+      getDocketNumbersByUser,
+      getUserById,
+      updateCase,
+      updateUser,
+    }),
+    getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
+    logger: {
+      debug: () => {},
+      error: () => {},
+      info: () => {},
+    },
+  };
+
+  const user = await getUserRecordById(userId);
+  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+    user,
+  });
+};
 
 export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
@@ -119,6 +161,7 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
+
 export const getUserRecordById = userId => {
   return client.get({
     Key: {
