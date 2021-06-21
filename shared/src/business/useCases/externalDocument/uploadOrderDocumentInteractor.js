@@ -6,17 +6,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
+ * @param {object} applicationContext application context
  * @param {object} object the argument object
- * @param {object} object.applicationContext application context
  * @param {string} object.docketEntryIdToOverwrite docket entry id to overwrite
  * @param {object} object.documentFile file object to upload to S3
  * @returns {string} uploaded docket entry id
  */
-exports.uploadOrderDocumentInteractor = async ({
+exports.uploadOrderDocumentInteractor = async (
   applicationContext,
-  docketEntryIdToOverwrite,
-  documentFile,
-}) => {
+  { docketEntryIdToOverwrite, documentFile },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {

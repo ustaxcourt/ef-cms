@@ -11,8 +11,9 @@ const getCognitoLoginUrl = () => {
   }
 };
 
-const getPublicSiteUrl = () =>
-  process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
+const getPublicSiteUrl = () => {
+  return process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
+};
 
 const getUniqueId = () => {
   return uuidv4();

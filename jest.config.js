@@ -6,14 +6,6 @@ module.exports = {
   collectCoverage: false,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
-  coverageThreshold: {
-    global: {
-      branches: 95,
-      functions: 95,
-      lines: 95,
-      statements: 95,
-    },
-  },
   setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
   testSequencer: `${__dirname}/jestSequencer.js`,
   verbose: false,

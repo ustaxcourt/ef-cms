@@ -8,10 +8,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedMessages', () => {
   const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
-  const {
-    DOCKET_SECTION,
-    PETITIONS_SECTION,
-  } = applicationContext.getConstants();
+  const { DOCKET_SECTION, PETITIONS_SECTION } =
+    applicationContext.getConstants();
   const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
 
   let validMessage;

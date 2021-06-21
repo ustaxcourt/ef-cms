@@ -16,6 +16,7 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
     documentTitle: 'Order to do something',
     documentType: 'Order',
     eventCode: 'O',
+    filers: [],
     filingDate: '2019-06-22T17:29:13.120Z',
     freeText: 'to do something',
     isOnDocketRecord: true,

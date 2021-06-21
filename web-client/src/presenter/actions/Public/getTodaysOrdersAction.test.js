@@ -42,12 +42,13 @@ describe('getTodaysOrdersAction', () => {
       },
       state: {},
     });
-    const todaysOrdersSort = applicationContext.getConstants()
-      .TODAYS_ORDER_SORT;
+
+    const todaysOrdersSort =
+      applicationContext.getConstants().TODAYS_ORDER_SORT;
     expect(
-      applicationContext.getUseCases().getTodaysOrdersInteractor,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
+      applicationContext.getUseCases().getTodaysOrdersInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       page: 1,
       todaysOrdersSort,
     });

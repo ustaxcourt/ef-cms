@@ -39,7 +39,7 @@ const cache = {
  * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
  */
 const getClient = async ({ environmentName, version }) => {
-  version = version || (await getVersion(environmentName));
+  version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = cache.hosts[domainName] || (await getHost(domainName));
   const credentials = new EnvironmentCredentials('AWS');
@@ -50,7 +50,7 @@ const getClient = async ({ environmentName, version }) => {
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
     awsConfig: new AWS.Config({ region: 'us-east-1' }),
-    connectionClass: connectionClass,
+    connectionClass,
     host,
     log: 'warning',
     port: 443,

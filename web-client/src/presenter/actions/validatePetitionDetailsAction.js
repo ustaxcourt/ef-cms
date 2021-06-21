@@ -11,76 +11,32 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
+
 export const validatePetitionDetailsAction = ({
   applicationContext,
   get,
   path,
+  props,
 }) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
+    props;
 
-  let petitionPaymentWaivedDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateWaivedMonth}-${form.paymentDateWaivedDay}-${form.paymentDateWaivedYear}`,
-      )
-  ) {
-    petitionPaymentWaivedDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateWaivedDay,
-        month: form.paymentDateWaivedMonth,
-        year: form.paymentDateWaivedYear,
-      });
-  }
-
-  let petitionPaymentDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${form.paymentDateMonth}-${form.paymentDateDay}-${form.paymentDateYear}`,
-      )
-  ) {
-    petitionPaymentDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.paymentDateDay,
-        month: form.paymentDateMonth,
-        year: form.paymentDateYear,
-      });
-  }
-
-  let irsNoticeDate;
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(`${form.irsMonth}-${form.irsDay}-${form.irsYear}`)
-  ) {
-    irsNoticeDate = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: form.irsDay,
-        month: form.irsMonth,
-        year: form.irsYear,
-      });
-  }
-
-  let errors = applicationContext.getUseCases().validateCaseDetailInteractor({
-    applicationContext,
-    caseDetail: {
-      ...caseDetail,
-      ...form,
-      irsNoticeDate,
-      petitionPaymentDate,
-      petitionPaymentWaivedDate,
-      preferredTrialCity: form.preferredTrialCity
-        ? form.preferredTrialCity
-        : null,
-    },
-  });
+  let errors = applicationContext
+    .getUseCases()
+    .validateCaseDetailInteractor(applicationContext, {
+      caseDetail: {
+        ...caseDetail,
+        ...form,
+        irsNoticeDate,
+        petitionPaymentDate,
+        petitionPaymentWaivedDate,
+        preferredTrialCity: form.preferredTrialCity
+          ? form.preferredTrialCity
+          : null,
+      },
+    });
 
   if (!errors) {
     return path.success();
@@ -89,13 +45,11 @@ export const validatePetitionDetailsAction = ({
       statistics: 'Statistics',
     };
 
-    const {
-      errors: formattedErrors,
-      statisticsErrorMessages,
-    } = aggregateStatisticsErrors({
-      errors,
-      get,
-    });
+    const { errors: formattedErrors, statisticsErrorMessages } =
+      aggregateStatisticsErrors({
+        errors,
+        get,
+      });
 
     const errorMessags = [
       ...Object.values(omit(errors, 'statistics')),

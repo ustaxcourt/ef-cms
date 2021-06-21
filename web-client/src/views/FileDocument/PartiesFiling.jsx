@@ -32,37 +32,13 @@ export const PartiesFiling = connect(
                 Who are you filing the document(s) for?
               </legend>
               <span className="usa-hint">Check all that apply.</span>
-              <div className="usa-checkbox">
-                <input
-                  aria-describedby="who-legend"
-                  checked={form.partyPrimary || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name="partyPrimary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateFileDocumentWizardFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateExternalDocumentInformationSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label inline-block"
-                  htmlFor="party-primary"
-                >
-                  {formattedCaseDetail.contactPrimary.name}, Petitioner
-                </label>
-              </div>
-              {fileDocumentHelper.showSecondaryParty && (
-                <div className="usa-checkbox">
+              {formattedCaseDetail.petitioners.map(petitioner => (
+                <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
-                    aria-describedby="who-legend"
-                    checked={form.partySecondary || false}
+                    checked={form.filersMap[petitioner.contactId] || false}
                     className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="partySecondary"
+                    id={`filing-${petitioner.contactId}`}
+                    name={`filersMap.${petitioner.contactId}`}
                     type="checkbox"
                     onChange={e => {
                       updateFileDocumentWizardFormValueSequence({
@@ -74,12 +50,12 @@ export const PartiesFiling = connect(
                   />
                   <label
                     className="usa-checkbox__label inline-block"
-                    htmlFor="party-secondary"
+                    htmlFor={`filing-${petitioner.contactId}`}
                   >
-                    {formattedCaseDetail.contactSecondary.name}, Petitioner
+                    {petitioner.displayName}
                   </label>
                 </div>
-              )}
+              ))}
               <div className="usa-checkbox">
                 <input
                   aria-describedby="who-legend"

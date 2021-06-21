@@ -46,14 +46,14 @@ let sent = 0;
   const segments = shuffle(
     new Array(totalSegments).fill(null).map((v, i) => ({
       segment: i,
-      totalSegments: totalSegments,
+      totalSegments,
     })),
   );
 
   const chunks = chunk(segments, 10);
   let done = 0;
   const promises = [];
-  for (let chunk of chunks) {
+  for (let c of chunks) {
     promises.push(
       sqs
         .sendMessageBatch({
@@ -65,7 +65,7 @@ let sent = 0;
         })
         .promise()
         .then(() => {
-          done += chunk.length;
+          done += c.length;
           console.log(
             `${done} out of ${totalSegments} messages sent successfully.`,
           );

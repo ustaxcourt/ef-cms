@@ -5,16 +5,16 @@ import React from 'react';
 
 export const CaseDeadlinesInternal = connect(
   {
-    caseDeadlines: state.formattedCaseDetail.caseDeadlines,
     caseDetailHelper: state.caseDetailHelper,
+    formattedCaseDeadlines: state.formattedCaseDeadlines,
     openDeleteCaseDeadlineModalSequence:
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
       sequences.openEditCaseDeadlineModalSequence,
   },
   function CaseDeadlinesInternal({
-    caseDeadlines,
     caseDetailHelper,
+    formattedCaseDeadlines,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
   }) {
@@ -37,7 +37,7 @@ export const CaseDeadlinesInternal = connect(
               </tr>
             </thead>
             <tbody>
-              {caseDeadlines.map(item => (
+              {formattedCaseDeadlines.map(item => (
                 <tr key={item.caseDeadlineId}>
                   <td className="smaller-column semi-bold">
                     {item.deadlineDateFormatted}

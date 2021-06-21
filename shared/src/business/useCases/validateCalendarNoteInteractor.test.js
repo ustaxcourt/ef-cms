@@ -8,8 +8,7 @@ const {
 
 describe('validateCalendarNoteInteractor', () => {
   it('returns the expected errors object on a note that is over the valid length', () => {
-    const errors = validateCalendarNoteInteractor({
-      applicationContext,
+    const errors = validateCalendarNoteInteractor(applicationContext, {
       note: over1000Characters,
     });
 
@@ -17,8 +16,7 @@ describe('validateCalendarNoteInteractor', () => {
   });
 
   it('returns null on no errors', () => {
-    const errors = validateCalendarNoteInteractor({
-      applicationContext,
+    const errors = validateCalendarNoteInteractor(applicationContext, {
       note: 'hello world',
     });
 

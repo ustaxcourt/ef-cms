@@ -27,30 +27,30 @@ const addNewInitialFilingToCase = ({
 
     const contactSecondary = caseEntity.getContactSecondary();
 
-    let partySecondary = false;
+    const filers = [caseEntity.getContactPrimary().contactId];
     if (contactSecondary && contactSecondary.name) {
-      partySecondary = true;
+      filers.push(contactSecondary.contactId);
     }
 
     documentMeta = {
       ...currentCaseDocument,
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       createdAt: caseEntity.receivedAt,
       eventCode,
+      filers,
       filingDate: caseEntity.receivedAt,
       isFileAttached: true,
       isOnDocketRecord: true,
       isPaper: true,
       mailingDate: caseEntity.mailingDate,
-      partyPrimary: true,
-      partySecondary,
       receivedAt: caseEntity.receivedAt,
       userId: authorizedUser.userId,
     };
   }
 
-  const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
+  const documentToAdd = new DocketEntry(documentMeta, {
+    applicationContext,
+    petitioners: caseEntity.petitioners,
+  });
 
   caseEntity.addDocketEntry(documentToAdd);
 };
