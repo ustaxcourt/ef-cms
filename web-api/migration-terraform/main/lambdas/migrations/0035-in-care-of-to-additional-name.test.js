@@ -2,15 +2,14 @@ const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./0034-contact-type-primary-secondary');
+const { cloneDeep } = require('lodash');
+const { migrateItems } = require('./0035-in-care-of-to-additional-name');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
   const mockDocketEntryId = 'f03ff1fa-6b53-4226-a61f-6ad36d25911c';
 
   let mockCaseItem;
-  let mockCaseRecords;
-  let documentClient;
   let mockDocketEntry = {
     archived: false,
     docketEntryId: mockDocketEntryId,
@@ -45,15 +44,6 @@ describe('migrateItems', () => {
       sk: 'case|999-99',
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     };
-    mockCaseRecords = [mockCaseItem];
-
-    documentClient = {
-      query: () => ({
-        promise: async () => ({
-          Items: mockCaseRecords,
-        }),
-      }),
-    };
   });
 
   it('should return and not modify records that are NOT case records', async () => {
@@ -67,7 +57,7 @@ describe('migrateItems', () => {
         sk: 'docket-entry|101-21',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
     expect(results).toEqual([
       {
@@ -81,87 +71,36 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should return and not modify records that are unserved case records', async () => {
-    const mockUnservedCaseRecord = {
-      ...mockCaseItem,
-      status: CASE_STATUS_TYPES.new,
-    };
+  it('should modify petitioners with inCareOf and map it to its respective additionalName', async () => {
+    const mockCaseRecordWithInCareOfPetitioner = cloneDeep(mockCaseItem);
+    mockCaseRecordWithInCareOfPetitioner.petitioners[0].inCareOf =
+      'John Jacob Jingleheimer-Schmidt';
+    mockCaseRecordWithInCareOfPetitioner.petitioners[1].inCareOf = 'Guy Fieri';
 
-    const items = [mockUnservedCaseRecord];
+    const items = [mockCaseRecordWithInCareOfPetitioner];
 
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
-    expect(results[0]).toEqual(mockUnservedCaseRecord);
+    expect(results[0].petitioners[0].inCareOf).toBeUndefined();
+    expect(results[0].petitioners[1].inCareOf).toBeUndefined();
+    expect(results[0].petitioners[0].additionalName).toEqual(
+      'John Jacob Jingleheimer-Schmidt',
+    );
+    expect(results[0].petitioners[1].additionalName).toEqual('Guy Fieri');
   });
 
-  it("should modify petitioners in the case item that have contactType 'primary', 'secondary' and 'otherPetitioner' to be 'petitioner' for a served case", async () => {
-    const items = [
-      {
-        ...mockCaseItem,
-        petitioners: [
-          MOCK_CASE.petitioners[0],
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: '7acfa199-c297-46b8-9371-2dc1470a5b26',
-            contactType: CONTACT_TYPES.secondary,
-          },
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: 'b6ef7294-6b3f-4bdb-bd96-390541a2f66a',
-            contactType: CONTACT_TYPES.intervenor,
-          },
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: 'b6ef7256-6b3f-4bdb-bd96-390541a2f66a',
-            contactType: CONTACT_TYPES.otherPetitioner,
-          },
-        ],
-      },
-    ];
+  it('should NOT modify petitioners WITHOUT the inCareOf property', async () => {
+    const mockCaseRecordWithRegularPetitioners = cloneDeep(mockCaseItem);
+    mockCaseRecordWithRegularPetitioners.petitioners[0].inCareOf = undefined;
+    mockCaseRecordWithRegularPetitioners.petitioners[1].inCareOf = undefined;
 
-    const results = await migrateItems(items, documentClient);
+    const items = [mockCaseRecordWithRegularPetitioners];
 
-    expect(results[0].petitioners[0].contactType).toEqual(
-      CONTACT_TYPES.petitioner,
-    );
-    expect(results[0].petitioners[1].contactType).toEqual(
-      CONTACT_TYPES.petitioner,
-    );
+    const results = await migrateItems(items);
 
-    expect(results[0].petitioners[2].contactType).toEqual(
-      CONTACT_TYPES.intervenor,
-    );
-
-    expect(results[0].petitioners[3].contactType).toEqual(
-      CONTACT_TYPES.petitioner,
-    );
-  });
-
-  it("should NOT modify petitioners in the case item that have contactType 'intervenor', or 'participant'", async () => {
-    const items = [
-      {
-        ...mockCaseItem,
-        petitioners: [
-          MOCK_CASE.petitioners[0],
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: 'b6ef7294-6b3f-4bdb-bd96-390541a2f66a',
-            contactType: CONTACT_TYPES.intervenor,
-          },
-        ],
-      },
-    ];
-
-    const results = await migrateItems(items, documentClient);
-
-    expect(results[0].petitioners[1].contactType).toEqual(
-      CONTACT_TYPES.intervenor,
-    );
-  });
-
-  it('should validate the modified case item', async () => {
-    const items = [{ ...mockCaseItem, docketNumber: null }];
-
-    await expect(migrateItems(items, documentClient)).rejects.toThrow();
+    expect(results[0].petitioners[0].inCareOf).toBeUndefined();
+    expect(results[0].petitioners[1].inCareOf).toBeUndefined();
+    expect(results[0].petitioners[0].additionalName).toBeUndefined();
+    expect(results[0].petitioners[1].additionalName).toBeUndefined();
   });
 });
