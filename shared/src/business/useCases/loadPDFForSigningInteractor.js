@@ -1,19 +1,17 @@
 /**
  * loadPDFForSigningInteractor
  *
- * @param {object} obj the params object
- * @param {string} obj.applicationContext the application context
- * @param {string} obj.docketNumber the docketNumber
- * @param {string} obj.docketEntryId the docket entry id
- * @param {boolean} obj.removeCover if saving should remove the cover sheet
+ * @param {string} applicationContext the application context
+ * @param {object} providers the params object
+ * @param {string} providers.docketNumber the docketNumber
+ * @param {string} providers.docketEntryId the docket entry id
+ * @param {boolean} providers.removeCover if saving should remove the cover sheet
  * @returns {Promise<object>} the document data
  */
-exports.loadPDFForSigningInteractor = async ({
+exports.loadPDFForSigningInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-  removeCover = false,
-}) => {
+  { docketEntryId, docketNumber, removeCover = false },
+) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   try {

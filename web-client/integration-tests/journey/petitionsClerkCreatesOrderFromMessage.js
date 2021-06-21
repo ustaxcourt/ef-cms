@@ -1,11 +1,7 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { formattedMessageDetail as formattedMessageDetailComputed } from '../../src/presenter/computeds/formattedMessageDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
 
 const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
@@ -58,14 +54,11 @@ export const petitionsClerkCreatesOrderFromMessage = test => {
       documentTitle: 'Order',
     });
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
+      test,
+    );
 
-    const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-    const draftOrder = caseDetailFormatted.formattedDraftDocuments.find(
+    const draftOrder = formattedDraftDocuments.find(
       document => document.documentTitle === 'Order',
     );
 

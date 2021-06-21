@@ -22,8 +22,7 @@ export const archiveCorrespondenceDocumentAction = async ({
   try {
     await applicationContext
       .getUseCases()
-      .archiveCorrespondenceDocumentInteractor({
-        applicationContext,
+      .archiveCorrespondenceDocumentInteractor(applicationContext, {
         correspondenceId,
         docketNumber,
       });

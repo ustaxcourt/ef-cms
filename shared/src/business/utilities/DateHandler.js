@@ -247,7 +247,8 @@ const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
   let result = null;
 
-  if (updatedDateString.replace(/[-,undefined]/g, '') === '') {
+  // use unique characters in "undefined" ⬇
+  if (updatedDateString.replace(/[-,undefi]/g, '') === '') {
     result = null;
   } else if (dateHasText(updatedDateString)) {
     result = '-1';
@@ -296,6 +297,22 @@ const computeDate = ({ day, month, year }) => {
   return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
 };
 
+/**
+ * Formats date object into ISO string only if date is valid
+ *
+ * @param {object} date the date object containing year, month, day
+ * @returns {string} a formatted ISO date string if date object is valid
+ */
+const validateDateAndCreateISO = date => {
+  if (isValidDateString(`${date.month}-${date.day}-${date.year}`)) {
+    return createISODateStringFromObject({
+      day: date.day,
+      month: date.month,
+      year: date.year,
+    });
+  }
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -317,4 +334,5 @@ module.exports = {
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
+  validateDateAndCreateISO,
 };

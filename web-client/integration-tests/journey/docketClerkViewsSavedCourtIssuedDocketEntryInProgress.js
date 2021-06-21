@@ -1,22 +1,15 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkViewsSavedCourtIssuedDocketEntryInProgress = (
   test,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk views an in-progress docket entry for the given court-issued document', async () => {
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,
     );
 

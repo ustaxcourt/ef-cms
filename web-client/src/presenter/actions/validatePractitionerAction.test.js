@@ -7,11 +7,7 @@ describe('validatePractitionerAction', () => {
   let successMock;
   let errorMock;
 
-  const {
-    COUNTRY_TYPES,
-    US_STATES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successMock = jest.fn();
@@ -49,7 +45,7 @@ describe('validatePractitionerAction', () => {
           },
           firstName: 'Test',
           lastName: 'Attorney',
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },
@@ -82,7 +78,7 @@ describe('validatePractitionerAction', () => {
             phone: '123-123-1234',
             postalCode: '12345',
           },
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },
@@ -115,7 +111,7 @@ describe('validatePractitionerAction', () => {
             phone: '123-123-1234',
             postalCode: '12345',
           },
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },

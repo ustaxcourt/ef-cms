@@ -16,8 +16,7 @@ describe('removeItemInteractor', () => {
 
     expect(result).toEqual('123');
 
-    await removeItemInteractor({
-      applicationContext,
+    await removeItemInteractor(applicationContext, {
       key: 'abc',
     });
 

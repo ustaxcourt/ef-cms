@@ -4,14 +4,12 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
+import {
+  getFormattedDocketEntriesForTest,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -49,29 +47,23 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views Stipulated Decision on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-    const stipulatedDecisionDocument = formattedCase.formattedDocketEntries.find(
-      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-    );
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument =
+      formattedDocketEntriesOnDocketRecord.find(
+        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+      );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 
   loginAs(test, 'privatePractitioner@example.com');
   it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-    const stipulatedDecisionDocument = formattedCase.formattedDocketEntries.find(
-      document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
-    );
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+    const stipulatedDecisionDocument =
+      formattedDocketEntriesOnDocketRecord.find(
+        document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
+      );
     expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);
   });
 });

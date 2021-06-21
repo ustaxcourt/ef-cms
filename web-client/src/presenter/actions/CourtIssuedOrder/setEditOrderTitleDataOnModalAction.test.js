@@ -36,4 +36,21 @@ describe('setEditOrderTitleDataOnModalAction', () => {
 
     expect(state.modal.documentTitle).toEqual(mockDocumentTitle);
   });
+
+  it('should set state.modal.documentType from state.form.documentType', async () => {
+    const mockDocumentType = 'I wanna dance with somebody';
+
+    const { state } = await runAction(setEditOrderTitleDataOnModalAction, {
+      state: {
+        form: {
+          documentType: mockDocumentType,
+        },
+        modal: {
+          documentType: undefined,
+        },
+      },
+    });
+
+    expect(state.modal.documentType).toEqual(mockDocumentType);
+  });
 });

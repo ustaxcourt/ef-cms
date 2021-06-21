@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { overwriteCorrespondenceFileAction } from './overwriteCorrespondenceFileAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -8,7 +8,7 @@ describe('overwriteCorrespondenceFileAction', () => {
   const successStub = jest.fn();
 
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
 
     presenter.providers.path = {
       error: errorStub,
@@ -17,7 +17,7 @@ describe('overwriteCorrespondenceFileAction', () => {
   });
 
   it('returns the success path with the docketEntryId when the correspondence file was successfully uploaded', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .uploadCorrespondenceDocumentInteractor.mockReturnValue(
         'document-id-123',
@@ -36,24 +36,21 @@ describe('overwriteCorrespondenceFileAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
-        .uploadCorrespondenceDocumentInteractor,
+      applicationContext.getUseCases().uploadCorrespondenceDocumentInteractor,
     ).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases()
-        .uploadCorrespondenceDocumentInteractor,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        keyToOverwrite: 'document-id-123',
-      }),
-    );
+      applicationContext.getUseCases().uploadCorrespondenceDocumentInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      keyToOverwrite: 'document-id-123',
+    });
     expect(successStub).toHaveBeenCalledWith({
       primaryDocumentFileId: 'document-id-123',
     });
   });
 
   it('returns the error path when the correspondence file failed to upload', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .uploadCorrespondenceDocumentInteractor.mockImplementation(() => {
         throw new Error();

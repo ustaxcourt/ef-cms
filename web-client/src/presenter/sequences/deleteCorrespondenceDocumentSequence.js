@@ -11,8 +11,8 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const deleteCorrespondenceDocumentSequence = showProgressSequenceDecorator(
-  [
+export const deleteCorrespondenceDocumentSequence =
+  showProgressSequenceDecorator([
     archiveCorrespondenceDocumentAction,
     {
       error: [
@@ -30,5 +30,4 @@ export const deleteCorrespondenceDocumentSequence = showProgressSequenceDecorato
     },
     clearModalAction,
     clearModalStateAction,
-  ],
-);
+  ]);

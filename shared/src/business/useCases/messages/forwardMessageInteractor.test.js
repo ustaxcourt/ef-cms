@@ -1,7 +1,6 @@
 jest.mock('./replyToMessageInteractor');
-const { replyToMessage } = require('./replyToMessageInteractor');
-
 const { forwardMessageInteractor } = require('./forwardMessageInteractor');
+const { replyToMessage } = require('./replyToMessageInteractor');
 
 describe('forwardMessageInteractor', () => {
   it('should call the replyToMessageInteractor with the given params', async () => {

@@ -17,6 +17,7 @@ const publicFieldsVisible = () => {
   expect(test.getState('caseDetail.docketNumber')).toBeDefined();
   expect(test.getState('caseDetail.caseCaption')).toBeDefined();
   expect(test.getState('caseDetail.docketEntries.0')).toBeDefined();
+  expect(test.getState('caseDetail.petitioners.0.contactId')).toBeDefined();
 };
 
 const associatedFieldsVisible = () => {
@@ -36,6 +37,7 @@ const associatedFieldsBlocked = () => {
   const contactSecondary = contactSecondaryFromState(test);
 
   expect(contactPrimary).toEqual({
+    contactId: contactPrimary.contactId,
     contactType: CONTACT_TYPES.primary,
     entityName: 'PublicContact',
     name: expect.anything(),
@@ -43,7 +45,6 @@ const associatedFieldsBlocked = () => {
   });
   expect(contactPrimary.address1).toBeUndefined();
   expect(contactSecondary).toBeUndefined();
-  expect(contactPrimary.contactId).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {

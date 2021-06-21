@@ -38,7 +38,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
     expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
   });
 
-  it('should call the interactor including party details if props.shouldIncludePartyDetail is true', async () => {
+  it('should call the interactor including party details if props.isAssociated is true', async () => {
     await runAction(generateDocketRecordPdfUrlAction, {
       modules: {
         presenter,
@@ -47,7 +47,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
         docketNumber: '123-45',
-        shouldIncludePartyDetail: true,
+        isAssociated: true,
       },
       state: {
         caseDetail: {
@@ -63,11 +63,11 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][0].includePartyDetail,
+        .calls[0][1].includePartyDetail,
     ).toEqual(true);
   });
 
-  it('should call the interactor excluding party details if props.shouldIncludePartyDetail is false', async () => {
+  it('should call the interactor excluding party details if props.isAssociated is false', async () => {
     await runAction(generateDocketRecordPdfUrlAction, {
       modules: {
         presenter,
@@ -76,7 +76,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
         docketNumber: '123-45',
-        shouldIncludePartyDetail: false,
+        isAssociated: false,
       },
       state: {
         caseDetail: {
@@ -92,7 +92,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][0].includePartyDetail,
+        .calls[0][1].includePartyDetail,
     ).toEqual(false);
   });
 });

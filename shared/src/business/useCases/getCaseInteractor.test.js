@@ -5,23 +5,12 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
-  getCaseInteractor,
-  isAuthorizedForContact,
-} = require('./getCaseInteractor');
-const {
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('../entities/cases/Case');
-const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
-const {
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getCaseInteractor } = require('./getCaseInteractor');
+const { getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
@@ -32,19 +21,19 @@ describe('getCaseInteractor', () => {
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
-  const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+  const mockCaseContactPrimary = MOCK_CASE.petitioners[0];
 
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await getCaseInteractor(applicationContext, {
       docketNumber: '000123-19S',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0],
     ).toEqual({
       applicationContext,
@@ -60,7 +49,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(
+      .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           archivedCorrespondences: [],
           archivedDocketEntries: [],
@@ -78,7 +67,7 @@ describe('getCaseInteractor', () => {
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
     expect(
-      applicationContext.getPersistenceGateway().getFullCaseByDocketNumber.mock
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls.length,
     ).toBe(1);
   });
@@ -91,7 +80,7 @@ describe('getCaseInteractor', () => {
     const mockInvalidCase = { ...MOCK_CASE, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(mockInvalidCase);
+      .getCaseByDocketNumber.mockReturnValue(mockInvalidCase);
 
     await expect(
       getCaseInteractor(applicationContext, {
@@ -109,7 +98,7 @@ describe('getCaseInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockResolvedValue({
+      .getCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         docketNumber: '101-00',
         petitioners: [
@@ -134,7 +123,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockReturnValue(
+      .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
           ...MOCK_CASE,
           docketNumber: '101-00',
@@ -163,7 +152,7 @@ describe('getCaseInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getFullCaseByDocketNumber.mockResolvedValue({
+      .getCaseByDocketNumber.mockResolvedValue({
         ...MOCK_CASE,
         docketNumber: '101-00',
         partyType: PARTY_TYPES.petitionerSpouse,
@@ -194,17 +183,15 @@ describe('getCaseInteractor', () => {
     beforeAll(() => {
       const mockCaseWithSealed = cloneDeep(MOCK_CASE_WITH_SECONDARY_OTHERS);
       // seal ALL addresses present on this mock case
-      getContactPrimary(mockCaseWithSealed).isAddressSealed = true;
-      getContactSecondary(mockCaseWithSealed).isAddressSealed = true;
+      mockCaseWithSealed.petitioners[0].isAddressSealed = true;
+      mockCaseWithSealed.petitioners[1].isAddressSealed = true;
       getOtherFilers(mockCaseWithSealed).forEach(
         filer => (filer.isAddressSealed = true),
       );
-      getOtherPetitioners(mockCaseWithSealed).forEach(
-        filer => (filer.isAddressSealed = true),
-      );
+
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
+        .getCaseByDocketNumber.mockReturnValue(mockCaseWithSealed);
     });
 
     it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
@@ -213,22 +200,18 @@ describe('getCaseInteractor', () => {
         role: ROLES.docketClerk,
         userId: docketClerkId,
       });
+
       const result = await getCaseInteractor(applicationContext, {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-      const contactSecondary = getContactSecondary(result);
-
+      const contactPrimary = result.petitioners[0];
+      const contactSecondary = result.petitioners[1];
       expect(contactPrimary.city).toBeDefined();
       expect(contactPrimary.sealedAndUnavailable).toBe(false);
       expect(contactSecondary.city).toBeDefined();
       expect(contactSecondary.sealedAndUnavailable).toBe(false);
       getOtherFilers(result).forEach(filer => {
-        expect(filer.city).toBeDefined();
-        expect(filer.sealedAndUnavailable).toBe(false);
-      });
-      getOtherPetitioners(result).forEach(filer => {
         expect(filer.city).toBeDefined();
         expect(filer.sealedAndUnavailable).toBe(false);
       });
@@ -245,8 +228,8 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      expect(getContactPrimary(result).city).toBeUndefined();
-      expect(getContactSecondary(result).city).toBeUndefined();
+      expect(result.petitioners[0].city).toBeUndefined();
+      expect(result.petitioners[1].city).toBeUndefined();
     });
   });
 
@@ -256,7 +239,7 @@ describe('getCaseInteractor', () => {
       sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(
+        .getCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             caseCaption: 'a case caption',
@@ -323,8 +306,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-
+      const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
     });
@@ -340,8 +322,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-
+      const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
     });
@@ -351,7 +332,7 @@ describe('getCaseInteractor', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getFullCaseByDocketNumber.mockReturnValue(
+        .getCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
             ...MOCK_CASE,
             privatePractitioners: [
@@ -377,8 +358,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-
+      const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
     });
@@ -394,8 +374,7 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-
+      const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeUndefined();
       expect(contactPrimary.phone).toBeUndefined();
     });
@@ -411,61 +390,9 @@ describe('getCaseInteractor', () => {
         docketNumber: '101-18',
       });
 
-      const contactPrimary = getContactPrimary(result);
-
+      const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
-    });
-  });
-
-  describe('isAuthorizedForContact', () => {
-    let currentUser;
-    let contact;
-
-    beforeEach(() => {
-      currentUser = {
-        userId: '123',
-      };
-      contact = {
-        contactId: currentUser.userId,
-      };
-    });
-
-    it('returns false if the default value is false and the user is not authorized', () => {
-      const result = isAuthorizedForContact({
-        contact: {
-          contactId: 'not_the_current_user',
-        },
-        currentUser,
-        defaultValue: false,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(false);
-    });
-
-    it('returns true if the default value is true and the user is not authorized', () => {
-      const result = isAuthorizedForContact({
-        contact: {
-          contactId: 'not_the_current_user',
-        },
-        currentUser,
-        defaultValue: true,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(true);
-    });
-
-    it('returns true if the default value is false and the user is authorized', () => {
-      const result = isAuthorizedForContact({
-        contact,
-        currentUser,
-        defaultValue: false,
-        permission: ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-      });
-
-      expect(result).toEqual(true);
     });
   });
 });

@@ -20,11 +20,12 @@ export const canConsolidateAction = async ({
     });
   }
 
-  const results = applicationContext.getUseCases().canConsolidateInteractor({
-    applicationContext,
-    caseToConsolidate,
-    currentCase: caseDetail,
-  });
+  const results = applicationContext
+    .getUseCases()
+    .canConsolidateInteractor(applicationContext, {
+      caseToConsolidate,
+      currentCase: caseDetail,
+    });
 
   if (results.canConsolidate) {
     return path.success();
