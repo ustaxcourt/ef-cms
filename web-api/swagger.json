@@ -6135,7 +6135,7 @@
         }
       }
     },
-    "/case-parties/{docketNumber}/petition-details": {
+    "/case-parties/{docketNumber}/case-details": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -6148,8 +6148,8 @@
         "tags": [
           "cases"
         ],
-        "summary": "updates the petition details on the case",
-        "description": "updates the petition details on the case.\n",
+        "summary": "updates the case details on the case",
+        "description": "updates the case details on the case.\n",
         "produces": [
           "application/json"
         ],

@@ -235,6 +235,7 @@ import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblock
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
+import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
@@ -244,7 +245,6 @@ import { updateCourtIssuedOrderInteractor } from '../../shared/src/proxies/court
 import { updateDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/updateDeficiencyStatisticProxy';
 import { updateDocketEntryMetaInteractor } from '../../shared/src/proxies/documents/updateDocketEntryMetaProxy';
 import { updateOtherStatisticsInteractor } from '../../shared/src/proxies/caseStatistics/updateOtherStatisticsProxy';
-import { updatePetitionDetailsInteractor } from '../../shared/src/proxies/updatePetitionDetailsProxy';
 import { updatePetitionerInformationInteractor } from '../../shared/src/proxies/updatePetitionerInformationProxy';
 import { updatePractitionerUserInteractor } from '../../shared/src/proxies/practitioners/updatePractitionerUserProxy';
 import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/updateQcCompleteForTrialProxy';
@@ -460,6 +460,7 @@ const allUseCases = {
   unprioritizeCaseInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
+  updateCaseDetailsInteractor,
   updateCaseTrialSortTagsInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
@@ -469,7 +470,6 @@ const allUseCases = {
   updateDeficiencyStatisticInteractor,
   updateDocketEntryMetaInteractor,
   updateOtherStatisticsInteractor,
-  updatePetitionDetailsInteractor,
   updatePetitionerInformationInteractor,
   updatePractitionerUserInteractor,
   updateQcCompleteForTrialInteractor,

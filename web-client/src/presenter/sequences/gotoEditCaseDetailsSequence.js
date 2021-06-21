@@ -5,12 +5,12 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setupEditPetitionDetailFormAction } from '../actions/setupEditPetitionDetailFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditPetitionDetailsSequence = [
+export const gotoEditCaseDetailsSequence = [
   setCurrentPageAction('Interstitial'),
   clearFormAction,
   getCaseAction,
   setCaseAction,
   stopShowValidationAction,
   setupEditPetitionDetailFormAction,
-  setCurrentPageAction('EditPetitionDetails'),
+  setCurrentPageAction('EditCaseDetails'),
 ];

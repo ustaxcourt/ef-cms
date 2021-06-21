@@ -28,11 +28,11 @@ import { DashboardPetitioner } from './Dashboards/DashboardPetitioner';
 import { DashboardPractitioner } from './Dashboards/DashboardPractitioner';
 import { DashboardRespondent } from './Dashboards/DashboardRespondent';
 import { DocketEntryQc } from './DocketEntryQc';
+import { EditCaseDetails } from './CaseDetail/EditCaseDetails';
 import { EditCorrespondenceDocument } from './Correspondence/EditCorrespondenceDocument';
 import { EditDeficiencyStatistic } from './CaseDetail/EditDeficiencyStatistic';
 import { EditDocketEntryMeta } from './EditDocketEntry/EditDocketEntryMeta';
 import { EditOtherStatistics } from './CaseDetail/EditOtherStatistics';
-import { EditPetitionDetails } from './CaseDetail/EditPetitionDetails';
 import { EditPetitionerCounsel } from './EditPetitionerCounsel';
 import { EditPetitionerInformationInternal } from './EditPetitionerInformationInternal';
 import { EditPractitionerUser } from './Practitioners/EditPractitionerUser';
@@ -116,11 +116,11 @@ const pages = {
   DashboardPractitioner,
   DashboardRespondent,
   DocketEntryQc,
+  EditCaseDetails,
   EditCorrespondenceDocument,
   EditDeficiencyStatistic,
   EditDocketEntryMeta,
   EditOtherStatistics,
-  EditPetitionDetails,
   EditPetitionerCounsel,
   EditPetitionerInformationInternal,
   EditPractitionerUser,
