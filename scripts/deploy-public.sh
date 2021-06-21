@@ -4,7 +4,7 @@
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 
-./web-client/build-dist-public.sh $ENV $DEPLOYING_COLOR
+./scripts/build-dist-public.sh $ENV $DEPLOYING_COLOR
 
 # public app
 aws s3 sync dist-public s3://${DEPLOYING_COLOR}.${EFCMS_DOMAIN} --delete
