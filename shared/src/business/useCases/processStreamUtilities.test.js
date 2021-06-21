@@ -175,6 +175,25 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
+      const messageRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'message|123',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'Message',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
       const otherRecord = {
         dynamodb: {
           Keys: {
@@ -198,6 +217,7 @@ describe('processStreamUtilities', () => {
         { ...removeRecord },
         { ...caseRecord },
         { ...docketEntryRecord },
+        { ...messageRecord },
         { ...otherRecord },
       ];
 
@@ -206,6 +226,7 @@ describe('processStreamUtilities', () => {
       expect(result).toMatchObject({
         caseEntityRecords: [caseRecord],
         docketEntryRecords: [docketEntryRecord],
+        messageRecords: [messageRecord],
         otherRecords: [otherRecord],
         removeRecords: [removeRecord],
       });
