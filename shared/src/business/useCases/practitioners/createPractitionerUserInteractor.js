@@ -26,13 +26,13 @@ exports.createPractitionerUserInteractor = async (
     throw new UnauthorizedError('Unauthorized for creating practitioner user');
   }
 
+  user.pendingEmail = user.email;
+  user.email = undefined;
+
   const practitioner = await createPractitionerUser({
     applicationContext,
     user,
   });
-
-  practitioner.pendingEmail = practitioner.email;
-  practitioner.email = undefined;
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
