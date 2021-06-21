@@ -134,6 +134,8 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       practitionerObject.email = user.email;
+      practitionerObject.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();

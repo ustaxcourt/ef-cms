@@ -1,5 +1,6 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
+const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
@@ -21,11 +22,17 @@ const updateCaseDocketEntries = ({
   caseToUpdate,
   oldCase,
 }) => {
+  console.log(oldCase.docketEntries);
+  console.log(caseToUpdate.docketEntries);
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries,
     caseToUpdate.docketEntries,
     'docketEntryId',
   );
+
+  console.log('addedDocketEntries', addedDocketEntries);
+  console.log('------');
+  console.log('updatedDocketEntries', updatedDocketEntries);
 
   const {
     added: addedArchivedDocketEntries,
@@ -383,6 +390,15 @@ const updateCaseWorkItems = async ({
   return workItemUpdates;
 };
 
+/**
+ * Identifies user case mappings which require updates and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
 const updateUserCaseMappings = async ({
   applicationContext,
   caseToUpdate,
@@ -427,6 +443,49 @@ const updateUserCaseMappings = async ({
 };
 
 /**
+ * Identifies user case mappings which require updates and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<Promise>} the persistence request promises
+ */
+const updateCaseDeadlines = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  if (oldCase.associatedJudge === caseToUpdate.associatedJudge) {
+    return [];
+  }
+
+  const deadlines = await applicationContext
+    .getPersistenceGateway()
+    .getCaseDeadlinesByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  deadlines.forEach(
+    caseDeadline =>
+      (caseDeadline.associatedJudge = caseToUpdate.associatedJudge),
+  );
+  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
+    applicationContext,
+  });
+
+  const updatedDeadlineRequests = validCaseDeadlines.map(caseDeadline =>
+    applicationContext.getPersistenceGateway().createCaseDeadline({
+      applicationContext,
+      caseDeadline,
+    }),
+  );
+
+  return updatedDeadlineRequests;
+};
+
+/**
  * updateCaseAndAssociations
  *
  * @param {object} providers the providers object
@@ -449,6 +508,9 @@ exports.updateCaseAndAssociations = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
+  console.log('OLD CASE HERE');
+  console.log(JSON.stringify(oldCaseEntity, null, 2));
+
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })
@@ -456,6 +518,7 @@ exports.updateCaseAndAssociations = async ({
     .toRawObject();
 
   const RELATED_CASE_OPERATIONS = [
+    updateCaseDeadlines,
     updateCaseDocketEntries,
     updateCaseMessages,
     updateCaseWorkItems,
@@ -474,13 +537,10 @@ exports.updateCaseAndAssociations = async ({
     }),
   ).flat();
 
-  // TODO: hoist logic from persistence method below to this use case helper.
-
   await Promise.all(requests);
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: validRawCaseEntity,
-    oldCase: validRawOldCaseEntity,
   });
 };

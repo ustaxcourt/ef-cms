@@ -106,35 +106,6 @@ describe('serveCaseToIrsInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('fails and logs if the s3 upload fails', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-    mockCase = { ...MOCK_CASE };
-
-    applicationContext.getStorageClient.mockReturnValue({
-      getObject: getObjectMock,
-      upload: (params, callback) => callback('there was an error uploading'),
-    });
-
-    await expect(
-      serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toEqual('there was an error uploading');
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'An error occurred while attempting to upload to S3',
-    );
-    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
-      'there was an error uploading',
-    );
-  });
-
   it('should add a coversheet to the served petition', async () => {
     mockCase = {
       ...MOCK_CASE,
@@ -383,7 +354,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(result).toBeDefined();
   });
 
-  it('should have processingStatus pending when calling updateCase the first time and processingStatus complete when calling updateCase the second time', async () => {
+  it('should set processingStatus to complete when calling updateCase the first time', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
@@ -396,7 +367,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
           filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
+          processingStatus: 'complete',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
         },
         {
@@ -407,7 +378,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
           filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
+          processingStatus: 'complete',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
         },
       ],
@@ -432,11 +403,6 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(
       updateCaseCall[0][0].caseToUpdate.docketEntries.find(
-        p => p.eventCode === 'A',
-      ).processingStatus,
-    ).toEqual(DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING);
-    expect(
-      updateCaseCall[1][0].caseToUpdate.docketEntries.find(
         p => p.eventCode === 'A',
       ).processingStatus,
     ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
@@ -508,7 +474,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[1][0]
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries,
     ).toMatchObject([
       {

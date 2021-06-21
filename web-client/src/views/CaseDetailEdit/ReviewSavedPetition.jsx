@@ -225,7 +225,7 @@ export const ReviewSavedPetition = connect(
                       <div className="grid-col-4">
                         <div>
                           <span className="usa-label usa-label-display">
-                            Notice attached to petition?
+                            IRS Notice provided?
                           </span>
                           {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
                         </div>
