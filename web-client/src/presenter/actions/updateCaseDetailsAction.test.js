@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updatePetitionDetailsAction } from './updatePetitionDetailsAction';
+import { updateCaseDetailsAction } from './updateCaseDetailsAction';
 
-describe('updatePetitionDetailsAction', () => {
+describe('updateCaseDetailsAction', () => {
   let PAYMENT_STATUS;
 
   beforeAll(() => {
@@ -12,13 +12,13 @@ describe('updatePetitionDetailsAction', () => {
 
     applicationContext
       .getUseCases()
-      .updatePetitionDetailsInteractor.mockReturnValue({
+      .updateCaseDetailsInteractor.mockReturnValue({
         docketNumber: '123-20',
       });
   });
 
   it('calls the use case with form data for a waived payment', async () => {
-    const result = await runAction(updatePetitionDetailsAction, {
+    const result = await runAction(updateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -32,13 +32,13 @@ describe('updatePetitionDetailsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+      applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+      applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      petitionDetails: {
+      caseDetails: {
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
       },
@@ -54,7 +54,7 @@ describe('updatePetitionDetailsAction', () => {
   });
 
   it('calls the use case with form data for a paid payment', async () => {
-    const result = await runAction(updatePetitionDetailsAction, {
+    const result = await runAction(updateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -70,13 +70,13 @@ describe('updatePetitionDetailsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+      applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+      applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      petitionDetails: {
+      caseDetails: {
         petitionPaymentDate: '2001-01-01T05:00:00.000Z',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
@@ -92,7 +92,7 @@ describe('updatePetitionDetailsAction', () => {
   });
 
   it('calls the use case with form data', async () => {
-    const result = await runAction(updatePetitionDetailsAction, {
+    const result = await runAction(updateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -108,13 +108,13 @@ describe('updatePetitionDetailsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+      applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+      applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      petitionDetails: {
+      caseDetails: {
         irsNoticeDate: '2001-01-01T05:00:00.000Z',
       },
     });
@@ -129,7 +129,7 @@ describe('updatePetitionDetailsAction', () => {
   });
 
   it('should send preferredTrialCity to the use case as null if it is not on the form', async () => {
-    await runAction(updatePetitionDetailsAction, {
+    await runAction(updateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -140,20 +140,20 @@ describe('updatePetitionDetailsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+      applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+      applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      petitionDetails: {
+      caseDetails: {
         preferredTrialCity: null,
       },
     });
   });
 
   it('should send preferredTrialCity to the use case if it is on the form', async () => {
-    await runAction(updatePetitionDetailsAction, {
+    await runAction(updateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -164,13 +164,13 @@ describe('updatePetitionDetailsAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor,
+      applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
+      applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      petitionDetails: {
+      caseDetails: {
         preferredTrialCity: 'Fresno, California',
       },
     });

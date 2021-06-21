@@ -1,58 +1,15 @@
-import { DynamoDB } from 'aws-sdk';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
+  callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,
   fakeFile,
-  getUserRecordById,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
-import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
-import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
-import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
-import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 
 const test = setupTest();
-
-const callCognitoTriggerForPendingEmail = async userId => {
-  // mock application context similar to that in cognito-triggers.js
-  const apiApplicationContext = {
-    getCurrentUser: () => ({}),
-    getDocumentClient: () => {
-      return new DynamoDB.DocumentClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
-    },
-    getEnvironment: () => ({
-      dynamoDbTableName: 'efcms-local',
-      stage: process.env.STAGE,
-    }),
-    getPersistenceGateway: () => ({
-      getCaseByDocketNumber,
-      getDocketNumbersByUser,
-      getUserById,
-      updateCase,
-      updateUser,
-    }),
-    getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
-    logger: {
-      debug: () => {},
-      error: () => {},
-      info: () => {},
-    },
-  };
-
-  const user = await getUserRecordById(userId);
-  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
-    user,
-  });
-};
 
 describe('admissions clerk adds petitioner without existing cognito account to case', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();

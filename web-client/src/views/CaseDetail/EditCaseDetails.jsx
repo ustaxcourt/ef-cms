@@ -10,22 +10,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const EditPetitionDetails = connect(
+export const EditCaseDetails = connect(
   {
     CASE_TYPES: state.constants.CASE_TYPES,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
+    updateCaseDetailsSequence: sequences.updateCaseDetailsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    updatePetitionDetailsSequence: sequences.updatePetitionDetailsSequence,
-    validatePetitionDetailsSequence: sequences.validatePetitionDetailsSequence,
+    validateCaseDetailsSequence: sequences.validateCaseDetailsSequence,
     validationErrors: state.validationErrors,
   },
-  function EditPetitionDetails({
+  function EditCaseDetails({
     docketNumber,
     form,
+    updateCaseDetailsSequence,
     updateFormValueSequence,
-    updatePetitionDetailsSequence,
-    validatePetitionDetailsSequence,
+    validateCaseDetailsSequence,
     validationErrors,
   }) {
     return (
@@ -38,13 +38,13 @@ export const EditPetitionDetails = connect(
         >
           <ErrorNotification />
 
-          <h1>Edit Petition Details</h1>
+          <h1>Edit Case Details</h1>
           <div className="blue-container margin-bottom-4">
             <div className="margin-bottom-5">
               <h4 className="margin-bottom-2">IRS Notice/Case</h4>
               <IRSNotice
                 shouldStartWithBlankStatistic={false}
-                validationName="validatePetitionDetailsSequence"
+                validationName="validateCaseDetailsSequence"
               />
 
               <ProcedureType
@@ -75,7 +75,7 @@ export const EditPetitionDetails = connect(
                       key: e.target.name,
                       value: e.target.value,
                     });
-                    validatePetitionDetailsSequence();
+                    validateCaseDetailsSequence();
                   }}
                 >
                   <option value="">- Select -</option>
@@ -89,14 +89,14 @@ export const EditPetitionDetails = connect(
               dateBind="form"
               updateDateSequence={updateFormValueSequence}
               updateSequence={updateFormValueSequence}
-              validateSequence={validatePetitionDetailsSequence}
+              validateSequence={validateCaseDetailsSequence}
               validationErrorsBind="validationErrors"
             />
           </div>
 
           <Button
             onClick={() => {
-              updatePetitionDetailsSequence();
+              updateCaseDetailsSequence();
             }}
           >
             Save
