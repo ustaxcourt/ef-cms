@@ -430,7 +430,9 @@ exports.processStreamRecordsInteractor = async (
       applicationContext,
       removeRecords,
     }).catch(err => {
-      applicationContext.logger.error("failed to processRemoveEntries',", err);
+      applicationContext.logger.error('failed to processRemoveEntries', {
+        err,
+      });
       throw err;
     });
 
@@ -439,7 +441,9 @@ exports.processStreamRecordsInteractor = async (
       caseEntityRecords,
       utils,
     }).catch(err => {
-      applicationContext.logger.error("failed to processCaseEntries',", err);
+      applicationContext.logger.error('failed to processCaseEntries', {
+        err,
+      });
       throw err;
     });
 
@@ -448,16 +452,17 @@ exports.processStreamRecordsInteractor = async (
       docketEntryRecords,
       utils,
     }).catch(err => {
-      applicationContext.logger.error("failed to processDocketEntries',", err);
+      applicationContext.logger.error('failed to processDocketEntries', {
+        err,
+      });
       throw err;
     });
 
     await processWorkItemEntries({ applicationContext, workItemRecords }).catch(
       err => {
-        applicationContext.logger.error(
-          "failed to process workItem records',",
+        applicationContext.logger.error('failed to process workItem records', {
           err,
-        );
+        });
         throw err;
       },
     );
@@ -467,23 +472,24 @@ exports.processStreamRecordsInteractor = async (
       messageRecords,
       utils,
     }).catch(err => {
-      applicationContext.logger.error(
-        "failed to process message records',",
+      applicationContext.logger.error('failed to process message records', {
         err,
-      );
+      });
       throw err;
     });
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
-        applicationContext.logger.error("failed to processOtherEntries',", err);
+        applicationContext.logger.error('failed to processOtherEntries', {
+          err,
+        });
         throw err;
       },
     );
   } catch (err) {
     applicationContext.logger.error(
       'processStreamRecordsInteractor failed to process the records',
-      err,
+      { err },
     );
     throw err;
   }
