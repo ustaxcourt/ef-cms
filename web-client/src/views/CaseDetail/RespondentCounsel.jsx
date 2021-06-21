@@ -46,7 +46,7 @@ const RespondentCounsel = connect(
                       {irsPractitioner.canEditRespondent && (
                         <Button
                           link
-                          className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
+                          className="width-auto white-edit-link padding-0 margin-right-0 float-right"
                           href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
                           icon="edit"
                           id="edit-respondent-counsel"
