@@ -40,7 +40,7 @@ const ParticipantsAndCounsel = connect(
                     {petitioner.canEditPetitioner && (
                       <Button
                         link
-                        className="width-auto white-edit-link padding-0 margin-right-0 float-right edit-petitioner-button"
+                        className="edit-participant width-auto white-edit-link padding-0 margin-right-0 float-right"
                         href={petitioner.editPetitionerLink}
                         icon="edit"
                       >
