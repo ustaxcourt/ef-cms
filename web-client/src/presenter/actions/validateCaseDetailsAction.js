@@ -3,7 +3,7 @@ import { omit } from 'lodash';
 import { state } from 'cerebral';
 
 /**
- * validates the edit petition details inputs
+ * validates the edit case details inputs
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
@@ -12,7 +12,7 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 
-export const validatePetitionDetailsAction = ({
+export const validateCaseDetailsAction = ({
   applicationContext,
   get,
   path,
