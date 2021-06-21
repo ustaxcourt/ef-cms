@@ -35,12 +35,12 @@ export const petitionsClerkCreateOrder = test => {
 
     expect(test.getState('caseDetail.docketEntries').length).toEqual(4);
 
-    const {
-      draftDocuments,
-    } = applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: test.getState('caseDetail'),
-    });
+    const { draftDocuments } = applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: test.getState('caseDetail'),
+      });
 
     test.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId

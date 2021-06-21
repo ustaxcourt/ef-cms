@@ -13,7 +13,6 @@ export const ConfirmRemoveSignatureModal = connect(
       <ModalDialog
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Remove Signature"
         confirmSequence={confirmSequence}
         message="This cannot be undone. You will need to reapply a signature to this document."

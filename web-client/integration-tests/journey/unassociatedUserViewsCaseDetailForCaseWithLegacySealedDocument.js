@@ -6,25 +6,25 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument = test => {
-  return it('unassociated user views case detail for a case with a legacy sealed document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-
-    expect(formattedCase.docketEntries).toEqual([]);
-    expect(formattedCase.contactPrimary).toEqual({ showEAccessFlag: false });
-
-    await expect(
-      test.runSequence('openCaseDocumentDownloadUrlSequence', {
-        docketEntryId: test.docketEntryId,
+export const unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
+  test => {
+    return it('unassociated user views case detail for a case with a legacy sealed document', async () => {
+      await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: test.docketNumber,
-        isPublic: false,
-      }),
-    ).rejects.toThrow('Unauthorized to view document at this time.');
-  });
-};
+      });
+
+      const formattedCase = runCompute(formattedCaseDetail, {
+        state: test.getState(),
+      });
+
+      expect(formattedCase.docketEntries).toEqual([]);
+
+      await expect(
+        test.runSequence('openCaseDocumentDownloadUrlSequence', {
+          docketEntryId: test.docketEntryId,
+          docketNumber: test.docketNumber,
+          isPublic: false,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time.');
+    });
+  };

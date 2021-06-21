@@ -13,16 +13,9 @@ describe('marshallPractitioner', () => {
   const MOCK_CONTACT = getContactPrimary(MOCK_CASE);
 
   it('returns a practitioner object with the expected properties', () => {
-    expect(
-      Object.keys(marshallPractitioner(MOCK_PRACTITIONER)).sort(),
-    ).toEqual([
-      'barNumber',
-      'contact',
-      'email',
-      'firmName',
-      'name',
-      'serviceIndicator',
-    ]);
+    expect(Object.keys(marshallPractitioner(MOCK_PRACTITIONER)).sort()).toEqual(
+      ['barNumber', 'contact', 'email', 'firmName', 'name', 'serviceIndicator'],
+    );
   });
 
   it('marshalls from the current practitioner format', () => {

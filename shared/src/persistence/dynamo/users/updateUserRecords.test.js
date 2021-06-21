@@ -47,9 +47,9 @@ describe('updateUserRecords', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...updatedUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...updatedUser,
         userId,
       },
     });

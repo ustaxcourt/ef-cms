@@ -16,14 +16,13 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    docketNumber,
-    isPublic: false,
-    key: docketEntryId,
-  });
+  const { url } = await applicationContext
+    .getUseCases()
+    .getDocumentDownloadUrlInteractor(applicationContext, {
+      docketNumber,
+      isPublic: false,
+      key: docketEntryId,
+    });
 
   store.set(state.iframeSrc, url);
 };

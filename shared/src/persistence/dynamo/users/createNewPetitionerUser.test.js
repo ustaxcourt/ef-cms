@@ -62,9 +62,9 @@ describe('createNewPetitionerUser', () => {
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
     ).toMatchObject({
+      ...mockUser,
       pk: `user|${mockUserId}`,
       sk: `user|${mockUserId}`,
-      ...mockUser,
       userId: mockUserId,
     });
   });

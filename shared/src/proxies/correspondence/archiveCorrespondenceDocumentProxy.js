@@ -9,11 +9,10 @@ const { remove } = require('../requests');
  * @param {string} providers.correspondenceId the id of the correspondence document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.archiveCorrespondenceDocumentInteractor = ({
+exports.archiveCorrespondenceDocumentInteractor = (
   applicationContext,
-  correspondenceId,
-  docketNumber,
-}) => {
+  { correspondenceId, docketNumber },
+) => {
   return remove({
     applicationContext,
     endpoint: `/case-documents/${docketNumber}/correspondence/${correspondenceId}`,

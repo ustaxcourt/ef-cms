@@ -17,17 +17,15 @@ describe('updatePetitionDetailsAction', () => {
       });
   });
 
-  it('creates date from form month, day, year fields and calls the use case with form data for a waived payment', async () => {
+  it('calls the use case with form data for a waived payment', async () => {
     const result = await runAction(updatePetitionDetailsAction, {
       modules: {
         presenter,
       },
+      props: { petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
-          paymentDateWaivedDay: '01',
-          paymentDateWaivedMonth: '01',
-          paymentDateWaivedYear: '2001',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         },
       },
@@ -38,7 +36,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
@@ -55,17 +53,17 @@ describe('updatePetitionDetailsAction', () => {
     });
   });
 
-  it('creates date from form month, day, year fields and calls the use case with form data for a paid payment', async () => {
+  it('calls the use case with form data for a paid payment', async () => {
     const result = await runAction(updatePetitionDetailsAction, {
       modules: {
         presenter,
       },
+      props: {
+        petitionPaymentDate: '2001-01-01T05:00:00.000Z',
+      },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
-          paymentDateDay: '01',
-          paymentDateMonth: '01',
-          paymentDateYear: '2001',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
       },
@@ -76,7 +74,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         petitionPaymentDate: '2001-01-01T05:00:00.000Z',
@@ -93,11 +91,12 @@ describe('updatePetitionDetailsAction', () => {
     });
   });
 
-  it('creates IRS notice date from form month, day, year fields and calls the use case with form data', async () => {
+  it('calls the use case with form data', async () => {
     const result = await runAction(updatePetitionDetailsAction, {
       modules: {
         presenter,
       },
+      props: { irsNoticeDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: { docketNumber: '123-20' },
         form: {
@@ -113,7 +112,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         irsNoticeDate: '2001-01-01T05:00:00.000Z',
@@ -145,7 +144,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: null,
@@ -169,7 +168,7 @@ describe('updatePetitionDetailsAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePetitionDetailsInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionDetails: {
         preferredTrialCity: 'Fresno, California',

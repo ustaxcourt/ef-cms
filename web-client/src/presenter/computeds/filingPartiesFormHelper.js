@@ -5,16 +5,12 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
 
-  const {
-    INTERNAL_CATEGORY_MAP,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { INTERNAL_CATEGORY_MAP, PARTY_TYPES } =
+    applicationContext.getConstants();
 
   const partyValidationError =
     validationErrors &&
-    (validationErrors.partyPrimary ||
-      validationErrors.partySecondary ||
-      validationErrors.partyIrsPractitioner);
+    (validationErrors.filers || validationErrors.partyIrsPractitioner);
 
   const objectionDocumentTypes = [
     ...INTERNAL_CATEGORY_MAP['Motion'].map(entry => {
@@ -27,11 +23,14 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
 
   const amendmentEventCodes = ['AMAT', 'ADMT'];
 
+  const isServed = applicationContext.getUtilities().isServed(form);
+
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
 
   return {
+    isServed,
     noMargin:
       objectionDocumentTypes.includes(form.documentType) ||
       (amendmentEventCodes.includes(form.eventCode) &&

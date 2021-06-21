@@ -11,8 +11,7 @@ export const authenticateCodeAction = async ({ applicationContext, props }) => {
 
   const response = await applicationContext
     .getUseCases()
-    .authorizeCodeInteractor({
-      applicationContext,
+    .authorizeCodeInteractor(applicationContext, {
       code,
     });
 

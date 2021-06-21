@@ -79,6 +79,7 @@ const computeCoordinates = ({
 /**
  * generateSignedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {number} providers.pageIndex // Zero based index of the page to get the signature
  * @param {Uint8Array} providers.pdfData // Uint8Array containing the pdf data to modify
@@ -88,24 +89,18 @@ const computeCoordinates = ({
  * @param {object} providers.sigTextData // Signature text data including the name and title
  * @returns {ByteArray} PDF data after signature is added
  */
-const generateSignedDocumentInteractor = async ({
+const generateSignedDocumentInteractor = async (
   applicationContext,
-  pageIndex,
-  pdfData,
-  posX,
-  posY,
-  scale = 1,
-  sigTextData,
-}) => {
+  { pageIndex, pdfData, posX, posY, scale = 1, sigTextData },
+) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const {
-    pdfDoc,
-    textFont,
-  } = await applicationContext.getUtilities().setupPdfDocument({
-    applicationContext,
-    pdfData,
-  });
+  const { pdfDoc, textFont } = await applicationContext
+    .getUtilities()
+    .setupPdfDocument({
+      applicationContext,
+      pdfData,
+    });
 
   const pageToApplyStampTo = pdfDoc.getPages()[pageIndex];
 
@@ -124,27 +119,21 @@ const generateSignedDocumentInteractor = async ({
   const rotationAngle = pageToApplyStampTo.getRotation().angle;
   const rotateSignatureDegrees = degrees(rotationAngle || 0);
 
-  const {
-    rectangleX,
-    rectangleY,
-    sigNameX,
-    sigNameY,
-    sigTitleX,
-    sigTitleY,
-  } = computeCoordinates({
-    applicationContext,
-    boxHeight,
-    boxWidth,
-    cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
-    lineHeight,
-    nameTextWidth,
-    pageRotation: rotationAngle,
-    posX,
-    posY,
-    scale,
-    textHeight,
-    titleTextWidth,
-  });
+  const { rectangleX, rectangleY, sigNameX, sigNameY, sigTitleX, sigTitleY } =
+    computeCoordinates({
+      applicationContext,
+      boxHeight,
+      boxWidth,
+      cropBox: applicationContext.getUtilities().getCropBox(pageToApplyStampTo),
+      lineHeight,
+      nameTextWidth,
+      pageRotation: rotationAngle,
+      posX,
+      posY,
+      scale,
+      textHeight,
+      titleTextWidth,
+    });
 
   pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),

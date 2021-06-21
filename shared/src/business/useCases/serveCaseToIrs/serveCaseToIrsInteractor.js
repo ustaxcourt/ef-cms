@@ -219,21 +219,17 @@ exports.serveCaseToIrsInteractor = async (
     }
   }
 
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
-    caseEntityToUpdate,
-  );
-  const {
-    docketNumberWithSuffix,
-    preferredTrialCity,
-    receivedAt,
-  } = caseEntityToUpdate;
+  const { caseCaptionExtension, caseTitle } =
+    getCaseCaptionMeta(caseEntityToUpdate);
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } =
+    caseEntityToUpdate;
 
   let pdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: caseEntityToUpdate.getContactPrimary(),
+        address: caseEntityToUpdate.petitioners[0],
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -250,12 +246,12 @@ exports.serveCaseToIrsInteractor = async (
       },
     });
 
-  const contactSecondary = caseEntityToUpdate.getContactSecondary();
+  const contactSecondary = caseEntityToUpdate.petitioners[1];
   if (contactSecondary) {
     const contactInformationDiff = applicationContext
       .getUtilities()
       .getAddressPhoneDiff({
-        newData: caseEntityToUpdate.getContactPrimary(),
+        newData: caseEntityToUpdate.petitioners[0],
         oldData: contactSecondary,
       });
 
@@ -313,7 +309,8 @@ exports.serveCaseToIrsInteractor = async (
     }
   }
 
-  const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
+  const caseConfirmationPdfName =
+    caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
 
   await new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
@@ -342,13 +339,13 @@ exports.serveCaseToIrsInteractor = async (
   let urlToReturn;
 
   if (caseEntityToUpdate.isPaper) {
-    ({
-      url: urlToReturn,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: caseConfirmationPdfName,
-      useTempBucket: false,
-    }));
+    ({ url: urlToReturn } = await applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl({
+        applicationContext,
+        key: caseConfirmationPdfName,
+        useTempBucket: false,
+      }));
   }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

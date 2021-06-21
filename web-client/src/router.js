@@ -1,9 +1,12 @@
+/* eslint-disable max-lines */
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
 import route from 'riot-route';
 
-route.base('/');
+const BASE_ROUTE = '/';
+
+route.base(BASE_ROUTE);
 
 // Add this prefix to page titles for all pages that are related to a case
 const getPageTitleDocketPrefix = docketNumber => {
@@ -31,45 +34,49 @@ const back = () => {
   window.history.back();
 };
 
+const gotoLoginPage = app => {
+  const path = app.getState('cognitoLoginUrl');
+  externalRoute(path);
+};
+const goto404 = app => {
+  return app.getSequence('navigateToPathSequence')({
+    path: '404',
+  });
+};
+const accessRedirects = { goto404, gotoLoginPage };
+
+const ifHasAccess = (
+  { app, permissionToCheck, redirect = accessRedirects },
+  cb,
+) => {
+  return function () {
+    if (!app.getState('user')) {
+      return redirect.gotoLoginPage(app);
+    } else {
+      if (
+        permissionToCheck &&
+        !app.getState('permissions')[permissionToCheck]
+      ) {
+        redirect.goto404(app);
+      } else {
+        app.getSequence('clearAlertSequence')();
+        return cb.apply(null, arguments);
+      }
+    }
+  };
+};
+
 const router = {
   initialize: (app, registerRoute) => {
-    window.document.title = 'U.S. Tax Court';
+    setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
-    const ifHasAccess = (cb, permissionToCheck) => {
-      return function () {
-        const gotoLoginPage = () => {
-          const path = app.getState('cognitoLoginUrl');
-          externalRoute(path);
-        };
-        const goto404 = () => {
-          return app.getSequence('navigateToPathSequence')({
-            path: '404',
-          });
-        };
-
-        if (!app.getState('user')) {
-          return gotoLoginPage();
-        } else {
-          if (
-            permissionToCheck &&
-            !app.getState('permissions')[permissionToCheck]
-          ) {
-            goto404();
-          } else {
-            app.getSequence('clearAlertSequence')();
-            return cb.apply(null, arguments);
-          }
-        }
-      };
-    };
-
     registerRoute(
       '/',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Dashboard');
         return app.getSequence('gotoDashboardSequence')();
       }),
@@ -77,7 +84,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketNumber,
@@ -87,7 +94,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/add-deficiency-statistics',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoAddDeficiencyStatisticsSequence')({
           docketNumber,
@@ -97,7 +104,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-deficiency-statistic/*',
-      ifHasAccess((docketNumber, statisticId) => {
+      ifHasAccess({ app }, (docketNumber, statisticId) => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoEditDeficiencyStatisticSequence')({
           docketNumber,
@@ -108,7 +115,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/add-other-statistics',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoAddOtherStatisticsSequence')({
           docketNumber,
@@ -118,7 +125,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-other-statistics',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoEditOtherStatisticsSequence')({
           docketNumber,
@@ -127,8 +134,18 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/add-petitioner-to-case',
+      ifHasAccess({ app }, docketNumber => {
+        setPageTitle(`Docket ${docketNumber}`);
+        return app.getSequence('gotoAddPetitionerToCaseSequence')({
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*?openModal=*',
-      ifHasAccess((docketNumber, openModal) => {
+      ifHasAccess({ app }, (docketNumber, openModal) => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketNumber,
@@ -139,7 +156,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/case-information',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
@@ -151,13 +168,14 @@ const router = {
 
     registerRoute(
       '/case-detail/*/case-information?..',
-      ifHasAccess(docketNumber => {
-        const { caseInformationTab } = route.query();
+      ifHasAccess({ app }, docketNumber => {
+        const { caseInformationTab, partiesTab } = route.query();
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           caseInformationTab,
           docketNumber,
+          partiesTab,
           primaryTab: 'caseInformation',
         });
       }),
@@ -165,7 +183,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/draft-documents',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
@@ -177,7 +195,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/draft-documents?..',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         const { docketEntryId } = route.query();
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
@@ -190,7 +208,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/document-view?..',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         const { docketEntryId } = route.query();
         window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
@@ -203,10 +221,35 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/edit-petitioner-information',
-      ifHasAccess(docketNumber => {
-        setPageTitle(`Docket ${docketNumber}`);
-        return app.getSequence('gotoEditPetitionerInformationSequence')({
+      '/case-detail/*/edit-petitioner-information/*',
+      ifHasAccess({ app }, (docketNumber, contactId) => {
+        setPageTitle('Edit Petitioner Information');
+        return app.getSequence('gotoEditPetitionerInformationInternalSequence')(
+          {
+            contactId,
+            docketNumber,
+          },
+        );
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-petitioner-counsel/*',
+      ifHasAccess({ app }, (docketNumber, barNumber) => {
+        setPageTitle('Edit Petitioner Counsel');
+        return app.getSequence('gotoEditPetitionerCounselSequence')({
+          barNumber,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/case-detail/*/edit-respondent-counsel/*',
+      ifHasAccess({ app }, (docketNumber, barNumber) => {
+        setPageTitle('Edit Respondent Counsel');
+        return app.getSequence('gotoEditRespondentCounselSequence')({
+          barNumber,
           docketNumber,
         });
       }),
@@ -214,7 +257,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-details',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoEditPetitionDetailsSequence')({
           docketNumber,
@@ -224,58 +267,70 @@ const router = {
 
     registerRoute(
       '/case-detail/*/petition-qc/document-view/*',
-      ifHasAccess((docketNumber, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
-        return app.getSequence('gotoPetitionQcSequence')({
-          docketNumber,
-          redirectUrl: `/case-detail/${docketNumber}/document-view?docketEntryId=${docketEntryId}`,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.UPDATE_CASE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+          return app.getSequence('gotoPetitionQcSequence')({
+            docketNumber,
+            redirectUrl: `/case-detail/${docketNumber}/document-view?docketEntryId=${docketEntryId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/petition-qc/*',
-      ifHasAccess((docketNumber, parentMessageId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
-        return app.getSequence('gotoPetitionQcSequence')({
-          docketNumber,
-          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.UPDATE_CASE },
+        (docketNumber, parentMessageId) => {
+          setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+          return app.getSequence('gotoPetitionQcSequence')({
+            docketNumber,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/petition-qc..',
-      ifHasAccess(docketNumber => {
-        const { tab } = route.query();
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
-        return app.getSequence('gotoPetitionQcSequence')({
-          docketNumber,
-          tab,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.UPDATE_CASE },
+        docketNumber => {
+          const { tab } = route.query();
+          setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Petition QC`);
+          return app.getSequence('gotoPetitionQcSequence')({
+            docketNumber,
+            tab,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/review',
-      ifHasAccess((docketNumber, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
-        );
-        return app.getSequence('gotoReviewSavedPetitionSequence')({
-          docketEntryId,
-          docketNumber,
-        });
-      }, ROLE_PERMISSIONS.UPDATE_CASE),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.UPDATE_CASE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Document detail review`,
+          );
+          return app.getSequence('gotoReviewSavedPetitionSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/complete',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
-        return app.getSequence('gotoCompleteDocketEntrySequence')({
+        return app.getSequence('gotoEditPaperFilingSequence')({
           docketEntryId,
           docketNumber,
         });
@@ -284,11 +339,11 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/edit',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit docket record`,
+          `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
-        return app.getSequence('gotoEditDocketEntrySequence')({
+        return app.getSequence('gotoDocketEntryQcSequence')({
           docketEntryId,
           docketNumber,
         });
@@ -297,7 +352,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
-      ifHasAccess((docketNumber, docketRecordIndex) => {
+      ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Docket Entry Meta`,
         );
@@ -310,7 +365,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit docket entry`,
         );
@@ -323,7 +378,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/before-you-file-a-document',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(
             docketNumber,
@@ -337,7 +392,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/file-a-document',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -353,7 +408,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/file-a-document/details',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -371,7 +426,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/file-a-document/review',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -389,7 +444,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/file-a-document/all-document-categories',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
@@ -406,24 +461,11 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/contacts/primary/edit',
-      ifHasAccess(docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Primary contact`,
-        );
-        return app.getSequence('gotoPrimaryContactEditSequence')({
-          docketNumber,
-        });
-      }),
-    );
-
-    registerRoute(
-      '/case-detail/*/contacts/secondary/edit',
-      ifHasAccess(docketNumber => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Secondary contact`,
-        );
-        return app.getSequence('gotoSecondaryContactEditSequence')({
+      '/case-detail/*/contacts/*/edit',
+      ifHasAccess({ app }, (docketNumber, contactId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Contact`);
+        return app.getSequence('gotoContactEditSequence')({
+          contactId,
           docketNumber,
         });
       }),
@@ -431,7 +473,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/create-order?..',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
@@ -447,7 +489,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/create-order/*?..',
-      ifHasAccess((docketNumber, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, parentMessageId) => {
         const { documentTitle, documentType, eventCode } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Create an order`,
@@ -465,7 +507,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/upload-court-issued',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
         );
@@ -476,7 +518,7 @@ const router = {
     );
     registerRoute(
       '/case-detail/*/edit-upload-court-issued/*',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
         );
@@ -489,7 +531,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-upload-court-issued/*/*',
-      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Upload a document`,
         );
@@ -503,7 +545,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/correspondence',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
         );
@@ -516,7 +558,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/correspondence?..',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         const { correspondenceId } = route.query();
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Correspondence`,
@@ -531,7 +573,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/upload-correspondence',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add Correspondence`,
         );
@@ -543,7 +585,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*',
-      ifHasAccess((docketNumber, correspondenceId) => {
+      ifHasAccess({ app }, (docketNumber, correspondenceId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
         );
@@ -557,21 +599,24 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-correspondence/*/*',
-      ifHasAccess((docketNumber, correspondenceId, parentMessageId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
-        );
-        return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
-          correspondenceId,
-          docketNumber,
-          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
-        });
-      }),
+      ifHasAccess(
+        { app },
+        (docketNumber, correspondenceId, parentMessageId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Edit Correspondence`,
+          );
+          return app.getSequence('gotoEditCorrespondenceDocumentSequence')({
+            correspondenceId,
+            docketNumber,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/edit-order/*/sign',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
@@ -584,7 +629,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-order/*/sign/*',
-      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoSignOrderSequence');
         return sequence({
@@ -598,7 +643,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-order/*',
-      ifHasAccess((docketNumber, docketEntryIdToEdit) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryIdToEdit) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
         const sequence = app.getSequence('gotoEditOrderSequence');
         return sequence({
@@ -610,31 +655,36 @@ const router = {
 
     registerRoute(
       '/case-detail/*/edit-order/*/*',
-      ifHasAccess((docketNumber, docketEntryIdToEdit, parentMessageId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Edit an order`);
-        const sequence = app.getSequence('gotoEditOrderSequence');
-        return sequence({
-          docketEntryIdToEdit,
-          docketNumber,
-          parentMessageId,
-          redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
-        });
-      }),
+      ifHasAccess(
+        { app },
+        (docketNumber, docketEntryIdToEdit, parentMessageId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Edit an order`,
+          );
+          const sequence = app.getSequence('gotoEditOrderSequence');
+          return sequence({
+            docketEntryIdToEdit,
+            docketNumber,
+            parentMessageId,
+            redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}`,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/case-detail/*/add-paper-filing',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add paper filing`,
         );
-        return app.getSequence('gotoAddDocketEntrySequence')({ docketNumber });
+        return app.getSequence('gotoAddPaperFilingSequence')({ docketNumber });
       }),
     );
 
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry',
-      ifHasAccess((docketNumber, docketEntryId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
@@ -647,7 +697,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
-      ifHasAccess((docketNumber, docketEntryId, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Add docket entry`,
         );
@@ -664,7 +714,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/printable-docket-record',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Docket record`);
         return app.getSequence('gotoPrintableDocketRecordSequence')({
           docketNumber,
@@ -674,7 +724,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/confirmation',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Case Confirmation`,
         );
@@ -686,7 +736,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/pending-report',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Pending Report`,
         );
@@ -699,7 +749,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/request-access',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Request access`,
         );
@@ -715,7 +765,7 @@ const router = {
 
     registerRoute(
       '/case-detail/*/request-access/review',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Request access review`,
         );
@@ -733,7 +783,7 @@ const router = {
 
     registerRoute(
       '/change-login-and-service-email',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Change Login & Service Email Address');
         return app.getSequence('gotoChangeLoginAndServiceEmailSequence')();
       }),
@@ -741,7 +791,7 @@ const router = {
 
     registerRoute(
       '/users/create-practitioner',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('EF-CMS User Management - Create Practitioner User');
         return app.getSequence('gotoCreatePractitionerUserSequence')();
       }),
@@ -749,7 +799,7 @@ const router = {
 
     registerRoute(
       '/users/edit-practitioner/*',
-      ifHasAccess(barNumber => {
+      ifHasAccess({ app }, barNumber => {
         setPageTitle('EF-CMS User Management - Edit Practitioner User');
         return app.getSequence('gotoEditPractitionerUserSequence')({
           barNumber,
@@ -759,7 +809,7 @@ const router = {
 
     registerRoute(
       '/document-qc',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
@@ -770,7 +820,7 @@ const router = {
 
     registerRoute(
       '/my-account',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('My Account');
         return app.getSequence('gotoMyAccountSequence')();
       }),
@@ -786,7 +836,7 @@ const router = {
 
     registerRoute(
       '/document-qc/my',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
@@ -797,7 +847,7 @@ const router = {
 
     registerRoute(
       '/document-qc/my/inbox',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
@@ -808,7 +858,7 @@ const router = {
 
     registerRoute(
       '/document-qc/my/outbox',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
@@ -819,7 +869,7 @@ const router = {
 
     registerRoute(
       '/document-qc/my/inProgress',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
@@ -830,7 +880,7 @@ const router = {
 
     registerRoute(
       '/document-qc/section',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
@@ -841,7 +891,7 @@ const router = {
 
     registerRoute(
       '/document-qc/section/inbox',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inbox',
@@ -852,7 +902,7 @@ const router = {
 
     registerRoute(
       '/document-qc/section/inProgress',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'inProgress',
@@ -863,7 +913,7 @@ const router = {
 
     registerRoute(
       '/document-qc/section/outbox',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
         return app.getSequence('gotoWorkQueueSequence')({
           box: 'outbox',
@@ -874,7 +924,7 @@ const router = {
 
     registerRoute(
       '/practitioner-detail/*',
-      ifHasAccess(barNumber => {
+      ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
         return app.getSequence('gotoPractitionerDetailSequence')({
           barNumber,
@@ -884,7 +934,7 @@ const router = {
 
     registerRoute(
       '/print-paper-service/*',
-      ifHasAccess(docketNumber => {
+      ifHasAccess({ app }, docketNumber => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Print Service`);
         return app.getSequence('gotoPrintPaperServiceSequence')({
           docketNumber,
@@ -894,27 +944,33 @@ const router = {
 
     registerRoute(
       '/trial-session-detail/*',
-      ifHasAccess(trialSessionId => {
-        setPageTitle('Trial session information');
-        return app.getSequence('gotoTrialSessionDetailSequence')({
-          trialSessionId,
-        });
-      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        trialSessionId => {
+          setPageTitle('Trial session information');
+          return app.getSequence('gotoTrialSessionDetailSequence')({
+            trialSessionId,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/trial-session-working-copy/*',
-      ifHasAccess(trialSessionId => {
-        setPageTitle('Trial session working copy');
-        return app.getSequence('gotoTrialSessionWorkingCopySequence')({
-          trialSessionId,
-        });
-      }, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY },
+        trialSessionId => {
+          setPageTitle('Trial session working copy');
+          return app.getSequence('gotoTrialSessionWorkingCopySequence')({
+            trialSessionId,
+          });
+        },
+      ),
     );
 
     registerRoute(
       '/trial-session-planning-report',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Trial session planning report');
         return app.getSequence('gotoTrialSessionPlanningReportSequence')();
       }),
@@ -922,16 +978,19 @@ const router = {
 
     registerRoute(
       '/trial-sessions..',
-      ifHasAccess(() => {
-        const trialSessionFilter = {};
-        forEach(route.query(), (value, key) => {
-          set(trialSessionFilter, key, value);
-        });
-        setPageTitle('Trial sessions');
-        return app.getSequence('gotoTrialSessionsSequence')({
-          query: trialSessionFilter,
-        });
-      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          const trialSessionFilter = {};
+          forEach(route.query(), (value, key) => {
+            set(trialSessionFilter, key, value);
+          });
+          setPageTitle('Trial sessions');
+          return app.getSequence('gotoTrialSessionsSequence')({
+            query: trialSessionFilter,
+          });
+        },
+      ),
     );
 
     registerRoute('/idle-logout', () => {
@@ -949,7 +1008,7 @@ const router = {
 
     registerRoute(
       '/before-filing-a-petition',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Before you file a petition');
         app.getSequence('gotoBeforeStartCaseSequence')();
       }),
@@ -957,7 +1016,7 @@ const router = {
 
     registerRoute(
       '/file-a-petition/step-*',
-      ifHasAccess(step => {
+      ifHasAccess({ app }, step => {
         setPageTitle('File a petition');
         if (app.getState('currentPage') === 'StartCaseWizard') {
           return app.getSequence('chooseStartCaseWizardStepSequence')({
@@ -984,7 +1043,7 @@ const router = {
 
     registerRoute(
       '/file-a-petition/success',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Petition Filed Successfully');
         return app.getSequence('gotoFilePetitionSuccessSequence')();
       }),
@@ -992,7 +1051,7 @@ const router = {
 
     registerRoute(
       '/file-a-petition-pa11y/step-*',
-      ifHasAccess(step => {
+      ifHasAccess({ app }, step => {
         setPageTitle('File a petition');
         return app.getSequence('gotoStartCaseWizardSequence')({
           step,
@@ -1003,20 +1062,26 @@ const router = {
 
     registerRoute(
       '/add-a-trial-session',
-      ifHasAccess(() => {
-        setPageTitle('Add a trial session');
-        return app.getSequence('gotoAddTrialSessionSequence')();
-      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Add a trial session');
+          return app.getSequence('gotoAddTrialSessionSequence')();
+        },
+      ),
     );
 
     registerRoute(
       '/edit-trial-session/*',
-      ifHasAccess(trialSessionId => {
-        setPageTitle('Edit trial session');
-        return app.getSequence('gotoEditTrialSessionSequence')({
-          trialSessionId,
-        });
-      }, ROLE_PERMISSIONS.TRIAL_SESSIONS),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        trialSessionId => {
+          setPageTitle('Edit trial session');
+          return app.getSequence('gotoEditTrialSessionSequence')({
+            trialSessionId,
+          });
+        },
+      ),
     );
 
     registerRoute('/style-guide', () => {
@@ -1031,7 +1096,7 @@ const router = {
 
     registerRoute(
       '/messages/*/*',
-      ifHasAccess((queue, box) => {
+      ifHasAccess({ app }, (queue, box) => {
         setPageTitle('Messages');
         return app.getSequence('gotoMessagesSequence')({
           box,
@@ -1042,7 +1107,7 @@ const router = {
 
     registerRoute(
       '/messages/*/message-detail/*',
-      ifHasAccess((docketNumber, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, parentMessageId) => {
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
@@ -1053,7 +1118,7 @@ const router = {
 
     registerRoute(
       '/messages/*/message-detail/*?..',
-      ifHasAccess((docketNumber, parentMessageId) => {
+      ifHasAccess({ app }, (docketNumber, parentMessageId) => {
         const { documentId } = route.query();
         setPageTitle('Message detail');
         return app.getSequence('gotoMessageDetailSequence')({
@@ -1066,7 +1131,7 @@ const router = {
 
     registerRoute(
       '/pdf-preview',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('PDF Preview');
         return app.getSequence('gotoPdfPreviewSequence')();
       }),
@@ -1074,7 +1139,7 @@ const router = {
 
     registerRoute(
       '/reports/case-inventory-report',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Case Inventory Report');
         return app.getSequence('gotoCaseInventoryReportSequence')();
       }),
@@ -1082,7 +1147,7 @@ const router = {
 
     registerRoute(
       '/reports/case-deadlines',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Case deadlines');
         return app.getSequence('gotoCaseDeadlineReportSequence')();
       }),
@@ -1090,7 +1155,7 @@ const router = {
 
     registerRoute(
       '/reports/blocked-cases',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Blocked cases');
         return app.getSequence('gotoBlockedCasesReportSequence')();
       }),
@@ -1098,7 +1163,7 @@ const router = {
 
     registerRoute(
       '/reports/pending-report',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Pending report');
         return app.getSequence('gotoPendingReportSequence')();
       }),
@@ -1106,7 +1171,7 @@ const router = {
 
     registerRoute(
       '/reports/pending-report/printable..',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         const { judgeFilter } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
@@ -1117,7 +1182,7 @@ const router = {
 
     registerRoute(
       '/user/contact/edit',
-      ifHasAccess(() => {
+      ifHasAccess({ app }, () => {
         setPageTitle('Edit user contact');
         return app.getSequence('gotoUserContactEditSequence')();
       }),
@@ -1125,19 +1190,25 @@ const router = {
 
     registerRoute(
       '/search/no-matches',
-      ifHasAccess(() => {
-        setPageTitle('Search results');
-        return app.getSequence('gotoCaseSearchNoMatchesSequence')();
-      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        () => {
+          setPageTitle('Search results');
+          return app.getSequence('gotoCaseSearchNoMatchesSequence')();
+        },
+      ),
     );
 
     registerRoute(
       '/search..',
-      ifHasAccess(() => {
-        const query = route.query();
-        setPageTitle('Advanced search');
-        return app.getSequence('gotoAdvancedSearchSequence')(query);
-      }, ROLE_PERMISSIONS.ADVANCED_SEARCH),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.ADVANCED_SEARCH },
+        () => {
+          const query = route.query();
+          setPageTitle('Advanced search');
+          return app.getSequence('gotoAdvancedSearchSequence')(query);
+        },
+      ),
     );
 
     registerRoute('/mock-login...', () => {
@@ -1180,7 +1251,7 @@ const router = {
       true,
     );
 
-    route.start(true);
+    route.start(true); // immediately triggers BASE_ROUTE
   },
 };
 
@@ -1188,6 +1259,7 @@ export {
   back,
   createObjectURL,
   externalRoute,
+  ifHasAccess,
   openInNewTab,
   revokeObjectURL,
   route,
