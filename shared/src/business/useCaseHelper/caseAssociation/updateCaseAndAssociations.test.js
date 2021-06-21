@@ -124,48 +124,89 @@ describe('updateCaseAndAssociations', () => {
     expect(updateArgs.caseToUpdate.isValidated).toBe(true);
   });
 
-  it.skip('does not attempt to make any update calls to persistence if any validation functions fail', async () => {
-    const practitionerId = applicationContext.getUniqueId();
-    const mockCaseWithIrsPractitioners = new Case(
-      {
-        ...MOCK_CASE,
-        privatePractitioners: [
-          {
-            barNumber: 'BT007',
-            name: 'Billie Jean',
-            role: 'privatePractitioner',
-            userId: practitionerId,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-    const updatedPractitioner = {
-      barNumber: 'BT007',
-      name: 'William Denim', // changed name
-      role: 'privatePractitioner',
-      userId: practitionerId,
-    };
-
-    // const mockValidationProblem = () =>
-    //   throw new Error('this is a mock validation failure');
-    // validation routine called by one of the last "update" functions
-    // PrivatePractitioner.validateRawCollection.mockImplementationOnce(
-    //   mockValidationProblem,
-    // );
+  it('does not attempt to make any update calls to persistence if any queries to persistence fail', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber.mockRejectedValueOnce(
+        new Error('query problem'),
+      );
 
     await expect(
       updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
+          ...validMockCase,
           associatedJudge: 'Judge Arnold',
-          privatePractitioners: [updatedPractitioner],
         },
       }),
-    ).rejects.toThrow('mock validation failure');
+    ).rejects.toThrow('query problem');
+
+    // updateCaseDocketEntries
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseMessages
+    expect(
+      applicationContext.getPersistenceGateway().updateMessage,
+    ).not.toHaveBeenCalled();
+
+    // updateCorrespondence
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+    ).not.toHaveBeenCalled();
+
+    // updateHearings
+    expect(
+      applicationContext.getPersistenceGateway().removeCaseFromHearing,
+    ).not.toHaveBeenCalled();
+
+    // updateIrsPractitioners
+    expect(
+      applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+    ).not.toHaveBeenCalled();
+
+    // updatePrivatePractitioners
+    expect(
+      applicationContext.getPersistenceGateway()
+        .removePrivatePractitionerOnCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updatePrivatePractitionerOnCase,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseWorkItems
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateAssociatedJudgeOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseTitleOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseStatusOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialDateOnWorkItems,
+    ).not.toHaveBeenCalled();
+
+    // updateUserCaseMappings
+    expect(
+      applicationContext.getPersistenceGateway().updateUserCaseMapping,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseDeadlines
     expect(
       applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
+
+    // update the case itself, final persistence call
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
     ).not.toHaveBeenCalled();
   });
 
