@@ -142,4 +142,49 @@ describe('practitionerDetailHelper', () => {
     });
     expect(practitionerNotes).toEqual(mockNote);
   });
+
+  it('should show the print case list link if the user is an internal user', () => {
+    const { showPrintCaseListLink } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          admissionsDate: '2020-01-27',
+        },
+        user: { role: 'admissionsclerk' },
+      },
+    });
+    expect(showPrintCaseListLink).toBeTruthy();
+  });
+
+  it('should not show the print case list link if the user is an external user', () => {
+    const { showPrintCaseListLink } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          admissionsDate: '2020-01-27',
+        },
+        user: { role: 'irsPractitioner' },
+      },
+    });
+    expect(showPrintCaseListLink).toBeFalsy();
+  });
+
+  it('should set a pendingEmailFormatted if pendingEmail is set on the user', () => {
+    const { pendingEmailFormatted } = runCompute(practitionerDetailHelper, {
+      state: {
+        permissions: {
+          ADD_EDIT_PRACTITIONER_USER: false,
+        },
+        practitionerDetail: {
+          pendingEmail: 'testing@example.com',
+        },
+        user: { role: 'irsPractitioner' },
+      },
+    });
+    expect(pendingEmailFormatted).toEqual('testing@example.com (Pending)');
+  });
 });

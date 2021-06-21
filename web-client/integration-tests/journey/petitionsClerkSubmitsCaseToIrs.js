@@ -14,6 +14,10 @@ export const petitionsClerkSubmitsCaseToIrs = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+    await test.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
