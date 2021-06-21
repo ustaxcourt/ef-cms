@@ -71,7 +71,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).rejects.toThrow('Bar number does not match user data.');
   });
 
-  it("should set the practitioner's serviceIndicator to electronic when an email is added", async () => {
+  it("should not set the practitioner's serviceIndicator to electronic when an email is added", async () => {
     mockPractitioner = {
       ...mockPractitioner,
       email: undefined,
@@ -91,9 +91,7 @@ describe('updatePractitionerUserInteractor', () => {
       },
     );
 
-    expect(updatedUser.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+    expect(updatedUser.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
@@ -120,7 +118,7 @@ describe('updatePractitionerUserInteractor', () => {
     ).toMatchObject({ user: mockPractitioner });
   });
 
-  it('updates the practitioner user and adds an email when the original user did not have an email', async () => {
+  it('updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockResolvedValue({
@@ -146,12 +144,37 @@ describe('updatePractitionerUserInteractor', () => {
     ).toBeCalled();
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
-        .calls[0][0].user.email,
-    ).toEqual('admissionsclerk@example.com');
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
         .calls[0][0].user.pendingEmail,
     ).toEqual('admissionsclerk@example.com');
+  });
+
+  it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        email: undefined,
+      });
+
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        email: undefined,
+        firstName: 'Donna',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateUserRecords.mock.calls[0][0],
+    ).toMatchObject({
+      updatedUser: {
+        ...mockPractitioner,
+        email: undefined,
+        firstName: 'Donna',
+        name: 'Donna Attorney',
+      },
+    });
   });
 
   describe('updating email', () => {
