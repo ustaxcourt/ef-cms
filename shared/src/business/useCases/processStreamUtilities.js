@@ -44,16 +44,24 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'Case',
   );
 
-  const [workItemRecords, otherRecords] = partition(
+  const [workItemRecords, nonWorkItemRecords] = partition(
     nonCaseEntityRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
+  const [messageRecords, otherRecords] = partition(
+    nonWorkItemRecords,
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Message',
+  );
+
   return {
     caseEntityRecords,
     docketEntryRecords,
+    messageRecords,
     otherRecords,
     removeRecords,
     workItemRecords,
