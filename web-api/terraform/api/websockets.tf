@@ -34,6 +34,10 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 
@@ -53,6 +57,10 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_apigatewayv2_integration" "websockets_connect_integration" {

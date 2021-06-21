@@ -37,15 +37,15 @@ exports.orderPublicSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const {
-    results,
-  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
-    applicationContext,
-    ...rawSearch,
-    documentEventCodes: ORDER_EVENT_CODES,
-    judgeType: ORDER_JUDGE_FIELD,
-    omitSealed: true,
-  });
+  const { results } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      ...rawSearch,
+      documentEventCodes: ORDER_EVENT_CODES,
+      judgeType: ORDER_JUDGE_FIELD,
+      omitSealed: true,
+    });
 
   const filteredResults = (
     await filterForPublic({

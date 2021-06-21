@@ -64,13 +64,11 @@ exports.removeCoversheet = async (
     throw err;
   }
 
-  const {
-    numberOfPages,
-    pdfData: newPdfData,
-  } = await exports.removeCoverFromPdf({
-    applicationContext,
-    pdfData,
-  });
+  const { numberOfPages, pdfData: newPdfData } =
+    await exports.removeCoverFromPdf({
+      applicationContext,
+      pdfData,
+    });
 
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);

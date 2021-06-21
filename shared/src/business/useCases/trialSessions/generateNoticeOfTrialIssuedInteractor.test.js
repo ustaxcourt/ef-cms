@@ -62,8 +62,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    await generateNoticeOfTrialIssuedInteractor({
-      applicationContext,
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -106,8 +105,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       }));
 
     await expect(
-      generateNoticeOfTrialIssuedInteractor({
-        applicationContext,
+      generateNoticeOfTrialIssuedInteractor(applicationContext, {
         docketNumber: '123-45',
         trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       }),
@@ -115,8 +113,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    await generateNoticeOfTrialIssuedInteractor({
-      applicationContext,
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });

@@ -20,12 +20,9 @@ export const setViewerCorrespondenceToDisplayAction = async ({
   store.set(state.viewerCorrespondenceToDisplay, viewerCorrespondenceToDisplay);
 
   if (viewerCorrespondenceToDisplay) {
-    const {
-      url,
-    } = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
         key: viewerCorrespondenceToDisplay.correspondenceId,

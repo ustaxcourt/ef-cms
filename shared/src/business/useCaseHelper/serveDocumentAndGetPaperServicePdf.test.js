@@ -47,9 +47,13 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   });
 
   it('should not call getObject or appendPaperServiceAddressPageToPdf if there are no paper service parties on the case', async () => {
+    caseEntity.petitioners.forEach(
+      p => (p.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC),
+    );
+
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity, // MOCK_CASE does not have any paper service parties
+      caseEntity,
       docketEntryId: mockDocketEntryId,
     });
 

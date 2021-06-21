@@ -44,12 +44,10 @@ exports.goToWizardStep5 = () => {
 exports.submitPetition = testData => {
   cy.get('button#submit-case').scrollIntoView().click();
 
-  cy.server();
-  cy.route('POST', '**/cases').as('postCase');
-  cy.wait('@postCase');
-  cy.get('@postCase').should(xhr => {
-    expect(xhr.responseBody).to.have.property('docketNumber');
-    const { docketNumber } = xhr.responseBody;
+  cy.intercept('POST', '**/cases').as('postCase');
+  cy.wait('@postCase').then(({ response }) => {
+    expect(response.body).to.have.property('docketNumber');
+    const { docketNumber } = response.body;
     if (testData) {
       testData.createdDocketNumber = docketNumber;
       if (testData.docketNumbers) {
@@ -65,12 +63,12 @@ exports.goToDashboard = () => {
 };
 
 exports.completeWizardStep1 = () => {
-  cy.upload_file('w3-dummy.pdf', 'input#stin-file');
+  cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
 exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
   cy.screenshot();
-  cy.upload_file('w3-dummy.pdf', 'input#petition-file');
+  cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();
   cy.get('#case-type').scrollIntoView().select(caseType);

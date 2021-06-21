@@ -41,6 +41,7 @@ describe('Docket Clerk seals a case', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
+    console.log('new case docket#', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
     test.docketNumber = caseDetail.docketNumber;
   });

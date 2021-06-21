@@ -48,8 +48,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('get the case detail and trial session detail', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -63,8 +62,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('should call the Standing Pretrial Order document generator with correct data', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -88,8 +86,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('should add a served stamp to the document', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });

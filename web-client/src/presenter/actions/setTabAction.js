@@ -5,7 +5,8 @@ import { state } from 'cerebral';
  * @param {string} tab the value of tab to be set
  * @returns {Function} returns a callback function that sets tab on state
  */
-export const setTabAction = tab =>
+export const setTabAction =
+  tab =>
   /**
    * sets the value of state.currentViewMetadata.tab entry to the value passed in
    *

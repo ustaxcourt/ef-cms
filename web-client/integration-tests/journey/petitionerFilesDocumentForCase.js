@@ -1,5 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -131,9 +132,16 @@ export const petitionerFilesDocumentForCase = (test, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
-    expect(test.getState('form.partyPrimary')).toEqual(true);
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
 
     await test.runSequence('reviewExternalDocumentInformationSequence');
+
+    expect(test.getState('form.filers')).toEqual([contactPrimary.contactId]);
 
     expect(test.getState('validationErrors')).toEqual({
       objections: VALIDATION_ERROR_MESSAGES.objections,

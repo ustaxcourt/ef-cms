@@ -10,8 +10,7 @@ export const getJudgeForCurrentUserAction = async ({ applicationContext }) => {
 
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor({
-      applicationContext,
+    .getJudgeForUserChambersInteractor(applicationContext, {
       user,
     });
 

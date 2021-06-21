@@ -3,15 +3,15 @@ const { remove } = require('../requests');
 /**
  * deleteTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteTrialSessionInteractor = ({
+exports.deleteTrialSessionInteractor = (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   return remove({
     applicationContext,
     endpoint: `/trial-sessions/${trialSessionId}`,

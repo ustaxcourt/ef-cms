@@ -14,8 +14,7 @@ export const blockCaseFromTrialAction = async ({ applicationContext, get }) => {
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .blockCaseFromTrialInteractor({
-      applicationContext,
+    .blockCaseFromTrialInteractor(applicationContext, {
       docketNumber,
       reason,
     });

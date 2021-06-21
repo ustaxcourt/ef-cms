@@ -13,7 +13,6 @@ export const CancelDraftDocumentModal = connect(
       <ModalDialog
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Cancel"
         confirmSequence={confirmSequence}
         message="If you cancel, this document will be returned to Draft Documents."

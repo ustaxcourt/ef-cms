@@ -45,7 +45,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
 
     expect(
       applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       judgeUser: {
         name: 'A judgy person',

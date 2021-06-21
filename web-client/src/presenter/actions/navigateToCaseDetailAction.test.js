@@ -68,4 +68,23 @@ describe('navigateToCaseDetailAction', () => {
       `/case-detail/${mockDocketNumber}`,
     );
   });
+
+  it('should not invoke the router when docket number is undefined in props and state', async () => {
+    await runAction(navigateToCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: undefined,
+        docketNumber: undefined,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: undefined,
+        },
+      },
+    });
+
+    expect(routerStub).not.toHaveBeenCalled();
+  });
 });
