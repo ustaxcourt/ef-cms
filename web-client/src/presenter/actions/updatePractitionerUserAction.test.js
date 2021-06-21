@@ -43,7 +43,7 @@ describe('updatePractitionerUserAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePractitionerUserInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       barNumber: 'AB1111',
       user: { firstName: 'Joe', lastName: 'Exotic' },

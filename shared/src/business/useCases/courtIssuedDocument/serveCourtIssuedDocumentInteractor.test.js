@@ -5,6 +5,7 @@ const {
 const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -43,8 +44,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   const dynamicallyGeneratedDocketEntries = [];
-  const docketEntriesWithCaseClosingEventCodes = ENTERED_AND_SERVED_EVENT_CODES.map(
-    eventCode => {
+  const docketEntriesWithCaseClosingEventCodes =
+    ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
       const docketEntryId = uuidv4();
       const docketRecordId = uuidv4();
 
@@ -52,6 +53,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       dynamicallyGeneratedDocketEntries.push({
         docketEntryId,
+        docketNumber: '101-20',
         docketRecordId,
         documentTitle: `Docket Record ${index}`,
         eventCode: 'O',
@@ -65,6 +67,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
       return {
         docketEntryId,
+        docketNumber: '101-20',
         documentType: eventCodeMap.documentType,
         eventCode,
         signedAt: createISODateString(),
@@ -73,8 +76,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
         workItem: mockWorkItem,
       };
-    },
-  );
+    });
 
   const mockCases = [
     {
@@ -82,6 +84,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '101-20',
           documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
@@ -93,6 +96,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '101-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -103,6 +107,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockServedDocketEntryId,
+          docketNumber: '101-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           servedAt: createISODateString(),
@@ -123,18 +128,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     },
     {
       ...MOCK_CASE,
-      contactSecondary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Contact Secondary',
-        phone: '123123134',
-        postalCode: '12345',
-        state: 'TN',
-      },
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketNumber: '102-20',
           documentType: 'Order',
           eventCode: 'O',
           pending: true,
@@ -147,6 +144,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
+          docketNumber: '102-20',
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -159,6 +157,19 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       ],
       docketNumber: '102-20',
       partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Contact Secondary',
+          phone: '123123134',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      ],
     },
   ];
 
@@ -274,8 +285,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry =>
         docketEntry.docketEntryId === 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
@@ -300,8 +312,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
@@ -323,8 +336,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const updatedCase = applicationContext.getPersistenceGateway().updateCase
-      .mock.calls[0][0].caseToUpdate;
+    const updatedCase =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate;
     const updatedDocument = updatedCase.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === mockDocketEntryId,
     );
@@ -441,8 +455,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         docketNumber: '101-20',
       });
 
-      const updatedCase = applicationContext.getPersistenceGateway().updateCase
-        .mock.calls[0][0].caseToUpdate;
+      const updatedCase =
+        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+          .caseToUpdate;
 
       expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
       expect(

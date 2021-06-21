@@ -1,3 +1,4 @@
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -11,6 +12,9 @@ import { withAppContextDecorator } from '../src/withAppContext';
 
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
+);
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
 );
 
 const test = setupTest();
@@ -48,8 +52,11 @@ describe('Adds automatic block case to trial', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
       state: test.getState(),
     });
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: test.getState(),
+    });
 
-    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(headerHelper.showBlockedTag).toBeTruthy();
     expect(formattedCase.automaticBlocked).toBeTruthy();
   });
 });

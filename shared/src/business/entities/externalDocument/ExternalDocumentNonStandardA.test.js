@@ -71,5 +71,15 @@ describe('ExternalDocumentNonStandardA', () => {
         'Brief in Support of Stipulation Something',
       );
     });
+
+    it('should generate title without previousDocument', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Brief in Support of [Document Name]',
+        documentType: 'Brief in Support',
+        scenario: 'Nonstandard A',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('Brief in Support of');
+    });
   });
 });

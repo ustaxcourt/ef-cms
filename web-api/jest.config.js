@@ -16,5 +16,13 @@ module.exports = {
     '!src/app-local.js',
     '!src/app-public-local.js',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 97,
+      functions: 99,
+      lines: 99,
+      statements: 99,
+    },
+  },
   verbose: false,
 };

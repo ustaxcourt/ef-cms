@@ -28,7 +28,7 @@ export const setDocketEntryFormForDocketEditAction = ({
 
   let docketEntryFormData = cloneDeep(docketEntry);
 
-  if (docketEntry && docketEntry.editState) {
+  if (docketEntry.editState) {
     const parsedJson = JSON.parse(docketEntry.editState);
     if (parsedJson.docketNumber) {
       docketEntryFormData = JSON.parse(docketEntry.editState);
@@ -44,6 +44,11 @@ export const setDocketEntryFormForDocketEditAction = ({
       ...deconstructedDate,
     };
   }
+
+  docketEntryFormData.filersMap = {};
+  docketEntryFormData.filers?.forEach(
+    filer => (docketEntryFormData.filersMap[filer] = true),
+  );
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 

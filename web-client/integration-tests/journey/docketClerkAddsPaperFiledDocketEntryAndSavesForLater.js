@@ -1,22 +1,21 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
   test,
   fakeFile,
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-  const {
-    DOCUMENT_RELATIONSHIPS,
-    OBJECTIONS_OPTIONS_MAP,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_RELATIONSHIPS, OBJECTIONS_OPTIONS_MAP } =
+    applicationContext.getConstants();
 
   return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -25,8 +24,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: false,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -34,7 +32,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
     //primary document
@@ -61,8 +59,10 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: 100,
     });
 
+    const contactPrimary = contactPrimaryFromState(test);
+
     await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -116,8 +116,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: true,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 

@@ -5,19 +5,16 @@ const setPdfToDisplay = async (
   formattedAttachment,
   applicationContext,
   docketNumber,
-  viewerDocumentToDisplay,
+  messageViewerDocumentToDisplay,
   store,
 ) => {
   if (!formattedAttachment.archived) {
-    const {
-      url,
-    } = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
-        key: viewerDocumentToDisplay.documentId,
+        key: messageViewerDocumentToDisplay.documentId,
       });
 
     store.set(state.iframeSrc, url);
@@ -26,7 +23,7 @@ const setPdfToDisplay = async (
 
 const setAttachmentToDisplay = (
   applicationContext,
-  viewerDocumentToDisplay,
+  messageViewerDocumentToDisplay,
   caseDetail,
   mostRecentMessage,
 ) => {
@@ -38,17 +35,18 @@ const setAttachmentToDisplay = (
     caseDetail,
   });
   let formattedAttachment = formattedAttachments.find(
-    attachment => attachment.documentId === viewerDocumentToDisplay.documentId,
+    attachment =>
+      attachment.documentId === messageViewerDocumentToDisplay.documentId,
   );
   if (!formattedAttachment) {
     formattedAttachment = formattedAttachments[0];
-    viewerDocumentToDisplay.documentId = formattedAttachment.documentId;
+    messageViewerDocumentToDisplay.documentId = formattedAttachment.documentId;
   }
   return formattedAttachment;
 };
 
 /**
- * sets the message detail viewerDocumentToDisplay from props
+ * sets the message detail messageViewerDocumentToDisplay from props
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
@@ -61,19 +59,22 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
   props,
   store,
 }) => {
-  const { mostRecentMessage, viewerDocumentToDisplay } = props;
+  const { messageViewerDocumentToDisplay, mostRecentMessage } = props;
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
 
-  store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
+  store.set(
+    state.messageViewerDocumentToDisplay,
+    messageViewerDocumentToDisplay,
+  );
 
   if (
-    viewerDocumentToDisplay?.documentId &&
+    messageViewerDocumentToDisplay?.documentId &&
     mostRecentMessage.attachments?.length
   ) {
     const formattedAttachment = setAttachmentToDisplay(
       applicationContext,
-      viewerDocumentToDisplay,
+      messageViewerDocumentToDisplay,
       caseDetail,
       mostRecentMessage,
     );
@@ -82,7 +83,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
       formattedAttachment,
       applicationContext,
       docketNumber,
-      viewerDocumentToDisplay,
+      messageViewerDocumentToDisplay,
       store,
     );
   }

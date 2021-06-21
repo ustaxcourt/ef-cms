@@ -22,12 +22,9 @@ export const setViewerDocumentToDisplayAction = async ({
   if (viewerDocumentToDisplay) {
     store.set(state.docketEntryId, viewerDocumentToDisplay.docketEntryId);
 
-    const {
-      url,
-    } = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
         key: viewerDocumentToDisplay.docketEntryId,

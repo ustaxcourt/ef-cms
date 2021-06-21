@@ -37,7 +37,7 @@ describe('completeMessageAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().completeMessageInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       message: 'the complete message',
       parentMessageId: '08c26c12-a3b0-40e6-abff-08152edeb053',

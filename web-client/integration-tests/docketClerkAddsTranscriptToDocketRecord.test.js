@@ -2,14 +2,12 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from './journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
+import {
+  getFormattedDocketEntriesForTest,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -62,13 +60,9 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
-    const transcriptDocuments = formattedCase.formattedDocketEntries.filter(
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+    const transcriptDocuments = formattedDocketEntriesOnDocketRecord.filter(
       document => document.eventCode === TRANSCRIPT_EVENT_CODE,
     );
     // first transcript should be available to the user
@@ -97,7 +91,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
       }),
     ).rejects.toThrow('Unauthorized to view document at this time.');
 
-    const transDocketRecord = formattedCase.docketEntries.find(
+    const transDocketRecord = formattedDocketEntriesOnDocketRecord.find(
       record => record.eventCode === TRANSCRIPT_EVENT_CODE,
     );
     expect(transDocketRecord.index).toBeTruthy();

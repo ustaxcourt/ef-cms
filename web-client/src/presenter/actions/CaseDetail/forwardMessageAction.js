@@ -13,17 +13,16 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    parentMessageId,
-  } = await applicationContext.getUseCases().forwardMessageInteractor({
-    applicationContext,
-    docketNumber,
-    ...form,
-  });
+  const { parentMessageId } = await applicationContext
+    .getUseCases()
+    .forwardMessageInteractor(applicationContext, {
+      docketNumber,
+      ...form,
+    });
 
-  let viewerDocumentToDisplay;
+  let messageViewerDocumentToDisplay;
   if (form.attachments.length) {
-    viewerDocumentToDisplay = {
+    messageViewerDocumentToDisplay = {
       documentId: form.attachments[0].documentId,
     };
   }
@@ -32,7 +31,7 @@ export const forwardMessageAction = async ({ applicationContext, get }) => {
     alertSuccess: {
       message: 'Your message has been sent.',
     },
+    messageViewerDocumentToDisplay,
     parentMessageId,
-    viewerDocumentToDisplay,
   };
 };

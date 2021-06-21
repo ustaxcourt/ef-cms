@@ -3,19 +3,19 @@ import { createTrialSessionAction } from './createTrialSessionAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const MOCK_TRIAL = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2019-12-01T00:00:00.000Z',
-  term: 'Fall',
-  trialLocation: 'Birmingham, Alabama',
-  trialSessionId: '123',
-};
-
-const successStub = jest.fn();
-const errorStub = jest.fn();
-
 describe('createTrialSessionAction', () => {
+  const MOCK_TRIAL = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2019-12-01T00:00:00.000Z',
+    term: 'Fall',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '123',
+  };
+
+  const successStub = jest.fn();
+  const errorStub = jest.fn();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
@@ -83,7 +83,7 @@ describe('createTrialSessionAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       swingSessionId: '123',
       trialSessionId: '456',

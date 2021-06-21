@@ -9,7 +9,9 @@ describe('workQueueSectionHelper', () => {
     applicationContext,
   );
 
-  const { JUDGES_CHAMBERS } = applicationContext.getConstants();
+  const JUDGES_CHAMBERS = applicationContext
+    .getPersistenceGateway()
+    .getJudgesChambers();
 
   it('returns the expected state when set', () => {
     const { chambersDisplay, sectionDisplay } = runCompute(

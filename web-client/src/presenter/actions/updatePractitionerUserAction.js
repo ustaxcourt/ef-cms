@@ -19,8 +19,7 @@ export const updatePractitionerUserAction = async ({
   try {
     const practitionerUser = await applicationContext
       .getUseCases()
-      .updatePractitionerUserInteractor({
-        applicationContext,
+      .updatePractitionerUserInteractor(applicationContext, {
         barNumber: user.barNumber,
         user,
       });

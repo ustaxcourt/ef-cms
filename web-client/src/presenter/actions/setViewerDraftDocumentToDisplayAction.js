@@ -26,12 +26,9 @@ export const setViewerDraftDocumentToDisplayAction = async ({
       viewerDraftDocumentToDisplay.docketEntryId,
     );
 
-    const {
-      url,
-    } = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
         key: viewerDraftDocumentToDisplay.docketEntryId,

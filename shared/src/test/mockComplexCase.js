@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const { CONTACT_TYPES } = require('../business/entities/EntityConstants');
 
 exports.MOCK_COMPLEX_CASE = {
@@ -8,7 +9,6 @@ exports.MOCK_COMPLEX_CASE = {
   caseCaption: 'Richard Allen and Brian Chandler',
   caseNote: 'No case notes in Blackstone',
   caseType: 'Deficiency',
-
   correspondence: [
     {
       correspondenceId: '2929afe9-2711-4383-bef8-669dcfb8ccf9',

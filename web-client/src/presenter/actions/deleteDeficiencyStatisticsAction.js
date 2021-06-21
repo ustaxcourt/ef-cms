@@ -18,11 +18,12 @@ export const deleteDeficiencyStatisticsAction = async ({
   const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().deleteDeficiencyStatisticInteractor({
-      applicationContext,
-      docketNumber,
-      statisticId,
-    });
+    await applicationContext
+      .getUseCases()
+      .deleteDeficiencyStatisticInteractor(applicationContext, {
+        docketNumber,
+        statisticId,
+      });
 
     let successMessageDate;
 

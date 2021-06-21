@@ -1,9 +1,9 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
-import { SecondaryDocumentForm } from '../AddDocketEntry/SecondaryDocumentForm';
+import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
@@ -121,7 +121,6 @@ export const EditDocketEntryMetaFormDocument = connect(
             }}
           />
         </FormGroup>
-
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
           <FormGroup
             errorText={
@@ -156,7 +155,8 @@ export const EditDocketEntryMetaFormDocument = connect(
                   action,
                   inputName,
                   inputValue,
-                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
+                  updateSequence:
+                    updateDocketEntryMetaDocumentFormValueSequence,
                   validateSequence: validateDocumentSequence,
                 });
                 return true;
@@ -165,13 +165,13 @@ export const EditDocketEntryMetaFormDocument = connect(
                 onInputChange({
                   action,
                   inputText,
-                  updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
+                  updateSequence:
+                    updateDocketEntryMetaDocumentFormValueSequence,
                 });
               }}
             />
           </FormGroup>
         )}
-
         {editDocketEntryMetaHelper.primary.showNonstandardForm && (
           <NonstandardForm
             helper="editDocketEntryMetaHelper"
@@ -181,9 +181,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             validationErrors="validationErrors"
           />
         )}
-
         {form.secondaryDocument && <SecondaryDocumentForm />}
-
         <FormGroup errorText={validationErrors.additionalInfo}>
           <label
             className="usa-label"
@@ -265,12 +263,10 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup>
           <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
         </FormGroup>
-
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
           validateSequence={validateDocumentSequence}
         />
-
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
             <fieldset className="usa-fieldset margin-bottom-0">

@@ -3,9 +3,8 @@ import { getMessagesForCaseAction } from './getMessagesForCaseAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const { PETITIONS_SECTION } = applicationContextForClient.getConstants();
-
 describe('getMessagesForCaseAction', () => {
+  const { PETITIONS_SECTION } = applicationContextForClient.getConstants();
   const mockMessage = {
     createdAt: '2019-03-01T21:40:46.415Z',
     docketNumber: '101-20',
@@ -44,7 +43,7 @@ describe('getMessagesForCaseAction', () => {
     ).toBeCalled();
     expect(
       applicationContextForClient.getUseCases().getMessagesForCaseInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       docketNumber: '101-20',
     });

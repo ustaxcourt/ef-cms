@@ -6,7 +6,6 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     meta(name="robots" content="noindex")
     title U.S. Tax Court Electronic Filing and Case Management System
-    link(rel="stylesheet" href="index.scss")
     link(rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png")
     link(rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png")
     link(rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png")
@@ -19,4 +18,3 @@ html(lang="en")
     #modal-root
     footer#last-deployed.grid-container.position-fixed.bottom-0.right-0.hide
       p Deployed #{(new Date()).toLocaleString('en-US', {weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', timeZone: 'America/New_York'})} EST    
-    script(src="index-public." + process.env.USTC_ENV + ".js")

@@ -7,9 +7,9 @@ exports.updateCaseHearing = async ({
 }) => {
   return await client.put({
     Item: {
+      ...hearingToUpdate,
       pk: `case|${docketNumber}`,
       sk: `hearing|${hearingToUpdate.trialSessionId}`,
-      ...hearingToUpdate,
     },
     applicationContext,
   });
