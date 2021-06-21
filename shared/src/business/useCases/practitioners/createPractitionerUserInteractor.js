@@ -31,6 +31,9 @@ exports.createPractitionerUserInteractor = async (
     user,
   });
 
+  practitioner.pendingEmail = practitioner.email;
+  practitioner.email = undefined;
+
   const createdUser = await applicationContext
     .getPersistenceGateway()
     .createPractitionerUser({
