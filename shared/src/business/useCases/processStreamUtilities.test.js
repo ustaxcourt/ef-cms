@@ -957,10 +957,10 @@ describe('processStreamUtilities', () => {
       expect(mockGetMessage).toHaveBeenCalled();
     });
 
-    it('attempts to bulk index the data returned from getMessage instead of the NewImage if the messageNewImage.isRepliedTo is false', async () => {
+    it('attempts to bulk index the data returned from getMessage instead of the NewImage if the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = false', async () => {
       mockGetMessage = jest.fn().mockReturnValue({
         ...messageData,
-        isRepliedTo: true,
+        isRepliedTo: false,
       });
       utils.getMessage = mockGetMessage;
 
@@ -991,11 +991,47 @@ describe('processStreamUtilities', () => {
         {
           dynamodb: {
             Keys: { pk: { S: messageData.pk }, sk: { S: messageData.sk } },
-            NewImage: { ...messageDataMarshalled, isRepliedTo: { BOOL: true } },
+            NewImage: {
+              ...messageDataMarshalled,
+              isRepliedTo: { BOOL: false },
+            },
           },
           eventName: 'MODIFY',
         },
       ]);
+    });
+
+    it('does not return any data to be indexed if the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = true', async () => {
+      mockGetMessage = jest.fn().mockReturnValue({
+        ...messageData,
+        isRepliedTo: true,
+      });
+      utils.getMessage = mockGetMessage;
+
+      await processMessageEntries({
+        applicationContext,
+        messageRecords: [
+          {
+            dynamodb: {
+              Keys: {
+                pk: { S: messageData.pk },
+                sk: { S: messageData.sk },
+              },
+              NewImage: {
+                ...messageDataMarshalled,
+                isRepliedTo: { BOOL: false },
+              },
+            },
+            eventName: 'MODIFY',
+          },
+        ],
+        utils,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+          .calls[0][0].records,
+      ).toEqual([]);
     });
 
     it('does not call getMessage to get the latest message if the messageNewImage.isRepliedTo is true', async () => {

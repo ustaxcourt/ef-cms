@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk');
-const { flattenDeep, get, partition } = require('lodash');
-const { omit } = require('lodash');
+const { compact, flattenDeep, get, omit, partition } = require('lodash');
 
 const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
@@ -138,7 +137,7 @@ const processCaseEntries = async ({
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
       'the case or docket entry records that failed to index',
-      failedRecords,
+      { failedRecords },
     );
     throw new Error('failed to index case entry or docket entry records');
   }
@@ -184,7 +183,7 @@ const processDocketEntries = async ({
         } catch (err) {
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
-            err,
+            { err },
           );
         }
       }
@@ -224,7 +223,7 @@ const processDocketEntries = async ({
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
       'the docket entry records that failed to index',
-      failedRecords,
+      { failedRecords },
     );
     throw new Error('failed to index docket entry records');
   }
@@ -245,10 +244,9 @@ const processEntries = async ({ applicationContext, records, recordType }) => {
     });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the records that failed to index',
+    applicationContext.logger.error('the records that failed to index', {
       failedRecords,
-    );
+    });
     throw new Error('failed to index records');
   }
 };
@@ -283,26 +281,28 @@ const processMessageEntries = async ({
         messageId: messageNewImage.messageId.S,
       });
 
-      const marshalledMessage =
-        AWS.DynamoDB.Converter.marshall(latestMessageData);
+      if (!latestMessageData.isRepliedTo) {
+        const marshalledMessage =
+          AWS.DynamoDB.Converter.marshall(latestMessageData);
 
-      return {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: messageNewImage.pk.S,
+        return {
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: messageNewImage.pk.S,
+              },
+              sk: {
+                S: messageNewImage.sk.S,
+              },
             },
-            sk: {
-              S: messageNewImage.sk.S,
-            },
+            NewImage: marshalledMessage,
           },
-          NewImage: marshalledMessage,
-        },
-        eventName: 'MODIFY',
-      };
+          eventName: 'MODIFY',
+        };
+      }
+    } else {
+      return messageRecord;
     }
-
-    return messageRecord;
   };
 
   const indexRecords = await Promise.all(messageRecords.map(indexMessageEntry));
@@ -311,7 +311,7 @@ const processMessageEntries = async ({
     .getPersistenceGateway()
     .bulkIndexRecords({
       applicationContext,
-      records: indexRecords,
+      records: compact(indexRecords),
     });
 
   if (failedRecords.length > 0) {
@@ -344,10 +344,9 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
     });
 
   if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the records that failed to delete',
+    applicationContext.logger.error('the records that failed to delete', {
       failedRecords,
-    );
+    });
     throw new Error('failed to delete records');
   }
 };
