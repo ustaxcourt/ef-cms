@@ -29,11 +29,8 @@ let testData = {};
 let token;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const {
-  closeScannerSetupDialog,
-  getUserToken,
-  login,
-} = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, getUserToken, login } =
+  getEnvironmentSpecificFunctions();
 
 describe('Create and serve a case to search for', () => {
   before(async () => {
