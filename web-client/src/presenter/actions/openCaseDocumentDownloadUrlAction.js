@@ -43,7 +43,8 @@ export const openCaseDocumentDownloadUrlAction = async ({
       openedPdfWindow.location.href = url;
     }
   } catch (e) {
-    if (openedPdfWindow) openedPdfWindow.close();
+    openedPdfWindow?.close();
+
     throw new Error(`Unable to get document download url. ${e.message}`);
   }
 };
