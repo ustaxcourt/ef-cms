@@ -148,11 +148,7 @@ exports.updateContactInteractor = async (
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
-    console.log(
-      'why oh why',
-      privatePractitionersRepresentingContact,
-      partyWithPaperService,
-    );
+
     if (!privatePractitionersRepresentingContact || partyWithPaperService) {
       const workItem = new WorkItem(
         {
