@@ -4,8 +4,6 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openCaseDocumentDownloadUrlAction', () => {
-  const openInNewTab = jest.fn();
-
   beforeAll(() => {
     window.open = jest.fn().mockReturnValue({
       location: { href: '' },
@@ -14,7 +12,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     window.location = { href: '' };
 
     presenter.providers.applicationContext = applicationContext;
-    presenter.providers.router = { openInNewTab };
 
     applicationContext
       .getUseCases()
@@ -65,15 +62,31 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     expect(window.location.href).toEqual('http://example.com');
   });
 
-  it('should open in a new tab when props.useSameTab and props.isForIFrame is false', async () => {
+  it('should open in a new tab when props.useSameTab and props.isForIFrame are false', async () => {
+    const writeSpy = jest.fn();
+    window.open = jest.fn().mockReturnValue({
+      close: jest.fn(),
+      document: {
+        write: writeSpy,
+      },
+      location: {
+        href: 'something original',
+      },
+    });
+    window.document.write = jest.fn();
+
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
         docketEntryId: 'docket-entry-id-123',
         docketNumber: '123-20',
+        isForIFrame: false,
         useSameTab: false,
       },
     });
+
+    expect(window.open).toHaveBeenCalled();
+    expect(writeSpy).toHaveBeenCalled();
 
     expect(
       applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
@@ -82,6 +95,40 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       docketNumber: '123-20',
       key: 'docket-entry-id-123',
     });
-    expect(openInNewTab).toHaveBeenCalledWith('http://example.com');
+    expect(window.open().location.href).toEqual('http://example.com');
+  });
+
+  it('should throw an error when getDocumentDownloadUrlInteractor fails', async () => {
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockRejectedValue(new Error());
+
+    const closeSpy = jest.fn();
+    const writeSpy = jest.fn();
+
+    window.open = jest.fn().mockReturnValue({
+      close: closeSpy,
+      document: {
+        write: writeSpy,
+      },
+      location: {
+        href: 'something original',
+      },
+    });
+    window.document.write = jest.fn();
+
+    await expect(
+      runAction(openCaseDocumentDownloadUrlAction, {
+        modules: { presenter },
+        props: {
+          docketEntryId: 'docket-entry-id-123',
+          docketNumber: '123-20',
+          isForIFrame: false,
+          useSameTab: false,
+        },
+      }),
+    ).rejects.toThrow();
+
+    expect(closeSpy).toHaveBeenCalled();
   });
 });
