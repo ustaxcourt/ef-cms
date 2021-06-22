@@ -154,9 +154,11 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </span>
-                        <div className="margin-bottom-2">
-                          {practitionerDetailHelper.emailFormatted}
-                        </div>
+                        {practitionerDetailHelper.emailFormatted && (
+                          <div className="margin-bottom-2">
+                            {practitionerDetailHelper.emailFormatted}
+                          </div>
+                        )}
                         {practitionerDetailHelper.pendingEmailFormatted && (
                           <div>
                             {practitionerDetailHelper.pendingEmailFormatted}
