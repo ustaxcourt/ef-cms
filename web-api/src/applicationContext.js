@@ -1081,6 +1081,9 @@ const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
 const {
+  uploadToS3,
+} = require('../../shared/src/business/utilities/uploadToS3');
+const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
 const {
@@ -1841,6 +1844,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         serveCaseDocument,
         setServiceIndicatorsForCase,
         setupPdfDocument,
+        uploadToS3,
       };
     },
     isAuthorized,
