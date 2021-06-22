@@ -352,61 +352,6 @@ describe('serveCaseToIrsInteractor', () => {
     expect(result).toBeDefined();
   });
 
-  // TODO - check if this is covered in addToCoversheet unit tests
-  // it('should set processingStatus to complete when calling updateCase the first time', async () => {
-  //   mockCase = {
-  //     ...MOCK_CASE,
-  //     docketEntries: [
-  //       ...MOCK_CASE.docketEntries,
-  //       {
-  //         createdAt: '2018-11-21T20:49:28.192Z',
-  //         docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  //         docketNumber: '101-18',
-  //         documentTitle: 'Request for Place of Trial Flavortown, AR',
-  //         documentType: 'Request for Place of Trial',
-  //         eventCode: 'RPT',
-  //         filedBy: 'Test Petitioner',
-  //         processingStatus: 'complete',
-  //         userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-  //       },
-  //       {
-  //         createdAt: '2018-11-21T20:49:28.192Z',
-  //         docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  //         docketNumber: '101-18',
-  //         documentTitle: 'Application for Waiver of Filing Fee',
-  //         documentType: 'Application for Waiver of Filing Fee',
-  //         eventCode: 'APW',
-  //         filedBy: 'Test Petitioner',
-  //         processingStatus: 'complete',
-  //         userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-  //       },
-  //     ],
-  //     isPaper: true,
-  //     mailingDate: 'some day',
-  //   };
-
-  //   applicationContext.getCurrentUser.mockReturnValue(
-  //     new User({
-  //       name: 'bob',
-  //       role: ROLES.petitionsClerk,
-  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  //     }),
-  //   );
-
-  //   await serveCaseToIrsInteractor(applicationContext, {
-  //     docketNumber: MOCK_CASE.docketNumber,
-  //   });
-
-  //   const updateCaseCall =
-  //     applicationContext.getPersistenceGateway().updateCase.mock.calls;
-
-  //   expect(
-  //     updateCaseCall[0][0].caseToUpdate.docketEntries.find(
-  //       p => p.eventCode === 'A',
-  //     ).processingStatus,
-  //   ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
-  // });
-
   it('should mark the Petition docketEntry as served', async () => {
     mockCase = {
       ...MOCK_CASE,
