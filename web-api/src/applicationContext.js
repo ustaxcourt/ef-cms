@@ -218,9 +218,6 @@ const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
 const {
-  deleteCaseByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/cases/deleteCaseByDocketNumber');
-const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
 const {
@@ -408,6 +405,9 @@ const {
   getCaseInventoryReportInteractor,
 } = require('../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor');
 const {
+  getCaseMetadataWithCounsel,
+} = require('../../shared/src/persistence/dynamo/cases/getCaseMetadataWithCounsel');
+const {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
 } = require('../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
@@ -535,6 +535,9 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
+const {
+  getMessageById,
+} = require('../../shared/src/persistence/dynamo/messages/getMessageById');
 const {
   getMessagesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber');
@@ -694,9 +697,6 @@ const {
 const {
   getUsersPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/getUsersPendingEmailInteractor');
-const {
-  getWebSocketConnectionByConnectionId,
-} = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionByConnectionId');
 const {
   getWebSocketConnectionsByUserId,
 } = require('../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
@@ -864,6 +864,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  serveCaseDocument,
+} = require('../../shared/src/business/utilities/serveCaseDocument');
+const {
   serveCaseToIrsInteractor,
 } = require('../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor');
 const {
@@ -951,6 +954,9 @@ const {
   updateCaseDeadlineInteractor,
 } = require('../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor');
 const {
+  updateCaseDetailsInteractor,
+} = require('../../shared/src/business/useCases/updateCaseDetailsInteractor');
+const {
   updateCaseHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
 const {
@@ -1005,9 +1011,6 @@ const {
 const {
   updateOtherStatisticsInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor');
-const {
-  updatePetitionDetailsInteractor,
-} = require('../../shared/src/business/useCases/updatePetitionDetailsInteractor');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -1080,6 +1083,9 @@ const {
 const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
+const {
+  uploadToS3,
+} = require('../../shared/src/business/utilities/uploadToS3');
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
@@ -1283,7 +1289,6 @@ const gatewayMethods = {
   casePublicSearch: casePublicSearchPersistence,
   createNewPetitionerUser,
   createNewPractitionerUser,
-  deleteCaseByDocketNumber,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
@@ -1303,6 +1308,7 @@ const gatewayMethods = {
   getCaseDeadlinesByDateRange,
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
+  getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
@@ -1324,6 +1330,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getIndexedCasesForUser,
   getInternalUsers,
+  getMessageById,
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
@@ -1348,7 +1355,6 @@ const gatewayMethods = {
   getUsersById,
   getUsersBySearchKey,
   getUsersInSection,
-  getWebSocketConnectionByConnectionId,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
   getWorkItemMappingsByDocketNumber,
@@ -1789,6 +1795,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         unprioritizeCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
+        updateCaseDetailsInteractor,
         updateCaseTrialSortTagsInteractor,
         updateContactInteractor,
         updateCorrespondenceDocumentInteractor,
@@ -1798,7 +1805,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateDeficiencyStatisticInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
-        updatePetitionDetailsInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updateQcCompleteForTrialInteractor,
@@ -1839,8 +1845,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
+        serveCaseDocument,
         setServiceIndicatorsForCase,
         setupPdfDocument,
+        uploadToS3,
       };
     },
     isAuthorized,

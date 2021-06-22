@@ -9,9 +9,9 @@ const {
   validateCaseDetailInteractor,
 } = require('./validateCaseDetailInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
+const { CaseQC } = require('../entities/cases/CaseQC');
 const { MOCK_USERS } = require('../../test/mockUsers');
-const { VALIDATION_ERROR_MESSAGES } = Case;
+const { VALIDATION_ERROR_MESSAGES } = CaseQC;
 
 describe('validate case detail', () => {
   const petitioners = [

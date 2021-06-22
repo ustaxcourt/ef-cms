@@ -2,7 +2,7 @@ import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityA
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmissionsDateAction';
-import { hasUpdatedEmailAction } from '../actions/hasUpdatedEmailAction';
+import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -42,7 +42,7 @@ export const submitUpdatePractitionerUserSequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       setWaitingForResponseAction,
-      hasUpdatedEmailAction,
+      hasUpdatedEmailFactoryAction('updatedEmail'),
       {
         no: afterSuccess,
         yes: [
