@@ -5,15 +5,15 @@ const {
   PAYMENT_STATUS,
 } = require('../entities/EntityConstants');
 const {
-  updatePetitionDetailsInteractor,
-} = require('./updatePetitionDetailsInteractor');
+  updateCaseDetailsInteractor,
+} = require('./updateCaseDetailsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
 
-describe('updatePetitionDetailsInteractor', () => {
+describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
 
   beforeAll(() => {
@@ -43,7 +43,7 @@ describe('updatePetitionDetailsInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updatePetitionDetailsInteractor(applicationContext, {
+      updateCaseDetailsInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -51,22 +51,22 @@ describe('updatePetitionDetailsInteractor', () => {
 
   it('should throw a validation error if attempting to update caseType to undefined', async () => {
     await expect(
-      updatePetitionDetailsInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        petitionDetails: {
+      updateCaseDetailsInteractor(applicationContext, {
+        caseDetails: {
           caseType: undefined,
         },
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });
 
   it('should call updateCase with the updated case payment information (when unpaid) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       },
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -79,14 +79,14 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when paid) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -103,12 +103,12 @@ describe('updatePetitionDetailsInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
 
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         preferredTrialCity: 'Cheyenne, Wyoming',
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -130,13 +130,13 @@ describe('updatePetitionDetailsInteractor', () => {
         highPriorityReason: 'roll out',
       });
 
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -150,13 +150,13 @@ describe('updatePetitionDetailsInteractor', () => {
   });
 
   it('should call updateCase with the updated case payment information (when waived) and return the updated case', async () => {
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -178,13 +178,13 @@ describe('updatePetitionDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...mockCase,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-11-30T09:10:11.000Z',
       },
+      docketNumber: mockCase.docketNumber,
     });
 
     const waivedDocument = result.docketEntries.find(
@@ -203,14 +203,14 @@ describe('updatePetitionDetailsInteractor', () => {
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
       });
 
-    const result = await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: mockCase.docketNumber,
-      petitionDetails: {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...mockCase,
         petitionPaymentDate: '2019-11-30T09:10:11.000Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
       },
+      docketNumber: mockCase.docketNumber,
     });
 
     const wavedDocument = result.docketEntries.find(
@@ -233,14 +233,14 @@ describe('updatePetitionDetailsInteractor', () => {
         highPriorityReason: 'roll out',
       });
 
-    await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         highPriority: true,
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -257,12 +257,12 @@ describe('updatePetitionDetailsInteractor', () => {
         caseType: CASE_TYPES_MAP.cdp,
       });
 
-    await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         caseType: CASE_TYPES_MAP.deficiency,
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -279,12 +279,12 @@ describe('updatePetitionDetailsInteractor', () => {
         procedureType: 'Regular',
       });
 
-    await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         procedureType: 'Small',
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -301,11 +301,11 @@ describe('updatePetitionDetailsInteractor', () => {
         procedureType: 'Regular',
       });
 
-    await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(
@@ -322,15 +322,15 @@ describe('updatePetitionDetailsInteractor', () => {
         highPriorityReason: 'roll out',
       });
 
-    await updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      petitionDetails: {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...generalDocketReadyForTrialCase,
         mailingDate: 'SOME NEW MAILING DATE', // attempting to change a field that does not exist in editableFields
         partyType: 'SOME NEW PARTY TYPE', // attempting to change a field that does not exist in editableFields
         preferredTrialCity: 'Cheyenne, Wyoming',
         status: CASE_STATUS_TYPES.rule155,
       },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
     });
 
     expect(

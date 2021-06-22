@@ -259,7 +259,7 @@ const router = {
       '/case-detail/*/edit-details',
       ifHasAccess({ app }, docketNumber => {
         setPageTitle(`Docket ${docketNumber}`);
-        return app.getSequence('gotoEditPetitionDetailsSequence')({
+        return app.getSequence('gotoEditCaseDetailsSequence')({
           docketNumber,
         });
       }),

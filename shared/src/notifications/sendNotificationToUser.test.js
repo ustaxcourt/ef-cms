@@ -42,6 +42,12 @@ describe('send websocket notification to browser', () => {
       .mockImplementationOnce(() => {
         throw notificationError;
       })
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
       .mockImplementation(() => {
         return { postToConnection };
       });
@@ -51,12 +57,13 @@ describe('send websocket notification to browser', () => {
       .getWebSocketConnectionsByUserId.mockReturnValue(connections);
   });
 
-  it('send notification to user', async () => {
+  it('should send notification to user', async () => {
     await sendNotificationToUser({
       applicationContext,
       message: 'hello, computer',
       userId: 'userId-000-000-0000',
     });
+
     expect(postToConnection.mock.calls.length).toBe(2);
     expect(
       applicationContext.getDocumentClient().delete.mock.calls.length,
@@ -73,7 +80,7 @@ describe('send websocket notification to browser', () => {
     expect(applicationContext.getDocumentClient().delete).toBeCalled();
   });
 
-  it('rethrows exception for statusCode not 410', async () => {
+  it('rethrows and logs exception for statusCode not 410', async () => {
     notificationError.statusCode = 400;
 
     await expect(
@@ -83,6 +90,8 @@ describe('send websocket notification to browser', () => {
         userId: 'userId-000-000-0000',
       }),
     ).rejects.toThrow('could not get notification client');
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 
   it('throws non 410 exception', async () => {

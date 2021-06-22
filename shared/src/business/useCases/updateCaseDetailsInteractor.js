@@ -11,35 +11,35 @@ const { DocketEntry } = require('../entities/DocketEntry');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
- * updatePetitionDetailsInteractor
+ * updateCaseDetailsInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
- * @param {object} providers.petitionDetails the petition details to update on the case
+ * @param {object} providers.caseDetails the case details to update on the case
  * @returns {object} the updated case data
  */
-exports.updatePetitionDetailsInteractor = async (
+exports.updateCaseDetailsInteractor = async (
   applicationContext,
-  { docketNumber, petitionDetails },
+  { caseDetails, docketNumber },
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITION_DETAILS)) {
-    throw new UnauthorizedError('Unauthorized for editing petition details');
+  if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
+    throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
   const editableFields = {
-    caseType: petitionDetails.caseType,
-    hasVerifiedIrsNotice: petitionDetails.hasVerifiedIrsNotice,
-    irsNoticeDate: petitionDetails.irsNoticeDate,
-    petitionPaymentDate: petitionDetails.petitionPaymentDate,
-    petitionPaymentMethod: petitionDetails.petitionPaymentMethod,
-    petitionPaymentStatus: petitionDetails.petitionPaymentStatus,
-    petitionPaymentWaivedDate: petitionDetails.petitionPaymentWaivedDate,
-    preferredTrialCity: petitionDetails.preferredTrialCity,
-    procedureType: petitionDetails.procedureType,
-    statistics: petitionDetails.statistics,
+    caseType: caseDetails.caseType,
+    hasVerifiedIrsNotice: caseDetails.hasVerifiedIrsNotice,
+    irsNoticeDate: caseDetails.irsNoticeDate,
+    petitionPaymentDate: caseDetails.petitionPaymentDate,
+    petitionPaymentMethod: caseDetails.petitionPaymentMethod,
+    petitionPaymentStatus: caseDetails.petitionPaymentStatus,
+    petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
+    preferredTrialCity: caseDetails.preferredTrialCity,
+    procedureType: caseDetails.procedureType,
+    statistics: caseDetails.statistics,
   };
 
   const oldCase = await applicationContext

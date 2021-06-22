@@ -57,7 +57,9 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
     );
   }
 
-  if (user.email) {
+  const userEmail = user.email || user.pendingEmail;
+
+  if (userEmail) {
     try {
       const response = await applicationContext
         .getCognito()
@@ -69,7 +71,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
             },
             {
               Name: 'email',
-              Value: user.email,
+              Value: userEmail,
             },
             {
               Name: 'custom:role',
@@ -81,7 +83,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
             },
           ],
           UserPoolId: process.env.USER_POOL_ID,
-          Username: user.email,
+          Username: userEmail,
         })
         .promise();
 
@@ -95,7 +97,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
         .getCognito()
         .adminGetUser({
           UserPoolId: process.env.USER_POOL_ID,
-          Username: user.email,
+          Username: userEmail,
         })
         .promise();
 
