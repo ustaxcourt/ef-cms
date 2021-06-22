@@ -2,9 +2,9 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { validatePetitionDetailsAction } from './validatePetitionDetailsAction';
+import { validateCaseDetailsAction } from './validateCaseDetailsAction';
 
-describe('validatePetitionDetailsAction', () => {
+describe('validateCaseDetailsAction', () => {
   let successStub;
   let errorStub;
   let PAYMENT_STATUS;
@@ -27,7 +27,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should call the success path when no errors are found for a paid case', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -55,7 +55,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should call the success path when no errors are found for an unpaid case', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -77,7 +77,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should call the success path when no errors are found for a waived case', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -101,7 +101,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should call the success path when no errors are found for a case with an IRS notice date', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -122,7 +122,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should send preferredTrialCity to the use case as null if it is not on the form', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -142,7 +142,7 @@ describe('validatePetitionDetailsAction', () => {
   });
 
   it('should send preferredTrialCity to the use case if it is on the form', async () => {
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },
@@ -166,7 +166,7 @@ describe('validatePetitionDetailsAction', () => {
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue('error');
 
-    await runAction(validatePetitionDetailsAction, {
+    await runAction(validateCaseDetailsAction, {
       modules: {
         presenter,
       },

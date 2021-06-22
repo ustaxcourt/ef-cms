@@ -86,9 +86,8 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       },
     );
 
-    expect(practitionerDetailHelperComputed.emailFormatted).toBe(
-      'Not provided',
-    );
+    expect(practitionerDetailHelperComputed.emailFormatted).toBeUndefined();
+
     expect(practitionerDetailHelperComputed.pendingEmailFormatted).toBe(
       `${mockAvailableEmail} (Pending)`,
     );

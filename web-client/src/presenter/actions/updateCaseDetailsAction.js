@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing props.irsNoticeDate, props.petitionPaymentDate, and props.petitionPaymentWaivedDate
  * @returns {object} alertSuccess, docketNumber, tab, caseDetail
  */
-export const updatePetitionDetailsAction = async ({
+export const updateCaseDetailsAction = async ({
   applicationContext,
   get,
   props,
@@ -21,9 +21,8 @@ export const updatePetitionDetailsAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .updatePetitionDetailsInteractor(applicationContext, {
-      docketNumber,
-      petitionDetails: {
+    .updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
         ...form,
         irsNoticeDate,
         petitionPaymentDate,
@@ -32,6 +31,7 @@ export const updatePetitionDetailsAction = async ({
           ? form.preferredTrialCity
           : null,
       },
+      docketNumber,
     });
 
   return {

@@ -24,6 +24,9 @@ const {
   migrateItems: migration0034,
 } = require('./migrations/0034-contact-type-primary-secondary');
 const {
+  migrateItems: migration0035,
+} = require('./migrations/0035-in-care-of-to-additional-name');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -66,6 +69,9 @@ const migrateRecords = async ({ documentClient, items }) => {
 
   applicationContext.logger.debug('about to run migration 0034');
   items = await migration0034(items);
+
+  applicationContext.logger.debug('about to run migration 0035');
+  items = await migration0035(items);
 
   applicationContext.logger.info('about to run migration 0002');
   items = migration0002(items);
