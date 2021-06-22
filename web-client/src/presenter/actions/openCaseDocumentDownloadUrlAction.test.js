@@ -4,12 +4,20 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('openCaseDocumentDownloadUrlAction', () => {
+  const closeSpy = jest.fn();
+  const writeSpy = jest.fn();
+
   beforeAll(() => {
     window.open = jest.fn().mockReturnValue({
+      close: closeSpy,
+      document: {
+        write: writeSpy,
+      },
       location: { href: '' },
     });
     delete window.location;
     window.location = { href: '' };
+    window.document.write = jest.fn(); //remove?
 
     presenter.providers.applicationContext = applicationContext;
 
@@ -63,18 +71,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
   });
 
   it('should open in a new tab when props.useSameTab and props.isForIFrame are false', async () => {
-    const writeSpy = jest.fn();
-    window.open = jest.fn().mockReturnValue({
-      close: jest.fn(),
-      document: {
-        write: writeSpy,
-      },
-      location: {
-        href: 'something original',
-      },
-    });
-    window.document.write = jest.fn();
-
     await runAction(openCaseDocumentDownloadUrlAction, {
       modules: { presenter },
       props: {
@@ -102,20 +98,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor.mockRejectedValue(new Error());
-
-    const closeSpy = jest.fn();
-    const writeSpy = jest.fn();
-
-    window.open = jest.fn().mockReturnValue({
-      close: closeSpy,
-      document: {
-        write: writeSpy,
-      },
-      location: {
-        href: 'something original',
-      },
-    });
-    window.document.write = jest.fn();
 
     await expect(
       runAction(openCaseDocumentDownloadUrlAction, {
