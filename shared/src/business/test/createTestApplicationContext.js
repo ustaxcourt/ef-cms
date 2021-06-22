@@ -248,7 +248,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
-    serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
     createISODateStringFromObject: jest
       .fn()
       .mockImplementation(DateHandler.createISODateStringFromObject),
@@ -333,6 +332,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
     replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
+    serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
