@@ -1602,10 +1602,13 @@ Case.prototype.setAdditionalNameOnPetitioners = function (rawCase) {
  * @returns {Object} the primary contact object on the case
  */
 const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
-  if (rawCase.status === CASE_STATUS_TYPES.new) {
-    return rawCase.petitioners?.find(p => p.contactType === contactType);
+  if (!rawCase.petitioners) {
+    return null;
+  } else if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
+    return rawCase.petitioners.find(p => p.contactType === contactType);
   }
-  const petitioners = rawCase.petitioners?.filter(
+
+  const petitioners = rawCase.petitioners.filter(
     p => p.contactType === CONTACT_TYPES.petitioner,
   );
 
