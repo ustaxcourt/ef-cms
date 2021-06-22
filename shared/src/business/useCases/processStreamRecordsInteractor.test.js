@@ -4,6 +4,7 @@ const {
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
+  processMessageEntries,
   processOtherEntries,
   processRemoveEntries,
   processWorkItemEntries,
@@ -20,6 +21,7 @@ describe('processStreamRecordsInteractor', () => {
     processCaseEntries.mockResolvedValue([]);
     processDocketEntries.mockResolvedValue([]);
     processWorkItemEntries.mockResolvedValue([]);
+    processMessageEntries.mockResolvedValue([]);
     processOtherEntries.mockResolvedValue([]);
 
     filterRecords.mockReturnValue(true);
@@ -44,6 +46,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
     expect(processWorkItemEntries).toHaveBeenCalled();
+    expect(processMessageEntries).toHaveBeenCalled();
     expect(processOtherEntries).toHaveBeenCalled();
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
@@ -63,6 +66,7 @@ describe('processStreamRecordsInteractor', () => {
       expect(processCaseEntries).not.toHaveBeenCalled();
       expect(processDocketEntries).not.toHaveBeenCalled();
       expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
       expect(processOtherEntries).not.toHaveBeenCalled();
 
       expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
@@ -81,10 +85,12 @@ describe('processStreamRecordsInteractor', () => {
       expect(processCaseEntries).toHaveBeenCalled(); // the one that throws an error
       expect(processDocketEntries).not.toHaveBeenCalled();
       expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
       expect(processOtherEntries).not.toHaveBeenCalled();
 
       expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
+
     it('logs an error, throws an exception, and halts further execution if processDocketEntries fails', async () => {
       processDocketEntries.mockRejectedValueOnce(new Error('something bad'));
 
@@ -98,10 +104,12 @@ describe('processStreamRecordsInteractor', () => {
       expect(processCaseEntries).toHaveBeenCalled();
       expect(processDocketEntries).toHaveBeenCalled(); // the one that throws an error
       expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
       expect(processOtherEntries).not.toHaveBeenCalled();
 
       expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
+
     it('logs an error, throws an exception, and halts further execution if processWorkItemEntries fails', async () => {
       processWorkItemEntries.mockRejectedValueOnce(new Error('something bad'));
 
@@ -115,10 +123,31 @@ describe('processStreamRecordsInteractor', () => {
       expect(processCaseEntries).toHaveBeenCalled();
       expect(processDocketEntries).toHaveBeenCalled();
       expect(processWorkItemEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processMessageEntries).not.toHaveBeenCalled();
       expect(processOtherEntries).not.toHaveBeenCalled();
 
       expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
+
+    it('logs an error, throws an exception, and halts further execution if processMessageEntries fails', async () => {
+      processMessageEntries.mockRejectedValueOnce(new Error('something bad'));
+
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
+
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled();
+      expect(processDocketEntries).toHaveBeenCalled();
+      expect(processWorkItemEntries).toHaveBeenCalled();
+      expect(processMessageEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processOtherEntries).not.toHaveBeenCalled();
+
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
+    });
+
     it('logs an error, throws an exception, and halts further execution if processOtherEntries fails', async () => {
       processOtherEntries.mockRejectedValueOnce(new Error('something bad'));
 
@@ -132,6 +161,7 @@ describe('processStreamRecordsInteractor', () => {
       expect(processCaseEntries).toHaveBeenCalled();
       expect(processDocketEntries).toHaveBeenCalled();
       expect(processWorkItemEntries).toHaveBeenCalled();
+      expect(processMessageEntries).toHaveBeenCalled();
       expect(processOtherEntries).toHaveBeenCalled(); // the one that throws an error
 
       expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
