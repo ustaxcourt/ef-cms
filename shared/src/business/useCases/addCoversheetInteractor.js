@@ -185,6 +185,7 @@ exports.addCoverToPdf = async ({
 exports.addCoversheetInteractor = async (
   applicationContext,
   {
+    caseEntity = null,
     docketEntryId,
     docketNumber,
     filingDateUpdated = false,
@@ -192,14 +193,16 @@ exports.addCoversheetInteractor = async (
     useInitialData = false,
   },
 ) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  if (!caseEntity) {
+    const caseRecord = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+    caseEntity = new Case(caseRecord, { applicationContext });
+  }
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
