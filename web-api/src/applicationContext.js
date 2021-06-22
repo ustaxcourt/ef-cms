@@ -536,6 +536,9 @@ const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
 const {
+  getMessageById,
+} = require('../../shared/src/persistence/dynamo/messages/getMessageById');
+const {
   getMessagesByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/messages/getMessagesByDocketNumber');
 const {
@@ -1327,6 +1330,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getIndexedCasesForUser,
   getInternalUsers,
+  getMessageById,
   getMessageThreadByParentId,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,

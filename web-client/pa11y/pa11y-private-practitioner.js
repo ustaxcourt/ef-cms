@@ -20,8 +20,7 @@ module.exports = [
       'wait for element .supporting-document-certificate-of-service-date to be visible',
     ],
     notes: ['request access with supporting document'],
-    url:
-      'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/102-19/request-access&info=supporting-document',
+    url: 'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/102-19/request-access&info=supporting-document',
   },
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/search/no-matches',
   'http://localhost:1234/mock-login?token=privatePractitioner&path=/my-account',
