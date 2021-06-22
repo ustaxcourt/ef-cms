@@ -29,15 +29,6 @@ describe('NewPractitioner', () => {
   };
 
   it('Creates a valid NewPractitioner with all required fields', () => {
-    const user = new NewPractitioner({
-      ...mockPractitioner,
-      confirmEmail: undefined,
-      email: undefined,
-    });
-    expect(user.isValid()).toBeTruthy();
-  });
-
-  it('Creates a valid NewPractitioner with eAccess', () => {
     const user = new NewPractitioner(mockPractitioner);
     expect(user.isValid()).toBeTruthy();
   });
@@ -47,6 +38,9 @@ describe('NewPractitioner', () => {
       role: ROLES.NewPractitioner,
     });
     expect(user.isValid()).toBeFalsy();
+    expect(user.getFormattedValidationErrors()).toMatchObject({
+      email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
+    });
   });
 
   it('Creates an invalid NewPractitioner with missing firstName and lastName', () => {
