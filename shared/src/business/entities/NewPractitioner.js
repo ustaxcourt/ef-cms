@@ -49,11 +49,7 @@ joiValidationDecorator(
       otherwise: joi.optional().allow(null),
       then: joi.valid(joi.ref('email')).required(),
     }),
-    email: joi.alternatives().conditional('confirmEmail', {
-      is: joi.exist().not(null),
-      otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
-      then: JoiValidationConstants.EMAIL.required(),
-    }),
+    email: JoiValidationConstants.EMAIL.required(),
     role: JoiValidationConstants.STRING.optional().allow(null),
     updatedEmail: JoiValidationConstants.STRING.optional().allow(null),
     userId: JoiValidationConstants.STRING.optional().allow(null),
