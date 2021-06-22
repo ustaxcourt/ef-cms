@@ -57,7 +57,7 @@ let sent = 0;
     promises.push(
       sqs
         .sendMessageBatch({
-          Entries: chunk.map(segment => ({
+          Entries: c.map(segment => ({
             Id: `${sent++}`,
             MessageBody: JSON.stringify(segment),
           })),
