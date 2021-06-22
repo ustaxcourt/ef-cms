@@ -861,6 +861,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  serveCaseDocument,
+} = require('../../shared/src/business/utilities/serveCaseDocument');
+const {
   serveCaseToIrsInteractor,
 } = require('../../shared/src/business/useCases/serveCaseToIrs/serveCaseToIrsInteractor');
 const {
@@ -1077,6 +1080,9 @@ const {
 const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
+const {
+  uploadToS3,
+} = require('../../shared/src/business/utilities/uploadToS3');
 const {
   UserCaseNote,
 } = require('../../shared/src/business/entities/notes/UserCaseNote');
@@ -1835,8 +1841,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         isPending: DocketEntry.isPending,
         prepareDateFromString,
         scrapePdfContents,
+        serveCaseDocument,
         setServiceIndicatorsForCase,
         setupPdfDocument,
+        uploadToS3,
       };
     },
     isAuthorized,
