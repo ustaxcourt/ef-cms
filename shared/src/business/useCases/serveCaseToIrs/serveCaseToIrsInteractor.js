@@ -192,6 +192,7 @@ const createCoversheetsForServedEntries = async ({
       const updatedDocketEntry = await applicationContext
         .getUseCases()
         .addCoversheetInteractor(applicationContext, {
+          caseEntity,
           docketEntryId: doc.docketEntryId,
           docketNumber: caseEntity.docketNumber,
           replaceCoversheet: !caseEntity.isPaper,
