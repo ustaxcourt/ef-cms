@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
@@ -47,6 +48,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
+  this.isStatusNew = rawCase.status === CASE_STATUS_TYPES.new;
 
   const currentUser = applicationContext.getCurrentUser();
 
@@ -96,6 +98,7 @@ const publicCaseSchema = {
   hasIrsPractitioner: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
+  isStatusNew: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),

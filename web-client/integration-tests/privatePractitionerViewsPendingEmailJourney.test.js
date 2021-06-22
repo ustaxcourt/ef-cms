@@ -51,7 +51,7 @@ describe('private practitioner views pending email journey', () => {
   petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(test, true);
+  admissionsClerkAddsPractitionerEmail(test);
 
   it('admission clerk views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
@@ -62,9 +62,10 @@ describe('private practitioner views pending email journey', () => {
       state: test.getState(),
     });
 
-    const practitionerWithPendingEmail = partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-      prac => prac.barNumber === test.barNumber,
-    );
+    const practitionerWithPendingEmail =
+      partiesHelper.formattedPetitioners[0].representingPractitioners.find(
+        prac => prac.barNumber === test.barNumber,
+      );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
       `${test.pendingEmail} (Pending)`,
@@ -83,9 +84,10 @@ describe('private practitioner views pending email journey', () => {
       state: test.getState(),
     });
 
-    const practitionerWithPendingEmail = partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-      prac => prac.barNumber === test.barNumber,
-    );
+    const practitionerWithPendingEmail =
+      partiesHelper.formattedPetitioners[0].representingPractitioners.find(
+        prac => prac.barNumber === test.barNumber,
+      );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
       `${test.pendingEmail} (Pending)`,

@@ -25,12 +25,12 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
       applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
     );
 
-    paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
-      searchResult =>
+    paginatedResults.formattedSearchResults =
+      paginatedResults.searchResults.map(searchResult =>
         formatDocumentSearchResultRecord(searchResult, advancedSearchTab, {
           applicationContext,
         }),
-    );
+      );
   }
 
   const showManyResultsMessage = !!(
@@ -52,10 +52,8 @@ export const formatDocumentSearchResultRecord = (
   advancedSearchTab,
   { applicationContext },
 ) => {
-  const {
-    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-    ORDER_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { OPINION_EVENT_CODES_WITH_BENCH_OPINION, ORDER_EVENT_CODES } =
+    applicationContext.getConstants();
 
   result.formattedFiledDate = applicationContext
     .getUtilities()

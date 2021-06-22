@@ -60,9 +60,8 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   it('petitioner views transcript on docket record', async () => {
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
     const transcriptDocuments = formattedDocketEntriesOnDocketRecord.filter(
       document => document.eventCode === TRANSCRIPT_EVENT_CODE,
     );

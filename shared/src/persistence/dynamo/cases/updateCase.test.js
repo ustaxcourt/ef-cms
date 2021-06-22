@@ -6,23 +6,8 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../business/entities/EntityConstants');
 const { updateCase } = require('./updateCase');
-jest.mock('../messages/updateMessage');
-jest.mock('../caseDeadlines/getCaseDeadlinesByDocketNumber');
-const {
-  getCaseDeadlinesByDocketNumber,
-} = require('../caseDeadlines/getCaseDeadlinesByDocketNumber');
-jest.mock('../caseDeadlines/createCaseDeadline');
-const { createCaseDeadline } = require('../caseDeadlines/createCaseDeadline');
 
 describe('updateCase', () => {
-  const mockCaseDeadline = {
-    associatedJudge: 'Judge Carluzzo',
-    caseDeadlineId: 'a37f712d-bb9c-4885-8d35-7b67b908a5aa',
-    deadlineDate: '2019-03-01T21:42:29.073Z',
-    description: 'hello world',
-    docketNumber: '101-18',
-  };
-
   let oldCase;
 
   beforeEach(() => {
@@ -56,8 +41,6 @@ describe('updateCase', () => {
     ]);
 
     client.query = applicationContext.getDocumentClient().query;
-
-    getCaseDeadlinesByDocketNumber.mockReturnValue([mockCaseDeadline]);
   });
 
   it('updates case', async () => {
@@ -114,24 +97,6 @@ describe('updateCase', () => {
       sk: 'case|101-18',
       status: CASE_STATUS_TYPES.generalDocket,
       userId: 'petitioner',
-    });
-  });
-
-  it('updates associated judge on case deadlines', async () => {
-    await updateCase({
-      applicationContext,
-      caseToUpdate: {
-        associatedJudge: 'Judge Buch',
-        docketNumberSuffix: null,
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-      oldCase,
-    });
-
-    expect(createCaseDeadline).toHaveBeenCalled();
-    expect(createCaseDeadline.mock.calls[0][0].caseDeadline).toMatchObject({
-      ...mockCaseDeadline,
-      associatedJudge: 'Judge Buch',
     });
   });
 });

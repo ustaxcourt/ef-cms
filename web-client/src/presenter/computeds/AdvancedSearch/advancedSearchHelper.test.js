@@ -8,12 +8,8 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedSearchHelper', () => {
-  const {
-    COUNTRY_TYPES,
-    DOCKET_NUMBER_SUFFIXES,
-    US_STATES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, US_STATES, USER_ROLES } =
+    applicationContext.getConstants();
 
   const maxSearchResultsOverride = 3;
   let pageSizeOverride = 5;

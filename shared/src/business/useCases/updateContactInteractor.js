@@ -139,9 +139,10 @@ exports.updateContactInteractor = async (
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const privatePractitionersRepresentingContact = caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      contactInfo.contactId,
-    );
+    const privatePractitionersRepresentingContact =
+      caseEntity.isUserIdRepresentedByPrivatePractitioner(
+        contactInfo.contactId,
+      );
 
     if (!privatePractitionersRepresentingContact) {
       const workItem = new WorkItem(

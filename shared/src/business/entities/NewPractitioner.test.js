@@ -6,6 +6,7 @@ describe('NewPractitioner', () => {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     birthYear: 2019,
+    confirmEmail: 'test@example.com',
     contact: {
       address1: '234 Main St',
       address2: 'Apartment 4',
@@ -28,8 +29,16 @@ describe('NewPractitioner', () => {
   };
 
   it('Creates a valid NewPractitioner with all required fields', () => {
-    const user = new NewPractitioner(mockPractitioner);
+    const user = new NewPractitioner({
+      ...mockPractitioner,
+      confirmEmail: undefined,
+      email: undefined,
+    });
+    expect(user.isValid()).toBeTruthy();
+  });
 
+  it('Creates a valid NewPractitioner with eAccess', () => {
+    const user = new NewPractitioner(mockPractitioner);
     expect(user.isValid()).toBeTruthy();
   });
 
@@ -61,27 +70,27 @@ describe('NewPractitioner', () => {
       expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
-    it('passes validation when updatedEmail and confirmEmail match', () => {
-      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+    it('passes validation when email and confirmEmail match', () => {
+      validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = mockUpdatedEmail;
 
       expect(validNewPractitioner.isValid()).toBeTruthy();
     });
 
-    it('fails validation when updatedEmail is not a valid email address', () => {
-      validNewPractitioner.updatedEmail = invalidEmail;
+    it('fails validation when email is not a valid email address', () => {
+      validNewPractitioner.email = invalidEmail;
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail:
           NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        updatedEmail: NewPractitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+        email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
       });
     });
 
-    it('fails validation when updatedEmail is defined and confirmEmail is undefined', () => {
-      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+    it('fails validation when email is defined and confirmEmail is undefined', () => {
+      validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = undefined;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
@@ -91,8 +100,8 @@ describe('NewPractitioner', () => {
       });
     });
 
-    it('fails validation when updatedEmail is defined and confirmEmail is not a valid email address', () => {
-      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+    it('fails validation when email is defined and confirmEmail is not a valid email address', () => {
+      validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = invalidEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
@@ -102,8 +111,8 @@ describe('NewPractitioner', () => {
       });
     });
 
-    it('fails validation when updatedEmail and confirmEmail do not match', () => {
-      validNewPractitioner.updatedEmail = mockUpdatedEmail;
+    it('fails validation when email and confirmEmail do not match', () => {
+      validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
 
       expect(validNewPractitioner.isValid()).toBeFalsy();

@@ -3859,6 +3859,35 @@
         }
       }
     },
+    "/practitioners/{userId}/printable-case-list": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["practitioners"],
+        "summary": "generates a printable case list for the practitioner userId provided",
+        "description": "Generates a printable case list for the practitioner userId provided.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/file"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/practitioners/{barNumber}": {
       "parameters": [
         {
@@ -4631,6 +4660,66 @@
         ],
         "summary": "sets the assigneeId of the workitem to a new user",
         "description": "sets the assigneeId of the workitem to a new user.\n",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/workItem"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/work-items/{workItemId}/read": {
+      "parameters": [
+        {
+          "name": "workItemId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": [
+          "workitems"
+        ],
+        "summary": "marks the work item as read",
+        "description": "marks the work item as read.\n",
         "produces": [
           "application/json"
         ],
@@ -6046,7 +6135,7 @@
         }
       }
     },
-    "/case-parties/{docketNumber}/petition-details": {
+    "/case-parties/{docketNumber}/case-details": {
       "parameters": [
         {
           "name": "docketNumber",
@@ -6059,8 +6148,8 @@
         "tags": [
           "cases"
         ],
-        "summary": "updates the petition details on the case",
-        "description": "updates the petition details on the case.\n",
+        "summary": "updates the case details on the case",
+        "description": "updates the case details on the case.\n",
         "produces": [
           "application/json"
         ],
@@ -7825,6 +7914,19 @@
     }
   },
   "definitions": {
+    "file": {
+      "type": "object",
+      "properties": {
+        "fileId": {
+          "type": "string",
+          "description": "the id of the file generated"
+        },
+        "url": {
+          "type": "string",
+          "description": "the url for downloading the file"
+        }
+      }
+    },
     "health": {
       "type": "object",
       "properties": {

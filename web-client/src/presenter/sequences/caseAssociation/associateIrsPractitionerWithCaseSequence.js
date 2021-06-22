@@ -15,8 +15,8 @@ import { startShowValidationAction } from '../../actions/startShowValidationActi
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddIrsPractitionerAction } from '../../actions/caseAssociation/validateAddIrsPractitionerAction';
 
-export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDecorator(
-  [
+export const associateIrsPractitionerWithCaseSequence =
+  showProgressSequenceDecorator([
     startShowValidationAction,
     validateAddIrsPractitionerAction,
     {
@@ -40,5 +40,4 @@ export const associateIrsPractitionerWithCaseSequence = showProgressSequenceDeco
         },
       ],
     },
-  ],
-);
+  ]);

@@ -6,9 +6,8 @@ export const irsSuperuserSearchForUnservedCase = test => {
     test.setState('header.searchTerm', test.docketNumber);
     await test.runSequence('submitCaseSearchSequence');
 
-    const {
-      formattedDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     const petitionDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Petition',

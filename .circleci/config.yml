@@ -362,6 +362,7 @@ jobs:
           name: Setup ES Volume Size
           command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
@@ -385,6 +386,7 @@ jobs:
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
+          no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
             docker run \
@@ -766,6 +768,7 @@ workflows:
               only:
                 - irs
                 - staging
+                - test
                 - experimental1
                 - experimental2
                 - experimental3
@@ -778,6 +781,7 @@ workflows:
               only:
                 - irs
                 - staging
+                - test
                 - master
                 - experimental1
                 - experimental2

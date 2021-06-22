@@ -74,9 +74,8 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('form')).toEqual({});
 
-    const {
-      formattedPendingDocketEntriesOnDocketRecord,
-    } = await getFormattedDocketEntriesForTest(test);
+    const { formattedPendingDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });
