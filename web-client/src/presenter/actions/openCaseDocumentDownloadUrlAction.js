@@ -20,10 +20,10 @@ export const openCaseDocumentDownloadUrlAction = async ({
     useSameTab,
   } = props;
 
-  let pdfWindow;
+  let openedPdfWindow;
   if (!isForIFrame && !useSameTab) {
-    pdfWindow = window.open();
-    pdfWindow.document.write('Loading your document...');
+    openedPdfWindow = window.open();
+    openedPdfWindow.document.write('Loading your document...');
   }
 
   try {
@@ -40,10 +40,10 @@ export const openCaseDocumentDownloadUrlAction = async ({
     } else if (useSameTab) {
       window.location.href = url;
     } else {
-      pdfWindow.location.href = url;
+      openedPdfWindow.location.href = url;
     }
   } catch (e) {
-    if (pdfWindow) pdfWindow.close();
-    throw new Error(e);
+    if (openedPdfWindow) openedPdfWindow.close();
+    throw new Error(`Unable to get document download url. ${e.message}`);
   }
 };

@@ -17,7 +17,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
     delete window.location;
     window.location = { href: '' };
-    window.document.write = jest.fn(); //remove?
 
     presenter.providers.applicationContext = applicationContext;
 
