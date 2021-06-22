@@ -29,11 +29,22 @@ export const editPetitionerInformationHelper = (get, applicationContext) => {
     contact.contactType === CONTACT_TYPES.intervenor ||
     contact.contactType === CONTACT_TYPES.participant;
 
+  let intervenorContactId;
+  caseDetail.petitioners.forEach(party => {
+    if (party.contactType === CONTACT_TYPES.intervenor) {
+      intervenorContactId = party.contactId;
+    }
+  });
+
+  const showIntervenorRole =
+    !intervenorContactId || contact.contactId === intervenorContactId;
+
   const showRemovePetitionerButton =
     (isOtherFiler || canRemovePetitioner) && permissions.REMOVE_PETITIONER;
 
   return {
     showEditEmail,
+    showIntervenorRole,
     showRemovePetitionerButton,
     showSealAddress,
     userPendingEmail,

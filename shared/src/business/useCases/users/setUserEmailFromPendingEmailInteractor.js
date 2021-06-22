@@ -1,8 +1,12 @@
 const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updateCasesForPetitioner,
   updatePractitionerCases,
 } = require('./verifyUserPendingEmailInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const { Practitioner } = require('../../entities/Practitioner');
 const { User } = require('../../entities/User');
 
 /**
@@ -48,11 +52,24 @@ exports.setUserEmailFromPendingEmailInteractor = async (
   applicationContext,
   { user },
 ) => {
-  const userEntity = new User({
-    ...user,
-    email: user.pendingEmail,
-    pendingEmail: undefined,
-  });
+  let userEntity;
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner
+  ) {
+    userEntity = new Practitioner({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
+  } else {
+    userEntity = new User({
+      ...user,
+      email: user.pendingEmail,
+      pendingEmail: undefined,
+    });
+  }
 
   const rawUser = userEntity.validate().toRawObject();
 

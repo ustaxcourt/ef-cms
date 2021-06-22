@@ -144,11 +144,30 @@ describe('createPractitionerUser', () => {
       user: privatePractitionerUserWithSection,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
+    ).toBe(privatePractitionerUserWithSection.email);
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
+  });
+
+  it('should call cognito adminCreateUser for a private practitioner user with pendingEmail when it is defined', async () => {
+    const mockPendingEmail = 'noone@example.com';
+
+    await createPractitionerUser({
+      applicationContext,
+      user: {
+        ...privatePractitionerUserWithSection,
+        email: undefined,
+        pendingEmail: mockPendingEmail,
+      },
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
+    ).toBe(mockPendingEmail);
   });
 
   it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {

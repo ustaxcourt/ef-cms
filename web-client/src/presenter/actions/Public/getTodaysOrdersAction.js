@@ -13,10 +13,7 @@ export const getTodaysOrdersAction = async ({ applicationContext, get }) => {
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
-  const {
-    results,
-    totalCount,
-  } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getUseCases()
     .getTodaysOrdersInteractor(applicationContext, { page, todaysOrdersSort });
 

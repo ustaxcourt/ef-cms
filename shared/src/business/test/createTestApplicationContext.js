@@ -138,9 +138,6 @@ const {
   setupPdfDocument,
 } = require('../../../src/business/utilities/setupPdfDocument');
 const {
-  setWorkItemAsRead,
-} = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
-const {
   updateCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
@@ -152,6 +149,9 @@ const {
 const {
   updateDocketEntry,
 } = require('../../persistence/dynamo/documents/updateDocketEntry');
+const {
+  updateUserRecords,
+} = require('../../persistence/dynamo/users/updateUserRecords');
 const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
@@ -361,6 +361,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -374,6 +375,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrderForSmallCase: jest
@@ -467,7 +469,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
-    setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
       .fn()

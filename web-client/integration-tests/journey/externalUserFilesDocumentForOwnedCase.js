@@ -9,8 +9,9 @@ export const externalUserFilesDocumentForOwnedCase = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    const docketEntriesBefore = test.getState('caseDetail.docketEntries')
-      .length;
+    const docketEntriesBefore = test.getState(
+      'caseDetail.docketEntries',
+    ).length;
 
     await test.runSequence('gotoFileDocumentSequence', {
       docketNumber: test.docketNumber,

@@ -31,6 +31,41 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   return pdf;
 };
 
+const practitionerCaseList = async ({ applicationContext, data }) => {
+  // data: barNumber, closedCases, openCases, practitionerName,
+  const template = reactTemplateGenerator({
+    componentName: 'PractitionerCaseList',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: template,
+    options: {
+      overwriteMain: true,
+      title: '',
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor(applicationContext, {
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
 const changeOfAddress = async ({ applicationContext, content }) => {
   const {
     caseCaptionExtension,
@@ -472,12 +507,8 @@ const standingPretrialOrderForSmallCase = async ({
   applicationContext,
   data,
 }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
     {
@@ -553,12 +584,8 @@ const standingPretrialOrderForSmallCase = async ({
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialOrder',
@@ -632,12 +659,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 };
 
 const caseInventoryReport = async ({ applicationContext, data }) => {
-  const {
-    formattedCases,
-    reportTitle,
-    showJudgeColumn,
-    showStatusColumn,
-  } = data;
+  const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
+    data;
 
   const caseInventoryReportTemplate = reactTemplateGenerator({
     componentName: 'CaseInventoryReport',
@@ -791,6 +814,7 @@ module.exports = {
   noticeOfTrialIssued,
   order,
   pendingReport,
+  practitionerCaseList,
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,

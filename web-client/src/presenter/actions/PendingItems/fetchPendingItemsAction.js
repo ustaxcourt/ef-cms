@@ -13,10 +13,7 @@ export const fetchPendingItemsAction = async ({ applicationContext, get }) => {
 
   const page = get(state.pendingReports.pendingItemsPage);
 
-  const {
-    foundDocuments,
-    total,
-  } = await applicationContext
+  const { foundDocuments, total } = await applicationContext
     .getUseCases()
     .fetchPendingItemsInteractor(applicationContext, {
       judge,

@@ -9,12 +9,8 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formatted work queue computed', () => {
-  const {
-    CHIEF_JUDGE,
-    DOCKET_NUMBER_SUFFIXES,
-    DOCKET_SECTION,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
+    applicationContext.getConstants();
 
   let globalUser;
 

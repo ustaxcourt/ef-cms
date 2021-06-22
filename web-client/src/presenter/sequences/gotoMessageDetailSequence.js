@@ -8,6 +8,7 @@ import { getShouldMarkMessageAsReadAction } from '../actions/getShouldMarkMessag
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
 import { setMessageAction } from '../actions/setMessageAction';
@@ -29,6 +30,7 @@ const gotoMessageDetail = showProgressSequenceDecorator([
   getDefaultAttachmentViewerDocumentToDisplayAction,
   setMessageDetailViewerDocumentToDisplayAction,
   setDefaultIsExpandedAction,
+  setCaseDetailPageTabActionGenerator('messages'),
   setCurrentPageAction('MessageDetail'),
   getShouldMarkMessageAsReadAction,
   {

@@ -16,8 +16,8 @@ import { startShowValidationAction } from '../../actions/startShowValidationActi
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociation/validateAddPrivatePractitionerAction';
 
-export const associatePrivatePractitionerWithCaseSequence = showProgressSequenceDecorator(
-  [
+export const associatePrivatePractitionerWithCaseSequence =
+  showProgressSequenceDecorator([
     startShowValidationAction,
     setRepresentingFromRepresentingMapActionFactory('modal'),
     validateAddPrivatePractitionerAction,
@@ -42,5 +42,4 @@ export const associatePrivatePractitionerWithCaseSequence = showProgressSequence
         },
       ],
     },
-  ],
-);
+  ]);

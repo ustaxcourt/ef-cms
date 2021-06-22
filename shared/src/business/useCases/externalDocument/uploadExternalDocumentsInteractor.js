@@ -62,25 +62,20 @@ exports.uploadExternalDocumentsInteractor = async (
     return key;
   };
 
-  documentMetadata.primaryDocumentId = await uploadDocumentAndMakeSafeInteractor(
-    'primary',
-  );
+  documentMetadata.primaryDocumentId =
+    await uploadDocumentAndMakeSafeInteractor('primary');
   docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
   if (documentFiles.secondary) {
-    documentMetadata.secondaryDocument.docketEntryId = await uploadDocumentAndMakeSafeInteractor(
-      'secondary',
-    );
+    documentMetadata.secondaryDocument.docketEntryId =
+      await uploadDocumentAndMakeSafeInteractor('secondary');
     docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
 
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
-      documentMetadata.supportingDocuments[
-        i
-      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
-        `primarySupporting${i}`,
-      );
+      documentMetadata.supportingDocuments[i].docketEntryId =
+        await uploadDocumentAndMakeSafeInteractor(`primarySupporting${i}`);
       docketEntryIdsAdded.push(
         documentMetadata.supportingDocuments[i].docketEntryId,
       );
@@ -93,11 +88,8 @@ exports.uploadExternalDocumentsInteractor = async (
       i < documentMetadata.secondarySupportingDocuments.length;
       i++
     ) {
-      documentMetadata.secondarySupportingDocuments[
-        i
-      ].docketEntryId = await uploadDocumentAndMakeSafeInteractor(
-        `secondarySupporting${i}`,
-      );
+      documentMetadata.secondarySupportingDocuments[i].docketEntryId =
+        await uploadDocumentAndMakeSafeInteractor(`secondarySupporting${i}`);
       docketEntryIdsAdded.push(
         documentMetadata.secondarySupportingDocuments[i].docketEntryId,
       );
