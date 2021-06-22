@@ -7,7 +7,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
   const closeSpy = jest.fn();
   const writeSpy = jest.fn();
 
-  beforeAll(() => {
+  beforeEach(() => {
     window.open = jest.fn().mockReturnValue({
       close: closeSpy,
       document: {
@@ -111,5 +111,28 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     ).rejects.toThrow();
 
     expect(closeSpy).toHaveBeenCalled();
+    expect(window.open().close).toHaveBeenCalled();
+  });
+
+  it('should not try to close openedPdfWindow if it does not exist when getDocumentDownloadUrlInteractor fails', async () => {
+    window.open = jest.fn().mockReturnValue(null);
+
+    applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor.mockRejectedValue(new Error());
+
+    await expect(
+      runAction(openCaseDocumentDownloadUrlAction, {
+        modules: { presenter },
+        props: {
+          docketEntryId: 'docket-entry-id-123',
+          docketNumber: '123-20',
+          isForIFrame: false,
+          useSameTab: false,
+        },
+      }),
+    ).rejects.toThrow();
+
+    expect(closeSpy).not.toHaveBeenCalled();
   });
 });
