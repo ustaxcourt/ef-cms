@@ -125,33 +125,6 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('passes validation when petitioner exists and everything else is valid on a served case', () => {
-    const caseExternal = new CaseExternal(
-      {
-        ...baseCaseExternal,
-        partyType: PARTY_TYPES.estateWithoutExecutor,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.petitioner,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'USTC',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      },
-      { applicationContext },
-    );
-    expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
-  });
-
   it('passes validation when in care of is undefined and everything else is valid on a served case', () => {
     const caseExternal = new CaseExternal(
       {
