@@ -12,6 +12,7 @@ describe('validateAddPractitionerInteractor', () => {
     });
 
     expect(Object.keys(errors)).toEqual([
+      'email',
       'admissionsDate',
       'admissionsStatus',
       'birthYear',
@@ -29,6 +30,8 @@ describe('validateAddPractitionerInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         birthYear: '2009',
+        confirmEmail: 'test@example.com',
+        email: 'test@example.com',
         employer: 'IRS',
         firstName: 'Test',
         lastName: 'Practitioner',
