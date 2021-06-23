@@ -217,7 +217,7 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
       address1: '123 Main St',
       city: 'Somewhere',
       contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      contactType: CONTACT_TYPES.primary,
+      contactType: CONTACT_TYPES.petitioner,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
       name: 'Test Petitioner',
