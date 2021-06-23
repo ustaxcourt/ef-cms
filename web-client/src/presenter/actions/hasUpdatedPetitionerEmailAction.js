@@ -13,6 +13,9 @@ export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
   const { contact: formContact } = get(state.form);
 
   if (formContact.updatedEmail) {
+    formContact.updatedEmail = formContact.updatedEmail.trim();
+    formContact.confirmEmail = formContact.confirmEmail.trim();
+
     return path.yes();
   }
 
