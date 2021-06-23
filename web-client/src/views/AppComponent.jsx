@@ -167,6 +167,8 @@ const pages = {
   WorkQueue,
 };
 
+let initialPageLoaded = false;
+
 /**
  * Root application component
  */
@@ -192,7 +194,12 @@ export const AppComponent = connect(
     };
 
     useEffect(() => {
-      focusMain();
+      if (initialPageLoaded) {
+        focusMain();
+      }
+      if (currentPage !== 'Interstitial') {
+        initialPageLoaded = true;
+      }
     }, [currentPage]);
 
     const CurrentPage = pages[currentPage];
