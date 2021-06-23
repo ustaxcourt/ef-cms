@@ -133,12 +133,13 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
           {
             ...getContactPrimary(MOCK_CASE),
             contactId: USER_ID,
-            contactType: CONTACT_TYPES.secondary,
+            contactType: CONTACT_TYPES.petitioner,
             email: undefined,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },

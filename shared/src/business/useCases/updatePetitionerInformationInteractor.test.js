@@ -44,7 +44,7 @@ describe('updatePetitionerInformationInteractor', () => {
       address2: 'Lights out',
       city: 'Somewhere',
       contactId: PRIMARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.primary,
+      contactType: CONTACT_TYPES.petitioner,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'test@example.com',
       name: 'Test Primary Petitioner',
@@ -59,7 +59,7 @@ describe('updatePetitionerInformationInteractor', () => {
       address2: 'Apt B',
       city: 'Somewhere',
       contactId: SECONDARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.secondary,
+      contactType: CONTACT_TYPES.petitioner,
       countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Secondary Petitioner',
       phone: '1234568',
@@ -409,11 +409,12 @@ describe('updatePetitionerInformationInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     };
     const mockAdditionalName = 'Tina Belcher';
+    const mockSecondaryContact = getContactSecondary(mockCase);
 
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
       updatedPetitionerData: {
-        ...getContactSecondary(mockCase),
+        ...mockSecondaryContact,
         additionalName: mockAdditionalName,
       },
     });
@@ -423,7 +424,7 @@ describe('updatePetitionerInformationInteractor', () => {
         .caseToUpdate.petitioners;
 
     const updatedContactSecondary = updatedPetitioners.find(
-      p => p.contactType === CONTACT_TYPES.secondary,
+      p => p.contactId === mockSecondaryContact.contactId,
     );
     expect(updatedContactSecondary.additionalName).toBe(mockAdditionalName);
   });
@@ -480,7 +481,7 @@ describe('updatePetitionerInformationInteractor', () => {
           address1: '456 Center St',
           city: 'Somewhere',
           contactId: PRIMARY_CONTACT_ID,
-          contactType: CONTACT_TYPES.primary,
+          contactType: CONTACT_TYPES.petitioner,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'test@example.com',
           isAddressSealed: true,

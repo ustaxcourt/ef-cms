@@ -1,8 +1,13 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  CASE_STATUS_TYPES,
+  CONTACT_TYPES,
+  PARTY_TYPES,
+  ROLES,
+} = require('../EntityConstants');
 const { Case, getContactPrimary } = require('./Case');
-const { CASE_STATUS_TYPES, PARTY_TYPES, ROLES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setAdditionalNameOnPetitioners', () => {
@@ -36,6 +41,7 @@ describe('setAdditionalNameOnPetitioners', () => {
           petitioners: [
             {
               ...getContactPrimary(MOCK_CASE),
+              contactType: CONTACT_TYPES.petitioner,
               secondaryName: mockSecondaryName,
             },
           ],
@@ -56,6 +62,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: mockSecondaryName,
             title: mockTitle,
           },
@@ -78,6 +85,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: mockSecondaryName,
             title: undefined,
           },
@@ -98,6 +106,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: undefined,
             title: undefined,
           },
@@ -118,6 +127,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             inCareOf: mockInCareOf,
           },
         ],
@@ -137,6 +147,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: mockSecondaryName,
           },
         ],
@@ -156,6 +167,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: mockSecondaryName,
           },
         ],
@@ -175,6 +187,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             inCareOf: mockInCareOf,
           },
         ],
@@ -194,6 +207,7 @@ describe('setAdditionalNameOnPetitioners', () => {
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
+            contactType: CONTACT_TYPES.petitioner,
             inCareOf: mockInCareOf,
           },
         ],
@@ -216,6 +230,7 @@ describe('setAdditionalNameOnPetitioners', () => {
           {
             ...getContactPrimary(MOCK_CASE),
             additionalName: mockAlreadySetAdditionalName,
+            contactType: CONTACT_TYPES.petitioner,
             inCareOf: mockInCareOf,
           },
         ],
