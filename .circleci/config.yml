@@ -426,7 +426,7 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "SESSION_TIMEOUT=${SESSION_TIMEOUT}" \
              -e "SESSION_MODAL_TIMEOUT=${SESSION_MODAL_TIMEOUT}" \
-             --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
+             --rm efcms /bin/sh -c "./scripts/deploy-ui.sh"
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: |
@@ -441,7 +441,7 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "ENV=${ENV}" \
              -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
-             --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
+             --rm efcms /bin/sh -c "./scripts/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
