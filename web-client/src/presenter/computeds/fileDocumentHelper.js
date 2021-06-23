@@ -1,3 +1,4 @@
+import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from 'cerebral';
 
@@ -80,10 +81,10 @@ export const fileDocumentHelper = (get, applicationContext) => {
     form,
   });
 
-  const formattedFilingParties = applicationContext
-    .getUtilities()
-    .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners })
-    .map(p => p.displayName);
+  const formattedFilingParties = getFilerParties({
+    caseDetail,
+    filersMap: form.filersMap,
+  });
 
   const exported = {
     certificateOfServiceDateFormatted,
