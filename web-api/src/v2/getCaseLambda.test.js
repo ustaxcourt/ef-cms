@@ -1,8 +1,5 @@
 const createApplicationContext = require('../applicationContext');
 const {
-  getContactPrimary,
-} = require('../../../shared/src/business/entities/cases/Case');
-const {
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../shared/src/test/mockCase');
 const {
@@ -19,13 +16,6 @@ const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   pk: 'case|101-18',
   sk: 'case|23',
 });
-
-mockDynamoCaseRecord.petitioners = [
-  {
-    ...getContactPrimary(mockDynamoCaseRecord),
-    serviceIndicator: 'Electronic',
-  },
-];
 
 const mockIrsPractitionerRecord = Object.assign(
   {},
@@ -131,9 +121,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       expect.any(String),
     );
     expect(JSON.parse(response.body).assignedJudge).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.address1).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.name).toBeDefined();
-    expect(JSON.parse(response.body).contactPrimary.state).toBeDefined();
+    expect(JSON.parse(response.body).contactPrimary).toBeUndefined();
     expect(JSON.parse(response.body).status).toBeUndefined();
     expect(JSON.parse(response.body).trialDate).toBeUndefined();
     expect(JSON.parse(response.body).trialLocation).toBeUndefined();

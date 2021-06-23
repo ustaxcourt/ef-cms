@@ -14,7 +14,6 @@ describe('marshallContact', () => {
       'address2',
       'address3',
       'city',
-      'contactType',
       'email',
       'name',
       'phone',
