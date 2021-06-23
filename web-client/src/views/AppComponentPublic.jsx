@@ -34,6 +34,8 @@ const pages = {
   TodaysOrders,
 };
 
+let initialPageLoaded = false;
+
 /**
  * Root application component for the public site
  */
@@ -50,7 +52,12 @@ export const AppComponentPublic = connect(
     };
 
     useEffect(() => {
-      focusMain();
+      if (initialPageLoaded) {
+        focusMain();
+      }
+      if (currentPage !== 'Interstitial') {
+        initialPageLoaded = true;
+      }
     });
 
     if (!process.env.CI) {
