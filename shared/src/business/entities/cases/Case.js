@@ -1595,11 +1595,11 @@ Case.prototype.setAdditionalNameOnPetitioners = function (rawCase) {
  * @param {Object} providers the providers object
  * @param {String} providers.contactType the type of contact we are looking for (primary or secondary)
  * @param {Object} providers.rawCase the raw case
- * @returns {Object} the primary contact object on the case
+ * @returns {(Object|undefined)} the contact object on the case
  */
 const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
   if (!rawCase.petitioners) {
-    return null;
+    return;
   } else if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
     return rawCase.petitioners.find(p => p.contactType === contactType);
   }
@@ -1609,12 +1609,10 @@ const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
   );
 
   if (contactType === CONTACT_TYPES.primary) {
-    return petitioners[0] || null;
+    return petitioners[0];
   } else if (contactType === CONTACT_TYPES.secondary) {
-    return petitioners[1] || null;
+    return petitioners[1];
   }
-
-  return null;
 };
 
 /**
