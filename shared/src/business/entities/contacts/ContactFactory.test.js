@@ -125,7 +125,7 @@ describe('ContactFactory', () => {
     expect(caseExternal.getFormattedValidationErrors()).toEqual(null);
   });
 
-  it('passes validation when primary contact is defined and everything else is valid on a served case', () => {
+  it('passes validation when petitioner exists and everything else is valid on a served case', () => {
     const caseExternal = new CaseExternal(
       {
         ...baseCaseExternal,
@@ -134,7 +134,7 @@ describe('ContactFactory', () => {
           {
             address1: '876 12th Ave',
             city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
+            contactType: CONTACT_TYPES.petitioner,
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
@@ -161,7 +161,7 @@ describe('ContactFactory', () => {
           {
             address1: '876 12th Ave',
             city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
+            contactType: CONTACT_TYPES.petitioner,
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'someone@example.com',
@@ -362,7 +362,7 @@ describe('ContactFactory', () => {
           {
             address1: '876 12th Ave',
             city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
+            contactType: CONTACT_TYPES.petitioner,
             country: 'USA',
             countryType: COUNTRY_TYPES.DOMESTIC,
             name: 'Jimmy Dean',
