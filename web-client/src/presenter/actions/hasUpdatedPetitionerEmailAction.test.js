@@ -22,17 +22,22 @@ describe('hasUpdatedPetitionerEmailAction', () => {
       state: {
         caseDetail: {
           petitioners: [
-            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+            {
+              contactType: CONTACT_TYPES.primary,
+              email: INITIAL_EMAIL,
+            },
           ],
         },
-        form: { contact: { updatedEmail: UPDATED_EMAIL } },
+        form: {
+          contact: { confirmEmail: UPDATED_EMAIL, updatedEmail: UPDATED_EMAIL },
+        },
       },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when orm.contact.updatedEmail is not defined', async () => {
+  it('returns the no path when form.contact.updatedEmail is not defined', async () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -48,5 +53,27 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     });
 
     expect(pathNoStub).toHaveBeenCalled();
+  });
+
+  it('should trim whitespace from form.contact.updatedEmail and form.contact.confirmEmail', async () => {
+    const { state } = await runAction(hasUpdatedPetitionerEmailAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactType: CONTACT_TYPES.primary, email: INITIAL_EMAIL },
+          ],
+        },
+        form: {
+          contact: {
+            confirmEmail: ` ${INITIAL_EMAIL} `,
+            updatedEmail: ` ${INITIAL_EMAIL} `,
+          },
+        },
+      },
+    });
+
+    expect(state.form.contact.updatedEmail).toEqual(INITIAL_EMAIL);
+    expect(state.form.contact.confirmEmail).toEqual(INITIAL_EMAIL);
   });
 });
