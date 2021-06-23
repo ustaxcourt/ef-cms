@@ -124,6 +124,7 @@ describe('Case entity', () => {
           {
             ...getContactPrimary(MOCK_CASE),
             additionalName: undefined,
+            contactType: CONTACT_TYPES.petitioner,
             secondaryName: mockSecondaryName,
             title: mockTitle,
           },
