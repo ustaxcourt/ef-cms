@@ -515,6 +515,13 @@ export const setupTest = ({ useCases = {} } = {}) => {
     location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
+      return {
+        close: jest.fn(),
+        document: {
+          write: jest.fn(),
+        },
+        location: '',
+      };
     },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
