@@ -3,6 +3,9 @@ const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 
 const {
+  migrateItems: bugMigration0035,
+} = require('./migrations/bug-0035-private-practitioner-representing');
+const {
   migrateItems: migration0002,
 } = require('./migrations/0002-original-bar-state');
 const {
@@ -69,6 +72,9 @@ const migrateRecords = async ({ documentClient, items }) => {
 
   applicationContext.logger.info('about to run migration 0002');
   items = migration0002(items);
+
+  applicationContext.logger.info('about to run bug migration 0035');
+  items = await bugMigration0035(items, documentClient);
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
