@@ -1,8 +1,8 @@
 const {
   reactTemplateGenerator,
-} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { COUNTRY_TYPES } = require('../entities/EntityConstants');
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { COUNTRY_TYPES } = require('../../entities/EntityConstants');
+const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const docketRecord = async ({ applicationContext, data }) => {
   const {

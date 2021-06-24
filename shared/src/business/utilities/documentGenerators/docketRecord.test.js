@@ -1,10 +1,8 @@
-jest.mock('./combineTwoPdfs');
 const fs = require('fs');
 const path = require('path');
 const sass = require('sass');
 const {
   applicationContext,
-  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   generatePdfFromHtmlInteractor,
@@ -13,14 +11,13 @@ const {
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
 } = require('../../entities/EntityConstants');
-const { combineTwoPdfs } = require('../combineTwoPdfs');
 const { docketRecord } = require('./docketRecord');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
     __dirname,
-    '../../../test-output/document-generation',
+    '../../../../test-output/document-generation',
   );
 
   const writePdfFile = (name, data) => {
@@ -52,8 +49,6 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
-
-    combineTwoPdfs.mockReturnValue(testPdfDoc);
   });
 
   describe('docketRecord', () => {

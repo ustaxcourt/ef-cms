@@ -12,13 +12,13 @@ const {
 const {
   standingPretrialOrderForSmallCase,
 } = require('./standingPretrialOrderForSmallCase');
-const { combineTwoPdfs } = require('../combineTwoPdfs');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
     __dirname,
-    '../../../test-output/document-generation',
+    '../../../../test-output/document-generation',
   );
 
   const writePdfFile = (name, data) => {

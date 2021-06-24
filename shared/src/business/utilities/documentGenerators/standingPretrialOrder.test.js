@@ -9,14 +9,14 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const { combineTwoPdfs } = require('../combineTwoPdfs');
+const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { standingPretrialOrder } = require('./standingPretrialOrder');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
     __dirname,
-    '../../../test-output/document-generation',
+    '../../../../test-output/document-generation',
   );
 
   const writePdfFile = (name, data) => {
