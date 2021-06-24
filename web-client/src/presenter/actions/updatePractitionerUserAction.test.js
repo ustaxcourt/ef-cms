@@ -73,5 +73,11 @@ describe('updatePractitionerUserAction', () => {
       applicationContext.getUseCases().updatePractitionerUserInteractor,
     ).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalled();
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Practitioner could not be edited. Please try again.',
+        title: 'Error',
+      },
+    });
   });
 });
