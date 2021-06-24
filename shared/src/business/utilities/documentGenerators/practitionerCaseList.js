@@ -1,7 +1,7 @@
 const {
   reactTemplateGenerator,
-} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const practitionerCaseList = async ({ applicationContext, data }) => {
   // data: barNumber, closedCases, openCases, practitionerName,

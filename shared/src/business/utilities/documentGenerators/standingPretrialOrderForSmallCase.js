@@ -1,8 +1,8 @@
 const {
   reactTemplateGenerator,
-} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
+} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const standingPretrialOrderForSmallCase = async ({
   applicationContext,

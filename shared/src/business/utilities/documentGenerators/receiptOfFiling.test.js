@@ -1,15 +1,12 @@
-jest.mock('./combineTwoPdfs');
 const fs = require('fs');
 const path = require('path');
 const sass = require('sass');
 const {
   applicationContext,
-  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const { combineTwoPdfs } = require('../combineTwoPdfs');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { OBJECTIONS_OPTIONS_MAP } = require('../../entities/EntityConstants');
 const { receiptOfFiling } = require('./receiptOfFiling');
@@ -17,7 +14,7 @@ const { receiptOfFiling } = require('./receiptOfFiling');
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
     __dirname,
-    '../../../test-output/document-generation',
+    '../../../../test-output/document-generation',
   );
 
   const writePdfFile = (name, data) => {
@@ -49,8 +46,6 @@ describe('documentGenerators', () => {
           generatePdfFromHtmlInteractor,
         );
     }
-
-    combineTwoPdfs.mockReturnValue(testPdfDoc);
   });
 
   describe('receiptOfFiling', () => {

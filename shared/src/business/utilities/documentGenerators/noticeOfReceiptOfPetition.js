@@ -1,7 +1,7 @@
 const {
   reactTemplateGenerator,
-} = require('./generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
+} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
   const reactNoticeReceiptPetitionTemplate = reactTemplateGenerator({
