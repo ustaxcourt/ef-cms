@@ -303,7 +303,7 @@ components:
         totalDocketEntries:
           type: number
           example: 0
-        reconcilationDate:
+        reconciliationDate:
           type: string
           format: date
           example: '2020-03-19'
