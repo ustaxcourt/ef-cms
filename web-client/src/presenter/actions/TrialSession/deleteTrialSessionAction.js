@@ -25,7 +25,12 @@ export const deleteTrialSessionAction = async ({
         trialSessionId,
       });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Trial session could not be deleted. Please try again.',
+        title: 'Error',
+      },
+    });
   }
 
   return path.success({
