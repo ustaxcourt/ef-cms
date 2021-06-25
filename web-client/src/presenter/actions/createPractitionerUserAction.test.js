@@ -115,5 +115,11 @@ describe('createPractitionerUserAction', () => {
     });
 
     expect(errorMock).toHaveBeenCalled();
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Practitioner could not be added. Please try again.',
+        title: 'Error',
+      },
+    });
   });
 });

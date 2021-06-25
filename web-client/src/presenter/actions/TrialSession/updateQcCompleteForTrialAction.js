@@ -29,7 +29,12 @@ export const updateQcCompleteForTrialAction = async ({
         trialSessionId,
       });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Could not complete QC eligible case. Please try again.',
+        title: 'Error',
+      },
+    });
   }
 
   return path.success({ updatedCase: result });
