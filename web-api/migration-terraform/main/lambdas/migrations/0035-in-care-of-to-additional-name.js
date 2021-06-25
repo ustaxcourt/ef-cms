@@ -18,7 +18,7 @@ const migrateItems = async items => {
     ) {
       item.petitioners.forEach(petitioner => {
         if (petitioner.inCareOf) {
-          petitioner.additionalName = petitioner.inCareOf;
+          petitioner.additionalName = `c/o ${petitioner.inCareOf}`;
           delete petitioner.inCareOf;
           applicationContext.logger.info(
             `Petitioner ${petitioner.contactId} on case ${item.docketNumber} has had additionalName mapped to inCareOf`,
