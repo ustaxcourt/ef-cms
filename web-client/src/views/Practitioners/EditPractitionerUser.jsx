@@ -53,7 +53,7 @@ export const EditPractitionerUser = connect(
                   submitUpdatePractitionerUserSequence();
                 }}
               >
-                Save Updatesss
+                Save Updates
               </Button>
               <Button link onClick={() => navigateBackSequence()}>
                 Cancel
