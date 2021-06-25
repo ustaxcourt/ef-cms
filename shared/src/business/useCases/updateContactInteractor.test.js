@@ -91,7 +91,7 @@ describe('updates the contact on a case', () => {
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: mockCaseContactPrimary.email,
       name: mockCaseContactPrimary.name,
-      phone: '1234567890',
+      phone: '123-456-7890',
       postalCode: '99999',
       state: 'PA',
     });

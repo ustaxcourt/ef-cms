@@ -2,8 +2,25 @@ const { COUNTRY_TYPES, ROLES } = require('./EntityConstants');
 const { User, userDecorator } = require('./User');
 
 describe('User entity', () => {
+  const mockValidUser = {
+    contact: {
+      address1: '234 Main St',
+      address2: 'Apartment 4',
+      address3: 'Under the stairs',
+      city: 'Chicago',
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      phone: '+1 (555) 555-5555',
+      postalCode: '61234',
+      state: 'IL',
+    },
+    name: 'Saul Goodman',
+    role: ROLES.petitioner,
+    userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+  };
+
   it('Creates a valid international petitioner user', () => {
     const user = new User({
+      ...mockValidUser,
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -15,34 +32,29 @@ describe('User entity', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Saul Goodman',
-      role: ROLES.petitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
 
   it('Creates a valid domestic petitioner user', () => {
-    const user = new User({
-      contact: {
-        address1: '234 Main St',
-        address2: 'Apartment 4',
-        address3: 'Under the stairs',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      name: 'Saul Goodman',
-      role: ROLES.petitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
-    });
+    const user = new User(mockValidUser);
     expect(user.isValid()).toBeTruthy();
+  });
+
+  it('formats contact phone number string', () => {
+    const user = new User({
+      ...mockValidUser,
+      contact: {
+        ...mockValidUser.contact,
+        phone: '1234567890',
+      },
+    });
+    expect(user.contact.phone).toEqual('123-456-7890');
   });
 
   it('Creates a valid petitioner user without address2 or address3', () => {
     const user = new User({
+      ...mockValidUser,
       contact: {
         address1: '234 Main St',
         city: 'Chicago',
@@ -51,9 +63,6 @@ describe('User entity', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      name: 'Saul Goodman',
-      role: ROLES.petitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.isValid()).toBeTruthy();
   });
@@ -227,18 +236,8 @@ describe('User entity', () => {
   it('should filter out pendingEmailVerificationToken when filtered is true', () => {
     const user = new User(
       {
-        contact: {
-          address1: '234 Main St',
-          city: 'Chicago',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          phone: '+1 (555) 555-5555',
-          postalCode: '61234',
-          state: 'IL',
-        },
-        name: 'Saul Goodman',
+        ...mockValidUser,
         pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
-        role: ROLES.petitioner,
-        userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       },
       { filtered: true },
     );
@@ -254,18 +253,8 @@ describe('User entity', () => {
     }
 
     const user = new MockUser({
-      contact: {
-        address1: '234 Main St',
-        city: 'Chicago',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        phone: '+1 (555) 555-5555',
-        postalCode: '61234',
-        state: 'IL',
-      },
-      name: 'Saul Goodman',
+      ...mockValidUser,
       pendingEmailVerificationToken: 'aab77c88-1dd0-4adb-a03c-c466ad72d417',
-      role: ROLES.petitioner,
-      userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
     });
     expect(user.pendingEmailVerificationToken).toBeDefined();
   });

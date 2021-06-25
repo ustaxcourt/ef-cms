@@ -19,7 +19,7 @@ const afterSuccess = [
   unsetWaitingForResponseAction,
   createPractitionerUserAction,
   {
-    error: [],
+    error: [setAlertErrorAction],
     success: [
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,

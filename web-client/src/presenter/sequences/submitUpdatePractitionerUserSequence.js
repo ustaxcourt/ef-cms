@@ -26,7 +26,7 @@ const afterSuccess = [
     success: [
       updatePractitionerUserAction,
       {
-        error: [],
+        error: [setAlertErrorAction],
         success: [setPractitionerDetailAction, clearScreenMetadataAction],
       },
     ],
