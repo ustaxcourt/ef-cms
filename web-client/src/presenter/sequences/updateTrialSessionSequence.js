@@ -27,7 +27,7 @@ export const updateTrialSessionSequence = [
     success: showProgressSequenceDecorator([
       updateTrialSessionAction,
       {
-        error: [],
+        error: [setAlertErrorAction],
         success: [
           setSaveAlertsForNavigationAction,
           setAlertSuccessAction,
