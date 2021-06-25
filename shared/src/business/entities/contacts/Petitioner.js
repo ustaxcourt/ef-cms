@@ -14,6 +14,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 
 /**
  * constructor
@@ -44,7 +45,7 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
   this.inCareOf = rawContact.inCareOf;
   this.isAddressSealed = rawContact.isAddressSealed || false;
   this.name = rawContact.name;
-  this.phone = rawContact.phone;
+  this.phone = formatPhoneNumber(rawContact.phone);
   this.postalCode = rawContact.postalCode;
   this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
   this.secondaryName = rawContact.secondaryName;
