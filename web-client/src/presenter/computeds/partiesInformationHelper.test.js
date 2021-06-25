@@ -5,7 +5,6 @@ import {
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -26,6 +25,10 @@ describe('partiesInformationHelper', () => {
     role: ROLES.petitionsClerk,
     userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
   };
+  const mockDocketClerk = {
+    role: ROLES.docketClerk,
+    userId: 'a09053ab-58c7-4384-96a1-bd5fbe14977a',
+  };
   let mockPetitioner;
   let mockPrivatePractitioner;
   let mockIrsPractitioner;
@@ -39,7 +42,6 @@ describe('partiesInformationHelper', () => {
     mockUser = { ...user };
     return {
       permissions: getUserPermissions(user),
-      screenMetadata: { pendingEmails: {} },
     };
   };
 
@@ -75,8 +77,9 @@ describe('partiesInformationHelper', () => {
     it('should set representing practitioners and formattedTitle when they exist on the participant', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockIntervenor, mockParticipant],
             privatePractitioners: [
               {
@@ -87,6 +90,10 @@ describe('partiesInformationHelper', () => {
                 ],
               },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -131,8 +138,9 @@ describe('partiesInformationHelper', () => {
 
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
           caseDetail: {
+            ...getBaseState(mockDocketClerk),
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [
               {
@@ -141,6 +149,7 @@ describe('partiesInformationHelper', () => {
               },
             ],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockPrivatePractitioner.userId]: mockPendingPractitionerEmail,
@@ -168,8 +177,9 @@ describe('partiesInformationHelper', () => {
     it('should set representingPractitioners and their emails when they exist for a petitioner', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [
               {
@@ -177,6 +187,10 @@ describe('partiesInformationHelper', () => {
                 representing: [mockPetitioner.contactId],
               },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -199,12 +213,17 @@ describe('partiesInformationHelper', () => {
     it("should set representingPractitioners.formattedEmail to `No email provided` when the petitioner's counsel does not have an email", () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [
               { ...mockPrivatePractitioner, email: undefined },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -227,12 +246,17 @@ describe('partiesInformationHelper', () => {
     it('should set hasCounsel to false for a petitioner that is not represented', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [
               { ...mockPrivatePractitioner, representing: [] },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -249,10 +273,15 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail for a petitioner that has a verified email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [{ ...mockPetitioner, email: mockEmail }],
             privatePractitioners: [mockPrivatePractitioner],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -263,11 +292,13 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail to the current email for a petitioner that has a verified email AND a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [{ ...mockPetitioner, email: mockEmail }],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: { [mockPetitioner.contactId]: 'blah@example.com' },
           },
@@ -280,11 +311,13 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail to undefined for a petitioner that does not have a verified email and has a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [{ ...mockPetitioner, email: undefined }],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: { [mockPetitioner.contactId]: mockEmail },
           },
@@ -297,10 +330,15 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail to `No email provided` for a petitioner that does not have a verified email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPrivatePractitioner],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -313,11 +351,13 @@ describe('partiesInformationHelper', () => {
     it('should set formattedPendingEmail when the petitioner has a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockPetitioner.contactId]: mockEmail,
@@ -334,11 +374,13 @@ describe('partiesInformationHelper', () => {
     it('should set formattedPendingEmail to undefined when the petitioner has no pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockPetitioner.contactId]: undefined,
@@ -357,9 +399,11 @@ describe('partiesInformationHelper', () => {
         state: {
           ...getBaseState(mockPrivatePractitioner),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [mockPrivatePractitioner],
           },
+          permissions: {},
           screenMetadata: {
             pendingEmails: {
               [mockPetitioner.contactId]: true,
@@ -378,9 +422,14 @@ describe('partiesInformationHelper', () => {
     it("should set formattedEmail to the counsel's email when it is defined and there is no pending email", () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [mockIrsPractitioner],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -391,9 +440,14 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail to `No email provided` when the respondent does not have an email or a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [{ ...mockIrsPractitioner, email: undefined }],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -406,9 +460,11 @@ describe('partiesInformationHelper', () => {
     it('should set formattedEmail to undefined, and set formattedPending email when the respondent does not have an email but has a pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [{ ...mockIrsPractitioner, email: undefined }],
+            petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {
@@ -427,11 +483,13 @@ describe('partiesInformationHelper', () => {
     it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to email when it is defined', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [
               { ...mockIrsPractitioner, email: 'lalal@example' },
             ],
+            petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {
@@ -452,9 +510,11 @@ describe('partiesInformationHelper', () => {
     it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to undefined when it is the same as the pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [{ ...mockIrsPractitioner, email: mockEmail }],
+            petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {
@@ -473,9 +533,11 @@ describe('partiesInformationHelper', () => {
     it('should not set formattedPendingEmail when the respondent has no pending email', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [mockIrsPractitioner],
+            petitioners: [],
+            privatePractitioners: [],
           },
           screenMetadata: {
             pendingEmails: {
@@ -493,9 +555,14 @@ describe('partiesInformationHelper', () => {
     it('should not set formattedPendingEmail when screenMetadata.pendingEmails is undefined', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [mockIrsPractitioner],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: undefined,
           },
         },
       });
@@ -508,7 +575,7 @@ describe('partiesInformationHelper', () => {
     it('should set canEditRespondent to true for internal users', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             irsPractitioners: [
               {
@@ -516,6 +583,11 @@ describe('partiesInformationHelper', () => {
                 email: undefined,
               },
             ],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -534,6 +606,11 @@ describe('partiesInformationHelper', () => {
                 email: undefined,
               },
             ],
+            petitioners: [],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -546,9 +623,14 @@ describe('partiesInformationHelper', () => {
     it('should be false when the case does not have any participants or intervenors', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -559,9 +641,14 @@ describe('partiesInformationHelper', () => {
     it('should be true when the case has at least one participant', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            irsPractitioners: [],
             petitioners: [mockPetitioner, mockParticipant],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -574,7 +661,7 @@ describe('partiesInformationHelper', () => {
     it('is false when the petition has not been served', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             docketEntries: [
               {
@@ -582,7 +669,13 @@ describe('partiesInformationHelper', () => {
                 servedAt: undefined,
               },
             ],
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -593,7 +686,7 @@ describe('partiesInformationHelper', () => {
     it('is true when the user is an internal user with permission to edit petitioner info and the petition has been served', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             docketEntries: [
               {
@@ -601,11 +694,17 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [
               {
                 contactType: CONTACT_TYPES.primary,
               },
             ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -613,10 +712,10 @@ describe('partiesInformationHelper', () => {
       expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
     });
 
-    it('is false when the petitioner is otherPetitioner and we are logged in as an external user', () => {
+    it('is returns false when the petitioner is otherPetitioner and we are logged in as an external user', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPetitioner),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
             docketEntries: [
               {
@@ -624,11 +723,17 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [
               {
                 contactType: CONTACT_TYPES.otherPetitioner,
               },
             ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: false },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -647,11 +752,17 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [
               {
                 contactType: CONTACT_TYPES.primary,
               },
             ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: false },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -670,7 +781,12 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -689,12 +805,17 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [
               {
                 ...mockPetitioner,
                 contactId: '38eb11a1-53be-4a5d-967c-b7334ddfd82f',
               },
             ],
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -705,14 +826,15 @@ describe('partiesInformationHelper', () => {
     it('is true when the current user is a private practitioner associated with the case and the petition has been served', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPrivatePractitioner),
           caseDetail: {
+            ...getBaseState(mockPrivatePractitioner),
             docketEntries: [
               {
                 documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
             privatePractitioners: [
               {
@@ -720,6 +842,10 @@ describe('partiesInformationHelper', () => {
                 representing: [mockPetitioner.contactId],
               },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -730,14 +856,15 @@ describe('partiesInformationHelper', () => {
     it('is false when the current user is a private practitioner associated with the case and the petition has been served BUT the petitioner is an otherPetitioner', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPrivatePractitioner),
           caseDetail: {
+            ...getBaseState(mockPrivatePractitioner),
             docketEntries: [
               {
                 documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [
               {
                 ...mockPetitioner,
@@ -750,6 +877,10 @@ describe('partiesInformationHelper', () => {
                 representing: [mockPetitioner.contactId],
               },
             ],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -768,7 +899,13 @@ describe('partiesInformationHelper', () => {
                 servedAt: '2020-08-01',
               },
             ],
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: {},
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -788,7 +925,12 @@ describe('partiesInformationHelper', () => {
                   servedAt: '2020-08-01',
                 },
               ],
+              irsPractitioners: [],
               petitioners: [mockPetitioner],
+            },
+            permissions: {},
+            screenMetadata: {
+              pendingEmails: {},
             },
           },
         }),
@@ -798,12 +940,22 @@ describe('partiesInformationHelper', () => {
 
   describe('editPetitionerLink', () => {
     it('should return external contact edit link when the user is external', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.privatePractitioner,
+      });
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPetitioner),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            docketEntries: [],
             docketNumber: '101-19',
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -813,12 +965,22 @@ describe('partiesInformationHelper', () => {
     });
 
     it('should return edit-petitioner-information url if the user is internal', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            docketEntries: [],
             docketNumber: '101-19',
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -830,11 +992,23 @@ describe('partiesInformationHelper', () => {
 
   describe('showIntervenorRole', () => {
     it('should be true when there are no intervenors on the case', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
+
       const { showIntervenorRole } = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
             petitioners: [mockPetitioner],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });
@@ -843,14 +1017,26 @@ describe('partiesInformationHelper', () => {
     });
 
     it('should be false when there is an intervenor on the case', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: ROLES.docketClerk,
+      });
+
       const { showIntervenorRole } = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(mockDocketClerk),
           caseDetail: {
+            docketEntries: [],
+            docketNumber: '101-19',
+            irsPractitioners: [],
             petitioners: [
               mockPetitioner,
               { ...mockPetitioner, contactType: CONTACT_TYPES.intervenor },
             ],
+            privatePractitioners: [],
+          },
+          permissions: { EDIT_PETITIONER_INFO: true },
+          screenMetadata: {
+            pendingEmails: {},
           },
         },
       });

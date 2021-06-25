@@ -48,12 +48,7 @@ export const createTrialSessionAction = async ({
         });
     }
   } catch (err) {
-    return path.error({
-      alertError: {
-        message: 'Trial session could not be added. Please try again.',
-        title: 'Error',
-      },
-    });
+    return path.error();
   }
 
   return path.success({

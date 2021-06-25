@@ -31,11 +31,6 @@ export const updatePractitionerUserAction = async ({
       practitionerDetail: practitionerUser,
     });
   } catch (err) {
-    return path.error({
-      alertError: {
-        message: 'Practitioner could not be edited. Please try again.',
-        title: 'Error',
-      },
-    });
+    return path.error();
   }
 };

@@ -63,8 +63,7 @@ export const submitEditDeficiencyStatisticAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        message: 'Statistic could not be edited. Please try again.',
-        title: 'Error',
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
     });
   }

@@ -1,4 +1,3 @@
-import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -14,7 +13,6 @@ import { validateAddDeficiencyStatisticsAction } from '../actions/validateAddDef
 
 export const submitEditDeficiencyStatisticSequence = [
   startShowValidationAction,
-  clearErrorAlertsAction,
   validateAddDeficiencyStatisticsAction,
   {
     error: [
@@ -26,7 +24,7 @@ export const submitEditDeficiencyStatisticSequence = [
       showProgressSequenceDecorator([
         submitEditDeficiencyStatisticAction,
         {
-          error: [setAlertErrorAction],
+          error: [],
           success: [
             clearFormAction,
             setSaveAlertsForNavigationAction,

@@ -69,8 +69,7 @@ describe('submitAddDeficiencyStatisticsAction', () => {
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
     expect(presenter.providers.path.error).toHaveBeenCalledWith({
       alertError: {
-        message: 'Statistic could not be added. Please try again.',
-        title: 'Error',
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
     });
   });

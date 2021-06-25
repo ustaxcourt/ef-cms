@@ -42,6 +42,15 @@ module.exports = {
         'jest/expect-expect': 'off',
       },
     },
+    {
+      files: ['**/*.test.js'],
+      rules: {
+        'max-lines': [
+          'error',
+          { max: 1200, skipBlankLines: true, skipComments: true },
+        ],
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -115,7 +124,7 @@ module.exports = {
     ],
     'max-lines': [
       'error',
-      { max: 800, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+      { max: 900, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',

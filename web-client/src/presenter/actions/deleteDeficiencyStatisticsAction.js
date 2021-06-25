@@ -43,8 +43,7 @@ export const deleteDeficiencyStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        message: 'Statistic could not be deleted. Please try again.',
-        title: 'Error',
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
     });
   }
