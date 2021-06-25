@@ -4,7 +4,6 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
-import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
@@ -24,19 +23,6 @@ const showSuccessAlert = [
   setCaseAction,
 ];
 
-const successPath = [
-  getTrialSessionsAction,
-  setTrialSessionsAction,
-  unsetWaitingForResponseAction,
-  showSuccessAlert,
-];
-
-const errorPath = [
-  clearModalStateAction,
-  setAlertErrorAction,
-  unsetWaitingForResponseAction,
-];
-
 export const addCaseToTrialSessionSequence = [
   clearScreenMetadataAction,
   startShowValidationAction,
@@ -48,10 +34,10 @@ export const addCaseToTrialSessionSequence = [
         setWaitingForResponseAction,
         clearModalAction,
         addCaseToTrialSessionAction,
-        {
-          error: [errorPath],
-          success: successPath,
-        },
+        getTrialSessionsAction,
+        setTrialSessionsAction,
+        unsetWaitingForResponseAction,
+        showSuccessAlert,
       ]),
     ],
   },

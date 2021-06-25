@@ -1,5 +1,6 @@
 const {
   applicationContext,
+  over1000Characters,
 } = require('../../test/createTestApplicationContext');
 const {
   CONTACT_TYPES,
@@ -12,29 +13,37 @@ const {
 const { Petitioner } = require('./Petitioner');
 
 describe('Petitioner', () => {
-  const mockValidPetitioner = {
-    address1: '1234 Some Street',
-    city: 'Someplace',
-    contactType: CONTACT_TYPES.primary,
-    country: 'Uruguay',
-    countryType: COUNTRY_TYPES.INTERNATIONAL,
-    name: 'Juana Pereyra',
-    phone: 'n/a',
-    postalCode: '98123',
-    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  };
-
   it('should throw an error when applicationContext is not provided to the constructor', () => {
-    expect(() => new Petitioner(mockValidPetitioner, {})).toThrow(
-      'applicationContext must be defined',
-    );
+    expect(
+      () =>
+        new Petitioner(
+          {
+            address1: '1234 Some Street',
+            city: 'Someplace',
+            country: 'Uruguay',
+            countryType: COUNTRY_TYPES.INTERNATIONAL,
+            name: 'Juana Pereyra',
+            phone: 'n/a',
+            postalCode: '98123',
+            serviceIndicator: undefined,
+          },
+          {},
+        ),
+    ).toThrow('applicationContext must be defined');
   });
 
   describe('validate', () => {
     it('should be false when serviceIndicator is undefined', () => {
       const entity = new Petitioner(
         {
-          ...mockValidPetitioner,
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: 'Juana Pereyra',
+          phone: 'n/a',
+          postalCode: '98123',
           serviceIndicator: undefined,
         },
         { applicationContext },
@@ -49,8 +58,15 @@ describe('Petitioner', () => {
     it('should be false when name field is too long', () => {
       const entity = new Petitioner(
         {
-          ...mockValidPetitioner,
-          name: getTextByCount(101),
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: over1000Characters,
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         { applicationContext },
       );
@@ -64,8 +80,16 @@ describe('Petitioner', () => {
     it('should be false when additionalName field is too long', () => {
       const entity = new Petitioner(
         {
-          ...mockValidPetitioner,
-          additionalName: getTextByCount(601),
+          additionalName: over1000Characters,
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: 'Somebody Somewhere',
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
         { applicationContext },
       );
@@ -78,9 +102,20 @@ describe('Petitioner', () => {
     });
 
     it('should be true when all required fields have been provided', () => {
-      const entity = new Petitioner(mockValidPetitioner, {
-        applicationContext,
-      });
+      const entity = new Petitioner(
+        {
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: 'Juana Pereyra',
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        { applicationContext },
+      );
 
       expect(entity.isValid()).toBe(true);
       expect(entity.getFormattedValidationErrors()).toEqual(null);
@@ -89,7 +124,15 @@ describe('Petitioner', () => {
     it('should be false when title is longer than 100 chars', () => {
       const entity = new Petitioner(
         {
-          ...mockValidPetitioner,
+          address1: '1234 Some Street',
+          city: 'Someplace',
+          contactType: CONTACT_TYPES.primary,
+          country: 'Uruguay',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          name: 'Juana Pereyra',
+          phone: 'n/a',
+          postalCode: '98123',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           title: getTextByCount(101),
         },
         { applicationContext },
@@ -100,20 +143,6 @@ describe('Petitioner', () => {
         title:
           '"title" length must be less than or equal to 100 characters long',
       });
-    });
-  });
-
-  describe('phone number formatting', () => {
-    it('should format phone number string', () => {
-      const entity = new Petitioner(
-        {
-          ...mockValidPetitioner,
-          phone: '1234567890',
-        },
-        { applicationContext },
-      );
-
-      expect(entity.phone).toEqual('123-456-7890');
     });
   });
 });

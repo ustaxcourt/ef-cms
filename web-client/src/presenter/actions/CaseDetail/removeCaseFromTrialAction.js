@@ -11,7 +11,6 @@ import { state } from 'cerebral';
 export const removeCaseFromTrialAction = async ({
   applicationContext,
   get,
-  path,
 }) => {
   let trialSessionId;
   const { docketNumber, trialSessionId: stateTrialSessionId } = get(
@@ -25,29 +24,21 @@ export const removeCaseFromTrialAction = async ({
   } = get(state.modal);
 
   trialSessionId = modalTrialSessionId || stateTrialSessionId;
-  try {
-    const caseDetail = await applicationContext
-      .getUseCases()
-      .removeCaseFromTrialInteractor(applicationContext, {
-        associatedJudge,
-        caseStatus,
-        disposition,
-        docketNumber,
-        trialSessionId,
-      });
-    return path.success({
-      alertSuccess: {
-        message: 'Case removed from trial.',
-      },
-      caseDetail,
+
+  const caseDetail = await applicationContext
+    .getUseCases()
+    .removeCaseFromTrialInteractor(applicationContext, {
+      associatedJudge,
+      caseStatus,
+      disposition,
+      docketNumber,
+      trialSessionId,
     });
-  } catch (e) {
-    return path.error({
-      alertError: {
-        message:
-          'Case could not be removed from trial session. Please try again.',
-        title: 'Error',
-      },
-    });
-  }
+
+  return {
+    alertSuccess: {
+      message: 'Case removed from trial.',
+    },
+    caseDetail,
+  };
 };

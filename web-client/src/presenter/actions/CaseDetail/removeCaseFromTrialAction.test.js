@@ -4,14 +4,7 @@ import { removeCaseFromTrialAction } from './removeCaseFromTrialAction';
 import { runAction } from 'cerebral/test';
 
 describe('removeCaseFromTrialAction', () => {
-  const errorStub = jest.fn();
-  const successStub = jest.fn();
-
   presenter.providers.applicationContext = applicationContext;
-  presenter.providers.path = {
-    error: errorStub,
-    success: successStub,
-  };
 
   const mockDocketNumber = '123-45';
   const mockTrialSessionId = '499d51ae-f118-4eb6-bd0e-f2c351df8f06';
@@ -40,7 +33,6 @@ describe('removeCaseFromTrialAction', () => {
       docketNumber: mockDocketNumber,
       trialSessionId: mockTrialSessionId,
     });
-    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call removeCaseFromTrialInteractor with case docketNumber and trialSessionId from state.modal', async () => {
@@ -69,14 +61,7 @@ describe('removeCaseFromTrialAction', () => {
   });
 
   it('should return an alertSuccess and caseDetail', async () => {
-    applicationContext
-      .getUseCases()
-      .removeCaseFromTrialInteractor.mockImplementationOnce(() => ({
-        docketNumber: mockDocketNumber,
-        trialSessionId: mockTrialSessionId,
-      }));
-
-    await runAction(removeCaseFromTrialAction, {
+    const result = await runAction(removeCaseFromTrialAction, {
       modules: {
         presenter,
       },
@@ -91,47 +76,7 @@ describe('removeCaseFromTrialAction', () => {
       },
     });
 
-    expect(successStub).toHaveBeenCalled();
-    expect(successStub).toHaveBeenCalledWith({
-      alertSuccess: {
-        message: 'Case removed from trial.',
-      },
-      caseDetail: {
-        docketNumber: mockDocketNumber,
-        trialSessionId: mockTrialSessionId,
-      },
-    });
-  });
-
-  it('should return an error if the interactor throws an exception', async () => {
-    applicationContext
-      .getUseCases()
-      .removeCaseFromTrialInteractor.mockImplementationOnce(() => {
-        throw new Error('error');
-      });
-
-    await runAction(removeCaseFromTrialAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: mockDocketNumber,
-          trialSessionId: mockTrialSessionId,
-        },
-        modal: {
-          disposition: mockDisposition,
-        },
-      },
-    });
-
-    expect(errorStub).toHaveBeenCalled();
-    expect(errorStub).toHaveBeenCalledWith({
-      alertError: {
-        message:
-          'Case could not be removed from trial session. Please try again.',
-        title: 'Error',
-      },
-    });
+    expect(result.output).toHaveProperty('alertSuccess');
+    expect(result.output).toHaveProperty('caseDetail');
   });
 });

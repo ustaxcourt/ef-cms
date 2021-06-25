@@ -59,7 +59,7 @@ describe('submitOtherStatisticsAction', () => {
     });
   });
 
-  it('returns the error path if an error is encountered when calling the interactor when adding a new other statistic', async () => {
+  it('returns the error path if an error is encountered when calling the interactor', async () => {
     presenter.providers.applicationContext
       .getUseCases()
       .updateOtherStatisticsInteractor.mockImplementationOnce(() => {
@@ -84,40 +84,7 @@ describe('submitOtherStatisticsAction', () => {
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
     expect(presenter.providers.path.error).toHaveBeenCalledWith({
       alertError: {
-        message: 'Statistic could not be added. Please try again.',
-        title: 'Error',
-      },
-    });
-  });
-
-  it('returns the error path if an error is encountered when calling the interactor when editing an other statistic', async () => {
-    presenter.providers.applicationContext
-      .getUseCases()
-      .updateOtherStatisticsInteractor.mockImplementationOnce(() => {
-        throw new Error('error');
-      });
-
-    await runAction(submitOtherStatisticsAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: '123-19',
-        },
-        form: {
-          damages: '1',
-          isEditing: true,
-          litigationCosts: '5',
-        },
-      },
-    });
-
-    expect(presenter.providers.path.success).not.toHaveBeenCalled();
-    expect(presenter.providers.path.error).toHaveBeenCalledWith({
-      alertError: {
-        message: 'Statistic could not be edited. Please try again.',
-        title: 'Error',
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
     });
   });

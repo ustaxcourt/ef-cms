@@ -20,7 +20,6 @@ const {
 const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
-const { docketClerkUser, MOCK_PRACTITIONER } = require('../../test/mockUsers');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
@@ -33,24 +32,52 @@ describe('updatePetitionerInformationInteractor', () => {
   const PRIMARY_CONTACT_ID = '661beb76-f9f3-40db-af3e-60ab5c9287f6';
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
+  const userData = {
+    name: 'administrator',
+    role: ROLES.docketClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  };
+
   const mockPetitioners = [
     {
-      ...MOCK_CASE.petitioners[0],
+      address1: '989 Division St',
+      address2: 'Lights out',
+      city: 'Somewhere',
       contactId: PRIMARY_CONTACT_ID,
       contactType: CONTACT_TYPES.petitioner,
+      countryType: COUNTRY_TYPES.DOMESTIC,
+      email: 'test@example.com',
       name: 'Test Primary Petitioner',
+      phone: '1234567',
+      postalCode: '12345',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      state: 'TN',
+      title: 'Executor',
     },
     {
-      ...MOCK_CASE.petitioners[0],
+      address1: '789 Division St',
+      address2: 'Apt B',
+      city: 'Somewhere',
       contactId: SECONDARY_CONTACT_ID,
       contactType: CONTACT_TYPES.petitioner,
+      countryType: COUNTRY_TYPES.DOMESTIC,
       name: 'Test Secondary Petitioner',
+      phone: '1234568',
+      postalCode: '12345',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      state: 'TN',
+      title: 'Executor',
     },
   ];
 
   const basePractitioner = {
-    ...MOCK_PRACTITIONER,
+    barNumber: 'PT1234',
+    email: 'practitioner1@example.com',
+    name: 'Test Practitioner',
     representing: [mockPetitioners[0].contactId],
+    role: ROLES.privatePractitioner,
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    userId: '898bbe4b-84ee-40a1-ad05-a1e2e8484c72',
   };
 
   beforeAll(() => {
@@ -73,7 +100,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   beforeEach(() => {
-    mockUser = docketClerkUser;
+    mockUser = userData;
 
     mockCase = {
       ...MOCK_CASE,
@@ -445,13 +472,25 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it("should not generate a notice of change address when contactPrimary's information is sealed", async () => {
+    mockUser.role = ROLES.docketClerk;
     mockCase = {
       ...mockCase,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
-          ...mockCase.petitioners[0],
+          address1: '456 Center St',
+          city: 'Somewhere',
+          contactId: PRIMARY_CONTACT_ID,
+          contactType: CONTACT_TYPES.petitioner,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'test@example.com',
           isAddressSealed: true,
+          name: 'Test Petitioner',
+          phone: '1234567',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'TN',
+          title: 'Executor',
         },
       ],
     };
@@ -459,9 +498,18 @@ describe('updatePetitionerInformationInteractor', () => {
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       updatedPetitionerData: {
-        ...mockCase.petitioners[0],
         address1: '456 Center St TEST',
+        city: 'Somewhere',
+        contactId: PRIMARY_CONTACT_ID,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
         isAddressSealed: true,
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        state: 'TN',
+        title: 'Executor',
       },
     });
 
@@ -471,6 +519,7 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it("should not generate a notice of change address when contactSecondary's information is sealed", async () => {
+    mockUser.role = ROLES.docketClerk;
     mockCase = {
       ...mockCase,
       partyType: PARTY_TYPES.petitionerSpouse,
@@ -528,6 +577,7 @@ describe('updatePetitionerInformationInteractor', () => {
 
   describe('createWorkItemForChange', () => {
     it('should create a work item for the NCA when the primary contact is unrepresented', async () => {
+      mockUser.role = ROLES.docketClerk;
       mockCase = {
         ...mockCase,
         partyType: PARTY_TYPES.petitioner,
@@ -566,6 +616,8 @@ describe('updatePetitionerInformationInteractor', () => {
     it('should create a work item for the NCA when the secondary contact is unrepresented', async () => {
       mockCase = {
         ...mockCase,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: mockPetitioners,
         privatePractitioners: [
           {
             ...basePractitioner,
@@ -632,6 +684,8 @@ describe('updatePetitionerInformationInteractor', () => {
     it('should NOT create a work item for the NCA when the secondary contact is represented and their service preference is NOT paper', async () => {
       mockCase = {
         ...mockCase,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: mockPetitioners,
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
@@ -697,6 +751,8 @@ describe('updatePetitionerInformationInteractor', () => {
     it('should create a work item for the NCA when the secondary contact is represented and their service preference is paper', async () => {
       mockCase = {
         ...mockCase,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: mockPetitioners,
         privatePractitioners: [
           { ...basePractitioner, representing: [SECONDARY_CONTACT_ID] },
         ],
@@ -729,6 +785,8 @@ describe('updatePetitionerInformationInteractor', () => {
     it('should create a work item for the NCA when the primary contact is represented and a private practitioner on the case requests paper service', async () => {
       mockCase = {
         ...mockCase,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: mockPetitioners,
         privatePractitioners: [
           {
             ...basePractitioner,
@@ -774,6 +832,8 @@ describe('updatePetitionerInformationInteractor', () => {
             userId: '899bbe4b-84ee-40a1-ad05-a1e2e8484c72',
           },
         ],
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: mockPetitioners,
         privatePractitioners: [
           {
             ...basePractitioner,
