@@ -38,7 +38,10 @@ export const submitOtherStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
+        message: `Statistic could not be ${
+          isEditing ? 'edited' : 'added'
+        }. Please try again.`,
+        title: 'Error',
       },
     });
   }
