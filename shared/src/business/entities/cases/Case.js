@@ -1590,15 +1590,42 @@ Case.prototype.setAdditionalNameOnPetitioners = function (rawCase) {
 };
 
 /**
+ * Retrieves the contact from the case based on whatever contactType is specified
+ *
+ * @param {Object} providers the providers object
+ * @param {String} providers.contactType the type of contact we are looking for (primary or secondary)
+ * @param {Object} providers.rawCase the raw case
+ * @returns {(Object|undefined)} the contact object on the case
+ */
+const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
+  if (!rawCase.petitioners) {
+    return;
+  } else if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
+    return rawCase.petitioners.find(p => p.contactType === contactType);
+  }
+
+  const petitioners = rawCase.petitioners.filter(
+    p => p.contactType === CONTACT_TYPES.petitioner,
+  );
+
+  if (contactType === CONTACT_TYPES.primary) {
+    return petitioners[0];
+  } else if (contactType === CONTACT_TYPES.secondary) {
+    return petitioners[1];
+  }
+};
+
+/**
  * Retrieves the primary contact on the case
  *
  * @param {object} arguments.rawCase the raw case
  * @returns {Object} the primary contact object on the case
  */
 const getContactPrimary = function (rawCase) {
-  return rawCase.petitioners?.find(
-    p => p.contactType === CONTACT_TYPES.primary,
-  );
+  return getContactPrimaryOrSecondary({
+    contactType: CONTACT_TYPES.primary,
+    rawCase,
+  });
 };
 
 /**
@@ -1617,9 +1644,10 @@ Case.prototype.getContactPrimary = function () {
  * @returns {Object} the secondary contact object on the case
  */
 const getContactSecondary = function (rawCase) {
-  return rawCase.petitioners?.find(
-    p => p.contactType === CONTACT_TYPES.secondary,
-  );
+  return getContactPrimaryOrSecondary({
+    contactType: CONTACT_TYPES.secondary,
+    rawCase,
+  });
 };
 
 /**
