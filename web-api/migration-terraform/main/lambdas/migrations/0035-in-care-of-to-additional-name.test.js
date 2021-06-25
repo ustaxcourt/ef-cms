@@ -84,9 +84,9 @@ describe('migrateItems', () => {
     expect(results[0].petitioners[0].inCareOf).toBeUndefined();
     expect(results[0].petitioners[1].inCareOf).toBeUndefined();
     expect(results[0].petitioners[0].additionalName).toEqual(
-      'John Jacob Jingleheimer-Schmidt',
+      'c/o John Jacob Jingleheimer-Schmidt',
     );
-    expect(results[0].petitioners[1].additionalName).toEqual('Guy Fieri');
+    expect(results[0].petitioners[1].additionalName).toEqual('c/o Guy Fieri');
   });
 
   it('should NOT modify petitioners on cases that are new', async () => {
