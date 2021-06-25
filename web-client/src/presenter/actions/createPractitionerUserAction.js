@@ -35,6 +35,11 @@ export const createPractitionerUserAction = async ({
       practitionerUser,
     });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Practitioner could not be added. Please try again.',
+        title: 'Error',
+      },
+    });
   }
 };
