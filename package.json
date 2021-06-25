@@ -252,7 +252,7 @@
     "test:pa11y:screenshots": "npm run test:pa11y:screenshots:capture && pa11y-ci --config ./web-client/pa11y/pa11y-ci-screenshots.config.js && rm -rf ./web-client/pa11y/pa11y-screenshots/diffs/* && node ./web-client/pa11y/compare-screenshots.js",
     "test:pa11y:smoketests": ". ./set-tokens.sh && pa11y-ci --config ./web-client/pa11y/pa11y-ci-smoketests.config.js",
     "test:pa11y": "npm run test:pa11y:1 && npm run test:pa11y:2 && npm run test:pa11y:3",
-    "test:pdf-output": "npm run build:assets && PDF_OUTPUT=true jest shared/src/business/utilities/documentGenerators.test.js",
+    "test:pdf-output": "npm run build:assets && PDF_OUTPUT=true jest --runInBand shared/src/business/utilities/documentGenerators/*.test.js",
     "test:public:integration": "npm run test:client:_integration \"web-client/integration-tests-public/.*\\.test\\.js\"",
     "test:shared:ci": "npm run build:assets && jest --runInBand --detectOpenHandles --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
     "test:shared": "npm run build:assets && node --trace-warnings --unhandled-rejections=strict ./node_modules/.bin/jest --maxWorkers=50% --config shared/jest.config.js \"shared/.*\\.test\\.js\"",
