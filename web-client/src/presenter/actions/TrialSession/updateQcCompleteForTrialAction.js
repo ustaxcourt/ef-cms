@@ -31,8 +31,8 @@ export const updateQcCompleteForTrialAction = async ({
   } catch (err) {
     return path.error({
       alertError: {
-        message: 'Could not complete QC eligible case. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Could not complete QC eligible case.',
       },
     });
   }

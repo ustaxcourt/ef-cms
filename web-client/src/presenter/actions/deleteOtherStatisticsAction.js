@@ -32,8 +32,8 @@ export const deleteOtherStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        message: 'Statistic could not be deleted. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Statistic could not be deleted.',
       },
     });
   }

@@ -84,8 +84,8 @@ describe('submitOtherStatisticsAction', () => {
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
     expect(presenter.providers.path.error).toHaveBeenCalledWith({
       alertError: {
-        message: 'Statistic could not be added. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Statistic could not be added.',
       },
     });
   });
@@ -116,8 +116,8 @@ describe('submitOtherStatisticsAction', () => {
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
     expect(presenter.providers.path.error).toHaveBeenCalledWith({
       alertError: {
-        message: 'Statistic could not be edited. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Statistic could not be edited.',
       },
     });
   });
