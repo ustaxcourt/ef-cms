@@ -75,8 +75,8 @@ describe('updatePractitionerUserAction', () => {
     expect(errorMock).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalledWith({
       alertError: {
-        message: 'Practitioner could not be edited. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Practitioner could not be edited.',
       },
     });
   });
