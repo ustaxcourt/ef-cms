@@ -38,10 +38,8 @@ export const submitOtherStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        message: `Statistic could not be ${
-          isEditing ? 'edited' : 'added'
-        }. Please try again.`,
-        title: 'Error',
+        message: 'Please try again.',
+        title: `Statistic could not be ${isEditing ? 'edited' : 'added'}. `,
       },
     });
   }

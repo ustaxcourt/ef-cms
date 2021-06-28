@@ -22,8 +22,8 @@ export const sealCaseAction = async ({ applicationContext, get, path }) => {
   } catch (err) {
     return path.error({
       alertError: {
-        message: 'Case could not be sealed. Please try again',
-        title: 'Error',
+        message: 'Please try again',
+        title: 'Case could not be sealed.',
       },
     });
   }

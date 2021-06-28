@@ -84,8 +84,8 @@ describe('addCaseToTrialSessionAction', () => {
     expect(presenter.providers.path.error).toHaveBeenCalled();
     expect(errorMock.mock.calls[0][0]).toMatchObject({
       alertError: {
-        message: 'Case could not be added to trial session. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Case could not be added to trial session.',
       },
     });
   });
