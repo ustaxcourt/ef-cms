@@ -14,7 +14,7 @@ export const deleteDeficiencyStatisticsSequence = [
     clearErrorAlertsAction,
     deleteDeficiencyStatisticsAction,
     {
-      error: [setAlertErrorAction],
+      error: [setAlertErrorAction, clearModalAction],
       success: [
         clearFormAction,
         setSaveAlertsForNavigationAction,
