@@ -10,7 +10,6 @@ Welcome to the team! 🎉 😎
 
 - [ ] GitHub — speak with your team lead to determine the appropriate repositories and levels of access in the [ustaxcourt](https://github.com/ustaxcourt) and [flexion](https://github.com/flexion) organizations.
 - [ ] [Slack](https://ustaxcourt.slack.com) — look for important channels to join in [How We Work](./how-we-work.md).
-- [ ] [Sonarcloud](https://sonarcloud.io/organizations/flexion-github/projects)
 - [ ] Zoom — speak with your team lead to get access to Zoom if you will be hosting meetings.
 - [ ] Zendesk — get access only if you will be providing customer support.
 - [ ] Trello — used for some backlogs (see the [README](../README.md)). Work with your team lead to gain access.

@@ -8,7 +8,7 @@
 -   Slack: We use both the Court's and vendor's Slack for communication that falls outside of the structure of GitHub or ZenHub, but that doesn't rise to the level of email, or for communication that it's helpful for everybody else to be able to observe. Notable channels include:
     - #ustcproject — Main project channel. Used to communicate high-level messages re: project
     - #ustc-story-channel — Channel used to communicate story-related work.
-    - #ustcux — Design/research-specific channel. 
+    - #ustcux — Design/research-specific channel.
     - #ustctech — Tech-specific channel.
 
 ## Meetings
@@ -19,6 +19,10 @@ There are two basic meeting rhythms: daily design calls/standups and bi-weekly a
 
 - **Daily design sync** — this meeting is a time to solution functionality, demo in-progress work with the team and review new wireframes
 - **Daily standup**
+
+### Weekly
+
+- **Stakeholder meeting** — on Mondays and Fridays, we review the current project status with stakeholders at the Court and discuss the schedule of large releases that need off-hours deployments
 
 ### Bi-weekly
 
@@ -54,14 +58,27 @@ There are two checklists that define what "done" is for [user stories](https://g
 
 ### Accepting Vendor Work
 
-Acceptance of work happens through the sprint as work is completed. The procedure is as follows:
+Acceptance of work happens through the sprint as work is completed.
 
-1.  Development team completes work — see _Definition of Done_ above
-2.  The product team verifies the functionality against acceptance criteria in a deployed instance
-3.  Development team creates pull request to the Court's staging environment
+#### User stories and new features
+
+1.  Development team completes work starting from the `staging` environment — see _Definition of Done_ above
+2.  The product team verifies the functionality against acceptance criteria in the Court's `migration` environment
+3.  Development team creates pull request to the Court's `staging` environment
 4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/CODE_REVIEW.md)
 5.  The development team responds to the Court’s code review feedback
 6.  Pull request merged to staging branch and deployed to the staging environment by the Court
+7.  User testing is performed
+8.  Court creates pull request to production branch and merges to update the production environment
+
+#### Bug fixes
+
+1.  Development team completes work starting from the `staging` environment — see _Definition of Done_ above
+2.  The product team verifies the functionality against acceptance criteria in the Court's `test` environment
+3.  Development team creates pull request to the Court's `staging` environment
+4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/CODE_REVIEW.md)
+5.  The development team responds to the Court’s code review feedback
+6.  Pull request merged and deployed to the `staging` environment by the Court
 7.  User testing is performed
 8.  Court creates pull request to production branch and merges to update the production environment
 
