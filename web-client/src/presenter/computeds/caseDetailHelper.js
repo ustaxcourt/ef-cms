@@ -72,7 +72,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showDocketRecordInProgressState: !isExternalUser,
-    showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
+    showEditCaseDetailsButton: permissions.EDIT_CASE_DETAILS,
     showFileDocumentButton,
     showFilingFeeExternal:
       isExternalUser &&
