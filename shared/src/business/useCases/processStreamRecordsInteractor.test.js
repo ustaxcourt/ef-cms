@@ -1,6 +1,5 @@
 jest.mock('./processStreamUtilities');
 const {
-  filterRecords,
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
@@ -24,7 +23,6 @@ describe('processStreamRecordsInteractor', () => {
     processMessageEntries.mockResolvedValue([]);
     processOtherEntries.mockResolvedValue([]);
 
-    filterRecords.mockReturnValue(true);
     partitionRecords.mockReturnValue({
       caseEntityRecords: [],
       docketEntryRecords: [],
@@ -39,7 +37,6 @@ describe('processStreamRecordsInteractor', () => {
       recordsToProcess: [{ my: 'record' }],
     });
 
-    expect(filterRecords).toHaveBeenCalled();
     expect(partitionRecords).toHaveBeenCalled();
 
     expect(processRemoveEntries).toHaveBeenCalled();
