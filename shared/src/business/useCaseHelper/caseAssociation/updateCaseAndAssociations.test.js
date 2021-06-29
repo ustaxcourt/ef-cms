@@ -2,9 +2,6 @@ jest.mock('../../entities/Message');
 jest.mock('../../entities/CaseDeadline');
 const faker = require('faker');
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
@@ -15,7 +12,12 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Message } = require('../../entities/Message');
 const { MOCK_CASE } = require('../../../../src/test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+
 const { updateCaseAndAssociations } = require('./updateCaseAndAssociations');
+
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 
 describe('updateCaseAndAssociations', () => {
   const MOCK_TRIAL_SESSION = {
@@ -69,6 +71,7 @@ describe('updateCaseAndAssociations', () => {
       .toRawObject();
 
     CaseDeadline.validateRawCollection.mockReturnValue([{ some: 'deadline' }]);
+    Message.validateRawCollection.mockImplementation(collection => collection);
 
     applicationContext
       .getPersistenceGateway()
@@ -119,6 +122,92 @@ describe('updateCaseAndAssociations', () => {
     const updateArgs = updateCaseMock.mock.calls[0][0];
 
     expect(updateArgs.caseToUpdate.isValidated).toBe(true);
+  });
+
+  it('does not attempt to make any update calls to persistence if any queries to persistence fail', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseDeadlinesByDocketNumber.mockRejectedValueOnce(
+        new Error('query problem'),
+      );
+
+    await expect(
+      updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          associatedJudge: 'Judge Arnold',
+        },
+      }),
+    ).rejects.toThrow('query problem');
+
+    // updateCaseDocketEntries
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseMessages
+    expect(
+      applicationContext.getPersistenceGateway().updateMessage,
+    ).not.toHaveBeenCalled();
+
+    // updateCorrespondence
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseCorrespondence,
+    ).not.toHaveBeenCalled();
+
+    // updateHearings
+    expect(
+      applicationContext.getPersistenceGateway().removeCaseFromHearing,
+    ).not.toHaveBeenCalled();
+
+    // updateIrsPractitioners
+    expect(
+      applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+    ).not.toHaveBeenCalled();
+
+    // updatePrivatePractitioners
+    expect(
+      applicationContext.getPersistenceGateway()
+        .removePrivatePractitionerOnCase,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updatePrivatePractitionerOnCase,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseWorkItems
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateAssociatedJudgeOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseTitleOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseStatusOnWorkItems,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialDateOnWorkItems,
+    ).not.toHaveBeenCalled();
+
+    // updateUserCaseMappings
+    expect(
+      applicationContext.getPersistenceGateway().updateUserCaseMapping,
+    ).not.toHaveBeenCalled();
+
+    // updateCaseDeadlines
+    expect(
+      applicationContext.getPersistenceGateway().createCaseDeadline,
+    ).not.toHaveBeenCalled();
+
+    // update the case itself, final persistence call
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toHaveBeenCalled();
   });
 
   it('updates hearings, removing old ones from the given case', async () => {
@@ -630,7 +719,6 @@ describe('updateCaseAndAssociations', () => {
     });
 
     it('gets messages and persists them if valid', async () => {
-      Message.validateRawCollection.mockImplementation(messages => messages);
       await expect(
         updateCaseAndAssociations({
           applicationContext,
