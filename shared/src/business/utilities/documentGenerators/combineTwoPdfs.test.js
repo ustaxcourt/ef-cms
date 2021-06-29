@@ -1,7 +1,7 @@
 const {
   applicationContext,
   testPdfDoc,
-} = require('../test/createTestApplicationContext');
+} = require('../../test/createTestApplicationContext');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
 const { PDFDocument } = require('pdf-lib');
 
