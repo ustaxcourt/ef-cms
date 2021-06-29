@@ -42,8 +42,8 @@ describe('uploadToS3', () => {
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'An error occurred while attempting to upload to S3',
     );
-    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
-      'there was an error uploading',
-    );
+    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual({
+      err: 'there was an error uploading',
+    });
   });
 });
