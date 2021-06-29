@@ -28,6 +28,23 @@ describe('ContactFactory', () => {
     stinFileSize: 1,
   };
 
+  const baseContact = {
+    address1: '876 12th Ave',
+    address2: 'Suite 123',
+    address3: 'Room 13',
+    city: 'Nashville',
+    contactType: CONTACT_TYPES.primary,
+    country: 'USA',
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    email: 'someone@example.com',
+    inCareOf: 'USTC',
+    name: 'Jimmy Dean',
+    phone: '1234567890',
+    postalCode: '05198',
+    secondaryName: 'Jimmy Dean',
+    state: 'AK',
+  };
+
   it('should throw an error if app context is not passed in', () => {
     expect(() => new CaseExternal(baseCaseExternal, {})).toThrow();
   });
@@ -49,23 +66,7 @@ describe('ContactFactory', () => {
         {
           ...baseCaseExternal,
           partyType: PARTY_TYPES.corporation,
-          petitioners: [
-            {
-              address1: '876 12th Ave',
-              address2: 'Suite 123',
-              address3: 'Room 13',
-              city: 'Nashville',
-              contactType: CONTACT_TYPES.primary,
-              country: 'USA',
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'someone@example.com',
-              inCareOf: 'USTC',
-              name: 'Jimmy Dean',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-            },
-          ],
+          petitioners: [baseContact],
         },
         { applicationContext },
       );
@@ -78,21 +79,7 @@ describe('ContactFactory', () => {
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'USTC',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
+        petitioners: [baseContact],
       },
       { applicationContext },
     );
@@ -104,21 +91,7 @@ describe('ContactFactory', () => {
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estateWithoutExecutor,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'USTC',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
-        ],
+        petitioners: [baseContact],
       },
       { applicationContext },
     );
@@ -132,16 +105,9 @@ describe('ContactFactory', () => {
         partyType: PARTY_TYPES.estateWithoutExecutor,
         petitioners: [
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
+            ...baseContact,
             contactType: CONTACT_TYPES.petitioner,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
+            inCareOf: undefined,
           },
         ],
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -167,22 +133,7 @@ describe('ContactFactory', () => {
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            serviceIndicator: 'WHAT',
-            state: 'AK',
-            title: 'Some Title',
-          },
-        ],
+        petitioners: [baseContact],
       },
       { applicationContext },
     );
@@ -197,19 +148,8 @@ describe('ContactFactory', () => {
         partyType: PARTY_TYPES.estate,
         petitioners: [
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
+            ...baseContact,
             isAddressSealed: true,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            serviceIndicator: 'WHAT',
-            state: 'AK',
-            title: 'Some Title',
           },
         ],
       },
@@ -223,22 +163,7 @@ describe('ContactFactory', () => {
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            serviceIndicator: 'WHAT',
-            state: 'AK',
-            title: 'Some Title',
-          },
-        ],
+        petitioners: [baseContact],
       },
       { applicationContext },
     );
@@ -252,25 +177,31 @@ describe('ContactFactory', () => {
         partyType: PARTY_TYPES.estate,
         petitioners: [
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
+            ...baseContact,
             sealedAndUnavailable: true,
-            secondaryName: 'Jimmy Dean',
-            serviceIndicator: 'WHAT',
-            state: 'AK',
-            title: 'Some Title',
           },
         ],
       },
       { applicationContext },
     );
     expect(caseExternal.getContactPrimary().sealedAndUnavailable).toBe(true);
+  });
+
+  it('formats phone number string', () => {
+    const caseExternal = new CaseExternal(
+      {
+        ...baseCaseExternal,
+        petitioners: [
+          {
+            ...baseContact,
+            phone: '4444444444',
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    expect(caseExternal.getContactPrimary().phone).toEqual('444-444-4444');
   });
 
   it('returns false for isValid if serviceIndicator is an invalid value', () => {
@@ -280,18 +211,8 @@ describe('ContactFactory', () => {
         partyType: PARTY_TYPES.estate,
         petitioners: [
           {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
+            ...baseContact,
             serviceIndicator: 'WHAT',
-            state: 'AK',
-            title: 'Some Title',
           },
         ],
       },
@@ -305,21 +226,7 @@ describe('ContactFactory', () => {
       {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
-        petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.primary,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
-            title: 'Some Title',
-          },
-        ],
+        petitioners: [baseContact],
       },
       { applicationContext },
     );
@@ -332,19 +239,7 @@ describe('ContactFactory', () => {
         ...baseCaseExternal,
         partyType: PARTY_TYPES.estate,
         petitioners: [
-          {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            contactType: CONTACT_TYPES.petitioner,
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Jimmy Dean',
-            phone: '4444444444',
-            postalCode: '05198',
-            secondaryName: 'Jimmy Dean',
-            state: 'AK',
-            title: 'Some Title',
-          },
+          { ...baseContact, contactType: CONTACT_TYPES.petitioner },
         ],
         status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       },
@@ -388,19 +283,7 @@ describe('ContactFactory', () => {
         {
           ...baseCaseExternal,
           partyType,
-          petitioners: [
-            {
-              address1: '876 12th Ave',
-              city: 'Nashville',
-              contactType: CONTACT_TYPES.primary,
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              name: 'Jimmy Dean',
-              phone: '1234567890',
-              postalCode: '05198',
-              secondaryName: 'Jimmy Dean',
-              state: 'AK',
-            },
-          ],
+          petitioners: [baseContact],
         },
         { applicationContext },
       );
@@ -427,28 +310,10 @@ describe('ContactFactory', () => {
             ...baseCaseExternal,
             partyType,
             petitioners: [
+              baseContact,
               {
-                address1: '876 12th Ave',
-                city: 'Nashville',
-                contactType: CONTACT_TYPES.primary,
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                name: 'Jimmy Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                secondaryName: 'Jimmy Dean',
-                state: 'AK',
-              },
-              {
-                address1: '876 12th Ave',
-                city: 'Nashville',
+                ...baseContact,
                 contactType: CONTACT_TYPES.secondary,
-                countryType: COUNTRY_TYPES.DOMESTIC,
-                inCareOf: 'Bob Dean',
-                name: 'Susan Dean',
-                phone: '1234567890',
-                postalCode: '05198',
-                secondaryName: 'Susan Dean',
-                state: 'AK',
               },
             ],
           },
@@ -465,20 +330,7 @@ describe('ContactFactory', () => {
         {
           ...baseCaseExternal,
           partyType: 'SOME INVALID PARTY TYPE',
-          petitioners: [
-            {
-              address1: '876 12th Ave',
-              city: 'Nashville',
-              contactType: CONTACT_TYPES.primary,
-              country: 'USA',
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'someone@example.com',
-              name: 'Jimmy Dean',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-            },
-          ],
+          petitioners: [baseContact],
         },
         { applicationContext },
       );
@@ -550,17 +402,9 @@ describe('ContactFactory', () => {
     it('fails when an email is not provided and the contact has eAccess', () => {
       const contact = new contactConstructor(
         {
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.primary,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
+          ...baseContact,
+          email: undefined,
           hasEAccess: true,
-          inCareOf: 'USTC',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          state: 'AK',
         },
         { applicationContext },
       );
@@ -573,17 +417,9 @@ describe('ContactFactory', () => {
     it('passes when email is not provided and the contact does not have eAccess', () => {
       const contact = new contactConstructor(
         {
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          contactType: CONTACT_TYPES.primary,
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
+          ...baseContact,
+          email: undefined,
           hasEAccess: false,
-          inCareOf: 'USTC',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          state: 'AK',
         },
         { applicationContext },
       );
