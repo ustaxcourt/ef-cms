@@ -452,7 +452,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -466,7 +466,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -746,6 +746,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
                 - dawson
       - migrate:
           requires:
@@ -760,6 +761,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
       - smoketests:
           requires:
             - migrate
@@ -773,6 +775,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
       - switch-colors:
           requires:
             - smoketests
@@ -787,6 +790,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
                 - dawson
   build-and-deploy-without-smoketests:
     jobs:
