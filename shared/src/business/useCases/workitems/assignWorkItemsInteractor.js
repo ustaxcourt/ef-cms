@@ -3,25 +3,22 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * getWorkItem
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.assigneeId the id of the user to assign the work item to
  * @param {string} providers.assigneeName the name of the user to assign the work item to
  * @param {string} providers.workItemId the id of the work item to assign
  */
-exports.assignWorkItemsInteractor = async ({
+exports.assignWorkItemsInteractor = async (
   applicationContext,
-  assigneeId,
-  assigneeName,
-  workItemId,
-}) => {
+  { assigneeId, assigneeName, workItemId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSIGN_WORK_ITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
@@ -47,9 +44,6 @@ exports.assignWorkItemsInteractor = async ({
 
   const caseToUpdate = new Case(caseObject, { applicationContext });
   const workItemEntity = new WorkItem(fullWorkItem, { applicationContext });
-  const originalWorkItem = new WorkItem(cloneDeep(fullWorkItem), {
-    applicationContext,
-  });
 
   workItemEntity.assignToUser({
     assigneeId,
@@ -60,20 +54,13 @@ exports.assignWorkItemsInteractor = async ({
     sentByUserId: user.userId,
   });
 
-  // This must run BEFORE saveWorkItemForPaper
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    deleteFromSection: false,
-    workItem: originalWorkItem.validate().toRawObject(),
-  });
-
   await Promise.all([
     applicationContext.getPersistenceGateway().updateWorkItemInCase({
       applicationContext,
       caseToUpdate: caseToUpdate.validate().toRawObject(),
       workItem: workItemEntity.validate().toRawObject(),
     }),
-    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
       workItem: workItemEntity.validate().toRawObject(),
     }),

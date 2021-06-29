@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for setting pendingItems
  * @param {object} providers.props the pendingItems to set
+ * @returns {object} the next path based on if there is a selected judge or not
  */
 export const isJudgeSelectedAction = ({ get, path }) => {
   const selectedJudge = get(state.pendingReports.selectedJudge);

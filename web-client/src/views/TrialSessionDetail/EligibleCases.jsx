@@ -39,6 +39,7 @@ export const EligibleCases = connect(
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
               <th>Case Type</th>
+              <th>Calendar Notes</th>
               {trialSessionDetailsHelper.showQcComplete && (
                 <th>QC Complete?</th>
               )}
@@ -66,8 +67,15 @@ export const EligibleCases = connect(
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td>{item.respondent}</td>
+                <td>
+                  {item.irsPractitioners.map(practitioner => (
+                    <div key={practitioner.userId}>{practitioner.name}</div>
+                  ))}
+                </td>
                 <td>{item.caseType}</td>
+                <td>
+                  <div>{item.calendarNotes}</div>
+                </td>
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
                     <div className="text-center">
@@ -83,9 +91,8 @@ export const EligibleCases = connect(
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
                             docketNumber: item.docketNumber,
-                            qcCompleteForTrial: !item.qcCompleteForTrial[
-                              trialSessionId
-                            ],
+                            qcCompleteForTrial:
+                              !item.qcCompleteForTrial[trialSessionId],
                           });
                         }}
                       />

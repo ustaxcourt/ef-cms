@@ -34,11 +34,11 @@ export const CaseSearchByDocketNumber = connect(
           <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-                <FormGroup
-                  className="margin-bottom-0"
-                  errorText={validationErrors.docketNumber}
-                >
-                  <label className="usa-label" htmlFor="docket-number">
+                <FormGroup errorText={validationErrors.docketNumber}>
+                  <label
+                    className="usa-label  margin-bottom-0"
+                    htmlFor="docket-number"
+                  >
                     Docket number <span className="usa-hint">(required)</span>
                   </label>
                   <span className="usa-hint">

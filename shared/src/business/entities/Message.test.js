@@ -1,4 +1,7 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
+const {
+  applicationContext,
+  over1000Characters,
+} = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
 const { Message } = require('./Message');
 
@@ -41,6 +44,56 @@ describe('Message', () => {
         { applicationContext },
       );
       expect(message.isValid()).toBeFalsy();
+    });
+
+    it('creates an invalid Message with no subject', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Enter a subject line',
+      );
+    });
+
+    it('creates an invalid Message with an empty subject', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          subject: ' ',
+        },
+        { applicationContext },
+      );
+
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Enter a subject line',
+      );
+    });
+
+    it('creates an invalid Message with a subject that is too long', () => {
+      const message = new Message(
+        {
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          subject:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque ph.', // 250 chars
+        },
+        { applicationContext },
+      );
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Limit is 250 characters. Enter 250 or fewer characters.',
+      );
     });
 
     it('creates an invalid Message with isCompleted true and without completedBy fields', () => {
@@ -137,7 +190,7 @@ describe('Message', () => {
   });
 
   describe('markAsCompleted', () => {
-    it('should mark the message as completed with a message and user', () => {
+    it('should mark the message as completed and replied to with a message and user', () => {
       const message = new Message(
         {
           caseStatus: CASE_STATUS_TYPES.generalDocket,
@@ -148,6 +201,7 @@ describe('Message', () => {
           from: 'gg',
           fromSection: PETITIONS_SECTION,
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isRepliedTo: false,
           message: 'hello world',
           subject: 'hey!',
           to: 'bob',
@@ -174,6 +228,49 @@ describe('Message', () => {
         completedMessage: 'the completed message',
         createdAt: expect.anything(),
         isCompleted: true,
+        isRepliedTo: true,
+      });
+    });
+
+    it('should not error out if message is a blank string', () => {
+      const message = new Message(
+        {
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isRepliedTo: false,
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+
+      message.markAsCompleted({
+        message: '',
+        user: {
+          name: 'Test Person',
+          section: PETITIONS_SECTION,
+          userId: 'f3cf18f9-f1b0-43f7-a4e0-d0e2658e1faa',
+        },
+      });
+
+      expect(message.isValid()).toBeTruthy();
+      expect(message).toMatchObject({
+        completedBy: 'Test Person',
+        completedBySection: PETITIONS_SECTION,
+        completedByUserId: 'f3cf18f9-f1b0-43f7-a4e0-d0e2658e1faa',
+        completedMessage: null,
+        createdAt: expect.anything(),
+        isCompleted: true,
+        isRepliedTo: true,
       });
     });
   });
@@ -211,6 +308,32 @@ describe('Message', () => {
           documentTitle: 'Petition',
         },
       ]);
+    });
+  });
+
+  describe('validation message', () => {
+    it('displays a message when the message is over 700 characters long', () => {
+      const message = new Message(
+        {
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          message: over1000Characters,
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+      expect(message.getFormattedValidationErrors()).toEqual({
+        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
+      });
     });
   });
 });

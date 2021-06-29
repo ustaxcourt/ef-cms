@@ -30,8 +30,8 @@ export const caseDetailEditHelper = (get, applicationContext) => {
     ].includes(caseDetail.partyType) &&
     caseDetail.docketEntries
   ) {
-    const odsDocs = caseDetail.docketEntries.filter(document => {
-      return document.documentType === 'Ownership Disclosure Statement';
+    const odsDocs = caseDetail.docketEntries.filter(doc => {
+      return doc.documentType === 'Ownership Disclosure Statement';
     });
     showOwnershipDisclosureStatement = true;
     if (odsDocs[0]) {
@@ -40,8 +40,8 @@ export const caseDetailEditHelper = (get, applicationContext) => {
   }
 
   if (caseDetail.docketEntries) {
-    const rptDocs = caseDetail.docketEntries.filter(document => {
-      return document.documentType.includes('Request for Place of Trial');
+    const rptDocs = caseDetail.docketEntries.filter(doc => {
+      return doc.documentType.includes('Request for Place of Trial');
     });
     if (rptDocs[0]) {
       requestForPlaceOfTrialDocumentId = rptDocs[0].docketEntryId;

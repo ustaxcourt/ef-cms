@@ -5,6 +5,7 @@ export const trialClerkViewsNotesFromCaseDetail = test => {
     });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.judgesNote.notes')).toEqual(undefined); // judge (user) notes should not be present
+    expect(test.getState('judgesNote.notes')).toEqual(undefined);
+    expect(test.getState('caseDetail.judgesNote.notes')).toEqual(undefined);
   });
 };

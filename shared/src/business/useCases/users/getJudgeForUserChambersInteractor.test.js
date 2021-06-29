@@ -56,18 +56,20 @@ describe('getJudgeForUserChambersInteractor', () => {
       });
     applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor.mockImplementation(async ({ section }) => {
-        return allUsers.filter(user => user.section === section);
-      });
+      .getUsersInSectionInteractor.mockImplementation(
+        async (appContext, { section }) => {
+          return allUsers.filter(user => user.section === section);
+        },
+      );
   });
 
   it('Fetches the judge associated with a given chambers user', async () => {
     currentUser = chambersUser;
 
-    const result = await getJudgeForUserChambersInteractor({
-      applicationContext,
+    const result = await getJudgeForUserChambersInteractor(applicationContext, {
       user: chambersUser,
     });
+
     expect(result).toMatchObject(judgeUser);
     expect(
       applicationContext.getUseCases().getUserInteractor,
@@ -78,10 +80,10 @@ describe('getJudgeForUserChambersInteractor', () => {
   });
 
   it('Fetches the judge associated with a given chambers user when the user is a judge', async () => {
-    const result = await getJudgeForUserChambersInteractor({
-      applicationContext,
+    const result = await getJudgeForUserChambersInteractor(applicationContext, {
       user: judgeUser,
     });
+
     expect(result).toMatchObject(judgeUser);
     expect(
       applicationContext.getUseCases().getUserInteractor,
@@ -97,10 +99,10 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: chambersUser.userId,
     };
 
-    const result = await getJudgeForUserChambersInteractor({
-      applicationContext,
+    const result = await getJudgeForUserChambersInteractor(applicationContext, {
       user: currentUser,
     });
+
     expect(result).toMatchObject(judgeUser);
     expect(
       applicationContext.getUseCases().getUserInteractor,
@@ -116,10 +118,10 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: 'docketclerk1',
     };
 
-    const result = await getJudgeForUserChambersInteractor({
-      applicationContext,
+    const result = await getJudgeForUserChambersInteractor(applicationContext, {
       user: currentUser,
     });
+
     expect(result).toBeUndefined();
     expect(
       applicationContext.getUseCases().getUserInteractor,

@@ -12,8 +12,7 @@ exports.getUserCaseNoteForCasesLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getUserCaseNoteForCasesInteractor({
-        applicationContext,
+      .getUserCaseNoteForCasesInteractor(applicationContext, {
         docketNumbers: docketNumbers.split(','),
       });
   });

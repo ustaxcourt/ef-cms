@@ -28,8 +28,7 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
 
     let error;
     try {
-      await getIrsPractitionersBySearchKeyInteractor({
-        applicationContext,
+      await getIrsPractitionersBySearchKeyInteractor(applicationContext, {
         searchKey: 'something',
       });
     } catch (err) {
@@ -56,10 +55,12 @@ describe('getIrsPractitionersBySearchKeyInteractor', () => {
         },
       ]);
 
-    const result = await getIrsPractitionersBySearchKeyInteractor({
+    const result = await getIrsPractitionersBySearchKeyInteractor(
       applicationContext,
-      searchKey: 'Test Practitioner',
-    });
+      {
+        searchKey: 'Test Practitioner',
+      },
+    );
 
     expect(result).toMatchObject([{ name: 'Test Practitioner' }]);
   });

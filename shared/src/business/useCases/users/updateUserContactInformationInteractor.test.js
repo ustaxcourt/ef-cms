@@ -43,11 +43,12 @@ describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
     mockUser = {
       ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      admissionsDate: new Date(),
+      admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[2],
       entityName: irsPractitionerEntityName,
+      firmName: 'broken',
       firstName: 'Roy',
       lastName: 'Rogers',
       originalBarState: 'OR',
@@ -71,8 +72,7 @@ describe('updateUserContactInformationInteractor', () => {
     };
 
     await expect(
-      updateUserContactInformationInteractor({
-        applicationContext,
+      updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
       }),
@@ -81,8 +81,7 @@ describe('updateUserContactInformationInteractor', () => {
 
   it('should throw unauthorized error when the user attempts to modify contact information for a different user', async () => {
     await expect(
-      updateUserContactInformationInteractor({
-        applicationContext,
+      updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
       }),
@@ -90,9 +89,9 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo: {},
+      firmName: 'broken',
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
@@ -118,11 +117,12 @@ describe('updateUserContactInformationInteractor', () => {
         throw new Error('something wicked');
       });
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
-      contactInfo,
-      userId: mockUser.userId,
-    });
+    await expect(
+      updateUserContactInformationInteractor(applicationContext, {
+        contactInfo,
+        userId: mockUser.userId,
+      }),
+    ).rejects.toThrow('something wicked');
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -136,7 +136,7 @@ describe('updateUserContactInformationInteractor', () => {
   it('should update the user with the new contact information and mark it as having an update in progress', async () => {
     mockUser = {
       ...MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'],
-      admissionsDate: new Date(),
+      admissionsDate: '2020-03-14',
       admissionsStatus: ADMISSIONS_STATUS_OPTIONS[0],
       birthYear: '1902',
       employer: EMPLOYER_OPTIONS[1],
@@ -147,8 +147,7 @@ describe('updateUserContactInformationInteractor', () => {
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -185,8 +184,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.privatePractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -210,8 +208,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -235,8 +232,7 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.privatePractitioner,
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -259,11 +255,12 @@ describe('updateUserContactInformationInteractor', () => {
       entityName: 'notapractitioner',
     };
 
-    await updateUserContactInformationInteractor({
-      applicationContext,
-      contactInfo,
-      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    await expect(
+      updateUserContactInformationInteractor(applicationContext, {
+        contactInfo,
+        userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+      }),
+    ).rejects.toThrow();
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -281,8 +278,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should generate a change of address document', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -291,8 +287,7 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   it('should notify the user that the update is complete and mark the user as not having an update in progress', async () => {
-    await updateUserContactInformationInteractor({
-      applicationContext,
+    await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -310,5 +305,38 @@ describe('updateUserContactInformationInteractor', () => {
     ).toMatchObject({
       isUpdatingInformation: false,
     });
+  });
+
+  it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      firmName: 'testing',
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      firmName: 'testing',
+    });
+  });
+
+  it('should return early if the firmName and contact info was not changed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => ({
+        ...mockUser,
+        contact: contactInfo,
+      }));
+
+    await updateUserContactInformationInteractor(applicationContext, {
+      contactInfo,
+      firmName: mockUser.firmName,
+      userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser,
+    ).not.toBeCalled();
   });
 });

@@ -94,8 +94,8 @@ export const AdvancedDocumentSearch = connect(
                   name="opinionType"
                 >
                   <option value="">- Select -</option>
-                  {opinionDocumentTypes.map((opinionType, idx) => (
-                    <option key={`opinion-${idx}`} value={opinionType}>
+                  {opinionDocumentTypes.map(opinionType => (
+                    <option key={opinionType} value={opinionType}>
                       {opinionType}
                     </option>
                   ))}
@@ -116,8 +116,8 @@ export const AdvancedDocumentSearch = connect(
                 name="judge"
               >
                 <option value="">- Select -</option>
-                {judges.map((judge, idx) => (
-                  <option key={`judge-${idx}`} value={judge.judgeFullName}>
+                {judges.map(judge => (
+                  <option key={judge.judgeFullName} value={judge.judgeFullName}>
                     {judge.name}
                   </option>
                 ))}

@@ -13,12 +13,12 @@ const { User } = require('../../entities/User');
 /**
  * createUserInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createUserInteractor = async ({ applicationContext, user }) => {
+exports.createUserInteractor = async (applicationContext, { user }) => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.CREATE_USER)) {
@@ -47,14 +47,14 @@ exports.createUserInteractor = async ({ applicationContext, user }) => {
     );
   }
 
-  const {
-    userId,
-  } = await applicationContext.getPersistenceGateway().createUser({
-    applicationContext,
-    disableCognitoUser: user.role === ROLES.legacyJudge,
-    password: user.password,
-    user: userEntity.validate().toRawObject(),
-  });
+  const { userId } = await applicationContext
+    .getPersistenceGateway()
+    .createUser({
+      applicationContext,
+      disableCognitoUser: user.role === ROLES.legacyJudge,
+      password: user.password,
+      user: userEntity.validate().toRawObject(),
+    });
 
   userEntity.userId = userId;
 

@@ -24,86 +24,20 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
-    'contactPrimary.M.contactId.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.countryType.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.name.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.secondaryName.S': {
-      type: 'text',
-    },
-    'contactPrimary.M.state.S': {
-      type: 'text',
-    },
-    'contactSecondary.M.contactId.S': {
-      type: 'text',
-    },
-    'contactSecondary.M.countryType.S': {
-      type: 'text',
-    },
-    'contactSecondary.M.name.S': {
-      type: 'text',
-    },
-    'contactSecondary.M.state.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.createdAt.S': {
+    'closedDate.S': {
       type: 'date',
-    },
-    'docketEntries.L.M.docketEntryId.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.documentType.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.entityName.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.eventCode.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.filedBy.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.filingDate.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.indexedTimestamp.N': {
-      type: 'text',
-    },
-    'docketEntries.L.M.isDraft.BOOL': {
-      type: 'boolean',
-    },
-    'docketEntries.L.M.judge.S': {
-      type: 'text',
-    },
-    'docketEntries.L.M.pending.BOOL': {
-      type: 'boolean',
-    },
-    'docketEntries.L.M.receivedAt.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.servedAt.S': {
-      type: 'date',
-    },
-    'docketEntries.L.M.userId.S': {
-      type: 'text',
     },
     'docketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumberSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'docketNumberWithSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'hasPendingItems.BOOL': {
       type: 'boolean',
@@ -112,16 +46,35 @@ module.exports = {
       type: 'text',
     },
     'irsPractitioners.L.M.userId.S': {
+      type: 'keyword',
+    },
+    'isSealed.BOOL': { type: 'boolean' },
+    'petitioners.L.M.contactId.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.contactType.S': {
+      type: 'keyword',
+    },
+    'petitioners.L.M.countryType.S': {
+      type: 'keyword',
+    },
+    'petitioners.L.M.name.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.secondaryName.S': {
+      type: 'text',
+    },
+    'petitioners.L.M.state.S': {
       type: 'text',
     },
     'pk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'preferredTrialCity.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'receivedAt.S': {
       type: 'date',
@@ -130,7 +83,7 @@ module.exports = {
       type: 'date',
     },
     'sk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sortableDocketNumber.N': {
       fields: {
@@ -138,13 +91,13 @@ module.exports = {
           type: 'keyword',
         },
       },
-      type: 'text',
+      type: 'integer',
     },
     'status.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'userId.S': {
-      type: 'text',
+      type: 'keyword',
     },
   },
 };

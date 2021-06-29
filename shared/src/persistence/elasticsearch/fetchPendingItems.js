@@ -4,18 +4,33 @@ exports.fetchPendingItems = async ({
   applicationContext,
   judge,
   page,
-  source,
+  unservableEventCodes,
 }) => {
+  const caseSource = [
+    'associatedJudge',
+    'caseCaption',
+    'docketNumber',
+    'docketNumberSuffix',
+    'status',
+  ];
+  const docketEntrySource = [
+    'docketEntryId',
+    'documentType',
+    'documentTitle',
+    'receivedAt',
+  ];
+
   const { PENDING_ITEMS_PAGE_SIZE } = applicationContext.getConstants();
 
   const size = page ? PENDING_ITEMS_PAGE_SIZE : 5000;
+
   const from = page ? page * size : undefined;
 
   const hasParentParam = {
     has_parent: {
       inner_hits: {
         _source: {
-          includes: source,
+          includes: caseSource,
         },
         name: 'case-mappings',
       },
@@ -26,20 +41,34 @@ exports.fetchPendingItems = async ({
 
   const searchParameters = {
     body: {
-      _source: source,
+      _source: docketEntrySource,
       from,
       query: {
         bool: {
           must: [
-            { match: { 'pk.S': 'case|' } },
-            { match: { 'sk.S': 'docket-entry|' } },
-            {
-              exists: {
-                field: 'servedAt',
-              },
-            },
+            { term: { 'entityName.S': 'DocketEntry' } },
             { term: { 'pending.BOOL': true } },
             hasParentParam,
+            {
+              bool: {
+                should: [
+                  {
+                    bool: {
+                      minimum_should_match: 1,
+                      should: [
+                        {
+                          exists: {
+                            field: 'servedAt',
+                          },
+                        },
+                        { term: { 'isLegacyServed.BOOL': true } },
+                      ],
+                    },
+                  },
+                  { terms: { 'eventCode.S': unservableEventCodes } },
+                ],
+              },
+            },
           ],
         },
       },
@@ -65,5 +94,5 @@ exports.fetchPendingItems = async ({
     searchParameters,
   });
 
-  return { results, total };
+  return { foundDocuments: results, total };
 };

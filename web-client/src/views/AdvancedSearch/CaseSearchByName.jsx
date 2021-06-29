@@ -42,11 +42,18 @@ export const CaseSearchByName = connect(
         <div className="blue-container advanced-search__form-container">
           <form>
             <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-6">
+              <div className="tablet:grid-col-12">
                 <FormGroup errorText={validationErrors.petitionerName}>
-                  <label className="usa-label" htmlFor="petitioner-name">
+                  <label
+                    className="usa-label margin-bottom-0"
+                    htmlFor="petitioner-name"
+                  >
                     Petitioner name <span className="usa-hint">(required)</span>
                   </label>
+                  <span className="usa-hint">
+                    Advanced syntax search (*, “”, - , etc. ) is not supported
+                    at this time.
+                  </span>
                   <input
                     aria-describedby="case-search-by-name"
                     className="usa-input"
@@ -69,9 +76,68 @@ export const CaseSearchByName = connect(
                   />
                 </FormGroup>
               </div>
+            </div>
 
-              <div className="tablet:grid-col-6">
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-7">
+                <div className="grid-row grid-gap">
+                  <div className="tablet:grid-col-7">
+                    <label className="usa-label" htmlFor="country-type">
+                      Country
+                    </label>
+                    <BindedSelect
+                      aria-describedby="case-search-by-name"
+                      bind="advancedSearchForm.caseSearchByName.countryType"
+                      id="country-type"
+                      name="countryType"
+                    >
+                      <option value={constants.COUNTRY_TYPES.DOMESTIC}>
+                        - United States -
+                      </option>
+                      <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
+                        - International -
+                      </option>
+                    </BindedSelect>
+                  </div>
+
+                  {advancedSearchHelper.showStateSelect && (
+                    <div className="tablet:grid-col-5">
+                      <label className="usa-label" htmlFor="petitioner-state">
+                        State
+                      </label>
+                      <BindedSelect
+                        aria-describedby="case-search-by-name"
+                        bind="advancedSearchForm.caseSearchByName.petitionerState"
+                        id="petitioner-state"
+                        name="petitionerState"
+                      >
+                        <option value="">- Select -</option>
+                        <optgroup label="State">
+                          {Object.keys(usStates).map(abbrev => {
+                            return (
+                              <option key={abbrev} value={abbrev}>
+                                {usStates[abbrev]}
+                              </option>
+                            );
+                          })}
+                        </optgroup>
+                        <optgroup label="Other">
+                          {usStatesOther.map(abbrev => {
+                            return (
+                              <option key={abbrev} value={abbrev}>
+                                {abbrev}
+                              </option>
+                            );
+                          })}
+                        </optgroup>
+                      </BindedSelect>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="tablet:grid-col-5">
                 <FormGroup
+                  className="margin-top-0"
                   errorText={[
                     validationErrors.yearFiledMin,
                     validationErrors.yearFiledMax,
@@ -130,65 +196,6 @@ export const CaseSearchByName = connect(
                     </div>
                   </fieldset>
                 </FormGroup>
-              </div>
-            </div>
-
-            <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-8">
-                <div className="grid-row grid-gap">
-                  <div className="tablet:grid-col-7">
-                    <label className="usa-label" htmlFor="country-type">
-                      Country
-                    </label>
-                    <BindedSelect
-                      aria-describedby="case-search-by-name"
-                      bind="advancedSearchForm.caseSearchByName.countryType"
-                      id="country-type"
-                      name="countryType"
-                    >
-                      <option value={constants.COUNTRY_TYPES.DOMESTIC}>
-                        - United States -
-                      </option>
-                      <option value={constants.COUNTRY_TYPES.INTERNATIONAL}>
-                        - International -
-                      </option>
-                    </BindedSelect>
-                  </div>
-
-                  {advancedSearchHelper.showStateSelect && (
-                    <div className="tablet:grid-col-5">
-                      <label className="usa-label" htmlFor="petitioner-state">
-                        State
-                      </label>
-                      <BindedSelect
-                        aria-describedby="case-search-by-name"
-                        bind="advancedSearchForm.caseSearchByName.petitionerState"
-                        id="petitioner-state"
-                        name="petitionerState"
-                      >
-                        <option value="">- Select -</option>
-                        <optgroup label="State">
-                          {Object.keys(usStates).map(abbrev => {
-                            return (
-                              <option key={abbrev} value={abbrev}>
-                                {usStates[abbrev]}
-                              </option>
-                            );
-                          })}
-                        </optgroup>
-                        <optgroup label="Other">
-                          {usStatesOther.map(abbrev => {
-                            return (
-                              <option key={abbrev} value={abbrev}>
-                                {abbrev}
-                              </option>
-                            );
-                          })}
-                        </optgroup>
-                      </BindedSelect>
-                    </div>
-                  )}
-                </div>
               </div>
             </div>
 

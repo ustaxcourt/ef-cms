@@ -10,24 +10,18 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * associatePrivatePractitionerWithCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} params the params object
- * @param {object} params.applicationContext the application context
  * @param {string} params.docketNumber the docket number of the case
- * @param {boolean} params.representingPrimary whether the practitioner is
- * representing the primary contact
- * @param {boolean} params.representingSecondary whether the practitioner is
- * representing the secondary contact
+ * @param {Array} params.representing the contact ids the private practitioner is representing
+ * @param {boolean} params.serviceIndicator serviceIndicator for the practitioner
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-exports.associatePrivatePractitionerWithCaseInteractor = async ({
+exports.associatePrivatePractitionerWithCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  representingPrimary,
-  representingSecondary,
-  serviceIndicator,
-  userId,
-}) => {
+  { docketNumber, representing, serviceIndicator, userId },
+) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 
   if (
@@ -43,8 +37,7 @@ exports.associatePrivatePractitionerWithCaseInteractor = async ({
   return await associatePrivatePractitionerToCase({
     applicationContext,
     docketNumber,
-    representingPrimary,
-    representingSecondary,
+    representing,
     serviceIndicator,
     user,
   });

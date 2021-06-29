@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
-import { FilingsAndProceedings } from './FilingsAndProceedings';
+import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -11,21 +11,61 @@ import classNames from 'classnames';
 export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     showModal: state.modal.showModal,
   },
+
   function DocketRecord({
     docketRecordHelper,
-    formattedCaseDetail,
+    formattedDocketEntries,
     showModal,
   }) {
+    const getIcon = entry => {
+      if (entry.isLegacySealed) {
+        return (
+          <FontAwesomeIcon
+            className="sealed-address"
+            icon={['fas', 'lock']}
+            title="is legacy sealed"
+          />
+        );
+      }
+
+      // we only care to show the lock icon for external users,
+      // so we check if hideIcons is true AFTER we renter the lock icon
+      if (entry.hideIcons) return;
+
+      if (entry.isPaper) {
+        return <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />;
+      }
+
+      if (entry.isInProgress) {
+        return (
+          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />
+        );
+      }
+
+      if (entry.qcNeeded) {
+        return <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />;
+      }
+
+      if (entry.showLoadingIcon) {
+        return (
+          <FontAwesomeIcon
+            className="fa-spin spinner"
+            icon="spinner"
+            title="is loading"
+          />
+        );
+      }
+    };
+
     return (
       <>
         <DocketRecordHeader />
-
         <table
           aria-label="docket record"
-          className="usa-table case-detail docket-record responsive-table row-border-only"
+          className="usa-table case-detail ustc-table responsive-table"
         >
           <thead>
             <tr>
@@ -48,7 +88,7 @@ export const DocketRecord = connect(
             </tr>
           </thead>
           <tbody>
-            {formattedCaseDetail.formattedDocketEntriesOnDocketRecord.map(
+            {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
               (entry, arrayIndex) => {
                 return (
                   <tr
@@ -56,7 +96,7 @@ export const DocketRecord = connect(
                       entry.isInProgress && 'in-progress',
                       entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
-                    key={arrayIndex}
+                    key={entry.index}
                   >
                     <td className="center-column hide-on-mobile">
                       {entry.index}
@@ -74,43 +114,8 @@ export const DocketRecord = connect(
                     <td className="center-column hide-on-mobile">
                       {entry.eventCode}
                     </td>
-                    <td
-                      aria-hidden="true"
-                      className="filing-type-icon hide-on-mobile"
-                    >
-                      {!entry.hideIcons && (
-                        <>
-                          {entry.isPaper && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'file-alt']}
-                              title="is paper"
-                            />
-                          )}
-
-                          {entry.isInProgress && (
-                            <FontAwesomeIcon
-                              icon={['fas', 'thumbtack']}
-                              title="in progress"
-                            />
-                          )}
-
-                          {entry.qcWorkItemsUntouched &&
-                            !entry.isInProgress && (
-                              <FontAwesomeIcon
-                                icon={['fa', 'star']}
-                                title="is untouched"
-                              />
-                            )}
-
-                          {entry.showLoadingIcon && (
-                            <FontAwesomeIcon
-                              className="fa-spin spinner"
-                              icon="spinner"
-                              title="is loading"
-                            />
-                          )}
-                        </>
-                      )}
+                    <td aria-hidden="true" className="filing-type-icon">
+                      {getIcon(entry)}
                     </td>
                     <td>
                       <FilingsAndProceedings
@@ -123,7 +128,7 @@ export const DocketRecord = connect(
                     </td>
                     <td className="hide-on-mobile">{entry.filedBy}</td>
                     <td className="hide-on-mobile">{entry.action}</td>
-                    <td>
+                    <td className="hide-on-mobile">
                       {entry.showNotServed && (
                         <span className="text-semibold not-served">
                           Not served
@@ -142,7 +147,7 @@ export const DocketRecord = connect(
                         {entry.showEditDocketRecordEntry && (
                           <Button
                             link
-                            href={`/case-detail/${formattedCaseDetail.docketNumber}/docket-entry/${entry.index}/edit-meta`}
+                            href={entry.editDocketEntryMetaLink}
                             icon="edit"
                           >
                             Edit

@@ -2,7 +2,7 @@ const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 const { put } = require('../../dynamodbClientService');
 /**
- * saveWorkItemForNonPaper
+ * saveWorkItemForDocketClerkFilingExternalDocument
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context

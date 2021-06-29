@@ -12,8 +12,7 @@ exports.getDocumentQCServedForSectionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCServedForSectionInteractor({
-        applicationContext,
+      .getDocumentQCServedForSectionInteractor(applicationContext, {
         section,
       });
   });

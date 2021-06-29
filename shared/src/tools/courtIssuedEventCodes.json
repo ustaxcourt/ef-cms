@@ -17,11 +17,27 @@
   },
   {
     "eventCode": "SPOS",
+    "documentType": "Standing Pretrial Order for Small Case",
+    "documentTitle": "Standing Pretrial Order for Small Case",
+    "scenario": "Type A",
+    "isOrder": true,
+    "requiresSignature": true
+  },
+  {
+    "eventCode": "SPTO",
     "documentType": "Standing Pretrial Order",
     "documentTitle": "Standing Pretrial Order",
     "scenario": "Type A",
     "isOrder": true,
     "requiresSignature": true
+  },
+  {
+    "eventCode": "SPTN",
+    "documentType": "Standing Pretrial Notice",
+    "documentTitle": "Standing Pretrial Notice",
+    "scenario": "Type A",
+    "isOrder": false,
+    "requiresSignature": false
   },
   {
     "eventCode": "OAL",
@@ -336,7 +352,7 @@
     "documentTitle": "[Anything]",
     "scenario": "Type A",
     "isNotice": true,
-    "requiresSignature": true
+    "requiresSignature": false
   },
   {
     "eventCode": "SOP",
@@ -361,14 +377,14 @@
   {
     "eventCode": "FTRL",
     "documentType": "Further Trial before",
-    "documentTitle": "Further Trial before [Judge] at [Place]",
+    "documentTitle": "Further Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
   {
     "eventCode": "HEAR",
     "documentType": "Hearing before",
-    "documentTitle": "Hearing before [Judge] at [Place]",
+    "documentTitle": "Hearing before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
@@ -383,14 +399,14 @@
   {
     "eventCode": "PTRL",
     "documentType": "Partial Trial before",
-    "documentTitle": "Partial Trial before [Judge] at [Place]",
+    "documentTitle": "Partial Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },
   {
     "eventCode": "TRL",
     "documentType": "Trial before",
-    "documentTitle": "Trial before [Judge] at [Place]",
+    "documentTitle": "Trial before [Judge] at [Place]. [Anything]",
     "scenario": "Type F",
     "isUnservable": true
   },

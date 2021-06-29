@@ -11,6 +11,7 @@ describe('setPractitionersAction', () => {
         modal: {},
       },
     });
+
     expect(result.state.modal.practitionerMatches).toEqual([
       { name: 'Test Practitioner', userId: '123' },
     ]);
@@ -32,10 +33,26 @@ describe('setPractitionersAction', () => {
         modal: {},
       },
     });
+
     expect(result.state.modal.practitionerMatches).toEqual([
       { name: 'Test Practitioner', userId: '123' },
       { name: 'Test Practitioner2', userId: '234' },
     ]);
     expect(result.state.modal.user).toBeUndefined();
+  });
+
+  it('sets state.modal.representingMap to an empty object', async () => {
+    const result = await runAction(setPractitionersAction, {
+      props: {
+        privatePractitioners: [],
+      },
+      state: {
+        modal: {
+          representingMap: { '5e9f7ebe-b2d5-46c5-8c33-60018e14c311': true },
+        },
+      },
+    });
+
+    expect(result.state.modal.representingMap).toEqual({});
   });
 });

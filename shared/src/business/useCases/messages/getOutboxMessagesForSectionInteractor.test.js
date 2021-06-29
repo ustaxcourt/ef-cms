@@ -22,9 +22,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForSectionInteractor({
-        applicationContext,
-      }),
+      getOutboxMessagesForSectionInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -59,10 +57,12 @@ describe('getOutboxMessagesForSectionInteractor', () => {
       .getPersistenceGateway()
       .getSectionOutboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getOutboxMessagesForSectionInteractor({
+    const returnedMessages = await getOutboxMessagesForSectionInteractor(
       applicationContext,
-      section: messageData.section,
-    });
+      {
+        section: messageData.section,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getSectionOutboxMessages,

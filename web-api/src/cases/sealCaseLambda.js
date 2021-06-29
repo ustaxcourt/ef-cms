@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.sealCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().sealCaseInteractor({
-      applicationContext,
-      ...event.pathParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .sealCaseInteractor(applicationContext, {
+        ...event.pathParameters,
+      });
   });

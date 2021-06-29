@@ -4,10 +4,8 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   get,
   applicationContext,
 ) => {
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    TRANSCRIPT_EVENT_CODE,
-  } = applicationContext.getConstants();
+  const { COURT_ISSUED_EVENT_CODES, TRANSCRIPT_EVENT_CODE } =
+    applicationContext.getConstants();
 
   const selectedEventCode = get(state.form.eventCode);
 
@@ -19,6 +17,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   let showDateLast = false;
   let showDocketNumbers = false;
   let showFreeText = false;
+  let showOptionalFreeText = false;
   let showJudge = false;
   let showTrialLocation = false;
 
@@ -42,6 +41,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
         showDateFirst = true;
         break;
       case 'Type F':
+        showOptionalFreeText = true;
         showJudge = true;
         showTrialLocation = true;
         break;
@@ -62,7 +62,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   } else if (selectedEventCode === 'NOT') {
     freeTextLabel = 'What is this notice for?';
   } else {
-    freeTextLabel = 'Enter description';
+    freeTextLabel = 'Description';
   }
 
   let dateLabel = 'Date';
@@ -78,6 +78,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
     showDocketNumbers,
     showFreeText,
     showJudge,
+    showOptionalFreeText,
     showTrialLocation,
   };
 };

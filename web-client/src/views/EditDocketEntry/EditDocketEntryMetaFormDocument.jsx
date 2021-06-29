@@ -1,8 +1,9 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Inclusions } from '../AddDocketEntry/Inclusions';
+import { Inclusions } from '../PaperFiling/Inclusions';
 import { NonstandardForm } from '../FileDocument/NonstandardForm';
+import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import {
@@ -101,11 +102,11 @@ export const EditDocketEntryMetaFormDocument = connect(
                 internalTypesHelper.internalDocumentTypesForSelectSorted,
               selectedEventCode: form.eventCode,
             })}
-            onChange={(inputValue, { action, name }) => {
+            onChange={(inputValue, { action, name: inputName }) => {
               docketEntryOnChange({
                 action,
+                inputName,
                 inputValue,
-                name,
                 updateSequence: updateDocketEntryMetaDocumentFormValueSequence,
                 validateSequence: validateDocumentSequence,
               });
@@ -120,7 +121,57 @@ export const EditDocketEntryMetaFormDocument = connect(
             }}
           />
         </FormGroup>
-
+        {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
+          <FormGroup
+            errorText={
+              validationErrors.secondaryDocument && !form.secondaryDocument
+            }
+          >
+            <label
+              className="usa-label"
+              htmlFor="react-select-3-input"
+              id="secondary-document-type-label"
+            >
+              Which Document Is This Motion for Leave For?
+              <span className="usa-hint">
+                You can upload the associated document by creating a new docket
+                entry for it.
+              </span>
+            </label>
+            <SelectSearch
+              aria-label="secondary-document-type-label"
+              id="secondary-document-type"
+              isClearable={true}
+              name="secondaryDocument.eventCode"
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+              value={reactSelectValue({
+                documentTypes:
+                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                selectedEventCode:
+                  form.secondaryDocument && form.secondaryDocument.eventCode,
+              })}
+              onChange={(inputValue, { action, name: inputName }) => {
+                docketEntryOnChange({
+                  action,
+                  inputName,
+                  inputValue,
+                  updateSequence:
+                    updateDocketEntryMetaDocumentFormValueSequence,
+                  validateSequence: validateDocumentSequence,
+                });
+                return true;
+              }}
+              onInputChange={(inputText, { action }) => {
+                onInputChange({
+                  action,
+                  inputText,
+                  updateSequence:
+                    updateDocketEntryMetaDocumentFormValueSequence,
+                });
+              }}
+            />
+          </FormGroup>
+        )}
         {editDocketEntryMetaHelper.primary.showNonstandardForm && (
           <NonstandardForm
             helper="editDocketEntryMetaHelper"
@@ -130,7 +181,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             validationErrors="validationErrors"
           />
         )}
-
+        {form.secondaryDocument && <SecondaryDocumentForm />}
         <FormGroup errorText={validationErrors.additionalInfo}>
           <label
             className="usa-label"
@@ -212,12 +263,10 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup>
           <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
         </FormGroup>
-
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
           validateSequence={validateDocumentSequence}
         />
-
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
             <fieldset className="usa-fieldset margin-bottom-0">
@@ -253,6 +302,33 @@ export const EditDocketEntryMetaFormDocument = connect(
             </fieldset>
           </FormGroup>
         )}
+        <hr />
+        <div className="usa-form-group">
+          <fieldset className="usa-fieldset">
+            <legend className="usa-legend">Track document?</legend>
+            <div className="usa-checkbox">
+              <input
+                checked={form.pending || false}
+                className="usa-checkbox__input"
+                id="pending"
+                name="pending"
+                type="checkbox"
+                onChange={e => {
+                  updateDocketEntryMetaDocumentFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label inline-block"
+                htmlFor="pending"
+              >
+                Add to pending report
+              </label>
+            </div>
+          </fieldset>
+        </div>
       </div>
     );
   },

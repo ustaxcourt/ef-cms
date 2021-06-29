@@ -12,24 +12,21 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * updateCounselOnCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the user is attached to
  * @param {object} providers.userData the data being updated on the user
  * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
-exports.updateCounselOnCaseInteractor = async ({
+exports.updateCounselOnCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  userData,
-  userId,
-}) => {
+  { docketNumber, userData, userId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   const editableFields = {
-    representingPrimary: userData.representingPrimary,
-    representingSecondary: userData.representingSecondary,
+    representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
   };
 
@@ -55,31 +52,39 @@ exports.updateCounselOnCaseInteractor = async ({
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
+      representing: editableFields.representing,
       userId,
       ...editableFields,
     });
-    if (userData.representingPrimary) {
-      caseEntity.contactPrimary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
-    if (caseEntity.contactSecondary && userData.representingSecondary) {
-      caseEntity.contactSecondary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
+
+    caseEntity.petitioners.map(petitioner => {
+      if (editableFields.representing.includes(petitioner.contactId)) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      } else if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitioner.contactId,
+        )
+      ) {
+        const serviceIsPaper = !petitioner.email;
+        petitioner.serviceIndicator = serviceIsPaper
+          ? SERVICE_INDICATOR_TYPES.SI_PAPER
+          : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+    });
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
+      serviceIndicator: editableFields.serviceIndicator,
       userId,
-      ...editableFields,
     });
   } else {
     throw new Error('User is not a practitioner');
   }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

@@ -36,8 +36,6 @@ CaseDeadline.prototype.init = function init(rawProps, { applicationContext }) {
   }
 };
 
-CaseDeadline.validationName = 'CaseDeadline';
-
 CaseDeadline.VALIDATION_ERROR_MESSAGES = {
   associatedJudge: 'Associated judge is required',
   deadlineDate: 'Enter a valid deadline date',

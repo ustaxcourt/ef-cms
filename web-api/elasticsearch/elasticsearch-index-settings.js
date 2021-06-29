@@ -5,7 +5,10 @@
   const connectionClass = require('http-aws-es');
   const elasticsearch = require('elasticsearch');
   const mappings = require('./elasticsearch-mappings');
-  const { settings } = require('./elasticsearch-settings');
+  const {
+    ELASTICSEARCH_API_VERSION,
+    settings,
+  } = require('./elasticsearch-settings');
 
   AWS.config.httpOptions.timeout = 300000;
   const { EnvironmentCredentials } = AWS;
@@ -18,8 +21,6 @@
     - elasticsearch.tf
     - delete-elasticsearch-index.js
   */
-  const ELASTICSEARCH_API_VERSION = '7.4';
-
   const environment = {
     region: 'us-east-1',
   };

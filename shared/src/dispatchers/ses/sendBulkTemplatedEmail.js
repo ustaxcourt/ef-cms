@@ -1,3 +1,5 @@
+const { backOff } = require('../../tools/helpers');
+
 /**
  * calls SES.sendBulkTemplatedEmail
  *
@@ -27,8 +29,6 @@ exports.sendBulkTemplatedEmail = async ({
   destinations,
   templateName,
 }) => {
-  const SES = applicationContext.getEmailClient();
-
   try {
     const params = {
       DefaultTemplateData: JSON.stringify(defaultTemplateData),
@@ -38,17 +38,65 @@ exports.sendBulkTemplatedEmail = async ({
         },
         ReplacementTemplateData: JSON.stringify(destination.templateData),
       })),
+      ReturnPath:
+        process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
       Source: process.env.EMAIL_SOURCE,
       Template: templateName,
     };
 
-    applicationContext.logger.info('Bulk Email Params', params);
-
-    const response = await SES.sendBulkTemplatedEmail(params).promise();
-
-    applicationContext.logger.info('Bulk Email Response', response);
+    await exports.sendWithRetry({ applicationContext, params });
   } catch (err) {
-    applicationContext.logger.error(err);
-    await applicationContext.notifyHoneybadger(err);
+    applicationContext.logger.error(`Error sending email: ${err}`, err);
+    throw err;
   }
+};
+
+/**
+ * Sends the email via SES, and retry `MAX_SES_RETRIES` number of times
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext application context
+ * @param {object} providers.params the parameters to send to SES
+ * @param {number} providers.retryCount the number of retries attempted
+ */
+exports.sendWithRetry = async ({
+  applicationContext,
+  params,
+  retryCount = 0,
+}) => {
+  const SES = applicationContext.getEmailClient();
+  const { MAX_SES_RETRIES } = applicationContext.getConstants();
+
+  applicationContext.logger.info('Bulk Email Params', params);
+  const response = await SES.sendBulkTemplatedEmail(params).promise();
+  applicationContext.logger.info('Bulk Email Response', response);
+
+  // parse response from AWS
+  const needToRetry = response.Status.map((attempt, index) => {
+    // AWS returns 'Success' and helpful identifier upon successful send
+    return attempt.Status !== 'Success' ? params.Destinations[index] : false;
+  }).filter(Boolean);
+
+  if (needToRetry.length === 0) {
+    return;
+  }
+
+  if (retryCount >= MAX_SES_RETRIES) {
+    const failures = needToRetry
+      .map(dest => dest.Destination.ToAddresses[0])
+      .join(',');
+    throw `Could not complete service to ${failures}`;
+  }
+
+  // exponential back-off
+  await backOff(retryCount);
+
+  await exports.sendWithRetry({
+    applicationContext,
+    params: {
+      ...params,
+      Destinations: needToRetry,
+    },
+    retryCount: retryCount + 1,
+  });
 };

@@ -9,10 +9,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
- * @param {boolean} providers.representingPrimary true if the practitioner is
- * representing the primary contact on the case, false otherwise
- * @param {boolean} providers.representingSecondary true if the practitioner is
- * representing the secondary contact on the case, false otherwise
+ * @param {Array} params.representing the contact ids the private practitioner is representing
  * @param {object} providers.user the user object for the logged in user
  * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
@@ -20,8 +17,7 @@ const { UserCase } = require('../../entities/UserCase');
 exports.associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
-  representingPrimary,
-  representingSecondary,
+  representing,
   serviceIndicator,
   user,
 }) => {
@@ -52,27 +48,25 @@ exports.associatePrivatePractitionerToCase = async ({
 
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
+    const { petitioners } = caseEntity;
+
+    petitioners.map(petitioner => {
+      if (representing.includes(petitioner.contactId)) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      }
+    });
+
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
         ...user,
-        representingPrimary,
-        representingSecondary,
+        representing,
         serviceIndicator,
       }),
     );
 
-    if (representingPrimary) {
-      caseEntity.contactPrimary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
-    if (caseEntity.contactSecondary && representingSecondary) {
-      caseEntity.contactSecondary.serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
-
-    await applicationContext.getPersistenceGateway().updateCase({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
     return caseEntity.toRawObject();

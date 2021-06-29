@@ -10,8 +10,5 @@ exports.archiveDraftDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .archiveDraftDocumentInteractor({
-        applicationContext,
-        ...event.pathParameters,
-      });
+      .archiveDraftDocumentInteractor(applicationContext, event.pathParameters);
   });

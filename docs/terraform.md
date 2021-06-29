@@ -6,7 +6,7 @@ It supports many cloud services, including AWS, through providers. You can read 
 
 - For your little Terraform robot to work correctly, it needs to be run from a particular directory — from a folder which has a `main.tf`.
 
-- Terraform is very specific about version numbers. It will automatically update versions forward, but will not run against files which have been managed by a newer version. So, if one person updates terraform, everyone has to update terraform. You may want to use [tfswitch](https://warrensbox.github.io/terraform-switcher/) to manage switching between installed Terraform versions. See [fixing version errors](#Fixing-version-errors) below for additional help.
+- Terraform is very specific about version numbers. It will automatically update versions forward, but will not run against files which have been managed by a newer version. So, if one person updates Terraform, everyone has to update Terraform. You may want to use [tfswitch](https://warrensbox.github.io/terraform-switcher/) to manage switching between installed Terraform versions. See [fixing version errors](#Fixing-version-errors) below for additional help.
 
 - It also needs access to a state file — more on that below!
 
@@ -44,7 +44,7 @@ Since state files need to be saved across Terraform runs, they need to be stored
 
 As you may imagine, two people modifying things at the same time can lead to unpredictable results. Terraform handles this by using DynamoDB to lock the state file while you are modifying it.
 
-Under normal circumstances, you won’t notice this happening. However, if you cancel a terraform run, the lock won’t be released — and you’ll need to [Manually unlock the state file](#Manually-unlock-the-state-file).
+Under normal circumstances, you won’t notice this happening. However, if you cancel a Terraform run, the lock won’t be released — and you’ll need to [Manually unlock the state file](#Manually-unlock-the-state-file).
 
 ## Stages of a Terraform run
 
@@ -84,7 +84,7 @@ Here are a few debugging tricks to help with commonly encountered situations.
 
 ### Manually unlock the state file
 
-Cancelling a terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes — verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
+Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes — verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
 Then, use `terraform force-unlock` — see the [Terraform documentation](https://www.terraform.io/docs/commands/force-unlock.html).
 

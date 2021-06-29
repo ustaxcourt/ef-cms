@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -21,29 +22,22 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     role: ROLES.docketClerk,
     userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
   };
+
   const mockCorrespondence = new Correspondence({
     correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
     documentTitle: 'old document title',
     filedBy: 'docket clerk',
     userId: '5980d666-641d-455a-8386-18908d50c98e',
   });
+
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'contact@example.com',
-      name: 'Contact Primary',
-      phone: '123123134',
-      postalCode: '12345',
-      state: 'TN',
-    },
     correspondence: [mockCorrespondence],
     docketEntries: [
       {
         docketEntryId: mockDocketEntryId,
+        docketNumber: '123-45',
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
@@ -58,9 +52,21 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     docketNumber: '123-45',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'contact@example.com',
+        name: 'Contact Primary',
+        phone: '123123134',
+        postalCode: '12345',
+        state: 'TN',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   beforeEach(() => {
@@ -76,16 +82,14 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
-      updateCorrespondenceDocumentInteractor({
-        applicationContext,
+      updateCorrespondenceDocumentInteractor(applicationContext, {
         documentMetadata: { docketNumber: mockCase.docketNumber },
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
-    await updateCorrespondenceDocumentInteractor({
-      applicationContext,
+    await updateCorrespondenceDocumentInteractor(applicationContext, {
       documentMetadata: {
         correspondenceId: mockCorrespondence.correspondenceId,
         docketNumber: mockCase.docketNumber,
@@ -106,14 +110,16 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   });
 
   it('should return an updated raw case object', async () => {
-    const result = await updateCorrespondenceDocumentInteractor({
+    const result = await updateCorrespondenceDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        correspondenceId: mockCorrespondence.correspondenceId,
-        docketNumber: mockCase.docketNumber,
-        documentTitle: 'A title that has been updated',
+      {
+        documentMetadata: {
+          correspondenceId: mockCorrespondence.correspondenceId,
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'A title that has been updated',
+        },
       },
-    });
+    );
 
     expect(result).toMatchObject({
       ...mockCase,

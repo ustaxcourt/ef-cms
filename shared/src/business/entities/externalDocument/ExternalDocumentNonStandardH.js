@@ -1,7 +1,8 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
+  baseExternalDocumentValidation,
+  externalDocumentDecorator,
+} = require('./ExternalDocumentBase');
 const {
   joiValidationDecorator,
   validEntityDecorator,
@@ -22,9 +23,7 @@ ExternalDocumentNonStandardH.prototype.init = function init(
   rawProps,
   ExternalDocumentFactory,
 ) {
-  this.category = rawProps.category;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  externalDocumentDecorator(this, rawProps);
 
   const { secondaryDocument } = rawProps;
   this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
@@ -42,9 +41,7 @@ ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentNonStandardH.schema = {
-  category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
+  ...baseExternalDocumentValidation,
   secondaryDocument: joi.object().required(),
 };
 

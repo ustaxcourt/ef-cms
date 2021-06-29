@@ -21,12 +21,9 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-pushd ../main/lambdas
-npx parcel build migration-segments.js migration.js --target node --bundle-node-modules --no-minify --no-cache --no-source-maps
-popd
-
 # exit on any failure
 set -eo pipefail
+npm run build:lambda:migration
 
 export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_stream_arn=$STREAM_ARN

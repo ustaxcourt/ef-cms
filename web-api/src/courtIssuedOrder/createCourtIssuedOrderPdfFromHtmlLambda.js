@@ -12,9 +12,8 @@ exports.createCourtIssuedOrderPdfFromHtmlLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .createCourtIssuedOrderPdfFromHtmlInteractor({
+        .createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {
           ...JSON.parse(event.body),
-          applicationContext,
         });
     },
     { logResults: false },

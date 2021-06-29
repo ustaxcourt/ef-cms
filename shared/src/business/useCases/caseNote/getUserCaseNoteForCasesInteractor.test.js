@@ -44,8 +44,7 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     };
 
     await expect(
-      getUserCaseNoteForCasesInteractor({
-        applicationContext,
+      getUserCaseNoteForCasesInteractor(applicationContext, {
         docketNumbers: [MOCK_NOTE.docketNumber],
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -57,16 +56,14 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       .getUserCaseNoteForCases.mockResolvedValue([omit(MOCK_NOTE, 'userId')]);
 
     await expect(
-      getUserCaseNoteForCasesInteractor({
-        applicationContext,
+      getUserCaseNoteForCasesInteractor(applicationContext, {
         docketNumbers: [MOCK_NOTE.docketNumber],
       }),
     ).rejects.toThrow('The UserCaseNote entity was invalid');
   });
 
   it('correctly returns data from persistence', async () => {
-    const result = await getUserCaseNoteForCasesInteractor({
-      applicationContext,
+    const result = await getUserCaseNoteForCasesInteractor(applicationContext, {
       docketNumbers: [MOCK_NOTE.docketNumber],
     });
 

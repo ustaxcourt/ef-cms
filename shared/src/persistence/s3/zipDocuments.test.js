@@ -23,17 +23,6 @@ describe('zipDocuments', () => {
   it('calls the s3 archive returning a promise', async () => {
     const zipProcess = zipDocuments({
       applicationContext,
-      fileNames: ['Test File 1', 'Test File 2'],
-      s3Ids: [123, 456],
-      zipName: 'TestZip.zip',
-    });
-
-    expect(zipProcess instanceof Promise).toBeTruthy();
-  });
-
-  it('calls the s3 archive returning a promise', async () => {
-    const zipProcess = zipDocuments({
-      applicationContext,
       extraFileNames: ['Test File Non - S3'],
       extraFiles: [testAsset('sample.pdf')],
       fileNames: ['Test File 1', 'Test File 2'],

@@ -10,8 +10,7 @@ exports.associatePrivatePractitionerWithCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .associatePrivatePractitionerWithCaseInteractor({
+      .associatePrivatePractitionerWithCaseInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });

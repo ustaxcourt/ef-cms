@@ -1,4 +1,10 @@
 const {
+  Case,
+  getPetitionerById,
+  isAssociatedUser,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } = require('../utilities/caseFilter');
@@ -6,64 +12,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case, isAssociatedUser } = require('../entities/cases/Case');
 const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
-
-const getDocumentContentsForDocuments = async ({
-  applicationContext,
-  docketEntries,
-}) => {
-  for (const document of docketEntries) {
-    if (document.documentContentsId) {
-      try {
-        const documentContentsFile = await applicationContext
-          .getPersistenceGateway()
-          .getDocument({
-            applicationContext,
-            key: document.documentContentsId,
-            protocol: 'S3',
-            useTempBucket: false,
-          });
-
-        const documentContentsData = JSON.parse(
-          documentContentsFile.toString(),
-        );
-        document.documentContents = documentContentsData.documentContents;
-        document.draftOrderState = {
-          ...document.draftOrderState,
-          documentContents: documentContentsData.documentContents,
-          richText: documentContentsData.richText,
-        };
-      } catch (e) {
-        applicationContext.logger.error(
-          `Document contents ${document.documentContentsId} could not be found in the S3 bucket.`,
-        );
-      }
-    }
-  }
-
-  return docketEntries;
-};
-
-const getCaseAndDocumentContents = async ({
-  applicationContext,
-  caseRecord,
-}) => {
-  const caseDetailRaw = new Case(caseRecord, {
-    applicationContext,
-  })
-    .validate()
-    .toRawObject();
-
-  caseDetailRaw.docketEntries = await getDocumentContentsForDocuments({
-    applicationContext,
-    docketEntries: caseDetailRaw.docketEntries,
-  });
-
-  return caseDetailRaw;
-};
 
 const getSealedCase = async ({
   applicationContext,
@@ -71,17 +22,27 @@ const getSealedCase = async ({
   isAssociatedWithCase,
 }) => {
   const currentUser = applicationContext.getCurrentUser();
-  const isAuthorizedToViewSealedCase = isAuthorized(
+
+  let isAuthorizedToViewSealedCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-    caseRecord.userId,
   );
 
+  if (!isAuthorizedToViewSealedCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToViewSealedCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
+  }
+
   if (isAuthorizedToViewSealedCase || isAssociatedWithCase) {
-    return await getCaseAndDocumentContents({
-      applicationContext,
-      caseRecord,
-    });
+    return new Case(caseRecord, { applicationContext })
+      .validate()
+      .toRawObject();
   } else {
     caseRecord = caseSealedFormatter(caseRecord);
     return new PublicCase(caseRecord, {
@@ -99,7 +60,9 @@ const getCaseForExternalUser = async ({
   isAuthorizedToGetCase,
 }) => {
   if (isAuthorizedToGetCase && isAssociatedWithCase) {
-    return await getCaseAndDocumentContents({ applicationContext, caseRecord });
+    return new Case(caseRecord, { applicationContext })
+      .validate()
+      .toRawObject();
   } else {
     return new PublicCase(caseRecord, {
       applicationContext,
@@ -112,17 +75,17 @@ const getCaseForExternalUser = async ({
 /**
  * getCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
+exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!caseRecord.docketNumber && !caseRecord.entityName) {
@@ -132,32 +95,43 @@ exports.getCaseInteractor = async ({ applicationContext, docketNumber }) => {
   }
 
   const currentUser = applicationContext.getCurrentUser();
-  const isAuthorizedToGetCase = isAuthorized(
+
+  let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
-    caseRecord.userId,
   );
+  if (!isAuthorizedToGetCase) {
+    const petitioner = getPetitionerById(caseRecord, currentUser.userId);
+    if (petitioner) {
+      isAuthorizedToGetCase = isAuthorized(
+        currentUser,
+        ROLE_PERMISSIONS.GET_CASE,
+        getPetitionerById(caseRecord, currentUser.userId).contactId,
+      );
+    }
+  }
+
   const isAssociatedWithCase = isAssociatedUser({
     caseRaw: caseRecord,
     user: currentUser,
   });
 
   let caseDetailRaw;
-  if (caseRecord.sealedDate) {
+  caseRecord.isSealed = isSealedCase(caseRecord);
+  if (isSealedCase(caseRecord)) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
       caseRecord,
       isAssociatedWithCase,
     });
   } else {
-    const userRole = applicationContext.getCurrentUser().role;
+    const { role: userRole } = currentUser;
     const isInternalUser = User.isInternalUser(userRole);
 
     if (isInternalUser) {
-      caseDetailRaw = await getCaseAndDocumentContents({
-        applicationContext,
-        caseRecord,
-      });
+      caseDetailRaw = new Case(caseRecord, { applicationContext })
+        .validate()
+        .toRawObject();
     } else {
       caseDetailRaw = await getCaseForExternalUser({
         applicationContext,

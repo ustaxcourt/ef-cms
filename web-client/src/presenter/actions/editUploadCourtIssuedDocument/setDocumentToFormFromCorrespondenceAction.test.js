@@ -36,7 +36,7 @@ describe('setDocumentToFormFromCorrespondenceAction', () => {
 
     expect(result.state.form).toEqual({
       ...mockCorrespondence,
-      documentIdToEdit: documentIdToEdit,
+      documentIdToEdit,
       primaryDocumentFile: true,
     });
   });

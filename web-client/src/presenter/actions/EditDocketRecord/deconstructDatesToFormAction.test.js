@@ -34,16 +34,17 @@ describe('deconstructDatesToFormAction', () => {
       dateReceivedDay: '5',
       dateReceivedMonth: '2',
       dateReceivedYear: '2005',
-      day: '25',
-      month: '12',
       secondaryDocument: {
-        day: '10',
-        month: '9',
-        year: '2008',
+        serviceDateDay: '10',
+        serviceDateMonth: '9',
+        serviceDateYear: '2008',
       },
-      year: '2010',
+      serviceDateDay: '25',
+      serviceDateMonth: '12',
+      serviceDateYear: '2010',
     });
   });
+
   it('deconstructs no dates', async () => {
     const result = await runAction(deconstructDatesToFormAction, {
       modules: {

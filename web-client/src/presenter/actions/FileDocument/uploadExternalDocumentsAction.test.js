@@ -5,9 +5,8 @@ import { runAction } from 'cerebral/test';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
 describe('uploadExternalDocumentsAction', () => {
-  const {
-    uploadExternalDocumentsInteractor,
-  } = applicationContext.getUseCases();
+  const { uploadExternalDocumentsInteractor } =
+    applicationContext.getUseCases();
   const { addCoversheetInteractor } = applicationContext.getUseCases();
 
   presenter.providers.applicationContext = applicationContext;
@@ -19,20 +18,25 @@ describe('uploadExternalDocumentsAction', () => {
     };
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the pending document', async () => {
-    uploadExternalDocumentsInteractor.mockReturnValue({
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          processingStatus: 'pending',
-          userId: 'petitioner',
+  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the added document', async () => {
+    uploadExternalDocumentsInteractor.mockImplementation(() => {
+      return {
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Answer',
+              documentType: 'Answer',
+              eventCode: 'A',
+              processingStatus: 'pending',
+              userId: 'petitioner',
+            },
+          ],
         },
-      ],
+        docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+      };
     });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -49,7 +53,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
@@ -57,36 +61,41 @@ describe('uploadExternalDocumentsAction', () => {
       },
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
-    expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+    expect(addCoversheetInteractor.mock.calls[0][1]).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and also skip addCoversheetInteractor for any pending documents without a file attached', async () => {
-    uploadExternalDocumentsInteractor.mockReturnValue({
-      ...MOCK_CASE,
-      docketEntries: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          processingStatus: 'pending',
-          userId: 'petitioner',
+  it('should call uploadExternalDocumentsInteractor for a single document file and also skip addCoversheetInteractor for any docketEntryIds created', async () => {
+    uploadExternalDocumentsInteractor.mockImplementation(() => {
+      return {
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Answer',
+              documentType: 'Answer',
+              eventCode: 'A',
+              processingStatus: 'pending',
+              userId: 'petitioner',
+            },
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              documentTitle: 'Answer',
+              documentType: 'Answer',
+              eventCode: 'A',
+              isFileAttached: false,
+              processingStatus: 'pending',
+              userId: 'petitioner',
+            },
+          ],
         },
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          documentTitle: 'Answer',
-          documentType: 'Answer',
-          eventCode: 'A',
-          isFileAttached: false,
-          processingStatus: 'pending',
-          userId: 'petitioner',
-        },
-      ],
+        docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
+      };
     });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -103,7 +112,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: { primary: { data: 'something' } },
       documentMetadata: {
         attachments: true,
@@ -111,7 +120,7 @@ describe('uploadExternalDocumentsAction', () => {
       },
     });
     expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
-    expect(addCoversheetInteractor.mock.calls[0][0]).toMatchObject({
+    expect(addCoversheetInteractor.mock.calls[0][1]).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -156,7 +165,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
 
     expect(uploadExternalDocumentsInteractor.mock.calls.length).toEqual(1);
-    expect(uploadExternalDocumentsInteractor.mock.calls[0][0]).toMatchObject({
+    expect(uploadExternalDocumentsInteractor.mock.calls[0][1]).toMatchObject({
       documentFiles: {
         primary: { data: 'something' },
         primarySupporting0: { data: 'something3' },

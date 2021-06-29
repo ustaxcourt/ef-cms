@@ -1,23 +1,22 @@
+const qs = require('qs');
 const { get } = require('../requests');
 
 /**
  * fetchPendingItemsProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fetchPendingItemsInteractor = ({
+exports.fetchPendingItemsInteractor = (
   applicationContext,
-  judge,
-  page = 0,
-}) => {
-  let queryString = `?page=${page}`;
-  queryString += '&judge=' + encodeURIComponent(judge);
+  { judge, page = 0 },
+) => {
+  const queryString = qs.stringify({ judge, page });
 
   return get({
     applicationContext,
-    endpoint: `/reports/pending-items${queryString}`,
+    endpoint: `/reports/pending-items?${queryString}`,
   });
 };

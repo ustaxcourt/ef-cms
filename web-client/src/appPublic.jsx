@@ -1,3 +1,7 @@
+import './index.scss';
+
+import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
 import {
@@ -12,8 +16,12 @@ import {
 // Icons - Solid
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
+import { faPhone } from '@fortawesome/free-solid-svg-icons/faPhone';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
@@ -51,11 +59,15 @@ const appPublic = {
     library.add(
       faFileAltSolid,
       faLock,
+      faLongArrowAltUp,
       faPrint,
       faSearch,
       faSync,
       faTimesCircle,
+      faInfoCircle,
       faCheckCircle,
+      faEnvelopeSolid,
+      faPhone,
       faTimesCircleRegular,
       faArrowAltCircleLeftSolid,
       faArrowAltCircleLeftRegular,
@@ -84,7 +96,7 @@ const appPublic = {
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      document.querySelector('#app-public'),
+      window.document.querySelector('#app-public'),
     );
   },
 };

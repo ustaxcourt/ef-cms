@@ -15,7 +15,7 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
       applicationContext,
     });
   } catch (e) {
-    console.log('Elasticsearch health check failed. ', e);
+    applicationContext.logger.error('Elasticsearch health check failed. ', e);
     return false;
   }
 
@@ -24,24 +24,24 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
 
 const getDynamoStatus = async ({ applicationContext }) => {
   try {
-    const status = await applicationContext
+    const dynamoStatus = await applicationContext
       .getPersistenceGateway()
       .getTableStatus({ applicationContext });
-    return status === 'ACTIVE';
+    return dynamoStatus === 'ACTIVE';
   } catch (e) {
-    console.log('Dynamo health check failed. ', e);
+    applicationContext.logger.error('Dynamo health check failed. ', e);
     return false;
   }
 };
 
 const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
-    const status = await applicationContext
+    const deployDynamoStatus = await applicationContext
       .getPersistenceGateway()
       .getDeployTableStatus({ applicationContext });
-    return status === 'ACTIVE';
+    return deployDynamoStatus === 'ACTIVE';
   } catch (e) {
-    console.log('Dynamo deploy health check failed. ', e);
+    applicationContext.logger.error('Dynamo deploy health check failed. ', e);
     return false;
   }
 };
@@ -52,23 +52,20 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   const source = handleAxiosTimeout(axios);
 
   try {
-    // Currently, dynamsoft is only deployed on the court's staging environment as it shares a license with
-    // other environments. Leaving this domain hard-coded for now until dynamsoft is deployed across multiple
-    // environments.
-    const dynamsoftDeployEnv = 'stg.ef-cms.ustaxcourt.gov';
+    const scannerResourceUri = applicationContext.getScannerResourceUri();
     await Promise.all(
       [
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.initiate.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.install.js`,
-        `https://dynamsoft-lib.${dynamsoftDeployEnv}/dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.css`,
+        `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.config.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.install.js`,
+        `${scannerResourceUri}/dynamsoft.webtwain.css`,
       ].map(url => {
         return axios.get(url, { cancelToken: source.token, timeout: 1000 });
       }),
     );
     return true;
   } catch (e) {
-    console.log('Dynamsoft health check failed. ', e);
+    applicationContext.logger.error('Dynamsoft health check failed. ', e);
     return false;
   }
 };
@@ -85,7 +82,7 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
 
     return true;
   } catch (e) {
-    console.log('S3 health check failed. ', e);
+    applicationContext.logger.error('S3 health check failed. ', e);
     return false;
   }
 };
@@ -147,7 +144,7 @@ const getCognitoStatus = async ({ applicationContext }) => {
     );
     return true;
   } catch (e) {
-    console.log('Cognito health check failed. ', e);
+    applicationContext.logger.error('Cognito health check failed. ', e);
     return false;
   }
 };
@@ -158,24 +155,18 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
       .getPersistenceGateway()
       .getSesStatus({ applicationContext });
   } catch (e) {
-    console.log('Email service health check failed. ', e);
+    applicationContext.logger.error('Email service health check failed. ', e);
     return false;
   }
-};
-
-const getClamAVStatus = async () => {
-  // eslint-disable-next-line spellcheck/spell-checker
-  // TODO - implement once #6282 (Implement ClamAV Fargate Solution) has been completed
-  return false;
 };
 
 /**
  * getHealthCheckInteractor
  *
- * @param {object} providers.applicationContext the application context
+ * @param {object} applicationContext the application context
  * @returns {object} contains the status of all our different services
  */
-exports.getHealthCheckInteractor = async ({ applicationContext }) => {
+exports.getHealthCheckInteractor = async applicationContext => {
   const elasticSearchStatus = await getElasticSearchStatus({
     applicationContext,
   });
@@ -195,12 +186,7 @@ exports.getHealthCheckInteractor = async ({ applicationContext }) => {
     applicationContext,
   });
 
-  const clamAVStatus = await getClamAVStatus({
-    applicationContext,
-  });
-
   return {
-    clamAV: clamAVStatus,
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,

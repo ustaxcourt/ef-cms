@@ -2,11 +2,12 @@ import { AccountMenu } from './AccountMenu';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ReportsMenu } from './ReportsMenu';
 import { SearchBox } from './SearchBox';
+import { VerifyEmailWarningNotification } from '../VerifyEmailWarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import close from '../../../../node_modules/uswds/dist/img/close.svg';
+import closeImg from '../../../../node_modules/uswds/dist/img/close.svg';
 import seal from '../../images/ustc_seal.svg';
 
 const BetaBar = toggleBetaBarSequence => {
@@ -27,7 +28,7 @@ const BetaBar = toggleBetaBarSequence => {
               <img
                 alt="close"
                 className="ustc-icon-square--small"
-                src={close}
+                src={closeImg}
               />
             </button>
           </div>
@@ -143,6 +144,18 @@ const NavigationItems = (
           <ReportsMenu isExpanded={isReportsMenuOpen} />
         </li>
       )}
+      {headerHelper.showMyAccount && (
+        <li className="usa-nav__primary-item nav-medium">
+          <a
+            className="usa-nav__link"
+            href="/my-account"
+            id="my-account"
+            onClick={() => toggleMobileMenuSequence()}
+          >
+            My Account
+          </a>
+        </li>
+      )}
       <li className="usa-nav__primary-item nav-medium">
         <a
           className="usa-nav__link"
@@ -163,7 +176,7 @@ export const Header = connect(
     isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
     isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    showBetaBar: state.header.showBetaBar,
+    showBetaBar: state.templateHelper.showBetaBar,
     showMobileMenu: state.header.showMobileMenu,
     signOutSequence: sequences.signOutSequence,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
@@ -185,11 +198,11 @@ export const Header = connect(
     const headerRef = useRef(null);
 
     useEffect(() => {
-      document.addEventListener('mousedown', reset, false);
-      document.addEventListener('keydown', keydown, false);
+      window.document.addEventListener('mousedown', reset, false);
+      window.document.addEventListener('keydown', keydown, false);
       return () => {
-        document.removeEventListener('mousedown', reset, false);
-        document.removeEventListener('keydown', keydown, false);
+        window.document.removeEventListener('mousedown', reset, false);
+        window.document.removeEventListener('keydown', keydown, false);
       };
     }, []);
 
@@ -211,58 +224,64 @@ export const Header = connect(
     };
 
     return (
-      <div ref={headerRef}>
-        {showBetaBar && BetaBar(toggleBetaBarSequence)}
-        <div className="grid-container no-mobile-padding">
-          <header
-            className="usa-header usa-header--basic ustc-header"
-            role="banner"
-          >
-            <div className="usa-nav-container">
-              <div className="usa-navbar">
-                <div className="usa-logo">
-                  <a href="/">
-                    <img alt="USTC Seal" src={seal} />
-                  </a>
+      <>
+        <div ref={headerRef}>
+          {showBetaBar && BetaBar(toggleBetaBarSequence)}
+          <div className="grid-container no-mobile-padding">
+            <header
+              className="usa-header usa-header--basic ustc-header"
+              role="banner"
+            >
+              <div className="usa-nav-container">
+                <div className="usa-navbar">
+                  <div className="usa-logo">
+                    <a href="/">
+                      <img alt="USTC Seal" src={seal} />
+                    </a>
+                  </div>
+                  <button
+                    className="usa-menu-btn"
+                    onClick={() => toggleMobileMenuSequence()}
+                  >
+                    Menu
+                  </button>
                 </div>
-                <button
-                  className="usa-menu-btn"
-                  onClick={() => toggleMobileMenuSequence()}
+                <nav
+                  className={classNames(
+                    'usa-nav ustc-nav',
+                    showMobileMenu && 'is-visible',
+                  )}
+                  role="navigation"
                 >
-                  Menu
-                </button>
+                  <Button
+                    iconRight
+                    link
+                    className="usa-nav__close float-right margin-right-0 padding-top-0"
+                    icon="times-circle"
+                    onClick={() => toggleMobileMenuSequence()}
+                  >
+                    Close
+                  </Button>
+                  {user &&
+                    NavigationItems(headerHelper, {
+                      isReportsMenuOpen,
+                      signOutSequence,
+                      toggleMobileMenuSequence,
+                    })}
+                  {headerHelper.showSearchInHeader && <SearchBox />}
+                  {headerHelper.showAccountMenu && (
+                    <AccountMenu isExpanded={isAccountMenuOpen} />
+                  )}
+                </nav>
               </div>
-              <nav
-                className={classNames(
-                  'usa-nav ustc-nav',
-                  showMobileMenu && 'is-visible',
-                )}
-                role="navigation"
-              >
-                <Button
-                  iconRight
-                  link
-                  className="usa-nav__close float-right margin-right-0 padding-top-0"
-                  icon="times-circle"
-                  onClick={() => toggleMobileMenuSequence()}
-                >
-                  Close
-                </Button>
-                {user &&
-                  NavigationItems(headerHelper, {
-                    isReportsMenuOpen,
-                    signOutSequence,
-                    toggleMobileMenuSequence,
-                  })}
-                {headerHelper.showSearchInHeader && <SearchBox />}
-                {headerHelper.showAccountMenu && (
-                  <AccountMenu isExpanded={isAccountMenuOpen} />
-                )}
-              </nav>
-            </div>
-          </header>
+            </header>
+          </div>
         </div>
-      </div>
+
+        {headerHelper.showVerifyEmailWarningNotification && (
+          <VerifyEmailWarningNotification />
+        )}
+      </>
     );
   },
 );

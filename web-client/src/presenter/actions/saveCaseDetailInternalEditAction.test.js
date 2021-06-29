@@ -5,21 +5,22 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { saveCaseDetailInternalEditAction } from './saveCaseDetailInternalEditAction';
 
-const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
-
 describe('saveCaseDetailInternalEditAction', () => {
+  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const mockUploadedKey = applicationContext.getUniqueId();
 
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor.mockImplementation(({ key }) => {
-        if (key) {
-          return key;
-        } else {
-          return mockUploadedKey; //generated document id from upload
-        }
-      });
+      .uploadDocumentAndMakeSafeInteractor.mockImplementation(
+        (_applicationContext, { key }) => {
+          if (key) {
+            return key;
+          } else {
+            return mockUploadedKey; //generated document id from upload
+          }
+        },
+      );
 
     presenter.providers.applicationContext = applicationContext;
   });
@@ -59,7 +60,7 @@ describe('saveCaseDetailInternalEditAction', () => {
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].key,
+        .calls[0][1].key,
     ).toEqual('123');
   });
 
@@ -95,12 +96,10 @@ describe('saveCaseDetailInternalEditAction', () => {
         document.documentType ===
         INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
     );
-
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].key,
+        .calls[0][1].key,
     ).toBeUndefined();
-
     expect(uploadedDocument).toEqual({
       docketEntryId: mockUploadedKey,
       documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentTitle,
@@ -129,7 +128,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
     expect(
       applicationContext.getUseCases().updateCaseTrialSortTagsInteractor.mock
-        .calls[0][0].docketNumber,
+        .calls[0][1].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -183,16 +182,56 @@ describe('saveCaseDetailInternalEditAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].document,
+        .calls[0][1].document,
     ).toEqual(mockRqtFile);
     expect(
       applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
-        .calls[0][0].caseToUpdate.docketEntries,
+        .calls[0][1].caseToUpdate.docketEntries,
     ).toMatchObject(
       expect.arrayContaining([
         {
           docketEntryId: mockUploadedKey,
-          documentTitle: 'Request for Place of Trial at [Place]',
+          documentTitle: `Request for Place of Trial at ${MOCK_CASE.preferredTrialCity}`,
+          documentType: 'Request for Place of Trial',
+        },
+      ]),
+    );
+  });
+
+  it('should compute the RQT documentTitle based on the preferredTrialCity when an RQT already exists on the case', async () => {
+    const mockRqtFile = {
+      docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+      documentType: 'Request for Place of Trial',
+      eventCode: 'RQT',
+      filedBy: 'Test Petitioner',
+      userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+    };
+    const caseDetail = {
+      ...MOCK_CASE,
+      docketEntries: [],
+      preferredTrialCity: 'Atlantis',
+      requestForPlaceOfTrialFile: mockRqtFile,
+      requestForPlaceOfTrialFileSize: 2,
+    };
+
+    await runAction(saveCaseDetailInternalEditAction, {
+      modules: {
+        presenter,
+      },
+      props: { formWithComputedDates: caseDetail },
+    });
+
+    expect(
+      applicationContext.getUtilities().replaceBracketed,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().saveCaseDetailInternalEditInteractor.mock
+        .calls[0][1].caseToUpdate.docketEntries,
+    ).toMatchObject(
+      expect.arrayContaining([
+        {
+          docketEntryId: mockUploadedKey,
+          documentTitle: 'Request for Place of Trial at Atlantis',
           documentType: 'Request for Place of Trial',
         },
       ]),

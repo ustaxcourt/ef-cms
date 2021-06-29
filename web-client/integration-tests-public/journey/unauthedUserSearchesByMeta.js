@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { COUNTRY_TYPES } = applicationContext.getConstants();
@@ -15,13 +16,17 @@ export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
 
     await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
 
-    const searchResults = test.getState('searchResults');
+    const searchResults = test.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
+    );
     expect(searchResults.length).toBeGreaterThan(0);
 
     await test.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'caseSearchByName',
     });
-    expect(test.getState('searchResults')).toBeUndefined();
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+    ).toBeUndefined();
     expect(test.getState('advancedSearchForm')).toEqual({
       caseSearchByName: { countryType: COUNTRY_TYPES.DOMESTIC },
       currentPage: 1,

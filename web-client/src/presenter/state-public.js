@@ -5,7 +5,9 @@ import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
+import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/public/todaysOpinionsHelper';
+import { todaysOrdersHelper } from './computeds/public/todaysOrdersHelper';
 
 const helpers = {
   advancedDocumentSearchHelper,
@@ -15,7 +17,9 @@ const helpers = {
   menuHelper,
   publicCaseDetailHeaderHelper,
   publicCaseDetailHelper,
+  templateHelper,
   todaysOpinionsHelper,
+  todaysOrdersHelper,
 };
 
 export const state = {
@@ -29,7 +33,7 @@ export const state = {
   currentPage: 'Interstitial',
   header: {
     searchTerm: '',
-    showBetaBar: true,
+    showBetaBar: true, // default state
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
@@ -40,6 +44,9 @@ export const state = {
     waitingForResponseRequests: 0,
   },
   todaysOpinions: [],
+  todaysOrders: {
+    results: [],
+  },
   user: {},
   validationErrors: {},
 };

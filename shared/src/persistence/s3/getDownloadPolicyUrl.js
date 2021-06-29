@@ -20,6 +20,10 @@ exports.getDownloadPolicyUrl = ({ applicationContext, key, useTempBucket }) => {
       },
       (err, data) => {
         if (err) {
+          applicationContext.logger.error(
+            'could not create a download policy url',
+            err,
+          );
           return reject(new Error(err));
         }
         resolve({

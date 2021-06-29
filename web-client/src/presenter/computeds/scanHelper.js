@@ -9,10 +9,8 @@ export const scanHelper = (get, applicationContext) => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 
-  const {
-    INITIAL_DOCUMENT_TYPES_MAP,
-    SCAN_MODES,
-  } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES_MAP, SCAN_MODES } =
+    applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const formCaseDocuments = get(state.form.docketEntries);
   const initiateScriptLoaded = get(state.scanner.initiateScriptLoaded);

@@ -5,9 +5,11 @@ const {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   fileExternalDocumentInteractor,
@@ -24,16 +26,6 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
@@ -76,6 +68,20 @@ describe('fileExternalDocumentInteractor', () => {
       docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -103,16 +109,70 @@ describe('fileExternalDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileExternalDocumentInteractor({
-        applicationContext,
+      fileExternalDocumentInteractor(applicationContext, {
         documentMetadata: {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'XYZ',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      }),
+    ).rejects.toThrow('The DocketEntry entity was invalid.');
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      },
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',
@@ -124,56 +184,53 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({
+      caseTitle: caseRecord.caseCaption,
+    });
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Motion for Leave to File',
-        documentType: 'Motion for Leave to File',
-        eventCode: 'M115',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        scenario: 'Nonstandard H',
-        secondaryDocument: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentTitle: 'Motion for Judgment on the Pleadings',
-          documentType: 'Motion for Judgment on the Pleadings',
-          eventCode: 'M121',
+      {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Motion for Leave to File',
+          documentType: 'Motion for Leave to File',
+          eventCode: 'M115',
           filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          scenario: 'Nonstandard H',
+          secondaryDocument: {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentTitle: 'Motion for Judgment on the Pleadings',
+            documentType: 'Motion for Judgment on the Pleadings',
+            eventCode: 'M121',
+            filedBy: 'Test Petitioner',
+          },
+          secondarySupportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+              documentTitle: 'Motion for in Camera Review',
+              documentType: 'Motion for in Camera Review',
+              eventCode: 'M135',
+              filedBy: 'Test Petitioner',
+            },
+          ],
+          supportingDocuments: [
+            {
+              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+              documentTitle: 'Civil Penalty Approval Form',
+              documentType: 'Civil Penalty Approval Form',
+              eventCode: 'CIVP',
+              filedBy: 'Test Petitioner',
+            },
+          ],
         },
-        secondarySupportingDocuments: [
-          {
-            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            documentTitle: 'Motion for in Camera Review',
-            documentType: 'Motion for in Camera Review',
-            eventCode: 'M135',
-            filedBy: 'Test Petitioner',
-          },
-        ],
-        supportingDocuments: [
-          {
-            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
-            documentTitle: 'Civil Penalty Approval Form',
-            documentType: 'Civil Penalty Approval Form',
-            eventCode: 'CIVP',
-            filedBy: 'Test Petitioner',
-          },
-        ],
       },
-    });
+    );
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(updatedCase.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
@@ -206,24 +263,26 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
-    const updatedCase = await fileExternalDocumentInteractor({
+    const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
-      docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
-      documentMetadata: {
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Simultaneous Memoranda of Law',
-        documentType: 'Simultaneous Memoranda of Law',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      {
+        docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Simultaneous Memoranda of Law',
+          documentType: 'Simultaneous Memoranda of Law',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        },
       },
-    });
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(
@@ -238,8 +297,7 @@ describe('fileExternalDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -251,11 +309,10 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
     });
@@ -264,8 +321,7 @@ describe('fileExternalDocumentInteractor', () => {
   it('should create a not-high-priority work item if the case status is not calendared', async () => {
     caseRecord.status = CASE_STATUS_TYPES.new;
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Simultaneous Memoranda of Law',
@@ -277,19 +333,17 @@ describe('fileExternalDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveWorkItemForNonPaper.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
       workItem: { highPriority: false },
     });
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -324,8 +378,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
       ]);
 
-    await fileExternalDocumentInteractor({
-      applicationContext,
+    await fileExternalDocumentInteractor(applicationContext, {
       docketEntryIds: [],
       documentMetadata: {
         category: 'Application',

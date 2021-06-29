@@ -15,6 +15,7 @@ resource "aws_cognito_user_pool" "pool" {
 
   lambda_config {
     post_confirmation = aws_lambda_function.cognito_post_confirmation_lambda.arn
+    post_authentication = aws_lambda_function.cognito_post_authentication_lambda.arn
   }
 
   admin_create_user_config {
@@ -22,7 +23,7 @@ resource "aws_cognito_user_pool" "pool" {
     invite_message_template {
       sms_message   = "Your username is {username} and temporary password is {####}."
       email_subject = "An account has been set up for you with the U.S. Tax Court"
-      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> {####}<br /><br /><b>This temporary password is valid for 7 days.</b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a>"
+      email_message = "Welcome to DAWSON, the new U.S. Tax Court case management system.  An account has been created for you to access your cases online.<br /><br />Please verify that your contact information is correct in the system, and make any required changes.<br /><br /><hr /><br /><br /><b>Your username:</b> {username}</br /><br /><b>Temporary password:</b> <span style=\"font-family: 'Courier New', Courier, monospace;\">{####}</span><br /><br /><b>This temporary password is valid for 7 days. </b> <a href='https://app.${var.dns_domain}/'>Log in to DAWSON to change your password.</a><br /><br />NOTE:<br />1. Make sure your username and password are entered exactly as they appear in the welcome email -- both are case sensitive.<br />2. Please copy and paste the temporary password versus trying to retype it.<br />3. Please make sure you do not pick up an extra space at the beginning or end of the password when copying and pasting.<br />4. If your password ends with a special character or punctuation (.?,), that is part of your temporary password. <br /><br />"
     }
   }
 
@@ -48,6 +49,18 @@ resource "aws_cognito_user_pool" "pool" {
   schema {
     attribute_data_type = "String"
     name                = "role"
+    required            = false
+    mutable             = true
+
+    string_attribute_constraints {
+      min_length = 0
+      max_length = 255
+    }
+  }
+
+  schema {
+    attribute_data_type = "String"
+    name                = "userId"
     required            = false
     mutable             = true
 
@@ -102,6 +115,26 @@ resource "aws_cognito_user_pool_client" "client" {
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.pool.id
+
+  write_attributes = [
+    "address",
+    "birthdate",
+    "email",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale",
+    "middle_name",
+    "name",
+    "nickname",
+    "phone_number",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo",
+  ]
 }
 
 resource "aws_cognito_user_pool_domain" "main" {
@@ -212,6 +245,26 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   supported_identity_providers = ["COGNITO"]
 
   user_pool_id = aws_cognito_user_pool.irs_pool.id
+
+  write_attributes = [
+    "address",
+    "birthdate",
+    "email",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale",
+    "middle_name",
+    "name",
+    "nickname",
+    "phone_number",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo",
+  ]
 }
 
 resource "aws_cognito_user_pool_domain" "irs" {

@@ -1,5 +1,8 @@
 module.exports = {
   properties: {
+    'assigneeId.S': {
+      type: 'keyword',
+    },
     'associatedJudge.S': {
       type: 'text',
     },
@@ -10,7 +13,7 @@ module.exports = {
       type: 'text',
     },
     'docketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'highPriority.BOOL': {
       type: 'boolean',
@@ -25,13 +28,13 @@ module.exports = {
       type: 'boolean',
     },
     'pk.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'section.S': {
       type: 'text',
     },
     'sk.S': {
-      type: 'text',
+      type: 'keyword',
     },
   },
 };

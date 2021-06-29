@@ -2,19 +2,16 @@ import { assignPetitionToAuthenticatedUserAction } from '../actions/WorkItem/ass
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
-import { computeIrsNoticeDateAction } from '../actions/StartCaseInternal/computeIrsNoticeDateAction';
-import { computePetitionFeeDatesAction } from '../actions/StartCaseInternal/computePetitionFeeDatesAction';
-import { computeReceivedAtDateAction } from '../actions/caseDetailEdit/computeReceivedAtDateAction';
-import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { createCaseFromPaperAction } from '../actions/createCaseFromPaperAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
+import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPetitionIdAction } from '../actions/setPetitionIdAction';
+import { setPaperPetitionDatesSequence } from './setPaperPetitionDatesSequence';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -30,10 +27,7 @@ export const submitPetitionFromPaperSequence = [
     noActiveBatches: [
       clearAlertsAction,
       startShowValidationAction,
-      computeReceivedAtDateAction,
-      computeIrsNoticeDateAction,
-      computePetitionFeeDatesAction,
-      computeStatisticDatesAction,
+      setPaperPetitionDatesSequence,
       filterEmptyStatisticsAction,
       validatePetitionFromPaperAction,
       {
@@ -52,7 +46,7 @@ export const submitPetitionFromPaperSequence = [
               success: [
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
-                setPetitionIdAction,
+                getPetitionIdAction,
                 setDocketEntryIdAction,
                 closeFileUploadStatusModalAction,
                 navigateToReviewSavedPetitionAction,

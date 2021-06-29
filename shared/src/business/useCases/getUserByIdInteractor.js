@@ -9,10 +9,11 @@ const { User } = require('../entities/User');
 /**
  * getUserByIdInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} userId the id for the user to get
  * @returns {User} the retrieved user
  */
-exports.getUserByIdInteractor = async ({ applicationContext, userId }) => {
+exports.getUserByIdInteractor = async (applicationContext, { userId }) => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {

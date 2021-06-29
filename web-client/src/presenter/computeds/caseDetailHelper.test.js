@@ -427,7 +427,7 @@ describe('case detail computed', () => {
     expect(result.hasConsolidatedCases).toEqual(false);
   });
 
-  it('should show edit petition details button if user has EDIT_PETITION_DETAILS permission', () => {
+  it('should show edit case details button if user has EDIT_CASE_DETAILS permission', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',
@@ -438,13 +438,13 @@ describe('case detail computed', () => {
         caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: true },
+        permissions: { EDIT_CASE_DETAILS: true },
       },
     });
-    expect(result.showEditPetitionDetailsButton).toEqual(true);
+    expect(result.showEditCaseDetailsButton).toEqual(true);
   });
 
-  it('should not show edit petition details button if user does not have EDIT_PETITION_DETAILS permission', () => {
+  it('should not show edit case details button if user does not have EDIT_CASE_DETAILS permission', () => {
     const user = {
       role: ROLES.docketClerk,
       userId: '789',
@@ -455,10 +455,10 @@ describe('case detail computed', () => {
         caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
-    expect(result.showEditPetitionDetailsButton).toEqual(false);
+    expect(result.showEditCaseDetailsButton).toEqual(false);
   });
 
   it('should show the filing fee section for a petitioner user', () => {
@@ -525,7 +525,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the petition is served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains a served docket entry', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -545,7 +545,25 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should show petition processing alert if user is an external user and the petition is not served', () => {
+  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed docket entry', () => {
+    const user = {
+      role: ROLES.petitioner,
+      userId: '789',
+    };
+    const result = runCompute(caseDetailHelper, {
+      state: {
+        ...getBaseState(user),
+        caseDetail: {
+          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+        },
+        currentPage: 'CaseDetailExternal',
+        form: {},
+      },
+    });
+    expect(result.showPetitionProcessingAlert).toEqual(false);
+  });
+
+  it('should show petition processing alert if user is an external user and the case does not contain any served docket entries', () => {
     const user = {
       role: ROLES.petitioner,
       userId: '789',
@@ -575,7 +593,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasIrsPractitioners).toEqual(false);
@@ -596,7 +614,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasIrsPractitioners).toEqual(true);
@@ -614,7 +632,7 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(false);
@@ -636,53 +654,53 @@ describe('case detail computed', () => {
 
         currentPage: 'CaseDetailInternal',
         form: {},
-        permissions: { EDIT_PETITION_DETAILS: false },
+        permissions: { EDIT_CASE_DETAILS: false },
       },
     });
     expect(result.hasPrivatePractitioners).toEqual(true);
   });
 
-  describe('showEditPetitionerInformation', () => {
-    it('should allow the user to edit the petitioner information if have the EDIT_PETITIONER_INFO permission', () => {
+  describe('showAddRemoveFromHearingButtons', () => {
+    it('should set showAddRemoveFromHearingButtons to false when the current user does not have SET_FOR_HEARING permission', () => {
       const user = {
-        role: ROLES.docketClerk,
-        userId: '789',
+        role: ROLES.petitionsClerk, // does not have SET_FOR_HEARING permission
+        userId: '123',
       };
 
       const result = runCompute(caseDetailHelper, {
         state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            privatePractitioners: [{ userId: '789' }],
+          ...getBaseState(user), // sets the permissions in state based on the user role
+          caseDetail: { docketEntries: [], privatePractitioners: [] },
+          currentPage: 'CaseDetail',
+          form: {},
+          screenMetadata: {
+            isAssociated: false,
           },
-          currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: true },
         },
       });
 
-      expect(result.showEditPetitionerInformation).toEqual(true);
+      expect(result.showAddRemoveFromHearingButtons).toEqual(false);
     });
 
-    it('should not allow the user to edit the petitioner information if they have the incorrect permission', () => {
+    it('should set showAddRemoveFromHearingButtons to true when the current user is a has SET_FOR_HEARING permission', () => {
       const user = {
-        role: ROLES.petitionsClerk,
-        userId: '789',
+        role: ROLES.docketClerk, // has SET_FOR_HEARING permission
+        userId: '123',
       };
 
       const result = runCompute(caseDetailHelper, {
         state: {
-          ...getBaseState(user),
-          caseDetail: {
-            docketEntries: [],
-            privatePractitioners: [{ userId: '789' }],
+          ...getBaseState(user), // sets the permissions in state based on the user role
+          caseDetail: { docketEntries: [], privatePractitioners: [] },
+          currentPage: 'CaseDetail',
+          form: {},
+          screenMetadata: {
+            isAssociated: false,
           },
-          currentPage: 'CaseDetailInternal',
-          permissions: { EDIT_PETITIONER_INFO: false },
         },
       });
 
-      expect(result.showEditPetitionerInformation).toEqual(false);
+      expect(result.showAddRemoveFromHearingButtons).toEqual(true);
     });
   });
 });

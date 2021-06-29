@@ -2,27 +2,27 @@ const {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } = require('../../utilities/caseFilter');
-const { Case } = require('../../entities/cases/Case');
+const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * getPublicCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getPublicCaseInteractor = async ({
+exports.getPublicCaseInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
-  const rawCaseRecord = await applicationContext
+  { docketNumber },
+) => {
+  let rawCaseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!rawCaseRecord.docketNumber && !rawCaseRecord.entityName) {
@@ -30,18 +30,16 @@ exports.getPublicCaseInteractor = async ({
     error.skipLogging = true;
     throw error;
   }
-
-  let caseRecord = rawCaseRecord;
-  if (rawCaseRecord.sealedDate) {
-    caseRecord = caseSealedFormatter(caseRecord);
+  rawCaseRecord.isSealed = isSealedCase(rawCaseRecord);
+  if (isSealedCase(rawCaseRecord)) {
+    rawCaseRecord = caseSealedFormatter(rawCaseRecord);
   }
-  caseRecord = caseContactAddressSealedFormatter(caseRecord, {});
 
-  const publicCaseDetail = new PublicCase(caseRecord, {
+  rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
+
+  const publicCaseDetail = new PublicCase(rawCaseRecord, {
     applicationContext,
-  })
-    .validate()
-    .toRawObject();
+  });
 
-  return publicCaseDetail;
+  return publicCaseDetail.validate().toRawObject();
 };

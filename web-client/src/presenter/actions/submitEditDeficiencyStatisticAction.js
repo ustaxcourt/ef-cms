@@ -31,18 +31,19 @@ export const submitEditDeficiencyStatisticAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().updateDeficiencyStatisticInteractor({
-      applicationContext,
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      docketNumber,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
-      statisticId,
-      year,
-      yearOrPeriod,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateDeficiencyStatisticInteractor(applicationContext, {
+        determinationDeficiencyAmount,
+        determinationTotalPenalties,
+        docketNumber,
+        irsDeficiencyAmount,
+        irsTotalPenalties,
+        lastDateOfPeriod,
+        statisticId,
+        year,
+        yearOrPeriod,
+      });
 
     let successMessageDate;
 
@@ -62,7 +63,8 @@ export const submitEditDeficiencyStatisticAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
+        message: 'Please try again.',
+        title: 'Statistic could not be edited.',
       },
     });
   }

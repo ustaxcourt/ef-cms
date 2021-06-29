@@ -1,3 +1,4 @@
+import { aggregatePetitionerErrors } from '../validatePetitionFromPaperAction';
 import { omit } from 'lodash';
 import { state } from 'cerebral';
 
@@ -22,10 +23,9 @@ export const validateStartCaseWizardAction = ({
     'trialCities',
   );
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
-    .validateStartCaseWizardInteractor({
-      applicationContext,
+    .validateStartCaseWizardInteractor(applicationContext, {
       petition,
     });
 
@@ -45,6 +45,8 @@ export const validateStartCaseWizardAction = ({
       'procedureType',
       'preferredTrialLocation',
     ];
+
+    errors = aggregatePetitionerErrors({ errors });
 
     return path.error({
       alertError: {

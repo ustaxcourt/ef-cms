@@ -6,6 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { Practitioner } = require('./Practitioner');
 const { ROLES } = require('./EntityConstants');
 const { SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 const { USER_CONTACT_VALIDATION_RULES, userDecorator } = require('./User');
@@ -22,18 +23,18 @@ function PrivatePractitioner() {
   this.entityName = entityName;
 }
 
-PrivatePractitioner.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+PrivatePractitioner.prototype.init = function init(
+  rawUser,
+  { filtered = false } = {},
+) {
+  userDecorator(this, rawUser, filtered);
   this.barNumber = rawUser.barNumber;
   this.firmName = rawUser.firmName;
   this.representing = rawUser.representing || [];
-  this.representingPrimary = rawUser.representingPrimary;
-  this.representingSecondary = rawUser.representingSecondary;
   this.serviceIndicator =
-    rawUser.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    rawUser.serviceIndicator ||
+    Practitioner.getDefaultServiceIndicator(rawUser);
 };
-
-PrivatePractitioner.validationName = 'PrivatePractitioner';
 
 PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
   barNumber: JoiValidationConstants.STRING.max(100)
@@ -56,8 +57,6 @@ PrivatePractitioner.VALIDATION_RULES = joi.object().keys({
     .items(JoiValidationConstants.UUID)
     .optional()
     .description('List of contact IDs of contacts'),
-  representingPrimary: joi.boolean().optional(),
-  representingSecondary: joi.boolean().optional(),
   role: JoiValidationConstants.STRING.required().valid(
     ROLES.privatePractitioner,
   ),
@@ -73,6 +72,12 @@ joiValidationDecorator(
   PrivatePractitioner.VALIDATION_RULES,
   {},
 );
+
+PrivatePractitioner.prototype.isRepresenting = function isRepresenting(
+  petitionerContactId,
+) {
+  return this.representing.includes(petitionerContactId);
+};
 
 module.exports = {
   PrivatePractitioner: validEntityDecorator(PrivatePractitioner),

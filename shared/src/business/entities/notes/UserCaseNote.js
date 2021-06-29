@@ -23,8 +23,6 @@ UserCaseNote.prototype.init = function init(rawProps) {
   this.notes = rawProps.notes;
 };
 
-UserCaseNote.validationName = 'UserCaseNote';
-
 UserCaseNote.VALIDATION_ERROR_MESSAGES = {
   notes: 'Add note',
 };

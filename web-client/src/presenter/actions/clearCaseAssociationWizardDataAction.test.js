@@ -12,7 +12,9 @@ describe('clearCaseAssociationWizardDataAction', () => {
       },
       state: {
         form: {
-          certificateOfServiceDate: new Date(),
+          certificateOfServiceDate: applicationContext
+            .getUtilities()
+            .createISODateString(),
           certificateOfServiceDay: 23,
           certificateOfServiceMonth: 4,
           certificateOfServiceYear: 2020,

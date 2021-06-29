@@ -15,7 +15,9 @@ export const getCaseCaptionForCaseInfoTabAction = ({
   const caseDetail = get(state.form);
 
   const caseCaption =
-    applicationContext.getUtilities().getCaseCaption(caseDetail) || '';
+    applicationContext
+      .getUtilities()
+      .getCaseCaption({ ...caseDetail, petitioners: [] }) || '';
 
   return { caseCaption };
 };

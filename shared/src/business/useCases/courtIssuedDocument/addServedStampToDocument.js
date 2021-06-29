@@ -1,4 +1,44 @@
-const { getPageDimensions } = require('../generateSignedDocumentInteractor');
+const TEXT_SIZE = 14;
+const PADDING = 3;
+
+const computeCoordinates = ({
+  applicationContext,
+  boxHeight,
+  boxWidth,
+  pageRotation,
+  pageToApplyStampTo,
+}) => {
+  const { pageHeight, pageWidth, x, y } = applicationContext
+    .getUtilities()
+    .getCropBox(pageToApplyStampTo);
+
+  const bottomLeftBoxCoordinates = {
+    x: pageWidth / 2 - boxWidth / 2,
+    y: y + boxHeight + PADDING * 2,
+  };
+
+  const boxCoordinates = applicationContext
+    .getUtilities()
+    .getStampBoxCoordinates({
+      bottomLeftBoxCoordinates,
+      cropBox: { x, y },
+      pageHeight,
+      pageRotation,
+      pageWidth,
+    });
+
+  return boxCoordinates;
+};
+
+const getBoxWidth = ({ font, text }) => {
+  const serviceStampWidth = font.widthOfTextAtSize(text, TEXT_SIZE);
+  return serviceStampWidth + PADDING * 2;
+};
+
+const getBoxHeight = ({ font }) => {
+  const textHeight = font.sizeAtHeight(TEXT_SIZE);
+  return textHeight + PADDING * 2;
+};
 
 /**
  * addServedStampToDocument
@@ -8,63 +48,62 @@ const { getPageDimensions } = require('../generateSignedDocumentInteractor');
  * @param {string} providers.serviceStampText the service stamp text to add to the document
  * @returns {object} the new pdf with the stamp at the bottom center of the document
  */
-exports.addServedStampToDocument = async ({
+const addServedStampToDocument = async ({
   applicationContext,
   pdfData,
-  serviceStampText,
+  serviceStampText = `SERVED ${applicationContext
+    .getUtilities()
+    .formatNow('MM/DD/YY')}`,
 }) => {
-  if (!serviceStampText) {
-    serviceStampText = `SERVED ${applicationContext
-      .getUtilities()
-      .formatNow('MM/DD/YY')}`;
-  }
+  const { degrees, rgb } = await applicationContext.getPdfLib();
 
-  const {
-    PDFDocument,
-    rgb,
-    StandardFonts,
-  } = await applicationContext.getPdfLib();
+  const { pdfDoc, textFont } = await applicationContext
+    .getUtilities()
+    .setupPdfDocument({
+      applicationContext,
+      pdfData,
+    });
 
-  const scale = 1;
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const pages = pdfDoc.getPages();
-  const page = pages[0];
+  const pageToApplyStampTo = pdfDoc.getPages()[0];
 
-  const [originalPageWidth] = getPageDimensions(page);
+  const boxWidth = getBoxWidth({
+    font: textFont,
+    text: serviceStampText,
+  });
 
-  const helveticaBoldFont = pdfDoc.embedStandardFont(
-    StandardFonts.HelveticaBold,
-  );
+  const boxHeight = getBoxHeight({ font: textFont });
 
-  const textSize = 14 * scale;
-  const padding = 3 * scale;
-  const serviceStampWidth = helveticaBoldFont.widthOfTextAtSize(
-    serviceStampText,
-    textSize,
-  );
-  const textHeight = helveticaBoldFont.sizeAtHeight(textSize);
-  const boxWidth = serviceStampWidth + padding * 2;
-  const boxHeight = textHeight + padding * 2;
-  const posX = originalPageWidth / 2 - boxWidth / 2;
-  const posY = boxHeight;
+  const rotationAngle = pageToApplyStampTo.getRotation().angle;
+  const rotateStampDegrees = degrees(rotationAngle || 0);
 
-  page.drawRectangle({
+  const boxCoordinates = computeCoordinates({
+    applicationContext,
+    boxHeight,
+    boxWidth,
+    pageRotation: rotationAngle,
+    pageToApplyStampTo,
+  });
+
+  pageToApplyStampTo.drawRectangle({
     color: rgb(1, 1, 1),
     height: boxHeight,
+    rotate: rotateStampDegrees,
     width: boxWidth,
-    x: posX,
-    y: posY,
-  });
-  page.drawText(serviceStampText, {
-    font: helveticaBoldFont,
-    size: textSize,
-    x: posX + padding,
-    y: posY + padding,
+    x: boxCoordinates.x,
+    y: boxCoordinates.y + PADDING,
   });
 
-  const pdfBytes = await pdfDoc.save({
+  pageToApplyStampTo.drawText(serviceStampText, {
+    font: textFont,
+    rotate: rotateStampDegrees,
+    size: TEXT_SIZE,
+    x: boxCoordinates.x + PADDING,
+    y: boxCoordinates.y + PADDING * 2,
+  });
+
+  return await pdfDoc.save({
     useObjectStreams: false,
   });
-
-  return pdfBytes;
 };
+
+module.exports = { PADDING, addServedStampToDocument, computeCoordinates };

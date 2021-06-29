@@ -3,9 +3,11 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  ROLES,
 } = require('../EntityConstants');
 const { CaseInternal } = require('./CaseInternal');
 const { Correspondence } = require('../Correspondence');
@@ -13,6 +15,10 @@ const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
 describe('CaseInternal entity', () => {
   describe('validation', () => {
+    it('throws an exception when not provided an application context', () => {
+      expect(() => new CaseInternal({}, {})).toThrow();
+    });
+
     it('returns the expected set of errors for an empty object', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
@@ -31,28 +37,84 @@ describe('CaseInternal entity', () => {
     it('creates a valid petition with minimal information', () => {
       const caseInternal = new CaseInternal(
         {
-          archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           mailingDate: 'test',
           partyType: PARTY_TYPES.petitioner,
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           preferredTrialCity: 'Boise, Idaho',
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
+          requestForPlaceOfTrialFile: { anObject: true },
+          requestForPlaceOfTrialFileSize: 1,
+          statistics: [
+            {
+              irsDeficiencyAmount: 1,
+              irsTotalPenalties: 1,
+              year: '2001',
+              yearOrPeriod: 'Year',
+            },
+          ],
+        },
+        { applicationContext },
+      );
+      expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
+      expect(caseInternal.isValid()).toEqual(true);
+    });
+
+    it('creates a valid petition with archived docket entries', () => {
+      const caseInternal = new CaseInternal(
+        {
+          archivedDocketEntries: [
+            {
+              docketNumber: '101-21',
+              documentType: 'Petition',
+              eventCode: 'A',
+              filedBy: 'Test Petitioner',
+              role: ROLES.petitioner,
+              userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+            },
+          ],
+          caseCaption: 'Dr. Leo Marvin, Petitioner',
+          caseType: CASE_TYPES_MAP.other,
+          mailingDate: 'test',
+          partyType: PARTY_TYPES.petitioner,
+          petitionFile: { anObject: true },
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
+          preferredTrialCity: 'Boise, Idaho',
+          procedureType: 'Small',
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: { anObject: true },
           requestForPlaceOfTrialFileSize: 1,
           statistics: [
@@ -76,18 +138,6 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'Someone',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
           ownershipDisclosureFile: { anObject: true },
@@ -96,8 +146,23 @@ describe('CaseInternal entity', () => {
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              inCareOf: 'Someone',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -111,18 +176,6 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'Someone',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: true,
           orderForOds: true,
@@ -130,8 +183,23 @@ describe('CaseInternal entity', () => {
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              inCareOf: 'Someone',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -145,7 +213,7 @@ describe('CaseInternal entity', () => {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: { anObject: true },
           petitionFileSize: 1,
-          receivedAt: new Date(Date.parse('9999-01-01')).toISOString(),
+          receivedAt: '9999-01-01T00:00:00.000Z',
         },
         { applicationContext },
       );
@@ -157,7 +225,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionFile: new File([], 'test.pdf'),
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -172,7 +240,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -215,7 +283,7 @@ describe('CaseInternal entity', () => {
         {
           applicationForWaiverOfFilingFeeFile: new File([], 'test.pdf'),
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -232,7 +300,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -248,7 +316,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           ownershipDisclosureFile: new File([], 'test.pdf'),
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -262,7 +330,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -278,7 +346,7 @@ describe('CaseInternal entity', () => {
       const caseInternal = new CaseInternal(
         {
           caseCaption: 'Dr. Leo Marvin, Petitioner',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           requestForPlaceOfTrialFile: new File([], 'test.pdf'),
         },
         { applicationContext },
@@ -294,7 +362,7 @@ describe('CaseInternal entity', () => {
         {
           caseCaption: 'Dr. Guy Fieri, Petitioner',
           preferredTrialCity: 'Flavortown, AR',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
         },
         { applicationContext },
       );
@@ -310,18 +378,6 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'Someone',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           mailingDate: 'test',
           ownershipDisclosureFile: { anObject: true },
           ownershipDisclosureFileSize: 1,
@@ -329,8 +385,23 @@ describe('CaseInternal entity', () => {
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              inCareOf: 'Someone',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
@@ -348,18 +419,6 @@ describe('CaseInternal entity', () => {
           archivedDocketEntries: [],
           caseCaption: 'Dr. Leo Marvin, Petitioner',
           caseType: CASE_TYPES_MAP.other,
-          contactPrimary: {
-            address1: '876 12th Ave',
-            city: 'Nashville',
-            country: 'USA',
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'someone@example.com',
-            inCareOf: 'Someone',
-            name: 'Jimmy Dean',
-            phone: '1234567890',
-            postalCode: '05198',
-            state: 'AK',
-          },
           mailingDate: 'test',
           orderDesignatingPlaceOfTrial: false,
           ownershipDisclosureFile: { anObject: true },
@@ -368,8 +427,23 @@ describe('CaseInternal entity', () => {
           petitionFile: { anObject: true },
           petitionFileSize: 1,
           petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '876 12th Ave',
+              city: 'Nashville',
+              contactType: CONTACT_TYPES.primary,
+              country: 'USA',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'someone@example.com',
+              inCareOf: 'Someone',
+              name: 'Jimmy Dean',
+              phone: '1234567890',
+              postalCode: '05198',
+              state: 'AK',
+            },
+          ],
           procedureType: 'Small',
-          receivedAt: new Date().toISOString(),
+          receivedAt: applicationContext.getUtilities().createISODateString(),
           stinFile: { anObject: true },
           stinFileSize: 1,
         },
@@ -396,25 +470,28 @@ describe('CaseInternal entity', () => {
         archivedCorrespondences: [mockCorrespondence],
         caseCaption: 'Dr. Leo Marvin, Petitioner',
         caseType: CASE_TYPES_MAP.other,
-        contactPrimary: {
-          address1: '876 12th Ave',
-          city: 'Nashville',
-          country: 'USA',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'someone@example.com',
-          name: 'Jimmy Dean',
-          phone: '1234567890',
-          postalCode: '05198',
-          state: 'AK',
-        },
         mailingDate: 'test',
         partyType: PARTY_TYPES.petitioner,
         petitionFile: { anObject: true },
         petitionFileSize: 1,
         petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+        petitioners: [
+          {
+            address1: '876 12th Ave',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.primary,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'someone@example.com',
+            name: 'Jimmy Dean',
+            phone: '1234567890',
+            postalCode: '05198',
+            state: 'AK',
+          },
+        ],
         preferredTrialCity: 'Boise, Idaho',
         procedureType: 'Small',
-        receivedAt: new Date().toISOString(),
+        receivedAt: applicationContext.getUtilities().createISODateString(),
         requestForPlaceOfTrialFile: { anObject: true },
         requestForPlaceOfTrialFileSize: 1,
         statistics: [

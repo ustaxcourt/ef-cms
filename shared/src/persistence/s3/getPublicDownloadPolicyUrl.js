@@ -16,6 +16,10 @@ exports.getPublicDownloadPolicyUrl = ({ applicationContext, key }) => {
       },
       (err, data) => {
         if (err) {
+          applicationContext.logger.error(
+            'unable to create the public download url policy',
+            err,
+          );
           return reject(err);
         }
         resolve({

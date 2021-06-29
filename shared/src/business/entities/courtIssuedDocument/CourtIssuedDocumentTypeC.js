@@ -1,4 +1,7 @@
-const joi = require('joi');
+const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -16,10 +19,8 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
  */
 function CourtIssuedDocumentTypeC() {}
 CourtIssuedDocumentTypeC.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments;
-  this.documentTitle = rawProps.documentTitle;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.docketNumbers = rawProps.docketNumbers;
-  this.documentType = rawProps.documentType;
 };
 
 CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
@@ -27,10 +28,8 @@ CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentTypeC.schema = {
-  attachments: joi.boolean().required(),
-  docketNumbers: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
+  ...CourtIssuedDocumentDefault.schema,
+  docketNumbers: JoiValidationConstants.STRING.max(500).required(),
 };
 
 joiValidationDecorator(

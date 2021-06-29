@@ -1,7 +1,7 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { COUNTRY_TYPES } = require('../EntityConstants');
+const { CONTACT_TYPES, COUNTRY_TYPES } = require('../EntityConstants');
 const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
 
 describe('Petition', () => {
@@ -14,6 +14,7 @@ describe('Petition', () => {
         {
           address1: '123 Deming Way',
           city: 'Los Angeles',
+          contactType: CONTACT_TYPES.primary,
           country: 'USA',
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',

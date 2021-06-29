@@ -16,13 +16,13 @@ describe('socket', () => {
     webSocketStub = jest.fn();
     webSocketCloseStub = jest.fn();
 
-    const { initialize, start, stop } = socketProvider({
+    ({
+      initialize: initializeSocket,
+      start: startSocket,
+      stop: stopSocket,
+    } = socketProvider({
       socketRouter,
-    });
-
-    initializeSocket = initialize;
-    startSocket = start;
-    stopSocket = stop;
+    }));
 
     global.WebSocket = class {
       constructor() {
@@ -53,5 +53,13 @@ describe('socket', () => {
 
     expect(webSocketStub).toHaveBeenCalled();
     expect(webSocketCloseStub).toHaveBeenCalled();
+  });
+
+  it('calling start twice returns the original socket rather than a second one', () => {
+    startSocket();
+    startSocket();
+
+    expect(webSocketStub).toBeCalledTimes(1);
+    expect(webSocketCloseStub).not.toHaveBeenCalled();
   });
 });

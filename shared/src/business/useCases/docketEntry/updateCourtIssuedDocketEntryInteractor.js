@@ -5,19 +5,18 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TRANSCRIPT_EVENT_CODE } = require('../../entities/EntityConstants');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.updateCourtIssuedDocketEntryInteractor = async ({
+exports.updateCourtIssuedDocketEntryInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -51,11 +50,6 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
-
   const editableFields = {
     attachments: documentMeta.attachments,
     date: documentMeta.date,
@@ -77,7 +71,6 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
-      secondaryDate,
       userId: user.userId,
     },
     { applicationContext },
@@ -96,18 +89,16 @@ exports.updateCourtIssuedDocketEntryInteractor = async ({
 
   docketEntryEntity.setWorkItem(workItem);
 
+  const rawValidWorkItem = workItem.validate().toRawObject();
+
   const saveItems = [
-    applicationContext.getPersistenceGateway().createUserInboxRecord({
+    applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
-      workItem: workItem.validate().toRawObject(),
+      workItem: rawValidWorkItem,
     }),
-    applicationContext.getPersistenceGateway().createSectionInboxRecord({
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      workItem: workItem.validate().toRawObject(),
-    }),
-    applicationContext.getPersistenceGateway().updateCase({
-      applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     }),
   ];
 

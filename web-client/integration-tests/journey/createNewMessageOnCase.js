@@ -54,7 +54,7 @@ export const createNewMessageOnCase = test => {
     await test.runSequence('createMessageSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      message: NewMessage.VALIDATION_ERROR_MESSAGES.message,
+      message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
     });
 
     await test.runSequence('updateModalFormValueSequence', {

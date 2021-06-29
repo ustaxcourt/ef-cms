@@ -49,8 +49,8 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.ownershipDisclosureFileId the id of the ownership disclosure file
  * @param {string} providers.petitionFileId the id of the petition file
  * @param {string} providers.petitionMetadata the petition metadata
@@ -58,15 +58,17 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {object} the created case
  */
-exports.createCaseFromPaperInteractor = async ({
+exports.createCaseFromPaperInteractor = async (
   applicationContext,
-  applicationForWaiverOfFilingFeeFileId,
-  ownershipDisclosureFileId,
-  petitionFileId,
-  petitionMetadata,
-  requestForPlaceOfTrialFileId,
-  stinFileId,
-}) => {
+  {
+    applicationForWaiverOfFilingFeeFileId,
+    ownershipDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
@@ -89,12 +91,11 @@ exports.createCaseFromPaperInteractor = async ({
   ).validate();
 
   // invoke the createCase interactor
-  const docketNumber = await applicationContext.docketNumberGenerator.createDocketNumber(
-    {
+  const docketNumber =
+    await applicationContext.docketNumberGenerator.createDocketNumber({
       applicationContext,
       receivedAt: petitionMetadata.receivedAt,
-    },
-  );
+    });
 
   const caseToAdd = new Case(
     {
@@ -112,12 +113,13 @@ exports.createCaseFromPaperInteractor = async ({
 
   caseToAdd.caseCaption = petitionEntity.caseCaption;
 
-  let partySecondary = false;
+  const filers = [caseToAdd.getContactPrimary().contactId];
+
   if (
     petitionMetadata.contactSecondary &&
     petitionMetadata.contactSecondary.name
   ) {
-    partySecondary = true;
+    filers.push(caseToAdd.getContactSecondary().contactId);
   }
 
   const petitionDocketEntryEntity = new DocketEntry(
@@ -127,21 +129,16 @@ exports.createCaseFromPaperInteractor = async ({
       documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentType,
       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+      filers,
       filingDate: caseToAdd.receivedAt,
       isFileAttached: true,
       isOnDocketRecord: true,
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
-      partyPrimary: true,
-      partySecondary,
       receivedAt: caseToAdd.receivedAt,
       userId: user.userId,
-      ...caseToAdd.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToAdd.petitioners },
   );
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
@@ -152,9 +149,8 @@ exports.createCaseFromPaperInteractor = async ({
   });
 
   if (applicationForWaiverOfFilingFeeFileId) {
-    let {
-      documentTitle,
-    } = INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
+    let { documentTitle } =
+      INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
 
     const applicationForWaiverOfFilingFeeDocketEntryEntity = new DocketEntry(
       {
@@ -165,20 +161,15 @@ exports.createCaseFromPaperInteractor = async ({
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
         eventCode:
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(applicationForWaiverOfFilingFeeDocketEntryEntity);
@@ -201,20 +192,15 @@ exports.createCaseFromPaperInteractor = async ({
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(requestForPlaceOfTrialDocketEntryEntity);
@@ -228,21 +214,16 @@ exports.createCaseFromPaperInteractor = async ({
         documentTitle: INITIAL_DOCUMENT_TYPES.stin.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         index: 0,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(stinDocketEntryEntity);
@@ -256,31 +237,26 @@ exports.createCaseFromPaperInteractor = async ({
         documentTitle: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+        filers,
         filingDate: caseToAdd.receivedAt,
         isFileAttached: true,
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
-        partyPrimary: true,
-        partySecondary,
         receivedAt: caseToAdd.receivedAt,
         userId: user.userId,
-        ...caseToAdd.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToAdd.petitioners },
     );
 
     caseToAdd.addDocketEntry(odsDocketEntryEntity);
   }
 
   await Promise.all([
-    applicationContext.getPersistenceGateway().createCase({
+    applicationContext.getUseCaseHelpers().createCaseAndAssociations({
       applicationContext,
       caseToCreate: caseToAdd.validate().toRawObject(),
     }),
-    applicationContext.getPersistenceGateway().saveWorkItemForPaper({
+    applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
       workItem: newWorkItem.validate().toRawObject(),
     }),

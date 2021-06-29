@@ -1,7 +1,8 @@
-const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
+const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
+app.use(logger());
 
 const {
   casePublicSearchLambda,
@@ -31,26 +33,38 @@ const {
 const {
   getPublicDocumentDownloadUrlLambda,
 } = require('./public-api/getPublicDocumentDownloadUrlLambda');
-const {
-  opinionPublicSearchLambda,
-} = require('./public-api/opinionPublicSearchLambda');
-const {
-  orderPublicSearchLambda,
-} = require('./public-api/orderPublicSearchLambda');
 const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
 const { getPublicCaseLambda } = require('./public-api/getPublicCaseLambda');
 const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
+const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
+
+// Temporarily disabled for story 7387
+// const {
+//   opinionPublicSearchLambda,
+// } = require('./public-api/opinionPublicSearchLambda');
+// const {
+//   orderPublicSearchLambda,
+// } = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
  */
 app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
-app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+
+// Temporarily disabled for story 7387
+// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
+// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
+
 app.get('/public-api/todays-opinions', lambdaWrapper(todaysOpinionsLambda));
+app.get(
+  '/public-api/todays-orders/:page/:todaysOrdersSort',
+  lambdaWrapper(todaysOrdersLambda),
+);
+
 app.get(
   '/public-api/docket-number-search/:docketNumber',
   lambdaWrapper(getCaseForPublicDocketSearchLambda),

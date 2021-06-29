@@ -24,14 +24,22 @@ export const editDocketEntryMetaHelper = (get, applicationContext) => {
   let categoryInformation;
   find(
     INTERNAL_CATEGORY_MAP,
-    entries => (categoryInformation = find(entries, { eventCode: eventCode })),
+    entries => (categoryInformation = find(entries, { eventCode })),
   );
 
-  const optionsForCategory = getOptionsForCategory(
+  const selectedDocketEntryId = get(state.docketEntryId);
+
+  const optionsForCategory = getOptionsForCategory({
     applicationContext,
     caseDetail,
     categoryInformation,
-  );
+    selectedDocketEntryId,
+  });
+
+  if (optionsForCategory.showSecondaryDocumentSelect) {
+    optionsForCategory.showSecondaryDocumentSelect = false;
+    optionsForCategory.showSecondaryDocumentForm = true;
+  }
 
   const strickenAtFormatted = applicationContext
     .getUtilities()

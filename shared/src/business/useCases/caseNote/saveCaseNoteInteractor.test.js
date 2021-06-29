@@ -4,24 +4,17 @@ const {
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 const { saveCaseNoteInteractor } = require('./saveCaseNoteInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
 describe('saveCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
-    let error;
-    try {
-      await saveCaseNoteInteractor({
-        applicationContext,
+    await expect(
+      saveCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error.message).toContain('Unauthorized');
-    expect(error).toBeInstanceOf(UnauthorizedError);
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('saves a case note', async () => {
@@ -40,20 +33,11 @@ describe('saveCaseNoteInteractor', () => {
       .getPersistenceGateway()
       .updateCase.mockImplementation(async ({ caseToUpdate }) => caseToUpdate);
 
-    let error;
-    let result;
+    const result = await saveCaseNoteInteractor(applicationContext, {
+      caseNote: 'This is my case note',
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
-    try {
-      result = await saveCaseNoteInteractor({
-        applicationContext,
-        caseNote: 'This is my case note',
-        docketNumber: MOCK_CASE.docketNumber,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(result).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,

@@ -1,6 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring } from './journey/docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
@@ -37,7 +38,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     hasPaper: true,
     partyType: PARTY_TYPES.petitionerSpouse,
     preferredTrialCity: trialLocation,
-    procedureType: 'Small', // should generate a Standing Pretrial Notice
+    procedureType: 'Small', // should generate a Standing Pretrial Order for Small Cases
     trialLocation,
   };
 
@@ -63,7 +64,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
@@ -76,6 +77,11 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   });
   petitionsClerkCompletesAndSetsTrialSession(test, overrides);
   petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
-    documentTitle: 'Standing Pretrial Notice',
+    documentTitle:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+        .documentTitle,
+    eventCode:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
+        .eventCode,
   });
 });

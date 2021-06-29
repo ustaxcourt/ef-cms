@@ -9,15 +9,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * createCaseDeadlineInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {CaseDeadline} the created case deadline
  */
-exports.createCaseDeadlineInteractor = async ({
+exports.createCaseDeadlineInteractor = async (
   applicationContext,
-  caseDeadline,
-}) => {
+  { caseDeadline },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
@@ -51,9 +51,9 @@ exports.createCaseDeadlineInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   return newCaseDeadline;

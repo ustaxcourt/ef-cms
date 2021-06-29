@@ -23,6 +23,7 @@ export const parseDateToMonthDayYear = ({ applicationContext, dateString }) => {
     day = momentedDate.format('D');
     year = momentedDate.format('YYYY');
   }
+
   return {
     day,
     month,

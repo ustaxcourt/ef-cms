@@ -32,4 +32,35 @@ describe('generateTitlePreviewAction', () => {
       documentType,
     );
   });
+
+  it('should reset the document title back to the bracketed title', async () => {
+    const documentType = 'Certificate of Service';
+    applicationContext
+      .getUseCases()
+      .generateDocumentTitleInteractor.mockReturnValue(
+        'Certificate of Service 01/01/20',
+      );
+
+    const result = await runAction(generateTitlePreviewAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          category: 'Motion',
+          documentTitle: 'Random',
+          documentType,
+          serviceDate: '01/01/20',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().generateDocumentTitleInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(result.state.screenMetadata.documentTitlePreview).toEqual(
+      'Certificate of Service 01/01/20',
+    );
+  });
 });

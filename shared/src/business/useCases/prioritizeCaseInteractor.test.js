@@ -10,12 +10,17 @@ describe('prioritizeCaseInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+        }),
+      );
 
-    const result = await prioritizeCaseInteractor({
-      applicationContext,
+    const result = await prioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       reason: 'just because',
     });
@@ -26,21 +31,44 @@ describe('prioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateHighPriorityCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateHighPriorityCaseTrialSortMappingRecords.mock.calls[0][0]
-        .docketNumber,
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
+  });
+
+  it('should update trial sort mapping records when status is other than "General Docket - At Issue (Ready for Trial)"', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.rule155,
+        }),
+      );
+
+    await prioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
   });
 
   it('should throw an unauthorized error if the user has no access to prioritize cases', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: '123-20',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -61,8 +89,7 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
@@ -82,11 +109,58 @@ describe('prioritizeCaseInteractor', () => {
       );
 
     await expect(
-      prioritizeCaseInteractor({
-        applicationContext,
+      prioritizeCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         reason: 'just because',
       }),
     ).rejects.toThrow('Cannot set a blocked case as high priority');
+  });
+
+  it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          preferredTrialCity: null,
+        }),
+      );
+
+    await prioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should update trial sort mapping records when automaticBlocked and high priority', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve({
+          ...MOCK_CASE,
+          automaticBlocked: true,
+          automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+          automaticBlockedReason: 'Pending Item',
+          status: CASE_STATUS_TYPES.rule155,
+        }),
+      );
+
+    await prioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      reason: 'just because',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
   });
 });

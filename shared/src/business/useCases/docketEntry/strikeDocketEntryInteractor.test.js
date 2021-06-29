@@ -4,6 +4,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -17,16 +18,6 @@ describe('strikeDocketEntryInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
@@ -44,6 +35,19 @@ describe('strikeDocketEntryInteractor', () => {
       docketNumber: '45678-18',
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -64,8 +68,7 @@ describe('strikeDocketEntryInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
       }),
@@ -80,8 +83,7 @@ describe('strikeDocketEntryInteractor', () => {
     });
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: 'does-not-exist',
         docketNumber: caseRecord.docketNumber,
       }),
@@ -95,8 +97,7 @@ describe('strikeDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    await strikeDocketEntryInteractor({
-      applicationContext,
+    await strikeDocketEntryInteractor(applicationContext, {
       docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
       docketNumber: caseRecord.docketNumber,
     });
@@ -120,8 +121,7 @@ describe('strikeDocketEntryInteractor', () => {
     caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
-      strikeDocketEntryInteractor({
-        applicationContext,
+      strikeDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
       }),

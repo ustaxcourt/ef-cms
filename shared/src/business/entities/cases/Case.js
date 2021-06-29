@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const joi = require('joi');
 const {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
@@ -8,6 +9,7 @@ const {
   CASE_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -16,11 +18,11 @@ const {
   MINUTE_ENTRIES_MAP,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
-  UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
@@ -45,14 +47,16 @@ const {
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
+const { clone, compact, includes, isEmpty } = require('lodash');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
-const { DocketEntry } = require('../DocketEntry');
-const { includes, isEmpty } = require('lodash');
+const { DocketEntry, isServed } = require('../DocketEntry');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { Petitioner } = require('../contacts/Petitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
+const { TrialSession } = require('../trialSessions/TrialSession');
 const { User } = require('../User');
 
 Case.VALIDATION_ERROR_MESSAGES = {
@@ -129,8 +133,6 @@ Case.VALIDATION_ERROR_MESSAGES = {
   ],
 };
 
-Case.validationName = 'Case';
-
 /**
  * Case Entity
  * Represents a Case that has already been accepted into the system.
@@ -138,258 +140,269 @@ Case.validationName = 'Case';
  * @param {object} rawCase the raw case data
  * @constructor
  */
-function Case() {}
+function Case() {
+  this.entityName = 'Case';
+}
 
 Case.prototype.init = function init(
   rawCase,
   { applicationContext, filtered = false },
 ) {
+  caseDecorator(this, rawCase, { applicationContext, filtered });
+};
+
+const caseDecorator = (
+  obj,
+  rawObject,
+  { applicationContext, filtered = false },
+) => {
   if (!applicationContext) {
     throw new TypeError('applicationContext must be defined');
   }
 
-  this.entityName = 'Case';
+  obj.petitioners = [];
 
   if (
     !filtered ||
     User.isInternalUser(applicationContext.getCurrentUser().role)
   ) {
-    this.assignFieldsForInternalUsers({ applicationContext, rawCase });
-    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
-  } else if (applicationContext.getCurrentUser().userId === rawCase.userId) {
-    this.assignFieldsForInternalUsersAndOwners({ applicationContext, rawCase });
+    assignFieldsForInternalUsers({
+      applicationContext,
+      obj,
+      rawCase: rawObject,
+    });
   }
 
-  this.assignDocketEntries({ applicationContext, filtered, rawCase });
-  this.assignContacts({ applicationContext, filtered, rawCase });
-  this.assignPractitioners({ applicationContext, filtered, rawCase });
-  this.assignFieldsForAllUsers({ applicationContext, filtered, rawCase });
+  const params = { applicationContext, filtered, obj, rawCase: rawObject };
+
+  // assignContacts needs to come first before assignDocketEntries
+  assignContacts(params);
+  assignDocketEntries(params);
+  assignHearings(params);
+  assignPractitioners(params);
+  assignFieldsForAllUsers(params);
 };
 
-Case.prototype.assignFieldsForInternalUsers = function assignFieldsForInternalUsers({
-  applicationContext,
-  rawCase,
-}) {
-  this.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
-  this.automaticBlocked = rawCase.automaticBlocked;
-  this.automaticBlockedDate = rawCase.automaticBlockedDate;
-  this.automaticBlockedReason = rawCase.automaticBlockedReason;
-  this.blocked = rawCase.blocked;
-  this.blockedDate = rawCase.blockedDate;
-  this.blockedReason = rawCase.blockedReason;
-  this.caseNote = rawCase.caseNote;
-  this.damages = rawCase.damages;
-  this.highPriority = rawCase.highPriority;
-  this.highPriorityReason = rawCase.highPriorityReason;
-  this.judgeUserId = rawCase.judgeUserId;
-  this.litigationCosts = rawCase.litigationCosts;
-  this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-  this.status = rawCase.status || CASE_STATUS_TYPES.new;
+const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
+  obj.associatedJudge = rawCase.associatedJudge || CHIEF_JUDGE;
+  obj.automaticBlocked = rawCase.automaticBlocked;
+  obj.automaticBlockedDate = rawCase.automaticBlockedDate;
+  obj.automaticBlockedReason = rawCase.automaticBlockedReason;
+  obj.blocked = rawCase.blocked;
+  obj.blockedDate = rawCase.blockedDate;
+  obj.blockedReason = rawCase.blockedReason;
+  obj.caseNote = rawCase.caseNote;
+  obj.damages = rawCase.damages;
+  obj.highPriority = rawCase.highPriority;
+  obj.highPriorityReason = rawCase.highPriorityReason;
+  obj.judgeUserId = rawCase.judgeUserId;
+  obj.litigationCosts = rawCase.litigationCosts;
+  obj.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
 
-  this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
-  this.orderDesignatingPlaceOfTrial =
+  obj.noticeOfAttachments = rawCase.noticeOfAttachments || false;
+  obj.orderDesignatingPlaceOfTrial =
     rawCase.orderDesignatingPlaceOfTrial || false;
-  this.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
-  this.orderForAmendedPetitionAndFilingFee =
+  obj.orderForAmendedPetition = rawCase.orderForAmendedPetition || false;
+  obj.orderForAmendedPetitionAndFilingFee =
     rawCase.orderForAmendedPetitionAndFilingFee || false;
-  this.orderForFilingFee = rawCase.orderForFilingFee || false;
-  this.orderForOds = rawCase.orderForOds || false;
-  this.orderForRatification = rawCase.orderForRatification || false;
-  this.orderToShowCause = rawCase.orderToShowCause || false;
+  obj.orderForFilingFee = rawCase.orderForFilingFee || false;
+  obj.orderForOds = rawCase.orderForOds || false;
+  obj.orderForRatification = rawCase.orderForRatification || false;
+  obj.orderToShowCause = rawCase.orderToShowCause || false;
 
-  this.assignArchivedDocketEntries({ applicationContext, rawCase });
-  this.assignStatistics({ applicationContext, rawCase });
-  this.assignCorrespondences({ applicationContext, rawCase });
+  assignArchivedDocketEntries({ applicationContext, obj, rawCase });
+  assignStatistics({ applicationContext, obj, rawCase });
+  assignCorrespondences({ applicationContext, obj, rawCase });
 };
 
-Case.prototype.assignFieldsForInternalUsersAndOwners = function assignFieldsForAllUsers({
-  rawCase,
-}) {
-  this.userId = rawCase.userId;
-};
-
-Case.prototype.assignFieldsForAllUsers = function assignFieldsForAllUsers({
-  rawCase,
-}) {
-  this.caseCaption = rawCase.caseCaption;
-  this.caseType = rawCase.caseType;
-  this.closedDate = rawCase.closedDate;
-  this.createdAt = rawCase.createdAt || createISODateString();
+const assignFieldsForAllUsers = ({ obj, rawCase }) => {
+  obj.caseCaption = rawCase.caseCaption;
+  obj.caseType = rawCase.caseType;
+  obj.closedDate = rawCase.closedDate;
+  obj.createdAt = rawCase.createdAt || createISODateString();
   if (rawCase.docketNumber) {
-    this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
+    obj.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
   }
-  this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
-  this.filingType = rawCase.filingType;
-  this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
-  this.irsNoticeDate = rawCase.irsNoticeDate;
-  this.isPaper = rawCase.isPaper;
-  this.leadDocketNumber = rawCase.leadDocketNumber;
-  this.mailingDate = rawCase.mailingDate;
-  this.partyType = rawCase.partyType;
-  this.petitionPaymentDate = rawCase.petitionPaymentDate;
-  this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
-  this.petitionPaymentStatus =
+  obj.docketNumberSuffix = getDocketNumberSuffix(rawCase);
+  obj.filingType = rawCase.filingType;
+  obj.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
+  obj.irsNoticeDate = rawCase.irsNoticeDate;
+  obj.isPaper = rawCase.isPaper;
+  obj.leadDocketNumber = rawCase.leadDocketNumber;
+  obj.mailingDate = rawCase.mailingDate;
+  obj.partyType = rawCase.partyType;
+  obj.petitionPaymentDate = rawCase.petitionPaymentDate;
+  obj.petitionPaymentMethod = rawCase.petitionPaymentMethod;
+  obj.petitionPaymentStatus =
     rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
-  this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
-  this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.procedureType = rawCase.procedureType;
-  this.receivedAt = rawCase.receivedAt || createISODateString();
-  this.sealedDate = rawCase.sealedDate;
-  this.sortableDocketNumber =
-    rawCase.sortableDocketNumber || this.generateSortableDocketNumber();
-  this.trialDate = rawCase.trialDate;
-  this.trialLocation = rawCase.trialLocation;
-  this.trialSessionId = rawCase.trialSessionId;
-  this.trialTime = rawCase.trialTime;
-  this.useSameAsPrimary = rawCase.useSameAsPrimary;
+  obj.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
+  obj.preferredTrialCity = rawCase.preferredTrialCity;
+  obj.procedureType = rawCase.procedureType;
+  obj.receivedAt = rawCase.receivedAt || createISODateString();
+  obj.sealedDate = rawCase.sealedDate;
+  obj.status = rawCase.status || CASE_STATUS_TYPES.new;
+  obj.sortableDocketNumber =
+    rawCase.sortableDocketNumber ||
+    Case.getSortableDocketNumber(rawCase.docketNumber);
+  obj.trialDate = rawCase.trialDate;
+  obj.trialLocation = rawCase.trialLocation;
+  obj.trialSessionId = rawCase.trialSessionId;
+  obj.trialTime = rawCase.trialTime;
+  obj.useSameAsPrimary = rawCase.useSameAsPrimary;
 
-  this.initialDocketNumberSuffix =
-    rawCase.initialDocketNumberSuffix || this.docketNumberSuffix || '_';
+  obj.initialDocketNumberSuffix =
+    rawCase.initialDocketNumberSuffix || obj.docketNumberSuffix || '_';
 
   if (rawCase.caseCaption) {
-    this.initialCaption = rawCase.initialCaption || this.caseCaption;
+    obj.initialCaption = rawCase.initialCaption || obj.caseCaption;
   }
 
-  this.hasPendingItems = this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  obj.hasPendingItems = obj.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 
-  this.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
+  obj.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
 
-  this.docketNumberWithSuffix =
-    this.docketNumber + (this.docketNumberSuffix || '');
+  obj.docketNumberWithSuffix =
+    obj.docketNumber + (obj.docketNumberSuffix || '');
 };
 
-Case.prototype.assignDocketEntries = function assignDocketEntries({
+const assignDocketEntries = ({
   applicationContext,
   filtered,
+  obj,
   rawCase,
-}) {
+}) => {
   if (Array.isArray(rawCase.docketEntries)) {
-    this.docketEntries = rawCase.docketEntries
+    obj.docketEntries = rawCase.docketEntries
       .map(
         docketEntry =>
-          new DocketEntry(docketEntry, { applicationContext, filtered }),
+          new DocketEntry(docketEntry, {
+            applicationContext,
+            filtered,
+            petitioners: obj.petitioners,
+          }),
       )
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
-    this.isSealed =
-      !!rawCase.sealedDate ||
-      this.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      );
+    obj.isSealed = isSealedCase(rawCase);
 
     if (
       filtered &&
       applicationContext.getCurrentUser().role !== ROLES.irsSuperuser &&
       (applicationContext.getCurrentUser().role !== ROLES.petitionsClerk ||
-        getPetitionDocketEntryFromDocketEntries(this.docketEntries).servedAt)
+        obj.getIrsSendDate())
     ) {
-      this.docketEntries = this.docketEntries.filter(
+      obj.docketEntries = obj.docketEntries.filter(
         d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
       );
     }
   } else {
-    this.docketEntries = [];
+    obj.docketEntries = [];
   }
 };
 
-Case.prototype.assignArchivedDocketEntries = function assignArchivedDocketEntries({
-  applicationContext,
-  rawCase,
-}) {
+const assignHearings = ({ applicationContext, obj, rawCase }) => {
+  if (Array.isArray(rawCase.hearings)) {
+    obj.hearings = rawCase.hearings
+      .map(hearing => new TrialSession(hearing, { applicationContext }))
+      .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  } else {
+    obj.hearings = [];
+  }
+};
+
+const assignArchivedDocketEntries = ({ applicationContext, obj, rawCase }) => {
   if (Array.isArray(rawCase.archivedDocketEntries)) {
-    this.archivedDocketEntries = rawCase.archivedDocketEntries.map(
-      docketEntry => new DocketEntry(docketEntry, { applicationContext }),
+    obj.archivedDocketEntries = rawCase.archivedDocketEntries.map(
+      docketEntry =>
+        new DocketEntry(docketEntry, {
+          applicationContext,
+          petitioners: obj.petitioners,
+        }),
     );
   } else {
-    this.archivedDocketEntries = [];
+    obj.archivedDocketEntries = [];
   }
 };
 
-Case.prototype.assignContacts = function assignContacts({
-  applicationContext,
-  rawCase,
-}) {
-  if (
-    applicationContext.getCurrentUser().role === ROLES.petitioner &&
-    applicationContext.getCurrentUser().userId === rawCase.userId
-  ) {
-    rawCase.contactPrimary.contactId = rawCase.userId;
-  }
-
-  const contacts = ContactFactory.createContacts({
-    applicationContext,
-    contactInfo: {
-      otherFilers: rawCase.otherFilers,
-      otherPetitioners: rawCase.otherPetitioners,
-      primary: rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
-    },
-    isPaper: rawCase.isPaper,
-    partyType: rawCase.partyType,
-  });
-
-  this.otherFilers = contacts.otherFilers;
-  this.otherPetitioners = contacts.otherPetitioners;
-
-  this.contactPrimary = contacts.primary;
-  this.contactSecondary = contacts.secondary;
+Case.prototype.hasPrivatePractitioners = function hasPrivatePractitioners() {
+  return this.privatePractitioners.length > 0;
 };
 
-Case.prototype.assignPractitioners = function assignPractitioners({ rawCase }) {
+const assignContacts = ({ applicationContext, obj, rawCase }) => {
+  if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
+    const contacts = ContactFactory.createContacts({
+      applicationContext,
+      contactInfo: {
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
+      },
+      partyType: rawCase.partyType,
+    });
+
+    obj.petitioners.push(contacts.primary);
+    if (contacts.secondary) {
+      obj.petitioners.push(contacts.secondary);
+    }
+  } else {
+    if (Array.isArray(rawCase.petitioners)) {
+      obj.petitioners = rawCase.petitioners.map(
+        petitioner => new Petitioner(petitioner, { applicationContext }),
+      );
+
+      setAdditionalNameOnPetitioners({ obj, rawCase });
+    }
+  }
+};
+
+const assignPractitioners = ({ obj, rawCase }) => {
   if (Array.isArray(rawCase.privatePractitioners)) {
-    this.privatePractitioners = rawCase.privatePractitioners.map(
+    obj.privatePractitioners = rawCase.privatePractitioners.map(
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else {
-    this.privatePractitioners = [];
+    obj.privatePractitioners = [];
   }
 
   if (Array.isArray(rawCase.irsPractitioners)) {
-    this.irsPractitioners = rawCase.irsPractitioners.map(
+    obj.irsPractitioners = rawCase.irsPractitioners.map(
       practitioner => new IrsPractitioner(practitioner),
     );
   } else {
-    this.irsPractitioners = [];
+    obj.irsPractitioners = [];
   }
 };
 
-Case.prototype.assignStatistics = function assignStatistics({
-  applicationContext,
-  rawCase,
-}) {
+const assignStatistics = ({ applicationContext, obj, rawCase }) => {
   if (Array.isArray(rawCase.statistics)) {
-    this.statistics = rawCase.statistics.map(
+    obj.statistics = rawCase.statistics.map(
       statistic => new Statistic(statistic, { applicationContext }),
     );
   } else {
-    this.statistics = [];
+    obj.statistics = [];
   }
 };
 
-Case.prototype.assignCorrespondences = function assignCorrespondences({
-  applicationContext,
-  rawCase,
-}) {
+const assignCorrespondences = ({ applicationContext, obj, rawCase }) => {
   if (Array.isArray(rawCase.correspondence)) {
-    this.correspondence = rawCase.correspondence
+    obj.correspondence = rawCase.correspondence
       .map(
         correspondence =>
           new Correspondence(correspondence, { applicationContext }),
       )
       .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
   } else {
-    this.correspondence = [];
+    obj.correspondence = [];
   }
 
   if (Array.isArray(rawCase.archivedCorrespondences)) {
-    this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
+    obj.archivedCorrespondences = rawCase.archivedCorrespondences.map(
       correspondence =>
         new Correspondence(correspondence, { applicationContext }),
     );
   } else {
-    this.archivedCorrespondences = [];
+    obj.archivedCorrespondences = [];
   }
 };
 
@@ -437,6 +450,11 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .meta({ tags: ['Restricted'] })
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.optional(),
+      then: joi.invalid(true),
+    })
     .description('Temporarily blocked from trial.'),
   blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
     is: true,
@@ -465,10 +483,6 @@ Case.VALIDATION_RULES = {
     otherwise: joi.optional().allow(null),
     then: joi.required(),
   }),
-  contactPrimary: ContactFactory.getValidationRules('primary'),
-  contactSecondary: ContactFactory.getValidationRules('secondary')
-    .optional()
-    .allow(null),
   correspondence: joi
     .array()
     .items(Correspondence.VALIDATION_RULES)
@@ -602,21 +616,6 @@ Case.VALIDATION_RULES = {
     .boolean()
     .optional()
     .description('Reminder for clerks to review the Order to Show Cause.'),
-  otherFilers: joi
-    .array()
-    .items(ContactFactory.getValidationRules('otherFilers'))
-    .unique(
-      (a, b) =>
-        a.otherFilerType === UNIQUE_OTHER_FILER_TYPE &&
-        b.otherFilerType === UNIQUE_OTHER_FILER_TYPE,
-    )
-    .description('List of OtherFilerContact Entities for the case.')
-    .optional(),
-  otherPetitioners: joi
-    .array()
-    .items(ContactFactory.getValidationRules('otherPetitioners'))
-    .description('List of OtherPetitionerContact Entities for the case.')
-    .optional(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
@@ -648,6 +647,15 @@ Case.VALIDATION_RULES = {
       then: JoiValidationConstants.ISO_DATE.max('now').required(),
     },
   ).description('When the case fee was waived.'),
+  // Individual items are validated by the ContactFactory.
+  petitioners: joi
+    .array()
+    .unique(
+      (a, b) =>
+        a.contactType === CONTACT_TYPES.intervenor &&
+        b.contactType === CONTACT_TYPES.intervenor,
+    )
+    .required(),
   preferredTrialCity: joi
     .alternatives()
     .try(
@@ -706,8 +714,13 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  trialDate: JoiValidationConstants.ISO_DATE.optional()
-    .allow(null)
+  trialDate: joi
+    .alternatives()
+    .conditional('trialSessionId', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.required(),
+    })
     .description('When this case goes to trial.'),
   trialLocation: joi
     .alternatives()
@@ -719,13 +732,19 @@ Case.VALIDATION_RULES = {
     .description(
       'Where this case goes to trial. This may be different that the preferred trial location.',
     ),
-  trialSessionId: JoiValidationConstants.UUID.when('status', {
-    is: CASE_STATUS_TYPES.calendared,
-    otherwise: joi.optional(),
-    then: joi.required(),
-  }).description(
-    'The unique ID of the trial session associated with this case.',
-  ),
+  trialSessionId: joi
+    .when('status', {
+      is: CASE_STATUS_TYPES.calendared,
+      otherwise: joi.when('trialDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.UUID.optional(),
+        then: JoiValidationConstants.UUID.required(),
+      }),
+      then: JoiValidationConstants.UUID.required(),
+    })
+    .description(
+      'The unique ID of the trial session associated with this case.',
+    ),
   trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
     .optional()
     .description('Time of day when this case goes to trial.'),
@@ -735,9 +754,6 @@ Case.VALIDATION_RULES = {
     .description(
       'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
     ),
-  userId: JoiValidationConstants.UUID.required()
-    .meta({ tags: ['Restricted'] })
-    .description('The unique ID of the User who added the case to the system.'),
 };
 
 joiValidationDecorator(
@@ -753,59 +769,92 @@ joiValidationDecorator(
  * @returns {string} the generated case caption
  */
 Case.getCaseCaption = function (rawCase) {
+  const primaryContact = clone(
+    getContactPrimary(rawCase) || rawCase.contactPrimary,
+  );
+  const secondaryContact = clone(
+    getContactSecondary(rawCase) || rawCase.contactSecondary,
+  );
+
+  // trim ALL white space from these non-validated strings
+  if (primaryContact?.name) {
+    primaryContact.name = primaryContact.name.trim();
+  }
+  if (primaryContact?.secondaryName) {
+    primaryContact.secondaryName = primaryContact.secondaryName.trim();
+  }
+  if (primaryContact?.title) {
+    primaryContact.title = primaryContact.title.trim();
+  }
+  if (secondaryContact?.name) {
+    secondaryContact.name = secondaryContact.name.trim();
+  }
+
+  return generateCaptionFromContacts({
+    partyType: rawCase.partyType,
+    primaryContact,
+    secondaryContact,
+  });
+};
+
+const generateCaptionFromContacts = ({
+  partyType,
+  primaryContact,
+  secondaryContact,
+}) => {
   let caseCaption;
-  switch (rawCase.partyType) {
+  switch (partyType) {
     case PARTY_TYPES.corporation:
     case PARTY_TYPES.petitioner:
-      caseCaption = `${rawCase.contactPrimary.name}, Petitioner`;
+      caseCaption = `${primaryContact.name}, Petitioner`;
       break;
     case PARTY_TYPES.petitionerSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${rawCase.contactPrimary.name} & ${rawCase.contactSecondary.name}, Deceased, ${rawCase.contactPrimary.name}, Surviving Spouse, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
       break;
     case PARTY_TYPES.estate:
-      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, ${rawCase.contactPrimary.title}, Petitioner(s)`;
+      caseCaption = `Estate of ${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, ${primaryContact.title}, Petitioner(s)`;
       break;
     case PARTY_TYPES.estateWithoutExecutor:
-      caseCaption = `Estate of ${rawCase.contactPrimary.name}, Deceased, Petitioner`;
+      caseCaption = `Estate of ${primaryContact.name}, Deceased, Petitioner`;
       break;
     case PARTY_TYPES.trust:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Trustee, Petitioner(s)`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Trustee, Petitioner(s)`;
       break;
     case PARTY_TYPES.partnershipAsTaxMattersPartner:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Tax Matters Partner, Petitioner`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipOtherThanTaxMatters:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, A Partner Other Than the Tax Matters Partner, Petitioner`;
       break;
     case PARTY_TYPES.partnershipBBA:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Partnership Representative, Petitioner(s)`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Partnership Representative, Petitioner(s)`;
       break;
     case PARTY_TYPES.conservator:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Conservator, Petitioner`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Conservator, Petitioner`;
       break;
     case PARTY_TYPES.guardian:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Guardian, Petitioner`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Guardian, Petitioner`;
       break;
     case PARTY_TYPES.custodian:
-      caseCaption = `${rawCase.contactPrimary.name}, ${rawCase.contactPrimary.secondaryName}, Custodian, Petitioner`;
+      caseCaption = `${primaryContact.name}, ${primaryContact.secondaryName}, Custodian, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForMinor:
-      caseCaption = `${rawCase.contactPrimary.name}, Minor, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
+      caseCaption = `${primaryContact.name}, Minor, ${primaryContact.secondaryName}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.nextFriendForIncompetentPerson:
-      caseCaption = `${rawCase.contactPrimary.name}, Incompetent, ${rawCase.contactPrimary.secondaryName}, Next Friend, Petitioner`;
+      caseCaption = `${primaryContact.name}, Incompetent, ${primaryContact.secondaryName}, Next Friend, Petitioner`;
       break;
     case PARTY_TYPES.donor:
-      caseCaption = `${rawCase.contactPrimary.name}, Donor, Petitioner`;
+      caseCaption = `${primaryContact.name}, Donor, Petitioner`;
       break;
     case PARTY_TYPES.transferee:
-      caseCaption = `${rawCase.contactPrimary.name}, Transferee, Petitioner`;
+      caseCaption = `${primaryContact.name}, Transferee, Petitioner`;
       break;
     case PARTY_TYPES.survivingSpouse:
-      caseCaption = `${rawCase.contactPrimary.name}, Deceased, ${rawCase.contactPrimary.secondaryName}, Surviving Spouse, Petitioner`;
+      caseCaption = `${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
@@ -822,8 +871,8 @@ Case.prototype.toRawObject = function (processPendingItems = true) {
 };
 
 Case.prototype.doesHavePendingItems = function () {
-  return this.docketEntries.some(
-    docketEntry => docketEntry.pending && docketEntry.servedAt,
+  return this.docketEntries.some(docketEntry =>
+    DocketEntry.isPending(docketEntry),
   );
 };
 
@@ -857,6 +906,7 @@ Case.prototype.archiveDocketEntry = function (
 ) {
   const docketEntryToArchive = new DocketEntry(docketEntry, {
     applicationContext,
+    petitioners: this.petitioners,
   });
   docketEntryToArchive.archive();
   this.archivedDocketEntries.push(docketEntryToArchive);
@@ -949,6 +999,8 @@ Case.prototype.removePrivatePractitioner = function (practitionerToRemove) {
  * @param {object} docketEntryEntity the docket entry to add to the case
  */
 Case.prototype.addDocketEntry = function (docketEntryEntity) {
+  docketEntryEntity.docketNumber = this.docketNumber;
+
   if (docketEntryEntity.isOnDocketRecord) {
     const updateIndex = shouldGenerateDocketRecordIndex({
       caseDetail: this,
@@ -973,11 +1025,16 @@ Case.prototype.closeCase = function () {
 
 /**
  *
- * @param {Date} sendDate the time stamp when the case was sent to the IRS
  * @returns {Case} the updated case entity
  */
 Case.prototype.markAsSentToIRS = function () {
   this.status = CASE_STATUS_TYPES.generalDocket;
+
+  this.petitioners.map(p => {
+    if (PETITIONER_CONTACT_TYPES.includes(p.contactType)) {
+      p.contactType = CONTACT_TYPES.petitioner;
+    }
+  });
 
   return this;
 };
@@ -1019,7 +1076,7 @@ Case.prototype.updateCaseCaptionDocketRecord = function ({
           processingStatus: 'complete',
           userId,
         },
-        { applicationContext },
+        { applicationContext, petitioners: this.petitioners },
       ),
     );
   }
@@ -1069,7 +1126,7 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
           processingStatus: 'complete',
           userId,
         },
-        { applicationContext },
+        { applicationContext, petitioners: this.petitioners },
       ),
     );
   }
@@ -1087,6 +1144,89 @@ Case.prototype.updateDocketNumberRecord = function ({ applicationContext }) {
 Case.prototype.getDocketEntryById = function ({ docketEntryId }) {
   return this.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === docketEntryId,
+  );
+};
+
+/**
+ * Retrieves the petitioner with id contactId on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the contact object
+ */
+const getPetitionerById = function (rawCase, contactId) {
+  return rawCase.petitioners?.find(
+    petitioner => petitioner.contactId === contactId,
+  );
+};
+
+/**
+ * gets the petitioner with id contactId from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.contactId the id of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerById = function (contactId) {
+  return getPetitionerById(this, contactId);
+};
+
+/**
+ * adds the petitioner to the petitioners array
+ *
+ * @params {object} petitioner the petitioner to add to the case
+ * @returns {Case} the updated case
+ */
+Case.prototype.addPetitioner = function (petitioner) {
+  this.petitioners.push(petitioner);
+  return this;
+};
+
+/**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
+  return rawCase.privatePractitioners.filter(practitioner =>
+    practitioner.representing.includes(petitionerContactId),
+  );
+};
+
+/**
+ * removes the contact from the practitioner they are presenting
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ */
+Case.prototype.removeRepresentingFromPractitioners = function (
+  petitionerContactId,
+) {
+  this.privatePractitioners.forEach(practitioner =>
+    practitioner.representing.splice(
+      practitioner.representing.indexOf(petitionerContactId),
+      1,
+    ),
+  );
+};
+
+/**
+ * returns the practitioner representing a petitioner
+ *
+ * @params {string} petitionerContactId the id of the petitioner
+ * @returns {Object} the practitioner
+ */
+Case.prototype.getPractitionersRepresenting = function (petitionerContactId) {
+  return getPractitionersRepresenting(this, petitionerContactId);
+};
+
+/**
+ * removes the petitioner from the petitioners array
+ *
+ * @params {object} contactId the contactId of the petitioner to remove from the case
+ */
+Case.prototype.removePetitioner = function (contactId) {
+  this.petitioners = this.petitioners.filter(
+    petitioner => petitioner.contactId !== contactId,
   );
 };
 
@@ -1163,15 +1303,15 @@ Case.prototype.deleteCorrespondenceById = function ({ correspondenceId }) {
   return this;
 };
 
-const getPetitionDocketEntryFromDocketEntries = function (docketEntries) {
-  return docketEntries.find(
+Case.prototype.getPetitionDocketEntry = function () {
+  return getPetitionDocketEntry(this);
+};
+
+const getPetitionDocketEntry = function (rawCase) {
+  return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-};
-
-Case.prototype.getPetitionDocketEntry = function () {
-  return getPetitionDocketEntryFromDocketEntries(this.docketEntries);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -1200,38 +1340,27 @@ Case.prototype.generateNextDocketRecordIndex = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
-  const foundDocketEntry = this.docketEntries.find(
+  const foundDocketEntryIndex = this.docketEntries.findIndex(
     docketEntry =>
       docketEntry.docketEntryId === updatedDocketEntry.docketEntryId,
   );
 
-  if (foundDocketEntry) {
-    Object.assign(foundDocketEntry, updatedDocketEntry);
+  if (foundDocketEntryIndex !== -1) {
+    this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
 
-    if (foundDocketEntry.isOnDocketRecord) {
+    if (updatedDocketEntry.isOnDocketRecord) {
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
-        docketEntry: foundDocketEntry,
+        docketEntry: updatedDocketEntry,
       });
 
       if (updateIndex) {
-        foundDocketEntry.index = this.generateNextDocketRecordIndex();
+        updatedDocketEntry.index = this.generateNextDocketRecordIndex();
       }
     }
   }
 
   return this;
-};
-
-/**
- * stripLeadingZeros
- *
- * @param {string} docketNumber the docket number
- * @returns {string} the updated docket number
- */
-Case.stripLeadingZeros = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${parseInt(number)}-${year}`;
 };
 
 /**
@@ -1271,24 +1400,16 @@ Case.prototype.checkForReadyForTrial = function () {
 };
 
 /**
- * returns a sortable docket number using this.docketNumber in ${year}${index} format
- *
- * @returns {string} the sortable docket number
- */
-Case.prototype.generateSortableDocketNumber = function () {
-  if (!this.docketNumber) {
-    return;
-  }
-  return Case.getSortableDocketNumber(this.docketNumber);
-};
-
-/**
  * returns a sortable docket number in ${year}${index} format
  *
  * @param {string} docketNumber the docket number to use
  * @returns {string} the sortable docket number
  */
 Case.getSortableDocketNumber = function (docketNumber) {
+  if (!docketNumber) {
+    return;
+  }
+
   // Note: This does not yet take into account pre-2000's years
   const docketNumberSplit = docketNumber.split('-');
   docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
@@ -1355,6 +1476,20 @@ Case.prototype.generateTrialSortTags = function () {
  * @returns {Case} the updated case entity
  */
 Case.prototype.setAsCalendared = function (trialSessionEntity) {
+  this.updateTrialSessionInformation(trialSessionEntity);
+  if (trialSessionEntity.isCalendared === true) {
+    this.status = CASE_STATUS_TYPES.calendared;
+  }
+  return this;
+};
+
+/**
+ * update trial session information
+ *
+ * @param {object} trialSessionEntity - the trial session that is associated with the case
+ * @returns {Case} the updated case entity
+ */
+Case.prototype.updateTrialSessionInformation = function (trialSessionEntity) {
   if (
     trialSessionEntity.isCalendared &&
     trialSessionEntity.judge &&
@@ -1366,9 +1501,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
   this.trialDate = trialSessionEntity.startDate;
   this.trialTime = trialSessionEntity.startTime;
   this.trialLocation = trialSessionEntity.trialLocation;
-  if (trialSessionEntity.isCalendared === true) {
-    this.status = CASE_STATUS_TYPES.calendared;
-  }
+
   return this;
 };
 
@@ -1377,7 +1510,7 @@ Case.prototype.setAsCalendared = function (trialSessionEntity) {
  *
  * @param {object} arguments arguments
  * @param {object} arguments.caseRaw raw case details
- * @param {string} arguments.userId id of the user account
+ * @param {string} arguments.user the user account
  * @returns {boolean} if the case is associated
  */
 const isAssociatedUser = function ({ caseRaw, user }) {
@@ -1387,10 +1520,8 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
-  const isPrimaryContact = caseRaw.contactPrimary.contactId === user.userId;
-  const isSecondaryContact =
-    caseRaw.contactSecondary &&
-    caseRaw.contactSecondary.contactId === user.userId;
+
+  const isPartyOnCase = !!getPetitionerById(caseRaw, user.userId);
 
   const isIrsSuperuser = user.role === ROLES.irsSuperuser;
 
@@ -1398,16 +1529,192 @@ const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||
     isPrivatePractitioner ||
-    isPrimaryContact ||
-    isSecondaryContact ||
+    isPartyOnCase ||
     (isIrsSuperuser && isPetitionServed)
   );
+};
+
+/**
+ * Computes and sets additionalName for contactPrimary depending on partyType
+ */
+const setAdditionalNameOnPetitioners = function ({ obj, rawCase }) {
+  const contactPrimary = getContactPrimary(rawCase);
+
+  if (contactPrimary && !contactPrimary.additionalName) {
+    const contactPrimaryRef = obj.petitioners.find(
+      p => p.contactId === contactPrimary.contactId,
+    );
+
+    switch (rawCase.partyType) {
+      case PARTY_TYPES.conservator:
+      case PARTY_TYPES.custodian:
+      case PARTY_TYPES.guardian:
+      case PARTY_TYPES.nextFriendForIncompetentPerson:
+      case PARTY_TYPES.nextFriendForMinor:
+      case PARTY_TYPES.partnershipOtherThanTaxMatters:
+      case PARTY_TYPES.partnershipBBA:
+      case PARTY_TYPES.survivingSpouse:
+      case PARTY_TYPES.trust:
+        contactPrimaryRef.additionalName = contactPrimaryRef.secondaryName;
+        delete contactPrimaryRef.secondaryName;
+        break;
+      case PARTY_TYPES.estate: {
+        const additionalNameFields = compact([
+          contactPrimaryRef.secondaryName,
+          contactPrimaryRef.title,
+        ]);
+        contactPrimaryRef.additionalName = additionalNameFields.join(', ');
+        delete contactPrimaryRef.secondaryName;
+        delete contactPrimaryRef.title;
+        break;
+      }
+      case PARTY_TYPES.estateWithoutExecutor:
+      case PARTY_TYPES.corporation:
+      case PARTY_TYPES.petitionerDeceasedSpouse:
+        contactPrimaryRef.additionalName = `c/o ${contactPrimaryRef.inCareOf}`;
+        delete contactPrimaryRef.inCareOf;
+        break;
+      default:
+        break;
+    }
+  }
+};
+
+/**
+ * Retrieves the contact from the case based on whatever contactType is specified
+ *
+ * @param {Object} providers the providers object
+ * @param {String} providers.contactType the type of contact we are looking for (primary or secondary)
+ * @param {Object} providers.rawCase the raw case
+ * @returns {(Object|undefined)} the contact object on the case
+ */
+const getContactPrimaryOrSecondary = function ({ contactType, rawCase }) {
+  if (!rawCase.petitioners) {
+    return;
+  } else if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
+    return rawCase.petitioners.find(p => p.contactType === contactType);
+  }
+
+  const petitioners = rawCase.petitioners.filter(
+    p => p.contactType === CONTACT_TYPES.petitioner,
+  );
+
+  if (contactType === CONTACT_TYPES.primary) {
+    return petitioners[0];
+  } else if (contactType === CONTACT_TYPES.secondary) {
+    return petitioners[1];
+  }
+};
+
+/**
+ * Retrieves the primary contact on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the primary contact object on the case
+ */
+const getContactPrimary = function (rawCase) {
+  return getContactPrimaryOrSecondary({
+    contactType: CONTACT_TYPES.primary,
+    rawCase,
+  });
+};
+
+/**
+ * Returns the primary contact on the case
+ *
+ * @returns {Object} the primary contact object on the case
+ */
+Case.prototype.getContactPrimary = function () {
+  return getContactPrimary(this);
+};
+
+/**
+ * Retrieves the secondary contact on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Object} the secondary contact object on the case
+ */
+const getContactSecondary = function (rawCase) {
+  return getContactPrimaryOrSecondary({
+    contactType: CONTACT_TYPES.secondary,
+    rawCase,
+  });
+};
+
+/**
+ * Retrieves the other filers on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @returns {Array} the other filers on the case
+ */
+const getOtherFilers = function (rawCase) {
+  return rawCase.petitioners?.filter(
+    p =>
+      p.contactType === CONTACT_TYPES.participant ||
+      p.contactType === CONTACT_TYPES.intervenor,
+  );
+};
+
+/**
+ * Returns the secondary contact on the case
+ *
+ * @returns {Object} the secondary contact object on the case
+ */
+Case.prototype.getContactSecondary = function () {
+  return getContactSecondary(this);
+};
+
+/**
+ * Returns the other filers on the case
+ *
+ * @returns {Array} the other filers on the case
+ */
+Case.prototype.getOtherFilers = function () {
+  return getOtherFilers(this);
+};
+
+/**
+ * Updates the specified contact object in the case petitioner's array
+ *
+ * @param {object} arguments.rawCase the raw case object
+ * @param {object} arguments.updatedPetitioner the updated petitioner object
+ */
+const updatePetitioner = function (rawCase, updatedPetitioner) {
+  const petitionerIndex = rawCase.petitioners.findIndex(
+    p => p.contactId === updatedPetitioner.contactId,
+  );
+
+  if (petitionerIndex !== -1) {
+    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
+  } else {
+    throw new Error(
+      `Petitioner was not found on case ${rawCase.docketNumber}.`,
+    );
+  }
+};
+
+/**
+ * Updates the specified contact object in the case petitioner's array
+ *
+ * @param {object} arguments.updatedPetitioner the updated petitioner object
+ */
+Case.prototype.updatePetitioner = function (updatedPetitioner) {
+  updatePetitioner(this, updatedPetitioner);
+};
+
+/**
+ * Determines if provided user is associated with the case
+ *
+ * @param {object} arguments.user the user account
+ * @returns {boolean} true if the user provided is associated with the case, false otherwise
+ */
+Case.prototype.isAssociatedUser = function ({ user }) {
+  return isAssociatedUser({ caseRaw: this, user });
 };
 
 /**
@@ -1425,7 +1732,12 @@ Case.prototype.isCalendared = function () {
  * @returns {boolean} if the case is calendared
  */
 Case.prototype.isReadyForTrial = function () {
-  return this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial;
+  return (
+    this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    !this.automaticBlocked
+  );
 };
 
 /**
@@ -1508,16 +1820,45 @@ Case.prototype.unsetAsHighPriority = function () {
 /**
  * remove case from trial, setting case status to generalDocketReadyForTrial
  *
+ * @param {string} caseStatus optional case status to set the case to
+ * @param {string} associatedJudge optional associatedJudge to set on the case
  * @returns {Case} the updated case entity
  */
-Case.prototype.removeFromTrial = function () {
-  this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
-  this.associatedJudge = CHIEF_JUDGE;
+Case.prototype.removeFromTrial = function (caseStatus, associatedJudge) {
+  this.setAssociatedJudge(associatedJudge || CHIEF_JUDGE);
+  this.setCaseStatus(
+    caseStatus || CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  );
   this.trialDate = undefined;
   this.trialLocation = undefined;
   this.trialSessionId = undefined;
   this.trialTime = undefined;
   return this;
+};
+
+/**
+ * check to see if trialSessionId is a hearing
+ *
+ * @param {string} trialSessionId trial session id to check
+ * @returns {boolean} whether or not the trial session id associated is a hearing or not
+ */
+Case.prototype.isHearing = function (trialSessionId) {
+  return this.hearings.some(
+    trialSession => trialSession.trialSessionId === trialSessionId,
+  );
+};
+
+/**
+ * removes a hearing from the case.hearings array
+ *
+ * @param {string} trialSessionId trial session id associated with hearing to remove
+ */
+Case.prototype.removeFromHearing = function (trialSessionId) {
+  const removeIndex = this.hearings
+    .map(trialSession => trialSession.trialSessionId)
+    .indexOf(trialSessionId);
+
+  this.hearings.splice(removeIndex, 1);
 };
 
 /**
@@ -1579,30 +1920,6 @@ Case.prototype.setCaseStatus = function (caseStatus) {
 Case.prototype.setCaseCaption = function (caseCaption) {
   this.caseCaption = caseCaption;
   return this;
-};
-
-/**
- * get case contacts
- *
- * @param {object} shape specific contact params to be returned
- * @returns {object} object containing case contacts
- */
-Case.prototype.getCaseContacts = function (shape) {
-  const caseContacts = {};
-  [
-    'contactPrimary',
-    'contactSecondary',
-    'privatePractitioners',
-    'irsPractitioners',
-    'otherPetitioners',
-    'otherFilers',
-  ].forEach(contact => {
-    if (!shape || (shape && shape[contact] === true)) {
-      caseContacts[contact] = this[contact];
-    }
-  });
-
-  return caseContacts;
 };
 
 /**
@@ -1693,26 +2010,47 @@ Case.prototype.removeConsolidation = function () {
 };
 
 /**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+const isUserIdRepresentedByPrivatePractitioner = function (rawCase, userId) {
+  return !!rawCase.privatePractitioners?.find(practitioner =>
+    practitioner.representing.find(id => id === userId),
+  );
+};
+
+/**
+ * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
+ *
+ * @param {String} userId the id of the user
+ * @returns {boolean} if the userId has a privatePractitioner associated with them
+ */
+Case.prototype.isUserIdRepresentedByPrivatePractitioner = function (userId) {
+  return isUserIdRepresentedByPrivatePractitioner(this, userId);
+};
+
+/**
  * sorts the given array of cases by docket number
  *
  * @param {Array} cases the cases to check for lead case computation
  * @returns {Case} the lead Case entity
  */
 Case.sortByDocketNumber = function (cases) {
-  const casesOrdered = cases.sort((a, b) => {
+  return cases.sort((a, b) => {
     const aSplit = a.docketNumber.split('-');
     const bSplit = b.docketNumber.split('-');
 
     if (aSplit[1] !== bSplit[1]) {
-      // compare years if they aren't the same
+      // compare years if they aren't the same;
+      // compare as strings, because they *might* have suffix
       return aSplit[1].localeCompare(bSplit[1]);
     } else {
-      // compare index if years are the same
-      return aSplit[0].localeCompare(bSplit[0]);
+      // compare index if years are the same, compare as integers
+      return +aSplit[0] - +bSplit[0];
     }
   });
-
-  return casesOrdered;
 };
 
 /**
@@ -1728,15 +2066,14 @@ Case.findLeadCaseForCases = function (cases) {
 };
 
 /**
- * re-formats docket number with any leading zeroes removed
+ * re-formats docket number with any leading zeroes and suffix removed
  *
  * @param {string} docketNumber the docket number to re-format
  * @returns {string} the formatted docket Number
  */
 Case.formatDocketNumber = function formatDocketNumber(docketNumber) {
-  const leadingZeroes = /^0+/;
-  const formattedDocketNumber = docketNumber.replace(leadingZeroes, '');
-  return formattedDocketNumber;
+  const regex = /^0*(\d+-\d{2}).*/;
+  return docketNumber.replace(regex, '$1');
 };
 
 /**
@@ -1865,8 +2202,78 @@ Case.prototype.deleteStatistic = function (statisticId) {
   return this;
 };
 
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {Object} rawCase the raw case object
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+const hasPartyWithServiceType = function (rawCase, serviceType) {
+  return (
+    rawCase.petitioners.some(p => p.serviceIndicator === serviceType) ||
+    (rawCase.privatePractitioners &&
+      rawCase.privatePractitioners.find(
+        pp => pp.serviceIndicator === serviceType,
+      )) ||
+    (rawCase.irsPractitioners &&
+      rawCase.irsPractitioners.find(ip => ip.serviceIndicator === serviceType))
+  );
+};
+
+/**
+ * Returns true if at least one party on the case has the provided serviceIndicator type.
+ *
+ * @param {string} serviceType the serviceIndicator type to check for
+ * @returns {Boolean} true if at least one party on the case has the provided serviceIndicator type, false otherwise.
+ */
+Case.prototype.hasPartyWithServiceType = function (serviceType) {
+  return hasPartyWithServiceType(this, serviceType);
+};
+
+/**
+ * Returns true if the case should be displayed as eligible for trial sessions
+ *
+ * @returns {Boolean} true if the case is eligible
+ */
+Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
+  return !!(
+    (this.highPriority ||
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+    this.preferredTrialCity &&
+    !this.blocked &&
+    (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
+  );
+};
+
+const isSealedCase = rawCase => {
+  const isSealed =
+    rawCase.isSealed ||
+    !!rawCase.sealedDate ||
+    (Array.isArray(rawCase.docketEntries) &&
+      rawCase.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+      ));
+  return isSealed;
+};
+
+const caseHasServedDocketEntries = rawCase => {
+  return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
-  getPetitionDocketEntryFromDocketEntries,
+  caseDecorator,
+  caseHasServedDocketEntries,
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+  getPetitionDocketEntry,
+  getPetitionerById,
+  getPractitionersRepresenting,
+  hasPartyWithServiceType,
   isAssociatedUser,
+  isSealedCase,
+  isUserIdRepresentedByPrivatePractitioner,
+  updatePetitioner,
 };

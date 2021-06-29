@@ -33,10 +33,12 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   });
 
   it('returns cases by the leadDocketNumber', async () => {
-    const cases = await getConsolidatedCasesByCaseInteractor({
+    const cases = await getConsolidatedCasesByCaseInteractor(
       applicationContext,
-      leadDocketNumber: '101-20',
-    });
+      {
+        leadDocketNumber: '101-20',
+      },
+    );
 
     expect(getCasesByLeadDocketNumberStub).toHaveBeenCalled();
     expect(cases).toMatchObject([

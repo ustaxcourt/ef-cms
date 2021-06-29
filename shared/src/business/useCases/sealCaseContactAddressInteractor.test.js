@@ -6,6 +6,7 @@ const {
   sealCaseContactAddressInteractor,
 } = require('./sealCaseContactAddressInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getOtherFilers } = require('../entities/cases/Case');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('sealCaseContactAddressInteractor', () => {
@@ -17,8 +18,7 @@ describe('sealCaseContactAddressInteractor', () => {
 
   it('should throw an error if the user is unauthorized to seal a case contact address', async () => {
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '10aa100f-0330-442b-8423-b01690c76e3f',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -31,8 +31,7 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '23-skidoo',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -54,9 +53,9 @@ describe('sealCaseContactAddressInteractor', () => {
       role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
+
     await expect(
-      sealCaseContactAddressInteractor({
-        applicationContext,
+      sealCaseContactAddressInteractor(applicationContext, {
         contactId: '23-skidoo',
         docketNumber: MOCK_CASE.docketNumber,
       }),
@@ -69,19 +68,18 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
 
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
-      contactId: '76a6050f-a423-47bb-943b-a5661fe08a6b', // contactPrimary
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
+      contactId: '7805d1ab-18d0-43ec-bafb-654e83405416', // contactPrimary
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-
-    expect(result.contactPrimary.isAddressSealed).toBe(true);
+    expect(result.petitioners[0].isAddressSealed).toBe(true);
   });
 
-  it('should call updateCase with `isSealedAddress` on contactSecondary and otherFilers[1] and return the updated case', async () => {
+  it('should call updateCase with `isSealedAddress` on contactSecondary and return the updated case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
@@ -91,16 +89,15 @@ describe('sealCaseContactAddressInteractor', () => {
       userId: 'docketClerk',
     });
 
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '2226050f-a423-47bb-943b-a5661fe08a6b', // contactSecondary
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-
-    expect(result.contactSecondary.isAddressSealed).toBe(true);
+    expect(result.petitioners[5].isAddressSealed).toBe(true);
   });
 
   it('should call updateCase with `isSealedAddress` on otherFilers[1] and return the updated case', async () => {
@@ -112,15 +109,15 @@ describe('sealCaseContactAddressInteractor', () => {
       role: ROLES.docketClerk,
       userId: 'docketClerk',
     });
-    const result = await sealCaseContactAddressInteractor({
-      applicationContext,
+
+    const result = await sealCaseContactAddressInteractor(applicationContext, {
       contactId: '4446050f-a423-47bb-943b-a5661fe08a6b', // otherFilers[1]
       docketNumber: MOCK_CASE.docketNumber,
     });
+
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-
-    expect(result.otherFilers[1].isAddressSealed).toBe(true);
+    expect(getOtherFilers(result)[1].isAddressSealed).toBe(true);
   });
 });

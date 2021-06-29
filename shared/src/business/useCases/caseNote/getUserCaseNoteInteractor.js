@@ -8,15 +8,15 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
 /**
  * getUserCaseNoteInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to get notes for
  * @returns {object} the case note object if one is found
  */
-exports.getUserCaseNoteInteractor = async ({
+exports.getUserCaseNoteInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
@@ -24,7 +24,7 @@ exports.getUserCaseNoteInteractor = async ({
 
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getJudgeForUserChambersInteractor(applicationContext, { user });
 
   const caseNote = await applicationContext
     .getPersistenceGateway()

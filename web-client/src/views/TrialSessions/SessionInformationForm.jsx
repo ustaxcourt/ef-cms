@@ -168,13 +168,14 @@ export const SessionInformationForm = connect(
                     }}
                   >
                     <option value="">- Select -</option>
-                    {formattedTrialSessions.sessionsByTerm.map(
-                      (session, idx) => (
-                        <option key={idx} value={session.trialSessionId}>
-                          {session.trialLocation}
-                        </option>
-                      ),
-                    )}
+                    {formattedTrialSessions.sessionsByTerm.map(session => (
+                      <option
+                        key={session.trialSessionId}
+                        value={session.trialSessionId}
+                      >
+                        {session.trialLocation}
+                      </option>
+                    ))}
                   </select>
                 </FormGroup>
               )}

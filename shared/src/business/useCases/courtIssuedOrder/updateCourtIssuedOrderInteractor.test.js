@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -20,16 +21,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   let caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: '',
     docketEntries: [
       {
@@ -62,6 +53,19 @@ describe('updateCourtIssuedOrderInteractor', () => {
     docketNumber: '45678-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
@@ -96,8 +100,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     mockUserById = { name: 'bob' };
 
     await expect(
-      updateCourtIssuedOrderInteractor({
-        applicationContext,
+      updateCourtIssuedOrderInteractor(applicationContext, {
         docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
@@ -112,8 +115,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue();
 
     await expect(
-      updateCourtIssuedOrderInteractor({
-        applicationContext,
+      updateCourtIssuedOrderInteractor(applicationContext, {
         docketEntryIdToEdit: '986fece3-6325-4418-bb28-a7095e6707b4',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
@@ -125,8 +127,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('update existing document within case', async () => {
-    await updateCourtIssuedOrderInteractor({
-      applicationContext,
+    await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
@@ -165,8 +166,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('stores documentContents in S3 if present', async () => {
-    await updateCourtIssuedOrderInteractor({
-      applicationContext,
+    await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
@@ -199,8 +199,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('does not update non-editable fields on document', async () => {
-    await updateCourtIssuedOrderInteractor({
-      applicationContext,
+    await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,

@@ -1,27 +1,27 @@
 const {
   addCoversheetInteractor,
   generateCoverSheetData,
-} = require('./addCoversheetInteractor.js');
+} = require('./addCoversheetInteractor');
 const {
   applicationContext,
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
 
 describe('addCoversheetInteractor', () => {
   const testingCaseData = {
-    contactPrimary: {
-      name: 'Daenerys Stormborn',
-    },
     createdAt: '2019-04-19T14:45:15.595Z',
     docketEntries: [
       {
         certificateOfService: false,
         createdAt: '2019-04-19T14:45:15.595Z',
         docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '101-19',
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
@@ -33,24 +33,25 @@ describe('addCoversheetInteractor', () => {
     ],
     docketNumber: '101-19',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        contactType: CONTACT_TYPES.primary,
+        name: 'Daenerys Stormborn',
+      },
+    ],
   };
 
   const optionalTestingCaseData = {
     ...testingCaseData,
-    contactPrimary: {
-      name: 'Janie Petitioner',
-    },
-    contactSecondary: {
-      name: 'Janie Petitioner',
-    },
     docketEntries: [
       {
         ...testingCaseData.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: 'Additional Info Something',
         certificateOfService: true,
-        certificateOfServiceDate: '2019-04-20',
+        certificateOfServiceDate: '2019-04-20T05:00:00.000Z',
         docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
+        docketNumber: '102-19',
         documentType:
           'Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)',
         eventCode: 'M008',
@@ -62,6 +63,16 @@ describe('addCoversheetInteractor', () => {
     ],
     docketNumber: '102-19',
     partyType: PARTY_TYPES.petitionerSpouse,
+    petitioners: [
+      {
+        contactType: CONTACT_TYPES.primary,
+        name: 'Janie Petitioner',
+      },
+      {
+        contactType: CONTACT_TYPES.secondary,
+        name: 'Janie Petitioner',
+      },
+    ],
   };
 
   beforeAll(() => {
@@ -80,12 +91,11 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -101,13 +111,12 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
       replaceCoversheet: true,
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getDocumentGenerators().coverSheet,
@@ -123,12 +132,11 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -143,12 +151,11 @@ describe('addCoversheetInteractor', () => {
       });
 
     const params = {
-      applicationContext,
       docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
@@ -161,16 +168,38 @@ describe('addCoversheetInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(optionalTestingCaseData);
 
     const params = {
-      applicationContext,
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3858',
       docketNumber: '101-19',
     };
 
-    await addCoversheetInteractor(params);
+    await addCoversheetInteractor(applicationContext, params);
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
+  });
+
+  it('returns the updated docket entry entity', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...testingCaseData,
+      });
+
+    const params = {
+      docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: '101-19',
+    };
+
+    const updatedDocketEntryEntity = await addCoversheetInteractor(
+      applicationContext,
+      params,
+    );
+
+    expect(updatedDocketEntryEntity).toMatchObject({
+      numberOfPages: 2,
+      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    });
   });
 
   describe('coversheet data generator', () => {
@@ -776,7 +805,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateServed).toBeUndefined();
     });
 
-    it('sets the dateRecieved to dateFiledFormatted when the filingDate has been updated', () => {
+    it('sets the dateReceived to dateFiledFormatted when the filingDate has been updated', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -802,7 +831,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toBe('05/19/19');
     });
 
-    it('sets the dateRecieved to createdAt date when the filingDate has not been updated', () => {
+    it('sets the dateReceived to createdAt date when the filingDate has not been updated', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {

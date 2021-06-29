@@ -119,10 +119,10 @@ const getTrialSessionPlanningReportData = async ({
     });
 
     trialLocationData.push({
-      allCaseCount: allCaseCount,
+      allCaseCount,
       previousTermsData,
-      regularCaseCount: regularCaseCount,
-      smallCaseCount: smallCaseCount,
+      regularCaseCount,
+      smallCaseCount,
       stateAbbreviation,
       trialCityState,
     });
@@ -134,15 +134,14 @@ const getTrialSessionPlanningReportData = async ({
 /**
  * runTrialSessionPlanningReportInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the runTrialSessionPlanningReportInteractor call
  */
-exports.runTrialSessionPlanningReportInteractor = async ({
+exports.runTrialSessionPlanningReportInteractor = async (
   applicationContext,
-  term,
-  year,
-}) => {
+  { term, year },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

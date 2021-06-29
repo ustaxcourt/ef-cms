@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -195,6 +196,8 @@ export const practitionerCreatesNewCase = (test, fakeFile) => {
     expect(test.getState('alertError')).toBeUndefined();
 
     expect(test.getState('currentPage')).toBe('FilePetitionSuccess');
+
+    await refreshElasticsearchIndex();
 
     await test.runSequence('gotoDashboardSequence');
 

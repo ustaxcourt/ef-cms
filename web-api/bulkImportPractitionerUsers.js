@@ -8,7 +8,8 @@ const {
   ROLES,
 } = require('../shared/src/business/entities/EntityConstants');
 const {
-  createISODateString,
+  formatDateString,
+  FORMATS,
 } = require('../shared/src/business/utilities/DateHandler');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
@@ -16,7 +17,7 @@ const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
 const formatRecord = record => {
   const returnData = {};
 
-  Object.keys(record).map(key => {
+  Object.keys(record).forEach(key => {
     if (record[key] === '') {
       delete record[key];
     }
@@ -27,9 +28,9 @@ const formatRecord = record => {
   returnData.lastName = record.lastName;
   returnData.suffix = record.suffix;
 
-  returnData.admissionsDate = createISODateString(
+  returnData.admissionsDate = formatDateString(
     record.admissionsDate,
-    'MM-DD-YYYY',
+    FORMATS.YYYYMMDD,
   );
 
   returnData.birthYear =
@@ -48,7 +49,6 @@ const formatRecord = record => {
 
   returnData.additionalPhone = record.additionalPhone;
   returnData.admissionsStatus = record.admissionsStatus;
-  returnData.alternateEmail = record.alternateEmail;
   returnData.barNumber = record.barNumber;
   returnData.email = record.email;
   returnData.firmName = record.firmName;
@@ -99,7 +99,6 @@ const formatRecord = record => {
     'suffix',
     'email',
     'firmName',
-    'alternateEmail',
     'additionalPhone',
     'originalBarState',
     'barNumber',
@@ -147,7 +146,7 @@ const formatRecord = record => {
     cognito,
     env: process.env.ENV,
     password: process.env.USTC_ADMIN_PASS,
-    username: 'ustcadmin@example.com',
+    username: process.env.USTC_ADMIN_USER,
   });
 
   const data = fs.readFileSync(files[0], 'utf8');

@@ -10,8 +10,7 @@ exports.removeCasePendingItemLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .removeCasePendingItemInteractor({
-        applicationContext,
+      .removeCasePendingItemInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

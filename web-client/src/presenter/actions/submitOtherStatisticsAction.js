@@ -18,12 +18,13 @@ export const submitOtherStatisticsAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().updateOtherStatisticsInteractor({
-      applicationContext,
-      damages,
-      docketNumber,
-      litigationCosts,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateOtherStatisticsInteractor(applicationContext, {
+        damages,
+        docketNumber,
+        litigationCosts,
+      });
 
     let successMessage = 'Other statistics added.';
     if (isEditing) {
@@ -37,7 +38,8 @@ export const submitOtherStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
+        message: 'Please try again.',
+        title: `Statistic could not be ${isEditing ? 'edited' : 'added'}.`,
       },
     });
   }

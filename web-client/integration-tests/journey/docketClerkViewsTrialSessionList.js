@@ -7,7 +7,7 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export const docketClerkViewsTrialSessionList = (test, overrides = {}) => {
+export const docketClerkViewsTrialSessionList = test => {
   return it('Docket clerk views trial session list', async () => {
     await test.runSequence('gotoTrialSessionsSequence');
     expect(test.getState('currentPage')).toEqual('TrialSessions');
@@ -18,9 +18,14 @@ export const docketClerkViewsTrialSessionList = (test, overrides = {}) => {
     expect(formatted.formattedSessions.length).toBeGreaterThan(0);
 
     const trialSession = find(formatted.sessionsByTerm, {
-      sessionType: overrides.sessionType || 'Hybrid',
-      trialLocation: overrides.trialLocation || 'Seattle, Washington',
+      trialSessionId: test.lastCreatedTrialSessionId,
     });
+
+    expect(trialSession).toBeDefined();
+
     test.trialSessionId = trialSession && trialSession.trialSessionId;
+    if (test.createdTrialSessions) {
+      test.createdTrialSessions.push(test.trialSessionId);
+    }
   });
 };

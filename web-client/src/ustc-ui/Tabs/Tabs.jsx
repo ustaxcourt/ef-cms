@@ -20,6 +20,73 @@ if (process.env.NODE_ENV === 'test') {
   ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
 }
 
+const renderTabFactory = ({
+  activeKey,
+  asSwitch,
+  boxed,
+  headingLevel,
+  setTab,
+}) =>
+  function TabComponent(child) {
+    const {
+      children: tabChildren,
+      className: childClassName,
+      disabled,
+      icon,
+      iconColor,
+      id: tabId,
+      showIcon,
+      showNotificationIcon,
+      tabName,
+      title,
+    } = child.props;
+
+    const isActiveTab = tabName === activeKey;
+    const tabContentId =
+      asSwitch || !tabChildren ? undefined : `tabContent-${camelCase(tabName)}`;
+    const buttonId = tabId || `tabButton-${camelCase(tabName)}`;
+
+    const liClass = classNames('ustc-ui-tabs', {
+      active: isActiveTab,
+      'grid-col': boxed,
+    });
+
+    if (!title) {
+      return null;
+    }
+
+    const HeadingElement = headingLevel ? `h${headingLevel}` : 'span';
+    const tabProps = {
+      'aria-controls': tabContentId,
+      'aria-selected': isActiveTab,
+      className: liClass,
+      role: 'tab',
+    };
+
+    const buttonProps = {
+      className: childClassName,
+      disabled,
+      id: buttonId,
+      onClick: () => setTab(tabName),
+      type: 'button',
+    };
+
+    return (
+      <li {...tabProps}>
+        <button {...buttonProps}>
+          <HeadingElement className="button-text">{title}</HeadingElement>{' '}
+          {showIcon && (
+            <FontAwesomeIcon color={iconColor || null} icon={icon} />
+          )}
+          {showNotificationIcon && (
+            <div className="icon-tab-notification">
+              <div className="icon-tab-notification-exclamation">!</div>
+            </div>
+          )}
+        </button>
+      </li>
+    );
+  };
 /**
  * Tab
  */
@@ -38,6 +105,7 @@ export function TabsComponent({
   children,
   className,
   defaultActiveTab,
+  headingLevel,
   id,
   onSelect,
   simpleSetter,
@@ -60,47 +128,6 @@ export function TabsComponent({
   }
 
   setTab = decorateWithPostCallback(setTab, onSelect);
-
-  const renderTab = child => {
-    const {
-      icon,
-      iconColor,
-      id: tabId,
-      showIcon,
-      tabName,
-      title,
-    } = child.props;
-
-    const isActiveTab = tabName === activeKey;
-    const tabContentId = asSwitch ? '' : `tabContent-${camelCase(tabName)}`;
-
-    const liClass = classNames('ustc-ui-tabs', {
-      active: isActiveTab,
-      'grid-col': boxed,
-    });
-
-    if (!title) {
-      return null;
-    }
-
-    return (
-      <li className={liClass}>
-        <button
-          aria-controls={tabContentId}
-          aria-selected={isActiveTab}
-          id={tabId}
-          role="tab"
-          type="button"
-          onClick={() => setTab(tabName)}
-        >
-          <span>{title}</span>{' '}
-          {showIcon && (
-            <FontAwesomeIcon color={iconColor || null} icon={icon} />
-          )}
-        </button>
-      </li>
-    );
-  };
 
   const renderTabContent = child => {
     const { children: tabChildren, tabName } = child.props;
@@ -152,6 +179,14 @@ export function TabsComponent({
     baseProps = {};
   }
 
+  const TabComponent = renderTabFactory({
+    activeKey,
+    asSwitch,
+    boxed,
+    headingLevel,
+    setTab,
+  });
+
   return (
     <div {...baseProps}>
       {hasNav && (
@@ -160,7 +195,7 @@ export function TabsComponent({
             className={classNames('ustc-ui-tabs', { 'grid-row': boxed })}
             role="tablist"
           >
-            {map(children, renderTab)}
+            {map(children, TabComponent)}
           </ul>
         </nav>
       )}

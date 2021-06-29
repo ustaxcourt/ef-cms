@@ -26,6 +26,18 @@ const {
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
 
 const VALIDATION_ERROR_MESSAGES = {
+  additionalInfo: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
+  additionalInfo2: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+  ],
   attachments: 'Enter selection for Attachments.',
   category: 'Select a Category.',
   certificateOfService:
@@ -38,6 +50,8 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Enter date of service',
   ],
+  documentTitle:
+    'Document title must be 3000 characters or fewer. Update this document title and try again.',
   documentType: [
     {
       contains: 'contains an invalid value',
@@ -46,16 +60,27 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
-  freeText: 'Provide an answer',
-  freeText2: 'Provide an answer',
+  filers: 'Select a filing party',
+  freeText: [
+    { contains: 'is required', message: 'Provide an answer' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
+  freeText2: [
+    { contains: 'is required', message: 'Provide an answer' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
   hasSecondarySupportingDocuments:
     'Enter selection for Secondary Supporting Documents.',
   hasSupportingDocuments: 'Enter selection for Supporting Documents.',
   objections: 'Enter selection for Objections.',
   ordinalValue: 'Select an iteration',
   partyIrsPractitioner: 'Select a filing party',
-  partyPrimary: 'Select a filing party',
-  partySecondary: 'Select a filing party',
   previousDocument: 'Select a document',
   primaryDocumentFile: 'Upload a document',
   primaryDocumentFileSize: [
@@ -111,7 +136,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
    */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
-    this.attachments = rawProps.attachments;
+    this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
     this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
@@ -122,11 +147,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       rawProps.hasSecondarySupportingDocuments;
     this.hasSupportingDocuments = rawProps.hasSupportingDocuments;
     this.lodged = rawProps.lodged;
+    this.filers = rawProps.filers;
     this.objections = rawProps.objections;
     this.ordinalValue = rawProps.ordinalValue;
-    this.partyPrimary = rawProps.partyPrimary;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
-    this.partySecondary = rawProps.partySecondary;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
     this.secondaryDocument = rawProps.secondaryDocument;
@@ -192,11 +216,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+    filers: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: JoiValidationConstants.STRING,
     partyIrsPractitioner: joi.boolean(),
-    partyPrimary: joi.boolean(),
-    partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -289,16 +315,21 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
           sortBy(casesWithAPartySelected),
         )
       ) {
-        addProperty('partyPrimary', joi.boolean().invalid(false).required());
+        addProperty(
+          'filers',
+          joi.array().items(joi.string().required()).required(),
+        );
       }
     }
   } else {
     if (
-      documentMetadata.partyPrimary !== true &&
-      documentMetadata.partySecondary !== true &&
+      documentMetadata.filers.length === 0 &&
       documentMetadata.partyIrsPractitioner !== true
     ) {
-      addProperty('partyPrimary', joi.boolean().invalid(false).required());
+      addProperty(
+        'filers',
+        joi.array().items(joi.string().required()).required(),
+      );
     }
   }
 

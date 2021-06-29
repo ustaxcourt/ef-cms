@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.unprioritizeCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().unprioritizeCaseInteractor({
-      applicationContext,
-      ...event.pathParameters,
-    });
+    return await applicationContext
+      .getUseCases()
+      .unprioritizeCaseInteractor(applicationContext, {
+        ...event.pathParameters,
+      });
   });

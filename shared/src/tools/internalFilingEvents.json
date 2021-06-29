@@ -439,9 +439,9 @@
       "documentType": "Letter",
       "category": "Miscellaneous",
       "eventCode": "LTR",
-      "scenario": "Standard",
+      "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
-      "labelFreeText": "",
+      "labelFreeText": "What is this letter for?",
       "labelFreeText2": "",
       "ordinalField": ""
     },
@@ -457,7 +457,7 @@
       "ordinalField": ""
     },
     {
-      "documentTitle": "Miscellaneous [anything]",
+      "documentTitle": "[Miscellaneous]",
       "documentType": "Miscellaneous",
       "category": "Miscellaneous",
       "eventCode": "MISC",
@@ -1483,15 +1483,15 @@
       "ordinalField": ""
     },
     {
-    "documentTitle": "Motion for Document Subpoena Hearing",
-    "documentType": "Motion for Document Subpoena Hearing",
-    "category": "Motion",
-    "eventCode": "M137",
-    "scenario": "Standard",
-    "labelPreviousDocument": "",
-    "labelFreeText": "",
-    "ordinalField": ""
-  },
+      "documentTitle": "Motion for Document Subpoena Hearing",
+      "documentType": "Motion for Document Subpoena Hearing",
+      "category": "Motion",
+      "eventCode": "M137",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
       "documentType": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
@@ -3010,11 +3010,11 @@
       "documentType": "Supplement To [anything]",
       "category": "Supplement",
       "eventCode": "SPMT",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard I",
       "labelPreviousDocument": "",
       "labelFreeText": "What is this supplement for?",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "What Iteration Is this filing?"
     },
     {
       "documentTitle": "[First, Second, etc.] Supplemental [Document Name]",
@@ -3032,11 +3032,11 @@
       "documentType": "Supplemental [anything]",
       "category": "Supplement",
       "eventCode": "SATL",
-      "scenario": "Nonstandard B",
+      "scenario": "Nonstandard I",
       "labelPreviousDocument": "",
       "labelFreeText": "What is this supplemental for?",
       "labelFreeText2": "",
-      "ordinalField": ""
+      "ordinalField": "What Iteration Is this filing?"
     }
   ],
   "Supporting Document": [

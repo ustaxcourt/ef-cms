@@ -4,10 +4,10 @@ export const printPaperServiceHelper = get => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   if (docketEntryId) {
-    const document = caseDetail.docketEntries.find(
+    const doc = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
-    return { documentTitle: document.documentType };
+    return { documentTitle: doc.documentTitle };
   } else {
     return {};
   }

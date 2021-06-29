@@ -13,7 +13,7 @@ const getDocQcSectionForUser = user => {
   }
 };
 
-const getWorkQueueFilters = ({ additionalFilters = item => item, user }) => {
+const getWorkQueueFilters = ({ user }) => {
   const docQCUserSection = getDocQcSectionForUser(user);
 
   return {
@@ -74,7 +74,6 @@ const getWorkQueueFilters = ({ additionalFilters = item => item, user }) => {
           item.section === docQCUserSection &&
           item.docketEntry.isFileAttached !== false &&
           !item.inProgress &&
-          additionalFilters(item) &&
           item.caseIsInProgress !== true
         );
       },

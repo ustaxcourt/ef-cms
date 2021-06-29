@@ -2,6 +2,7 @@ const {
   generatePrintableFilingReceiptInteractor,
 } = require('./generatePrintableFilingReceiptInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -23,8 +24,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         primaryDocumentId: mockPrimaryDocketEntryId,
@@ -43,8 +43,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should populate filedBy on the receipt of filing', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
@@ -60,14 +59,20 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    const receiptMockCall = applicationContext.getDocumentGenerators()
-      .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
-    expect(receiptMockCall.filedBy).toBe(MOCK_CASE.contactPrimary.name);
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data; // 'data' property of first arg (an object) of first call
+
+    const expectedFilingDateForamtted = applicationContext
+      .getUtilities()
+      .formatDateString(MOCK_CASE.docketEntries[0].filingDate, 'DATE_TIME_TZ');
+
+    expect(receiptMockCall.filedBy).toBe(getContactPrimary(MOCK_CASE).name);
+    expect(receiptMockCall.filedAt).toBe(expectedFilingDateForamtted);
   });
 
   it('acquires document information', async () => {
-    await generatePrintableFilingReceiptInteractor({
-      applicationContext,
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
@@ -83,10 +88,29 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    const receiptMockCall = applicationContext.getDocumentGenerators()
-      .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data; // 'data' property of first arg (an object) of first call
     expect(receiptMockCall.supportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondarySupportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondaryDocument).toBeDefined();
+  });
+
+  it('formats certificateOfServiceDate', async () => {
+    await generatePrintableFilingReceiptInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      documentsFiled: {
+        certificateOfService: true,
+        certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
+        primaryDocumentId: mockPrimaryDocketEntryId,
+      },
+    });
+
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data;
+    expect(receiptMockCall.document.formattedCertificateOfServiceDate).toEqual(
+      '08/25/19',
+    );
   });
 });

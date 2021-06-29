@@ -3,12 +3,14 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const RemoveFromTrialSessionModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.removeCaseFromTrialSequence,
     modal: state.modal,
+    removeFromTrialSessionModalHelper: state.removeFromTrialSessionModalHelper,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateRemoveFromTrialSessionSequence:
       sequences.validateRemoveFromTrialSessionSequence,
@@ -18,6 +20,7 @@ export const RemoveFromTrialSessionModal = connect(
     cancelSequence,
     confirmSequence,
     modal,
+    removeFromTrialSessionModalHelper,
     updateModalValueSequence,
     validateRemoveFromTrialSessionSequence,
     validationErrors,
@@ -26,7 +29,6 @@ export const RemoveFromTrialSessionModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Remove Case"
         confirmSequence={confirmSequence}
         title="Remove From Trial Session"
@@ -60,6 +62,79 @@ export const RemoveFromTrialSessionModal = connect(
             </fieldset>
           </FormGroup>
         </div>
+
+        {removeFromTrialSessionModalHelper.showCaseStatusDropdown && (
+          <div className="margin-bottom-4">
+            <FormGroup errorText={validationErrors.caseStatus}>
+              <label
+                className="usa-label"
+                htmlFor="caseStatus"
+                id="case-status"
+              >
+                Case status{' '}
+              </label>
+              <select
+                aria-labelledby="case-status"
+                className={classNames(
+                  'usa-select',
+                  validationErrors.caseStatus && 'usa-select--error',
+                )}
+                id="Status"
+                name="caseStatus"
+                value={modal.caseStatus}
+                onChange={e => {
+                  updateModalValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateRemoveFromTrialSessionSequence();
+                }}
+              >
+                {removeFromTrialSessionModalHelper.caseStatusOptions.map(
+                  status => (
+                    <option key={status} value={status}>
+                      {status}
+                    </option>
+                  ),
+                )}
+              </select>
+            </FormGroup>
+          </div>
+        )}
+
+        {removeFromTrialSessionModalHelper.showAssociatedJudgeDropdown && (
+          <div className="margin-bottom-4">
+            <FormGroup errorText={validationErrors.associatedJudge}>
+              <label className="usa-label" htmlFor="associated-judge">
+                Associated Judge
+              </label>
+              <select
+                className={classNames(
+                  'usa-select',
+                  validationErrors.associatedJudge && 'usa-select--error',
+                )}
+                id="associated-judge"
+                name="associatedJudge"
+                value={modal.associatedJudge}
+                onChange={e => {
+                  updateModalValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                  validateRemoveFromTrialSessionSequence();
+                }}
+              >
+                <option value="">- Select -</option>
+                <option value="Chief Judge">Chief Judge</option>
+                {modal.judges.map(judgeUser => (
+                  <option key={judgeUser.userId} value={judgeUser.name}>
+                    {judgeUser.name}
+                  </option>
+                ))}
+              </select>
+            </FormGroup>
+          </div>
+        )}
       </ModalDialog>
     );
   },

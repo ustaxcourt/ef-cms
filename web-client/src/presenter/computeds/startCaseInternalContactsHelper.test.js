@@ -14,7 +14,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.conservator },
       },
@@ -33,7 +33,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.corporation },
       },
@@ -51,7 +51,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.custodian },
       },
@@ -70,7 +70,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: { partyType: PARTY_TYPES.donor },
       },
@@ -87,7 +87,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.estate,
@@ -109,7 +109,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.estateWithoutExecutor,
@@ -129,7 +129,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.guardian,
@@ -150,7 +150,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.nextFriendForIncompetentPerson,
@@ -171,7 +171,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.nextFriendForMinor,
@@ -192,7 +192,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.partnershipBBA,
@@ -213,7 +213,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.partnershipOtherThanTaxMatters,
@@ -234,7 +234,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.partnershipAsTaxMattersPartner,
@@ -255,7 +255,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.petitioner,
@@ -274,7 +274,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.petitionerSpouse,
@@ -299,7 +299,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.petitionerDeceasedSpouse,
@@ -322,7 +322,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.survivingSpouse,
@@ -343,7 +343,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.transferee,
@@ -362,7 +362,7 @@ describe('startCaseInternalContactsHelper', () => {
     const result = runCompute(startCaseInternalContactsHelper, {
       state: {
         constants: {
-          PARTY_TYPES: PARTY_TYPES,
+          PARTY_TYPES,
         },
         form: {
           partyType: PARTY_TYPES.trust,

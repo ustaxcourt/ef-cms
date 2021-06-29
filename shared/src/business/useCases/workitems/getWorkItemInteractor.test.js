@@ -45,8 +45,7 @@ describe('getWorkItemInteractor', () => {
       .getWorkItemById.mockResolvedValue(null);
     let error;
     try {
-      await getWorkItemInteractor({
-        applicationContext,
+      await getWorkItemInteractor(applicationContext, {
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (e) {
@@ -63,8 +62,7 @@ describe('getWorkItemInteractor', () => {
 
     let error;
     try {
-      await getWorkItemInteractor({
-        applicationContext,
+      await getWorkItemInteractor(applicationContext, {
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       });
     } catch (e) {
@@ -79,8 +77,7 @@ describe('getWorkItemInteractor', () => {
       .getPersistenceGateway()
       .getWorkItemById.mockResolvedValue(mockWorkItem);
 
-    const result = await getWorkItemInteractor({
-      applicationContext,
+    const result = await getWorkItemInteractor(applicationContext, {
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
     expect(result).toMatchObject({

@@ -4,12 +4,10 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.uploadDocumentInteractor = async ({
+exports.uploadDocumentInteractor = async (
   applicationContext,
-  documentFile,
-  key,
-  onUploadProgress,
-}) => {
+  { documentFile, key, onUploadProgress },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (

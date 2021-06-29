@@ -1,5 +1,10 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
+const removeAdvancedSyntaxSymbols = text => {
+  const nonWordCharacters = /[-+\s[\]{}:?!*."()<>=]+/gims;
+  return text.replace(nonWordCharacters, ' ').trim();
+};
+
 /**
  * aggregateCommonQueryParams
  *
@@ -25,102 +30,75 @@ const aggregateCommonQueryParams = ({
   const nonExactMatchesQuery = [];
 
   if (petitionerName) {
-    const petitionerNameArray = petitionerName.toLowerCase().split(' ');
+    const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
+    const simpleQuery = {
+      default_operator: 'and',
+      fields: ['petitioners.L.M.name.S^4', 'caseCaption.S^0.2'],
+      flags: 'AND|PHRASE|PREFIX',
+    };
+
     exactMatchesQuery.push({
       bool: {
         should: [
           {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactPrimary.M.name.S': word,
-                  },
-                };
-              }),
+            simple_query_string: {
+              ...simpleQuery,
+              boost: 20,
+              query: `"${simplePetitionerQuery}"`, // match complete phrase
             },
           },
           {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactPrimary.M.secondaryName.S': word,
-                  },
-                };
-              }),
-            },
-          },
-          {
-            bool: {
-              minimum_should_match: petitionerNameArray.length,
-              should: petitionerNameArray.map(word => {
-                return {
-                  term: {
-                    'contactSecondary.M.name.S': word,
-                  },
-                };
-              }),
+            simple_query_string: {
+              ...simpleQuery,
+              boost: 0.5,
+              query: simplePetitionerQuery, // match all terms in any order
             },
           },
         ],
       },
     });
-
     nonExactMatchesQuery.push({
-      query_string: {
-        fields: [
-          'contactPrimary.M.name.S',
-          'contactPrimary.M.secondaryName.S',
-          'contactSecondary.M.name.S',
-          'caseCaption.S',
-        ],
-        query: `*${petitionerName}*`,
+      simple_query_string: {
+        default_operator: 'or', // any subset of all terms
+        fields: ['petitioners.L.M.name.S^5', 'caseCaption.S'],
+        query: simplePetitionerQuery,
       },
     });
   }
+
   if (countryType) {
     commonQuery.push({
       bool: {
         should: [
           {
             match: {
-              'contactPrimary.M.countryType.S': countryType,
-            },
-          },
-          {
-            match: {
-              'contactSecondary.M.countryType.S': countryType,
+              'petitioners.L.M.countryType.S': countryType,
             },
           },
         ],
       },
     });
   }
+
   if (petitionerState) {
     commonQuery.push({
       bool: {
         should: [
           {
             match: {
-              'contactPrimary.M.state.S': petitionerState,
-            },
-          },
-          {
-            match: {
-              'contactSecondary.M.state.S': petitionerState,
+              'petitioners.L.M.state.S': petitionerState,
             },
           },
         ],
       },
     });
   }
+
   if (yearFiledMin || yearFiledMax) {
-    const yearMin = yearFiledMin || CASE_SEARCH_MIN_YEAR;
-    const yearMax =
-      yearFiledMax || applicationContext.getUtilities().formatNow('YYYY');
+    const yearMin = yearFiledMin ? yearFiledMin.trim() : CASE_SEARCH_MIN_YEAR;
+    const yearMax = yearFiledMax
+      ? yearFiledMax.trim()
+      : applicationContext.getUtilities().formatNow('YYYY');
 
     commonQuery.push({
       range: {
@@ -133,10 +111,7 @@ const aggregateCommonQueryParams = ({
     });
   }
 
-  commonQuery.push(
-    { match: { 'pk.S': 'case|' } },
-    { match: { 'sk.S': 'case|' } },
-  );
+  commonQuery.push({ match: { 'entityName.S': 'Case' } });
 
   return {
     commonQuery,
@@ -147,4 +122,5 @@ const aggregateCommonQueryParams = ({
 
 module.exports = {
   aggregateCommonQueryParams,
+  removeAdvancedSyntaxSymbols,
 };

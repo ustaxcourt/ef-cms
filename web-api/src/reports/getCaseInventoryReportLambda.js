@@ -10,8 +10,7 @@ exports.getCaseInventoryReportLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getCaseInventoryReportInteractor({
-        applicationContext,
+      .getCaseInventoryReportInteractor(applicationContext, {
         ...event.queryStringParameters,
       });
   });

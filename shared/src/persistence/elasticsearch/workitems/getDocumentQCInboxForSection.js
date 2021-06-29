@@ -2,6 +2,7 @@ const { search } = require('../searchClient');
 
 exports.getDocumentQCInboxForSection = async ({
   applicationContext,
+  judgeUserName,
   section,
 }) => {
   const query = {
@@ -10,13 +11,14 @@ exports.getDocumentQCInboxForSection = async ({
         bool: {
           must: [
             {
-              match: {
-                'pk.S': `section|${section}`,
-              },
+              prefix: { 'pk.S': 'work-item|' },
             },
             {
-              match: {
-                'sk.S': 'work-item|',
+              prefix: { 'sk.S': 'work-item|' },
+            },
+            {
+              term: {
+                'section.S': section,
               },
             },
           ],
@@ -41,6 +43,14 @@ exports.getDocumentQCInboxForSection = async ({
     },
     index: 'efcms-work-item',
   };
+
+  if (judgeUserName) {
+    query.body.query.bool.must.push({
+      match: {
+        'associatedJudge.S': `${judgeUserName}`,
+      },
+    });
+  }
 
   const { results } = await search({
     applicationContext,

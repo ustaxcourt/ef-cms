@@ -1,11 +1,9 @@
-import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
-
-export const getOptionsForCategory = (
+export const getOptionsForCategory = ({
   applicationContext,
   caseDetail,
   categoryInformation,
-) => {
+  selectedDocketEntryId,
+}) => {
   let options = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
@@ -24,6 +22,7 @@ export const getOptionsForCategory = (
         previouslyFiledDocuments: getPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
+          selectedDocketEntryId,
         ),
         showNonstandardForm: true,
       };
@@ -43,6 +42,7 @@ export const getOptionsForCategory = (
         previouslyFiledDocuments: getPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
+          selectedDocketEntryId,
         ),
         showNonstandardForm: true,
         showTextInput: true,
@@ -56,6 +56,7 @@ export const getOptionsForCategory = (
         previouslyFiledDocuments: getPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
+          selectedDocketEntryId,
         ),
         showDateFields: true,
         showNonstandardForm: true,
@@ -78,6 +79,7 @@ export const getOptionsForCategory = (
         previouslyFiledDocuments: getPreviouslyFiledDocuments(
           applicationContext,
           caseDetail,
+          selectedDocketEntryId,
         ),
         showNonstandardForm: true,
       };
@@ -121,74 +123,29 @@ export const getOptionsForCategory = (
   return options;
 };
 
+export const MAX_TITLE_LENGTH = 100;
+
 export const getPreviouslyFiledDocuments = (
   applicationContext,
   caseDetail,
-  docketEntryIdWhitelist,
+  selectedDocketEntryId,
 ) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const withDocumentTitle = doc => {
+    let documentTitle = applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
+    if (documentTitle && documentTitle.length > MAX_TITLE_LENGTH) {
+      documentTitle = documentTitle.substring(0, MAX_TITLE_LENGTH - 1) + '…';
+    }
+    return { ...doc, documentTitle };
+  };
+
   return caseDetail.docketEntries
     .filter(
-      document =>
-        document.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
+      doc =>
+        doc.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType &&
+        doc.docketEntryId !== selectedDocketEntryId,
     )
-    .filter(
-      document =>
-        !docketEntryIdWhitelist ||
-        docketEntryIdWhitelist.includes(document.docketEntryId),
-    );
-};
-
-export const selectDocumentTypeHelper = (get, applicationContext) => {
-  const caseDetail = get(state.caseDetail);
-  const form = get(state.form);
-
-  let returnData = {};
-  if (isEmpty(caseDetail)) {
-    return {};
-  }
-
-  const { CATEGORY_MAP } = applicationContext.getConstants();
-
-  const selectedDocumentCategory = form.category;
-  const selectedDocumentType = form.documentType;
-  const categoryInformation = (
-    CATEGORY_MAP[selectedDocumentCategory] || []
-  ).find(entry => entry.documentType === selectedDocumentType);
-
-  returnData.primary = getOptionsForCategory(
-    applicationContext,
-    caseDetail,
-    categoryInformation,
-  );
-
-  if (returnData.primary.showSecondaryDocumentSelect) {
-    returnData.filteredSecondaryDocumentTypes = [];
-  }
-
-  if (form.secondaryDocument) {
-    const selectedSecondaryDocumentCategory = form.secondaryDocument.category;
-    if (selectedSecondaryDocumentCategory) {
-      if (categoryInformation.scenario === 'Nonstandard H') {
-        returnData.filteredSecondaryDocumentTypes = CATEGORY_MAP[
-          selectedSecondaryDocumentCategory
-        ].filter(entry => entry.scenario !== 'Nonstandard H');
-      }
-
-      const selectedSecondaryDocumentType = form.secondaryDocument.documentType;
-      if (selectedSecondaryDocumentType) {
-        const secondaryCategoryInformation = CATEGORY_MAP[
-          selectedSecondaryDocumentCategory
-        ].find(entry => entry.documentType === selectedSecondaryDocumentType);
-
-        returnData.secondary = getOptionsForCategory(
-          applicationContext,
-          caseDetail,
-          secondaryCategoryInformation,
-        );
-      }
-    }
-  }
-
-  return returnData;
+    .map(withDocumentTitle);
 };

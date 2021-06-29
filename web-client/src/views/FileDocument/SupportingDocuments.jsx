@@ -21,7 +21,10 @@ export const SupportingDocuments = connect(
       <>
         {form.hasSupportingDocuments &&
           form.supportingDocuments.map((item, idx) => (
-            <SupportingDocumentForm index={idx} key={idx} />
+            <SupportingDocumentForm
+              index={idx}
+              key={`supporting-doc-${item.documentTitle}`}
+            />
           ))}
 
         {fileDocumentHelper.showAddSupportingDocuments && (

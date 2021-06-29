@@ -31,7 +31,7 @@ exports.getScannerInterface = () => {
         const dynamScriptClass = 'dynam-scanner-injection';
 
         // Create a script element to inject into the header
-        const initiateScript = document.createElement('script');
+        const initiateScript = window.document.createElement('script');
         initiateScript.type = 'text/javascript';
         initiateScript.async = true;
         initiateScript.setAttribute('class', dynamScriptClass);
@@ -71,8 +71,12 @@ exports.getScannerInterface = () => {
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
         // Inject scripts into <head />
-        document.getElementsByTagName('head')[0].appendChild(initiateScript);
-        document.getElementsByTagName('head')[0].appendChild(configScript);
+        window.document
+          .getElementsByTagName('head')[0]
+          .appendChild(initiateScript);
+        window.document
+          .getElementsByTagName('head')[0]
+          .appendChild(configScript);
       });
     }
 
@@ -120,7 +124,10 @@ exports.getScannerInterface = () => {
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
-        if (count === 0) reject(new Error('no images in buffer'));
+        if (count === 0) {
+          reject(new Error('no images in buffer'));
+          return;
+        }
         const promises = [];
         const response = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
@@ -139,8 +146,19 @@ exports.getScannerInterface = () => {
 
         return Promise.all(promises)
           .then(async blobs => {
+            const COVER_SHEET_WIDTH_IN_PX = 866;
+
+            const scaledDownBlobs = await Promise.all(
+              blobs.map(blob =>
+                applicationContext
+                  .getReduceImageBlob()
+                  .default()
+                  .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
+              ),
+            );
+
             const blobBuffers = await Promise.all(
-              blobs.map(applicationContext.convertBlobToUInt8Array),
+              scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
             );
 
             response.scannedBuffer = blobBuffers;

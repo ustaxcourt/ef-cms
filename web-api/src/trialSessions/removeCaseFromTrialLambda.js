@@ -8,14 +8,16 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.removeCaseFromTrialLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const lambdaArgs = {
-      ...event.pathParameters,
-      ...JSON.parse(event.body),
-    };
+    const { docketNumber, trialSessionId } = event.pathParameters || event.path;
+    const { associatedJudge, caseStatus, disposition } = JSON.parse(event.body);
+
     return await applicationContext
       .getUseCases()
-      .removeCaseFromTrialInteractor({
-        applicationContext,
-        ...lambdaArgs,
+      .removeCaseFromTrialInteractor(applicationContext, {
+        associatedJudge,
+        caseStatus,
+        disposition,
+        docketNumber,
+        trialSessionId,
       });
   });

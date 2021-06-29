@@ -15,27 +15,36 @@ export const openCaseDocumentDownloadUrlAction = async ({
   const {
     docketEntryId,
     docketNumber,
-    isForIFrame,
-    isMobile,
+    isForIFrame = false,
     isPublic,
+    useSameTab,
   } = props;
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    docketNumber,
-    isPublic,
-    key: docketEntryId,
-  });
+  let openedPdfWindow;
+  if (!isForIFrame && !useSameTab) {
+    openedPdfWindow = window.open();
+    openedPdfWindow.document.write('Loading your document...');
+  }
 
-  if (isForIFrame) {
-    store.set(state.iframeSrc, url);
-  } else {
-    if (isMobile) {
+  try {
+    const { url } = await applicationContext
+      .getUseCases()
+      .getDocumentDownloadUrlInteractor(applicationContext, {
+        docketNumber,
+        isPublic,
+        key: docketEntryId,
+      });
+
+    if (isForIFrame) {
+      store.set(state.iframeSrc, url);
+    } else if (useSameTab) {
       window.location.href = url;
     } else {
-      window.open(url, '_blank');
+      openedPdfWindow.location.href = url;
     }
+  } catch (e) {
+    openedPdfWindow?.close();
+
+    throw new Error(`Unable to get document download url. ${e.message}`);
   }
 };

@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const modalRoot = document.getElementById('modal-root');
+const modalRoot = window.document.getElementById('modal-root');
 
 export const BaseModal = connect(
   {
@@ -25,7 +25,7 @@ export const BaseModal = connect(
 
     const getEl = () => {
       if (!elRef.current) {
-        elRef.current = document.createElement('div');
+        elRef.current = window.document.createElement('div');
       }
       return elRef.current;
     };
@@ -45,21 +45,11 @@ export const BaseModal = connect(
     };
 
     useEffect(() => {
-      const touchmoveTriggered = event => {
-        return event.preventDefault();
-      };
-
       const toggleNoScroll = scrollingOn => {
         if (scrollingOn) {
-          document.body.classList.add('no-scroll');
-          document.addEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
+          window.document.body.classList.add('no-scroll');
         } else {
-          document.body.classList.remove('no-scroll');
-          document.removeEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
+          window.document.body.classList.remove('no-scroll');
         }
       };
 
@@ -70,12 +60,12 @@ export const BaseModal = connect(
       };
 
       modalRoot.appendChild(getEl());
-      document.addEventListener('keydown', keydownTriggered, false);
+      window.document.addEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(true);
 
       return () => {
         modalRoot.removeChild(getEl());
-        document.removeEventListener('keydown', keydownTriggered, false);
+        window.document.removeEventListener('keydown', keydownTriggered, false);
         toggleNoScroll(false);
       };
     }, []);
@@ -90,7 +80,6 @@ export const BaseModal = connect(
             onClick={blurDialog}
           >
             <div
-              aria-live="assertive"
               aria-modal="true"
               className={classNames(
                 'modal-dialog padding-205',

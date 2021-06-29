@@ -12,24 +12,21 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * serveExternallyFiledDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document to serve
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the paper service pdf url
  */
-exports.serveExternallyFiledDocumentInteractor = async ({
+exports.serveExternallyFiledDocumentInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const { PDFDocument } = await applicationContext.getPdfLib();
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -63,7 +60,7 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     applicationContext,
     caseEntity,
     docketEntryEntity: currentDocketEntry,
-    pdfData: pdfData,
+    pdfData,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -72,52 +69,9 @@ exports.serveExternallyFiledDocumentInteractor = async ({
     key: docketEntryId,
   });
 
-  let paperServicePdfUrl;
-  if (servedParties.paper.length > 0) {
-    const originalDoc = await PDFDocument.load(servedDocWithCover);
-
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: originalDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-
-    const paperServicePdfId = applicationContext.getUniqueId();
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: paperServicePdfData,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
-
-    const {
-      url,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: paperServicePdfId,
-      useTempBucket: true,
-    });
-
-    paperServicePdfUrl = url;
-  }
-
   const workItemToUpdate = currentDocketEntry.workItem;
 
   if (workItemToUpdate) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-
     workItemToUpdate.setAsCompleted({
       message: 'completed',
       user,
@@ -142,19 +96,16 @@ exports.serveExternallyFiledDocumentInteractor = async ({
 
   caseEntity.updateDocketEntry(currentDocketEntry);
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseEntity,
-    docketEntryId: currentDocketEntry.docketEntryId,
-    servedParties,
+    caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
-  return {
-    paperServicePdfUrl,
-  };
+  return await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntity,
+      docketEntryId: currentDocketEntry.docketEntryId,
+    });
 };

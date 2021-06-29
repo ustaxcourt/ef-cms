@@ -24,14 +24,6 @@
             type: "any"
             flags: 
               presence: "forbidden"
-          contactPrimary: 
-            type: "any"
-            flags: 
-              presence: "forbidden"
-          contactSecondary: 
-            type: "any"
-            flags: 
-              presence: "forbidden"
           createdAt: 
             type: "any"
             flags: 
@@ -83,6 +75,10 @@
             type: "any"
             flags: 
               presence: "forbidden"
+          petitioners: 
+            type: "any"
+            flags: 
+              presence: "forbidden"
           receivedAt: 
             type: "any"
             flags: 
@@ -101,198 +97,11 @@
           name: "max"
           args: 
             limit: 4700
-    contactPrimary: 
-      type: "object"
-      flags: 
-        presence: "required"
-      keys: 
-        name: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-            - 
-              name: "max"
-              args: 
-                limit: 500
-        state: 
-          type: "string"
-          flags: 
-            only: true
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-          allow: 
-            - "AK"
-            - "AL"
-            - "AR"
-            - "AZ"
-            - "CA"
-            - "CO"
-            - "CT"
-            - "DC"
-            - "DE"
-            - "FL"
-            - "GA"
-            - "HI"
-            - "IA"
-            - "ID"
-            - "IL"
-            - "IN"
-            - "KS"
-            - "KY"
-            - "LA"
-            - "MA"
-            - "MD"
-            - "ME"
-            - "MI"
-            - "MN"
-            - "MO"
-            - "MS"
-            - "MT"
-            - "NC"
-            - "ND"
-            - "NE"
-            - "NH"
-            - "NJ"
-            - "NM"
-            - "NV"
-            - "NY"
-            - "OH"
-            - "OK"
-            - "OR"
-            - "PA"
-            - "RI"
-            - "SC"
-            - "SD"
-            - "TN"
-            - "TX"
-            - "UT"
-            - "VA"
-            - "VT"
-            - "WA"
-            - "WI"
-            - "WV"
-            - "WY"
-            - "AA"
-            - "AE"
-            - "AP"
-            - "AS"
-            - "FM"
-            - "GU"
-            - "MH"
-            - "MP"
-            - "PR"
-            - "PW"
-            - "VI"
-            - "N/A"
-    contactSecondary: 
-      type: "object"
-      flags: 
-        presence: "optional"
-      allow: 
-        - null
-      keys: 
-        name: 
-          type: "string"
-          flags: 
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-            - 
-              name: "max"
-              args: 
-                limit: 500
-        state: 
-          type: "string"
-          flags: 
-            only: true
-            presence: "optional"
-          rules: 
-            - 
-              name: "min"
-              args: 
-                limit: 1
-          allow: 
-            - "AK"
-            - "AL"
-            - "AR"
-            - "AZ"
-            - "CA"
-            - "CO"
-            - "CT"
-            - "DC"
-            - "DE"
-            - "FL"
-            - "GA"
-            - "HI"
-            - "IA"
-            - "ID"
-            - "IL"
-            - "IN"
-            - "KS"
-            - "KY"
-            - "LA"
-            - "MA"
-            - "MD"
-            - "ME"
-            - "MI"
-            - "MN"
-            - "MO"
-            - "MS"
-            - "MT"
-            - "NC"
-            - "ND"
-            - "NE"
-            - "NH"
-            - "NJ"
-            - "NM"
-            - "NV"
-            - "NY"
-            - "OH"
-            - "OK"
-            - "OR"
-            - "PA"
-            - "RI"
-            - "SC"
-            - "SD"
-            - "TN"
-            - "TX"
-            - "UT"
-            - "VA"
-            - "VT"
-            - "WA"
-            - "WI"
-            - "WV"
-            - "WY"
-            - "AA"
-            - "AE"
-            - "AP"
-            - "AS"
-            - "FM"
-            - "GU"
-            - "MH"
-            - "MP"
-            - "PR"
-            - "PW"
-            - "VI"
-            - "N/A"
     createdAt: 
       type: "date"
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
     docketEntries: 
       type: "array"
@@ -329,12 +138,48 @@
                   name: "max"
                   args: 
                     limit: 500
+            attachments: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            certificateOfService: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+            certificateOfServiceDate: 
+              type: "date"
+              flags: 
+                format: 
+                  - "YYYY-MM-DDTHH:mm:ss.SSSZ"
+              whens: 
+                - 
+                  ref: 
+                    path: 
+                      - "certificateOfService"
+                  is: 
+                    type: "any"
+                    flags: 
+                      only: true
+                      presence: "required"
+                    allow: 
+                      - 
+                        override: true
+                      - true
+                  then: 
+                    type: "any"
+                    flags: 
+                      presence: "required"
+                  otherwise: 
+                    type: "any"
+                    flags: 
+                      presence: "optional"
+                    allow: 
+                      - null
             createdAt: 
               type: "date"
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
                 description: "When the Document was added to the system."
             docketEntryId: 
@@ -762,8 +607,7 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
                 description: "Date that this Document was filed."
               rules: 
                 - 
@@ -782,6 +626,12 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Has an associated PDF in S3."
+            isLegacyServed: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+                description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
             isMinuteEntry: 
               type: "boolean"
               flags: 
@@ -801,6 +651,11 @@
               flags: 
                 presence: "optional"
                 description: "Indicates the item has been removed from the docket record."
+            lodged: 
+              type: "boolean"
+              flags: 
+                presence: "optional"
+                description: "A lodged document is awaiting action by the judge to enact or refuse."
             numberOfPages: 
               type: "number"
               flags: 
@@ -810,6 +665,20 @@
                   name: "integer"
               allow: 
                 - null
+            objections: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "Yes"
+                - "No"
+                - "Unknown"
             processingStatus: 
               type: "string"
               flags: 
@@ -824,33 +693,39 @@
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
-                presence: "optional"
+                presence: "required"
+              rules: 
+                - 
+                  name: "max"
+                  args: 
+                    date: "now"
             servedAt: 
               type: "date"
               flags: 
                 format: 
                   - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-                  - "YYYY-MM-DD"
                 presence: "optional"
-            servedParties: 
-              type: "array"
-              flags: 
-                presence: "optional"
-              items: 
+              rules: 
                 - 
-                  type: "object"
-                  keys: 
-                    name: 
-                      type: "string"
-                      flags: 
-                        presence: "optional"
-                        description: "The name of a party from a contact, or \"IRS\""
-                      rules: 
-                        - 
-                          name: "min"
-                          args: 
-                            limit: 1
+                  name: "max"
+                  args: 
+                    date: "now"
+            servedPartiesCode: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Served parties code to override system-computed code."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "B"
+                - "P"
+                - "R"
+                - null
     docketNumber: 
       type: "string"
       flags: 
@@ -899,6 +774,10 @@
       type: "boolean"
       flags: 
         presence: "required"
+    isPaper: 
+      type: "boolean"
+      flags: 
+        presence: "optional"
     isSealed: 
       type: "boolean"
     partyType: 
@@ -931,12 +810,56 @@
         - "Surviving spouse"
         - "Transferee"
         - "Trust"
+    petitioners: 
+      type: "array"
+      flags: 
+        presence: "required"
+      items: 
+        - 
+          type: "object"
+          keys: 
+            contactType: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "primary"
+                - "secondary"
+                - "otherFilers"
+                - "otherPetitioners"
+            name: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+                - 
+                  name: "max"
+                  args: 
+                    limit: 500
+            state: 
+              type: "string"
+              flags: 
+                presence: "optional"
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
     receivedAt: 
       type: "date"
       flags: 
         format: 
           - "YYYY-MM-DDTHH:mm:ss.SSSZ"
-          - "YYYY-MM-DD"
         presence: "optional"
 
  ```

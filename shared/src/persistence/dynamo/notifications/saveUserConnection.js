@@ -24,6 +24,7 @@ exports.saveUserConnection = async ({
       gsi1pk: `connection|${connectionId}`,
       pk: `user|${userId}`,
       sk: `connection|${connectionId}`,
+      // eslint-disable-next-line @miovision/disallow-date/no-static-date
       ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
     },
     applicationContext,

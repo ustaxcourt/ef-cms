@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getMessageThreadLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getMessageThreadInteractor({
-      applicationContext,
-      parentMessageId: event.pathParameters.parentMessageId,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getMessageThreadInteractor(applicationContext, {
+        parentMessageId: event.pathParameters.parentMessageId,
+      });
   });

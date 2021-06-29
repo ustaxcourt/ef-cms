@@ -2,7 +2,7 @@ import { AddEditUserCaseNoteModal } from '../TrialSessionWorkingCopy/AddEditUser
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeleteCaseNoteConfirmModal } from './DeleteCaseNoteConfirmModal';
 import { DeleteUserCaseNoteConfirmModal } from '../TrialSessionWorkingCopy/DeleteUserCaseNoteConfirmModal';
-import { Text } from '../../ustc-ui/Text/Text';
+import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -11,6 +11,7 @@ export const CaseNotes = connect(
   {
     caseDetail: state.caseDetail,
     caseDetailHelper: state.caseDetailHelper,
+    judgesNote: state.judgesNote,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence:
@@ -24,6 +25,7 @@ export const CaseNotes = connect(
   function CaseNotes({
     caseDetail,
     caseDetailHelper,
+    judgesNote,
     openAddEditCaseNoteModalSequence,
     openAddEditUserCaseNoteModalFromDetailSequence,
     openDeleteCaseNoteConfirmModalSequence,
@@ -53,7 +55,7 @@ export const CaseNotes = connect(
                     )}
                     <h3 className="underlined">Case Notes</h3>
                     <div className="margin-top-1 margin-bottom-4">
-                      <Text bind="caseDetail.caseNote" />
+                      <TextView bind="caseDetail.caseNote" />
                     </div>
                     {caseDetail.caseNote && (
                       <div className="grid-row">
@@ -75,7 +77,9 @@ export const CaseNotes = connect(
                             icon="trash"
                             id="delete-procedural-note-button"
                             onClick={() => {
-                              openDeleteCaseNoteConfirmModalSequence();
+                              openDeleteCaseNoteConfirmModalSequence({
+                                docketNumber: caseDetail.docketNumber,
+                              });
                             }}
                           >
                             Delete Note
@@ -90,8 +94,7 @@ export const CaseNotes = connect(
                 <div className="tablet:grid-col-6">
                   <div className="card height-full">
                     <div className="content-wrapper">
-                      {(!caseDetail.judgesNote ||
-                        !caseDetail.judgesNote.notes) && (
+                      {(!judgesNote || !judgesNote.notes) && (
                         <Button
                           link
                           className="float-right margin-right-0 margin-top-1 padding-0"
@@ -107,9 +110,9 @@ export const CaseNotes = connect(
                       )}
                       <h3 className="underlined">Judge’s Notes</h3>
                       <div className="margin-top-1  margin-bottom-4">
-                        <Text bind="caseDetail.judgesNote.notes" />
+                        <TextView bind="judgesNote.notes" />
                       </div>
-                      {caseDetail.judgesNote && caseDetail.judgesNote.notes && (
+                      {judgesNote && judgesNote.notes && (
                         <div className="grid-row">
                           <div className="tablet:grid-col-6">
                             <Button

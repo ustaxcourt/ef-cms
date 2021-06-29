@@ -3,15 +3,15 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { servePaperFiledDocumentAction } from './servePaperFiledDocumentAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('servePaperFiledDocumentAction', () => {
   let caseDetail;
   const docketNumber = '123-45';
   const docketEntryId = '456';
-  const paperServicePdfUrl = 'www.example.com';
+  const pdfUrl = 'www.example.com';
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     caseDetail = {
       docketEntries: [],
       docketNumber,
@@ -22,7 +22,7 @@ describe('servePaperFiledDocumentAction', () => {
     applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
-        return { paperServicePdfUrl };
+        return { pdfUrl };
       });
 
     const result = await runAction(servePaperFiledDocumentAction, {
@@ -44,17 +44,16 @@ describe('servePaperFiledDocumentAction', () => {
 
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({ docketEntryId, docketNumber });
-
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: true,
-      pdfUrl: paperServicePdfUrl,
+      pdfUrl,
     });
   });
 
-  it('returns hasPaper false when there is no paperServicePdfUrl after the document has been served', async () => {
+  it('returns hasPaper false when there is no pdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
@@ -80,9 +79,8 @@ describe('servePaperFiledDocumentAction', () => {
 
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({ docketEntryId, docketNumber });
-
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: false,

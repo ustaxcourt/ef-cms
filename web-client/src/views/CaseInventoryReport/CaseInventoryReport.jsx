@@ -59,8 +59,8 @@ export const CaseInventoryReport = connect(
                 }
               >
                 <option value="">- Judge -</option>
-                {caseInventoryReportHelper.judges.map((judge, idx) => (
-                  <option key={idx} value={judge}>
+                {caseInventoryReportHelper.judges.map(judge => (
+                  <option key={judge} value={judge}>
                     {judge}
                   </option>
                 ))}
@@ -119,8 +119,8 @@ export const CaseInventoryReport = connect(
                     </thead>
                     <tbody>
                       {caseInventoryReportHelper.formattedReportData.map(
-                        (row, idx) => (
-                          <tr key={idx}>
+                        row => (
+                          <tr key={row.docketNumber}>
                             <td>
                               <CaseLink formattedCase={row} />
                             </td>

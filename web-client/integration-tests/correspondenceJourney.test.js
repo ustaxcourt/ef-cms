@@ -1,10 +1,12 @@
-import { docketClerkAddsCorrespondence } from './journey/docketClerkAddsCorrespondence';
 import { docketClerkCreatesMessageWithCorrespondence } from './journey/docketClerkCreatesMessageWithCorrespondence';
 import { docketClerkDeletesCorrespondence } from './journey/docketClerkDeletesCorrespondence';
-import { docketClerkEditsCorrespondence } from './journey/docketClerkEditsCorrespondence';
-import { docketClerkNavigatesToAddCorrespondence } from './journey/docketClerkNavigatesToAddCorrespondence';
-import { docketClerkNavigatesToEditCorrespondence } from './journey/docketClerkNavigatesToEditCorrespondence';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkViewsMessageWithCorrespondence } from './journey/docketClerkViewsMessageWithCorrespondence';
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { userAddsCorrespondence } from './journey/userAddsCorrespondence';
+import { userDeletesCorrespondence } from './journey/userDeletesCorrespondence';
+import { userEditsCorrespondence } from './journey/userEditsCorrespondence';
+import { userNavigatesToAddCorrespondence } from './journey/userNavigatesToAddCorrespondence';
+import { userNavigatesToEditCorrespondence } from './journey/userNavigatesToEditCorrespondence';
 
 describe('Adds correspondence to a case', () => {
   let caseDetail;
@@ -18,6 +20,10 @@ describe('Adds correspondence to a case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('create case', async () => {
     caseDetail = await uploadPetition(test);
@@ -26,11 +32,43 @@ describe('Adds correspondence to a case', () => {
   });
 
   loginAs(test, 'docketclerk@example.com');
-  docketClerkNavigatesToAddCorrespondence(test);
-  docketClerkAddsCorrespondence(test, firstCorrespondenceTitle);
-  docketClerkAddsCorrespondence(test, secondCorrespondenceTitle);
-  docketClerkNavigatesToEditCorrespondence(test, firstCorrespondenceTitle);
+  userNavigatesToAddCorrespondence(test, 'DocketClerk');
+  userAddsCorrespondence(test, firstCorrespondenceTitle, 'DocketClerk');
+  userAddsCorrespondence(test, secondCorrespondenceTitle, 'DocketClerk');
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'DocketClerk',
+  );
   docketClerkCreatesMessageWithCorrespondence(test);
-  docketClerkEditsCorrespondence(test, fakeFile);
-  docketClerkDeletesCorrespondence(test);
+  docketClerkViewsMessageWithCorrespondence(test);
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'DocketClerk',
+  );
+  userEditsCorrespondence(test, 'DocketClerk');
+  docketClerkDeletesCorrespondence(test, firstCorrespondenceTitle);
+
+  loginAs(test, 'admissionsclerk@example.com');
+  userNavigatesToAddCorrespondence(test, 'AdmissionsClerk');
+  userAddsCorrespondence(test, firstCorrespondenceTitle, 'AdmissionsClerk');
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'AdmissionsClerk',
+  );
+  userEditsCorrespondence(test, 'AdmissionsClerk');
+  userDeletesCorrespondence(test, firstCorrespondenceTitle, 'AdmissionsClerk');
+
+  loginAs(test, 'general@example.com');
+  userNavigatesToAddCorrespondence(test, 'General user');
+  userAddsCorrespondence(test, firstCorrespondenceTitle, 'General user');
+  userNavigatesToEditCorrespondence(
+    test,
+    firstCorrespondenceTitle,
+    'General user',
+  );
+  userEditsCorrespondence(test, 'General user');
+  userDeletesCorrespondence(test, firstCorrespondenceTitle);
 });

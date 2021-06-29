@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  baseExternalDocumentValidation,
+  externalDocumentDecorator,
+} = require('./ExternalDocumentBase');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -19,9 +23,7 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
 function ExternalDocumentNonStandardC() {}
 
 ExternalDocumentNonStandardC.prototype.init = function init(rawProps) {
-  this.category = rawProps.category;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  externalDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
   this.previousDocument = rawProps.previousDocument;
 };
@@ -30,20 +32,27 @@ ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
     this.freeText,
-    this.previousDocument.documentTitle || this.previousDocument.documentType,
+    this.previousDocument
+      ? this.previousDocument.documentTitle ||
+          this.previousDocument.documentType
+      : '',
   );
 };
 
 ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,
-  freeText: 'Enter name',
+  freeText: [
+    { contains: 'is required', message: 'Enter name' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    },
+  ],
 };
 
 ExternalDocumentNonStandardC.schema = {
-  category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.required(),
+  ...baseExternalDocumentValidation,
+  freeText: JoiValidationConstants.STRING.max(1000).required(),
   previousDocument: joi
     .object()
     .keys({

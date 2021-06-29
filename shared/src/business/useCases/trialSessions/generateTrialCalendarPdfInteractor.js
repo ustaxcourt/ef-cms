@@ -1,19 +1,22 @@
 const {
+  compareCasesByDocketNumber,
+} = require('../../utilities/getFormattedTrialSessionDetails');
+const {
   saveFileAndGenerateUrl,
 } = require('../../useCaseHelper/saveFileAndGenerateUrl');
 
 /**
  * generateTrialCalendarPdfInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {string} trial session calendar pdf url
  */
-exports.generateTrialCalendarPdfInteractor = async ({
+exports.generateTrialCalendarPdfInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -35,26 +38,21 @@ exports.generateTrialCalendarPdfInteractor = async ({
       trialSessionId,
     });
 
-  const getPractitionerName = practitioner => {
-    const { barNumber, name } = practitioner;
-    const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
-    return `${name}${barNumberFormatted}`;
-  };
+  const formattedOpenCases = exports.formatCases({
+    applicationContext,
+    calendaredCases,
+  });
 
-  const formattedOpenCases = calendaredCases
-    .filter(calendaredCase => calendaredCase.removedFromTrial !== true)
-    .map(openCase => {
-      return {
-        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-        docketNumber: openCase.docketNumberWithSuffix,
-        petitionerCounsel: (openCase.privatePractitioners || []).map(
-          getPractitionerName,
-        ),
-        respondentCounsel: (openCase.irsPractitioners || []).map(
-          getPractitionerName,
-        ),
-      };
-    });
+  formattedTrialSession.caseOrder.forEach(aCase => {
+    if (aCase.calendarNotes) {
+      const caseToUpdate = formattedOpenCases.find(
+        theCase => theCase.docketNumber === aCase.docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.calendarNotes = aCase.calendarNotes;
+      }
+    }
+  });
 
   const {
     formattedCourtReporter,
@@ -88,4 +86,30 @@ exports.generateTrialCalendarPdfInteractor = async ({
     file,
     useTempBucket: true,
   });
+};
+
+const getPractitionerName = practitioner => {
+  const { barNumber, name } = practitioner;
+  const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
+  return `${name}${barNumberFormatted}`;
+};
+
+exports.formatCases = ({ applicationContext, calendaredCases }) => {
+  const formattedOpenCases = calendaredCases
+    .filter(calendaredCase => !calendaredCase.removedFromTrial)
+    .sort(compareCasesByDocketNumber)
+    .map(openCase => {
+      return {
+        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
+        docketNumber: openCase.docketNumber,
+        docketNumberWithSuffix: openCase.docketNumberWithSuffix,
+        petitionerCounsel: (openCase.privatePractitioners || []).map(
+          getPractitionerName,
+        ),
+        respondentCounsel: (openCase.irsPractitioners || []).map(
+          getPractitionerName,
+        ),
+      };
+    });
+  return formattedOpenCases;
 };

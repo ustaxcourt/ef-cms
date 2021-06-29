@@ -1,4 +1,4 @@
-import { OPINION_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../shared/src/business/entities/EntityConstants';
 const courtIssuedEventCodes = require('../../../../shared/src/tools/courtIssuedEventCodes.json');
 
 /**
@@ -9,7 +9,11 @@ const courtIssuedEventCodes = require('../../../../shared/src/tools/courtIssuedE
  */
 export const getOpinionTypesAction = () => {
   const opinionDocuments = courtIssuedEventCodes.filter(courtIssuedDocument => {
-    if (OPINION_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
+    if (
+      OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(
+        courtIssuedDocument.eventCode,
+      )
+    ) {
       return courtIssuedDocument;
     }
   });

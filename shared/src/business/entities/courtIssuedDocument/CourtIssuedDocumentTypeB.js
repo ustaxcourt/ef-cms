@@ -1,4 +1,7 @@
-const joi = require('joi');
+const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -17,23 +20,22 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 function CourtIssuedDocumentTypeB() {}
 
 CourtIssuedDocumentTypeB.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
   this.judge = rawProps.judge;
+  this.judgeWithTitle = rawProps.judgeWithTitle;
 };
 
 CourtIssuedDocumentTypeB.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.judge, this.freeText);
+  const judge = this.judgeWithTitle || this.judge;
+  return replaceBracketed(this.documentTitle, judge, this.freeText);
 };
 
 CourtIssuedDocumentTypeB.schema = {
-  attachments: joi.boolean().required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.optional(),
+  ...CourtIssuedDocumentDefault.schema,
+  freeText: JoiValidationConstants.STRING.max(1000).optional(),
   judge: JoiValidationConstants.STRING.required(),
+  judgeWithTitle: JoiValidationConstants.STRING.optional(),
 };
 
 joiValidationDecorator(

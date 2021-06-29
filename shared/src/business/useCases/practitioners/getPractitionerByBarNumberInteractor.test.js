@@ -4,7 +4,10 @@ const {
 const {
   getPractitionerByBarNumberInteractor,
 } = require('./getPractitionerByBarNumberInteractor');
-const { ROLES, US_STATES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('getPractitionerByBarNumberInteractor', () => {
@@ -18,8 +21,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     );
 
     await expect(
-      getPractitionerByBarNumberInteractor({
-        applicationContext,
+      getPractitionerByBarNumberInteractor(applicationContext, {
         barNumber: 'BN0000',
       }),
     ).rejects.toThrow('Unauthorized for getting attorney user');
@@ -36,7 +38,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue({
-        admissionsDate: '2019-03-01T21:42:29.073Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
         birthYear: '1983',
@@ -46,7 +48,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
         lastName: 'Practitioner',
         name: 'Private Practitioner',
-        originalBarState: US_STATES.OK,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         section: ROLES.privatePractitioner,
@@ -54,16 +56,17 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'PP1234',
-    });
+      {
+        barNumber: 'PP1234',
+      },
+    );
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
-      admissionsDate: '2019-03-01T21:42:29.073Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
-      alternateEmail: undefined,
       barNumber: 'PP1234',
       birthYear: '1983',
       email: undefined,
@@ -76,11 +79,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'Private Practitioner',
-      originalBarState: US_STATES.OK,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: ROLES.privatePractitioner,
-      serviceIndicator: 'Electronic',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -98,7 +101,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue({
-        admissionsDate: '2019-03-01T21:42:29.073Z',
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PI5678',
         birthYear: '1983',
@@ -107,23 +110,24 @@ describe('getPractitionerByBarNumberInteractor', () => {
         firstName: 'IRS',
         lastName: 'Practitioner',
         name: 'IRS Practitioner',
-        originalBarState: US_STATES.OK,
+        originalBarState: 'IL',
         practitionerType: 'Attorney',
         role: ROLES.irsPractitioner,
         section: ROLES.privatePractitioner,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'PI5678',
-    });
+      {
+        barNumber: 'PI5678',
+      },
+    );
 
     expect(practitioner).toEqual({
       additionalPhone: undefined,
-      admissionsDate: '2019-03-01T21:42:29.073Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
-      alternateEmail: undefined,
       barNumber: 'PI5678',
       birthYear: '1983',
       email: undefined,
@@ -135,11 +139,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
       lastName: 'Practitioner',
       middleName: undefined,
       name: 'IRS Practitioner',
-      originalBarState: US_STATES.OK,
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
       section: 'irsPractitioner',
-      serviceIndicator: 'Electronic',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       suffix: undefined,
       token: undefined,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -158,10 +162,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
       .getPersistenceGateway()
       .getPractitionerByBarNumber.mockReturnValue(undefined);
 
-    const practitioner = await getPractitionerByBarNumberInteractor({
+    const practitioner = await getPractitionerByBarNumberInteractor(
       applicationContext,
-      barNumber: 'BN0000',
-    });
+      {
+        barNumber: 'BN0000',
+      },
+    );
 
     expect(practitioner).toBeUndefined();
   });

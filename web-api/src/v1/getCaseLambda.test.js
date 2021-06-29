@@ -1,9 +1,11 @@
 const createApplicationContext = require('../applicationContext');
+const {
+  MOCK_CASE_WITH_TRIAL_SESSION,
+} = require('../../../shared/src/test/mockCase');
 const { getCaseLambda } = require('./getCaseLambda');
-const { MOCK_CASE } = require('../../../shared/src/test/mockCase');
 const { MOCK_USERS } = require('../../../shared/src/test/mockUsers');
 
-const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE, {
+const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
   pk: 'case|123-20',
   sk: 'case|23',
@@ -20,20 +22,18 @@ const REQUEST_EVENT = {
 };
 
 const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user);
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-
-  applicationContext.logger = {
+  const applicationContext = createApplicationContext(user, {
+    debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
-    time: () => jest.fn().mockReturnValue(null),
-    timeEnd: () => jest.fn().mockReturnValue(null),
-  };
+  });
+
+  applicationContext.environment.dynamoDbTableName = 'mocked';
 
   return applicationContext;
 };
 
-describe('getCaseLambda', () => {
+describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
   // disable logging by mimicking CI for this test
   beforeAll(() => {
@@ -45,8 +45,7 @@ describe('getCaseLambda', () => {
 
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 
-  // Currently returns a 500 instead of a 404; bug https://github.com/flexion/ef-cms/issues/6853
-  it.skip('returns 404 when the user is not authorized and the case is not found', async () => {
+  it('returns 404 when the user is not authorized and the case is not found', async () => {
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentAppContext(user);
 
@@ -99,17 +98,14 @@ describe('getCaseLambda', () => {
       expect.any(String),
     );
     expect(JSON.parse(response.body).assignedJudge).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.address1).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.name).toBeDefined();
-    expect(JSON.parse(response.body).contactPrimary.state).toBeDefined();
+    expect(JSON.parse(response.body).contactPrimary).toBeUndefined();
     expect(JSON.parse(response.body).noticeOfTrialDate).toBeUndefined();
     expect(JSON.parse(response.body).status).toBeUndefined();
     expect(JSON.parse(response.body).trialLocation).toBeUndefined();
     expect(JSON.parse(response.body).userId).toBeUndefined();
   });
 
-  // Currently returns a 500 instead of a 404; bug https://github.com/flexion/ef-cms/issues/6853
-  it.skip('returns 404 when the docket number isn’t found', async () => {
+  it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 
@@ -160,6 +156,8 @@ describe('getCaseLambda', () => {
   });
 
   it('returns the case in v1 format', async () => {
+    // Careful! Changing this test would mean that the v1 format is changing;
+    // this would mean breaking changes for any user of the v1 API
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentAppContext(user);
 
@@ -201,7 +199,7 @@ describe('getCaseLambda', () => {
       preferredTrialCity: 'Washington, District of Columbia',
       respondents: [],
       sortableDocketNumber: 18000101,
-      status: 'New',
+      status: 'Calendared',
     });
   });
 });

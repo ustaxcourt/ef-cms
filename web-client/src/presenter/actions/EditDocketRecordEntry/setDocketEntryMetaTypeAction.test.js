@@ -50,4 +50,18 @@ describe('setDocketEntryMetaTypeAction', () => {
     expect(result.state.screenMetadata.editType).toEqual('NoDocument');
     expect(result.state.docketEntryId).toEqual('123');
   });
+
+  it('Should return CourtIssued when form.eventCode is NODC', async () => {
+    const result = await runAction(setDocketEntryMetaTypeAction, {
+      modules: { presenter },
+      state: {
+        form: {
+          docketEntryId: '123',
+          eventCode: 'NODC',
+        },
+      },
+    });
+
+    expect(result.state.screenMetadata.editType).toEqual('CourtIssued');
+  });
 });

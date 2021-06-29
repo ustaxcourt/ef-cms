@@ -1,9 +1,7 @@
 const joi = require('joi');
 const {
-  CHAMBERS_SECTIONS_WITH_LEGACY,
   COUNTRY_TYPES,
   ROLES,
-  SECTIONS,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -15,8 +13,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
-
-User.validationName = 'User';
+const { formatPhoneNumber } = require('../utilities/formatPhoneNumber');
 
 /**
  * constructor
@@ -28,14 +25,19 @@ function User() {
   this.entityName = 'User';
 }
 
-User.prototype.init = function init(rawUser) {
-  userDecorator(this, rawUser);
+User.prototype.init = function init(rawUser, { filtered = false } = {}) {
+  userDecorator(this, rawUser, filtered);
   this.section = rawUser.section;
 };
 
-const userDecorator = (obj, rawObj) => {
+const userDecorator = (obj, rawObj, filtered = false) => {
+  if (!filtered) {
+    obj.pendingEmailVerificationToken = rawObj.pendingEmailVerificationToken;
+  }
+
   obj.email = rawObj.email;
   obj.name = rawObj.name;
+  obj.pendingEmail = rawObj.pendingEmail;
   obj.role = rawObj.role || ROLES.petitioner;
   obj.token = rawObj.token;
   obj.userId = rawObj.userId;
@@ -48,7 +50,7 @@ const userDecorator = (obj, rawObj) => {
       city: rawObj.contact.city,
       country: rawObj.contact.country,
       countryType: rawObj.contact.countryType,
-      phone: rawObj.contact.phone,
+      phone: formatPhoneNumber(rawObj.contact.phone),
       postalCode: rawObj.contact.postalCode,
       state: rawObj.contact.state,
     };
@@ -94,12 +96,12 @@ const baseUserValidation = {
   judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
     is: ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.optional(),
+    then: joi.required(),
   }),
   judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
-    is: ROLES.judge || ROLES.judgeTitle,
+    is: ROLES.judge,
     otherwise: joi.optional().allow(null),
-    then: joi.optional(),
+    then: joi.required(),
   }),
   name: JoiValidationConstants.STRING.max(100).required(),
   role: JoiValidationConstants.STRING.valid(...Object.values(ROLES)).required(),
@@ -116,11 +118,10 @@ const userValidation = {
     .description(
       'Whether the contact information for the user is being updated.',
     ),
-  section: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS_WITH_LEGACY,
-    ...Object.values(ROLES),
-  ).optional(),
+  pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
+  pendingEmailVerificationToken:
+    JoiValidationConstants.UUID.allow(null).optional(),
+  section: JoiValidationConstants.STRING.optional(),
   token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),
 };
@@ -166,8 +167,10 @@ User.isInternalUser = function (role) {
     ROLES.clerkOfCourt,
     ROLES.docketClerk,
     ROLES.floater,
+    ROLES.general,
     ROLES.judge,
     ROLES.petitionsClerk,
+    ROLES.reportersOffice,
     ROLES.trialClerk,
   ];
   return internalRoles.includes(role);

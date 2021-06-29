@@ -43,8 +43,10 @@ export const DateRangePickerComponent = ({
   }, [dateRangePickerRef]);
 
   useEffect(() => {
-    const startInput = document.getElementById(`${startName}-date-start`);
-    const startHiddenInput = document.querySelector(
+    const startInput = window.document.getElementById(
+      `${startName}-date-start`,
+    );
+    const startHiddenInput = window.document.querySelector(
       `input[name="${startName}-date-start"]`,
     );
     if (!startValue && startInput) {
@@ -61,8 +63,8 @@ export const DateRangePickerComponent = ({
   }, [startValue]);
 
   useEffect(() => {
-    const endInput = document.getElementById(`${endName}-date-end`);
-    const endHiddenInput = document.querySelector(
+    const endInput = window.document.getElementById(`${endName}-date-end`);
+    const endHiddenInput = window.document.querySelector(
       `input[name="${endName}-date-end"]`,
     );
     if (!endValue && endInput) {
@@ -80,10 +82,10 @@ export const DateRangePickerComponent = ({
 
   useEffect(() => {
     if (startDateInputRef.current && endDateInputRef.current) {
-      document
+      window.document
         .getElementById(`${endName}-date-end`)
         .addEventListener('change', onChangeEnd);
-      document
+      window.document
         .getElementById(`${startName}-date-start`)
         .addEventListener('change', onChangeStart);
     }

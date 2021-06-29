@@ -7,13 +7,12 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { set } from 'cerebral/factories';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
+import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
 import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoRequestAccess = [
@@ -32,12 +31,12 @@ const gotoRequestAccess = [
       runPathForUserRoleAction,
       {
         irsPractitioner: [
-          set(state.form.partyIrsPractitioner, true),
+          setFormPartyTrueAction('partyIrsPractitioner'),
           setRequestAccessWizardStepActionGenerator('RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],
         privatePractitioner: [
-          set(state.form.partyPrivatePractitioner, true),
+          setFormPartyTrueAction('partyPrivatePractitioner'),
           setRequestAccessWizardStepActionGenerator('RequestAccess'),
           setCurrentPageAction('RequestAccessWizard'),
         ],

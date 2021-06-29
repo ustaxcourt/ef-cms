@@ -1,13 +1,16 @@
 import { state } from 'cerebral';
 
-export const showAppTimeoutModalHelper = (get, applicationContext) => {
+export const showAppTimeoutModalHelper = get => {
+  const appTimeoutModalName = 'AppTimeoutModal';
+
   const showModalState = get(state.modal.showModal);
-  const currentUser = applicationContext.getCurrentUser();
+  const currentUser = get(state.user);
   const hasCurrentUser = !!currentUser;
   const isUploading = get(state.fileUploadProgress.isUploading);
 
   return {
     beginIdleMonitor: hasCurrentUser && !isUploading,
-    showModal: showModalState === 'AppTimeoutModal' && hasCurrentUser,
+    currentUser,
+    showModal: showModalState === appTimeoutModalName && hasCurrentUser,
   };
 };

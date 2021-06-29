@@ -14,14 +14,23 @@ export const generateTitlePreviewAction = ({
 }) => {
   const documentMetadata = get(state.form);
 
+  const { EXTERNAL_DOCUMENTS_ARRAY } = applicationContext.getConstants();
+
+  const matchingDocument = EXTERNAL_DOCUMENTS_ARRAY.find(
+    i => i.eventCode === documentMetadata.eventCode,
+  );
+
+  if (matchingDocument) {
+    documentMetadata.documentTitle = matchingDocument.documentTitle;
+  }
+
   const formattedDocketEntry = applicationContext
     .getUtilities()
     .formatDocketEntry(applicationContext, documentMetadata);
 
   let updatedDocumentTitle = applicationContext
     .getUseCases()
-    .generateDocumentTitleInteractor({
-      applicationContext,
+    .generateDocumentTitleInteractor(applicationContext, {
       documentMetadata,
     });
 

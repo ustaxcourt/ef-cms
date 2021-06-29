@@ -1,6 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedMessageDetail as formattedMessageDetailComputed } from './formattedMessageDetail';
-import { getConstants } from '../../getConstants';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -12,7 +11,7 @@ describe('formattedMessageDetail', () => {
     },
   );
 
-  const { PETITIONS_SECTION } = getConstants();
+  const { PETITIONS_SECTION, USER_ROLES } = applicationContext.getConstants();
 
   const mockCaseDetail = {
     archivedCorrespondences: [],
@@ -441,6 +440,140 @@ describe('formattedMessageDetail', () => {
       });
 
       expect(result.attachments[0].archived).toBeFalsy();
+    });
+  });
+
+  describe('showActionButtons', () => {
+    it('should be true when message is NOT completed and user role is NOT general', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: USER_ROLES.petitionsClerk,
+      });
+
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            ...mockCaseDetail,
+            docketEntries: [],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
+              ],
+              completedAt: '2019-05-01T21:40:46.415Z',
+              completedBy: 'Test Petitioner',
+              completedBySection: PETITIONS_SECTION,
+              completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
+              createdAt: '2019-04-01T21:40:46.415Z',
+              docketNumber: '101-20',
+              isCompleted: false,
+              messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
+            },
+          ],
+        },
+      });
+
+      expect(result.showActionButtons).toBeTruthy();
+    });
+
+    it('should be false when message is NOT completed and user role is general', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: USER_ROLES.general,
+      });
+
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            ...mockCaseDetail,
+            docketEntries: [],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
+              ],
+              completedAt: '2019-05-01T21:40:46.415Z',
+              completedBy: 'Test Petitioner',
+              completedBySection: PETITIONS_SECTION,
+              completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
+              createdAt: '2019-04-01T21:40:46.415Z',
+              docketNumber: '101-20',
+              isCompleted: false,
+              messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
+            },
+          ],
+        },
+      });
+
+      expect(result.showActionButtons).toBeFalsy();
+    });
+
+    it('should be false when message is completed and user role is NOT general', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: USER_ROLES.petitionsClerk,
+      });
+
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            ...mockCaseDetail,
+            docketEntries: [],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
+              ],
+              completedAt: '2019-05-01T21:40:46.415Z',
+              completedBy: 'Test Petitioner',
+              completedBySection: PETITIONS_SECTION,
+              completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
+              createdAt: '2019-04-01T21:40:46.415Z',
+              docketNumber: '101-20',
+              isCompleted: true,
+              messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
+            },
+          ],
+        },
+      });
+
+      expect(result.showActionButtons).toBeFalsy();
+    });
+
+    it('should be false when message is completed and user role is general', () => {
+      applicationContext.getCurrentUser.mockReturnValue({
+        role: USER_ROLES.general,
+      });
+
+      const result = runCompute(formattedMessageDetail, {
+        state: {
+          caseDetail: {
+            ...mockCaseDetail,
+            docketEntries: [],
+          },
+          isExpanded: false,
+          messageDetail: [
+            {
+              attachments: [
+                { documentId: 'fee3958e-c738-4794-b0a1-bad711506685' },
+              ],
+              completedAt: '2019-05-01T21:40:46.415Z',
+              completedBy: 'Test Petitioner',
+              completedBySection: PETITIONS_SECTION,
+              completedByUserId: '23869007-384d-464f-b079-cb1fcfb21e03',
+              createdAt: '2019-04-01T21:40:46.415Z',
+              docketNumber: '101-20',
+              isCompleted: true,
+              messageId: '98a9dbc4-a8d1-459b-98b2-30235b596d70',
+            },
+          ],
+        },
+      });
+
+      expect(result.showActionButtons).toBeFalsy();
     });
   });
 });

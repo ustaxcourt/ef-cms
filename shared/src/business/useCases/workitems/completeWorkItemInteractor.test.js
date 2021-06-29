@@ -68,8 +68,7 @@ describe('completeWorkItemInteractor', () => {
     };
 
     await expect(
-      completeWorkItemInteractor({
-        applicationContext,
+      completeWorkItemInteractor(applicationContext, {
         completedMessage: 'Completed',
         workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -79,8 +78,7 @@ describe('completeWorkItemInteractor', () => {
   it('should retrieve the original work item from persistence', async () => {
     const mockWorkItemId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
 
-    await completeWorkItemInteractor({
-      applicationContext,
+    await completeWorkItemInteractor(applicationContext, {
       completedMessage: 'Completed',
       workItemId: mockWorkItemId,
     });

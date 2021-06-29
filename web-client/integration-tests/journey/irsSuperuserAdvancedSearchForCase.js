@@ -1,4 +1,7 @@
-import { COUNTRY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  COUNTRY_TYPES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
 import { refreshElasticsearchIndex } from '../helpers';
 
@@ -58,7 +61,7 @@ export const irsSuperuserAdvancedSearchForCase = test => {
 
     expect(
       test
-        .getState('searchResults')
+        .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(result => result.docketNumber === test.docketNumber),
     ).toBeDefined();
   });

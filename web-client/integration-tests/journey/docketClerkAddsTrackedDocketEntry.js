@@ -1,6 +1,11 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
+export const docketClerkAddsTrackedDocketEntry = (
+  test,
+  fakeFile,
+  paperServiceRequested = false,
+) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
   return it('Docketclerk adds tracked paper filing', async () => {
@@ -8,19 +13,17 @@ export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      partyPrimary: VALIDATION_ERROR_MESSAGES.partyPrimary,
+      filers: VALIDATION_ERROR_MESSAGES.filers,
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
@@ -49,8 +52,10 @@ export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
       value: 100,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
@@ -61,12 +66,10 @@ export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
 
     expect(test.getState('form.documentType')).toEqual('Application');
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
     await test.runSequence('updateDocketEntryFormValueSequence', {
@@ -74,17 +77,20 @@ export const docketClerkAddsTrackedDocketEntry = (test, fakeFile) => {
       value: 'Application for Flavortown',
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
-      docketNumber: test.docketNumber,
-    });
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
-    );
+    if (!paperServiceRequested) {
+      expect(test.getState('alertSuccess').message).toEqual(
+        'Your entry has been added to docket record.',
+      );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    } else {
+      expect(test.getState('pdfPreviewUrl')).toBeDefined();
+      expect(test.getState('currentPage')).toEqual('PrintPaperService');
+    }
     expect(test.getState('form')).toEqual({});
 
     expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);

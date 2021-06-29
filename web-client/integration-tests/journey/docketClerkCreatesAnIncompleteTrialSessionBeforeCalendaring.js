@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
@@ -20,6 +21,11 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
       term: errorMessages.term,
       termYear: errorMessages.termYear,
       trialLocation: errorMessages.trialLocation,
+    });
+
+    await test.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'proceedingType',
+      value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
 
     await test.runSequence('updateTrialSessionFormDataSequence', {
@@ -62,5 +68,16 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
     expect(test.getState('validationErrors')).toEqual({});
 
     await test.runSequence('submitTrialSessionSequence');
+
+    expect(test.getState('alertSuccess')).toEqual({
+      message: 'Trial session added.',
+    });
+
+    const lastCreatedTrialSessionId = test.getState(
+      'lastCreatedTrialSessionId',
+    );
+    expect(lastCreatedTrialSessionId).toBeDefined();
+
+    test.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
   });
 };

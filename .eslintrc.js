@@ -15,13 +15,12 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:jest/recommended',
     'plugin:jsdoc/recommended',
-    // 'plugin:jsx-a11y/recommended', // todo
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
     'plugin:react/recommended',
     'plugin:security/recommended',
-    'prettier/react',
-    'prettier/standard',
+    'prettier',
+    // 'plugin:jsx-a11y/recommended', // todo
   ],
   overrides: [
     {
@@ -56,6 +55,7 @@ module.exports = {
     'jest',
     'jsdoc',
     'jsx-a11y',
+    '@miovision/disallow-date',
     'prettier',
     'promise',
     'react',
@@ -67,16 +67,20 @@ module.exports = {
     'spellcheck',
   ],
   rules: {
+    '@miovision/disallow-date/no-new-date': 1,
+    '@miovision/disallow-date/no-static-date': 0,
+    '@miovision/disallow-date/no-to-date': 0,
     'arrow-parens': ['error', 'as-needed'],
-    complexity: ['error', { max: 40 }], // todo: plugin default is 20, try to lower this
+    complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
+    'eol-last': ['error', 'always'],
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
-    'jest/expect-expect': 'warn',
+    'jest/expect-expect': 'off',
     'jest/no-conditional-expect': 'off',
     'jest/no-export': 'off',
     'jest/no-identical-title': 'off', // todo: warn
-    'jsdoc/check-alignment': 'off', // todo: warn
+    'jsdoc/check-alignment': 'error',
     'jsdoc/check-param-names': 'off', // todo: warn
     'jsdoc/check-tag-names': 'off', // todo: warn
     'jsdoc/check-types': 'off', // todo: warn
@@ -109,15 +113,30 @@ module.exports = {
         },
       },
     ],
+    'max-lines': [
+      'error',
+      { max: 850, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+    ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
-    'no-shadow': ['warn', { builtinGlobals: false }], // TODO: builtinGlobals: true
+    'no-restricted-globals': [
+      'error',
+      { name: 'error' },
+      { name: 'event' },
+      { name: 'status' },
+      { name: 'name' },
+      { name: 'document' },
+    ],
+    'no-shadow': ['error', { builtinGlobals: false }],
+    'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
+    'no-unneeded-ternary': ['error', { defaultAssignment: false }],
     'no-var': 'error',
     'no-warning-comments': [
       'error',
       { location: 'anywhere', terms: ['fixme', 'xxx'] },
     ],
+    'object-shorthand': 'warn',
     'prefer-destructuring': [
       'error',
       {
@@ -158,7 +177,9 @@ module.exports = {
         shorthandLast: false,
       },
     ],
+    'react/no-array-index-key': 'warn',
     'react/prop-types': 'off',
+    'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
     'security/detect-child-process': 'off',
     'security/detect-non-literal-fs-filename': 'off',
@@ -188,7 +209,7 @@ module.exports = {
         identifiers: false,
         lang: 'en_US',
         minLength: 4,
-        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$'],
+        skipIfMatch: ['https?://[^\\s]{10,}', '^[^\\s]{35,}$', 'eslint\\-.*$'],
         skipWords: [
           'anthony',
           'apigateway',
@@ -225,6 +246,7 @@ module.exports = {
           'docketclerk',
           'doctype',
           'douglass',
+          'dropdown',
           'dynam',
           'dynamodb',
           'dynamsoft',
@@ -278,6 +300,7 @@ module.exports = {
           'listitem',
           'localhost',
           'lodash',
+          'marshall',
           'maxw',
           'memoranda',
           'metadata',
@@ -389,7 +412,7 @@ module.exports = {
       },
     },
     react: {
-      version: '16.12.0',
+      version: '17.0.2',
     },
   },
 };

@@ -4,6 +4,7 @@ const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -13,7 +14,16 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockCase;
 
   const MOCK_TRIAL = {
+    chambersPhoneNumber: '1111111',
+    joinPhoneNumber: '0987654321',
+    judge: {
+      name: 'Chief Judge',
+      userId: '822366b7-e47c-413e-811f-d29113d09b06',
+    },
     maxCases: 100,
+    meetingId: '1234567890',
+    password: 'abcdefg',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
@@ -47,8 +57,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -62,8 +71,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -78,8 +86,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await expect(
-      addCaseToTrialSessionInteractor({
-        applicationContext,
+      addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
       }),
@@ -96,11 +103,13 @@ describe('addCaseToTrialSessionInteractor', () => {
       '8675309b-18d0-43ec-bafb-654e83405411',
     );
 
-    const latestCase = await addCaseToTrialSessionInteractor({
+    const latestCase = await addCaseToTrialSessionInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      },
+    );
 
     expect(latestCase).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
@@ -112,6 +121,30 @@ describe('addCaseToTrialSessionInteractor', () => {
     });
   });
 
+  it('should add calendarNotes for the case to the trial session', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      caseOrder: [{ docketNumber: '123-45' }],
+      isCalendared: true,
+    };
+    applicationContext.getUniqueId.mockReturnValue(
+      '8675309b-18d0-43ec-bafb-654e83405411',
+    );
+
+    await addCaseToTrialSessionInteractor(applicationContext, {
+      calendarNotes: 'Test',
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+    });
+
+    const caseWithCalendarNotes = applicationContext
+      .getPersistenceGateway()
+      .updateTrialSession.mock.calls[0][0].trialSessionToUpdate.caseOrder.find(
+        c => c.docketNumber === MOCK_CASE.docketNumber,
+      );
+    expect(caseWithCalendarNotes.calendarNotes).toBe('Test');
+  });
+
   it('sets work items to high priority if the trial session is calendared', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL,
@@ -119,8 +152,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       isCalendared: true,
     };
 
-    await addCaseToTrialSessionInteractor({
-      applicationContext,
+    await addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
     });

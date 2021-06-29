@@ -1,4 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { PDFPreviewErrorModal } from './PDFPreviewErrorModal';
 import { PDFPreviewModal } from './PDFPreviewModal';
 import { connect } from '@cerebral/react';
@@ -16,31 +18,45 @@ export const PDFPreviewButton = connect(
     file,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
+    shouldAbbreviateTitle = true,
+    shouldWrapText = false,
     showModal,
     title,
   }) {
     const modalId = `PDFPreviewModal-${title}`;
     const fullTitle = file.name || file.documentType || title;
     const abbrevTitle = getStringAbbreviation(fullTitle, 50);
+    const displayTitle = shouldAbbreviateTitle ? abbrevTitle : fullTitle;
+
     return (
       <>
-        <Button
-          link
-          className="pdf-preview-btn padding-0"
-          icon={['fas', 'file-pdf']}
-          iconColor="blue"
-          title={fullTitle}
-          onClick={() => {
-            return openPdfPreviewModalSequence({ file, modalId });
-          }}
-        >
-          {abbrevTitle}
-        </Button>
+        <Mobile>
+          <FontAwesomeIcon
+            className="fa-icon-blue"
+            icon={['fas', 'file-pdf']}
+          />
+          {displayTitle}
+        </Mobile>
+        <NonMobile>
+          <Button
+            link
+            className="pdf-preview-btn padding-0"
+            icon={['fas', 'file-pdf']}
+            iconColor="blue"
+            shouldWrapText={shouldWrapText}
+            title={fullTitle}
+            onClick={() => {
+              return openPdfPreviewModalSequence({ file, modalId });
+            }}
+          >
+            {displayTitle}
+          </Button>
+        </NonMobile>
         {showModal == modalId &&
           (pdfPreviewModalHelper.displayErrorText ? (
             <PDFPreviewErrorModal title={title} />
           ) : (
-            <PDFPreviewModal preventScrolling={false} title={title} />
+            <PDFPreviewModal preventScrolling={true} title={title} />
           ))}
       </>
     );

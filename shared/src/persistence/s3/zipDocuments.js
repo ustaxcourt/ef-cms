@@ -16,6 +16,7 @@ exports.zipDocuments = ({
   extraFiles,
   fileNames,
   onEntry,
+  onError,
   onProgress,
   onUploadStart,
   s3Ids,
@@ -55,8 +56,8 @@ exports.zipDocuments = ({
       .archive(
         {
           bucket: documentsBucket,
-          debug: true,
           onEntry,
+          onError,
           onProgress,
           region,
           s3: s3Client,

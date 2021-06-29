@@ -9,6 +9,6 @@ describe('setJudgesCaseNoteOnCaseDetailAction', () => {
       },
     });
 
-    expect(result.state.caseDetail.judgesNote).toEqual('welcome to flavortown');
+    expect(result.state.judgesNote).toEqual('welcome to flavortown');
   });
 });

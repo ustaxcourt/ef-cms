@@ -10,8 +10,7 @@ exports.updateCaseTrialSortTagsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateCaseTrialSortTagsInteractor({
-        applicationContext,
+      .updateCaseTrialSortTagsInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

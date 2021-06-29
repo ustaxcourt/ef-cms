@@ -2,9 +2,9 @@ import { chooseStartCaseWizardStepAction } from './chooseStartCaseWizardStepActi
 import { runAction } from 'cerebral/test';
 
 describe('chooseStartCaseWizardStepAction', () => {
-  it('should set state.wizardStep to the passed in props.value and sets state.form.wizardStep to the passed in step', async () => {
+  it('should set state.wizardStep to the passed in props.wizardStep and sets state.form.wizardStep to the passed in step', async () => {
     const result = await runAction(chooseStartCaseWizardStepAction, {
-      props: { step: '1', value: 'step1' },
+      props: { step: '1', wizardStep: 'step1' },
       state: { form: {} },
     });
 

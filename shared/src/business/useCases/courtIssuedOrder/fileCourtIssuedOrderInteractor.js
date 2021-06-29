@@ -11,17 +11,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-exports.fileCourtIssuedOrderInteractor = async ({
+exports.fileCourtIssuedOrderInteractor = async (
   applicationContext,
-  documentMetadata,
-  primaryDocumentFileId,
-}) => {
+  { documentMetadata, primaryDocumentFileId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -39,10 +38,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
       applicationContext,
       docketNumber,
     });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const shouldScrapePDFContents = !documentMetadata.documentContents;
-
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (['O', 'NOT'].includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
@@ -61,24 +59,12 @@ exports.fileCourtIssuedOrderInteractor = async ({
       })
       .promise();
 
-    const arrayBuffer = new ArrayBuffer(pdfBuffer.length);
-    const view = new Uint8Array(arrayBuffer);
-    for (let i = 0; i < pdfBuffer.length; ++i) {
-      view[i] = pdfBuffer[i];
-    }
+    const contents = await applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents({ applicationContext, pdfBuffer });
 
-    // TODO: Wait to hear from Jessica on what should happen for PDF scraping failures
-    try {
-      const contents = await applicationContext
-        .getUtilities()
-        .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
-
-      if (contents) {
-        documentMetadata.documentContents = contents;
-      }
-    } catch (e) {
-      applicationContext.logger.info('Failed to parse PDF', e);
-      throw e;
+    if (contents) {
+      documentMetadata.documentContents = contents;
     }
   }
 
@@ -94,6 +80,7 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
+      contentType: 'application/json',
       document: Buffer.from(JSON.stringify(contentToStore)),
       key: documentContentsId,
       useTempBucket: false,
@@ -126,9 +113,9 @@ exports.fileCourtIssuedOrderInteractor = async ({
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   if (documentMetadata.parentMessageId) {

@@ -1,4 +1,7 @@
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -23,6 +26,18 @@ describe('ExternalDocumentStandard', () => {
         scenario: 'Standard',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Application',
+        documentTitle: over3000Characters,
+        documentType: 'Application for Waiver of Filing Fee',
+        scenario: 'Standard',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+      });
     });
 
     describe('Proposed Stipulated Decision', () => {

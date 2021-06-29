@@ -4,14 +4,8 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedPendingItems', () => {
-  const {
-    CHIEF_JUDGE,
-    DOCKET_NUMBER_SUFFIXES,
-    DOCKET_SECTION,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    DOCUMENT_RELATIONSHIPS,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =
+    applicationContext.getConstants();
 
   const formattedPendingItems = withAppContextDecorator(
     formattedPendingItemsComputed,
@@ -20,86 +14,18 @@ describe('formattedPendingItems', () => {
   const mockPendingItems = [
     {
       associatedJudge: CHIEF_JUDGE,
-      caseCaption: 'Brett Osborne, Petitioner',
       caseStatus: STATUS_TYPES.new,
-      category: 'Miscellaneous',
-      certificateOfServiceDate: null,
       createdAt: '2019-01-10',
       docketEntryId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
       docketNumber: '101-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
       documentType: 'Administrative Record',
       eventCode: 'ADMR',
-      filedBy: 'Petr. Brett Osborne',
-      isFileAttached: true,
-      isPaper: true,
-      lodged: false,
-      partyPrimary: true,
-      pending: true,
-      privatePractitioners: [],
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2019-01-10',
-      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      scenario: 'Standard',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      workItem: {
-        assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'Test Docketclerk',
-        caseStatus: STATUS_TYPES.new,
-        completedAt: '2019-11-13T00:38:59.049Z',
-        completedBy: 'Test Docketclerk',
-        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        completedMessage: 'completed',
-        createdAt: '2019-11-13T00:38:59.048Z',
-        docketEntry: {
-          category: 'Miscellaneous',
-          certificateOfServiceDate: null,
-          createdAt: '2019-01-10',
-          docketEntryId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
-          docketNumber: '101-19',
-          documentTitle: 'Administrative Record',
-          documentType: 'Administrative Record',
-          eventCode: 'ADMR',
-          filedBy: 'Petr. Brett Osborne',
-          isFileAttached: true,
-          isPaper: true,
-          lodged: false,
-          partyPrimary: true,
-          pending: true,
-          privatePractitioners: [],
-          processingStatus: 'pending',
-          receivedAt: '2019-01-10',
-          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          scenario: 'Standard',
-          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        isRead: true,
-        messages: [
-          {
-            createdAt: '2019-11-13T00:38:59.049Z',
-            from: 'Test Docketclerk',
-            fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Administrative Record filed by Docketclerk is ready for review.',
-            messageId: '5de1edbf-98f9-4099-a9a0-68905091327f',
-          },
-        ],
-        section: DOCKET_SECTION,
-        sentBy: 'Test Docketclerk',
-        sentBySection: DOCKET_SECTION,
-        sentByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        updatedAt: '2019-11-13T00:38:59.048Z',
-        workItemId: '1cfba306-a570-4347-833d-1956923dc78f',
-      },
     },
     {
       associatedJudge: CHIEF_JUDGE,
-      caseCaption: 'Brett Osborne, Petitioner',
       caseStatus: STATUS_TYPES.new,
-      category: 'Supporting Document',
-      certificateOfServiceDate: null,
       createdAt: '2018-01-20',
       docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       docketNumber: '101-19',
@@ -107,80 +33,11 @@ describe('formattedPendingItems', () => {
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
       eventCode: 'AFF',
-      filedBy: 'Resp.',
-      freeText: 'Bob',
-      isFileAttached: true,
-      isPaper: true,
-      lodged: false,
-      partyIrsPractitioner: true,
-      pending: true,
-      previousDocument: 'Petition',
-      privatePractitioners: [],
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2018-01-20',
-      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      scenario: 'Nonstandard C',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      workItem: {
-        assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'Test Docketclerk',
-        caseStatus: STATUS_TYPES.new,
-        completedAt: '2019-11-13T02:27:07.801Z',
-        completedBy: 'Test Docketclerk',
-        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        completedMessage: 'completed',
-        createdAt: '2019-11-13T02:26:51.448Z',
-        docketEntry: {
-          category: 'Supporting Document',
-          certificateOfServiceDate: null,
-          createdAt: '2019-01-20',
-          docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
-          docketNumber: '101-19',
-          documentTitle: 'Affidavit of Bob in Support of Petition',
-          documentType: 'Affidavit in Support',
-          eventCode: 'AFF',
-          filedBy: 'Resp.',
-          freeText: 'Bob',
-          isFileAttached: true,
-          isPaper: true,
-          lodged: false,
-          partyIrsPractitioner: true,
-          pending: true,
-          previousDocument: 'Petition',
-          privatePractitioners: [],
-          processingStatus: 'pending',
-          receivedAt: '2019-01-20',
-          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          scenario: 'Nonstandard C',
-          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        isRead: true,
-        messages: [
-          {
-            createdAt: '2019-11-13T02:26:51.449Z',
-            from: 'Test Docketclerk',
-            fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Affidavit in Support filed by Docketclerk is ready for review.',
-            messageId: '7fa6cac2-53b3-4cf1-9834-d3c0a0dfa89e',
-          },
-        ],
-        section: DOCKET_SECTION,
-        sentBy: 'Test Docketclerk',
-        sentBySection: DOCKET_SECTION,
-        sentByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        updatedAt: '2019-11-13T02:26:51.448Z',
-        workItemId: '1487b2a4-6c75-44b6-92fb-038b4c810669',
-      },
     },
     {
       associatedJudge: 'Judge A',
-      caseCaption: 'Brett Osborne, Petitioner',
       caseStatus: STATUS_TYPES.new,
-      category: 'Supporting Document',
-      certificateOfServiceDate: null,
       createdAt: '2018-01-20',
       docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
       docketNumber: '103-19',
@@ -188,132 +45,37 @@ describe('formattedPendingItems', () => {
       documentTitle: 'Affidavit of Bob in Support of Petition',
       documentType: 'Affidavit in Support',
       eventCode: 'AFF',
-      filedBy: 'Resp.',
-      freeText: 'Bob',
-      isFileAttached: true,
-      isPaper: true,
-      lodged: false,
-      partyIrsPractitioner: true,
-      pending: true,
-      previousDocument: 'Petition',
-      privatePractitioners: [],
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       receivedAt: '2018-01-20',
-      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      scenario: 'Nonstandard C',
-      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      workItem: {
-        assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        assigneeName: 'Test Docketclerk',
-        caseStatus: STATUS_TYPES.new,
-        completedAt: '2019-11-13T02:27:07.801Z',
-        completedBy: 'Test Docketclerk',
-        completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        completedMessage: 'completed',
-        createdAt: '2019-11-13T02:26:51.448Z',
-        docketEntry: {
-          category: 'Supporting Document',
-          certificateOfServiceDate: null,
-          createdAt: '2019-01-20',
-          docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
-          docketNumber: '101-19',
-          documentTitle: 'Affidavit of Bob in Support of Petition',
-          documentType: 'Affidavit in Support',
-          eventCode: 'AFF',
-          filedBy: 'Resp.',
-          freeText: 'Bob',
-          isFileAttached: true,
-          isPaper: true,
-          lodged: false,
-          partyIrsPractitioner: true,
-          pending: true,
-          previousDocument: 'Petition',
-          privatePractitioners: [],
-          processingStatus: 'pending',
-          receivedAt: '2019-01-20',
-          relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          scenario: 'Nonstandard C',
-          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        docketNumber: '101-19',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-        isRead: true,
-        messages: [
-          {
-            createdAt: '2019-11-13T02:26:51.449Z',
-            from: 'Test Docketclerk',
-            fromUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-            message:
-              'Affidavit in Support filed by Docketclerk is ready for review.',
-            messageId: '7fa6cac2-53b3-4cf1-9834-d3c0a0dfa89e',
-          },
-        ],
-        section: DOCKET_SECTION,
-        sentBy: 'Test Docketclerk',
-        sentBySection: DOCKET_SECTION,
-        sentByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        updatedAt: '2019-11-13T02:26:51.448Z',
-        workItemId: '1487b2a4-6c75-44b6-92fb-038b4c810669',
-      },
     },
   ];
 
-  it('returns the cases and judges', () => {
-    const result = runCompute(formattedPendingItems, {
-      state: {
-        pendingReports: {
-          pendingItems: mockPendingItems,
-        },
-      },
-    });
-    expect(result).toMatchObject({
-      items: [
-        {
-          associatedJudge: CHIEF_JUDGE,
-          associatedJudgeFormatted: CHIEF_JUDGE,
-          caseStatus: STATUS_TYPES.new,
-          formattedFiledDate: '01/20/18',
-          formattedName: 'Affidavit of Bob in Support of Petition',
-          receivedAt: '2018-01-20',
-        },
-        {
-          associatedJudge: 'Judge A',
-          associatedJudgeFormatted: 'A',
-          caseStatus: STATUS_TYPES.new,
-          formattedFiledDate: '01/20/18',
-          formattedName: 'Affidavit of Bob in Support of Petition',
-          receivedAt: '2018-01-20',
-        },
-        {
-          associatedJudge: CHIEF_JUDGE,
-          associatedJudgeFormatted: CHIEF_JUDGE,
-          caseStatus: STATUS_TYPES.new,
-          formattedFiledDate: '01/10/19',
-          formattedName: 'Administrative Record',
-          receivedAt: '2019-01-10',
-        },
-      ],
-      judges: [CHIEF_JUDGE],
-    });
-  });
-
-  it('formats pending items', () => {
+  it('returns formatted and sorted judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
+      },
+    });
+
+    expect(result.judges).toEqual(['A', 'B', CHIEF_JUDGE]);
+  });
+
+  it('returns the cases', () => {
+    const result = runCompute(formattedPendingItems, {
+      state: {
         pendingReports: {
           pendingItems: mockPendingItems,
         },
-        screenMetadata: { pendingItemsFilters: { judge: CHIEF_JUDGE } },
       },
     });
 
     expect(result).toMatchObject({
       items: [
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
-          caseStatus: 'New',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
+          caseStatus: STATUS_TYPES.new,
+          documentLink:
+            '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
           receivedAt: '2018-01-20',
@@ -321,21 +83,44 @@ describe('formattedPendingItems', () => {
         {
           associatedJudge: 'Judge A',
           associatedJudgeFormatted: 'A',
-          caseStatus: 'New',
+          caseStatus: STATUS_TYPES.new,
+          documentLink:
+            '/case-detail/103-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
           formattedFiledDate: '01/20/18',
           formattedName: 'Affidavit of Bob in Support of Petition',
           receivedAt: '2018-01-20',
         },
         {
-          associatedJudge: 'Chief Judge',
-          associatedJudgeFormatted: 'Chief Judge',
-          caseStatus: 'New',
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
+          caseStatus: STATUS_TYPES.new,
+          documentLink:
+            '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
           formattedFiledDate: '01/10/19',
           formattedName: 'Administrative Record',
           receivedAt: '2019-01-10',
         },
       ],
-      judges: ['A', 'B', CHIEF_JUDGE],
     });
+  });
+
+  it('appends screenMetadata.pendingItemsFilters.judge on the printUrl if one is present', () => {
+    const result = runCompute(formattedPendingItems, {
+      state: {
+        screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
+      },
+    });
+
+    expect(result.printUrl).toContain('Judge%20Somebody');
+  });
+
+  it('returns default printUrl if screenMetadata.pendingItemsFilters.judge is not set', () => {
+    const result = runCompute(formattedPendingItems, {
+      state: {
+        screenMetadata: { pendingItemsFilters: {} },
+      },
+    });
+
+    expect(result.printUrl).toEqual('/reports/pending-report/printable?');
   });
 });

@@ -4,9 +4,11 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeDocketEntryQCAction', () => {
+  const mockDocketEntryId = '123-456-789-abc';
+
   const caseDetail = {
     docketEntries: [
-      { docketEntryId: '123-456-789-abc', documentTitle: "bob's burgers" },
+      { docketEntryId: mockDocketEntryId, documentTitle: "bob's burgers" },
     ],
     docketNumber: '123-45',
   };
@@ -26,7 +28,7 @@ describe('completeDocketEntryQCAction', () => {
       },
       state: {
         caseDetail,
-        docketEntryId: '123-456-789-abc',
+        docketEntryId: mockDocketEntryId,
         form: {
           primaryDocumentFile: {},
         },
@@ -46,9 +48,34 @@ describe('completeDocketEntryQCAction', () => {
       caseDetail,
       docketNumber: caseDetail.docketNumber,
       updatedDocument: {
-        docketEntryId: '123-456-789-abc',
+        docketEntryId: mockDocketEntryId,
         documentTitle: "bob's burgers",
       },
     });
+  });
+
+  it('should return the full document title with additional info as a part of props.alertSuccess.message', async () => {
+    caseDetail.docketEntries[0] = {
+      ...caseDetail.docketEntries[0],
+      addToCoversheet: true,
+      additionalInfo: 'More title information',
+    };
+
+    const { output } = await runAction(completeDocketEntryQCAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: mockDocketEntryId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(output.alertSuccess.message).toEqual(
+      "bob's burgers More title information has been completed.",
+    );
   });
 });

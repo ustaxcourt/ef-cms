@@ -13,8 +13,25 @@ describe('publicCaseDetailHeaderHelper', () => {
     };
   });
 
-  it('Should return case detail helper information', () => {
+  it('should return an empty string for caseCaption when it is undefined', () => {
+    const stateWithoutCaseCaption = {
+      caseDetail: {
+        caseCaption: undefined,
+        docketNumber: '123-45',
+        docketNumberWithSuffix: '123-45S',
+      },
+    };
+
+    const result = runCompute(publicCaseDetailHeaderHelper, {
+      state: stateWithoutCaseCaption,
+    });
+
+    expect(result.caseCaption).toBe('');
+  });
+
+  it('should return case detail helper information', () => {
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
+
     expect(result).toMatchObject({
       caseCaption: 'Test Caption',
       docketNumber: '123-45',
@@ -23,9 +40,11 @@ describe('publicCaseDetailHeaderHelper', () => {
     });
   });
 
-  it('Should indicate whether a case is sealed', () => {
+  it('should indicate whether a case is sealed', () => {
     state.caseDetail.isSealed = true;
+
     const result = runCompute(publicCaseDetailHeaderHelper, { state });
+
     expect(result.isCaseSealed).toBe(true);
   });
 });

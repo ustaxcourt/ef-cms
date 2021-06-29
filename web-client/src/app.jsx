@@ -1,4 +1,9 @@
+import './index.scss';
+
+import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 import { AppComponent } from './views/AppComponent';
+import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
 import {
@@ -24,6 +29,7 @@ import { faFilePdf as faFilePdfRegular } from '@fortawesome/free-regular-svg-ico
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
+//if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -49,6 +55,7 @@ import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faEye as faEyeSolid } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -62,12 +69,14 @@ import { faLaptop } from '@fortawesome/free-solid-svg-icons/faLaptop';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
 import { faMailBulk } from '@fortawesome/free-solid-svg-icons/faMailBulk';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons/faMinusCircle';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons/faPaperPlane';
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons/faPaperclip';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons/faPencilAlt';
+import { faPhone } from '@fortawesome/free-solid-svg-icons/faPhone';
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons/faPlusCircle';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
@@ -91,6 +100,7 @@ import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
@@ -107,20 +117,19 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    applicationContext.initHoneybadger();
     const scannerSourceName = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+      .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
     const scanMode = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scanMode' });
+      .getItemInteractor(applicationContext, { key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
     const user =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'user' })) ||
+        .getItemInteractor(applicationContext, { key: 'user' })) ||
       presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
@@ -141,7 +150,7 @@ const app = {
     const token =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'token' })) ||
+        .getItemInteractor(applicationContext, { key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
@@ -185,6 +194,7 @@ const app = {
       faExclamationCircle,
       faExclamationTriangle,
       faEyeSlash,
+      faEyeSolid,
       faFile,
       faFileAlt,
       faFileAltSolid,
@@ -200,12 +210,14 @@ const app = {
       faLink,
       faListUl,
       faLock,
+      faLongArrowAltUp,
       faMailBulk,
       faMinus,
       faMinusCircle,
       faPaperclip,
       faPaperPlane,
       faPencilAlt,
+      faPhone,
       faPlus,
       faPlusCircle,
       faPrint,
@@ -231,6 +243,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faUserFriends,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
@@ -253,15 +266,22 @@ const app = {
     const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp, route);
-    initializeSocketProvider(cerebralApp);
+    initializeSocketProvider(cerebralApp, applicationContext);
 
     ReactDOM.render(
       <Container app={cerebralApp}>
-        <IdleActivityMonitor />
+        {!process.env.CI && (
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+          </>
+        )}
+
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      document.querySelector('#app'),
+      window.document.querySelector('#app'),
     );
   },
 };

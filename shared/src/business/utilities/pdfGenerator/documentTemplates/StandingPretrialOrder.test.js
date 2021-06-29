@@ -6,7 +6,7 @@ describe('StandingPretrialOrder', () => {
   let options;
   let trialInfo;
 
-  beforeEach(() => {
+  beforeAll(() => {
     options = {
       caseCaptionExtension: 'Petitioner(s)',
       caseTitle: 'Test Petitioner',
@@ -14,12 +14,14 @@ describe('StandingPretrialOrder', () => {
     };
 
     trialInfo = {
-      city: 'Some City',
-      fullStartDate: 'Friday May 8, 2020',
-      judge: {
-        name: 'Test Judge',
-      },
-      state: 'AL',
+      chambersPhoneNumber: '123456',
+      formattedJudgeName: 'Judge What',
+      formattedServedDate: 'June 20, 2020',
+      formattedStartDate: 'May 8, 2020',
+      formattedStartDateWithDayOfWeek: 'Friday May 8, 2020',
+      formattedStartTime: '10:00 am',
+      startDay: 'Friday',
+      trialLocation: 'Boise, Idaho',
     };
   });
 
@@ -37,13 +39,30 @@ describe('StandingPretrialOrder', () => {
     );
   });
 
-  it('renders a document with trial information', () => {
+  it('renders the trial location and formatted trial start date and time', () => {
     const wrapper = shallow(
       <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
     );
-    expect(wrapper.text()).toContain(trialInfo.fullStartDate);
-    expect(wrapper.text()).toContain(trialInfo.city);
-    expect(wrapper.text()).toContain(trialInfo.state);
-    expect(wrapper.text()).toContain(trialInfo.judge.name);
+
+    const trialInformation = wrapper.find('#trial-information-card');
+
+    expect(trialInformation.text()).toContain(trialInfo.trialLocation);
+    expect(trialInformation.text()).toContain(trialInfo.formattedStartTime);
+    expect(trialInformation.text()).toContain(
+      trialInfo.formattedStartDateWithDayOfWeek,
+    );
+  });
+
+  it('renders the formatted trial judge signature', () => {
+    const wrapper = shallow(
+      <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
+    );
+
+    const signature = wrapper.find('.judge-signature');
+
+    expect(signature.text()).toContain(trialInfo.formattedServedDate);
+    expect(signature.text()).toContain(
+      `(Signed) ${trialInfo.formattedJudgeName}`,
+    );
   });
 });

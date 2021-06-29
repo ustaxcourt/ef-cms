@@ -42,44 +42,42 @@ export const ViewAllDocumentsDesktop = connect(
                 to file.
               </p>
               <Accordion bind="allDocumentsAccordion" headingLevel="3">
-                {viewAllDocumentsHelper.sections.map((title, index) => {
+                {viewAllDocumentsHelper.sections.map(title => {
                   return (
-                    <AccordionItem key={`item-${index}`} title={title}>
+                    <AccordionItem key={`item-${title}`} title={title}>
                       <div className="all-columns-view">
-                        {viewAllDocumentsHelper.categoryMap[title].map(
-                          (document, docIndex) => (
-                            <Button
-                              link
-                              className="text-left"
-                              key={`${title}-document-${docIndex}`}
-                              onClick={() => {
-                                updateFileDocumentWizardFormValueSequence({
-                                  key: 'category',
-                                  value: document.category,
-                                });
-                                updateFileDocumentWizardFormValueSequence({
-                                  key: 'documentType',
-                                  value: document.documentType,
-                                });
-                                updateFileDocumentWizardFormValueSequence({
-                                  key: 'documentTitle',
-                                  value: document.documentTitle,
-                                });
-                                updateFileDocumentWizardFormValueSequence({
-                                  key: 'eventCode',
-                                  value: document.eventCode,
-                                });
-                                updateFileDocumentWizardFormValueSequence({
-                                  key: 'scenario',
-                                  value: document.scenario,
-                                });
-                                openCompleteSelectDocumentTypeModalSequence();
-                              }}
-                            >
-                              {document.documentType}
-                            </Button>
-                          ),
-                        )}
+                        {viewAllDocumentsHelper.categoryMap[title].map(doc => (
+                          <Button
+                            link
+                            className="text-left"
+                            key={`${title}-document-${doc.eventCode}`}
+                            onClick={() => {
+                              updateFileDocumentWizardFormValueSequence({
+                                key: 'category',
+                                value: doc.category,
+                              });
+                              updateFileDocumentWizardFormValueSequence({
+                                key: 'documentType',
+                                value: doc.documentType,
+                              });
+                              updateFileDocumentWizardFormValueSequence({
+                                key: 'documentTitle',
+                                value: doc.documentTitle,
+                              });
+                              updateFileDocumentWizardFormValueSequence({
+                                key: 'eventCode',
+                                value: doc.eventCode,
+                              });
+                              updateFileDocumentWizardFormValueSequence({
+                                key: 'scenario',
+                                value: doc.scenario,
+                              });
+                              openCompleteSelectDocumentTypeModalSequence();
+                            }}
+                          >
+                            {doc.documentType}
+                          </Button>
+                        ))}
                       </div>
                     </AccordionItem>
                   );

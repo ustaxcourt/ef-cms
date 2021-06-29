@@ -26,9 +26,7 @@ describe('getUserInteractor', () => {
       section: PETITIONS_SECTION,
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toEqual({
       ...mockPetitionsClerk,
@@ -42,6 +40,8 @@ describe('getUserInteractor', () => {
 
   it('should call the persistence method to get the user when the user is a judge', async () => {
     const mockJudge = {
+      judgeFullName: 'Test Judge',
+      judgeTitle: 'Judge',
       name: 'Test Judge',
       role: ROLES.judge,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -52,9 +52,7 @@ describe('getUserInteractor', () => {
       section: 'judge',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toEqual({
       ...mockJudge,
@@ -82,9 +80,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT1234',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockPrivatePractitioner,
@@ -92,8 +88,6 @@ describe('getUserInteractor', () => {
       email: undefined,
       isUpdatingInformation: undefined,
       representing: [],
-      representingPrimary: undefined,
-      representingSecondary: undefined,
       token: undefined,
     });
   });
@@ -114,9 +108,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT5678',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockIrsPractitioner,
@@ -129,7 +121,7 @@ describe('getUserInteractor', () => {
 
   it('should return a Practitioner entity when the entity returned from persistence is a Practitioner', async () => {
     const mockPractitioner = {
-      admissionsDate: '2019-03-01T21:40:46.415Z',
+      admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       birthYear: '1976',
       employer: 'IRS',
@@ -137,7 +129,7 @@ describe('getUserInteractor', () => {
       firstName: 'Bob',
       lastName: 'Ross',
       name: 'Bob Ross',
-      originalBarState: 'Oregon',
+      originalBarState: 'IL',
       practitionerType: 'Attorney',
       role: ROLES.irsPractitioner,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -151,9 +143,7 @@ describe('getUserInteractor', () => {
       barNumber: 'PT9012',
     });
 
-    const user = await getUserInteractor({
-      applicationContext,
-    });
+    const user = await getUserInteractor(applicationContext);
 
     expect(user).toMatchObject({
       ...mockPractitioner,

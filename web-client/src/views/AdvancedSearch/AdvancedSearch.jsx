@@ -1,7 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { DocumentSearchResults } from './DocumentSearchResults';
-import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from './OpinionSearchForm';
 import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
@@ -48,22 +47,28 @@ export const AdvancedSearch = connect(
 
         <section className="usa-section grid-container advanced-search">
           <SuccessNotification />
-          <ErrorNotification />
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab={searchTabs.CASE}
+            headingLevel="2"
             onSelect={() => {
               advancedSearchTabChangeSequence();
             }}
           >
             <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
-              <p>
+              <p className="margin-top-0">
                 Anyone can search for a case in our system for cases filed{' '}
                 <span className="text-semibold">on or after May 1, 1986</span>.
-                If you aren’t affiliated with that case, you will only see
-                limited information about that case.
               </p>
+              <ul>
+                <li>
+                  {' '}
+                  If you aren’t affiliated with a case, you will only see
+                  limited information about that case.
+                </li>
+                <li>Sealed cases will not display in search results.</li>
+              </ul>
 
               <CaseSearchForm
                 submitAdvancedSearchSequence={submitCaseAdvancedSearchSequence}
@@ -73,13 +78,23 @@ export const AdvancedSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName={searchTabs.ORDER} title="Order">
+            <Tab
+              disabled
+              id="tab-order"
+              tabName={searchTabs.ORDER}
+              title="Order (Coming Soon)"
+            >
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab id="tab-opinion" tabName={searchTabs.OPINION} title="Opinion">
+            <Tab
+              disabled
+              id="tab-opinion"
+              tabName={searchTabs.OPINION}
+              title="Opinion (Coming Soon)"
+            >
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitOpinionAdvancedSearchSequence

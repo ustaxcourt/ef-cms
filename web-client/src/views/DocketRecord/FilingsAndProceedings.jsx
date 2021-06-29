@@ -59,6 +59,7 @@ export const FilingsAndProceedings = connect(
                 showDocketRecordDetailModalSequence({
                   docketRecordIndex: arrayIndex,
                   showModal: 'DocketRecordOverlay',
+                  useSameTab: true,
                 });
               }}
             >
@@ -81,8 +82,15 @@ export const FilingsAndProceedings = connect(
                 <span aria-hidden="true">Processing</span>
               </span>
             )}
-            {entry.descriptionDisplay}{' '}
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
+            <span
+              className={classNames(
+                entry.isStricken && 'stricken-docket-record',
+                'margin-right-05',
+              )}
+            >
+              {entry.descriptionDisplay}{' '}
+              {!entry.addToCoversheet && entry.additionalInfoDisplay}
+            </span>
           </>
         )}
 
@@ -105,7 +113,10 @@ export const FilingsAndProceedings = connect(
             >
               {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
-                  <FontAwesomeIcon icon={['fas', 'file-alt']} />
+                  <FontAwesomeIcon
+                    icon={['fas', 'file-alt']}
+                    title="is paper"
+                  />
                 </span>
               )}
               {entry.descriptionDisplay}

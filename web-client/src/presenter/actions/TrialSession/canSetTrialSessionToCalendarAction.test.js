@@ -3,18 +3,18 @@ import { canSetTrialSessionToCalendarAction } from './canSetTrialSessionToCalend
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const VALID_TRIAL_SESSION = {
-  maxCases: 100,
-  sessionType: 'Regular',
-  startDate: '2025-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2025',
-  trialLocation: 'Birmingham, Alabama',
-};
-
 describe('canSetTrialSessionToCalendarAction', () => {
   let pathNoStub;
   let pathYesStub;
+
+  const VALID_TRIAL_SESSION = {
+    maxCases: 100,
+    sessionType: 'Regular',
+    startDate: '2025-03-01T00:00:00.000Z',
+    term: 'Fall',
+    termYear: '2025',
+    trialLocation: 'Birmingham, Alabama',
+  };
 
   beforeAll(() => {
     pathNoStub = jest.fn();
@@ -123,6 +123,46 @@ describe('canSetTrialSessionToCalendarAction', () => {
     expect(pathNoStub).toHaveBeenCalledWith({
       alertWarning: {
         message: 'Provide a judge to set this trial session.',
+      },
+    });
+  });
+
+  it('should return the no path when remote properties are missing', async () => {
+    applicationContext
+      .getUseCases()
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: [
+          'chambersPhoneNumber',
+          'joinPhoneNumber',
+          'meetingId',
+          'password',
+        ],
+      });
+
+    await runAction(canSetTrialSessionToCalendarAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          state: 'TN',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
+    ).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledWith({
+      alertWarning: {
+        message:
+          'Provide remote proceeding information to set this trial session.',
       },
     });
   });

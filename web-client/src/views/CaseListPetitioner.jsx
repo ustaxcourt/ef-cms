@@ -56,7 +56,7 @@ export const CaseListPetitioner = connect(
       return (
         <>
           {!cases?.length && <p>You have no {tabName.toLowerCase()} cases.</p>}
-          {cases.length > 0 && (
+          {cases?.length > 0 && (
             <>
               <table
                 className="usa-table responsive-table dashboard"
@@ -102,9 +102,7 @@ export const CaseListPetitioner = connect(
 
     return (
       <>
-        <WarningNotification
-          alertWarning={{ message: 'Hi', title: 'Hello there' }}
-        />
+        <WarningNotification />
         <NonMobile>
           <div className="grid-container padding-x-0">
             <div className="grid-row">

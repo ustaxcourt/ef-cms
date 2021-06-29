@@ -18,8 +18,7 @@ export const validateDocketEntryAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateDocketEntryInteractor({
-      applicationContext,
+    .validateDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
 
@@ -27,6 +26,7 @@ export const validateDocketEntryAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'documentTitle',
       'primaryDocumentFile',
       'dateReceived',
       'eventCode',
@@ -38,8 +38,7 @@ export const validateDocketEntryAction = ({
       'ordinalValue',
       'certificateOfServiceDate',
       'objections',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
     ];

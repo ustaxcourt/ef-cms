@@ -5,11 +5,14 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {Function} providers.props used for getting docketNumber and docketEntryId
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props used for getting docketNumber and docketEntryId
+ * @param {object} providers.store the cerebral store
  * @returns {Promise<object>} pdf file object for preview
  */
 export const getPDFForPreviewAction = async ({
   applicationContext,
+  get,
   props,
   store,
 }) => {
@@ -17,12 +20,12 @@ export const getPDFForPreviewAction = async ({
   if (props.file.name) {
     return props;
   }
-  const { docketEntryId, docketNumber } = props.file;
+  const { docketEntryId } = props.file;
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const pdfObj = await applicationContext
     .getUseCases()
-    .loadPDFForPreviewInteractor({
-      applicationContext,
+    .loadPDFForPreviewInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });

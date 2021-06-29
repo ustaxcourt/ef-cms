@@ -1,10 +1,9 @@
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { state } from 'cerebral';
 import { stopWebSocketConnectionAction } from '../actions/webSocketConnection/stopWebSocketConnectionAction';
-import { unset } from 'cerebral/factories';
+import { unsetBatchDownloadsZipInProgessAction } from '../actions/unsetBatchDownloadsZipInProgessAction';
 
 export const batchDownloadErrorSequence = [
   stopWebSocketConnectionAction,
-  unset(state.batchDownloads.zipInProgress),
+  unsetBatchDownloadsZipInProgessAction,
   setShowModalFactoryAction('FileCompressionErrorModal'),
 ];

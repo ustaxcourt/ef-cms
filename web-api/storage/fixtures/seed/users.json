@@ -163,7 +163,6 @@
     "entityName": "PrivatePractitioner",
     "email": "privatePractitioner@example.com",
     "firmName": "GW Law Offices",
-    "alternateEmail": "privatePractitioner@example.com",
     "additionalPhone": "111-111-1111",
     "originalBarState": "Maryland",
     "barNumber": "PT1234",
@@ -193,8 +192,8 @@
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "entityName": "PrivatePractitioner",
-    "email": "privatePractitioner1@example.com",
     "firmName": "Bogus Barristers",
+    "email": "privatePractitioner1@example.com",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",
@@ -297,6 +296,36 @@
     },
     "originalBarState": "Florida",
     "entityName": "PrivatePractitioner"
+  },
+  {
+    "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01T21:40:46.415Z",
+    "admissionsStatus": "Active",
+    "birthYear": "1952",
+    "employer": "Private",
+    "practitionerType": "Attorney",
+    "name": "Test Private Practitioner 99",
+    "firstName": "Test",
+    "middleName": "Private",
+    "lastName": "Practitioner",
+    "suffix": "",
+    "section": "privatePractitioner",
+    "userId": "a6318a31-8aa4-4002-a7b0-1192af19dbb9",
+    "entityName": "PrivatePractitioner",
+    "email": "privatePractitioner99@example.com",
+    "firmName": "Bogus Barristers",
+    "barNumber": "PT9999",
+    "contact": {
+      "address1": "234 Bogus Ln",
+      "address2": "Apartment 99",
+      "address3": "Under the stairs",
+      "city": "Chicago",
+      "countryType": "domestic",
+      "phone": "+1 (555) 555-5555",
+      "postalCode": "61234",
+      "state": "IL"
+    },
+    "originalBarState": "Oregon"
   },
   {
     "role": "irsPractitioner",
@@ -449,6 +478,17 @@
   },
   {
     "role": "petitioner",
+    "name": "Test Petitioner 1",
+    "section": "petitioner",
+    "userId": "b84acb19-008f-4911-bfb6-773ca4020464",
+    "email": "petitioner1@example.com",
+    "address1": "3202 Elk Avenue",
+    "address2": "Hanover, MI 49241",
+    "phone": "517-563-1536",
+    "entityName": "User"
+  },
+  {
+    "role": "petitioner",
     "name": "Test Petitioner 2",
     "section": "petitioner",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405417",
@@ -456,6 +496,17 @@
     "address1": "3202 Elk Avenue",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
+    "entityName": "User"
+  },
+  {
+    "role": "petitioner",
+    "name": "Test Petitioner 3",
+    "section": "petitioner",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405418",
+    "email": "petitioner3@example.com",
+    "address1": "3202 Sauceboss Ln",
+    "address2": "Flavortown, AR 72364",
+    "phone": "517-563-1532",
     "entityName": "User"
   },
   {
@@ -480,6 +531,14 @@
     "section": "trialClerks",
     "userId": "f0a1e52a-876f-4c03-853c-f66e407e5a1e",
     "email": "trialclerk@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "trialclerk",
+    "name": "Test trialclerk1",
+    "section": "trialClerks",
+    "userId": "d1f8a729-cbfa-4d22-a09b-73743a12f188",
+    "email": "trialclerk1@example.com",
     "entityName": "User"
   },
   {
@@ -551,7 +610,31 @@
     "name": "Test Floater",
     "section": "floater",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
-    "email": "testFloater@example.com",
+    "email": "floater@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "floater",
+    "name": "Test Floater1",
+    "section": "floater",
+    "userId": "5dffc4d8-423d-4de9-bca0-585c7b6627f7",
+    "email": "floater1@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "general",
+    "name": "Test General",
+    "section": "general",
+    "userId": "0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
+    "email": "general@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "reportersOffice",
+    "name": "Test Reporter's Office",
+    "section": "reportersOffice",
+    "userId": "27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f",
+    "email": "reportersOffice@example.com",
     "entityName": "User"
   },
   {

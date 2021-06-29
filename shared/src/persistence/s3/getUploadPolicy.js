@@ -21,7 +21,13 @@ exports.getUploadPolicy = ({ applicationContext, key }) =>
         ],
       },
       (err, data) => {
-        if (err) return reject(err);
+        if (err) {
+          applicationContext.logger.error(
+            'unable to create the upload policy url',
+            err,
+          );
+          return reject(err);
+        }
         resolve(data);
       },
     );

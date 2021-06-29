@@ -7,19 +7,22 @@ const {
 const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
+  const TEST_JUDGE = {
+    judgeTitle: 'Judge',
+    name: 'Test Judge',
+  };
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => ({
-        address1: '123 Some Street',
-        address2: 'Courtroom 2',
-        city: 'City',
-        courthouseName: 'Courthouse 1',
+        joinPhoneNumber: '3333',
         judge: { name: 'Test Judge' },
-        postalCode: '12345',
-        startDate: '2/2/2020',
+        meetingId: '1111',
+        password: '2222',
+        startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
-        state: 'AL',
+        trialLocation: 'Boise, Idaho',
       }));
 
     applicationContext
@@ -52,11 +55,14 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       .generateNoticeOfTrialIssuedTemplate.mockImplementation(
         ({ content }) => `<html>${content.docketNumberWithSuffix}</html>`,
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {
-    await generateNoticeOfTrialIssuedInteractor({
-      applicationContext,
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -68,30 +74,46 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfTrialIssued,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          docketNumberWithSuffix: '123-45',
-          trialInfo: {
-            address1: '123 Some Street',
-            address2: 'Courtroom 2',
-            city: 'City',
-            courthouseName: 'Courthouse 1',
-            judge: 'Test Judge',
-            postalCode: '12345',
-            startDate: '2/2/2020',
-            startTime: '10:00',
-            state: 'AL',
-          },
-        }),
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        docketNumberWithSuffix: '123-45',
+        trialInfo: {
+          formattedStartDate: 'Sunday, August 25, 2019',
+          formattedStartTime: '10:00 AM',
+          joinPhoneNumber: '3333',
+          meetingId: '1111',
+          password: '2222',
+          trialLocation: 'Boise, Idaho',
+        },
+      },
+    });
+  });
+
+  it('should throw an error when the judge for the trial session is not found in persistence', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => ({
+        joinPhoneNumber: '3333',
+        judge: { name: 'Bob Judge' },
+        meetingId: '1111',
+        password: '2222',
+        startDate: '2019-08-25T05:00:00.000Z',
+        startTime: '10:00',
+        trialLocation: 'Boise, Idaho',
+      }));
+
+    await expect(
+      generateNoticeOfTrialIssuedInteractor(applicationContext, {
+        docketNumber: '123-45',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       }),
-    );
+    ).rejects.toThrow('Judge Bob Judge was not found');
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    await generateNoticeOfTrialIssuedInteractor({
-      applicationContext,
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -103,13 +125,12 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfTrialIssued,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          docketNumberWithSuffix: '234-56S',
-        }),
-      }),
-    );
+      applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        docketNumberWithSuffix: '234-56S',
+      },
+    });
   });
 });

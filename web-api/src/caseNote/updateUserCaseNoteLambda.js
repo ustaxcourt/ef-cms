@@ -13,8 +13,9 @@ exports.updateUserCaseNoteLambda = event =>
       ...JSON.parse(event.body),
     };
 
-    return await applicationContext.getUseCases().updateUserCaseNoteInteractor({
-      applicationContext,
-      ...lambdaArguments,
-    });
+    return await applicationContext
+      .getUseCases()
+      .updateUserCaseNoteInteractor(applicationContext, {
+        ...lambdaArguments,
+      });
   });

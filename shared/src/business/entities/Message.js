@@ -1,16 +1,12 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} = require('./EntityConstants');
-const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 /**
  * constructor
@@ -55,11 +51,22 @@ Message.prototype.init = function init(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 };
 
-Message.validationName = 'Message';
-
 Message.VALIDATION_ERROR_MESSAGES = {
-  message: 'Enter a message',
-  subject: 'Enter a subject line',
+  message: [
+    { contains: 'is required', message: 'Enter a message' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 700 characters. Enter 700 or fewer characters.',
+    },
+  ],
+  subject: [
+    { contains: 'is required', message: 'Enter a subject line' },
+    { contains: 'is not allowed to be empty', message: 'Enter a subject line' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 250 characters. Enter 250 or fewer characters.',
+    },
+  ],
   toSection: 'Select a section',
   toUserId: 'Select a recipient',
 };
@@ -97,16 +104,11 @@ Message.VALIDATION_RULES = {
       then: joi.required(),
     })
     .description('The name of the user who completed the message thread'),
-  completedBySection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .when('isCompleted', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .description('The section of the user who completed the message thread'),
+  completedBySection: JoiValidationConstants.STRING.when('isCompleted', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }).description('The section of the user who completed the message thread'),
   completedByUserId: JoiValidationConstants.UUID.when('isCompleted', {
     is: true,
     otherwise: joi.optional().allow(null),
@@ -127,12 +129,9 @@ Message.VALIDATION_RULES = {
   from: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The name of the user who sent the message.'),
-  fromSection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .required()
-    .description('The section of the user who sent the message.'),
+  fromSection: JoiValidationConstants.STRING.required().description(
+    'The section of the user who sent the message.',
+  ),
   fromUserId: JoiValidationConstants.UUID.required().description(
     'The ID of the user who sent the message.',
   ),
@@ -145,7 +144,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message has been replied to or forwarded.'),
-  message: JoiValidationConstants.STRING.max(500)
+  message: JoiValidationConstants.STRING.max(700)
     .required()
     .description('The message text.'),
   messageId: JoiValidationConstants.UUID.required().description(
@@ -161,14 +160,9 @@ Message.VALIDATION_RULES = {
     .required()
     .allow(null)
     .description('The name of the user who is the recipient of the message.'),
-  toSection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .required()
-    .description(
-      'The section of the user who is the recipient of the message.',
-    ),
+  toSection: JoiValidationConstants.STRING.required().description(
+    'The section of the user who is the recipient of the message.',
+  ),
   toUserId: JoiValidationConstants.UUID.required()
     .allow(null)
     .description('The ID of the user who is the recipient of the message.'),
@@ -190,10 +184,11 @@ joiValidationDecorator(
 Message.prototype.markAsCompleted = function ({ message, user }) {
   this.isCompleted = true;
   this.completedAt = createISODateString();
+  this.isRepliedTo = true;
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedBySection = user.section;
-  this.completedMessage = message;
+  this.completedMessage = message || null;
 
   return this;
 };

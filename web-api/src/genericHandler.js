@@ -34,51 +34,37 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
 /**
  * generic handler function for use in lambdas
  *
- * @param {object} event the AWS event object
+ * @param {object} awsEvent the AWS event object
  * @param {Function} cb the code to be executed
  * @param options
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 
-exports.genericHandler = (event, cb, options = {}) => {
-  return handle(event, async () => {
-    const user = options.user || getUserFromAuthHeader(event);
+exports.genericHandler = (awsEvent, cb, options = {}) => {
+  return handle(awsEvent, async () => {
+    const user = options.user || getUserFromAuthHeader(awsEvent);
     const applicationContext =
-      options.applicationContext || createApplicationContext(user); // This is mostly for testing purposes
-    const {
-      isPublicUser,
-      logEvent = true,
-      logEventLabel = 'Event',
-      logResults = true,
-      logResultsLabel = 'Results',
-      logUser = true,
-      logUserLabel = 'User',
-      skipFiltering,
-    } = options;
+      options.applicationContext ||
+      createApplicationContext(user, awsEvent.logger);
+
+    delete awsEvent.logger;
 
     try {
-      if (logEvent && applicationContext) {
-        applicationContext.logger.info(logEventLabel, event);
-      }
-
-      if (logUser && applicationContext) {
-        let userToLog = user;
-        if (isPublicUser) {
-          userToLog = 'Public User';
-        }
-        applicationContext.logger.info(logUserLabel, userToLog);
-      }
+      applicationContext.logger.debug('Request:', {
+        request: awsEvent,
+        user,
+      });
 
       const results = await cb({ applicationContext, user });
 
-      const returnResults = !skipFiltering
-        ? exports.dataSecurityFilter(results, {
-            applicationContext,
-          })
-        : results;
+      const returnResults = exports.dataSecurityFilter(results, {
+        applicationContext,
+      });
 
-      if (logResults && applicationContext) {
-        applicationContext.logger.info(logResultsLabel, returnResults);
+      if (options.logResults !== false) {
+        applicationContext.logger.debug('Results:', {
+          results: returnResults,
+        });
       }
 
       return returnResults;
@@ -86,7 +72,6 @@ exports.genericHandler = (event, cb, options = {}) => {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
         applicationContext.logger.error(e);
-        await applicationContext.notifyHoneybadger(e);
       }
       throw e;
     }

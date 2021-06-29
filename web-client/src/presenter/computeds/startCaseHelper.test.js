@@ -1,4 +1,5 @@
 import {
+  CASE_TYPES_MAP,
   FILING_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -8,12 +9,14 @@ import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const startCaseHelper = withAppContextDecorator(
-  startCaseHelperComputed,
-  applicationContext,
-);
-
 describe('start a case computed', () => {
+  const { PARTY_TYPES } = applicationContext.getConstants();
+
+  const startCaseHelper = withAppContextDecorator(
+    startCaseHelperComputed,
+    applicationContext,
+  );
+
   beforeAll(() => {
     applicationContext.getCurrentUser = () => ({
       role: ROLES.petitioner,
@@ -136,5 +139,152 @@ describe('start a case computed', () => {
       },
     });
     expect(result.filingTypes).toEqual(FILING_TYPES.petitioner);
+  });
+
+  it('should set contactPrimaryLabel correctly when form.partyType is one of petitioner', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: 'Michael G. Scott' },
+          partyType: PARTY_TYPES.petitioner,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactPrimaryLabel).toEqual('Your contact information');
+  });
+
+  it('should set contactPrimaryLabel correctly when form.partyType is one of petitionerDeceasedSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: 'Michael G. Scott' },
+          contactSecondary: { name: 'Carol Stills' },
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactPrimaryLabel).toEqual('Your contact information');
+  });
+
+  it('should set contactPrimaryLabel correctly when form.partyType is one of petitionerSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: 'Michael G. Scott' },
+          contactSecondary: { name: 'Carol Stills' },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactPrimaryLabel).toEqual('Your contact information');
+  });
+
+  it('should set contactSecondaryLabel correctly when form.partyType is one of petitionerDeceasedSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: 'Michael G. Scott' },
+          contactSecondary: { name: 'Carol Stills' },
+          partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactSecondaryLabel).toEqual(
+      'Spouse’s contact information',
+    );
+  });
+
+  it('should set contactSecondaryLabel correctly when form.partyType is one of petitionerSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: 'Michael G. Scott' },
+          contactSecondary: { name: 'Carol Stills' },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactSecondaryLabel).toEqual(
+      'Spouse’s contact information',
+    );
+  });
+
+  it('should set contactPrimaryLabel correctly when form.partyType is NOT petitioner, petitionerDeceasedSpouse, or petitionerSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: '' },
+          partyType: PARTY_TYPES.trust,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactPrimaryLabel).toEqual('Contact Information');
+  });
+
+  it('should set contactSecondaryLabel correctly when form.partyType is NOT  petitionerDeceasedSpouse or petitionerSpouse', () => {
+    const result = runCompute(startCaseHelper, {
+      state: {
+        form: {
+          contactPrimary: { name: '' },
+          partyType: PARTY_TYPES.trust,
+        },
+        getTrialCityName,
+      },
+    });
+
+    expect(result.contactSecondaryLabel).toEqual('Contact Information');
+  });
+
+  describe('formattedCaseType', () => {
+    it('should be Disclosure if form.caseType is Disclosure1', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: 'Disclosure1',
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.disclosure);
+    });
+
+    it('should be Disclosure if form.caseType is Disclosure2', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: 'Disclosure2',
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.disclosure);
+    });
+
+    it('should be form.caseType if form.caseType is not Disclosure1 or Disclosure2', () => {
+      const result = runCompute(startCaseHelper, {
+        state: {
+          form: {
+            caseType: CASE_TYPES_MAP.deficiency,
+          },
+          getTrialCityName,
+        },
+      });
+
+      expect(result.formattedCaseType).toEqual(CASE_TYPES_MAP.deficiency);
+    });
   });
 });

@@ -1,4 +1,11 @@
-export const docketClerkEditsDocketEntryMeta = test => {
+import { AUTOMATIC_BLOCKED_REASONS } from '../../../shared/src/business/entities/EntityConstants';
+import { getFormattedDocketEntriesForTest } from '../helpers';
+
+export const docketClerkEditsDocketEntryMeta = (
+  test,
+  docketRecordIndex,
+  data = {},
+) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
@@ -8,13 +15,18 @@ export const docketClerkEditsDocketEntryMeta = test => {
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'servedPartiesCode',
+      value: 'B',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'ordinalValue',
       value: 'First',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'filingDate',
-      value: '2020-01-04',
+      value: '2020-01-04T05:00:00.000Z',
     });
 
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
@@ -47,6 +59,11 @@ export const docketClerkEditsDocketEntryMeta = test => {
       value: true,
     });
 
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'pending',
+      value: true,
+    });
+
     await test.runSequence('submitEditDocketEntryMetaSequence', {
       docketNumber: test.docketNumber,
     });
@@ -55,9 +72,15 @@ export const docketClerkEditsDocketEntryMeta = test => {
       otherFilingParty: 'Enter other filing party name.',
     });
 
+    // note: this is not possible if the docket entry is already served
     await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
       key: 'otherFilingParty',
       value: 'Brianna Noble',
+    });
+
+    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
+      key: 'filedBy',
+      value: data.filedBy || 'Resp. & Petr. Mona Schultz, Brianna Noble',
     });
 
     await test.runSequence('submitEditDocketEntryMetaSequence', {
@@ -69,5 +92,30 @@ export const docketClerkEditsDocketEntryMeta = test => {
     expect(test.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
+
+    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
+    expect(test.getState('caseDetail.automaticBlockedReason')).toEqual(
+      AUTOMATIC_BLOCKED_REASONS.pending,
+    );
+    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
+    const docketEntries = test.getState('caseDetail.docketEntries');
+    const pendingDocketEntry = docketEntries.find(
+      d => d.index === docketRecordIndex,
+    );
+
+    expect(pendingDocketEntry.pending).toEqual(true);
+
+    const { formattedPendingDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+
+    test.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
+
+    expect(formattedPendingDocketEntriesOnDocketRecord).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: pendingDocketEntry.docketEntryId,
+        }),
+      ]),
+    );
   });
 };

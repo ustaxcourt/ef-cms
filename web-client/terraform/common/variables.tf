@@ -19,4 +19,3 @@ variable "cloudfront_default_ttl" {
 variable "zone_name" {
   type = string
 }
-

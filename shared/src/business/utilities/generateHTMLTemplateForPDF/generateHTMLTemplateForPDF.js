@@ -18,8 +18,15 @@ const generateHTMLTemplateForPDF = async ({
   const pug = applicationContext.getPug();
   const sass = applicationContext.getNodeSass();
 
-  const { css } = await new Promise(resolve => {
+  const { css } = await new Promise((resolve, reject) => {
     sass.render({ data: sassContent }, (err, result) => {
+      if (err) {
+        applicationContext.logger.error(
+          'Error compiling SASS to CSS while generating PDF',
+          err,
+        );
+        return reject(err);
+      }
       return resolve(result);
     });
   });

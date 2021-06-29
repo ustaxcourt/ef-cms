@@ -9,19 +9,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * removeCaseFromTrialInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to remove from trial
  * @param {string} providers.disposition the reason the case is being removed from trial
  * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
  * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
  */
-exports.removeCaseFromTrialInteractor = async ({
+exports.removeCaseFromTrialInteractor = async (
   applicationContext,
-  disposition,
-  docketNumber,
-  trialSessionId,
-}) => {
+  { associatedJudge, caseStatus, disposition, docketNumber, trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
@@ -58,31 +56,37 @@ exports.removeCaseFromTrialInteractor = async ({
 
   const caseEntity = new Case(myCase, { applicationContext });
 
-  caseEntity.removeFromTrial();
+  if (!caseEntity.isHearing(trialSessionId)) {
+    caseEntity.removeFromTrial(caseStatus, associatedJudge);
 
-  await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-    applicationContext,
-    docketNumber: caseEntity.docketNumber,
-    highPriority: false,
-  });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .createCaseTrialSortMappingRecords({
+    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
       applicationContext,
-      caseSortTags: caseEntity.generateTrialSortTags(),
       docketNumber: caseEntity.docketNumber,
+      highPriority: false,
     });
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    if (caseEntity.isReadyForTrial()) {
+      await applicationContext
+        .getPersistenceGateway()
+        .createCaseTrialSortMappingRecords({
+          applicationContext,
+          caseSortTags: caseEntity.generateTrialSortTags(),
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+  } else {
+    caseEntity.removeFromHearing(trialSessionId);
+  }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

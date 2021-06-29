@@ -31,21 +31,23 @@ describe('getJudgesForPublicSearchInteractor', () => {
         },
       ]);
 
-    const results = await getJudgesForPublicSearchInteractor({
+    const results = await getJudgesForPublicSearchInteractor(
       applicationContext,
-    });
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getUsersInSection,
     ).toHaveBeenCalledWith({ applicationContext, section: ROLES.judge });
     expect(results).toEqual([
       {
+        entityName: 'PublicUser',
         judgeFullName: 'Lila A. Fenwick',
         judgeTitle: 'Special Trial Judge',
         name: 'Lila A. Fenwick',
         role: ROLES.judge,
       },
       {
+        entityName: 'PublicUser',
         judgeFullName: 'Stephanie Kulp Seymour',
         judgeTitle: 'Special Trial Judge',
         name: 'Stephanie Kulp Seymour',

@@ -37,7 +37,8 @@ describe('Advanced search', () => {
     });
   });
 
-  describe('opinion', () => {
+  // Temporarily disabled for story 7387
+  describe.skip('opinion', () => {
     it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
       navigateToDashboard();
       clickOnSearchTab('opinion');

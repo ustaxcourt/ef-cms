@@ -13,7 +13,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  let showEditPetitionerInformation = false;
   const permissions = get(state.permissions);
   const showJudgesNotes = permissions.JUDGES_NOTES;
 
@@ -31,7 +30,7 @@ export const caseDetailHelper = (get, applicationContext) => {
       userHasAccessToCase = true;
       showFileDocumentButton = true;
 
-      if (caseDeadlines && caseDeadlines.length > 0) {
+      if (caseDeadlines.length > 0) {
         showCaseDeadlinesExternal = true;
       }
     } else {
@@ -41,30 +40,18 @@ export const caseDetailHelper = (get, applicationContext) => {
     userHasAccessToCase = true;
     showQcWorkItemsUntouchedState = true;
 
-    if (caseDeadlines && caseDeadlines.length > 0) {
+    if (caseDeadlines.length > 0) {
       showCaseDeadlinesInternal = true;
     } else {
       showCaseDeadlinesInternalEmpty = true;
     }
   }
 
-  let showEditContacts = false;
-
-  if (user.role === USER_ROLES.petitioner) {
-    showEditContacts = true;
-  } else if (user.role === USER_ROLES.privatePractitioner) {
-    showEditContacts = userAssociatedWithCase;
-  } else if (permissions.EDIT_PETITIONER_INFO) {
-    showEditPetitionerInformation = true;
-  }
-
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const petitionDocketEntry = applicationContext
+  const caseHasServedDocketEntries = applicationContext
     .getUtilities()
-    .getPetitionDocketEntryFromDocketEntries(caseDetail.docketEntries);
-  const petitionIsServed =
-    petitionDocketEntry && !!petitionDocketEntry.servedAt;
+    .caseHasServedDocketEntries(caseDetail);
 
   const hasPrivatePractitioners =
     !!caseDetail.privatePractitioners &&
@@ -79,23 +66,20 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasIrsPractitioners,
     hasPrivatePractitioners,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
+    showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
     showCaseDeadlinesInternal,
     showCaseDeadlinesInternalEmpty,
     showCaseInformationExternal: isExternalUser,
     showDocketRecordInProgressState: !isExternalUser,
-    showEditContacts,
-    showEditPetitionDetailsButton: permissions.EDIT_PETITION_DETAILS,
-    showEditPetitionerInformation,
-    showEditSecondaryContactModal:
-      get(state.modal.showModal) === 'EditSecondaryContact',
+    showEditCaseDetailsButton: permissions.EDIT_CASE_DETAILS,
     showFileDocumentButton,
     showFilingFeeExternal:
       isExternalUser &&
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
-    showPetitionProcessingAlert: isExternalUser && !petitionIsServed,
+    showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,

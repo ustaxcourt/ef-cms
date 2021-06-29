@@ -17,10 +17,9 @@ export const getPractitionersByNameAction = async ({
 
   const practitioners = await applicationContext
     .getUseCases()
-    .getPractitionersByNameInteractor({
-      applicationContext,
+    .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
     });
 
-  return { practitioners };
+  return { searchResults: practitioners };
 };

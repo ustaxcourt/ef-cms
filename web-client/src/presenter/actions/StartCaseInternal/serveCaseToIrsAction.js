@@ -20,8 +20,7 @@ export const serveCaseToIrsAction = async ({
 
   const pdfUrl = await applicationContext
     .getUseCases()
-    .serveCaseToIrsInteractor({
-      applicationContext,
+    .serveCaseToIrsInteractor(applicationContext, {
       docketNumber,
     });
 

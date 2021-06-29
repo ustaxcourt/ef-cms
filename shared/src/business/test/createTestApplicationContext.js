@@ -1,10 +1,6 @@
 const DateHandler = require('../utilities/DateHandler');
-const getAddressPhoneDiff = require('../utilities/generateChangeOfAddressTemplate');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
-const {
-  addWorkItemToSectionInbox,
-} = require('../../persistence/dynamo/workitems/addWorkItemToSectionInbox');
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
@@ -19,7 +15,14 @@ const {
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
   Case,
-  getPetitionDocketEntryFromDocketEntries,
+  caseHasServedDocketEntries,
+  getContactPrimary,
+  getContactSecondary,
+  getOtherFilers,
+  getPetitionDocketEntry,
+  getPetitionerById,
+  getPractitionersRepresenting,
+  isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
   compareCasesByDocketNumber,
@@ -29,14 +32,11 @@ const {
   compareStrings,
 } = require('../utilities/sortFunctions');
 const {
+  createCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
+const {
   createDocketNumber,
 } = require('../../persistence/dynamo/cases/docketNumberGenerator');
-const {
-  createSectionInboxRecord,
-} = require('../../persistence/dynamo/workitems/createSectionInboxRecord');
-const {
-  createUserInboxRecord,
-} = require('../../persistence/dynamo/workitems/createUserInboxRecord');
 const {
   deleteRecord,
 } = require('../../persistence/elasticsearch/deleteRecord');
@@ -47,14 +47,17 @@ const {
   deleteUserOutboxRecord,
 } = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
-  deleteWorkItemFromInbox,
-} = require('../../persistence/dynamo/workitems/deleteWorkItemFromInbox');
+  deleteWorkItem,
+} = require('../../persistence/dynamo/workitems/deleteWorkItem');
 const {
   documentUrlTranslator,
 } = require('../../../src/business/utilities/documentUrlTranslator');
 const {
-  filterQcItemsByAssociatedJudge,
-} = require('../utilities/filterQcItemsByAssociatedJudge');
+  fakeData,
+  getFakeFile,
+  testInvalidPdfDoc,
+  testPdfDoc,
+} = require('./getFakeFile');
 const {
   filterWorkItemsForUser,
 } = require('../../../src/business/utilities/filterWorkItemsForUser');
@@ -63,9 +66,7 @@ const {
 } = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
-  getServedPartiesCode,
   sortDocketEntries,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
@@ -76,11 +77,20 @@ const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
+  getAddressPhoneDiff,
+} = require('../utilities/generateChangeOfAddressTemplate');
+const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
 const {
   getCaseDeadlinesByDocketNumber,
 } = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
+const {
+  getChambersSections,
+  getChambersSectionsLabels,
+  getJudgesChambers,
+  getJudgesChambersWithLegacy,
+} = require('../../persistence/dynamo/chambers/getJudgesChambers');
 const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
@@ -92,11 +102,20 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
+const {
   getDocumentTypeForAddressChange,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
   getFormattedCaseDetail,
 } = require('../utilities/getFormattedCaseDetail');
+const {
+  getFormattedPartiesNameAndTitle,
+} = require('../utilities/getFormattedPartiesNameAndTitle');
+const {
+  getStampBoxCoordinates,
+} = require('../../../src/business/utilities/getStampBoxCoordinates');
 const {
   getUserById: getUserByIdPersistence,
 } = require('../../persistence/dynamo/users/getUserById');
@@ -110,38 +129,48 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
-  saveWorkItemForNonPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForNonPaper');
-const {
-  saveWorkItemForPaper,
-} = require('../../persistence/dynamo/workitems/saveWorkItemForPaper');
+  saveWorkItem,
+} = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
 const {
-  setWorkItemAsRead,
-} = require('../../persistence/dynamo/workitems/setWorkItemAsRead');
+  setupPdfDocument,
+} = require('../../../src/business/utilities/setupPdfDocument');
+const {
+  updateCaseAndAssociations,
+} = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
   updateCaseAutomaticBlock,
 } = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
 const {
+  updateCaseCorrespondence,
+} = require('../../persistence/dynamo/correspondence/updateCaseCorrespondence');
+const {
+  updateDocketEntry,
+} = require('../../persistence/dynamo/documents/updateDocketEntry');
+const {
+  updateUserRecords,
+} = require('../../persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
-const {
-  updateWorkItemInCase,
-} = require('../../persistence/dynamo/cases/updateWorkItemInCase');
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { fakeData, getFakeFile, testPdfDoc } = require('./getFakeFile');
+const { DocketEntry } = require('../entities/DocketEntry');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
+const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
+const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
+const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
+const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -150,11 +179,11 @@ const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
-    get(target, name, receiver) {
-      if (!Reflect.has(target, name)) {
-        Reflect.set(target, name, jest.fn(), receiver);
+    get(target, myName, receiver) {
+      if (!Reflect.has(target, myName)) {
+        Reflect.set(target, myName, jest.fn(), receiver);
       }
-      return Reflect.get(target, name, receiver);
+      return Reflect.get(target, myName, receiver);
     },
   };
   const proxied = new Proxy(initial, applicationContextHandler);
@@ -190,6 +219,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
   };
 
+  const mockGetReduceImageBlobValue = {
+    default: jest.fn().mockReturnValue({
+      toBlob: jest.fn(),
+    }),
+  };
+
   const mockGetUtilities = appContextProxy({
     aggregatePartiesForService: jest
       .fn()
@@ -197,12 +232,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    caseHasServedDocketEntries: jest
+      .fn()
+      .mockImplementation(caseHasServedDocketEntries),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
+    computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -220,15 +259,11 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
-    filterQcItemsByAssociatedJudge: jest
-      .fn()
-      .mockImplementation(filterQcItemsByAssociatedJudge),
     filterWorkItemsForUser: jest
       .fn()
       .mockImplementation(filterWorkItemsForUser),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),
-    formatCaseDeadlines: jest.fn().mockImplementation(formatCaseDeadlines),
     formatDateString: jest
       .fn()
       .mockImplementation(DateHandler.formatDateString),
@@ -244,9 +279,15 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
+    getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
+    getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
+    getCropBox: jest.fn().mockImplementation(getCropBox),
     getDocQcSectionForUser: jest
       .fn()
       .mockImplementation(getDocQcSectionForUser),
+    getDocumentTitleWithAdditionalInfo: jest
+      .fn()
+      .mockImplementation(getDocumentTitleWithAdditionalInfo),
     getDocumentTypeForAddressChange: jest
       .fn()
       .mockImplementation(getDocumentTypeForAddressChange),
@@ -254,30 +295,52 @@ const createTestApplicationContext = ({ user } = {}) => {
     getFormattedCaseDetail: jest
       .fn()
       .mockImplementation(getFormattedCaseDetail),
+    getFormattedPartiesNameAndTitle: jest
+      .fn()
+      .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
     getMonthDayYearObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearObj),
-    getPetitionDocketEntryFromDocketEntries: jest
+    getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
+    getPetitionDocketEntry: jest
       .fn()
-      .mockImplementation(getPetitionDocketEntryFromDocketEntries),
+      .mockImplementation(getPetitionDocketEntry),
+    getPetitionerById: jest.fn().mockImplementation(getPetitionerById),
+    getPractitionersRepresenting: jest
+      .fn()
+      .mockImplementation(getPractitionersRepresenting),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
+    getStampBoxCoordinates: jest
+      .fn()
+      .mockImplementation(getStampBoxCoordinates),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: User.isInternalUser,
+    isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isUserIdRepresentedByPrivatePractitioner: jest
+      .fn()
+      .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
+    replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
+    serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
+    setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
+    validateDateAndCreateISO: jest
+      .fn()
+      .mockImplementation(DateHandler.validateDateAndCreateISO),
   });
 
   const mockGetHttpClientReturnValue = {
@@ -291,9 +354,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    createCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(createCaseAndAssociations),
+    updateCaseAndAssociations: jest
+      .fn()
+      .mockImplementation(updateCaseAndAssociations),
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -307,9 +377,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
-    standingPretrialNotice: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
+    standingPretrialOrderForSmallCase: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
@@ -338,16 +411,12 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
-    addWorkItemToSectionInbox,
+    addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
-    createSectionInboxRecord: jest
-      .fn()
-      .mockImplementation(createSectionInboxRecord),
-    createUserInboxRecord: jest.fn().mockImplementation(createUserInboxRecord),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
@@ -357,7 +426,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteUserOutboxRecord: jest
       .fn()
       .mockImplementation(deleteUserOutboxRecord),
-    deleteWorkItemFromInbox: jest.fn(deleteWorkItemFromInbox),
+    deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
@@ -365,6 +434,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getChambersSections: jest.fn().mockImplementation(getChambersSections),
+    getChambersSectionsLabels: jest
+      .fn()
+      .mockImplementation(getChambersSectionsLabels),
     getDocumentQCInboxForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
@@ -377,32 +450,41 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDownloadPolicyUrl: jest.fn(),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
+    getJudgesChambersWithLegacy: jest
+      .fn()
+      .mockImplementation(getJudgesChambersWithLegacy),
+    getMessagesByDocketNumber: jest.fn(),
+    getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
+    getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
+    getWorkItemMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
+    isEmailAvailable: jest.fn(),
+    isFileExists: jest.fn(),
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
-    saveWorkItemForNonPaper: jest
-      .fn()
-      .mockImplementation(saveWorkItemForNonPaper),
-    saveWorkItemForPaper: jest.fn().mockImplementation(saveWorkItemForPaper),
+    saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
-    setWorkItemAsRead: jest.fn().mockImplementation(setWorkItemAsRead),
     updateCase: jest.fn().mockImplementation(updateCase),
-    updateCaseTrialSortMappingRecords: jest.fn(),
-    updateHighPriorityCaseTrialSortMappingRecords: jest.fn(),
-    updateWorkItem,
-    updateWorkItemInCase,
+    updateCaseCorrespondence: jest
+      .fn()
+      .mockImplementation(updateCaseCorrespondence),
+    updateCaseHearing: jest.fn(),
+    updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
+    updateWorkItem: jest.fn().mockImplementation(updateWorkItem),
+    updateWorkItemInCase: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
   const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(data, { css: '' }),
+    render: (data, cb) => cb(null, { css: '' }),
   };
 
   const mockGetEmailClient = {
@@ -413,6 +495,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
+  };
+
+  const mockBroadcastGateway = {
+    postMessage: jest.fn(),
   };
 
   const applicationContext = {
@@ -434,13 +520,21 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
     getClerkOfCourtNameForSigning: jest.fn(),
-    getCognito: appContextProxy(),
+    getCognito: appContextProxy({
+      adminCreateUser: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+      adminUpdateUserAttributes: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
+    }),
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
@@ -468,6 +562,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
+    getEnvironment: jest.fn(),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
@@ -485,6 +580,7 @@ const createTestApplicationContext = ({ user } = {}) => {
         return () => null;
       },
     })),
+    getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
@@ -497,14 +593,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
-    initHoneybadger: appContextProxy(),
     logger: {
+      debug: jest.fn(),
       error: jest.fn(),
       info: jest.fn(),
-      time: () => jest.fn().mockReturnValue(null),
-      timeEnd: () => jest.fn().mockReturnValue(null),
+      warn: jest.fn(),
     },
-    notifyHoneybadger: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };
@@ -522,11 +616,16 @@ const applicationContext = createTestApplicationContext();
   applicationContextForClient.
 */
 const applicationContextForClient = {};
-Object.entries(applicationContext).map(([key, value]) => {
+Object.entries(applicationContext).forEach(([key, value]) => {
   if (typeof value === 'function') {
     applicationContextForClient[key] = value;
   }
 });
+
+const over1000Characters =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat turpis in turpis tincidunt sagittis. Pellentesque fringilla fringilla fermentum. Suspendisse porta semper diam sit amet lobortis. Nam commodo turpis velit, id vestibulum quam porttitor a. Nulla metus eros, interdum eu blandit non, scelerisque at tellus. Ut pretium pretium magna non feugiat. Pellentesque vestibulum tempor leo finibus lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum blandit, urna eu porta eleifend, tortor ante aliquet arcu, non venenatis purus enim in ex. In sed accumsan nibh. In pulvinar id dui id aliquam. Vestibulum ante felis, porta id accumsan sed, hendrerit non arcu. Sed suscipit elit at metus pulvinar, iaculis vulputate justo volutpat. Pellentesque a dolor pharetra risus ornare semper eu at massa. Integer ut rutrum lacus, posuere dignissim massa. Etiam molestie at tortor mollis semper. Donec pulvinar mauris ac commodo malesuada. In quis tellus euismod, tempor quam et, dapibus lacus. Donec gravida tempor nunc, a maximus lectus fermentum vitae. Nullam hendrerit, nisi at fermentum scelerisque, massa nibh varius purus, at dapibus lorem massa id enim. Maecenas aliquet arcu mi, ut volutpat eros consectetur ac. Quisque dolor eros, posuere commodo vehicula sed, auctor ac nulla. Etiam sit amet massa justo. Nunc ullamcorper porta lorem quis maximus. Donec congue vel est eget accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean non suscipit tortor.';
+const over3000Characters =
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec se';
 
 module.exports = {
   applicationContext,
@@ -534,5 +633,8 @@ module.exports = {
   createTestApplicationContext,
   fakeData,
   getFakeFile,
+  over1000Characters,
+  over3000Characters,
+  testInvalidPdfDoc,
   testPdfDoc,
 };

@@ -51,6 +51,20 @@ describe('formatAttachments', () => {
   ];
 
   it('formats docketEntries in the attachments array based on meta from docketEntries in the docketEntries, correspondence, archivedDocketEntries, and archivedCorrespondences arrays', () => {
+    const firstGeneratedTitle = 'Test Document One';
+    const secondGeneratedTitle = 'Test Archived One';
+    const thirdGeneratedTitle = 'Test Archived Correspondence One';
+    const fourthGeneratedTitle = 'Test Archived Correspondence Two';
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce(
+        firstGeneratedTitle,
+      )
+      .mockReturnValueOnce(secondGeneratedTitle)
+      .mockReturnValueOnce(thirdGeneratedTitle)
+      .mockReturnValueOnce(fourthGeneratedTitle);
+
     const result = formatAttachments({
       applicationContext,
       attachments: [
@@ -68,17 +82,17 @@ describe('formatAttachments', () => {
     });
 
     expect(result).toEqual([
-      { archived: false, documentId: '1', documentTitle: 'Test Document One' },
+      { archived: false, documentId: '1', documentTitle: firstGeneratedTitle },
       {
         archived: false,
         documentId: '3',
-        documentTitle: 'Test Correspondence One',
+        documentTitle: secondGeneratedTitle,
       },
-      { archived: true, documentId: '5', documentTitle: 'Test Archived One' },
+      { archived: true, documentId: '5', documentTitle: thirdGeneratedTitle },
       {
         archived: true,
         documentId: '7',
-        documentTitle: 'Test Archived Correspondence One',
+        documentTitle: fourthGeneratedTitle,
       },
     ]);
   });

@@ -177,7 +177,7 @@ exports.getUserFromAuthHeader = event => {
   if (decoded) {
     decoded.token = token;
     decoded.role = decoded['custom:role'];
-    decoded.userId = decoded.sub;
+    decoded.userId = decoded['custom:userId'] || decoded.sub;
     return decoded;
   } else {
     return null;

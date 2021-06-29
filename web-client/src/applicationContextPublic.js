@@ -4,16 +4,25 @@ import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  ORDER_EVENT_CODES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
+  TODAYS_ORDERS_SORTS,
+  TODAYS_ORDERS_SORT_DEFAULT,
   TRANSCRIPT_EVENT_CODE,
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import {
+  Case,
+  getContactPrimary,
+  getContactSecondary,
+} from '../../shared/src/business/entities/cases/Case';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -36,6 +45,7 @@ import { getJudgeLastName } from '../../shared/src/business/utilities/getFormatt
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
+import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
 import { tryCatchDecorator } from './tryCatchDecorator';
@@ -60,6 +70,7 @@ const allUseCases = {
   getHealthCheckInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
+  getTodaysOrdersInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   validateCaseAdvancedSearchInteractor,
@@ -68,33 +79,22 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const initHoneybadger = async () => {
-  if (process.env.USTC_ENV === 'prod') {
-    const apiKey = process.env.CIRCLE_HONEYBADGER_API_KEY;
-
-    if (apiKey) {
-      const Honeybadger = await import('honeybadger-js'); // browser version
-
-      const config = {
-        apiKey,
-        environment: 'client',
-      };
-      Honeybadger.configure(config);
-      return Honeybadger;
-    }
-  }
-};
 const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
-  CASE_CAPTION_POSTFIX: CASE_CAPTION_POSTFIX,
-  CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE,
-  COUNTRY_TYPES: COUNTRY_TYPES,
+  CASE_CAPTION_POSTFIX,
+  CASE_SEARCH_PAGE_SIZE,
+  COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   OBJECTIONS_OPTIONS_MAP,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+  ORDER_EVENT_CODES,
   STIPULATED_DECISION_EVENT_CODE,
+  TODAYS_ORDERS_SORT_DEFAULT,
+  TODAYS_ORDERS_SORTS,
   TRANSCRIPT_EVENT_CODE,
   US_STATES,
   US_STATES_OTHER,
@@ -108,7 +108,11 @@ const applicationContextPublic = {
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
   getConstants: () => frozenConstants,
+  getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
+  getEnvironment: () => ({
+    stage: process.env.STAGE || 'local',
+  }),
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
@@ -136,33 +140,11 @@ const applicationContextPublic = {
       createISODateString,
       formatDateString,
       formatDocketEntry,
+      getContactPrimary,
+      getContactSecondary,
       getJudgeLastName,
       sortDocketEntries,
     };
-  },
-  initHoneybadger,
-  notifyHoneybadger: async (message, context) => {
-    const honeybadger = await initHoneybadger();
-
-    const notifyAsync = messageForNotification => {
-      return new Promise(resolve => {
-        honeybadger.notify(messageForNotification, null, null, resolve);
-      });
-    };
-
-    if (honeybadger) {
-      const errorContext = {
-        userId: 'public',
-      };
-
-      if (context) {
-        Object.assign(errorContext, context);
-      }
-
-      honeybadger.setContext(errorContext);
-
-      await notifyAsync(message);
-    }
   },
 };
 

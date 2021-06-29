@@ -32,11 +32,6 @@ variable "es_instance_type" {
   default = "t2.small.elasticsearch"
 }
 
-variable "honeybadger_key" {
-  type    = string
-  default = "default_key"
-}
-
 variable "irs_superuser_email" {
   type = string
 }
@@ -73,4 +68,16 @@ variable "disable_emails" {
 
 variable "es_volume_size" {
   type = number
+}
+
+variable "bounced_email_recipient" {
+  type = string
+}
+
+variable "scanner_resource_uri" {
+  type = string
+}
+
+variable "cognito_table_name" {
+  type = string
 }

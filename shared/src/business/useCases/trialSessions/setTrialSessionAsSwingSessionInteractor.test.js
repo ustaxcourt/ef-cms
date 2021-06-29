@@ -2,12 +2,16 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   setTrialSessionAsSwingSessionInteractor,
 } = require('./setTrialSessionAsSwingSessionInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
   sessionType: 'Regular',
   startDate: '3000-03-01T00:00:00.000Z',
   term: 'Fall',
@@ -18,6 +22,7 @@ const MOCK_TRIAL_SESSION = {
 
 const OTHER_MOCK_TRIAL_SESSION = {
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Small',
   startDate: '3000-03-03T00:00:00.000Z',
   term: 'Fall',
@@ -47,8 +52,7 @@ describe('Set trial session as swing session', () => {
     };
 
     await expect(
-      setTrialSessionAsSwingSessionInteractor({
-        applicationContext,
+      setTrialSessionAsSwingSessionInteractor(applicationContext, {
         swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
         trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
       }),
@@ -61,8 +65,7 @@ describe('Set trial session as swing session', () => {
       userId: 'petitionsclerk',
     };
 
-    await setTrialSessionAsSwingSessionInteractor({
-      applicationContext,
+    await setTrialSessionAsSwingSessionInteractor(applicationContext, {
       swingSessionId: MOCK_TRIAL_SESSION.trialSessionId,
       trialSessionId: OTHER_MOCK_TRIAL_SESSION.trialSessionId,
     });

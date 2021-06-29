@@ -1,4 +1,7 @@
-import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
+import {
+  aggregatePetitionerErrors,
+  aggregateStatisticsErrors,
+} from './validatePetitionFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -41,19 +44,21 @@ export const validateCaseDetailAction = ({
   if (formWithComputedDates.isPaper) {
     errors = applicationContext
       .getUseCases()
-      .validatePetitionFromPaperInteractor({
-        applicationContext,
+      .validatePetitionFromPaperInteractor(applicationContext, {
         petition: {
           ...formWithComputedDates,
           ...initialDocumentFormFiles,
         },
       });
   } else {
-    errors = applicationContext.getUseCases().validateCaseDetailInteractor({
-      applicationContext,
-      caseDetail: formWithComputedDates,
-    });
+    errors = applicationContext
+      .getUseCases()
+      .validateCaseDetailInteractor(applicationContext, {
+        caseDetail: formWithComputedDates,
+      });
   }
+
+  errors = aggregatePetitionerErrors({ errors });
 
   store.set(state.validationErrors, errors || {});
 
@@ -66,11 +71,11 @@ export const validateCaseDetailAction = ({
       statistics: 'Statistics',
     };
 
-    const statisticsErrors = aggregateStatisticsErrors({ errors, get });
-    if (statisticsErrors) {
-      errors.statistics = statisticsErrors;
-    }
+    const { errors: formattedErrors } = aggregateStatisticsErrors({
+      errors,
+      get,
+    });
 
-    return path.error({ errorDisplayMap, errors });
+    return path.error({ errorDisplayMap, errors: formattedErrors });
   }
 };

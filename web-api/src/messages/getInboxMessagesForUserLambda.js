@@ -10,8 +10,7 @@ exports.getInboxMessagesForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getInboxMessagesForUserInteractor({
-        applicationContext,
+      .getInboxMessagesForUserInteractor(applicationContext, {
         userId: event.pathParameters.userId,
       });
   });

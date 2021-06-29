@@ -21,8 +21,9 @@ const docketChangeInfo = {
 describe('generateNoticeOfDocketChangePdf', () => {
   beforeEach(() => {
     isAuthorized.mockReturnValue(true);
+    applicationContext.logger.error = jest.fn();
     applicationContext.getStorageClient.mockReturnValue({
-      upload: (params, callback) => callback(),
+      upload: (params, callback) => callback(null, true),
     });
   });
 
@@ -53,5 +54,25 @@ describe('generateNoticeOfDocketChangePdf', () => {
       applicationContext.getDocumentGenerators().noticeOfDocketChange,
     ).toHaveBeenCalled();
     expect(result).toEqual('uniqueId');
+  });
+
+  it('fails and logs if the s3 upload fails', async () => {
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, callback) => callback('there was an error uploading'),
+    });
+
+    await expect(
+      generateNoticeOfDocketChangePdf({
+        applicationContext,
+        docketChangeInfo,
+      }),
+    ).rejects.toEqual('there was an error uploading');
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'An error occurred while attempting to upload to S3',
+    );
+    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
+      'there was an error uploading',
+    );
   });
 });

@@ -31,8 +31,6 @@ resource "aws_s3_bucket" "failover_public" {
     error_document = "index.html"
   }
 
-  region = "us-west-1"
-
   tags = {
     environment = var.environment
   }

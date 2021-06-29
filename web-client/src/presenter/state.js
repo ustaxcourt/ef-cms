@@ -5,6 +5,7 @@ import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModal
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -20,18 +21,17 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
-import { contactEditHelper } from './computeds/contactEditHelper';
 import { contactsHelper } from './computeds/contactsHelper';
 import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelper';
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
+import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
 import { documentSigningHelper } from './computeds/documentSigningHelper';
 import { documentViewerHelper } from './computeds/documentViewerHelper';
 import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper';
-import { editDocketEntryHelper } from './computeds/editDocketEntryHelper';
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
@@ -39,6 +39,7 @@ import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCases
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
+import { formattedCaseDeadlines } from './computeds/formattedCaseDeadlines';
 import {
   formattedCaseDetail,
   formattedClosedCases,
@@ -46,6 +47,7 @@ import {
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
+import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
@@ -53,6 +55,7 @@ import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
+import { getConstants } from '../getConstants';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
@@ -61,8 +64,10 @@ import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
+import { myAccountHelper } from './computeds/myAccountHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
+import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
 import { pendingReportListHelper } from './computeds/pendingReportListHelper';
@@ -71,17 +76,19 @@ import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
+import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
-import { selectDocumentTypeHelper } from './computeds/selectDocumentTypeHelper';
+import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -89,10 +96,14 @@ import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCo
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
+import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewAllDocumentsHelper } from './computeds/viewAllDocumentsHelper';
+import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
+
+const { IDLE_STATUS } = getConstants();
 
 const helpers = {
   addCourtIssuedDocketEntryHelper,
@@ -102,6 +113,7 @@ const helpers = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
+  appInstanceManagerHelper,
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
@@ -117,18 +129,17 @@ const helpers = {
   caseTypeDescriptionHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
-  contactEditHelper,
   contactsHelper,
   correspondenceViewerHelper,
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
   dashboardExternalHelper,
+  docketEntryQcHelper,
   docketRecordHelper,
   documentSigningHelper,
   documentViewerHelper,
   draftDocumentViewerHelper,
-  editDocketEntryHelper,
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
@@ -136,10 +147,12 @@ const helpers = {
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
+  formattedCaseDeadlines,
   formattedCaseDetail,
   formattedCaseMessages,
   formattedClosedCases,
   formattedDashboardTrialSessions,
+  formattedDocketEntries,
   formattedDocument,
   formattedMessageDetail,
   formattedMessages,
@@ -156,8 +169,10 @@ const helpers = {
   messageDocumentHelper,
   messageModalHelper,
   messagesHelper,
+  myAccountHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
+  partiesInformationHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
   pendingReportListHelper,
@@ -166,17 +181,19 @@ const helpers = {
   practitionerSearchFormHelper,
   printPaperServiceHelper,
   recentMessagesHelper,
+  removeFromTrialSessionModalHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  selectDocumentTypeHelper,
+  setForHearingModalHelper,
   showAppTimeoutModalHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,
+  templateHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
@@ -184,8 +201,10 @@ const helpers = {
   trialSessionsHelper,
   trialSessionsSummaryHelper,
   updateCaseModalHelper,
+  userContactEditHelper,
   userContactEditProgressHelper,
   viewAllDocumentsHelper,
+  viewCounselHelper,
   workQueueHelper,
   workQueueSectionHelper,
 };
@@ -249,10 +268,12 @@ export const baseState = {
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
-    showBetaBar: true,
+    showBetaBar: true, // default state
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  idleStatus: IDLE_STATUS.ACTIVE,
+  idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judges: [],
@@ -299,10 +320,9 @@ export const baseState = {
   selectedWorkItems: [],
   sessionMetadata: {
     docketRecordSort: [],
+    todaysOrdersSort: [],
   },
-
   showValidation: false,
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

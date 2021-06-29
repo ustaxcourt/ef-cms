@@ -12,8 +12,7 @@ exports.setNoticesForCalendaredTrialSessionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .setNoticesForCalendaredTrialSessionInteractor({
-        applicationContext,
+      .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
         trialSessionId,
         ...event.body,
       });

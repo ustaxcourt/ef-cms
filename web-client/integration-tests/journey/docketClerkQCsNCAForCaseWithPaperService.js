@@ -1,13 +1,15 @@
-import { addDocketEntryHelper as addDocketEnryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
+import { addDocketEntryHelper as addDocketEntryHelperComputed } from '../../src/presenter/computeds/addDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+  refreshElasticsearchIndex,
+} from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
-import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
-const addDocketEntryHelper = withAppContextDecorator(addDocketEntryHelper);
 
 export const docketClerkQCsNCAForCaseWithPaperService = test => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -21,9 +23,8 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
     });
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseWithPaperService = test.getState('caseDetail');
-
-    expect(caseWithPaperService.contactPrimary.serviceIndicator).toEqual(
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
@@ -43,39 +44,26 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
       docketEntry: { documentTitle: 'Notice of Change of Address' },
     });
 
-    let caseDetailFormatted;
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const lastIndex =
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.length - 1;
+    const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     noticeOfChangeOfAddressQCItem.index =
       noticeOfChangeOfAddressQCItem.index || lastIndex;
 
-    const {
-      docketEntryId,
-    } = caseDetailFormatted.formattedDocketEntriesOnDocketRecord[
-      noticeOfChangeOfAddressQCItem.index
-    ];
+    const { docketEntryId } =
+      formattedDocketEntriesOnDocketRecord[noticeOfChangeOfAddressQCItem.index];
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await test.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: caseDetailFormatted.docketNumber,
+      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
-    const addDocketEnryHelper = withAppContextDecorator(
-      addDocketEnryHelperComputed,
+    const addDocketEntryHelper = withAppContextDecorator(
+      addDocketEntryHelperComputed,
     );
 
-    const { showFilingPartiesForm } = runCompute(addDocketEnryHelper, {
+    const { showFilingPartiesForm } = runCompute(addDocketEntryHelper, {
       state: test.getState(),
     });
 
@@ -85,14 +73,10 @@ export const docketClerkQCsNCAForCaseWithPaperService = test => {
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
-    const selectedDocument = caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
+    const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
 

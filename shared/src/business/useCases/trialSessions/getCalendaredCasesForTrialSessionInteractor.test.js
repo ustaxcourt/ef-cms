@@ -36,8 +36,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     });
 
     await expect(
-      getCalendaredCasesForTrialSessionInteractor({
-        applicationContext,
+      getCalendaredCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrowError(UnauthorizedError);
@@ -51,8 +50,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     });
 
     await expect(
-      getCalendaredCasesForTrialSessionInteractor({
-        applicationContext,
+      getCalendaredCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).resolves.not.toThrow();

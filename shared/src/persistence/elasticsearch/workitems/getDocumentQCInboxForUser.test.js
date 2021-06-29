@@ -21,14 +21,15 @@ describe('getDocumentQCInboxForUser', () => {
             bool: {
               must: [
                 {
-                  match: {
-                    'pk.S': 'user|123',
+                  term: {
+                    'assigneeId.S': '123',
                   },
                 },
                 {
-                  match: {
-                    'sk.S': 'work-item|',
-                  },
+                  prefix: { 'pk.S': 'work-item|' },
+                },
+                {
+                  prefix: { 'sk.S': 'work-item|' },
                 },
               ],
               must_not: {

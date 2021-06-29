@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesADocumentForCase = (test, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -75,7 +76,14 @@ export const petitionerFilesADocumentForCase = (test, fakeFile) => {
     });
 
     await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyPrimary',
+      key: 'primaryDocumentFile',
+      value: fakeFile,
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 

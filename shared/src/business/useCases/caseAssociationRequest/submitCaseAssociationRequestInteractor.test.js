@@ -2,38 +2,14 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-  ROLES,
-} = require('../../entities/EntityConstants');
-const {
   submitCaseAssociationRequestInteractor,
 } = require('./submitCaseAssociationRequestInteractor');
+const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('submitCaseAssociationRequest', () => {
-  let caseRecord = {
-    caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
-    docketEntries: MOCK_CASE.docketEntries,
-    docketNumber: '123-19',
-    filingType: 'Myself',
-    partyType: PARTY_TYPES.petitioner,
-    preferredTrialCity: 'Fresno, California',
-    procedureType: 'Regular',
-    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-  };
+  const mockContactId = getContactPrimary(MOCK_CASE).contactId;
 
   let mockCurrentUser;
   let mockGetUserById;
@@ -47,7 +23,7 @@ describe('submitCaseAssociationRequest', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockImplementation(() => MOCK_CASE);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -58,9 +34,8 @@ describe('submitCaseAssociationRequest', () => {
     };
 
     await expect(
-      submitCaseAssociationRequestInteractor({
-        applicationContext,
-        docketNumber: caseRecord.docketNumber,
+      submitCaseAssociationRequestInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -93,16 +68,14 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: false,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      representing: [mockContactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toBeCalled();
   });
 
@@ -127,18 +100,18 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
-      representingPrimary: true,
-      representingSecondary: false,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      filers: [mockContactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toBeCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
@@ -168,15 +141,16 @@ describe('submitCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    await submitCaseAssociationRequestInteractor({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
+    await submitCaseAssociationRequestInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toBeCalled();
   });
 });

@@ -47,6 +47,19 @@ export const docketClerkAddsDocketEntryFromDraft = (test, draftOrderIndex) => {
       value: 'U.S.C.A created by a test',
     });
 
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
+    });
+
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(test.getState('alertSuccess').message).toEqual(

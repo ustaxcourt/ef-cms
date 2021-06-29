@@ -4,7 +4,12 @@ describe('lambdaWrapper', () => {
   let req, res;
 
   beforeEach(() => {
-    req = { body: 'blank' };
+    req = {
+      body: 'blank',
+      headers: {},
+      locals: {},
+      setTimeout: jest.fn(),
+    };
     res = {
       headers: {},
       json: jest.fn(),
@@ -99,5 +104,19 @@ describe('lambdaWrapper', () => {
     expect(console.log).toHaveBeenCalledWith(
       'ERROR: we do not support this return type',
     );
+  });
+
+  it('sets request timeout to 20 minutes', async () => {
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      };
+    })(req, res);
+
+    expect(req.setTimeout).toHaveBeenCalled();
+    expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
   });
 });

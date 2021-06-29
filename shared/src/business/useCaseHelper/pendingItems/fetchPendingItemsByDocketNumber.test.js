@@ -8,8 +8,6 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('fetchPendingItems', () => {
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
-
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
@@ -19,7 +17,47 @@ describe('fetchPendingItems', () => {
   it('uses docketNumber filter and calls getCaseByDocketNumber and returns the pending items for that case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            docketEntryId: '5597987e-3e4f-4ce9-8c71-7ebd96bc9c70',
+            index: 1,
+            pending: false,
+          },
+          {
+            ...MOCK_CASE.docketEntries[0],
+            docketEntryId: '2568fa29-cc61-4570-800a-9bfc2b0abbc3',
+            index: 2,
+            pending: true,
+            servedAt: '2019-08-25T05:00:00.000Z',
+            servedParties: [
+              {
+                name: 'Bernard Lowe',
+              },
+            ],
+          },
+          {
+            ...MOCK_CASE.docketEntries[0],
+            docketEntryId: '69c399d7-0e8d-4e29-8825-1fbb1f63f042',
+            index: 3,
+            isLegacyServed: true,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+          {
+            ...MOCK_CASE.docketEntries[0],
+            docketEntryId: '74efd6d9-6b7b-4f9f-b303-012723003192',
+            index: 4,
+            isLegacyServed: false,
+            pending: true,
+            servedAt: undefined,
+            servedParties: undefined,
+          },
+        ],
+      });
 
     const results = await fetchPendingItemsByDocketNumber({
       applicationContext,
@@ -30,20 +68,6 @@ describe('fetchPendingItems', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
 
-    expect(results).toMatchObject([
-      {
-        associatedJudge: CHIEF_JUDGE,
-        caseCaption: 'Test Petitioner, Petitioner',
-        createdAt: '2018-11-21T20:49:28.192Z',
-        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumberSuffix: null,
-        documentTitle: 'Proposed Stipulated Decision',
-        documentType: 'Proposed Stipulated Decision',
-        eventCode: 'PSDE',
-        pending: true,
-        processingStatus: 'pending',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    ]);
+    expect(results).toMatchObject([{ index: 2 }, { index: 3 }]);
   });
 });

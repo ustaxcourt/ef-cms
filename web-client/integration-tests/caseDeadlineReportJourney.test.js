@@ -25,6 +25,10 @@ describe('Case deadline report journey', () => {
     test.createdDocketNumbers = [];
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   describe('set up test data - 3 cases with 2 deadlines each', () => {
     for (let i = 0; i < 3; i++) {
       loginAs(test, 'petitioner@example.com');

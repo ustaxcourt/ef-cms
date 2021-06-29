@@ -1,13 +1,8 @@
 const {
-  COUNTRY_TYPES,
-  PETITIONS_SECTION,
-} = require('../../entities/EntityConstants');
-const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -16,10 +11,11 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.addDocketEntryForPaymentStatus = ({
+const addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
   user,
@@ -60,6 +56,7 @@ exports.addDocketEntryForPaymentStatus = ({
     );
   }
 };
+exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
@@ -85,18 +82,209 @@ const addDocketEntries = ({ caseEntity }) => {
   }
 };
 
+const createPetitionWorkItems = async ({
+  applicationContext,
+  caseEntity,
+  user,
+}) => {
+  const petitionDocument = caseEntity.docketEntries.find(
+    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
+
+  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+  initializeCaseWorkItem.docketNumberWithSuffix =
+    caseEntity.docketNumberWithSuffix;
+
+  initializeCaseWorkItem.setAsCompleted({
+    message: 'Served to IRS',
+    user,
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: PETITIONS_SECTION,
+    userId: user.userId,
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
+  });
+};
+
+const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+
+  let pdfData = await applicationContext
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
+      applicationContext,
+      data: {
+        address: caseEntity.petitioners[0],
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
+    });
+
+  const contactSecondary = caseEntity.petitioners[1];
+  if (contactSecondary) {
+    const dataWithNoticeAttached = await generatePaperNoticeForContactSecondary(
+      {
+        applicationContext,
+        caseCaptionExtension,
+        caseEntity,
+        caseTitle,
+        contactSecondary,
+        docketNumberWithSuffix,
+        pdfData,
+        preferredTrialCity,
+        receivedAt,
+      },
+    );
+    if (dataWithNoticeAttached) {
+      pdfData = dataWithNoticeAttached;
+    }
+  }
+
+  const caseConfirmationPdfName =
+    caseEntity.getCaseConfirmationGeneratedPdfFileName();
+
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName,
+    pdfData,
+  });
+
+  let urlToReturn;
+
+  if (caseEntity.isPaper) {
+    ({ url: urlToReturn } = await applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl({
+        applicationContext,
+        key: caseConfirmationPdfName,
+        useTempBucket: false,
+      }));
+  }
+
+  return urlToReturn;
+};
+
+const createCoversheetsForServedEntries = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  for (const doc of caseEntity.docketEntries) {
+    if (doc.isFileAttached) {
+      const updatedDocketEntry = await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          caseEntity,
+          docketEntryId: doc.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          replaceCoversheet: !caseEntity.isPaper,
+          useInitialData: !caseEntity.isPaper,
+        });
+
+      caseEntity.updateDocketEntry(updatedDocketEntry);
+    }
+  }
+};
+
+const generatePaperNoticeForContactSecondary = async ({
+  applicationContext,
+  caseCaptionExtension,
+  caseEntity,
+  caseTitle,
+  contactSecondary,
+  docketNumberWithSuffix,
+  pdfData,
+  preferredTrialCity,
+  receivedAt,
+}) => {
+  const contactInformationDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: caseEntity.petitioners[0],
+      oldData: contactSecondary,
+    });
+
+  const addressFields = [
+    'country',
+    'countryType',
+    'address1',
+    'address2',
+    'address3',
+    'city',
+    'state',
+    'postalCode',
+  ];
+
+  const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
+    field => addressFields.includes(field),
+  );
+
+  let secondaryPdfData;
+
+  if (contactAddressesAreDifferent) {
+    secondaryPdfData = await applicationContext
+      .getDocumentGenerators()
+      .noticeOfReceiptOfPetition({
+        applicationContext,
+        data: {
+          address: contactSecondary,
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          preferredTrialCity,
+          receivedAtFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(receivedAt, 'MMMM D, YYYY'),
+          servedDate: applicationContext
+            .getUtilities()
+            .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+        },
+      });
+
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const pdfDoc = await PDFDocument.load(pdfData);
+    const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+    const coverPageDocumentPages = await pdfDoc.copyPages(
+      secondaryPdfDoc,
+      secondaryPdfDoc.getPageIndices(),
+    );
+    pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+
+    const pdfDataBuffer = await pdfDoc.save();
+    return Buffer.from(pdfDataBuffer);
+  }
+};
+
 /**
  * serveCaseToIrsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async ({
+exports.serveCaseToIrsInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
@@ -110,7 +298,7 @@ exports.serveCaseToIrsInteractor = async ({
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
+  let caseEntity = new Case(caseToBatch, { applicationContext });
 
   caseEntity.markAsSentToIRS();
 
@@ -119,47 +307,14 @@ exports.serveCaseToIrsInteractor = async ({
   }
 
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
-
-    const initialDocketEntry = caseEntity.docketEntries.find(
-      document => document.documentType === initialDocumentType.documentType,
-    );
-
-    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
-      initialDocketEntry.setAsServed([
-        {
-          name: 'IRS',
-          role: ROLES.irsSuperuser,
-        },
-      ]);
-      caseEntity.updateDocketEntry(initialDocketEntry);
-
-      if (
-        initialDocketEntry.documentType ===
-        INITIAL_DOCUMENT_TYPES.petition.documentType
-      ) {
-        await applicationContext
-          .getUseCaseHelpers()
-          .sendIrsSuperuserPetitionEmail({
-            applicationContext,
-            caseEntity,
-            docketEntryId: initialDocketEntry.docketEntryId,
-          });
-      } else {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: initialDocketEntry.docketEntryId,
-          servedParties: {
-            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-            electronic: [],
-          },
-        });
-      }
-    }
+    await applicationContext.getUtilities().serveCaseDocument({
+      applicationContext,
+      caseEntity,
+      initialDocumentTypeKey,
+    });
   }
 
-  exports.addDocketEntryForPaymentStatus({
+  addDocketEntryForPaymentStatus({
     applicationContext,
     caseEntity,
     user,
@@ -170,135 +325,37 @@ exports.serveCaseToIrsInteractor = async ({
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  const petitionDocument = caseEntity.docketEntries.find(
-    document =>
-      document.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-  const initializeCaseWorkItem = petitionDocument.workItem;
-
-  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
-  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
-  initializeCaseWorkItem.docketNumberWithSuffix =
-    caseEntity.docketNumberWithSuffix;
-
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+  await createPetitionWorkItems({
     applicationContext,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
+    caseEntity,
+    user,
   });
 
-  initializeCaseWorkItem.setAsCompleted({
-    message: 'Served to IRS',
-    user: user,
-  });
+  // TODO: figure out why we need this for making the petitioner become served
+  // const updatedCase = await applicationContext
+  //   .getUseCaseHelpers()
+  //   .updateCaseAndAssociations({
+  //     applicationContext,
+  //     caseToUpdate: caseEntity,
+  //   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+  // caseEntity = new Case(updatedCase, {
+  //   applicationContext,
+  // });
+
+  await createCoversheetsForServedEntries({
     applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem,
+    caseEntity,
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
-    workItemToUpdate: initializeCaseWorkItem,
+    caseEntity,
   });
-  const caseWithServedDocketEntryInformation = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({ applicationContext, caseToUpdate: caseEntity });
 
-  const caseEntityToUpdate = new Case(caseWithServedDocketEntryInformation, {
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-  });
-
-  for (const doc of caseEntityToUpdate.docketEntries) {
-    if (doc.isFileAttached) {
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
-        docketEntryId: doc.docketEntryId,
-        docketNumber: caseEntityToUpdate.docketNumber,
-        replaceCoversheet: !caseEntityToUpdate.isPaper,
-        useInitialData: !caseEntityToUpdate.isPaper,
-      });
-
-      doc.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
-          docketEntryId: doc.docketEntryId,
-        });
-    }
-  }
-
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(
-    caseEntityToUpdate,
-  );
-  const {
-    docketNumberWithSuffix,
-    preferredTrialCity,
-    receivedAt,
-  } = caseEntityToUpdate;
-
-  const address = {
-    ...caseEntityToUpdate.contactPrimary,
-    countryName:
-      caseEntityToUpdate.contactPrimary.countryType !== COUNTRY_TYPES.DOMESTIC
-        ? caseEntityToUpdate.contactPrimary.country
-        : '',
-  };
-
-  const pdfData = await applicationContext
-    .getDocumentGenerators()
-    .noticeOfReceiptOfPetition({
-      applicationContext,
-      data: {
-        address,
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        preferredTrialCity,
-        receivedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(receivedAt, 'MMMM D, YYYY'),
-        servedDate: applicationContext
-          .getUtilities()
-          .formatDateString(
-            caseEntityToUpdate.getIrsSendDate(),
-            'MMMM D, YYYY',
-          ),
-      },
-    });
-
-  const caseConfirmationPdfName = caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
-
-  await new Promise(resolve => {
-    const documentsBucket = applicationContext.getDocumentsBucketName();
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: pdfData,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: caseConfirmationPdfName,
-    };
-
-    s3Client.upload(params, resolve);
-  });
-
-  let urlToReturn;
-
-  if (caseEntityToUpdate.isPaper) {
-    ({
-      url: urlToReturn,
-    } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-      applicationContext,
-      key: caseConfirmationPdfName,
-      useTempBucket: false,
-    }));
-  }
-
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntityToUpdate.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   return urlToReturn;

@@ -21,7 +21,7 @@ const revokeObjectURL = url => {
 
 const router = {
   initialize: app => {
-    document.title = 'U.S. Tax Court';
+    window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => router.route(path || '/');
@@ -43,6 +43,11 @@ const router = {
       app.getSequence('gotoTodaysOpinionsSequence')();
     });
 
+    route('/todays-orders', () => {
+      setPageTitle('Today’s Orders');
+      app.getSequence('gotoTodaysOrdersSequence')();
+    });
+
     route('/health', () => {
       setPageTitle('Health Check');
       return app.getSequence('gotoHealthCheckSequence')();
@@ -51,6 +56,28 @@ const router = {
     route('/', () => {
       setPageTitle('Dashboard');
       app.getSequence('gotoPublicSearchSequence')();
+    });
+
+    route('/privacy', () => {
+      setPageTitle('Privacy');
+      return app.getSequence('gotoPrivacySequence')();
+    });
+
+    route('/contact', () => {
+      setPageTitle('Contact');
+      return app.getSequence('gotoContactSequence')();
+    });
+
+    route('/email-verification-success', () => {
+      setPageTitle('Email Verification Success');
+      return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
+    });
+
+    route('/email-verification-instructions', () => {
+      setPageTitle('Email Verification Instructions');
+      return app.getSequence(
+        'gotoPublicEmailVerificationInstructionsSequence',
+      )();
     });
 
     route('..', () => {

@@ -21,7 +21,13 @@ Order.prototype.init = function init(rawOrder) {
 };
 
 Order.VALIDATION_ERROR_MESSAGES = {
-  documentTitle: 'Enter the title of this order',
+  documentTitle: [
+    { contains: 'is required', message: 'Enter the title of this order' },
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 100 characters. Enter 100 or fewer characters.',
+    },
+  ],
   documentType: 'Select an order type',
   eventCode: 'Select an order type',
   orderBody: 'Order body is required.',

@@ -4,18 +4,18 @@ export const formattedDocument = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
 
-  const document = applicationContext.getUtilities().getAttachmentDocumentById({
+  const doc = applicationContext.getUtilities().getAttachmentDocumentById({
     caseDetail,
     documentId: docketEntryId,
   });
 
-  if (!document) {
+  if (!doc) {
     return;
   }
 
   const docketEntryFormatted = applicationContext
     .getUtilities()
-    .formatDocketEntry(applicationContext, document);
+    .formatDocketEntry(applicationContext, doc);
 
   return docketEntryFormatted;
 };

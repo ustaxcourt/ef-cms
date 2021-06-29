@@ -19,21 +19,20 @@ module.exports = {
   coverageDirectory: './coverage-unit',
   coverageThreshold: {
     global: {
-      branches: 50,
-      functions: 40,
-      lines: 45,
-      statements: 45,
+      branches: 94.56,
+      functions: 98.81,
+      lines: 99.25,
+      statements: 99.23,
     },
   },
   globals: {
-    File: function () {},
-    FileReader: function () {},
+    File() {},
+    FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
-    window: { document: {} },
   },
+  testEnvironment: 'jsdom',
   //this is to ignore imported html files
-  testEnvironment: 'node',
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
     '^.+\\.js$': 'babel-jest',

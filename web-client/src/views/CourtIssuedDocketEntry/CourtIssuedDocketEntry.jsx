@@ -3,6 +3,7 @@ import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -105,8 +106,10 @@ export const CourtIssuedDocketEntry = connect(
                         action,
                         inputValue,
                         name,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence: validateCourtIssuedDocketEntrySequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
+                        validateSequence:
+                          validateCourtIssuedDocketEntrySequence,
                       });
                       return true;
                     }}
@@ -114,7 +117,8 @@ export const CourtIssuedDocketEntry = connect(
                       onInputChange({
                         action,
                         inputText,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
                       });
                     }}
                   />
@@ -155,7 +159,10 @@ export const CourtIssuedDocketEntry = connect(
                     <fieldset className="usa-fieldset">
                       <legend className="usa-legend">Service stamp</legend>
                       {constants.SERVICE_STAMP_OPTIONS.map((option, idx) => (
-                        <div className="usa-radio usa-radio__inline" key={idx}>
+                        <div
+                          className="usa-radio usa-radio__inline"
+                          key={`stamp_${option}`}
+                        >
                           <input
                             checked={form.serviceStamp === option}
                             className="usa-radio__input"
@@ -197,6 +204,27 @@ export const CourtIssuedDocketEntry = connect(
                     </div>
                   ))}
                 </div>
+
+                {addCourtIssuedDocketEntryHelper.showReceivedDate && (
+                  <DateInput
+                    className="margin-top-4"
+                    errorText={validationErrors.filingDate}
+                    id="date-received"
+                    label="Filed date"
+                    names={{
+                      day: 'filingDateDay',
+                      month: 'filingDateMonth',
+                      year: 'filingDateYear',
+                    }}
+                    values={{
+                      day: form.filingDateDay,
+                      month: form.filingDateMonth,
+                      year: form.filingDateYear,
+                    }}
+                    onBlur={validateCourtIssuedDocketEntrySequence}
+                    onChange={updateCourtIssuedDocketEntryFormValueSequence}
+                  />
+                )}
               </div>
 
               <section className="usa-section DocumentDetail">

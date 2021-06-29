@@ -15,5 +15,13 @@ module.exports = {
     '!src/test/**/*.js',
     '!src/**/*_.js',
   ],
+  coverageThreshold: {
+    global: {
+      branches: 96.13,
+      functions: 96.16,
+      lines: 98.34,
+      statements: 98.25,
+    },
+  },
   verbose: false,
 };

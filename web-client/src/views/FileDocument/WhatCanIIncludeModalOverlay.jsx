@@ -28,7 +28,7 @@ export const WhatCanIIncludeModalOverlay = connect(
               For more information on mailing attachments, see the{' '}
               <a
                 className="usa-link--external"
-                href="https://www.ustaxcourt.gov/resources/eaccess/Petitioners_Guide_to_eAccess_and_eFiling.pdf"
+                href="https://ustaxcourt.gov/resources/dawson/DAWSON_Petitioner_Training_Guide.pdf"
                 rel="noopener noreferrer"
                 target="_blank"
               >

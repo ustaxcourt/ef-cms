@@ -17,9 +17,11 @@ export const setupEditPetitionDetailFormAction = ({
 
   store.set(state.form, {
     caseType: caseDetail.caseType,
+    hasVerifiedIrsNotice: caseDetail.hasVerifiedIrsNotice,
     petitionPaymentStatus: caseDetail.petitionPaymentStatus,
     preferredTrialCity: caseDetail.preferredTrialCity,
     procedureType: caseDetail.procedureType,
+    statistics: caseDetail.statistics,
   });
 
   if (caseDetail.petitionPaymentStatus === paymentStatus.WAIVED) {
@@ -36,14 +38,11 @@ export const setupEditPetitionDetailFormAction = ({
     store.set(state.form.paymentDateWaivedMonth, paymentDateWaivedMonth);
     store.set(state.form.paymentDateWaivedDay, paymentDateWaivedDay);
   } else if (caseDetail.petitionPaymentStatus === paymentStatus.PAID) {
-    const [
-      paymentDateYear,
-      paymentDateMonth,
-      paymentDateDay,
-    ] = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
-      .split('-');
+    const [paymentDateYear, paymentDateMonth, paymentDateDay] =
+      applicationContext
+        .getUtilities()
+        .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
+        .split('-');
 
     store.set(state.form.paymentDateYear, paymentDateYear);
     store.set(state.form.paymentDateMonth, paymentDateMonth);
@@ -56,11 +55,7 @@ export const setupEditPetitionDetailFormAction = ({
   }
 
   if (caseDetail.irsNoticeDate) {
-    const [
-      irsYear,
-      irsMonth,
-      irsDay,
-    ] = applicationContext
+    const [irsYear, irsMonth, irsDay] = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.irsNoticeDate, 'YYYY-MM-DD')
       .split('-');
@@ -68,5 +63,30 @@ export const setupEditPetitionDetailFormAction = ({
     store.set(state.form.irsYear, irsYear);
     store.set(state.form.irsMonth, irsMonth);
     store.set(state.form.irsDay, irsDay);
+  }
+
+  if (caseDetail.statistics) {
+    caseDetail.statistics.forEach((statistic, index) => {
+      if (statistic.lastDateOfPeriod) {
+        const deconstructedLastDateOfPeriod = applicationContext
+          .getUtilities()
+          .deconstructDate(statistic.lastDateOfPeriod);
+
+        if (deconstructedLastDateOfPeriod) {
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodMonth,
+            deconstructedLastDateOfPeriod.month,
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodDay,
+            deconstructedLastDateOfPeriod.day,
+          );
+          store.set(
+            state.form.statistics[index].lastDateOfPeriodYear,
+            deconstructedLastDateOfPeriod.year,
+          );
+        }
+      }
+    });
   }
 };

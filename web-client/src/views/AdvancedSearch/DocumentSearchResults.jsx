@@ -8,6 +8,7 @@ import React from 'react';
 
 export const DocumentSearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -15,6 +16,7 @@ export const DocumentSearchResults = connect(
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
+    MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
   }) {
@@ -22,23 +24,23 @@ export const DocumentSearchResults = connect(
       <div aria-live="polite">
         {advancedDocumentSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">
-              ({advancedDocumentSearchHelper.searchResultsCount}) Results
-            </h1>
-            {advancedDocumentSearchHelper.showMaxResultsMessage && (
+            <h1 className="margin-top-4">Search Results</h1>
+            {advancedDocumentSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: `Your search has more than ${advancedDocumentSearchHelper.maxResults} results.  Refine your search for more accurate results.`,
+                  message: 'Narrow your search by adding search terms.',
+                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                 }}
                 dismissable={false}
+                scrollToTop={false}
               />
             )}
 
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
-                  <th aria-hidden="true" className="small-column"></th>
-                  <th aria-hidden="true" className="small-column"></th>
+                  <td aria-hidden="true" className="small-column"></td>
+                  <td aria-hidden="true" className="small-column"></td>
                   <th aria-label="docket number">Docket No.</th>
                   <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
@@ -50,7 +52,7 @@ export const DocumentSearchResults = connect(
               <tbody>
                 {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr className="search-result" key={idx}>
+                    <tr className="search-result" key={result.docketEntryId}>
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>
@@ -77,6 +79,7 @@ export const DocumentSearchResults = connect(
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
                               isPublic: advancedDocumentSearchHelper.isPublic,
+                              useSameTab: advancedDocumentSearchHelper.isPublic,
                             });
                           }}
                         >

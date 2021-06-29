@@ -11,121 +11,76 @@ const { asUserFromEmail } = require('../createUsers');
 module.exports.createCase1 = async () => {
   let caseDetail;
 
-  await asUserFromEmail('petitioner@example.com', async applicationContext => {
-    const petitionFile = getFakeFile();
-    const petitionFileId = applicationContext.getUniqueId();
+  const docketNumber = await asUserFromEmail(
+    'petitioner@example.com',
+    async applicationContext => {
+      const petitionFile = getFakeFile();
+      const petitionFileId = applicationContext.getUniqueId();
 
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: petitionFile,
-      key: petitionFileId,
-    });
-
-    const stinFile = getFakeFile();
-    const stinFileId = applicationContext.getUniqueId();
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: stinFile,
-      key: stinFileId,
-    });
-
-    caseDetail = await applicationContext.getUseCases().createCaseInteractor({
-      applicationContext,
-      petitionFileId,
-      petitionMetadata: {
-        caseType: CASE_TYPES_MAP.whistleblower,
-        contactPrimary: {
-          address1: '68 Fabien Freeway',
-          address2: 'Suscipit animi solu',
-          address3: 'Architecto assumenda',
-          city: 'Aspernatur nostrum s',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'petitioner@example.com',
-          name: 'Brett Osborne',
-          phone: '+1 (537) 235-6147',
-          postalCode: '89499',
-          state: 'AK',
-        },
-        filingType: 'Myself',
-        hasIrsNotice: false,
-        partyType: PARTY_TYPES.petitioner,
-        preferredTrialCity: 'Birmingham, Alabama',
-        procedureType: 'Regular',
-      },
-      stinFileId,
-    });
-
-    const addCoversheet = docketEntry => {
-      return applicationContext.getUseCases().addCoversheetInteractor({
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
-    };
-
-    const coversheets = [];
-
-    for (const docketEntry of caseDetail.docketEntries) {
-      coversheets.push(addCoversheet(docketEntry));
-    }
-
-    await Promise.all(coversheets);
-  });
-
-  await asUserFromEmail('docketclerk@example.com', async applicationContext => {
-    const { docketNumber } = caseDetail;
-
-    const documentMetadata = {
-      docketNumber,
-      documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
-      documentType: 'Order of Dismissal for Lack of Jurisdiction',
-      eventCode: 'ODJ',
-      richText: '<p>Testing</p>',
-    };
-
-    documentMetadata.draftOrderState = { ...documentMetadata };
-    const docketEntryId = '25100ec6-eeeb-4e88-872f-c99fad1fe6c7';
-
-    caseDetail = await applicationContext
-      .getUseCases()
-      .fileCourtIssuedOrderInteractor({
-        applicationContext,
-        documentMetadata,
-        primaryDocumentFileId: docketEntryId,
+        document: petitionFile,
+        key: petitionFileId,
       });
 
-    await applicationContext.getUseCases().saveSignedDocumentInteractor({
-      applicationContext,
-      docketNumber,
-      //todo - do not hard code a judge
-      nameForSigning: 'Maurice B. Foley',
-      originalDocketEntryId: docketEntryId,
-      signedDocketEntryId: docketEntryId,
-    });
-  });
+      const stinFile = getFakeFile();
+      const stinFileId = applicationContext.getUniqueId();
 
-  await asUserFromEmail('docketclerk@example.com', async applicationContext => {
-    const { docketNumber } = caseDetail;
-
-    const documentMetadata = {
-      docketNumber,
-      documentTitle: 'Something',
-      documentType: 'Miscellaneous',
-      eventCode: 'MISC',
-      freeText: 'Something',
-      scenario: 'Type A',
-    };
-
-    documentMetadata.draftOrderState = { ...documentMetadata };
-    const docketEntryId = 'dd219579-9f1a-49e3-a092-f79164631ae8';
-
-    caseDetail = await applicationContext
-      .getUseCases()
-      .fileCourtIssuedOrderInteractor({
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         applicationContext,
-        documentMetadata,
-        primaryDocumentFileId: docketEntryId,
+        document: stinFile,
+        key: stinFileId,
       });
-  });
+
+      caseDetail = await applicationContext
+        .getUseCases()
+        .createCaseInteractor(applicationContext, {
+          petitionFileId,
+          petitionMetadata: {
+            caseType: CASE_TYPES_MAP.whistleblower,
+            contactPrimary: {
+              address1: '68 Fabien Freeway',
+              address2: 'Suscipit animi solu',
+              address3: 'Architecto assumenda',
+              city: 'Aspernatur nostrum s',
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner@example.com',
+              name: 'Brett Osborne',
+              phone: '+1 (537) 235-6147',
+              postalCode: '89499',
+              state: 'AK',
+            },
+            filingType: 'Myself',
+            hasIrsNotice: false,
+            partyType: PARTY_TYPES.petitioner,
+            preferredTrialCity: 'Birmingham, Alabama',
+            procedureType: 'Regular',
+          },
+          stinFileId,
+        });
+
+      const addCoversheet = docketEntry => {
+        return applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            docketEntryId: docketEntry.docketEntryId,
+            docketNumber: caseDetail.docketNumber,
+          });
+      };
+
+      const coversheets = [];
+
+      for (const docketEntry of caseDetail.docketEntries) {
+        if (!docketEntry.isMinuteEntry) {
+          coversheets.push(addCoversheet(docketEntry));
+        }
+      }
+
+      await Promise.all(coversheets);
+
+      return caseDetail.docketNumber;
+    },
+  );
+
+  return docketNumber;
 };

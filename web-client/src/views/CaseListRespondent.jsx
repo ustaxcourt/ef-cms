@@ -2,7 +2,6 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseListRowExternal } from './CaseListRowExternal';
 import { CaseSearchBox } from './CaseSearchBox';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
-import { MyContactInformation } from './MyContactInformation';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -125,7 +124,6 @@ export const CaseListRespondent = connect(
               </div>
               <div className="grid-col-4">
                 {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
-                <MyContactInformation />
               </div>
             </div>
           </div>
@@ -165,9 +163,8 @@ export const CaseListRespondent = connect(
                   openTab,
                 )}
             </div>
-            <div className="grid-row">
+            <div className="grid-row display-block">
               {dashboardExternalHelper.showCaseSearch && <CaseSearchBox />}
-              <MyContactInformation />
             </div>
           </div>
         </Mobile>

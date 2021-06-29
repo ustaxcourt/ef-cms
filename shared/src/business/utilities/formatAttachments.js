@@ -12,19 +12,21 @@ export const formatAttachments = ({
   caseDetail,
 }) => {
   const formattedAttachments = attachments.map(({ documentId }) => {
-    const document = applicationContext
-      .getUtilities()
-      .getAttachmentDocumentById({
-        caseDetail,
-        documentId,
-        useArchived: true,
-      });
+    const doc = applicationContext.getUtilities().getAttachmentDocumentById({
+      caseDetail,
+      documentId,
+      useArchived: true,
+    });
 
-    if (document) {
+    if (doc) {
+      const generatedDocumentTitle = applicationContext
+        .getUtilities()
+        .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
+
       return {
-        archived: !!document.archived,
+        archived: !!doc.archived,
         documentId,
-        documentTitle: document.documentTitle || document.documentType,
+        documentTitle: generatedDocumentTitle || doc.documentType,
       };
     } else {
       return {

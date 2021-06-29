@@ -1,20 +1,38 @@
+const {
+  GENERIC_ORDER_DOCUMENT_TYPE,
+  VALIDATION_ERROR_MESSAGES,
+} = require('./CourtIssuedDocumentConstants');
+const {
+  over1000Characters,
+} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeA', () => {
+  describe('constructor', () => {
+    it('should set attachments to false when no value is provided', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: 'Some free text',
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+      expect(documentInstance.attachments).toBe(false);
+    });
+  });
+
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         scenario: 'Type A',
       });
-      expect(document.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
 
     it('should be valid when all fields are present', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
         documentType: 'Order',
@@ -22,24 +40,95 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: 'Served',
       });
-      expect(document.getFormattedValidationErrors()).toEqual(null);
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be valid when serviceStamp is undefined, documentType is a generic order, and isLegacy is true', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        freeText: 'Some free text',
+        isLegacy: true,
+        scenario: 'Type A',
+        serviceStamp: undefined,
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when serviceStamp is undefined, documentType is a generic order, and isLegacy is false', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        freeText: 'Some free text',
+        isLegacy: false,
+        scenario: 'Type A',
+        serviceStamp: undefined,
+      });
+
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+      });
+    });
+
+    describe('requiring filing dates on unservable documents', () => {
+      it('should be invalid when filingDate is undefined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          scenario: 'Type A',
+        });
+        expect(
+          documentInstance.getFormattedValidationErrors().filingDate,
+        ).toBeDefined();
+      });
+
+      it('should be valid when filingDate is defined on an unservable document', () => {
+        const documentInstance = CourtIssuedDocumentFactory.get({
+          attachments: false,
+          documentTitle: '[Anything]',
+          documentType: 'USCA',
+          eventCode: 'USCA',
+          filingDate: '1990-01-01T05:00:00.000Z',
+          scenario: 'Type A',
+        });
+        expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
+      });
     });
 
     it('should be invalid if the document type is a generic order and serviceStamp and freeText are not present', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
         documentType: 'Order',
         scenario: 'Type A',
       });
-      expect(document.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
         serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
       });
     });
 
+    it('should be invalid when freeText is longer than 1000 characters', () => {
+      const documentInstance = CourtIssuedDocumentFactory.get({
+        attachments: false,
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        freeText: over1000Characters,
+        scenario: 'Type A',
+        serviceStamp: 'Served',
+      });
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
+        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+      });
+    });
+
     it('should be invalid if the document type is a generic order and serviceStamp is present and not a valid option', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
         documentType: 'Order',
@@ -47,13 +136,13 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: 'Something invalid',
       });
-      expect(document.getFormattedValidationErrors()).toEqual({
+      expect(documentInstance.getFormattedValidationErrors()).toEqual({
         serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
       });
     });
 
     it('should be valid if the document type is a generic order and serviceStamp is present and a valid option and freeText is present', () => {
-      const document = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory.get({
         attachments: false,
         documentTitle: '[Anything]',
         documentType: 'Order',
@@ -61,7 +150,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: 'Served',
       });
-      expect(document.getFormattedValidationErrors()).toEqual(null);
+      expect(documentInstance.getFormattedValidationErrors()).toEqual(null);
     });
   });
 

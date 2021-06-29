@@ -13,7 +13,7 @@ resource "aws_route53_record" "ses_verification_record" {
 }
 
 resource "aws_ses_domain_identity_verification" "example_verification" {
-  domain = aws_ses_domain_identity.main.id
+  domain     = aws_ses_domain_identity.main.id
   depends_on = [aws_route53_record.ses_verification_record]
 }
 
@@ -104,6 +104,16 @@ EOF
 resource "aws_ses_template" "petition_served" {
   name    = "petition_served_${var.environment}"
   subject = "eService Notification from US Tax Court on Case {{docketNumber}}"
+  html    = <<EOF
+  {{emailContent}}
+EOF
+}
+
+
+#Email Change Verification Email Template
+resource "aws_ses_template" "email_change_verification" {
+  name    = "email_change_verification_${var.environment}"
+  subject = "U.S. Tax Court: Verify Your New Email"
   html    = <<EOF
   {{emailContent}}
 EOF

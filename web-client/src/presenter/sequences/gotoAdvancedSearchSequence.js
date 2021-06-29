@@ -1,5 +1,4 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
@@ -10,7 +9,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 
 export const gotoAdvancedSearchSequence = [
-  clearSearchResultsAction,
+  setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
   defaultAdvancedSearchFormAction,

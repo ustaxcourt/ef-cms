@@ -22,7 +22,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    client.query = jest.fn().mockReturnValue([
+    client.queryFull = jest.fn().mockReturnValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
         pk: `case|${MOCK_CASE.docketNumber}`,
@@ -65,6 +65,7 @@ describe('getCalendaredCasesForTrialSession', () => {
           },
         ],
         docketNumber: MOCK_CASE.docketNumber,
+        hearings: [],
         irsPractitioners: [
           {
             pk: `case|${MOCK_CASE.docketNumber}`,

@@ -3,20 +3,19 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
 /**
  * updates the case trial sort tags
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update the case trial sort tags
  */
-exports.updateCaseTrialSortTagsInteractor = async ({
+exports.updateCaseTrialSortTagsInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   const caseToUpdate = await applicationContext
@@ -36,14 +35,12 @@ exports.updateCaseTrialSortTagsInteractor = async ({
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  if (caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) {
-    const caseSortTags = caseEntity.generateTrialSortTags();
-
+  if (caseEntity.isReadyForTrial()) {
     await applicationContext
       .getPersistenceGateway()
-      .updateCaseTrialSortMappingRecords({
+      .createCaseTrialSortMappingRecords({
         applicationContext,
-        caseSortTags,
+        caseSortTags: caseEntity.generateTrialSortTags(),
         docketNumber: caseEntity.validate().toRawObject().docketNumber,
       });
   }

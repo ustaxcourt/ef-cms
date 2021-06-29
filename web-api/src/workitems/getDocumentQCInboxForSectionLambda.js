@@ -12,8 +12,8 @@ exports.getDocumentQCInboxForSectionLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCInboxForSectionInteractor({
-        applicationContext,
+      .getDocumentQCInboxForSectionInteractor(applicationContext, {
         section,
+        ...event.queryStringParameters,
       });
   });

@@ -2,9 +2,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { NewTrialSession } = require('./NewTrialSession');
+const { TRIAL_SESSION_PROCEEDING_TYPES } = require('../EntityConstants');
 
 const VALID_TRIAL_SESSION = {
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
   sessionType: 'Regular',
   startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',

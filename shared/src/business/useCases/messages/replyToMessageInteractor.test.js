@@ -19,9 +19,7 @@ describe('replyToMessageInteractor', () => {
     });
 
     await expect(
-      replyToMessageInteractor({
-        applicationContext,
-      }),
+      replyToMessageInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -67,8 +65,7 @@ describe('replyToMessageInteractor', () => {
         status: CASE_STATUS_TYPES.generalDocket,
       });
 
-    await replyToMessageInteractor({
-      applicationContext,
+    await replyToMessageInteractor(applicationContext, {
       ...messageData,
     });
 

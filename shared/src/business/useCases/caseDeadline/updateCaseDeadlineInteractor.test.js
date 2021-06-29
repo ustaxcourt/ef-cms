@@ -22,8 +22,7 @@ describe('updateCaseDeadlineInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCaseDeadlineInteractor({
-        applicationContext,
+      updateCaseDeadlineInteractor(applicationContext, {
         caseDeadline: mockCaseDeadline,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -38,10 +37,12 @@ describe('updateCaseDeadlineInteractor', () => {
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockReturnValue(mockPetitionsClerk);
 
-    const caseDeadline = await updateCaseDeadlineInteractor({
+    const caseDeadline = await updateCaseDeadlineInteractor(
       applicationContext,
-      caseDeadline: mockCaseDeadline,
-    });
+      {
+        caseDeadline: mockCaseDeadline,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().deleteCaseDeadline.mock

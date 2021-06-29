@@ -31,6 +31,10 @@ describe('Petitioner creates a case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(testClient, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(testClient);
@@ -86,7 +90,8 @@ describe('Unauthed user views stricken docket entry for order', () => {
   unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
 });
 
-describe('Unauthed user searches for stricken order', () => {
+// Temporarily disabled for story 7387
+describe.skip('Unauthed user searches for stricken order', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesForStrickenOrder(test);
 });

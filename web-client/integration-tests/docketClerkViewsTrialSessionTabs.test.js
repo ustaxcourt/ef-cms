@@ -50,7 +50,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
   // Trial Session should exist in New tab
   docketClerkViewsTrialSessionsTab(test, { tab: 'New' });
 

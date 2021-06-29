@@ -19,40 +19,48 @@ resource "aws_apigatewayv2_route" "disconnect" {
 }
 
 resource "aws_lambda_function" "websockets_connect_lambda" {
-  depends_on    = [var.websockets_object]
-  function_name = "websockets_connect_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "websockets.connectHandler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "websockets_${var.deploying_color}.js.zip"
+  depends_on       = [var.websockets_object]
+  function_name    = "websockets_connect_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "websockets.connectHandler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
-  timeout     = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 
 resource "aws_lambda_function" "websockets_disconnect_lambda" {
-  depends_on    = [var.websockets_object]
-  function_name = "websockets_disconnect_${var.environment}_${var.current_color}"
-  role          = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler       = "websockets.disconnectHandler"
-  s3_bucket     = var.lambda_bucket_id
-  s3_key        = "websockets_${var.deploying_color}.js.zip"
+  depends_on       = [var.websockets_object]
+  function_name    = "websockets_disconnect_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "websockets.disconnectHandler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
-  timeout     = "29"
-  memory_size = "3008"
+  timeout          = "29"
+  memory_size      = "3008"
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_apigatewayv2_integration" "websockets_connect_integration" {
@@ -94,8 +102,9 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
 }
 
 resource "aws_apigatewayv2_stage" "stage" {
-  api_id = aws_apigatewayv2_api.websocket_api.id
-  name   = var.environment
+  api_id        = aws_apigatewayv2_api.websocket_api.id
+  name          = var.environment
+  deployment_id = aws_apigatewayv2_deployment.websocket_deploy.id
 }
 
 resource "aws_apigatewayv2_deployment" "websocket_deploy" {
@@ -131,19 +140,24 @@ resource "aws_acm_certificate" "websockets" {
 
 resource "aws_acm_certificate_validation" "validate_websockets" {
   certificate_arn         = aws_acm_certificate.websockets.arn
-  validation_record_fqdns = [aws_route53_record.websockets_route53.0.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.websockets_route53 : record.fqdn]
   count                   = var.validate
 }
 
 resource "aws_route53_record" "websockets_route53" {
-  name    = aws_acm_certificate.websockets.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.websockets.domain_validation_options.0.resource_record_type
-  count   = var.validate
-  zone_id = var.zone_id
-  records = [
-    aws_acm_certificate.websockets.domain_validation_options.0.resource_record_value,
-  ]
-  ttl = 60
+  for_each = {
+    for dvo in aws_acm_certificate.websockets.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name            = each.value.name
+  records         = [each.value.record]
+  type            = each.value.type
+  zone_id         = var.zone_id
+  ttl             = 60
+  allow_overwrite = true
 }
 
 resource "aws_apigatewayv2_domain_name" "websockets_domain" {

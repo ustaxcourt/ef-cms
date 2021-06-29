@@ -40,7 +40,7 @@ export const BlockedCasesReport = connect(
                     </div>
                   </div>
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
-                    <table className="usa-table row-border-only subsection work-queue deadlines">
+                    <table className="usa-table subsection ustc-table deadlines">
                       <thead>
                         <tr>
                           <th aria-label="docket number">Docket No.</th>
@@ -52,8 +52,8 @@ export const BlockedCasesReport = connect(
                       </thead>
                       <tbody>
                         {blockedCasesReportHelper.blockedCasesFormatted.map(
-                          (item, idx) => (
-                            <tr key={idx}>
+                          item => (
+                            <tr key={item.docketNumber}>
                               <td>
                                 <CaseLink formattedCase={item} />
                               </td>

@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  courtIssuedDocumentDecorator,
+  CourtIssuedDocumentDefault,
+} = require('./CourtIssuedDocumentDefault');
+const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
@@ -19,10 +23,9 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  */
 function CourtIssuedDocumentTypeA() {}
 CourtIssuedDocumentTypeA.prototype.init = function init(rawProps) {
-  this.attachments = rawProps.attachments;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  courtIssuedDocumentDecorator(this, rawProps);
   this.freeText = rawProps.freeText;
+  this.isLegacy = rawProps.isLegacy;
   this.serviceStamp = rawProps.serviceStamp;
 };
 
@@ -31,10 +34,8 @@ CourtIssuedDocumentTypeA.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentTypeA.schema = {
-  attachments: joi.boolean().required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  freeText: JoiValidationConstants.STRING.when('documentType', {
+  ...CourtIssuedDocumentDefault.schema,
+  freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
     then: joi.required(),
@@ -44,7 +45,11 @@ CourtIssuedDocumentTypeA.schema = {
   ).when('documentType', {
     is: GENERIC_ORDER_DOCUMENT_TYPE,
     otherwise: joi.optional().allow(null),
-    then: joi.required(),
+    then: joi.when('isLegacy', {
+      is: true,
+      otherwise: joi.required(),
+      then: joi.optional().allow(null),
+    }),
   }),
 };
 

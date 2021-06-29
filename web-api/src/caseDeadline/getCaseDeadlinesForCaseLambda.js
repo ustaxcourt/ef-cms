@@ -10,8 +10,7 @@ exports.getCaseDeadlinesForCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getCaseDeadlinesForCaseInteractor({
-        applicationContext,
+      .getCaseDeadlinesForCaseInteractor(applicationContext, {
         docketNumber: event.pathParameters.docketNumber,
       });
   });

@@ -1,5 +1,4 @@
 /* istanbul ignore file */
-/* eslint-disable no-console */
 const archiver = require('archiver');
 const s3Files = require('s3-files');
 
@@ -7,15 +6,16 @@ const s3Zip = {};
 module.exports = s3Zip;
 
 s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
-  const self = this;
+  const thisArchive = this;
   let connectionConfig;
 
   this.folder = folder;
 
   const noop = () => {};
-  self.debug = opts.debug || false;
-  self.onEntry = opts.onEntry || noop;
-  self.onProgress = opts.onProgress || noop;
+  thisArchive.debug = opts.debug || false;
+  thisArchive.onEntry = opts.onEntry || noop;
+  thisArchive.onProgress = opts.onProgress || noop;
+  thisArchive.onError = opts.onError || noop;
 
   if ('s3' in opts) {
     connectionConfig = {
@@ -29,9 +29,9 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
 
   connectionConfig.bucket = opts.bucket;
 
-  self.client = s3Files.connect(connectionConfig);
+  thisArchive.client = s3Files.connect(connectionConfig);
 
-  const keyStream = self.client.createKeyStream(folder, filesS3);
+  const keyStream = thisArchive.client.createKeyStream(folder, filesS3);
 
   const preserveFolderStructure =
     opts.preserveFolderStructure === true || filesZip;
@@ -39,7 +39,7 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
     keyStream,
     preserveFolderStructure,
   );
-  const archive = self.archiveStream(
+  const archive = thisArchive.archiveStream(
     fileStream,
     filesS3,
     filesZip,
@@ -51,7 +51,7 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
 };
 
 s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
-  const self = this;
+  const thisArchive = this;
   const folder = this.folder || '';
   if (this.registerFormat) {
     archiver.registerFormat(this.registerFormat, this.formatModule);
@@ -60,26 +60,28 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
 
   const extrasPromises = (extras || []).map((extra, index) =>
     Promise.resolve(extra).then(file => {
-      self.debug && console.log('append to zip from promise', extrasZip[index]);
+      thisArchive.debug &&
+        console.log('append to zip from promise', extrasZip[index]);
       archive.append(file, { name: extrasZip[index] });
     }),
   );
 
   const extraFilesPromisesAll = Promise.all(extrasPromises).then(() => {
-    self.debug && console.log('promise.all complete');
+    thisArchive.debug && console.log('promise.all complete');
   });
 
   archive.on('error', function (err) {
-    self.debug && console.log('archive error', err);
+    thisArchive.debug && console.log('archive error', err);
+    thisArchive.onError(err);
   });
 
-  archive.on('progress', self.onProgress);
-  archive.on('entry', self.onEntry);
+  archive.on('progress', thisArchive.onProgress);
+  archive.on('entry', thisArchive.onEntry);
 
   stream
     .on('data', function (file) {
       if (file.path[file.path.length - 1] === '/') {
-        self.debug && console.log("don't append to zip", file.path);
+        thisArchive.debug && console.log("don't append to zip", file.path);
         return;
       }
       let fname;
@@ -96,7 +98,7 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
         fname = file.path;
       }
       const entryData = typeof fname === 'object' ? fname : { name: fname };
-      self.debug && console.log('append to zip', fname);
+      thisArchive.debug && console.log('append to zip', fname);
       if (file.data.length === 0) {
         archive.append('', entryData);
       } else {
@@ -104,12 +106,12 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
       }
     })
     .on('end', function () {
-      self.debug && console.log('end -> finalize');
+      thisArchive.debug && console.log('end -> finalize');
       extraFilesPromisesAll
         .then(() => {})
         .catch(() => {})
         .then(() => {
-          self.debug && console.log('promise.all -> finalize');
+          thisArchive.debug && console.log('promise.all -> finalize');
           archive.finalize();
         });
     })

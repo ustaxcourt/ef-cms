@@ -18,6 +18,12 @@ resource "aws_cognito_user_pool_domain" "log_viewers" {
 resource "aws_cognito_identity_pool" "log_viewers" {
   identity_pool_name               = "kibana dashboard identity pool"
   allow_unauthenticated_identities = false
+
+  lifecycle {
+    ignore_changes = [
+      cognito_identity_providers # AWS Elasticsearch forces management itself
+    ]
+  }
 }
 
 resource "aws_iam_role" "es_kibana_role" {

@@ -102,4 +102,87 @@ describe('resetContactsAction', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
   });
+
+  it('persists the contactId on both the contactPrimary and contactSecondary if they are prepopulated', async () => {
+    const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
+      state: {
+        form: {
+          contactPrimary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
+            state: 'AL',
+            zip: '12345',
+          },
+          contactSecondary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            contactId: '1805d1ab-18d0-43ec-bafb-654e83405417',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Bob',
+            state: 'AL',
+            zip: '12345',
+          },
+          partyType: PARTY_TYPES.petitionerSpouse,
+        },
+      },
+    });
+    expect(state.form).toEqual({
+      contactPrimary: {
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+      },
+      contactSecondary: {
+        contactId: '1805d1ab-18d0-43ec-bafb-654e83405417',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+      },
+      partyType: PARTY_TYPES.petitionerSpouse,
+    });
+  });
+
+  it('delete the contactSecondary from the state.form if the party type does not required a contactSecondary', async () => {
+    const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
+      state: {
+        form: {
+          contactPrimary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
+            state: 'AL',
+            zip: '12345',
+          },
+          contactSecondary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            contactId: '1805d1ab-18d0-43ec-bafb-654e83405417',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            name: 'Bob',
+            state: 'AL',
+            zip: '12345',
+          },
+          partyType: PARTY_TYPES.petitioner,
+        },
+      },
+    });
+    expect(state.form).toEqual({
+      contactPrimary: {
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'test@example.com',
+      },
+      contactSecondary: undefined,
+      partyType: PARTY_TYPES.petitioner,
+    });
+  });
 });

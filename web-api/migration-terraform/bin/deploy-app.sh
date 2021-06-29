@@ -3,13 +3,20 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as a command line argument 1" && exit 1
-[ -z "${SOURCE_TABLE}" ] && echo "You set SOURCE_TABLE as an environment variable" && exit 1
+[ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="migrations-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"1.0.0"* ]]; then
+  echo "Please set your terraform version to 1.0.0 before deploying."
+  exit 1
+fi
 
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
@@ -27,12 +34,9 @@ fi
 
 npm run build:assets
 
-pushd ../main/lambdas
-npx parcel build migration-segments.js migration.js --target node --bundle-node-modules --no-minify --no-cache --no-source-maps
-popd
-
 # exit on any failure
 set -eo pipefail
+npm run build:lambda:migration
 
 # get the stream arn
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)

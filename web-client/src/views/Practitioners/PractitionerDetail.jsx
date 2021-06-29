@@ -1,15 +1,23 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerDetail = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
+    showModal: state.modal.showModal,
   },
-  function PractitionerDetail({ practitionerDetailHelper }) {
+  function PractitionerDetail({
+    gotoPrintPractitionerCasesSequence,
+    practitionerDetailHelper,
+    showModal,
+  }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -34,11 +42,26 @@ export const PractitionerDetail = connect(
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <div className="grid-col-9">
+            <div className="grid-col-8">
               <SuccessNotification />
             </div>
-            {practitionerDetailHelper.showEditLink && (
-              <div className="grid-col-3">
+
+            <div className="grid-col-4">
+              {practitionerDetailHelper.showPrintCaseListLink && (
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  icon="print"
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerDetailHelper.userId,
+                    });
+                  }}
+                >
+                  Print case list
+                </Button>
+              )}
+              {practitionerDetailHelper.showEditLink && (
                 <Button
                   link
                   className="push-right margin-bottom-1"
@@ -47,8 +70,8 @@ export const PractitionerDetail = connect(
                 >
                   Edit
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-4 margin-bottom-4">
@@ -131,12 +154,22 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </span>
-                        {practitionerDetailHelper.email}
+                        {practitionerDetailHelper.emailFormatted && (
+                          <div className="margin-bottom-2">
+                            {practitionerDetailHelper.emailFormatted}
+                          </div>
+                        )}
+                        {practitionerDetailHelper.pendingEmailFormatted && (
+                          <div>
+                            {practitionerDetailHelper.pendingEmailFormatted}
+                          </div>
+                        )}
                         {practitionerDetailHelper.showEAccessFlag && (
                           <FontAwesomeIcon
                             className="margin-left-05 fa-icon-blue"
                             icon="flag"
                             size="1x"
+                            title="has e-access"
                           />
                         )}
                       </div>
@@ -181,13 +214,6 @@ export const PractitionerDetail = connect(
                         <div className="margin-bottom-4">
                           {practitionerDetailHelper.additionalPhone}
                         </div>
-                        <span
-                          className="usa-label usa-label-display"
-                          htmlFor="practitioner-practitioner-type"
-                        >
-                          Alternate email address
-                        </span>
-                        {practitionerDetailHelper.alternateEmail}
                       </div>
                     </div>
                   </div>
@@ -196,61 +222,71 @@ export const PractitionerDetail = connect(
             </div>
           </div>
           <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-12 margin-bottom-4">
+            <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
                   <h3 className="underlined">Admissions Information</h3>
                   <div className="grid-row grid-gap">
-                    <div className="tablet:grid-col-4 margin-bottom-1">
-                      <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="practitioner-birth-year"
-                          >
-                            Bar number
-                          </span>
+                    <div className="tablet:grid-col-6 margin-bottom-1">
+                      <div className="tablet:margin-bottom-0 margin-bottom-205">
+                        <span
+                          className="usa-label usa-label-display"
+                          htmlFor="admissions-bar-number"
+                        >
+                          Bar number
+                        </span>
+                        <div className="margin-bottom-4">
                           {practitionerDetailHelper.barNumber}
                         </div>
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="practitioner-birth-year"
-                          >
-                            Admission status
-                          </span>
-                          {practitionerDetailHelper.admissionsStatus}
-                        </div>
+                        <span
+                          className="usa-label usa-label-display"
+                          htmlFor="original-bar-state"
+                        >
+                          Original bar state
+                        </span>
+                        {practitionerDetailHelper.originalBarState}
                       </div>
                     </div>
-                    <div className="tablet:grid-col-8 margin-bottom-1">
-                      <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="practitioner-birth-year"
-                          >
-                            Original bar state
-                          </span>
-                          {practitionerDetailHelper.originalBarState}
+                    <div className="tablet:grid-col-6 margin-bottom-1">
+                      <div className="tablet:margin-bottom-0 margin-bottom-205">
+                        <span
+                          className="usa-label usa-label-display"
+                          htmlFor="admissions-status"
+                        >
+                          Admission status
+                        </span>
+                        <div className="margin-bottom-4">
+                          {practitionerDetailHelper.admissionsStatus}
                         </div>
-                        <div className="tablet:grid-col-6 margin-bottom-1">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="practitioner-birth-year"
-                          >
-                            Admission date
-                          </span>
-                          {practitionerDetailHelper.admissionsDateFormatted}
-                        </div>
+                        <span
+                          className="usa-label usa-label-display"
+                          htmlFor="admission-date"
+                        >
+                          Admission date
+                        </span>
+                        {practitionerDetailHelper.admissionsDateFormatted}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="tablet:grid-col-7 margin-bottom-4">
+              <div className="card height-full margin-bottom-0">
+                <div className="content-wrapper">
+                  <h3 className="underlined">Practitioner Notes</h3>
+                  <div className="tablet:grid-col-12 margin-bottom-1">
+                    {practitionerDetailHelper.practitionerNotes}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {showModal === 'OpenPractitionerCaseListPdfModal' && (
+          <OpenPractitionerCaseListPdfModal />
+        )}
       </React.Fragment>
     );
   },

@@ -19,13 +19,16 @@ export const setViewerDraftDocumentToDisplayAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   store.set(state.viewerDraftDocumentToDisplay, viewerDraftDocumentToDisplay);
+
   if (viewerDraftDocumentToDisplay) {
-    const {
-      url,
-    } = await applicationContext
+    store.set(
+      state.screenMetadata.draftDocumentViewerDocketEntryId,
+      viewerDraftDocumentToDisplay.docketEntryId,
+    );
+
+    const { url } = await applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor({
-        applicationContext,
+      .getDocumentDownloadUrlInteractor(applicationContext, {
         docketNumber,
         isPublic: false,
         key: viewerDraftDocumentToDisplay.docketEntryId,

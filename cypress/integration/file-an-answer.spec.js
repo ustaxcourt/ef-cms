@@ -12,8 +12,8 @@ describe('Filing an Answer', function () {
   });
 
   it('can select a document type and go to the next step in the wizard', () => {
-    cy.get('#react-select-2-input').click();
-    cy.get('#react-select-2-option-6').click();
+    cy.get('#react-select-2-input').click({ force: true });
+    cy.get('#react-select-2-option-6').click({ force: true });
     cy.get('button#submit-document').click();
   });
 
@@ -22,8 +22,7 @@ describe('Filing an Answer', function () {
       .scrollIntoView()
       .should('not.have.class', 'validated');
 
-    cy.upload_file('w3-dummy.pdf', '#primary-document');
-
+    cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
     cy.get('label#primary-document-label').should('have.class', 'validated');
   });
 
@@ -38,7 +37,7 @@ describe('Filing an Answer', function () {
   });
 
   it('docket record table reflects newly-added record', () => {
-    cy.get('table.docket-record').find('button').should('contain', 'Answer');
+    cy.get('table.ustc-table').find('button').should('contain', 'Answer');
   });
 
   it('reflects changes to 104-20 by showing it in irsPractitioner case list', () => {

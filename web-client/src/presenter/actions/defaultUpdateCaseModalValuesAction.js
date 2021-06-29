@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,7 +10,8 @@ import { state } from 'cerebral';
  */
 export const defaultUpdateCaseModalValuesAction = ({ get, store }) => {
   const caseDetail = get(state.caseDetail);
-  let { associatedJudge, caseCaption, status } = caseDetail;
+  let { associatedJudge, caseCaption, status } = cloneDeep(caseDetail);
+
   store.set(state.modal.caseCaption, caseCaption);
   store.set(state.modal.caseStatus, status);
   store.set(state.modal.associatedJudge, associatedJudge);

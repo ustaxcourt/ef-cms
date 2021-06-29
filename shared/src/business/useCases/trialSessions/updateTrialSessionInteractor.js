@@ -6,21 +6,22 @@ const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { Case } = require('../../entities/cases/Case');
+const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
  * updateTrialSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.trialSession the trial session data
  * @returns {object} the created trial session
  */
-exports.updateTrialSessionInteractor = async ({
+exports.updateTrialSessionInteractor = async (
   applicationContext,
-  trialSession,
-}) => {
+  { trialSession },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -44,14 +45,19 @@ exports.updateTrialSessionInteractor = async ({
   const editableFields = {
     address1: trialSession.address1,
     address2: trialSession.address2,
+    chambersPhoneNumber: trialSession.chambersPhoneNumber,
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
     maxCases: trialSession.maxCases,
+    meetingId: trialSession.meetingId,
     notes: trialSession.notes,
+    password: trialSession.password,
     postalCode: trialSession.postalCode,
+    proceedingType: trialSession.proceedingType,
     sessionType: trialSession.sessionType,
     startDate: trialSession.startDate,
     startTime: trialSession.startTime,
@@ -72,9 +78,8 @@ exports.updateTrialSessionInteractor = async ({
   );
 
   if (
-    ((!currentTrialSession.judge || !currentTrialSession.judge.userId) &&
-      newTrialSessionEntity.judge &&
-      newTrialSessionEntity.judge.userId) ||
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(newTrialSessionEntity, 'judge.userId')) ||
     (currentTrialSession.judge &&
       newTrialSessionEntity.judge &&
       currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId)
@@ -96,10 +101,8 @@ exports.updateTrialSessionInteractor = async ({
   }
 
   if (
-    ((!currentTrialSession.trialClerk ||
-      !currentTrialSession.trialClerk.userId) &&
-      newTrialSessionEntity.trialClerk &&
-      newTrialSessionEntity.trialClerk.userId) ||
+    (!get(currentTrialSession, 'trialClerk.userId') &&
+      get(newTrialSessionEntity, 'trialClerk.userId')) ||
     (currentTrialSession.trialClerk &&
       newTrialSessionEntity.trialClerk &&
       currentTrialSession.trialClerk.userId !==
@@ -134,12 +137,28 @@ exports.updateTrialSessionInteractor = async ({
         });
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });
-      caseEntity.setAsCalendared(newTrialSessionEntity);
+      if (
+        caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
+      ) {
+        caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
-      await applicationContext.getPersistenceGateway().updateCase({
-        applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
-      });
+        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: caseEntity,
+        });
+      }
+
+      const matchingHearing = caseToUpdate.hearings.find(
+        hearing =>
+          hearing.trialSessionId == newTrialSessionEntity.trialSessionId,
+      );
+      if (matchingHearing) {
+        applicationContext.getPersistenceGateway().updateCaseHearing({
+          applicationContext,
+          docketNumber: calendaredCase.docketNumber,
+          hearingToUpdate: newTrialSessionEntity.validate().toRawObject(),
+        });
+      }
     }
   }
 

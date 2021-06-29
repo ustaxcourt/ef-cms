@@ -19,9 +19,7 @@ describe('getMessagesForCaseInteractor', () => {
     });
 
     await expect(
-      getMessagesForCaseInteractor({
-        applicationContext,
-      }),
+      getMessagesForCaseInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -54,10 +52,12 @@ describe('getMessagesForCaseInteractor', () => {
       .getPersistenceGateway()
       .getMessagesByDocketNumber.mockReturnValue([mockMessage]);
 
-    const returnedMessage = await getMessagesForCaseInteractor({
+    const returnedMessage = await getMessagesForCaseInteractor(
       applicationContext,
-      docketNumber: mockMessage.docketNumber,
-    });
+      {
+        docketNumber: mockMessage.docketNumber,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getMessagesByDocketNumber,

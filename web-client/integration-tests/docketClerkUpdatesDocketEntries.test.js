@@ -9,7 +9,6 @@ import { docketClerkEditsDocketEntryNonstandardF } from './journey/docketClerkEd
 import { docketClerkEditsDocketEntryNonstandardG } from './journey/docketClerkEditsDocketEntryNonstandardG';
 import { docketClerkEditsDocketEntryNonstandardH } from './journey/docketClerkEditsDocketEntryNonstandardH';
 import { docketClerkEditsDocketEntryStandard } from './journey/docketClerkEditsDocketEntryStandard';
-import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const test = setupTest();
@@ -19,6 +18,10 @@ const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 describe('docket clerk updates docket entries', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -41,7 +44,6 @@ describe('docket clerk updates docket entries', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test);
   docketClerkEditsDocketEntryStandard(test);
   docketClerkEditsDocketEntryNonstandardA(test);
   docketClerkEditsDocketEntryNonstandardB(test);

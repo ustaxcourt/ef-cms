@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
+import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
 
 /**
  * resets the state.form which is used throughout the app for storing html form values
@@ -17,7 +17,7 @@ export const updateCaseDeadlineAction = async ({
   path,
   props,
 }) => {
-  const caseDeadline = getCaseDeadlineFromForm({
+  const caseDeadline = getCaseDeadlineFromFormAction({
     applicationContext,
     get,
     props,
@@ -25,8 +25,7 @@ export const updateCaseDeadlineAction = async ({
 
   let updateCaseDeadlineResult = await applicationContext
     .getUseCases()
-    .updateCaseDeadlineInteractor({
-      applicationContext,
+    .updateCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
 

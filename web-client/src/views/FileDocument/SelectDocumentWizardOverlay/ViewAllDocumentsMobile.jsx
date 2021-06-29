@@ -52,11 +52,11 @@ export const ViewAllDocumentsMobile = connect(
           </div>
         </div>
         <div className="margin-bottom-2">
-          {viewAllDocumentsHelper.sections.map((title, index) => {
+          {viewAllDocumentsHelper.sections.map(title => {
             return (
               <div
                 className="category-view grid-container padding-bottom-1 padding-top-1"
-                key={`${title}-document-${index}`}
+                key={`${title}-document`}
               >
                 <Button
                   link

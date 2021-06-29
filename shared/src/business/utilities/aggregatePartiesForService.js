@@ -14,13 +14,16 @@ const aggregatePartiesForService = caseEntity => {
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
 
   const parties = [
-    formattedCase.contactPrimary,
-    formattedCase.contactSecondary,
+    ...formattedCase.petitioners,
     ...formattedCase.privatePractitioners,
     ...formattedCase.irsPractitioners,
   ];
 
-  const aggregated = { electronic: [], paper: [] };
+  const aggregated = {
+    electronic: [],
+    paper: [],
+  };
+
   parties.forEach(party => {
     if (
       party &&
@@ -37,6 +40,7 @@ const aggregatePartiesForService = caseEntity => {
     ) {
       aggregated.paper.push({
         ...party,
+        ...(party.contact || {}),
       });
     }
   });
@@ -44,6 +48,7 @@ const aggregatePartiesForService = caseEntity => {
     aggregated.electronic,
     aggregated.paper,
   );
+
   return aggregated;
 };
 

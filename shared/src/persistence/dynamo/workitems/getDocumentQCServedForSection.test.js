@@ -12,32 +12,42 @@ describe('getDocumentQCServedForSection', () => {
   let queryStub;
 
   beforeEach(() => {
-    queryStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Items: [
-          {
-            completedAt: 'today',
-            section: DOCKET_SECTION,
-            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            completedAt: null,
-            section: DOCKET_SECTION,
-            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            completedAt: 'today',
-            section: DOCKET_SECTION,
-            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          {
-            completedAt: null,
-            section: DOCKET_SECTION,
-            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-        ],
-      }),
-    });
+    const itemsToReturn = [
+      {
+        completedAt: 'today',
+        section: DOCKET_SECTION,
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        completedAt: null,
+        section: DOCKET_SECTION,
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        completedAt: 'today',
+        section: DOCKET_SECTION,
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      {
+        completedAt: null,
+        section: DOCKET_SECTION,
+        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    ];
+
+    queryStub = jest
+      .fn()
+      .mockReturnValueOnce({
+        promise: async () => ({
+          Items: itemsToReturn,
+          LastEvaluatedKey: 'last-evaluated-key',
+        }),
+      })
+      .mockReturnValue({
+        promise: async () => ({
+          Items: itemsToReturn,
+        }),
+      });
   });
 
   it('invokes the persistence layer with pk of {userId}|outbox and {section}|outbox and other expected params', async () => {
@@ -52,17 +62,29 @@ describe('getDocumentQCServedForSection', () => {
       applicationContext,
       section: DOCKET_SECTION,
     });
-    expect(items).toEqual([
-      {
-        completedAt: 'today',
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      {
-        completedAt: 'today',
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    ]);
+    expect(
+      applicationContext.getDocumentClient().query.mock.calls[1][0],
+    ).toMatchObject({
+      ExclusiveStartKey: 'last-evaluated-key',
+    });
+    expect(
+      applicationContext.getDocumentClient().query.mock.calls[0][0],
+    ).toMatchObject({
+      ExclusiveStartKey: null,
+    });
+    expect(items).toEqual(
+      expect.arrayContaining([
+        {
+          completedAt: 'today',
+          section: DOCKET_SECTION,
+          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        {
+          completedAt: 'today',
+          section: DOCKET_SECTION,
+          userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ]),
+    );
   });
 });

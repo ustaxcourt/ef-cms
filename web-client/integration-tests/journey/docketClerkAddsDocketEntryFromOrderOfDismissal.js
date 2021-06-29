@@ -47,7 +47,7 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'judge',
-      value: 'Judge Buch',
+      value: 'Buch',
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -59,6 +59,10 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
       key: 'attachments',
       value: true,
     });
+
+    expect(test.getState('form.generatedDocumentTitle')).toContain(
+      'Judge Buch for Something',
+    );
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 

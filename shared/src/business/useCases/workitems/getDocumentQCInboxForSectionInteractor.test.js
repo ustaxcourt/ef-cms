@@ -35,8 +35,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
 
     let error;
     try {
-      await getDocumentQCInboxForSectionInteractor({
-        applicationContext,
+      await getDocumentQCInboxForSectionInteractor(applicationContext, {
         section: DOCKET_SECTION,
       });
     } catch (e) {
@@ -51,8 +50,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: DOCKET_SECTION,
     });
 
@@ -68,8 +66,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: PETITIONS_SECTION,
     });
 
@@ -85,8 +82,7 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       userId: 'docketclerk',
     });
 
-    await getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
       section: 'ANY_OTHER_SECTION',
     });
 
@@ -94,5 +90,27 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
         .mock.calls[0][0].section,
     ).toEqual(DOCKET_SECTION);
+  });
+
+  it('queries workItems for the DOCKET_SECTION with a judgeUserName', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.judge,
+      userId: 'judge',
+    });
+
+    await getDocumentQCInboxForSectionInteractor(applicationContext, {
+      judgeUserName: 'Ashford',
+      section: applicationContext.getPersistenceGateway().getJudgesChambers()
+        .ASHFORDS_CHAMBERS_SECTION.section,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0].section,
+    ).toEqual(DOCKET_SECTION);
+    expect(
+      applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
+        .mock.calls[0][0].judgeUserName,
+    ).toEqual('Ashford');
   });
 });

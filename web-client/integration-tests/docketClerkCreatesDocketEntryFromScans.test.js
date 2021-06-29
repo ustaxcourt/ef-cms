@@ -7,16 +7,10 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
-import { docketClerkSavesDocketEntry } from './journey/docketClerkSavesDocketEntry';
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
-import {
-  fakeFile,
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-} from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
@@ -45,6 +39,10 @@ describe('Create Docket Entry From Scans', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
   petitionerChoosesCaseType(test);
@@ -52,11 +50,6 @@ describe('Create Docket Entry From Scans', () => {
 
   loginAs(test, 'docketclerk@example.com');
   docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkSavesDocketEntry(test);
-
-  it('refresh elasticsearch index', async () => {
-    await refreshElasticsearchIndex();
-  });
 
   docketClerkViewsQCInProgress(test, true);
   docketClerkViewsSectionQCInProgress(test, true);
@@ -70,17 +63,10 @@ describe('Create Docket Entry From Scans', () => {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(test, {
-    scannerSourceIndex,
-    scannerSourceName,
-  });
+  createPDFFromScannedBatches(test);
 
   docketClerkAddsDocketEntryFile(test, fakeFile);
   docketClerkSavesAndServesDocketEntry(test);
-
-  it('refresh elasticsearch index', async () => {
-    await refreshElasticsearchIndex();
-  });
 
   docketClerkViewsQCInProgress(test, false);
   docketClerkViewsSectionQCInProgress(test, false);

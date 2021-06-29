@@ -7,13 +7,13 @@ describe('NoticeOfTrialIssued', () => {
   const caseTitle = 'Test Petitioner';
   const docketNumberWithSuffix = '123-19S';
   const trialInfo = {
-    address1: '123 Some St.',
-    city: 'Somecity',
-    judge: 'Judge Dredd',
-    postalCode: '80008',
-    startDate: '02/02/2020',
-    startTime: '9:00 AM',
-    state: 'ZZ',
+    formattedJudge: 'Judge Dredd',
+    formattedStartDate: 'Monday, January 20, 2020',
+    formattedStartTime: '10:00 am',
+    joinPhoneNumber: '11111',
+    meetingId: '22222',
+    password: '33333',
+    trialLocation: 'Boise, Idaho',
   };
 
   it('renders a document header with trial information', () => {
@@ -43,37 +43,18 @@ describe('NoticeOfTrialIssued', () => {
       />,
     );
 
-    const textContent = wrapper.find('#trial-info').text();
+    const trialInfoContent = wrapper.find('#trial-info').text();
 
-    expect(textContent).toContain(trialInfo.address1);
-    expect(textContent).toContain(trialInfo.city);
-    expect(textContent).toContain(trialInfo.state);
-    expect(textContent).toContain(trialInfo.postalCode);
+    expect(trialInfoContent).toContain(trialInfo.trialLocation);
+
+    const noticeBodyContent = wrapper.find('#notice-body').text();
+
+    expect(noticeBodyContent).toContain(trialInfo.meetingId);
+    expect(noticeBodyContent).toContain(trialInfo.password);
+    expect(noticeBodyContent).toContain(trialInfo.joinPhoneNumber);
   });
 
-  it('renders optional trial information', () => {
-    const optionalTrialInfo = {
-      ...trialInfo,
-      address2: 'Suite B',
-      courthouseName: 'Test Courthouse Name',
-    };
-
-    const wrapper = shallow(
-      <NoticeOfTrialIssued
-        caseCaptionExtension={caseCaptionExtension}
-        caseTitle={caseTitle}
-        docketNumberWithSuffix={docketNumberWithSuffix}
-        trialInfo={optionalTrialInfo}
-      />,
-    );
-
-    const textContent = wrapper.find('#trial-info').text();
-
-    expect(textContent).toContain(optionalTrialInfo.address2);
-    expect(textContent).toContain(optionalTrialInfo.courthouseName);
-  });
-
-  it('renders the judge name', () => {
+  it('renders the formatted judge name', () => {
     const wrapper = shallow(
       <NoticeOfTrialIssued
         caseCaptionExtension={caseCaptionExtension}
@@ -83,10 +64,12 @@ describe('NoticeOfTrialIssued', () => {
       />,
     );
 
-    expect(wrapper.find('#judge-info').text()).toContain(trialInfo.judge);
+    expect(wrapper.find('#judge-info').text()).toContain(
+      trialInfo.formattedJudge,
+    );
   });
 
-  it('renders the start date and time', () => {
+  it('renders the formatted start date and time', () => {
     const wrapper = shallow(
       <NoticeOfTrialIssued
         caseCaptionExtension={caseCaptionExtension}
@@ -97,7 +80,7 @@ describe('NoticeOfTrialIssued', () => {
     );
     const textContent = wrapper.find('#notice-body').text();
 
-    expect(textContent).toContain(trialInfo.startTime);
-    expect(textContent).toContain(trialInfo.startDate);
+    expect(textContent).toContain(trialInfo.formattedStartTime);
+    expect(textContent).toContain(trialInfo.formattedStartDate);
   });
 });

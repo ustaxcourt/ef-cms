@@ -1,6 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   INITIAL_DOCUMENT_TYPES,
@@ -10,47 +11,59 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
 
 describe('createCase integration test', () => {
   const CREATED_DATE = '2019-03-01T22:54:06.000Z';
   const CREATED_YEAR = '2019';
+  const PETITIONER_USER_ID = '7805d1ab-18d0-43ec-bafb-654e83405416';
+
+  const petitionerUser = {
+    name: 'Test Petitioner',
+    role: ROLES.petitioner,
+    userId: PETITIONER_USER_ID,
+  };
 
   beforeAll(() => {
     window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     window.Date.prototype.getFullYear = jest.fn().mockReturnValue(CREATED_YEAR);
+
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(petitionerUser);
   });
 
   it('should create the expected case into the database', async () => {
-    const { docketNumber } = await createCaseInteractor({
-      applicationContext,
+    const { docketNumber } = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseType: CASE_TYPES_MAP.innocentSpouse,
-        contactPrimary: {
-          address1: '19 First Freeway',
-          address2: 'Ad cumque quidem lau',
-          address3: 'Anim est dolor animi',
-          city: 'Rerum eaque cupidata',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'petitioner@example.com',
-          name: 'Rick Petitioner',
-          phone: '+1 (599) 681-5435',
-          postalCode: '89614',
-          state: 'AL',
-        },
         contactSecondary: {},
         filingType: 'Myself',
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '19 First Freeway',
+            address2: 'Ad cumque quidem lau',
+            address3: 'Anim est dolor animi',
+            city: 'Rerum eaque cupidata',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'petitioner@example.com',
+            name: 'Rick Petitioner',
+            phone: '+1 (599) 681-5435',
+            postalCode: '89614',
+            state: 'AL',
+          },
+        ],
         preferredTrialCity: 'Aberdeen, South Dakota',
         procedureType: 'Small',
       },
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
 
-    const createdCase = await getCaseInteractor({
-      applicationContext,
+    const createdCase = await getCaseInteractor(applicationContext, {
       docketNumber,
     });
 
@@ -73,8 +86,8 @@ describe('createCase integration test', () => {
             docketNumberWithSuffix: '101-19S',
             isInitializeCase: true,
             section: PETITIONS_SECTION,
-            sentBy: 'Alex Petitionsclerk',
-            sentByUserId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+            sentBy: 'Test Petitioner',
+            sentByUserId: PETITIONER_USER_ID,
           },
         },
         {
@@ -87,7 +100,7 @@ describe('createCase integration test', () => {
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Rick Petitioner',
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+          userId: PETITIONER_USER_ID,
         },
       ],
       docketNumber: '101-19',
@@ -101,16 +114,13 @@ describe('createCase integration test', () => {
       orderForOds: false,
       orderForRatification: false,
       orderToShowCause: false,
+      petitioners: [
+        {
+          contactId: PETITIONER_USER_ID,
+          contactType: CONTACT_TYPES.primary,
+        },
+      ],
       status: CASE_STATUS_TYPES.new,
-      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'richard',
-        role: ROLES.petitionsClerk,
-        userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
   });
 });

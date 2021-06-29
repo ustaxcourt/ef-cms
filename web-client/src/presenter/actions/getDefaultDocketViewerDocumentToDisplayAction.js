@@ -19,13 +19,13 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({ get }) => {
 
   if (entriesWithDocument && entriesWithDocument.length) {
     viewerDocumentToDisplay = entriesWithDocument[0];
-    const foundDocketEnry = entriesWithDocument.find(
+    const foundDocketEntry = entriesWithDocument.find(
       d => d.docketEntryId === docketEntryId,
     );
     if (!docketEntryId && viewerDocumentToDisplayInState) {
       viewerDocumentToDisplay = viewerDocumentToDisplayInState;
-    } else if (docketEntryId && foundDocketEnry) {
-      viewerDocumentToDisplay = foundDocketEnry;
+    } else if (docketEntryId && foundDocketEntry) {
+      viewerDocumentToDisplay = foundDocketEntry;
     }
   }
 

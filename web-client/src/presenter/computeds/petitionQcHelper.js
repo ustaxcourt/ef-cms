@@ -29,9 +29,8 @@ export const petitionQcHelper = (get, applicationContext) => {
   const documents = get(state.caseDetail.docketEntries);
 
   const hasODS = !!documents.find(
-    document =>
-      document.eventCode ===
-      INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
+    doc =>
+      doc.eventCode === INITIAL_DOCUMENT_TYPES.ownershipDisclosure.eventCode,
   );
 
   let documentTabsToDisplay = [...initialFilingDocumentTabs];

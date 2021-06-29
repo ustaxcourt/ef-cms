@@ -1,8 +1,5 @@
 import { find, orderBy } from 'lodash';
-import {
-  getOptionsForCategory,
-  getPreviouslyFiledDocuments,
-} from './selectDocumentTypeHelper';
+import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from 'cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
@@ -38,7 +35,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
     return {};
   }
   const showDateReceivedEdit = caseDetail.isPaper;
-  const docketEntryIdWhitelist = get(state.screenMetadata.filedDocumentIds);
   const form = get(state.form);
 
   const internalDocumentTypes = getInternalDocumentTypes(INTERNAL_CATEGORY_MAP);
@@ -66,12 +62,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
   }
 
-  const previouslyFiledWizardDocuments = getPreviouslyFiledDocuments(
-    applicationContext,
-    caseDetail,
-    docketEntryIdWhitelist,
-  );
-
   const selectedEventCode = form.eventCode;
   const secondarySelectedEventCode = get(
     state.form.secondaryDocument.eventCode,
@@ -94,17 +84,21 @@ export const addDocketEntryHelper = (get, applicationContext) => {
       })),
   );
 
-  const optionsForCategory = getOptionsForCategory(
+  const selectedDocketEntryId = get(state.docketEntryId);
+
+  const optionsForCategory = getOptionsForCategory({
     applicationContext,
     caseDetail,
     categoryInformation,
-  );
+    selectedDocketEntryId,
+  });
 
-  const secondaryOptionsForCategory = getOptionsForCategory(
+  const secondaryOptionsForCategory = getOptionsForCategory({
     applicationContext,
     caseDetail,
-    secondaryCategoryInformation,
-  );
+    categoryInformation: secondaryCategoryInformation,
+    selectedDocketEntryId,
+  });
 
   if (optionsForCategory.showSecondaryDocumentSelect) {
     optionsForCategory.showSecondaryDocumentSelect = false;
@@ -123,7 +117,6 @@ export const addDocketEntryHelper = (get, applicationContext) => {
   return {
     certificateOfServiceDateFormatted,
     internalDocumentTypes,
-    previouslyFiledWizardDocuments,
     primary: optionsForCategory,
     secondary: secondaryOptionsForCategory,
     showDateReceivedEdit,
@@ -134,7 +127,8 @@ export const addDocketEntryHelper = (get, applicationContext) => {
         objectionDocumentTypes.includes(form.previousDocument?.documentType)),
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     showSecondaryDocumentValid: !!form.secondaryDocumentFile,
-    showSecondarySupportingDocumentValid: !!form.secondarySupportingDocumentFile,
+    showSecondarySupportingDocumentValid:
+      !!form.secondarySupportingDocumentFile,
     showSupportingDocumentFreeText: supportingDocumentFreeTextTypes.includes(
       form.documentType,
     ),

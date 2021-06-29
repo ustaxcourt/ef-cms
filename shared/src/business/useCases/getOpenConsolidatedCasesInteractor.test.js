@@ -40,17 +40,13 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   });
 
   it('should retrieve the current user information', async () => {
-    await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(applicationContext.getCurrentUser).toBeCalled();
   });
 
   it('should make a call to retrieve open cases by user', async () => {
-    await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().getIndexedCasesForUser,
@@ -62,9 +58,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   });
 
   it('should validate the list of found open cases', async () => {
-    await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(UserCase.validateRawCollection).toBeCalled();
   });
@@ -72,17 +66,13 @@ describe('getOpenConsolidatedCasesInteractor', () => {
   it('should return an empty list when no open cases are found', async () => {
     mockFoundCasesList = [];
 
-    const result = await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(result).toEqual([]);
   });
 
   it('should return a list of open cases', async () => {
-    const result = await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(result).toMatchObject([
       {
@@ -121,9 +111,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
         consolidatedCaseThatIsNotTheLeadCase,
       ]);
 
-    const result = await getOpenConsolidatedCasesInteractor({
-      applicationContext,
-    });
+    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(result[0]).toBe(MOCK_CASE);
     expect(result[0].consolidatedCases[0]).toBe(

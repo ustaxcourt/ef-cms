@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 const React = require('react');
 const {
   CompressedDocketHeader,
@@ -21,7 +22,8 @@ const DocumentRow = ({ document }) => {
             {hasAttachments && <p className="included">Attachment(s)</p>}
             {hasCertificateOfService && (
               <p className="included">
-                Certificate of Service {document.certificateOfServiceDate}
+                Certificate of Service{' '}
+                {document.formattedCertificateOfServiceDate}
               </p>
             )}
           </>

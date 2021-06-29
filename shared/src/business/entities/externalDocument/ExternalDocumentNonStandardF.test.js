@@ -1,4 +1,7 @@
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -27,6 +30,20 @@ describe('ExternalDocumentNonStandardF', () => {
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Miscellaneous',
+        documentTitle: over3000Characters,
+        documentType: 'Amended',
+        ordinalValue: 'First',
+        previousDocument: { documentType: 'Petition' },
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+      });
     });
   });
 
@@ -58,6 +75,17 @@ describe('ExternalDocumentNonStandardF', () => {
       expect(extDoc.getDocumentTitle()).toEqual(
         'First Amended Stipulation Something',
       );
+    });
+
+    it('should generate title without previousDocument', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Miscellaneous',
+        documentTitle: '[First, Second, etc.] Amended [Document Name]',
+        documentType: 'Amended',
+        ordinalValue: 'First',
+        scenario: 'Nonstandard F',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual('First Amended');
     });
   });
 });

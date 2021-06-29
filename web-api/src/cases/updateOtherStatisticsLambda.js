@@ -10,8 +10,7 @@ exports.updateOtherStatisticsLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .updateOtherStatisticsInteractor({
-        applicationContext,
+      .updateOtherStatisticsInteractor(applicationContext, {
         ...event.pathParameters,
         ...JSON.parse(event.body),
       });
