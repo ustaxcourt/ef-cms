@@ -193,7 +193,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "dynamodb:GetRecords",
         "dynamodb:GetShardIterator",
         "dynamodb:ListStreams",
-        "dynamodb:UpdateGlobalTable"
+        "dynamodb:UpdateGlobalTable",
+        "dynamodb:CreateTableReplica"
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
