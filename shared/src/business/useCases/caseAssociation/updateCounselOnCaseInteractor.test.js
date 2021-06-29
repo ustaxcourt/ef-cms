@@ -10,10 +10,6 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   updateCounselOnCaseInteractor,
 } = require('./updateCounselOnCaseInteractor');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
@@ -25,6 +21,7 @@ describe('updateCounselOnCaseInteractor', () => {
     new PrivatePractitioner({
       barNumber: 'BN1234',
       name: 'Saul Goodman',
+      representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
       role: ROLES.privatePractitioner,
       userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
     }),
@@ -99,6 +96,7 @@ describe('updateCounselOnCaseInteractor', () => {
           {
             address1: '123 Main St',
             city: 'Somewhere',
+            contactId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
             contactType: CONTACT_TYPES.primary,
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: 'fieri@example.com',
@@ -111,13 +109,13 @@ describe('updateCounselOnCaseInteractor', () => {
           {
             address1: '123 Main St',
             city: 'Somewhere',
+            contactId: '3d914ca2-7876-43a7-acfa-ccb645717e11',
             contactType: CONTACT_TYPES.secondary,
             countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'fieri@example.com',
             name: 'Guy Fieri',
             phone: '1234567890',
             postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
             state: 'CA',
           },
         ],
@@ -135,7 +133,7 @@ describe('updateCounselOnCaseInteractor', () => {
       updateCounselOnCaseInteractor(applicationContext, {
         docketNumber: '123-19',
         userData: {
-          representingPrimary: true,
+          representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
         },
         userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
       }),
@@ -147,8 +145,7 @@ describe('updateCounselOnCaseInteractor', () => {
       docketNumber: '123-19',
       userData: {
         name: 'Saul Goodman',
-        representingPrimary: true,
-        representingSecondary: false,
+        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
@@ -164,8 +161,7 @@ describe('updateCounselOnCaseInteractor', () => {
       docketNumber: '123-19',
       userData: {
         name: 'Saul Goodman',
-        representingPrimary: true,
-        representingSecondary: false,
+        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
@@ -182,8 +178,7 @@ describe('updateCounselOnCaseInteractor', () => {
       userData: {
         email: 'not.editable@example.com',
         name: 'Saul Goodman',
-        representingPrimary: true,
-        representingSecondary: false,
+        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userId: '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
@@ -195,8 +190,7 @@ describe('updateCounselOnCaseInteractor', () => {
         p => p.userId === '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       );
     expect(updatedPractitioner.email).toBeUndefined();
-    expect(updatedPractitioner.representingPrimary).toBe(true);
-    expect(updatedPractitioner.representingSecondary).toBe(false);
+    expect(updatedPractitioner.representing).toBeUndefined();
     expect(updatedPractitioner.serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
@@ -208,18 +202,37 @@ describe('updateCounselOnCaseInteractor', () => {
       userData: {
         email: 'not.editable@example.com',
         name: 'Saul Goodman',
-        representingPrimary: true,
-        representingSecondary: true,
+        representing: ['9d914ca2-7876-43a7-acfa-ccb645717e11'],
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       },
       userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
     });
 
-    expect(getContactPrimary(results).serviceIndicator).toBe(
+    expect(results.petitioners[0].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
     );
-    expect(getContactSecondary(results).serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_NONE,
+    expect(results.petitioners[1].serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+  });
+
+  it('reverts the service indicator on the contacts when they are no longer being represented', async () => {
+    const results = await updateCounselOnCaseInteractor(applicationContext, {
+      docketNumber: '123-19',
+      userData: {
+        email: 'not.editable@example.com',
+        name: 'Saul Goodman',
+        representing: ['b7315e1b-b804-4e09-84c5-e0f3b4f229c5'],
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
+    });
+
+    expect(results.petitioners[0].serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+    expect(results.petitioners[1].serviceIndicator).toBe(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 

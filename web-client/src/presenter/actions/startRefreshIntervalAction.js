@@ -18,19 +18,19 @@ export const startRefreshIntervalAction = ({
   const interval = setInterval(async () => {
     const response = await applicationContext
       .getUseCases()
-      .refreshTokenInteractor({
-        applicationContext,
+      .refreshTokenInteractor(applicationContext, {
         refreshToken,
       });
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
 
-    await applicationContext.getUseCases().setItemInteractor({
-      applicationContext,
-      key: 'token',
-      value: response.token,
-    });
+    await applicationContext
+      .getUseCases()
+      .setItemInteractor(applicationContext, {
+        key: 'token',
+        value: response.token,
+      });
   }, time);
   store.set(state.refreshTokenInterval, interval);
 };

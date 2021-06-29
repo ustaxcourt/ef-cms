@@ -26,8 +26,7 @@ exports.updateCounselOnCaseInteractor = async (
   const user = applicationContext.getCurrentUser();
 
   const editableFields = {
-    representingPrimary: userData.representingPrimary,
-    representingSecondary: userData.representingSecondary,
+    representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
   };
 
@@ -50,33 +49,32 @@ exports.updateCounselOnCaseInteractor = async (
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
-  const contactPrimary = caseEntity.getContactPrimary();
-  const contactSecondary = caseEntity.getContactSecondary();
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
-    const representing = [];
-    if (editableFields.representingPrimary) {
-      representing.push(contactPrimary.contactId);
-    }
-    if (editableFields.representingSecondary) {
-      representing.push(contactSecondary.contactId);
-    }
-
     caseEntity.updatePrivatePractitioner({
-      representing,
+      representing: editableFields.representing,
       userId,
       ...editableFields,
     });
-    if (userData.representingPrimary) {
-      contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
-    if (contactSecondary && userData.representingSecondary) {
-      contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-    }
+
+    caseEntity.petitioners.map(petitioner => {
+      if (editableFields.representing.includes(petitioner.contactId)) {
+        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+      } else if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitioner.contactId,
+        )
+      ) {
+        const serviceIsPaper = !petitioner.email;
+        petitioner.serviceIndicator = serviceIsPaper
+          ? SERVICE_INDICATOR_TYPES.SI_PAPER
+          : SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+    });
   } else if (userToUpdate.role === ROLES.irsPractitioner) {
     caseEntity.updateIrsPractitioner({
+      serviceIndicator: editableFields.serviceIndicator,
       userId,
-      ...editableFields,
     });
   } else {
     throw new Error('User is not a practitioner');

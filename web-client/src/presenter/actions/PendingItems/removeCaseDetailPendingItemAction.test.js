@@ -24,7 +24,7 @@ describe('removeCaseDetailPendingItemAction', () => {
 
     expect(
       applicationContext.getUseCases().removeCasePendingItemInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketEntryId: '123abc',
       docketNumber: '101-20',

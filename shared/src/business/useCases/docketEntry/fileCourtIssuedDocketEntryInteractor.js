@@ -49,6 +49,9 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
+  if (docketEntry.isOnDocketRecord) {
+    throw new Error('Docket entry has already been added to docket record');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -70,7 +73,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
       draftOrderState: null,
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
-      filedBy: undefined,
       filingDate: documentMeta.filingDate,
       freeText: documentMeta.freeText,
       isDraft: false,
@@ -93,7 +95,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
       associatedJudge: caseToUpdate.associatedJudge,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+      caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
@@ -144,11 +146,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     );
   } else {
     saveItems.push(
-      applicationContext.getPersistenceGateway().createUserInboxRecord({
-        applicationContext,
-        workItem: rawValidWorkItem,
-      }),
-      applicationContext.getPersistenceGateway().createSectionInboxRecord({
+      applicationContext.getPersistenceGateway().saveWorkItem({
         applicationContext,
         workItem: rawValidWorkItem,
       }),

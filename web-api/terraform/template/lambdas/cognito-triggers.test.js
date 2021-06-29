@@ -108,7 +108,7 @@ describe('cognito-triggers', () => {
       await handler(mockEvent);
 
       expect(
-        setUserEmailFromPendingEmailInteractor.mock.calls[0][0].user,
+        setUserEmailFromPendingEmailInteractor.mock.calls[0][1].user,
       ).toEqual({ pendingEmail: mockEmail });
     });
 

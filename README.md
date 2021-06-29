@@ -78,6 +78,8 @@ DAWSON is in active use and is continually updated to deploy enhancements and ne
 
 ## Technical overview
 
+[![DeepScan grade](https://deepscan.io/api/teams/8976/projects/17137/branches/383813/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8976&pid=17137&bid=383813)
+
 | develop | prod | staging | test |
 | ------- | ------ | ------- | ---- |
 | [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) |

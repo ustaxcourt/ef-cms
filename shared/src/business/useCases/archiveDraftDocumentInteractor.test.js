@@ -30,9 +30,9 @@ describe('archiveDraftDocumentInteractor', () => {
       docketNumber: '101-20',
     });
 
-    const {
-      caseToUpdate,
-    } = applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
 
     expect(
       caseToUpdate.archivedDocketEntries.find(
@@ -88,7 +88,7 @@ describe('archiveDraftDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
+      applicationContext.getPersistenceGateway().deleteWorkItem,
     ).toHaveBeenCalled();
 
     expect(

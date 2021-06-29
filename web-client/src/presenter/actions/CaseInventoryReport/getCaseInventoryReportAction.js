@@ -18,8 +18,7 @@ export const getCaseInventoryReportAction = async ({
   if (associatedJudge || status) {
     const reportData = await applicationContext
       .getUseCases()
-      .getCaseInventoryReportInteractor({
-        applicationContext,
+      .getCaseInventoryReportInteractor(applicationContext, {
         associatedJudge,
         page,
         status,

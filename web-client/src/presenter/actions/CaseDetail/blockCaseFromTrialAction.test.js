@@ -33,7 +33,7 @@ describe('blockCaseFromTrialAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().blockCaseFromTrialInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
       reason: 'pending',

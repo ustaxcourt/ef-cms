@@ -73,22 +73,10 @@ joiValidationDecorator(
   {},
 );
 
-PrivatePractitioner.prototype.getRepresentingPrimary = function getRepresentingPrimary(
-  caseEntity,
+PrivatePractitioner.prototype.isRepresenting = function isRepresenting(
+  petitionerContactId,
 ) {
-  return this.representing.find(
-    r => r === caseEntity.getContactPrimary().contactId,
-  );
-};
-
-PrivatePractitioner.prototype.getRepresentingSecondary = function getRepresentingSecondary(
-  caseEntity,
-) {
-  const contactSecondary = caseEntity.getContactSecondary();
-  return (
-    contactSecondary &&
-    this.representing.find(r => r === contactSecondary.contactId)
-  );
+  return this.representing.includes(petitionerContactId);
 };
 
 module.exports = {

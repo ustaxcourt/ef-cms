@@ -23,8 +23,7 @@ export const updateQcCompleteForTrialAction = async ({
   try {
     result = await applicationContext
       .getUseCases()
-      .updateQcCompleteForTrialInteractor({
-        applicationContext,
+      .updateQcCompleteForTrialInteractor(applicationContext, {
         docketNumber,
         qcCompleteForTrial,
         trialSessionId,

@@ -17,11 +17,6 @@ module "dynamo_table_alpha" {
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-alpha"
-
-  providers = {
-    aws.us-east-1 = aws.us-east-1
-    aws.us-west-1 = aws.us-west-1
-  }
 }
 
 module "dynamo_table_beta" {
@@ -29,11 +24,6 @@ module "dynamo_table_beta" {
 
   environment = var.environment
   table_name  = "efcms-${var.environment}-beta"
-
-  providers = {
-    aws.us-east-1 = aws.us-east-1
-    aws.us-west-1 = aws.us-west-1
-  }
 }
 
 module "elasticsearch_alpha" {

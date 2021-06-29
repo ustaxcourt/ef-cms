@@ -67,5 +67,5 @@ describe('Unauthed user views todays orders', () => {
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOrdersOnSealedCase(test, testClient);
+  unauthedUserViewsTodaysOrdersOnSealedCase(test);
 });
