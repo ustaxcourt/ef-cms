@@ -49,6 +49,12 @@ describe('deleteOtherStatisticsAction', () => {
       },
     });
 
-    expect(presenter.providers.path.error).toBeCalled();
+    expect(presenter.providers.path.success).not.toHaveBeenCalled();
+    expect(presenter.providers.path.error).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Statistic could not be deleted.',
+      },
+    });
   });
 });
