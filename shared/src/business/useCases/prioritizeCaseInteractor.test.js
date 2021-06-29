@@ -10,6 +10,7 @@ describe('prioritizeCaseInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
     });
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -30,11 +31,11 @@ describe('prioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -59,7 +60,7 @@ describe('prioritizeCaseInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
 
@@ -115,7 +116,7 @@ describe('prioritizeCaseInteractor', () => {
     ).rejects.toThrow('Cannot set a blocked case as high priority');
   });
 
-  it('should not call updateCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
+  it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -131,7 +132,7 @@ describe('prioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
   });
 
@@ -159,7 +160,7 @@ describe('prioritizeCaseInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
   });
 });

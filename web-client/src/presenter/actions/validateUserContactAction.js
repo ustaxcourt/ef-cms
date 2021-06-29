@@ -19,8 +19,7 @@ export const validateUserContactAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateUserContactInteractor({
-      applicationContext,
+    .validateUserContactInteractor(applicationContext, {
       user: {
         ...currentUser,
         contact: formContact.contact,

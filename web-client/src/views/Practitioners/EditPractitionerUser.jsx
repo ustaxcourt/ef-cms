@@ -14,15 +14,12 @@ export const EditPractitionerUser = connect(
     showModal: state.modal.showModal,
     submitUpdatePractitionerUserSequence:
       sequences.submitUpdatePractitionerUserSequence,
-    validateUpdatePractitionerSequence:
-      sequences.validateUpdatePractitionerSequence,
   },
   function EditPractitionerUser({
     form,
     navigateBackSequence,
     showModal,
     submitUpdatePractitionerUserSequence,
-    validateUpdatePractitionerSequence,
   }) {
     return (
       <>
@@ -47,9 +44,7 @@ export const EditPractitionerUser = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <PractitionerForm
-            validateSequence={validateUpdatePractitionerSequence}
-          />
+          <PractitionerForm validateSequenceName="validateUpdatePractitionerSequence" />
 
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">

@@ -19,8 +19,7 @@ export const validateExternalDocumentInformationAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateExternalDocumentInformationInteractor({
-      applicationContext,
+    .validateExternalDocumentInformationInteractor(applicationContext, {
       documentMetadata,
     });
 
@@ -42,8 +41,7 @@ export const validateExternalDocumentInformationAction = ({
       'secondaryDocument',
       'hasSecondarySupportingDocuments',
       'secondarySupportingDocuments',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
     ];
 

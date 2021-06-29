@@ -16,7 +16,6 @@ export const FileDocumentReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
@@ -24,7 +23,6 @@ export const FileDocumentReview = connect(
   function FileDocumentReview({
     fileDocumentHelper,
     form,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     showModal,
@@ -34,7 +32,7 @@ export const FileDocumentReview = connect(
       <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
         <div className="tablet:grid-col-6 margin-bottom-1">
           <div className="tablet:margin-bottom-0 margin-bottom-205">
-            <div className="">
+            <div>
               <label className="usa-label" htmlFor="secondary-filing">
                 {form.secondaryDocument.documentTitle}{' '}
               </label>
@@ -295,22 +293,15 @@ export const FileDocumentReview = connect(
                         Parties Filing The Document(s)
                       </h3>
                       <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
+                        <div className="tablet:grid-col-12 margin-bottom-1">
                           <label className="usa-label" htmlFor="filing-parties">
                             Filing parties
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
-                            {form.partyPrimary && (
-                              <li>
-                                {formattedCaseDetail.contactPrimary.name},
-                                Petitioner
-                              </li>
-                            )}
-                            {form.partySecondary && (
-                              <li>
-                                {formattedCaseDetail.contactSecondary.name},
-                                Petitioner
-                              </li>
+                            {fileDocumentHelper.formattedFilingParties.map(
+                              party => (
+                                <li key={party}>{party}</li>
+                              ),
                             )}
                             {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>

@@ -10,6 +10,9 @@ const { OBJECTIONS_OPTIONS_MAP } = require('../entities/EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
 describe('CaseAssociationRequestFactory', () => {
+  const mockPrimaryId = '149e24c2-5d66-4037-bf13-a7d440e5afc8';
+  const mockSecondaryId = '361ad2cf-623a-4e00-b419-8e5320b42734';
+
   let rawEntity;
 
   const errors = () =>
@@ -160,31 +163,41 @@ describe('CaseAssociationRequestFactory', () => {
           expect(
             errors().supportingDocuments[0].certificateOfServiceDate,
           ).toEqual(VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1]);
-          rawEntity.supportingDocuments[0].certificateOfServiceDate = createISODateString();
+          rawEntity.supportingDocuments[0].certificateOfServiceDate =
+            createISODateString();
           expect(errors().supportingDocuments).toEqual(undefined);
         });
       });
     });
 
-    it('should require one of [representingPrimary, representingSecondary] to be selected', () => {
-      expect(errors().representingPrimary).toEqual(
-        VALIDATION_ERROR_MESSAGES.representingPrimary,
-      );
-      rawEntity.representingSecondary = true;
-      expect(errors().representingPrimary).toEqual(undefined);
+    it('should require one filer to be selected', () => {
+      expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+      rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
+      expect(errors().filers).toEqual(undefined);
     });
 
     describe('title generation', () => {
+      const petitioners = [
+        {
+          contactId: mockPrimaryId,
+          name: 'Test Petitioner',
+        },
+        {
+          contactId: mockSecondaryId,
+          name: 'Another Petitioner',
+        },
+      ];
+
       it('should generate valid title for representingPrimary', () => {
         const caseAssoc = CaseAssociationRequestFactory({
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          representingPrimary: true,
+          filers: [mockPrimaryId],
         });
-        expect(
-          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Substitution of Counsel for Petr. Test Petitioner');
+        expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
+          'Substitution of Counsel for Petr. Test Petitioner',
+        );
       });
 
       it('should generate valid title for representingSecondary', () => {
@@ -192,11 +205,11 @@ describe('CaseAssociationRequestFactory', () => {
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          representingSecondary: true,
+          filers: [mockSecondaryId],
         });
-        expect(
-          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Substitution of Counsel for Petr. Another Petitioner');
+        expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
+          'Substitution of Counsel for Petr. Another Petitioner',
+        );
       });
 
       it('should generate valid title for representingPrimary and representingSecondary', () => {
@@ -204,12 +217,9 @@ describe('CaseAssociationRequestFactory', () => {
           documentTitleTemplate:
             'Substitution of Counsel for [Petitioner Names]',
           documentType: 'Substitution of Counsel',
-          representingPrimary: true,
-          representingSecondary: true,
+          filers: [mockPrimaryId, mockSecondaryId],
         });
-        expect(
-          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual(
+        expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Petrs. Test Petitioner & Another Petitioner',
         );
       });
@@ -219,12 +229,11 @@ describe('CaseAssociationRequestFactory', () => {
           documentTitleTemplate:
             'Motion to Substitute Parties and Change Caption',
           documentType: 'Motion to Substitute Parties and Change Caption',
-          representingPrimary: true,
-          representingSecondary: true,
+          filers: [mockPrimaryId, mockSecondaryId],
         });
-        expect(
-          caseAssoc.getDocumentTitle('Test Petitioner', 'Another Petitioner'),
-        ).toEqual('Motion to Substitute Parties and Change Caption');
+        expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
+          'Motion to Substitute Parties and Change Caption',
+        );
       });
 
       it('should generate valid title when party is irsPractitioner', () => {
@@ -234,7 +243,7 @@ describe('CaseAssociationRequestFactory', () => {
           documentType: 'Substitution of Counsel',
           partyIrsPractitioner: true,
         });
-        expect(caseAssoc.getDocumentTitle()).toEqual(
+        expect(caseAssoc.getDocumentTitle(petitioners)).toEqual(
           'Substitution of Counsel for Respondent',
         );
       });

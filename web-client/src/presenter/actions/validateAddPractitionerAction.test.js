@@ -7,11 +7,7 @@ describe('validateAddPractitionerAction', () => {
   let successMock;
   let errorMock;
 
-  const {
-    COUNTRY_TYPES,
-    US_STATES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   beforeAll(() => {
     successMock = jest.fn();
@@ -50,7 +46,7 @@ describe('validateAddPractitionerAction', () => {
           email: 'test@example.com',
           firstName: 'Test',
           lastName: 'Attorney',
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },
@@ -84,7 +80,7 @@ describe('validateAddPractitionerAction', () => {
             postalCode: '12345',
           },
           email: 'test@example.com',
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },
@@ -98,6 +94,7 @@ describe('validateAddPractitionerAction', () => {
       .getUseCases()
       .validateAddPractitionerInteractor.mockReturnValue({
         address1: 'Enter a mailing address',
+        serviceIndicator: 'Select a service indicator',
       });
 
     runAction(validateAddPractitionerAction, {
@@ -118,7 +115,7 @@ describe('validateAddPractitionerAction', () => {
             postalCode: '12345',
           },
           email: 'test@example.com',
-          originalBarState: US_STATES.TX,
+          originalBarState: 'TX',
           role: USER_ROLES.privatePractitioner,
         },
       },
@@ -128,6 +125,7 @@ describe('validateAddPractitionerAction', () => {
     expect(errorMock.mock.calls[0][0].errors).toEqual({
       contact: {
         address1: 'Enter a mailing address',
+        serviceIndicator: 'Select a service indicator',
       },
     });
   });

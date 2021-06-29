@@ -23,11 +23,8 @@ import {
 
 const test = setupTest();
 
-const {
-  COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-  SERVICE_INDICATOR_TYPES,
-} = applicationContext.getConstants();
+const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, SERVICE_INDICATOR_TYPES } =
+  applicationContext.getConstants();
 
 const seedData = {
   caseCaption: 'Hanan Al Hroub, Petitioner',

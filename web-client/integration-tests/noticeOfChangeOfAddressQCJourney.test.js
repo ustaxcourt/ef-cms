@@ -5,9 +5,9 @@ import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketC
 import { docketClerkQCsNCAForCaseWithPaperService } from './journey/docketClerkQCsNCAForCaseWithPaperService';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
-import { petitionerNavigatesToEditPrimaryContact } from './journey/petitionerNavigatesToEditPrimaryContact';
+import { petitionerNavigatesToEditContact } from './journey/petitionerNavigatesToEditContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 
 const test = setupTest();
@@ -44,11 +44,11 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   });
 
   loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
+  petitionsClerkServesElectronicCaseToIrs(test);
   petitionsClerkAddsPractitionersToCase(test);
 
   loginAs(test, 'petitioner@example.com');
-  petitionerNavigatesToEditPrimaryContact(test);
+  petitionerNavigatesToEditContact(test);
   petitionerEditsCasePrimaryContactAddress(test);
 
   loginAs(test, 'docketclerk@example.com');

@@ -19,8 +19,7 @@ export const uploadCorrespondenceFileAction = async ({
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
-      .uploadCorrespondenceDocumentInteractor({
-        applicationContext,
+      .uploadCorrespondenceDocumentInteractor(applicationContext, {
         documentFile: primaryDocumentFile,
       });
 

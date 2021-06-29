@@ -73,11 +73,8 @@ exports.completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress,
-  } = entryMetadata;
+  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
+    entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -109,6 +106,8 @@ exports.completeDocketEntryQCInteractor = async (
     documentTitle: entryMetadata.documentTitle,
     documentType: entryMetadata.documentType,
     eventCode: entryMetadata.eventCode,
+    filedBy: entryMetadata.filedBy,
+    filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
@@ -119,8 +118,6 @@ exports.completeDocketEntryQCInteractor = async (
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
-    partyPrimary: entryMetadata.partyPrimary,
-    partySecondary: entryMetadata.partySecondary,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
@@ -130,16 +127,13 @@ exports.completeDocketEntryQCInteractor = async (
   const updatedDocketEntry = new DocketEntry(
     {
       ...currentDocketEntry,
-      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
 
@@ -191,11 +185,6 @@ exports.completeDocketEntryQCInteractor = async (
   const workItemToUpdate = updatedDocketEntry.workItem;
 
   if (workItemToUpdate) {
-    await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
-
     Object.assign(workItemToUpdate, {
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
@@ -280,9 +269,7 @@ exports.completeDocketEntryQCInteractor = async (
         useTempBucket: true,
       });
 
-      const {
-        url,
-      } = await applicationContext
+      const { url } = await applicationContext
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
@@ -312,7 +299,7 @@ exports.completeDocketEntryQCInteractor = async (
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext

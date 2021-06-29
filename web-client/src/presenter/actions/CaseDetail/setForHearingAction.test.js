@@ -4,13 +4,13 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setForHearingAction } from './setForHearingAction';
 
-presenter.providers.applicationContext = applicationContext;
-
-applicationContext
-  .getUseCases()
-  .setForHearingInteractor.mockReturnValue(MOCK_CASE);
-
 describe('setForHearingAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
+  applicationContext
+    .getUseCases()
+    .setForHearingInteractor.mockReturnValue(MOCK_CASE);
+
   it('should call the setForHearingInteractor with the state.caseDetail.docketNumber and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
     const result = await runAction(setForHearingAction, {
       modules: {
@@ -31,7 +31,7 @@ describe('setForHearingAction', () => {
       applicationContext.getUseCases().setForHearingInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().setForHearingInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().setForHearingInteractor.mock.calls[0][1],
     ).toMatchObject({
       calendarNotes: 'calendarNotes',
       docketNumber: '123-45',

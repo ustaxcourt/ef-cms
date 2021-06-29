@@ -7,6 +7,7 @@ import {
 } from './helpers';
 import { docketClerkSealsContactInformation } from './journey/docketClerkSealsContactInformation';
 import { docketClerkUpdatesSealedContactAddress } from './journey/docketClerkUpdatesSealedContactAddress';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkViewsCaseWithSealedContact } from './journey/petitionsClerkViewsCaseWithSealedContact';
 
 const test = setupTest();
@@ -43,6 +44,9 @@ describe('Docket Clerk seals a case contact information', () => {
 
     test.contactId = contactPrimaryFromState(test).contactId;
   });
+
+  loginAs(test, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(test);
 
   loginAs(test, 'docketclerk@example.com');
   contactType = 'contactPrimary';

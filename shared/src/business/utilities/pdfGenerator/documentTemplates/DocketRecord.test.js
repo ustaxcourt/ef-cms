@@ -1,5 +1,6 @@
 const React = require('react');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
@@ -25,10 +26,13 @@ describe('DocketRecord', () => {
     };
 
     contactPrimary = {
+      additionalName: 'Additional name',
       address1: 'Address 1',
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
+      contactId: '1f033442-2962-42cd-8fd8-a393dc754ae1',
+      contactType: CONTACT_TYPES.primary,
       country: 'USA',
       name: 'Test Petitioner',
       phone: '123-124-1234',
@@ -42,6 +46,8 @@ describe('DocketRecord', () => {
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
+      contactId: '04b71da8-a63e-44c2-ad3d-018b584210ee',
+      contactType: CONTACT_TYPES.secondary,
       country: 'USA',
       name: 'Test Petitioner 2',
       phone: '123-124-5678',
@@ -63,6 +69,7 @@ describe('DocketRecord', () => {
       },
       formattedName: 'Test Private Practitioner (PT20001)',
       name: 'Test Private Practitioner',
+      representingFormatted: [],
     };
 
     irsPractitioner = {
@@ -81,10 +88,10 @@ describe('DocketRecord', () => {
     };
 
     caseDetail = {
-      contactPrimary,
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
-      privatePractitioners: [],
+      petitioners: [contactPrimary],
+      privatePractitioners: [{ representingFormatted: [] }],
     };
 
     entries = [
@@ -125,6 +132,7 @@ describe('DocketRecord', () => {
 
     expect(contactPrimaryEl).toContain(contactPrimary.name);
     expect(contactPrimaryEl).toContain(`c/o ${contactPrimary.secondaryName}`);
+    expect(contactPrimaryEl).toContain(contactPrimary.additionalName);
     expect(contactPrimaryEl).toContain(contactPrimary.address1);
     expect(contactPrimaryEl).toContain(contactPrimary.address2);
     expect(contactPrimaryEl).toContain(contactPrimary.address3);
@@ -253,22 +261,21 @@ describe('DocketRecord', () => {
     expect(contactEl).toContain(privatePractitioner.contact.state);
     expect(contactEl).toContain(privatePractitioner.contact.postalCode);
     expect(contactEl).toContain(privatePractitioner.contact.phone);
-
-    expect(contactEl).not.toContain('Representing');
+    expect(contactEl).toContain('Representing');
   });
 
   it('displays represented parties with each practitioner', () => {
     const privatePractitioner2 = {
       ...privatePractitioner,
       barNumber: 'PT20002',
-      representingSecondary: true,
+      representingFormatted: [{ name: contactSecondary.name }],
     };
-    privatePractitioner.representingPrimary = true;
+    privatePractitioner.representingFormatted = [{ name: contactPrimary.name }];
     caseDetail.privatePractitioners = [
       privatePractitioner,
       privatePractitioner2,
     ];
-    caseDetail.contactSecondary = contactSecondary;
+    caseDetail.petitioners.push(contactSecondary);
 
     const wrapper = mount(
       <DocketRecord

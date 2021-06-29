@@ -9,27 +9,27 @@ describe('isEmailAvailable', () => {
 
   it('returns false when there is a corresponding user with the provided email found in cognito', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () => ({ mockFoundUser }),
+      promise: () => Promise.resolve({ mockFoundUser }),
     });
 
-    const result = await isEmailAvailable({
-      applicationContext,
-      email: mockEmail,
-    });
-
-    expect(result).toBeFalsy();
+    await expect(
+      isEmailAvailable({
+        applicationContext,
+        email: mockEmail,
+      }),
+    ).resolves.toBeFalsy();
   });
 
   it('returns true when there is no corresponding user with the provided email found in cognito', async () => {
-    applicationContext.getCognito().adminGetUser.mockRejectedValue({
-      promise: async () => new Error('User does not exist'),
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => Promise.reject(new Error('User does not exist')),
     });
 
-    const result = await isEmailAvailable({
-      applicationContext,
-      email: mockEmail,
-    });
-
-    expect(result).toBeTruthy();
+    await expect(
+      isEmailAvailable({
+        applicationContext,
+        email: mockEmail,
+      }),
+    ).resolves.toBeTruthy();
   });
 });

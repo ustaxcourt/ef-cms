@@ -29,6 +29,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Petition',
         hasDocument: true,
+        servedPartiesCode: 'R',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: true,
@@ -36,6 +37,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
       },
@@ -43,6 +45,7 @@ export const unauthedUserViewsCaseDetail = test => {
         descriptionDisplay:
           'Order of Dismissal Entered, Judge Buch for Something',
         hasDocument: true,
+        servedPartiesCode: 'B',
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
         showServed: true,
@@ -50,6 +53,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Transcript of Anything on 01-01-2019',
         hasDocument: true,
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: false,
@@ -58,6 +62,7 @@ export const unauthedUserViewsCaseDetail = test => {
         descriptionDisplay:
           'Stipulated Decision Entered, Judge Ashford Anything',
         hasDocument: true,
+        servedPartiesCode: 'B',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: true,

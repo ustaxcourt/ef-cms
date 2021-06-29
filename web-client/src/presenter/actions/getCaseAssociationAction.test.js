@@ -1,7 +1,4 @@
-import {
-  CONTACT_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
@@ -146,7 +143,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return that petitioner is associated when the contactPrimaryId is equal to currentUser.userId', async () => {
+  it('should return that petitioner is associated when their userId is found in the case petitioners array', async () => {
     applicationContext
       .getUseCases()
       .verifyPendingCaseForUserInteractor.mockReturnValue(false);
@@ -165,43 +162,6 @@ describe('getCaseAssociation', () => {
           petitioners: [
             {
               contactId: '123',
-              contactType: CONTACT_TYPES.primary,
-            },
-          ],
-        },
-      },
-    });
-
-    expect(results.output).toEqual({
-      isAssociated: true,
-      pendingAssociation: false,
-    });
-  });
-
-  it('should return that petitioner is associated when the contactSecondaryId is equal to currentUser.userId', async () => {
-    applicationContext
-      .getUseCases()
-      .verifyPendingCaseForUserInteractor.mockReturnValue(false);
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitioner,
-      userId: '234',
-    });
-
-    const results = await runAction(getCaseAssociationAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        caseDetail: {
-          petitioners: [
-            {
-              contactId: '123',
-              contactType: CONTACT_TYPES.primary,
-            },
-            {
-              contactId: '234',
-              contactType: CONTACT_TYPES.secondary,
             },
           ],
         },
@@ -232,7 +192,6 @@ describe('getCaseAssociation', () => {
           petitioners: [
             {
               contactId: '456',
-              contactType: CONTACT_TYPES.primary,
             },
           ],
           userId: '123',

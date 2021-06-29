@@ -97,5 +97,18 @@ describe('ExternalDocumentNonStandardC', () => {
         'Affidavit Of Lori Loughlin in Support Of Stipulation Something',
       );
     });
+
+    it('should generate title without previousDocument', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Supporting Document',
+        documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
+        documentType: 'Affidavit in Support',
+        freeText: 'Lori Loughlin',
+        scenario: 'Nonstandard C',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Affidavit Of Lori Loughlin in Support Of',
+      );
+    });
   });
 });

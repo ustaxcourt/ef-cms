@@ -15,13 +15,9 @@ export const canSetTrialSessionToCalendarAction = async ({
   path,
 }) => {
   const trialSession = get(state.trialSession);
-  const {
-    canSetAsCalendared,
-    emptyFields,
-  } = applicationContext
+  const { canSetAsCalendared, emptyFields } = applicationContext
     .getUseCases()
-    .canSetTrialSessionAsCalendaredInteractor({
-      applicationContext,
+    .canSetTrialSessionAsCalendaredInteractor(applicationContext, {
       trialSession,
     });
 

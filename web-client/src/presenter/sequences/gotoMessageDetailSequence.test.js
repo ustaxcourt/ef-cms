@@ -84,10 +84,10 @@ describe('gotoMessageDetailSequence', () => {
     expect(test.getState()).toMatchObject({
       iframeSrc: mockPdfUrl,
       messageDetail: [mockMessage],
-      parentMessageId: mockParentMessageId,
-      viewerDocumentToDisplay: {
+      messageViewerDocumentToDisplay: {
         documentId: mockDocumentId,
       },
+      parentMessageId: mockParentMessageId,
     });
   });
 });
