@@ -1,26 +1,27 @@
 const {
+  Case,
+  getPractitionersRepresenting,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
 
 /**
  * generateDocketRecordPdfInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
  * @returns {Uint8Array} docket record pdf
  */
-exports.generateDocketRecordPdfInteractor = async ({
+exports.generateDocketRecordPdfInteractor = async (
   applicationContext,
-  docketNumber,
-  docketRecordSort,
-  includePartyDetail = false,
-}) => {
+  { docketNumber, docketRecordSort, includePartyDetail = false },
+) => {
   const user = applicationContext.getCurrentUser();
   const isAssociated = await applicationContext
     .getPersistenceGateway()
@@ -29,10 +30,6 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketNumber,
       userId: user.userId,
     });
-  const isInternal = User.isInternalUser(user.role);
-
-  const shouldIncludePartyDetail =
-    includePartyDetail && (isAssociated || isInternal);
 
   const caseSource = await applicationContext
     .getPersistenceGateway()
@@ -42,12 +39,11 @@ exports.generateDocketRecordPdfInteractor = async ({
     });
 
   let caseEntity;
-  if (caseSource.sealedDate) {
-    if (user && user.userId) {
+  if (isSealedCase(caseSource)) {
+    if (user.userId) {
       const isAuthorizedToViewSealedCase = isAuthorized(
         user,
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-        caseSource.userId,
       );
 
       if (isAuthorizedToViewSealedCase || isAssociated) {
@@ -72,6 +68,29 @@ exports.generateDocketRecordPdfInteractor = async ({
       docketRecordSort,
     });
 
+  formattedCaseDetail.petitioners.forEach(petitioner => {
+    petitioner.counselDetails = [];
+
+    const practitioners = getPractitionersRepresenting(
+      formattedCaseDetail,
+      petitioner.contactId,
+    );
+
+    if (practitioners.length > 0) {
+      practitioners.forEach(practitioner => {
+        petitioner.counselDetails.push({
+          email: practitioner.email,
+          name: practitioner.formattedName,
+          phone: practitioner.contact.phone,
+        });
+      });
+    } else {
+      petitioner.counselDetails.push({
+        name: 'None',
+      });
+    }
+  });
+
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
   const pdf = await applicationContext.getDocumentGenerators().docketRecord({
@@ -86,7 +105,7 @@ exports.generateDocketRecordPdfInteractor = async ({
       entries: formattedCaseDetail.formattedDocketEntries.filter(
         d => d.isOnDocketRecord,
       ),
-      includePartyDetail: shouldIncludePartyDetail,
+      includePartyDetail,
     },
   });
 

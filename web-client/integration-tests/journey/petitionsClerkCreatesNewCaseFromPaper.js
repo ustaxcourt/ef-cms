@@ -7,12 +7,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
 );
-const {
-  COUNTRY_TYPES,
-  DEFAULT_PROCEDURE_TYPE,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} = applicationContext.getConstants();
+const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   test,
@@ -117,10 +113,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     {
       key: 'contactPrimary.postalCode',
       value: '23-skidoo',
-    },
-    {
-      key: 'contactPrimary.email',
-      value: 'test@example.com',
     },
     {
       key: 'contactPrimary.phone',

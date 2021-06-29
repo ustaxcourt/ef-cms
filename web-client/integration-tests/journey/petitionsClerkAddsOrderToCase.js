@@ -11,7 +11,7 @@ export const petitionsClerkAddsOrderToCase = test => {
     await test.runSequence('submitCreateOrderModalSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle,
+      documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
@@ -39,12 +39,12 @@ export const petitionsClerkAddsOrderToCase = test => {
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
 
-    const {
-      draftDocuments,
-    } = applicationContext.getUtilities().getFormattedCaseDetail({
-      applicationContext,
-      caseDetail: test.getState('caseDetail'),
-    });
+    const { draftDocuments } = applicationContext
+      .getUtilities()
+      .getFormattedCaseDetail({
+        applicationContext,
+        caseDetail: test.getState('caseDetail'),
+      });
 
     test.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId

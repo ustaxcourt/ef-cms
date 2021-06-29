@@ -1,25 +1,17 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeF = (
   test,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type F`, async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -36,12 +28,28 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
       value: 'FTRL',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'freeText',
+      value: 'some freeText',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
       value: 'Further Trial before',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentTitle',
-      value: 'Further Trial before [Judge] at [Place]',
+      value: 'Further Trial before [Judge] at [Place]. [Anything]',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'scenario',
@@ -69,21 +77,19 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
+      documentTitle:
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       documentType: 'Further Trial before',
       eventCode: 'FTRL',
+      freeText: 'some freeText',
       judge: 'Judge Ashford',
       trialLocation: 'Boise, Idaho',
     });
@@ -94,11 +100,13 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
     });
 
     expect(test.getState('form')).toMatchObject({
-      documentTitle: 'Further Trial before Judge Ashford at Boise, Idaho',
+      documentTitle:
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       documentType: 'Further Trial before',
       eventCode: 'FTRL',
+      freeText: 'some freeText',
       generatedDocumentTitle:
-        'Further Trial before Judge Ashford at Boise, Idaho',
+        'Further Trial before Judge Ashford at Boise, Idaho. some freeText',
       judge: 'Judge Ashford',
       trialLocation: 'Boise, Idaho',
     });

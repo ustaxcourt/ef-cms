@@ -10,21 +10,18 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * updateCaseContextInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the associated judge to set on the case
  * @param {string} providers.caseCaption the caption to set on the case
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
  */
-exports.updateCaseContextInteractor = async ({
+exports.updateCaseContextInteractor = async (
   applicationContext,
-  associatedJudge,
-  caseCaption,
-  caseStatus,
-  docketNumber,
-}) => {
+  { associatedJudge, caseCaption, caseStatus, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
@@ -86,7 +83,7 @@ exports.updateCaseContextInteractor = async ({
         });
     }
 
-    if (caseStatus === CASE_STATUS_TYPES.generalDocketReadyForTrial) {
+    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
       await applicationContext
         .getPersistenceGateway()
         .createCaseTrialSortMappingRecords({
@@ -98,10 +95,10 @@ exports.updateCaseContextInteractor = async ({
   }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: newCase.validate().toRawObject(),
+      caseToUpdate: newCase,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

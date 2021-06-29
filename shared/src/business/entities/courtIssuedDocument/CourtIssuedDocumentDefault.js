@@ -1,3 +1,4 @@
+const joi = require('joi');
 const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
@@ -5,7 +6,16 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { UNSERVABLE_EVENT_CODES } = require('../EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+
+const courtIssuedDocumentDecorator = (obj, rawObj) => {
+  obj.attachments = rawObj.attachments || false;
+  obj.documentTitle = rawObj.documentTitle;
+  obj.documentType = rawObj.documentType;
+  obj.eventCode = rawObj.eventCode;
+  obj.filingDate = rawObj.filingDate;
+};
 
 /**
  * @param {object} rawProps the raw document data
@@ -13,8 +23,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
  */
 function CourtIssuedDocumentDefault() {}
 CourtIssuedDocumentDefault.prototype.init = function init(rawProps) {
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  courtIssuedDocumentDecorator(this, rawProps);
 };
 
 CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
@@ -22,8 +31,18 @@ CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
 };
 
 CourtIssuedDocumentDefault.schema = {
+  attachments: joi.boolean().required(),
   documentTitle: JoiValidationConstants.STRING.optional(),
   documentType: JoiValidationConstants.STRING.required(),
+  eventCode: JoiValidationConstants.STRING.optional(),
+  filingDate: joi.when('eventCode', {
+    is: joi
+      .exist()
+      .not(null)
+      .valid(...UNSERVABLE_EVENT_CODES),
+    otherwise: joi.optional().allow(null),
+    then: JoiValidationConstants.ISO_DATE.max('now').required(),
+  }),
 };
 
 joiValidationDecorator(
@@ -34,4 +53,5 @@ joiValidationDecorator(
 
 module.exports = {
   CourtIssuedDocumentDefault: validEntityDecorator(CourtIssuedDocumentDefault),
+  courtIssuedDocumentDecorator,
 };

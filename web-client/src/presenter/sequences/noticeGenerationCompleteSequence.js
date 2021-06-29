@@ -3,7 +3,6 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getNoticeGenerationSuccessMessageAction } from '../actions/TrialSession/getNoticeGenerationSuccessMessageAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
-import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -32,11 +31,7 @@ export const noticeGenerationCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
-      shouldRefreshCaseAction,
-      {
-        no: [setCurrentPageAction('PrintPaperTrialNotices')],
-        yes: [navigateToPrintPaperServiceAction],
-      },
+      setCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
     ],

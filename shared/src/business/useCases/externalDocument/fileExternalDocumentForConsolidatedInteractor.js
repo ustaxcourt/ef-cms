@@ -15,13 +15,19 @@ const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
-exports.fileExternalDocumentForConsolidatedInteractor = async ({
+/**
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {array} providers.docketNumbersForFiling an array of docket numbers representing consolidated cases
+ * @param {object} providers.documentMetadata the metadata for all the documents
+ * @param {string} providers.leadDocketNumber the lead docket number in the consolidated cases
+ * @returns {Promise<*>} an array of the updated consolidated cases
+ */
+exports.fileExternalDocumentForConsolidatedInteractor = async (
   applicationContext,
-  docketNumbersForFiling,
-  documentMetadata,
-  leadDocketNumber,
-  //filingPartyNames? filingPartyMap?,
-}) => {
+  { docketNumbersForFiling, documentMetadata, leadDocketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_IN_CONSOLIDATED)) {
@@ -152,13 +158,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
         const docketEntryEntity = new DocketEntry(
           {
             ...rawDocument,
-            ...caseEntity.getCaseContacts({
-              contactPrimary: true,
-              contactSecondary: true,
-            }),
           },
           {
             applicationContext,
+            petitioners: caseEntity.petitioners,
           },
         );
 
@@ -180,7 +183,7 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
                 associatedJudge: caseEntity.associatedJudge,
                 caseIsInProgress: caseEntity.inProgress,
                 caseStatus: caseEntity.status,
-                caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+                caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
                 docketEntry: {
                   ...docketEntryEntity.toRawObject(),
                   createdAt: docketEntryEntity.createdAt,
@@ -213,12 +216,10 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
             }
 
             saveWorkItems.push(
-              applicationContext
-                .getPersistenceGateway()
-                .saveWorkItemForNonPaper({
-                  applicationContext,
-                  workItem: workItem.validate().toRawObject(),
-                }),
+              applicationContext.getPersistenceGateway().saveWorkItem({
+                applicationContext,
+                workItem: workItem.validate().toRawObject(),
+              }),
             );
           }
 
@@ -238,12 +239,12 @@ exports.fileExternalDocumentForConsolidatedInteractor = async ({
           }
         }
 
-        saveCasesMap[
-          caseEntity.docketNumber
-        ] = await applicationContext.getPersistenceGateway().updateCase({
-          applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
-        });
+        saveCasesMap[caseEntity.docketNumber] = await applicationContext
+          .getUseCaseHelpers()
+          .updateCaseAndAssociations({
+            applicationContext,
+            caseToUpdate: caseEntity,
+          });
       } // consolidatedCases
     }
   } // documentsToAdd

@@ -64,22 +64,22 @@ export const fileDocumentSecondaryOnChange = ({
 
 export const docketEntryOnChange = ({
   action,
+  inputName,
   inputValue,
-  name,
   updateSequence,
   validateSequence,
 }) => {
   switch (action) {
     case 'select-option':
       updateSequence({
-        key: name,
+        key: inputName,
         value: inputValue.value,
       });
       validateSequence();
       break;
     case 'clear':
       updateSequence({
-        key: name,
+        key: inputName,
         value: '',
       });
       validateSequence();

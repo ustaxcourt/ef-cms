@@ -2,6 +2,7 @@ import { clearFormsAction } from '../actions/clearFormsAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
+import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultDocumentSelectedForPreviewAction } from '../actions/setDefaultDocumentSelectedForPreviewAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
@@ -20,6 +21,7 @@ export const gotoPetitionQcSequence = [
   getCaseAction,
   setCaseAction,
   setCaseOnFormAction,
+  setContactsOnFormAction,
   setFormForCaseAction,
   unsetDocumentSelectedForPreviewAction,
   setDefaultDocumentSelectedForPreviewAction,

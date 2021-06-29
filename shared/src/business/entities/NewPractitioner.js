@@ -20,29 +20,38 @@ function NewPractitioner() {
 
 NewPractitioner.prototype.init = function init(rawUser) {
   Practitioner.prototype.init.call(this, rawUser);
-  this.firstName = rawUser.firstName;
-  this.lastName = rawUser.lastName;
 };
-
-NewPractitioner.validationName = 'Practitioner';
 
 const VALIDATION_ERROR_MESSAGES = {
   ...Practitioner.VALIDATION_ERROR_MESSAGES,
-  email: 'Enter email',
+  confirmEmail: [
+    {
+      contains: 'must be [ref:email]',
+      message: 'Email addresses do not match',
+    },
+    { contains: 'is required', message: 'Enter a valid email address' },
+    { contains: 'must be a valid', message: 'Enter a valid email address' },
+  ],
+  email: 'Enter email address',
   firstName: 'Enter first name',
   lastName: 'Enter last name',
 };
+
+NewPractitioner.VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
 
 joiValidationDecorator(
   NewPractitioner,
   joi.object().keys({
     ...Practitioner.validationRules,
-    admissionsStatus: JoiValidationConstants.STRING.required(),
     barNumber: JoiValidationConstants.STRING.optional().allow(null),
-    email: JoiValidationConstants.STRING.required(),
-    firstName: JoiValidationConstants.STRING.required(),
-    lastName: JoiValidationConstants.STRING.required(),
+    confirmEmail: JoiValidationConstants.EMAIL.when('email', {
+      is: joi.exist().not(null),
+      otherwise: joi.optional().allow(null),
+      then: joi.valid(joi.ref('email')).required(),
+    }),
+    email: JoiValidationConstants.EMAIL.required(),
     role: JoiValidationConstants.STRING.optional().allow(null),
+    updatedEmail: JoiValidationConstants.STRING.optional().allow(null),
     userId: JoiValidationConstants.STRING.optional().allow(null),
   }),
   VALIDATION_ERROR_MESSAGES,

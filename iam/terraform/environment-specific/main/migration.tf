@@ -41,20 +41,31 @@ resource "aws_iam_role_policy" "migration_policy" {
         },
         {
             "Action": [
-                "dynamodb:*"
+                "dynamodb:BatchWriteItem",
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListShards",
+                "dynamodb:ListStreams",
+                "dynamodb:Query",
+                "dynamodb:PutItem",
+                "dynamodb:Scan"
             ],
             "Resource": [
-                "*"
+                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
+                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
             ],
             "Effect": "Allow"
         },
         {
             "Action": [
-                "sqs:*"
+                "sqs:DeleteMessage",
+                "sqs:SendMessage",
+                "sqs:SendMessageBatch",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
             ],
-            "Resource": [
-                "*"
-            ],
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
             "Effect": "Allow"
         }
     ]
@@ -104,20 +115,31 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
         },
         {
             "Action": [
-                "sqs:*"
+                "dynamodb:BatchWriteItem",
+                "dynamodb:DescribeStream",
+                "dynamodb:GetRecords",
+                "dynamodb:GetShardIterator",
+                "dynamodb:ListShards",
+                "dynamodb:ListStreams",
+                "dynamodb:PutItem",
+                "dynamodb:Query",
+                "dynamodb:Scan"
             ],
             "Resource": [
-                "*"
+                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
+                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/*"
             ],
             "Effect": "Allow"
         },
         {
             "Action": [
-                "dynamodb:*"
+                "sqs:DeleteMessage",
+                "sqs:SendMessage",
+                "sqs:SendMessageBatch",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
             ],
-            "Resource": [
-                "*"
-            ],
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
             "Effect": "Allow"
         }
     ]

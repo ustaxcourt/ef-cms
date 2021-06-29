@@ -2,19 +2,17 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const CaseDetailSubnavTabs = connect(
   {
+    caseDetailPrimaryTabChangeSequence:
+      sequences.caseDetailPrimaryTabChangeSequence,
     caseDetailSubnavHelper: state.caseDetailSubnavHelper,
-    clearAlertSequence: sequences.clearAlertSequence,
-    clearDocumentViewerDataSequence: sequences.clearDocumentViewerDataSequence,
-    setCaseDetailPrimaryTabSequence: sequences.setCaseDetailPrimaryTabSequence,
   },
   function CaseDetailSubnavTabs({
+    caseDetailPrimaryTabChangeSequence,
     caseDetailSubnavHelper,
-    clearAlertSequence,
-    clearDocumentViewerDataSequence,
-    setCaseDetailPrimaryTabSequence,
   }) {
     return (
       <div className="case-detail-primary-tabs__container">
@@ -22,11 +20,8 @@ export const CaseDetailSubnavTabs = connect(
           <Tabs
             bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
-            onSelect={() => {
-              clearAlertSequence();
-              setCaseDetailPrimaryTabSequence();
-              clearDocumentViewerDataSequence();
-            }}
+            headingLevel="2"
+            onSelect={caseDetailPrimaryTabChangeSequence}
           >
             <Tab
               className="padding-left-2"
@@ -36,7 +31,14 @@ export const CaseDetailSubnavTabs = connect(
             />
             {caseDetailSubnavHelper.showTrackedItemsTab && (
               <Tab
+                className={classNames(
+                  caseDetailSubnavHelper.showTrackedItemsNotification &&
+                    'tracked-items-padding-right',
+                )}
                 id="tab-tracked-items"
+                showNotificationIcon={
+                  caseDetailSubnavHelper.showTrackedItemsNotification
+                }
                 tabName="trackedItems"
                 title="Tracked Items"
               />

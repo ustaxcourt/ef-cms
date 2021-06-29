@@ -54,8 +54,8 @@ const replaceOriginalWithSignedDocument = async ({
 /**
  * saveSignedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.nameForSigning the name on the signature of the signed document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
@@ -63,14 +63,16 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {string} providers.signedDocketEntryId the id of the signed document
  * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
-exports.saveSignedDocumentInteractor = async ({
+exports.saveSignedDocumentInteractor = async (
   applicationContext,
-  docketNumber,
-  nameForSigning,
-  originalDocketEntryId,
-  parentMessageId,
-  signedDocketEntryId,
-}) => {
+  {
+    docketNumber,
+    nameForSigning,
+    originalDocketEntryId,
+    parentMessageId,
+    signedDocketEntryId,
+  },
+) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -91,6 +93,7 @@ exports.saveSignedDocumentInteractor = async ({
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
         docketEntryId: signedDocketEntryId,
+        docketNumber: caseRecord.docketNumber,
         documentTitle:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         documentType:
@@ -114,7 +117,7 @@ exports.saveSignedDocumentInteractor = async ({
         .getPersistenceGateway()
         .getMessageThreadByParentId({
           applicationContext,
-          parentMessageId: parentMessageId,
+          parentMessageId,
         });
 
       const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
@@ -159,9 +162,9 @@ exports.saveSignedDocumentInteractor = async ({
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   return {

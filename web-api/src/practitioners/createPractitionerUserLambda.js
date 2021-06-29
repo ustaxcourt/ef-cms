@@ -10,8 +10,7 @@ exports.createPractitionerUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .createPractitionerUserInteractor({
-        applicationContext,
+      .createPractitionerUserInteractor(applicationContext, {
         user: JSON.parse(event.body).user,
       });
   });

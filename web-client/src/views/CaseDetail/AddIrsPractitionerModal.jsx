@@ -45,8 +45,7 @@ export const AddIrsPractitionerModal = connect(
                 counsel match(es) found
               </legend>
 
-              {caseDetailPractitionerSearchHelper.respondentSearchResultsCount ===
-                1 && (
+              {caseDetailPractitionerSearchHelper.showOneRespondent && (
                 <span>
                   {
                     caseDetailPractitionerSearchHelper
@@ -66,8 +65,7 @@ export const AddIrsPractitionerModal = connect(
                 </span>
               )}
               <div className="respondent-matches">
-                {caseDetailPractitionerSearchHelper.respondentSearchResultsCount >
-                  1 &&
+                {caseDetailPractitionerSearchHelper.showMultipleRespondents &&
                   caseDetailPractitionerSearchHelper.respondentMatchesFormatted.map(
                     (counsel, idx) => (
                       <div
@@ -76,7 +74,7 @@ export const AddIrsPractitionerModal = connect(
                           'padding-1',
                           counsel.isAlreadyInCase && 'bg-gold',
                         )}
-                        key={idx}
+                        key={counsel.userId}
                       >
                         {counsel.isAlreadyInCase && (
                           <div className="float-right text-italic padding-right-1">

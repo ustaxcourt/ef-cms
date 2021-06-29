@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { EmailVerificationModal } from './EmailVerificationModal';
 import { ErrorNotification } from '../ErrorNotification';
 import { PractitionerForm } from './PractitionerForm';
 import { SuccessNotification } from '../SuccessNotification';
@@ -10,12 +11,14 @@ export const EditPractitionerUser = connect(
   {
     form: state.form,
     navigateBackSequence: sequences.navigateBackSequence,
+    showModal: state.modal.showModal,
     submitUpdatePractitionerUserSequence:
       sequences.submitUpdatePractitionerUserSequence,
   },
   function EditPractitionerUser({
     form,
     navigateBackSequence,
+    showModal,
     submitUpdatePractitionerUserSequence,
   }) {
     return (
@@ -41,7 +44,7 @@ export const EditPractitionerUser = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <PractitionerForm />
+          <PractitionerForm validateSequenceName="validateUpdatePractitionerSequence" />
 
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">
@@ -58,6 +61,8 @@ export const EditPractitionerUser = connect(
             </div>
           </div>
         </section>
+
+        {showModal === 'EmailVerificationModal' && <EmailVerificationModal />}
       </>
     );
   },

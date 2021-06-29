@@ -10,14 +10,14 @@ export const Focus = ({ children, className }) => {
 
   const setFocus = e => {
     e && e.preventDefault();
-    const focusEl = node.current.querySelector(focusableChildren);
-    if (focusEl && focusEl.focus) focusEl.focus();
+    const focusEl = node?.current?.querySelector(focusableChildren);
+    if (focusEl?.focus) focusEl.focus();
     setFocused(true);
     return false;
   };
 
   useEffect(() => {
-    focused || setFocus();
+    focused || setTimeout(setFocus, 50);
   }, []);
 
   const focusClassName = classNames('focus-component', className);

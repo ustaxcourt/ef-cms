@@ -18,15 +18,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-exports.fileExternalDocumentInteractor = async ({
+exports.fileExternalDocumentInteractor = async (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -56,8 +56,7 @@ exports.fileExternalDocumentInteractor = async ({
   } = documentMetadata;
 
   const baseMetadata = pick(primaryDocumentMetadata, [
-    'partyPrimary',
-    'partySecondary',
+    'filers',
     'partyIrsPractitioner',
     'practitioner',
     'docketNumber',
@@ -117,20 +116,11 @@ exports.fileExternalDocumentInteractor = async ({
           docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
-          partyPrimary:
-            baseMetadata.partyPrimary || documentMetadata.representingPrimary,
-          partySecondary:
-            baseMetadata.partySecondary ||
-            documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
-          ...caseEntity.getCaseContacts({
-            contactPrimary: true,
-            contactSecondary: true,
-          }),
         },
-        { applicationContext },
-      );
+        { applicationContext, petitioners: caseEntity.petitioners },
+      ).validate();
 
       const highPriorityWorkItem =
         caseEntity.status === CASE_STATUS_TYPES.calendared;
@@ -142,7 +132,7 @@ exports.fileExternalDocumentInteractor = async ({
           associatedJudge: caseToUpdate.associatedJudge,
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
-          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,
@@ -156,7 +146,7 @@ exports.fileExternalDocumentInteractor = async ({
           trialDate: caseEntity.trialDate,
         },
         { applicationContext },
-      );
+      ).validate();
 
       docketEntryEntity.setWorkItem(workItem);
 
@@ -185,13 +175,13 @@ exports.fileExternalDocumentInteractor = async ({
       caseEntity,
     });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
   for (let workItem of workItems) {
-    await applicationContext.getPersistenceGateway().saveWorkItemForNonPaper({
+    await applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
       workItem: workItem.validate().toRawObject(),
     });

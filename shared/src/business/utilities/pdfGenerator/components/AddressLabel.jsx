@@ -1,6 +1,7 @@
 const React = require('react');
 
 export const AddressLabel = ({
+  additionalName,
   address1,
   address2,
   address3,
@@ -19,6 +20,7 @@ export const AddressLabel = ({
         {'@media print{@page {margin-bottom: 2cm}}'}
       </style>
       <div>{name}</div>
+      {additionalName && <div>c/o {additionalName}</div>}
       {secondaryName && (
         <div>
           c/o {secondaryName}
@@ -37,7 +39,7 @@ export const AddressLabel = ({
       <div>
         {city}, {state} {postalCode}
       </div>
-      {!address3 && <div>{countryName}</div>}
+      <div>{countryName}</div>
     </div>
   );
 };

@@ -19,8 +19,7 @@ describe('submitPendingCaseAssociationRequest', () => {
     });
 
     await expect(
-      submitPendingCaseAssociationRequestInteractor({
-        applicationContext,
+      submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
@@ -42,8 +41,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
 
-    await submitPendingCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -54,8 +52,7 @@ describe('submitPendingCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if these is already a pending association', async () => {
-    await submitPendingCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -73,8 +70,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       .getPersistenceGateway()
       .verifyPendingCaseForUser.mockReturnValue(false);
 
-    await submitPendingCaseAssociationRequestInteractor({
-      applicationContext,
+    await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });

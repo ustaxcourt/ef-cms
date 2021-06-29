@@ -1,32 +1,28 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const DocketRecordHeader = connect(
   {
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
-    navigateToPrintableDocketRecordSequence:
-      sequences.navigateToPrintableDocketRecordSequence,
-    printDocketRecordSequence: sequences.printDocketRecordSequence,
+    gotoPrintableDocketRecordSequence:
+      sequences.gotoPrintableDocketRecordSequence,
+    showModal: state.modal.showModal,
     toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
+    docketRecordHelper,
     formattedCaseDetail,
-    navigateToPrintableDocketRecordSequence,
-    printDocketRecordSequence,
+    gotoPrintableDocketRecordSequence,
+    showModal,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) {
-    const openDocketRecordPrintPreview = (options = {}) => {
-      updateSessionMetadataSequence({
-        key: `docketRecordSort.${formattedCaseDetail.docketNumber}`,
-        value: 'byDate',
-      });
-      printDocketRecordSequence(options);
-    };
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
@@ -68,21 +64,24 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
-            <div className="tablet:grid-col-10 text-right">
-              <Button
-                link
-                aria-label="printable docket record"
-                className="margin-right-0"
-                icon="print"
-                onClick={() => {
-                  navigateToPrintableDocketRecordSequence({
-                    docketNumber: formattedCaseDetail.docketNumber,
-                  });
-                }}
-              >
-                Printable Docket Record
-              </Button>
-            </div>
+            {docketRecordHelper.showPrintableDocketRecord && (
+              <div className="tablet:grid-col-10 text-right">
+                <Button
+                  link
+                  aria-label="printable docket record"
+                  className="margin-right-0"
+                  icon="print"
+                  id="printable-docket-record-button"
+                  onClick={() => {
+                    gotoPrintableDocketRecordSequence({
+                      docketNumber: formattedCaseDetail.docketNumber,
+                    });
+                  }}
+                >
+                  Printable Docket Record
+                </Button>
+              </div>
+            )}
           </div>
           <div className="only-small-screens">
             <Button
@@ -90,9 +89,8 @@ export const DocketRecordHeader = connect(
               aria-hidden="true"
               icon="print"
               onClick={() => {
-                openDocketRecordPrintPreview({
-                  openNewTab: true,
-                  openNewView: false,
+                gotoPrintableDocketRecordSequence({
+                  docketNumber: formattedCaseDetail.docketNumber,
                 });
               }}
             >
@@ -118,6 +116,9 @@ export const DocketRecordHeader = connect(
             </Button>
           </div>
         </div>
+        {showModal === 'OpenPrintableDocketRecordModal' && (
+          <OpenPrintableDocketRecordModal />
+        )}
       </React.Fragment>
     );
   },

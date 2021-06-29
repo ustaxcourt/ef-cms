@@ -8,10 +8,11 @@ const createApplicationContext = require('../applicationContext');
  */
 exports.processStreamRecordsLambda = async event => {
   const applicationContext = createApplicationContext({});
-  applicationContext.logger.info('received a stream event of', event);
+  applicationContext.logger.debug('received a stream event of', event);
   const recordsToProcess = event.Records;
-  return await applicationContext.getUseCases().processStreamRecordsInteractor({
-    applicationContext,
-    recordsToProcess,
-  });
+  return await applicationContext
+    .getUseCases()
+    .processStreamRecordsInteractor(applicationContext, {
+      recordsToProcess,
+    });
 };

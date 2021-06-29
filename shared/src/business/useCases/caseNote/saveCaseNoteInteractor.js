@@ -8,17 +8,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * saveCaseNoteInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update case note
  * @param {string} providers.caseNote the note to update
  * @returns {object} the updated case note returned from persistence
  */
-exports.saveCaseNoteInteractor = async ({
+exports.saveCaseNoteInteractor = async (
   applicationContext,
-  caseNote,
-  docketNumber,
-}) => {
+  { caseNote, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
@@ -40,10 +39,12 @@ exports.saveCaseNoteInteractor = async ({
     .validate()
     .toRawObject();
 
-  const result = await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate,
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate,
+    });
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };

@@ -2,17 +2,20 @@ module.exports = {
   plugins: ['babel-plugin-cerebral', 'transform-html-import-require-to-string'],
   presets: [
     [
-      '@babel/env',
+      '@babel/preset-env',
       {
-        corejs: '3',
         targets: {
-          chrome: '78',
-          firefox: '70',
-          safari: '13',
+          esmodules: true,
         },
-        useBuiltIns: 'usage',
       },
     ],
-    '@babel/preset-react',
+    [
+      '@babel/preset-react',
+      {
+        runtime: 'automatic',
+      },
+    ],
   ],
+  sourceType: 'unambiguous',
+  targets: 'defaults',
 };

@@ -10,8 +10,7 @@ exports.getConsolidatedCasesByCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getConsolidatedCasesByCaseInteractor({
-        applicationContext,
+      .getConsolidatedCasesByCaseInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

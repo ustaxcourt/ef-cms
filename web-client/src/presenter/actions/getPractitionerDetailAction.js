@@ -1,5 +1,3 @@
-import { state } from 'cerebral';
-
 /**
  * Fetches the details about a practitioner
  *
@@ -11,29 +9,15 @@ import { state } from 'cerebral';
 
 export const getPractitionerDetailAction = async ({
   applicationContext,
-  get,
   props,
 }) => {
   const { barNumber } = props;
-  const currentPractitionerDetail = get(state.practitionerDetail);
 
-  if (
-    currentPractitionerDetail &&
-    currentPractitionerDetail.barNumber === barNumber
-  ) {
-    // we already have detail in state, so return that
-    return {
-      practitionerDetail: currentPractitionerDetail,
-    };
-  } else {
-    // fetch practitionerDetail from use case
-    const practitionerDetail = await applicationContext
-      .getUseCases()
-      .getPractitionerByBarNumberInteractor({
-        applicationContext,
-        barNumber,
-      });
+  const practitionerDetail = await applicationContext
+    .getUseCases()
+    .getPractitionerByBarNumberInteractor(applicationContext, {
+      barNumber,
+    });
 
-    return { practitionerDetail };
-  }
+  return { practitionerDetail };
 };

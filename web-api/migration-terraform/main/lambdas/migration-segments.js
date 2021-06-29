@@ -1,10 +1,20 @@
 const AWS = require('aws-sdk');
-const {
-  migrateItems: migration0003,
-} = require('./migrations/0003-case-deadline-required-fields');
-const { chunk, isEmpty } = require('lodash');
-const MAX_DYNAMO_WRITE_SIZE = 25;
+const createApplicationContext = require('../../../src/applicationContext');
+const promiseRetry = require('promise-retry');
 
+const {
+  migrateItems: migration0035,
+} = require('./migrations/0035-in-care-of-to-additional-name');
+const {
+  migrateItems: migration0036,
+} = require('./migrations/0036-phone-number-format');
+const {
+  migrateItems: validationMigration,
+} = require('./migrations/0000-validate-all-items');
+const { chunk } = require('lodash');
+
+const MAX_DYNAMO_WRITE_SIZE = 25;
+const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
   maxRetries: 10,
   region: 'us-east-1',
@@ -19,59 +29,57 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
+// eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  items = await migration0003(items, documentClient);
+  applicationContext.logger.debug('about to run migration 0035');
+  items = await migration0035(items);
+
+  applicationContext.logger.debug('about to run migration 0036');
+  items = await migration0036(items);
+
+  applicationContext.logger.debug('about to run validation migration');
+  items = await validationMigration(items);
+
   return items;
 };
 
-const reprocessItems = async ({ documentClient, items }) => {
-  const moreUnprocessedItems = [];
-
-  items = await migrateRecords({ documentClient, items });
-
-  for (let item of items) {
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: item,
-      })
-      .promise();
-
-    if (!isEmpty(results.UnprocessedItems)) {
-      moreUnprocessedItems.push(results.UnprocessedItems);
-    }
-  }
-
-  if (moreUnprocessedItems.length) {
-    await reprocessItems(moreUnprocessedItems);
-  }
-};
+exports.migrateRecords = migrateRecords;
 
 const processItems = async ({ documentClient, items }) => {
-  // your migration code goes here
+  try {
+    items = await migrateRecords({ documentClient, items });
+  } catch (err) {
+    applicationContext.logger.error('Error migrating records', err);
+    throw err;
+  }
+
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
-  for (let c of chunks) {
-    c = await migrateRecords({ documentClient, items: c });
-
-    const results = await documentClient
-      .batchWrite({
-        RequestItems: {
-          [process.env.DESTINATION_TABLE]: c.map(item => ({
-            PutRequest: {
-              Item: {
-                ...item,
-              },
-            },
-          })),
-        },
-      })
-      .promise();
-
-    if (!isEmpty(results.UnprocessedItems)) {
-      await reprocessItems({
-        documentClient,
-        items: [results.UnprocessedItems],
-      });
+  for (let aChunk of chunks) {
+    const promises = [];
+    for (let item of aChunk) {
+      promises.push(
+        promiseRetry(retry => {
+          return documentClient
+            .put({
+              ConditionExpression: 'attribute_not_exists(pk)',
+              Item: item,
+              TableName: process.env.DESTINATION_TABLE,
+            })
+            .promise()
+            .catch(e => {
+              if (e.message.includes('The conditional request failed')) {
+                console.log(
+                  `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
+                );
+              } else {
+                throw e;
+              }
+            })
+            .catch(retry);
+        }),
+      );
     }
+    await Promise.all(promises);
   }
 };
 
@@ -92,7 +100,9 @@ const scanTableSegment = async (segment, totalSegments) => {
       })
       .promise()
       .then(async results => {
-        console.log('got some results', results.Items.length);
+        applicationContext.logger.info(
+          `${segment}/${totalSegments} got ${results.Items.length} results`,
+        );
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await processItems({
@@ -108,9 +118,12 @@ exports.handler = async event => {
   const { body, receiptHandle } = Records[0];
   const { segment, totalSegments } = JSON.parse(body);
 
-  console.log(`about to process ${segment} of ${totalSegments}`);
+  applicationContext.logger.info(
+    `about to process ${segment} of ${totalSegments}`,
+  );
 
   await scanTableSegment(segment, totalSegments);
+  applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
   await sqs
     .deleteMessage({
       QueueUrl: process.env.SEGMENTS_QUEUE_URL,

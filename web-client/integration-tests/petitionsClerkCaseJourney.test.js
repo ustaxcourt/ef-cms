@@ -1,6 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDeficiencyStatisticToCase } from './journey/petitionsClerkAddsDeficiencyStatisticToCase';
 import { petitionsClerkAddsOtherStatisticsToCase } from './journey/petitionsClerkAddsOtherStatisticsToCase';
+import { petitionsClerkCancelsAddingDeficiencyStatisticToCase } from './journey/petitionsClerkCancelsAddingDeficiencyStatisticToCase';
 import { petitionsClerkChangesCaseCaptionDuringQC } from './journey/petitionsClerkChangesCaseCaptionDuringQC';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkDeleteDeficiencyStatistic } from './journey/petitionsClerkDeleteDeficiencyStatistic';
@@ -17,6 +18,10 @@ const test = setupTest();
 describe('Petitions clerk case journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitionsclerk@example.com');
@@ -47,6 +52,7 @@ describe('Petitions clerk case journey', () => {
 
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkAddsDeficiencyStatisticToCase(test);
+  petitionsClerkCancelsAddingDeficiencyStatisticToCase(test);
   petitionsClerkEditsDeficiencyStatistic(test);
   petitionsClerkDeleteDeficiencyStatistic(test);
 

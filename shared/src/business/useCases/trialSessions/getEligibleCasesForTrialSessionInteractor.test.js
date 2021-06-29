@@ -4,8 +4,15 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('./getEligibleCasesForTrialSessionInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} = require('../../../test/mockCase');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
@@ -14,6 +21,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   const MOCK_TRIAL = {
     maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
     startDate: '2025-12-01T00:00:00.000Z',
     term: 'Fall',
@@ -23,6 +31,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   const MOCK_ASSOCIATED_CASE = {
     ...MOCK_CASE,
+    ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
   };
 
   beforeEach(() => {
@@ -40,7 +49,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       .getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
     applicationContext
       .getUseCases()
       .getCalendaredCasesForTrialSessionInteractor.mockImplementation(() => [
@@ -52,8 +61,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     mockCurrentUser = {};
 
     await expect(
-      getEligibleCasesForTrialSessionInteractor({
-        applicationContext,
+      getEligibleCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrow();
@@ -61,11 +69,23 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
   it('should find the cases for a trial session successfully', async () => {
     await expect(
-      getEligibleCasesForTrialSessionInteractor({
-        applicationContext,
+      getEligibleCasesForTrialSessionInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).resolves.not.toThrow();
+  });
+
+  it('should call getEligibleCasesForTrialSession with correct limit', async () => {
+    await getEligibleCasesForTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
+        .mock.calls[0][0],
+    ).toMatchObject({
+      limit: 150, // max cases + buffer
+    });
   });
 
   it('should return cases that are set for this session even if uncalendared', async () => {
@@ -84,15 +104,20 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     let result;
 
     try {
-      result = await getEligibleCasesForTrialSessionInteractor({
+      result = await getEligibleCasesForTrialSessionInteractor(
         applicationContext,
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      });
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      );
     } catch (e) {
       error = e;
     }
 
     expect(error).toBeUndefined();
-    expect(result).toMatchObject([MOCK_ASSOCIATED_CASE, MOCK_CASE]);
+    expect(result).toMatchObject([
+      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+      MOCK_ELIGIBLE_CASE,
+    ]);
   });
 });

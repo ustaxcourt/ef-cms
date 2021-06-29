@@ -246,4 +246,25 @@ describe('internalTypesHelper', () => {
       });
     });
   });
+
+  describe('lodged', () => {
+    let LODGED_EVENT_CODE;
+
+    beforeAll(() => {
+      ({ LODGED_EVENT_CODE } = applicationContext.getConstants());
+    });
+
+    it('does not show MISCL in dropdown', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {},
+      });
+
+      const miscellaneousLodgedType =
+        result.internalDocumentTypesForSelectSorted.find(
+          d => d.eventCode === LODGED_EVENT_CODE,
+        );
+
+      expect(miscellaneousLodgedType).toBeUndefined();
+    });
+  });
 });

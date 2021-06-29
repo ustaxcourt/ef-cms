@@ -29,28 +29,26 @@ describe('Update case trial sort tags', () => {
   });
 
   it('does not call persistence if case status is not ready for trial', async () => {
-    await updateCaseTrialSortTagsInteractor({
-      applicationContext,
+    await updateCaseTrialSortTagsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
     });
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).not.toBeCalled();
   });
 
   it('calls persistence if case status is ready for trial', async () => {
     mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
 
-    await updateCaseTrialSortTagsInteractor({
-      applicationContext,
+    await updateCaseTrialSortTagsInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
     });
 
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toBeCalled();
   });
 
@@ -58,8 +56,7 @@ describe('Update case trial sort tags', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateCaseTrialSortTagsInteractor({
-        applicationContext,
+      updateCaseTrialSortTagsInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case');
@@ -71,8 +68,7 @@ describe('Update case trial sort tags', () => {
       .getCaseByDocketNumber.mockReturnValue(null);
 
     await expect(
-      updateCaseTrialSortTagsInteractor({
-        applicationContext,
+      updateCaseTrialSortTagsInteractor(applicationContext, {
         docketNumber: '123-45',
       }),
     ).rejects.toThrow('Case 123-45');
@@ -90,8 +86,7 @@ describe('Update case trial sort tags', () => {
       );
 
     await expect(
-      updateCaseTrialSortTagsInteractor({
-        applicationContext,
+      updateCaseTrialSortTagsInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         userId: 'petitionsclerk',
       }),

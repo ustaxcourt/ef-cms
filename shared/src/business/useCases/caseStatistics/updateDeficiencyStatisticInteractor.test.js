@@ -35,8 +35,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      updateDeficiencyStatisticInteractor({
-        applicationContext,
+      updateDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
@@ -48,12 +47,14 @@ describe('updateDeficiencyStatisticInteractor', () => {
       determinationDeficiencyAmount: 1,
     };
 
-    const result = await updateDeficiencyStatisticInteractor({
+    const result = await updateDeficiencyStatisticInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
-      ...statisticToUpdate,
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
+        ...statisticToUpdate,
+      },
+    );
     expect(result).toMatchObject({
       statistics: [statisticToUpdate],
     });
@@ -66,12 +67,14 @@ describe('updateDeficiencyStatisticInteractor', () => {
       statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
     };
 
-    const result = await updateDeficiencyStatisticInteractor({
+    const result = await updateDeficiencyStatisticInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
-      ...statisticToUpdate,
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
+        ...statisticToUpdate,
+      },
+    );
     expect(result).toMatchObject({
       statistics: [statistic],
     });

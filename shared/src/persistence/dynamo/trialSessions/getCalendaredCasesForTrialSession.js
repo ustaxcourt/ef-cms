@@ -1,5 +1,6 @@
 const client = require('../../dynamodbClientService');
 const { getCaseByDocketNumber } = require('../cases/getCaseByDocketNumber');
+const { map } = require('lodash');
 
 exports.getCalendaredCasesForTrialSession = async ({
   applicationContext,
@@ -14,14 +15,21 @@ exports.getCalendaredCasesForTrialSession = async ({
   });
 
   const { caseOrder } = trialSession;
+  const docketNumbers = map(caseOrder, 'docketNumber');
+
+  const casesByDocketNumber = await Promise.all(
+    docketNumbers.map(docketNumber =>
+      getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
 
   for (let i = 0; i < caseOrder.length; i++) {
     caseOrder[i] = {
       ...caseOrder[i],
-      ...(await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: caseOrder[i].docketNumber,
-      })),
+      ...casesByDocketNumber[i],
     };
   }
 

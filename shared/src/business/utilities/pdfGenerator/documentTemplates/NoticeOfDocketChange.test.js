@@ -101,7 +101,7 @@ describe('NoticeOfDocketChange', () => {
     );
 
     expect(wrapper.find('#changed-filing-parties').text()).toEqual(
-      `"${filingParties.before}" has been changed to "${filingParties.after}".`,
+      `The filing party/parties has been changed from "${filingParties.before}" to "${filingParties.after}".`,
     );
   });
 

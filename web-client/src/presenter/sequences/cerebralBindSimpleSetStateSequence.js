@@ -1,6 +1,5 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { cerebralBindSimpleSetStateAction } from '../actions/cerebralBindSimpleSetStateAction';
 
 export const cerebralBindSimpleSetStateSequence = [
-  set(state[props.key], props.value),
+  cerebralBindSimpleSetStateAction,
 ];

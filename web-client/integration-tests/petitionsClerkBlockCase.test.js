@@ -43,7 +43,7 @@ describe('Blocking a Case', () => {
   docketClerkSetsCaseReadyForTrial(test);
   loginAs(test, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test, overrides);
+  docketClerkViewsTrialSessionList(test);
 
   loginAs(test, 'petitionsclerk@example.com');
   //manual block and unblock - check eligible list
@@ -53,8 +53,9 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(test, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
 
-  // //automatic block with a due date
+  // automatic block with a due date
   petitionsClerkCreatesACaseDeadline(test);
+
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
 
@@ -68,12 +69,14 @@ describe('Blocking a Case', () => {
     expect(test.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
-        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
+        automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         blocked: false,
         docketNumber: test.docketNumber,
       },
     ]);
   });
+
+  petitionsClerkRemovesPendingItemFromCase(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
   petitionsClerkDeletesCaseDeadline(test);
   petitionsClerkViewsATrialSessionsEligibleCases(test, 1);

@@ -300,4 +300,26 @@ describe('workQueueHelper', () => {
     });
     expect(result.sectionInProgressCount).toBe(10);
   });
+
+  it('should return the correct document qc queue path URL based on the box and queue type provided', () => {
+    const user = {
+      role: ROLES.docketClerk,
+      userId: '9d7fd667-42a4-4bd0-9ec7-89d2673cf8b1',
+    };
+    const mockQueue = 'test';
+    const mockBox = 'my';
+
+    const result = runCompute(workQueueHelper, {
+      state: {
+        ...getBaseState(user),
+        sectionInProgressCount: 10,
+        selectedWorkItems: [],
+        workQueueToDisplay: { box: 'outbox', queue: 'my' },
+      },
+    });
+
+    expect(result.getQueuePath({ box: mockBox, queue: mockQueue })).toBe(
+      `/document-qc/${mockQueue}/${mockBox}`,
+    );
+  });
 });

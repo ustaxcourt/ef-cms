@@ -9,11 +9,8 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const test = setupTest();
-const {
-  CASE_TYPES_MAP,
-  CHIEF_JUDGE,
-  STATUS_TYPES,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, CHIEF_JUDGE, STATUS_TYPES } =
+  applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey', () => {
   beforeAll(() => {
@@ -36,7 +33,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
     loginAs(test, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test, overrides);
+    docketClerkViewsTrialSessionList(test);
     docketClerkViewsNewTrialSession(test);
   });
 
@@ -334,7 +331,12 @@ describe('Trial Session Eligible Cases Journey', () => {
       await test.runSequence('removeCaseFromTrialSequence');
 
       expect(test.getState('validationErrors')).toEqual({
+        caseStatus: 'Enter a case status',
         disposition: 'Enter a disposition',
+      });
+
+      await test.runSequence('openRemoveFromTrialSessionModalSequence', {
+        trialSessionId: test.trialSessionId,
       });
 
       await test.runSequence('updateModalValueSequence', {
@@ -343,6 +345,8 @@ describe('Trial Session Eligible Cases Journey', () => {
       });
 
       await test.runSequence('removeCaseFromTrialSequence');
+
+      expect(test.getState('validationErrors')).toEqual({});
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
@@ -368,6 +372,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         STATUS_TYPES.calendared,
       );
 
+      await test.runSequence('openAddToTrialModalSequence');
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000);
 
@@ -375,10 +380,13 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: 'Select a Trial Session',
       });
 
+      await test.runSequence('openAddToTrialModalSequence');
       test.setState('modal.trialSessionId', test.trialSessionId);
 
       await test.runSequence('addCaseToTrialSessionSequence');
       await wait(1000); // we need to wait for some reason
+
+      expect(test.getState('validationErrors')).toEqual({});
 
       await test.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],

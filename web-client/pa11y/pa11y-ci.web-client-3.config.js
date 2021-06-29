@@ -1,3 +1,5 @@
+const { getOnly } = require('./helpers');
+
 const adc = require('./pa11y-adc');
 const admissionsClerk = require('./pa11y-admissionsclerk');
 const irsSuperuser = require('./pa11y-irs-superuser');
@@ -10,5 +12,5 @@ const urls = [...petitioner, ...adc, ...irsSuperuser, ...admissionsClerk].map(
 
 module.exports = {
   defaults,
-  urls,
+  urls: getOnly(urls),
 };

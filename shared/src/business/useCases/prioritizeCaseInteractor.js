@@ -8,17 +8,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * used for setting a case as high priority
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.reason the reason the case is being set as high priority
  * @param {string} providers.docketNumber the docket number of the case to set as high priority
  * @returns {object} the case data
  */
-exports.prioritizeCaseInteractor = async ({
+exports.prioritizeCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  reason,
-}) => {
+  { docketNumber, reason },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PRIORITIZE_CASE)) {
@@ -43,19 +42,21 @@ exports.prioritizeCaseInteractor = async ({
 
   caseEntity.setAsHighPriority(reason);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateHighPriorityCaseTrialSortMappingRecords({
-      applicationContext,
-      caseSortTags: caseEntity.generateTrialSortTags(),
-      docketNumber: caseEntity.docketNumber,
-    });
+  if (caseEntity.preferredTrialCity && !caseEntity.blocked) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();

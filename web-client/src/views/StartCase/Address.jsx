@@ -27,15 +27,128 @@ export const Address = connect(
     validateStartCaseSequence,
     validationErrors,
   }) {
+    /**
+     * @returns {function} MobileCityAndState template
+     */
+    function MobileCityAndState() {
+      return (
+        <Mobile>
+          <FormGroup errorText={validationErrors?.[type]?.city}>
+            <label className="usa-label" htmlFor={`${type}.city`}>
+              City
+            </label>
+            <input
+              autoCapitalize="none"
+              className="usa-input"
+              id={`${type}.city`}
+              name={`${type}.city`}
+              type="text"
+              value={data[type].city || ''}
+              onBlur={() => {
+                validateStartCaseSequence();
+              }}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </FormGroup>
+
+          <FormGroup errorText={validationErrors?.[type]?.state}>
+            <label className="usa-label" htmlFor={`${type}.state`}>
+              State
+            </label>
+            <StateSelect
+              data={data}
+              type={type}
+              updateFormValueSequence={updateFormValueSequence}
+              usStates={usStates}
+              usStatesOther={usStatesOther}
+              validateStartCaseSequence={validateStartCaseSequence}
+            />
+          </FormGroup>
+        </Mobile>
+      );
+    }
+
+    /**
+     * @returns {function} NonMobileCityAndState template
+     */
+    function NonMobileCityAndState() {
+      return (
+        <NonMobile>
+          {/* we do not use <FormGroup> here because of how custom the error text is displayed */}
+          <div
+            className={classNames(
+              'usa-form-group',
+              (validationErrors?.[type]?.city ||
+                validationErrors?.[type]?.state) &&
+                'usa-form-group--error',
+            )}
+          >
+            <div className="grid-row grid-gap state-and-city">
+              <div className="grid-col-8">
+                <label className="usa-label" htmlFor={`${type}.city`}>
+                  City
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input usa-input--inline"
+                  id={`${type}.city`}
+                  name={`${type}.city`}
+                  type="text"
+                  value={data[type].city || ''}
+                  onBlur={() => {
+                    validateStartCaseSequence();
+                  }}
+                  onChange={e => {
+                    updateFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+              <div className="grid-col-4">
+                <label className="usa-label" htmlFor={`${type}.state`}>
+                  State
+                </label>
+                <StateSelect
+                  data={data}
+                  type={type}
+                  updateFormValueSequence={updateFormValueSequence}
+                  usStates={usStates}
+                  usStatesOther={usStatesOther}
+                  validateStartCaseSequence={validateStartCaseSequence}
+                />
+              </div>
+            </div>
+            <div className="grid-row grid-gap">
+              <div className="grid-col-8">
+                {validationErrors?.[type]?.city && (
+                  <span className="usa-error-message">
+                    {validationErrors[type].city}
+                  </span>
+                )}
+              </div>
+              <div className="grid-col-4">
+                {validationErrors?.[type]?.state && (
+                  <span className="usa-error-message">
+                    {validationErrors[type].state}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </NonMobile>
+      );
+    }
+
     return (
       <>
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.address1}>
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
           </label>
@@ -101,134 +214,11 @@ export const Address = connect(
             }}
           />
         </div>
-        <NonMobile>
-          {/* we do not use <FormGroup> here because of how custom the error text is displayed */}
-          <div
-            className={classNames(
-              'usa-form-group',
-              validationErrors &&
-                validationErrors[type] &&
-                (validationErrors[type].city || validationErrors[type].state) &&
-                'usa-form-group--error',
-            )}
-          >
-            <div className="grid-row grid-gap state-and-city">
-              <div className="grid-col-8">
-                <label className="usa-label" htmlFor={`${type}.city`}>
-                  City
-                </label>
-                <input
-                  autoCapitalize="none"
-                  className="usa-input usa-input--inline"
-                  id={`${type}.city`}
-                  name={`${type}.city`}
-                  type="text"
-                  value={data[type].city || ''}
-                  onBlur={() => {
-                    validateStartCaseSequence();
-                  }}
-                  onChange={e => {
-                    updateFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-              <div className="grid-col-4">
-                <label className="usa-label" htmlFor={`${type}.state`}>
-                  State
-                </label>
-                <StateSelect
-                  data={data}
-                  type={type}
-                  updateFormValueSequence={updateFormValueSequence}
-                  usStates={usStates}
-                  usStatesOther={usStatesOther}
-                  validateStartCaseSequence={validateStartCaseSequence}
-                />
-              </div>
-            </div>
-            <div className="grid-row grid-gap">
-              <div className="grid-col-8">
-                {validationErrors &&
-                  validationErrors[type] &&
-                  validationErrors[type].city && (
-                    <span className="usa-error-message">
-                      {validationErrors[type].city}
-                    </span>
-                  )}
-              </div>
-              <div className="grid-col-4">
-                {validationErrors &&
-                  validationErrors[type] &&
-                  validationErrors[type].state && (
-                    <span className="usa-error-message">
-                      {validationErrors[type].state}
-                    </span>
-                  )}
-              </div>
-            </div>
-          </div>
-        </NonMobile>
-        <Mobile>
-          <FormGroup
-            errorText={
-              validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].city
-            }
-          >
-            <label className="usa-label" htmlFor={`${type}.city`}>
-              City
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id={`${type}.city`}
-              name={`${type}.city`}
-              type="text"
-              value={data[type].city || ''}
-              onBlur={() => {
-                validateStartCaseSequence();
-              }}
-              onChange={e => {
-                updateFormValueSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
 
-          <FormGroup
-            errorText={
-              validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].state
-            }
-          >
-            <label className="usa-label" htmlFor={`${type}.state`}>
-              State
-            </label>
-            <StateSelect
-              data={data}
-              type={type}
-              updateFormValueSequence={updateFormValueSequence}
-              usStates={usStates}
-              usStatesOther={usStatesOther}
-              validateStartCaseSequence={validateStartCaseSequence}
-            />
-          </FormGroup>
-        </Mobile>
+        {NonMobileCityAndState()}
+        {MobileCityAndState()}
 
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.postalCode}>
           <label
             aria-hidden
             className="usa-label"

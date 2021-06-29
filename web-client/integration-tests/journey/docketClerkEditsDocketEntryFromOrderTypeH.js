@@ -1,8 +1,6 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeH = (
   test,
@@ -11,18 +9,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
   const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
 
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type H`, async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
     const { docketEntryId } = test.draftOrders[draftOrderIndex];
 
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
+
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -37,6 +29,18 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: TRANSCRIPT_EVENT_CODE,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: '1',
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: '2021',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'documentType',
@@ -57,7 +61,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
 
     expect(test.getState('validationErrors')).toEqual({
       date: VALIDATION_ERROR_MESSAGES.date[2],
-      freeText: VALIDATION_ERROR_MESSAGES.freeText,
+      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
@@ -93,14 +97,10 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
 
     expect(test.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test));
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 

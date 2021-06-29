@@ -1,5 +1,3 @@
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-
 /**
  * updateCaseAutomaticBlock
  *
@@ -12,35 +10,33 @@ exports.updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
 }) => {
-  if (!caseEntity.trialDate) {
-    const caseDeadlines = await applicationContext
+  if (caseEntity.trialDate || caseEntity.highPriority) {
+    return caseEntity;
+  }
+  const caseDeadlines = await applicationContext
+    .getPersistenceGateway()
+    .getCaseDeadlinesByDocketNumber({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+    });
+
+  caseEntity.updateAutomaticBlocked({ caseDeadlines });
+
+  if (caseEntity.automaticBlocked) {
+    await applicationContext
       .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber({
+      .deleteCaseTrialSortMappingRecords({
         applicationContext,
         docketNumber: caseEntity.docketNumber,
       });
-
-    caseEntity.updateAutomaticBlocked({ caseDeadlines });
-
-    if (caseEntity.automaticBlocked) {
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-        });
-    } else if (
-      caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-      !caseEntity.blocked
-    ) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
+  } else if (caseEntity.isReadyForTrial()) {
+    await applicationContext
+      .getPersistenceGateway()
+      .createCaseTrialSortMappingRecords({
+        applicationContext,
+        caseSortTags: caseEntity.generateTrialSortTags(),
+        docketNumber: caseEntity.docketNumber,
+      });
   }
 
   return caseEntity;

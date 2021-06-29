@@ -4,11 +4,10 @@ const { UserCase } = require('../entities/UserCase');
 /**
  * getClosedCasesInteractor
  *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
+ * @param {object} applicationContext the application context
  * @returns {object} the closed cases data
  */
-exports.getClosedCasesInteractor = async ({ applicationContext }) => {
+exports.getClosedCasesInteractor = async applicationContext => {
   let closedCases;
   let foundCases = [];
 

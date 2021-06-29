@@ -10,8 +10,9 @@ exports.deleteTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { trialSessionId } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().deleteTrialSessionInteractor({
-      applicationContext,
-      trialSessionId,
-    });
+    return await applicationContext
+      .getUseCases()
+      .deleteTrialSessionInteractor(applicationContext, {
+        trialSessionId,
+      });
   });

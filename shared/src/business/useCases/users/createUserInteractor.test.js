@@ -30,8 +30,7 @@ describe('create user', () => {
       role: ROLES.petitionsClerk,
       userId: '245b7d39-8fae-4c2f-893c-3c829598bc71',
     };
-    const user = await createUserInteractor({
-      applicationContext,
+    const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
     });
     expect(user).not.toBeUndefined();
@@ -54,8 +53,7 @@ describe('create user', () => {
     const userToCreate = { userId: '145b7d39-8fae-4c2f-893c-3c829598bc71' };
 
     await expect(
-      createUserInteractor({
-        applicationContext,
+      createUserInteractor(applicationContext, {
         user: userToCreate,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -75,7 +73,7 @@ describe('create user', () => {
     });
 
     const userToCreate = {
-      admissionsDate: new Date().toISOString(),
+      admissionsDate: '2020-03-14',
       admissionsStatus: 'Active',
       birthYear: '1993',
       employer: 'Private',
@@ -86,8 +84,7 @@ describe('create user', () => {
       role: ROLES.privatePractitioner,
     };
 
-    const user = await createUserInteractor({
-      applicationContext,
+    const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
     });
 
@@ -108,10 +105,9 @@ describe('create user', () => {
       role: ROLES.irsPractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
+    const mockAdmissionsDate = '1876-02-19';
 
-    const user = await createUserInteractor({
-      applicationContext,
+    const user = await createUserInteractor(applicationContext, {
       user: {
         admissionsDate: mockAdmissionsDate,
         admissionsStatus: 'Active',
@@ -142,10 +138,9 @@ describe('create user', () => {
       role: ROLES.inactivePractitioner,
       userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    const mockAdmissionsDate = new Date('1876/02/19').toISOString();
+    const mockAdmissionsDate = '1876-02-19';
 
-    const user = await createUserInteractor({
-      applicationContext,
+    const user = await createUserInteractor(applicationContext, {
       user: {
         admissionsDate: mockAdmissionsDate,
         admissionsStatus: 'Inactive',
@@ -188,8 +183,7 @@ describe('create user', () => {
       userId: 'legacyJudge1@example.com',
     };
 
-    const user = await createUserInteractor({
-      applicationContext,
+    const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
     });
 

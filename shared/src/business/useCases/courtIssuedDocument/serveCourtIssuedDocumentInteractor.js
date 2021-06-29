@@ -13,9 +13,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
@@ -36,9 +33,9 @@ const completeWorkItem = async ({
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
+  await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
-    workItem: workItemToUpdate.validate().toRawObject(),
+    workItemToUpdate: workItemToUpdate.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
@@ -50,20 +47,17 @@ const completeWorkItem = async ({
 /**
  * serveCourtIssuedDocumentInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document to serve
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the updated case after the document was served
  */
-exports.serveCourtIssuedDocumentInteractor = async ({
+exports.serveCourtIssuedDocumentInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
-
-  const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized for document service');
@@ -88,6 +82,9 @@ exports.serveCourtIssuedDocumentInteractor = async ({
 
   if (!courtIssuedDocument) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
+  }
+  if (courtIssuedDocument.servedAt) {
+    throw new Error('Docket entry has already been served');
   }
 
   courtIssuedDocument.numberOfPages = await applicationContext
@@ -209,40 +206,16 @@ exports.serveCourtIssuedDocumentInteractor = async ({
     }
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
+    caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: courtIssuedDocument.docketEntryId,
-    servedParties,
-  });
-
-  if (servedParties.paper.length > 0) {
-    const courtIssuedOrderDoc = await PDFDocument.load(newPdfData);
-
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: courtIssuedOrderDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const { url } = await saveFileAndGenerateUrl({
+  return await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      file: paperServicePdfData,
-      useTempBucket: true,
+      caseEntity,
+      docketEntryId: courtIssuedDocument.docketEntryId,
     });
-
-    return { pdfUrl: url };
-  }
 };

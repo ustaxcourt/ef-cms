@@ -1,5 +1,6 @@
 const {
-  OPINION_EVENT_CODES,
+  MAX_SEARCH_RESULTS,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
 } = require('../../business/entities/EntityConstants');
 const {
@@ -15,29 +16,28 @@ describe('opinionAdvancedSearchInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents:
-            'Everyone knows that Reeses Outrageous bars are the best candy',
-          documentTitle: 'T.C. Opinion for More Candy',
-          documentType: 'T.C. Opinion',
-          eventCode: 'TCOP',
-          signedJudgeName: 'Guy Fieri',
-        },
-        {
-          caseCaption: 'Samson Workman, Petitioner',
-          docketNumber: '103-19',
-          docketNumberSuffix: 'AAA',
-          documentContents: 'KitKats are inferior candies',
-          documentTitle: 'Summary Opinion for KitKats',
-          documentType: 'Summary Opinion',
-          eventCode: 'SOP',
-          signedJudgeName: 'Guy Fieri',
-        },
-      ]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'T.C. Opinion for More Candy',
+            documentType: 'T.C. Opinion',
+            eventCode: 'TCOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Samson Workman, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '103-19',
+            documentTitle: 'Summary Opinion for KitKats',
+            documentType: 'Summary Opinion',
+            eventCode: 'SOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
   });
 
   it('returns an unauthorized error on petitioner user role', async () => {
@@ -46,15 +46,12 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
 
     await expect(
-      opinionAdvancedSearchInteractor({
-        applicationContext,
-      }),
+      opinionAdvancedSearchInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
-    const result = await opinionAdvancedSearchInteractor({
-      applicationContext,
+    const result = await opinionAdvancedSearchInteractor(applicationContext, {
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -62,10 +59,8 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(result).toMatchObject([
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents:
-          'Everyone knows that Reeses Outrageous bars are the best candy',
         documentTitle: 'T.C. Opinion for More Candy',
         documentType: 'T.C. Opinion',
         eventCode: 'TCOP',
@@ -73,9 +68,8 @@ describe('opinionAdvancedSearchInteractor', () => {
       },
       {
         caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
         docketNumber: '103-19',
-        docketNumberSuffix: 'AAA',
-        documentContents: 'KitKats are inferior candies',
         documentTitle: 'Summary Opinion for KitKats',
         documentType: 'Summary Opinion',
         eventCode: 'SOP',
@@ -84,11 +78,32 @@ describe('opinionAdvancedSearchInteractor', () => {
     ]);
   });
 
+  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+      caseCaption: 'Samson Workman, Petitioner',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '103-19',
+      documentTitle: 'T.C. Opinion for More Candy',
+      documentType: 'T.C. Opinion',
+      eventCode: 'TCOP',
+      signedJudgeName: 'Guy Fieri',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+
+    const results = await opinionAdvancedSearchInteractor(applicationContext, {
+      keyword: 'keyword',
+      petitionerName: 'test person',
+    });
+
+    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+  });
+
   it('searches for documents that are of type opinions', async () => {
     const keyword = 'keyword';
 
-    await opinionAdvancedSearchInteractor({
-      applicationContext,
+    await opinionAdvancedSearchInteractor(applicationContext, {
       keyword,
       startDate: '2001-01-01',
     });
@@ -97,7 +112,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     });
   });
 });

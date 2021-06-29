@@ -1,8 +1,12 @@
 import { queryStringDecoder } from './queryStringDecoder';
 
 describe('queryStringDecoder', () => {
+  beforeAll(() => {
+    delete window.location;
+  });
+
   it('should return code, path, and token from hash', () => {
-    global.location = {
+    window.location = {
       hash: '#id_token=ID_TOKEN',
       search: '?code=CODE&token=TOKEN&path=BoulevardOfBrokenMemes',
     };
@@ -15,7 +19,7 @@ describe('queryStringDecoder', () => {
   });
 
   it('should return code and token from query with a default path of /', () => {
-    global.location = {
+    window.location = {
       search: '?code=CODE&token=TOKEN',
     };
 

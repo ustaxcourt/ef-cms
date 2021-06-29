@@ -6,4 +6,3 @@ output "elasticsearch_endpoint_alpha" {
 output "elasticsearch_endpoint_beta" {
   value = module.elasticsearch_beta.endpoint
 }
-

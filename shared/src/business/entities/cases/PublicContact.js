@@ -6,11 +6,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  STATE_NOT_AVAILABLE,
-  US_STATES,
-  US_STATES_OTHER,
-} = require('../EntityConstants');
+const { CONTACT_TYPES } = require('../EntityConstants');
 
 /**
  * PublicContact
@@ -19,21 +15,24 @@ const {
  * @param {object} rawContact the raw case data
  * @constructor
  */
-function PublicContact() {}
+function PublicContact() {
+  this.entityName = 'PublicContact';
+}
+
 PublicContact.prototype.init = function init(rawContact) {
+  this.contactId = rawContact.contactId;
+  this.contactType = rawContact.contactType;
   this.name = rawContact.name;
   this.state = rawContact.state;
 };
 
-PublicContact.validationName = 'PublicContact';
-
 PublicContact.VALIDATION_RULES = joi.object().keys({
-  name: JoiValidationConstants.STRING.max(500).optional(),
-  state: JoiValidationConstants.STRING.valid(
-    ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
-    STATE_NOT_AVAILABLE,
+  contactId: JoiValidationConstants.UUID.required(),
+  contactType: JoiValidationConstants.STRING.valid(
+    ...Object.values(CONTACT_TYPES),
   ).optional(),
+  name: JoiValidationConstants.STRING.max(500).optional(),
+  state: JoiValidationConstants.STRING.optional(),
 });
 
 joiValidationDecorator(PublicContact, PublicContact.VALIDATION_RULES, {});

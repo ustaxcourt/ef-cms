@@ -11,6 +11,7 @@ export const PublicCaseDetailSubnavTabs = connect(
           <Tabs
             bind="currentViewMetadata.caseDetail.primaryTab"
             className="container-tabs-dark"
+            headingLevel="2"
           >
             <Tab
               className="padding-left-2"

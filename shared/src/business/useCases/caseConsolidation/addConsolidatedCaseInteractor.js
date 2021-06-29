@@ -8,17 +8,16 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 /**
  * addConsolidatedCaseInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to consolidate
  * @param {object} providers.docketNumberToConsolidateWith the docket number of the case with which to consolidate
  * @returns {object} the updated case data
  */
-exports.addConsolidatedCaseInteractor = async ({
+exports.addConsolidatedCaseInteractor = async (
   applicationContext,
-  docketNumber,
-  docketNumberToConsolidateWith,
-}) => {
+  { docketNumber, docketNumberToConsolidateWith },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
@@ -86,9 +85,9 @@ exports.addConsolidatedCaseInteractor = async ({
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   });

@@ -6,29 +6,31 @@ import React from 'react';
 
 export const PractitionerSearchResults = connect(
   {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedSearchHelper: state.advancedSearchHelper,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
   function PractitionerSearchResults({
     advancedSearchHelper,
+    MAX_SEARCH_RESULTS,
     showMoreResultsSequence,
   }) {
     return (
       <>
         {advancedSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">
-              ({advancedSearchHelper.searchResultsCount}) Results
-            </h1>
-            {advancedSearchHelper.showMaxResultsMessage && (
+            <h1 className="margin-top-4">Search Results</h1>
+            {advancedSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: `Your search has more than ${advancedSearchHelper.maxResults} results.  Refine your search for more accurate results.`,
+                  message: 'Narrow your search by adding search terms.',
+                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                 }}
                 dismissable={false}
+                scrollToTop={false}
               />
             )}
-            <table className="usa-table search-results docket-record responsive-table row-border-only">
+            <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
                   <th aria-label="bar number">Bar No.</th>
@@ -38,20 +40,18 @@ export const PractitionerSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {advancedSearchHelper.formattedSearchResults.map(
-                  (result, idx) => (
-                    <tr className="search-result" key={idx}>
-                      <td>
-                        <a href={`/practitioner-detail/${result.barNumber}`}>
-                          {result.barNumber}
-                        </a>
-                      </td>
-                      <td>{result.name}</td>
-                      <td>{result.contact.state}</td>
-                      <td>{result.admissionsStatus}</td>
-                    </tr>
-                  ),
-                )}
+                {advancedSearchHelper.formattedSearchResults.map(result => (
+                  <tr className="search-result" key={result.barNumber}>
+                    <td>
+                      <a href={`/practitioner-detail/${result.barNumber}`}>
+                        {result.barNumber}
+                      </a>
+                    </td>
+                    <td>{result.name}</td>
+                    <td>{result.contact.state}</td>
+                    <td>{result.admissionsStatus}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </>

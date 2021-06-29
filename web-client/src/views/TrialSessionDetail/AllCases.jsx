@@ -29,8 +29,8 @@ export const AllCases = connect(
               <th>Disposition Date</th>
             </tr>
           </thead>
-          {allCases.map((item, idx) => (
-            <tbody key={idx}>
+          {allCases.map(item => (
+            <tbody key={item.docketNumber}>
               <tr className="eligible-cases-row">
                 <td>
                   <CaseLink formattedCase={item} />

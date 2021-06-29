@@ -8,7 +8,7 @@ export const MessagesSectionInbox = connect(
   function MessagesSectionInbox({ formattedMessages }) {
     return (
       <>
-        <table className="usa-table work-queue subsection">
+        <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
@@ -23,10 +23,10 @@ export const MessagesSectionInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={message.messageId}>
+                <tr key={message.messageId}>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
@@ -36,12 +36,12 @@ export const MessagesSectionInbox = connect(
                       {message.createdAtFormatted}
                     </span>
                   </td>
-                  <td className="message-queue-row message-queue-document message-subject">
+                  <td className="message-queue-row message-subject">
                     <div className="message-document-title">
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>
@@ -50,7 +50,9 @@ export const MessagesSectionInbox = connect(
                       {message.message}
                     </div>
                   </td>
-                  <td className="message-queue-row">{message.caseTitle}</td>
+                  <td className="message-queue-row max-width-25">
+                    {message.caseTitle}
+                  </td>
                   <td className="message-queue-row">{message.caseStatus}</td>
                   <td className="message-queue-row to">{message.to}</td>
                   <td className="message-queue-row from">{message.from}</td>

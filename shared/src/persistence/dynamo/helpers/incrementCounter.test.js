@@ -29,7 +29,9 @@ describe('incrementCounter', () => {
   });
 
   it('should update the docketNumber counter for the current year when one is not provided', async () => {
-    const currentYear = new Date().getFullYear().toString();
+    const { year: currentYear } = applicationContext
+      .getUtilities()
+      .getMonthDayYearObj();
 
     await incrementCounter({
       applicationContext,

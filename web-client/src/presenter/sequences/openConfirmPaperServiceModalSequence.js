@@ -1,10 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeFormDateAction } from '../actions/FileDocument/computeFormDateAction';
-import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -15,10 +16,14 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateAction,
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
   computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
+  getComputedFormDateFactoryAction('dateReceived'),
+  setComputeFormDateFactoryAction('dateReceived'),
   setDocumentIsRequiredAction,
+  generateTitleForPaperFilingAction,
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [
@@ -27,7 +32,6 @@ export const openConfirmPaperServiceModalSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      generateTitleAction,
       clearModalStateAction,
       setShowModalFactoryAction('ConfirmInitiateServiceModal'),
     ],

@@ -5,23 +5,22 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const getDocumentOption = document => {
-  const title = document.documentTitle || document.documentType;
+const getDocumentOption = doc => {
+  const documentTitle = doc.title.substr(0, 100);
+
   return (
-    <option key={document.docketEntryId} value={`${document.docketEntryId}`}>
-      {document.createdAtFormatted} - {title}
+    <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
+      {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
 };
 
-const getCorrespondenceOption = document => {
-  const title = document.documentTitle || document.documentType;
+const getCorrespondenceOption = doc => {
+  const title = doc.documentTitle || doc.documentType;
+  const documentTitle = title.substr(0, 100);
   return (
-    <option
-      key={document.correspondenceId}
-      value={`${document.correspondenceId}`}
-    >
-      {title}
+    <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
+      {documentTitle}
     </option>
   );
 };
@@ -55,13 +54,10 @@ export const MessageModalAttachments = connect(
               />
               <span className="margin-left-1 semi-bold">Attachment(s)</span>
             </div>
-            {form.attachments.map((document, idx) => {
+            {form.attachments.map(doc => {
               return (
-                <div
-                  className="margin-top-1"
-                  key={`${idx}-${document.documentId}`}
-                >
-                  {document.documentTitle}
+                <div className="margin-top-1" key={doc.documentId}>
+                  {doc.documentTitle}
                 </div>
               );
             })}

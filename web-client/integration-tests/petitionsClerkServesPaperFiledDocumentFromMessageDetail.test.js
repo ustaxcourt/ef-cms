@@ -13,6 +13,10 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create case', async () => {
     const caseDetail = await uploadPetition(test);
@@ -22,7 +26,7 @@ describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () =
 
   loginAs(test, 'docketclerk1@example.com');
   docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  createNewMessageOnCase(test, 0);
+  createNewMessageOnCase(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);

@@ -8,11 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.updatePractitionerUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const { bypassDocketEntry = false, user } = JSON.parse(event.body);
+
     return await applicationContext
       .getUseCases()
-      .updatePractitionerUserInteractor({
-        applicationContext,
+      .updatePractitionerUserInteractor(applicationContext, {
         barNumber: event.pathParameters.barNumber,
-        user: JSON.parse(event.body).user,
+        bypassDocketEntry: bypassDocketEntry || false,
+        user,
       });
   });

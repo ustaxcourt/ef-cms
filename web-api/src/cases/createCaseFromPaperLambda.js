@@ -10,8 +10,7 @@ exports.createCaseFromPaperLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .createCaseFromPaperInteractor({
+      .createCaseFromPaperInteractor(applicationContext, {
         ...JSON.parse(event.body),
-        applicationContext,
       });
   });

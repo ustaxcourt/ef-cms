@@ -7,17 +7,16 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * generatePrintableCaseInventoryReportInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.associatedJudge the judge to filter by
  * @param {string} providers.status the status to filter by
  * @returns {Array} the url of the document
  */
-exports.generatePrintableCaseInventoryReportInteractor = async ({
+exports.generatePrintableCaseInventoryReportInteractor = async (
   applicationContext,
-  associatedJudge,
-  status,
-}) => {
+  { associatedJudge, status },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {

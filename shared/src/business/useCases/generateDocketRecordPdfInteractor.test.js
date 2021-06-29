@@ -1,48 +1,58 @@
-import {
+const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../entities/EntityConstants';
-import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
+} = require('../entities/EntityConstants');
+const {
+  generateDocketRecordPdfInteractor,
+} = require('./generateDocketRecordPdfInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_USERS } = require('../../test/mockUsers');
+const { cloneDeep } = require('lodash');
+const { MOCK_PRACTITIONER, MOCK_USERS } = require('../../test/mockUsers');
 
 const mockId = '12345';
 const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
-const caseDetail = {
-  caseCaption: 'Test Case Caption',
-  contactPrimary: {
-    address1: 'address 1',
-    city: 'City',
-    countryType: COUNTRY_TYPES.DOMESTIC,
-    name: 'Test Petitioner',
-    phone: '123-123-1234',
-    postalCode: '12345',
-    state: 'AL',
-  },
-  docketEntries: [
-    {
-      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
-    },
-    {
-      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-    },
-    {
-      additionalInfo2: 'Additional Info 2',
-      docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
-      isStatusServed: true,
-      servedAtFormatted: '03/27/19',
-    },
-  ],
-  docketNumber: '123-45',
-  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-  irsPractitioners: [],
-  partyType: PARTY_TYPES.petitioner,
-  privatePractitioners: [],
-};
+let caseDetail;
 
 describe('generateDocketRecordPdfInteractor', () => {
   beforeEach(() => {
+    caseDetail = {
+      caseCaption: 'Test Case Caption',
+      docketEntries: [
+        {
+          docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fd',
+        },
+        {
+          docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+        },
+        {
+          additionalInfo2: 'Additional Info 2',
+          docketEntryId: 'e631d81f-a579-4de5-b8a8-b3f10ef619fe',
+          isStatusServed: true,
+          servedAtFormatted: '03/27/19',
+        },
+      ],
+      docketNumber: '123-45',
+      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      irsPractitioners: [],
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: 'address 1',
+          city: 'City',
+          contactId: '98956b46-1757-4337-9f7c-58801eba2e99',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Petitioner',
+          phone: '123-123-1234',
+          postalCode: '12345',
+          state: 'AL',
+        },
+      ],
+      privatePractitioners: [],
+    };
+
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
@@ -51,7 +61,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       .verifyCaseForUser.mockReturnValue(true);
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ ...caseDetail });
+      .getCaseByDocketNumber.mockImplementation(() => ({ ...caseDetail }));
     applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
@@ -64,8 +74,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('Calls docketRecord document generator to build a PDF', async () => {
-    await generateDocketRecordPdfInteractor({
-      applicationContext,
+    await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
       includePartyDetail: true,
     });
@@ -76,63 +85,52 @@ describe('generateDocketRecordPdfInteractor', () => {
     ).toMatchObject({ includePartyDetail: true });
   });
 
-  describe('party detail is requested', () => {
-    it('user is associated with the case', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
+  it('calls docketRecord document generator with formatted counsel for all petitioners on a case', async () => {
+    const mockPractitionerOnCase = {
+      ...MOCK_PRACTITIONER,
+      representing: [caseDetail.petitioners[0].contactId],
+    };
 
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: true });
+    caseDetail.privatePractitioners = [mockPractitionerOnCase, {}];
+
+    await generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      includePartyDetail: true,
     });
 
-    it('user has an internal role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'], // docket clerk
-      );
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
+    expect(
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data.caseDetail.petitioners[0].counselDetails[0],
+    ).toMatchObject({
+      email: 'ab@example.com',
+      name: 'Test Attorney (AB1111)',
+      phone: '+1 (555) 555-5555',
+    });
+  });
 
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: true });
+  it('sets counsel name to `None` when there is no counsel representing the petitioner', async () => {
+    const mockPractitionerOnCase = {
+      ...MOCK_PRACTITIONER,
+      representing: ['b4302f61-2cff-4a57-bacf-1f817ffbaf8d'],
+    };
+
+    caseDetail.privatePractitioners = [mockPractitionerOnCase, {}];
+
+    await generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      includePartyDetail: true,
     });
 
-    it('user is NOT associated with the case and does NOT have an internal role', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({});
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-      await generateDocketRecordPdfInteractor({
-        applicationContext,
-        docketNumber: caseDetail.docketNumber,
-        includePartyDetail: true,
-      });
-
-      expect(
-        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
-          .data,
-      ).toMatchObject({ includePartyDetail: false });
+    expect(
+      applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+        .data.caseDetail.petitioners[0].counselDetails[0],
+    ).toMatchObject({
+      name: 'None',
     });
   });
 
   it('Returns a file ID and url to the generated file', async () => {
-    const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
+    const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
       includePartyDetail: true,
     });
@@ -144,8 +142,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('defaults includePartyDetail to false when a value has not been provided', async () => {
-    await generateDocketRecordPdfInteractor({
-      applicationContext,
+    await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -159,6 +156,8 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'], //privatePractitioner
     );
+    const sealedDocketEntries = cloneDeep(caseDetail.docketEntries);
+    sealedDocketEntries[0].isSealed = true;
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -166,13 +165,12 @@ describe('generateDocketRecordPdfInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...caseDetail,
+        docketEntries: sealedDocketEntries,
         privatePractitioners: [],
-        sealedDate: '2019-08-25T05:00:00.000Z',
       });
 
     await expect(
-      generateDocketRecordPdfInteractor({
-        applicationContext,
+      generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized to view sealed case.');
@@ -191,8 +189,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       });
 
     await expect(
-      generateDocketRecordPdfInteractor({
-        applicationContext,
+      generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized to view sealed case.');
@@ -212,8 +209,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         sealedDate: '2019-08-25T05:00:00.000Z',
       });
 
-    const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
+    const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -234,8 +230,7 @@ describe('generateDocketRecordPdfInteractor', () => {
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f', //petitioner
       });
 
-    const result = await generateDocketRecordPdfInteractor({
-      applicationContext,
+    const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
     });
 

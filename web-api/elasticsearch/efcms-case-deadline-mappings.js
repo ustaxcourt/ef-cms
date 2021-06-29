@@ -4,7 +4,7 @@ module.exports = {
       type: 'text',
     },
     'caseDeadlineId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'deadlineDate.S': {
       type: 'date',
@@ -13,10 +13,10 @@ module.exports = {
       type: 'text',
     },
     'docketNumber.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'sortableDocketNumber.N': {
       fields: {
@@ -24,7 +24,7 @@ module.exports = {
           type: 'keyword',
         },
       },
-      type: 'text',
+      type: 'integer',
     },
   },
 };

@@ -1,25 +1,54 @@
 const {
+  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  UNSERVABLE_EVENT_CODES,
+} = require('../../entities/EntityConstants');
+const {
+  getDocumentTitleWithAdditionalInfo,
+} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const { createISODateString } = require('../../utilities/DateHandler');
+const { DocketEntry, isServed } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const shouldGenerateCoversheetForDocketEntry = ({
+  certificateOfServiceUpdated,
+  documentTitleUpdated,
+  entryRequiresCoverSheet,
+  filingDateUpdated,
+  originalDocketEntry,
+  servedAtUpdated,
+  shouldAddNewCoverSheet,
+}) => {
+  return (
+    (servedAtUpdated ||
+      filingDateUpdated ||
+      certificateOfServiceUpdated ||
+      shouldAddNewCoverSheet ||
+      documentTitleUpdated) &&
+    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
+    !originalDocketEntry.isMinuteEntry
+  );
+};
+
+exports.shouldGenerateCoversheetForDocketEntry =
+  shouldGenerateCoversheetForDocketEntry;
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryMetaInteractor = async ({
+exports.updateDocketEntryMetaInteractor = async (
   applicationContext,
-  docketEntryMeta,
-  docketNumber,
-}) => {
+  { docketEntryMeta, docketNumber },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY)) {
@@ -37,11 +66,25 @@ exports.updateDocketEntryMetaInteractor = async ({
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
+
+  if (!originalDocketEntry) {
+    throw new Error(
+      `Docket entry with id ${docketEntryMeta.docketEntryId} not found.`,
+    );
+  }
+
+  if (
+    !isServed(originalDocketEntry) &&
+    !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
+    !originalDocketEntry.isMinuteEntry
+  ) {
+    throw new Error('Unable to update unserved docket entry.');
+  }
 
   const editableFields = {
     action: docketEntryMeta.action,
@@ -56,6 +99,8 @@ exports.updateDocketEntryMetaInteractor = async ({
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
+    filedBy: docketEntryMeta.filedBy,
+    filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
     freeText2: docketEntryMeta.freeText2,
@@ -66,64 +111,110 @@ exports.updateDocketEntryMetaInteractor = async ({
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
-    partyPrimary: docketEntryMeta.partyPrimary,
-    partySecondary: docketEntryMeta.partySecondary,
+    pending: docketEntryMeta.pending,
+    previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
-    servedAt: docketEntryMeta.servedAt,
+    secondaryDocument: docketEntryMeta.secondaryDocument,
+    servedAt:
+      docketEntryMeta.servedAt && createISODateString(docketEntryMeta.servedAt),
     servedPartiesCode: docketEntryMeta.servedPartiesCode,
     serviceDate: docketEntryMeta.serviceDate,
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  if (originalDocketEntry) {
-    const servedAtUpdated =
-      editableFields.servedAt &&
-      editableFields.servedAt !== originalDocketEntry.servedAt;
-    const filingDateUpdated =
-      editableFields.filingDate &&
-      editableFields.filingDate !== originalDocketEntry.filingDate;
-    const shouldGenerateCoversheet =
-      (servedAtUpdated || filingDateUpdated) &&
-      !originalDocketEntry.isCourtIssued() &&
-      !originalDocketEntry.isMinuteEntry;
+  const servedAtUpdated =
+    editableFields.servedAt &&
+    editableFields.servedAt !== originalDocketEntry.servedAt;
+  const filingDateUpdated =
+    editableFields.filingDate &&
+    editableFields.filingDate !== originalDocketEntry.filingDate;
 
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...originalDocketEntry,
-        ...editableFields,
-        filedBy: undefined, // allow constructor to re-generate
-        ...caseEntity.getCaseContacts({
-          contactPrimary: true,
-          contactSecondary: true,
-        }),
-      },
-      { applicationContext },
+  const entryRequiresCoverSheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      editableFields.eventCode,
     );
+  const originalEntryRequiresCoversheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      originalDocketEntry.eventCode,
+    );
+  const shouldAddNewCoverSheet =
+    !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
 
-    caseEntity.updateDocketEntry(docketEntryEntity);
+  const shouldRemoveExistingCoverSheet =
+    originalEntryRequiresCoversheet && !entryRequiresCoverSheet;
 
-    if (shouldGenerateCoversheet) {
-      await applicationContext.getPersistenceGateway().updateDocketEntry({
-        applicationContext,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        docketNumber,
-        document: docketEntryEntity.validate(),
-      });
+  const documentTitleUpdated =
+    getDocumentTitleWithAdditionalInfo({ docketEntry: originalDocketEntry }) !==
+    getDocumentTitleWithAdditionalInfo({ docketEntry: docketEntryMeta });
 
-      // servedAt or filingDate has changed, generate a new coversheet
-      await applicationContext.getUseCases().addCoversheetInteractor({
-        applicationContext,
+  const certificateOfServiceUpdated =
+    originalDocketEntry.certificateOfService !==
+    docketEntryMeta.certificateOfService;
+
+  const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+    certificateOfServiceUpdated,
+    documentTitleUpdated,
+    entryRequiresCoverSheet,
+    filingDateUpdated,
+    originalDocketEntry,
+    servedAtUpdated,
+    shouldAddNewCoverSheet,
+  });
+
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...originalDocketEntry,
+      ...editableFields,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  ).validate();
+
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+
+  if (shouldGenerateCoversheet) {
+    await applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber,
+      document: docketEntryEntity.validate(),
+    });
+
+    const updatedDocketEntry = await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
         docketEntryId: originalDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         filingDateUpdated,
       });
-    }
+
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  } else if (shouldRemoveExistingCoverSheet) {
+    await applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber,
+      document: docketEntryEntity.validate(),
+    });
+    const updatedDocketEntry = await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet(applicationContext, {
+        docketEntryId: originalDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        filingDateUpdated,
+      });
+    caseEntity.updateDocketEntry(updatedDocketEntry);
   }
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
-  return caseEntity.toRawObject();
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

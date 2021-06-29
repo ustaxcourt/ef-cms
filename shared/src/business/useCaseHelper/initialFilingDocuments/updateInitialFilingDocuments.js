@@ -25,33 +25,34 @@ const addNewInitialFilingToCase = ({
       dt => dt.documentType === documentType,
     );
 
-    let partySecondary = false;
-    if (caseEntity.contactSecondary && caseEntity.contactSecondary.name) {
-      partySecondary = true;
+    const contactSecondary = caseEntity.getContactSecondary();
+
+    const filers = [caseEntity.getContactPrimary().contactId];
+    if (contactSecondary && contactSecondary.name) {
+      filers.push(contactSecondary.contactId);
     }
 
     documentMeta = {
       ...currentCaseDocument,
       createdAt: caseEntity.receivedAt,
       eventCode,
+      filers,
       filingDate: caseEntity.receivedAt,
       isFileAttached: true,
+      isOnDocketRecord: true,
       isPaper: true,
       mailingDate: caseEntity.mailingDate,
-      partyPrimary: true,
-      partySecondary,
       receivedAt: caseEntity.receivedAt,
       userId: authorizedUser.userId,
-      ...caseEntity.getCaseContacts({
-        contactPrimary: true,
-        contactSecondary: true,
-      }),
     };
   }
 
-  const documentToAdd = new DocketEntry(documentMeta, { applicationContext });
+  const documentToAdd = new DocketEntry(documentMeta, {
+    applicationContext,
+    petitioners: caseEntity.petitioners,
+  });
 
-  caseEntity.docketEntries.push(documentToAdd);
+  caseEntity.addDocketEntry(documentToAdd);
 };
 
 const deleteInitialFilingFromCase = async ({
@@ -75,6 +76,16 @@ const deleteInitialFilingFromCase = async ({
   });
 };
 
+/**
+ * updateInitialFilingDocuments
+ *
+ * @param {object} providers providers object
+ * @param {object} providers.applicationContext application context object
+ * @param {object} providers.authorizedUser authorized user object
+ * @param {object} providers.caseEntity case entity
+ * @param {object} providers.caseToUpdate case to update
+ * @returns {void}
+ */
 exports.updateInitialFilingDocuments = async ({
   applicationContext,
   authorizedUser,

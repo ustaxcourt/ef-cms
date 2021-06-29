@@ -3,15 +3,15 @@ import { handleInvalidScannerSourceAction } from './handleInvalidScannerSourceAc
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-const mockStorage = {
-  scannerSourceIndex: 1,
-  scannerSourceName: 'TC3000 Tricorder',
-};
-
 describe('handleInvalidScannerSourceAction', () => {
+  const mockStorage = {
+    scannerSourceIndex: 1,
+    scannerSourceName: 'TC3000 Tricorder',
+  };
+
   beforeAll(() => {
     applicationContext.getUseCases().removeItemInteractor = jest.fn(
-      ({ key }) => {
+      (appContext, { key }) => {
         mockStorage[key] = null;
       },
     );

@@ -10,8 +10,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
     await expect(
-      uploadOrderDocumentInteractor({
-        applicationContext,
+      uploadOrderDocumentInteractor(applicationContext, {
         docketEntryIdToOverwrite: 123,
         documentFile: '',
       }),
@@ -24,8 +23,7 @@ describe('uploadOrderDocumentInteractor', () => {
       userId: 'admin',
     });
 
-    await uploadOrderDocumentInteractor({
-      applicationContext,
+    await uploadOrderDocumentInteractor(applicationContext, {
       docketEntryIdToOverwrite: 123,
       documentFile: 'document file',
     });

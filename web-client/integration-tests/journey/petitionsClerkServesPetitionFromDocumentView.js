@@ -39,6 +39,11 @@ export const petitionsClerkServesPetitionFromDocumentView = test => {
       redirectUrl: `/case-detail/${test.docketNumber}/document-view?docketEntryId=${petitionDocketEntryId}`,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+
     expect(test.getState('currentPage')).toEqual('PetitionQc');
 
     await test.runSequence('saveSavedCaseForLaterSequence');

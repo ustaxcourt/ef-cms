@@ -10,9 +10,8 @@ import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
-import { state } from 'cerebral';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { unset } from 'cerebral/factories';
+import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
 export const gotoCaseDetailWithModal = [
   ...openCreateOrderChooseTypeModalSequence,
@@ -28,7 +27,7 @@ export const gotoCreateOrderSequence = [
       {
         no: gotoCaseDetailWithModal,
         proceed: [
-          unset(state.documentToEdit),
+          unsetDocumentToEditAction,
           clearModalAction,
           setCurrentPageAction('Interstitial'),
           stopShowValidationAction,

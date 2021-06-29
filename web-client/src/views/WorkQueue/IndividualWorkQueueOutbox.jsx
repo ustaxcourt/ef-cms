@@ -13,7 +13,7 @@ export const IndividualWorkQueueOutbox = connect(
       <React.Fragment>
         <table
           aria-describedby="tab-my-queue"
-          className="usa-table work-queue subsection"
+          className="usa-table ustc-table subsection"
           id="my-work-queue"
         >
           <thead>
@@ -33,8 +33,8 @@ export const IndividualWorkQueueOutbox = connect(
               <th>{workQueueHelper.sentTitle} Date</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map((item, idx) => (
-            <tbody key={idx}>
+          {formattedWorkQueue.map(item => (
+            <tbody key={item.workItemId}>
               <tr>
                 <td aria-hidden="true" className="focus-toggle" />
                 <td className="message-queue-row small">
@@ -46,7 +46,7 @@ export const IndividualWorkQueueOutbox = connect(
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
                     <a className="case-link" href={item.editLink}>
-                      {item.docketEntry.documentTitle ||
+                      {item.docketEntry.descriptionDisplay ||
                         item.docketEntry.documentType}
                     </a>
                   </div>

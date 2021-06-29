@@ -20,9 +20,7 @@ describe('Get trial sessions', () => {
     );
 
     await expect(
-      getTrialSessionsInteractor({
-        applicationContext,
-      }),
+      getTrialSessionsInteractor(applicationContext),
     ).rejects.toThrow();
   });
 
@@ -41,9 +39,7 @@ describe('Get trial sessions', () => {
     let error;
 
     try {
-      await getTrialSessionsInteractor({
-        applicationContext,
-      });
+      await getTrialSessionsInteractor(applicationContext);
     } catch (err) {
       error = err;
     }

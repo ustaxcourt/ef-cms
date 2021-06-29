@@ -14,6 +14,10 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
     jest.setTimeout(40000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
   petitionsClerkReviewsPetitionAndSavesForLater(test);

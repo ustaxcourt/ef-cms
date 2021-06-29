@@ -51,12 +51,16 @@ export const docketClerkAddsStipulatedDecisionDocketEntryFromOrder = (
 
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'judge',
-      value: 'Judge Ashford',
+      value: 'Ashford',
     });
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'Anything',
     });
+
+    expect(test.getState('form.generatedDocumentTitle')).toContain(
+      'Judge Ashford Anything',
+    );
 
     await test.runSequence('submitCourtIssuedDocketEntrySequence');
 

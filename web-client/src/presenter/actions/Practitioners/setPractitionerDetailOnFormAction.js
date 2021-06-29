@@ -14,6 +14,7 @@ export const setPractitionerDetailOnFormAction = async ({
   store,
 }) => {
   store.set(state.form, props.practitionerDetail);
+  store.set(state.form.originalEmail, props.practitionerDetail.email);
 
   const admissionsDate = applicationContext
     .getUtilities()

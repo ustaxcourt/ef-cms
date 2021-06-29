@@ -4,19 +4,14 @@ describe('Petitions clerk views case detail', function () {
   });
 
   describe('case information tab', () => {
-    it('should display a card for other petitioners in the petitioner tab', () => {
+    it('should display other petitioners in main party information box', () => {
       cy.visit('/case-detail/101-20');
 
       cy.get('button#tab-case-information').click();
 
-      cy.get('button#tab-petitioner').click();
+      cy.get('button#tab-parties').click();
 
-      cy.get('div#other-petitioners-label').should('exist');
-      cy.get('button#view-additional-petitioners-button')
-        .scrollIntoView()
-        .click();
-
-      cy.get('div.other-petitioners-information').should('have.length', 7);
+      cy.get('.petitioner-card').should('have.length', 8);
     });
   });
 
@@ -32,6 +27,17 @@ describe('Petitions clerk views case detail', function () {
       cy.get('.document-viewer--documents h3').should('contain', 'First draft');
 
       cy.get('.message-document-actions').children().should('have.length', 5);
+    });
+  });
+
+  describe('case detail tab', () => {
+    it('should not display printable docket record tab for new case', () => {
+      cy.visit('/case-detail/122-20');
+
+      cy.get('.progress-indicator').should('not.exist');
+      cy.get('button#tab-docket-sub-record');
+
+      cy.get('button#printable-docket-record-button').should('not.exist');
     });
   });
 });

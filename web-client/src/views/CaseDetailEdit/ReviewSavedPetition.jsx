@@ -92,12 +92,12 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-4 margin-bottom-1">
                         <span
                           className="usa-label usa-label-display"
-                          htmlFor="filing-contact-primary"
+                          id="filing-contact-primary"
                         >
                           Petitioner’s information
                         </span>
                         {form.contactPrimary && (
-                          <address aria-labelledby="primary-label">
+                          <address aria-labelledby="filing-contact-primary">
                             <AddressDisplay contact={form.contactPrimary} />
                           </address>
                         )}
@@ -107,11 +107,13 @@ export const ReviewSavedPetition = connect(
                           <>
                             <span
                               className="usa-label usa-label-display"
-                              htmlFor="filing-contact-secondary"
+                              id="filing-contact-secondary"
                             >
                               Spouse’s information
                             </span>
-                            <AddressDisplay contact={form.contactSecondary} />
+                            <address aria-labelledby="filing-contact-secondary">
+                              <AddressDisplay contact={form.contactSecondary} />
+                            </address>
                           </>
                         )}
                       </div>
@@ -222,8 +224,8 @@ export const ReviewSavedPetition = connect(
                     <div className="grid-row grid-gap margin-bottom-4">
                       <div className="grid-col-4">
                         <div>
-                          <span className="usa-label usa-label-display">
-                            Notice attached to petition?
+                          <span className="usa-label usa-label-display margin-bottom-0">
+                            IRS Notice provided?
                           </span>
                           {reviewSavedPetitionHelper.hasIrsNoticeFormatted}
                         </div>
@@ -248,7 +250,7 @@ export const ReviewSavedPetition = connect(
                     {reviewSavedPetitionHelper.showStatistics && (
                       <>
                         <h4>Statistics</h4>
-                        <table className="usa-table docket-record responsive-table row-border-only">
+                        <table className="usa-table ustc-table responsive-table">
                           <thead>
                             <tr>
                               <th>Year/Period</th>
@@ -258,8 +260,10 @@ export const ReviewSavedPetition = connect(
                           </thead>
                           <tbody>
                             {reviewSavedPetitionHelper.formattedStatistics.map(
-                              (statistic, index) => (
-                                <tr key={index}>
+                              statistic => (
+                                <tr
+                                  key={`${statistic.formattedDate}-${statistic.formattedIrsDeficiencyAmount}`}
+                                >
                                   <td>{statistic.formattedDate}</td>
                                   <td>
                                     {statistic.formattedIrsDeficiencyAmount}

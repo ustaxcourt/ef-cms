@@ -1,8 +1,10 @@
+import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
+import { PractitionerLoginServiceEmailForm } from './PractitionerLoginServiceEmailForm';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerForm = connect(
@@ -15,7 +17,7 @@ export const PractitionerForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
-    validateAddPractitionerSequence: sequences.validateAddPractitionerSequence,
+    validateSequence: sequences[props.validateSequenceName],
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
@@ -27,7 +29,8 @@ export const PractitionerForm = connect(
     updateFormValueSequence,
     usStates,
     usStatesOther,
-    validateAddPractitionerSequence,
+    validateSequence,
+    validateSequenceName,
     validationErrors,
   }) {
     return (
@@ -51,7 +54,7 @@ export const PractitionerForm = connect(
                       type="text"
                       value={form.firstName || ''}
                       onBlur={() => {
-                        validateAddPractitionerSequence();
+                        validateSequence();
                       }}
                       onChange={e => {
                         updateFormValueSequence({
@@ -76,7 +79,7 @@ export const PractitionerForm = connect(
                       type="text"
                       value={form.middleName || ''}
                       onBlur={() => {
-                        validateAddPractitionerSequence();
+                        validateSequence();
                       }}
                       onChange={e => {
                         updateFormValueSequence({
@@ -101,7 +104,7 @@ export const PractitionerForm = connect(
                       type="text"
                       value={form.lastName || ''}
                       onBlur={() => {
-                        validateAddPractitionerSequence();
+                        validateSequence();
                       }}
                       onChange={e => {
                         updateFormValueSequence({
@@ -125,7 +128,7 @@ export const PractitionerForm = connect(
                       type="text"
                       value={form.suffix || ''}
                       onBlur={() => {
-                        validateAddPractitionerSequence();
+                        validateSequence();
                       }}
                       onChange={e => {
                         updateFormValueSequence({
@@ -158,7 +161,7 @@ export const PractitionerForm = connect(
                           type="text"
                           value={form.birthYear || ''}
                           onBlur={() => {
-                            validateAddPractitionerSequence();
+                            validateSequence();
                           }}
                           onChange={e => {
                             updateFormValueSequence({
@@ -187,7 +190,7 @@ export const PractitionerForm = connect(
                                 key: e.target.name,
                                 value: e.target.value,
                               });
-                              validateAddPractitionerSequence();
+                              validateSequence();
                             }}
                           />
                           <label
@@ -220,7 +223,7 @@ export const PractitionerForm = connect(
                                 key: e.target.name,
                                 value: e.target.value,
                               });
-                              validateAddPractitionerSequence();
+                              validateSequence();
                             }}
                           />
                           <label
@@ -269,7 +272,7 @@ export const PractitionerForm = connect(
                     bind="form"
                     changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                     type="contact"
-                    onBlurSequenceName="validateAddPractitionerSequence"
+                    onBlurSequenceName={validateSequenceName}
                     onChangeSequenceName="updateFormValueSequence"
                   />
                 </div>
@@ -277,6 +280,15 @@ export const PractitionerForm = connect(
             </div>
           </div>
         </div>
+
+        <PractitionerLoginServiceEmailForm
+          emailFormName={
+            createPractitionerUserHelper.isEditingPractitioner
+              ? 'updatedEmail'
+              : 'email'
+          }
+          validateSequenceName={validateSequenceName}
+        />
 
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
@@ -298,7 +310,7 @@ export const PractitionerForm = connect(
                           key: e.target.name,
                           value: e.target.value,
                         });
-                        validateAddPractitionerSequence();
+                        validateSequence();
                       }}
                     >
                       <option value="">- Select -</option>
@@ -307,7 +319,7 @@ export const PractitionerForm = connect(
                         {Object.keys(usStates).map(abbrev => {
                           const fullStateName = usStates[abbrev];
                           return (
-                            <option key={fullStateName} value={fullStateName}>
+                            <option key={fullStateName} value={abbrev}>
                               {fullStateName}
                             </option>
                           );
@@ -340,12 +352,12 @@ export const PractitionerForm = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
-                          validateAddPractitionerSequence();
+                          validateSequence();
                         }}
                       >
                         <option value="">- Select -</option>
-                        {ADMISSIONS_STATUS_OPTIONS.map((status, idx) => (
-                          <option key={idx} value={status}>
+                        {ADMISSIONS_STATUS_OPTIONS.map(status => (
+                          <option key={status} value={status}>
                             {status}
                           </option>
                         ))}
@@ -375,9 +387,35 @@ export const PractitionerForm = connect(
                       month: form.month,
                       year: form.year,
                     }}
-                    onBlur={validateAddPractitionerSequence}
+                    onBlur={validateSequence}
                     onChange={updateFormValueSequence}
                   />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="grid-row margin-bottom-4">
+          <div className="grid-col-12">
+            <h2>Practitioner Notes</h2>
+            <div className="blue-container">
+              <div className="grid-row grid-gap-3">
+                <div className="grid-col-12">
+                  <FormGroup errorText={validationErrors.practitionerNotes}>
+                    <label className="usa-label" htmlFor="practitioner-notes">
+                      Practitioner notes{' '}
+                      <span className="usa-hint">(optional)</span>
+                    </label>
+                    <BindedTextarea
+                      bind="form.practitionerNotes"
+                      id="practitioner-notes"
+                      name="practitionerNotes"
+                      required={false}
+                      onChange={() => {
+                        validateSequence();
+                      }}
+                    ></BindedTextarea>
+                  </FormGroup>
                 </div>
               </div>
             </div>

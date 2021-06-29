@@ -7,14 +7,18 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
   function_name    = "check_case_cron_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "cron.checkForReadyForTrialCasesHandler"
-  timeout          = "29"
+  timeout          = "900"
   memory_size      = "3008"
 
-  runtime = "nodejs12.x"
+  runtime = "nodejs14.x"
 
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {

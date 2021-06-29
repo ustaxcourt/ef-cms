@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.createTrialSessionLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().createTrialSessionInteractor({
-      applicationContext,
-      trialSession: JSON.parse(event.body),
-    });
+    return await applicationContext
+      .getUseCases()
+      .createTrialSessionInteractor(applicationContext, {
+        trialSession: JSON.parse(event.body),
+      });
   });

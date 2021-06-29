@@ -1,10 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { setDocketRecordIndexAction } from '../actions/setDocketRecordIndexAction';
 import { setShowModalAction } from '../actions/setShowModalAction';
 
 export const showDocketRecordDetailModalSequence = [
   clearAlertsAction,
-  set(state.docketRecordIndex, props.docketRecordIndex),
+  setDocketRecordIndexAction,
   setShowModalAction,
 ];

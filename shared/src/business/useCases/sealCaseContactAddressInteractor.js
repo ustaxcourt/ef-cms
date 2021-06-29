@@ -11,17 +11,16 @@ const { Case } = require('../entities/cases/Case');
 /**
  * sealCaseContactAddressInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.contactId the id of the contact address to be sealed
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {object} the updated case data
  */
-exports.sealCaseContactAddressInteractor = async ({
+exports.sealCaseContactAddressInteractor = async (
   applicationContext,
-  contactId,
-  docketNumber,
-}) => {
+  { contactId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -41,12 +40,7 @@ exports.sealCaseContactAddressInteractor = async ({
     applicationContext,
   });
 
-  const contactToSeal = [
-    caseEntity.contactPrimary,
-    caseEntity.contactSecondary,
-    ...(caseEntity.otherFilers || []),
-    ...(caseEntity.otherPetitioners || []),
-  ].find(contact => contact && contact.contactId == contactId);
+  const contactToSeal = caseEntity.getPetitionerById(contactId);
 
   if (!contactToSeal) {
     throw new UnprocessableEntityError(
@@ -56,10 +50,10 @@ exports.sealCaseContactAddressInteractor = async ({
   contactToSeal.isAddressSealed = true;
 
   const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .updateCase({
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     });
 
   return new Case(updatedCase, { applicationContext }).toRawObject();

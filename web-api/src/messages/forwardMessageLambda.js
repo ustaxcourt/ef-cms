@@ -8,9 +8,10 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.forwardMessageLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().forwardMessageInteractor({
-      applicationContext,
-      parentMessageId: event.pathParameters.parentMessageId,
-      ...JSON.parse(event.body),
-    });
+    return await applicationContext
+      .getUseCases()
+      .forwardMessageInteractor(applicationContext, {
+        parentMessageId: event.pathParameters.parentMessageId,
+        ...JSON.parse(event.body),
+      });
   });

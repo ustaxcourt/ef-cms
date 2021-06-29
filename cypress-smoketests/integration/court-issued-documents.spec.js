@@ -12,12 +12,6 @@ const {
   uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
 const {
-  closeScannerSetupDialog,
-  goToCreateCase,
-  goToReviewCase,
-  serveCaseToIrs,
-} = require('../support/pages/create-paper-case');
-const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -36,13 +30,26 @@ const {
 const {
   fillInCreateCaseFromPaperForm,
 } = require('../../cypress/support/pages/create-paper-petition');
-const { getUserToken, login } = require('../support/pages/login');
+const {
+  getEnvironmentSpecificFunctions,
+} = require('../support/pages/environment-specific-factory');
+const {
+  goToCreateCase,
+  goToReviewCase,
+  serveCaseToIrs,
+} = require('../support/pages/create-paper-case');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;
 const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+
+const {
+  closeScannerSetupDialog,
+  getUserToken,
+  login,
+} = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {
@@ -150,6 +157,7 @@ describe('Docket Clerk', () => {
 
   it('should be able to upload a court-issued order pdf on the paper-filed case', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
+
     uploadCourtIssuedDocPdf();
   });
 

@@ -8,10 +8,10 @@ const { post } = require('../requests');
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileExternalDocumentInteractor = ({
+exports.fileExternalDocumentInteractor = (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const { docketNumber } = documentMetadata;
   return post({
     applicationContext,

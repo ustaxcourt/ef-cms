@@ -197,6 +197,10 @@ export const SecondarySupportingDocumentForm = connect(
                 </span>
                 <StateDrivenFileInput
                   aria-describedby={`secondary-supporting-document-file-${index}-label`}
+                  file={
+                    form.secondarySupportingDocuments[index]
+                      .supportingDocumentFile
+                  }
                   id={`secondary-supporting-document-file-${index}`}
                   name={`secondarySupportingDocuments.${index}.supportingDocumentFile`}
                   updateFormValueSequence="updateFileDocumentWizardFormValueSequence"

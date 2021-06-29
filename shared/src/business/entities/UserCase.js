@@ -27,14 +27,14 @@ UserCase.prototype.init = function init(rawUserCase) {
   this.docketNumberWithSuffix = rawUserCase.docketNumberWithSuffix;
   this.leadDocketNumber = rawUserCase.leadDocketNumber;
   this.status = rawUserCase.status;
+  this.closedDate = rawUserCase.closedDate;
 };
-
-UserCase.validationName = 'UserCase';
 
 joiValidationDecorator(
   UserCase,
   joi.object().keys({
     caseCaption: Case.VALIDATION_RULES.caseCaption,
+    closedDate: Case.VALIDATION_RULES.closedDate,
     createdAt: Case.VALIDATION_RULES.createdAt,
     docketNumber: Case.VALIDATION_RULES.docketNumber,
     docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,

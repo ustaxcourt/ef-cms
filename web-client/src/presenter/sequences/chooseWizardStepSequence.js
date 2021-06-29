@@ -1,4 +1,4 @@
-import { props, state } from 'cerebral';
-import { set } from 'cerebral/factories';
+import { props } from 'cerebral';
+import { setWizardStepAction } from '../actions/setWizardStepAction';
 
-export const chooseWizardStepSequence = [set(state.wizardStep, props.value)];
+export const chooseWizardStepSequence = [setWizardStepAction(props.value)];

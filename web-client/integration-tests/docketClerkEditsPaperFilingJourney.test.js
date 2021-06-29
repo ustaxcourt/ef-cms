@@ -1,10 +1,21 @@
-import { fakeFile, loginAs, setupTest, uploadPetition, wait } from './helpers';
-
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+  uploadPetition,
+  wait,
+} from './helpers';
+import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
 const test = setupTest();
 
 describe('Docket Clerk edits a paper filing journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -16,11 +27,11 @@ describe('Docket Clerk edits a paper filing journey', () => {
 
   loginAs(test, 'docketclerk@example.com');
   it('create a paper-filed docket entry', async () => {
-    await test.runSequence('gotoAddDocketEntrySequence', {
+    await test.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -28,7 +39,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'dateReceived',
       'eventCode',
       'documentType',
-      'partyPrimary',
+      'filers',
     ];
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual(
@@ -68,12 +79,14 @@ describe('Docket Clerk edits a paper filing journey', () => {
       value: 'Little Rock, AR',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'partyPrimary',
+    const contactPrimary = contactPrimaryFromState(test);
+
+    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
-    await test.runSequence('fileDocketEntrySequence', {
+    await test.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
@@ -109,12 +122,12 @@ describe('Docket Clerk edits a paper filing journey', () => {
   });
 
   it('edit paper-filed docket entry, replacing PDF', async () => {
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
+    await test.runSequence('gotoEditPaperFilingSequence', {
       docketEntryId: test.docketEntryId,
       docketNumber: test.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
@@ -127,7 +140,7 @@ describe('Docket Clerk edits a paper filing journey', () => {
       'scan',
     );
 
-    await test.runSequence('fileDocketEntrySequence');
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(Object.keys(test.getState('validationErrors'))).toEqual([
       'primaryDocumentFile',
@@ -139,16 +152,18 @@ describe('Docket Clerk edits a paper filing journey', () => {
       file: fakeFile,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(test.getState('currentPage')).toEqual('PaperFiling');
     expect(test.getState('pdfPreviewUrl')).toBeDefined();
     expect(test.getState('form.primaryDocumentFile')).toBeDefined();
     expect(test.getState('currentViewMetadata.documentUploadMode')).toEqual(
       'preview',
     );
 
-    await test.runSequence('fileDocketEntrySequence');
+    await test.runSequence('submitPaperFilingSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
   });
+
+  docketClerkAddsMiscellaneousPaperFiling(test, fakeFile);
 });

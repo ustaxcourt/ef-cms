@@ -35,10 +35,10 @@ export const TrialSessionsSummary = connect(
                 <h3>Upcoming Trial Sessions</h3>
                 <div role="list">
                   {formattedUpcomingSessions.length ? (
-                    formattedUpcomingSessions.map((trialSession, idx) => (
+                    formattedUpcomingSessions.map(trialSession => (
                       <div
                         className="grid-row margin-top-4 margin-bottom-4"
-                        key={idx}
+                        key={trialSession.trialSessionId}
                         role="listitem"
                       >
                         <div className="tablet:grid-col-6">
@@ -68,10 +68,10 @@ export const TrialSessionsSummary = connect(
                 <h3>Recent Trial Sessions</h3>
                 <div className="margin-bottom-0" role="list">
                   {formattedRecentSessions.length ? (
-                    formattedRecentSessions.map((trialSession, idx) => (
+                    formattedRecentSessions.map(trialSession => (
                       <div
                         className="grid-row margin-top-4 margin-bottom-4"
-                        key={idx}
+                        key={trialSession.trialSessionId}
                         role="listitem"
                       >
                         <div className="tablet:grid-col-6">

@@ -12,6 +12,7 @@
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
 
+( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
 [ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
@@ -51,7 +52,7 @@ generate_post_data() {
   "lastName": "$lastName",
   "suffix": "$suffix",
   "barNumber": "$barNumber",
-  "admissionsDate": "2019-03-01T21:40:46.415Z",
+  "admissionsDate": "2019-03-01",
   "admissionsStatus": "Active",
   "birthYear": "1950",
   "employer": "$employer",
@@ -77,17 +78,19 @@ createAdmin() {
   role=$2
   name=$3
 
-  aws cognito-idp sign-up \
-    --region "${REGION}" \
-    --client-id "${CLIENT_ID}" \
-    --username "${email}" \
-    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
-    --password "${USTC_ADMIN_PASS}" || true
-
-  aws cognito-idp admin-confirm-sign-up \
-    --region "${REGION}" \
+  aws cognito-idp admin-create-user \
     --user-pool-id "${USER_POOL_ID}" \
-    --username "${email}" || true
+    --username "${email}" \
+    --region "${REGION}" \
+    --user-attributes 'Name="name",'Value="${name}" 'Name="custom:role",'Value="${role}" \
+    --temporary-password "${USTC_ADMIN_PASS}" || true
+
+  aws cognito-idp admin-set-user-password \
+    --user-pool-id "${USER_POOL_ID}" \
+    --username "${email}" \
+    --region "${REGION}" \
+    --password "${USTC_ADMIN_PASS}" \
+    --permanent || true
 
   response=$(aws cognito-idp admin-initiate-auth \
     --user-pool-id "${USER_POOL_ID}" \
@@ -198,27 +201,30 @@ createManyAccounts "10" "docketclerk" "docket"
 createManyAccounts "10" "petitionsclerk" "petitions" &
 createManyAccounts "10" "trialclerk" "trialClerks" &
 createManyAccounts "30" "petitioner" "petitioner"
+createManyAccounts "2" "floater" "floater"
+createManyAccounts "2" "general" "general"
+createManyAccounts "2" "reportersOffice" "reportersOffice"
 createChambersAccount "ashfordsChambers" "chambers" &
-createChambersAccount "buchsChambers" "chambers" 
+createChambersAccount "buchsChambers" "chambers"
 createChambersAccount "cohensChambers" "chambers" &
-createPrivatePractitionerAccount "1" "PT1234" 
+createPrivatePractitionerAccount "1" "PT1234"
 createPrivatePractitionerAccount "2" "PT5432" &
-createPrivatePractitionerAccount "3" "PT1111" 
+createPrivatePractitionerAccount "3" "PT1111"
 createPrivatePractitionerAccount "4" "PT2222" &
-createPrivatePractitionerAccount "5" "PT3333" 
+createPrivatePractitionerAccount "5" "PT3333"
 createPrivatePractitionerAccount "6" "PT4444" "Test private practitioner" &
-createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner" 
+createPrivatePractitionerAccount "7" "PT5555" "Test private practitioner"
 createPrivatePractitionerAccount "8" "PT6666" "Test private practitioner" &
-createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner" 
+createPrivatePractitionerAccount "9" "PT7777" "Test private practitioner"
 createPrivatePractitionerAccount "10" "PT8888" "Test private practitioner" &
-createIRSPractitionerAccount "1" "RT6789" 
+createIRSPractitionerAccount "1" "RT6789"
 createIRSPractitionerAccount "2" "RT0987" &
-createIRSPractitionerAccount "3" "RT7777" 
+createIRSPractitionerAccount "3" "RT7777"
 createIRSPractitionerAccount "4" "RT8888" &
-createIRSPractitionerAccount "5" "RT9999" 
+createIRSPractitionerAccount "5" "RT9999"
 createIRSPractitionerAccount "6" "RT6666" "Test IRS practitioner" &
-createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner" 
+createIRSPractitionerAccount "7" "RT0000" "Test IRS practitioner"
 createIRSPractitionerAccount "8" "RT1111" "Test IRS practitioner" &
-createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner" 
+createIRSPractitionerAccount "9" "RT2222" "Test IRS practitioner"
 createIRSPractitionerAccount "10" "RT3333" "Test IRS practitioner" &
 wait

@@ -2,36 +2,39 @@ const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
-const getDocumentInfo = ({ applicationContext, documentData }) => {
-  const document = new DocketEntry(documentData, {
+const getDocumentInfo = ({ applicationContext, documentData, petitioners }) => {
+  const doc = new DocketEntry(documentData, {
     applicationContext,
+    petitioners,
   });
 
   return {
-    attachments: document.attachments,
-    certificateOfService: document.certificateOfService,
-    certificateOfServiceDate: document.certificateOfServiceDate,
-    documentTitle: document.documentTitle,
-    filedBy: document.filedBy,
-    objections: document.objections,
-    receivedAt: document.receivedAt,
+    attachments: doc.attachments,
+    certificateOfService: doc.certificateOfService,
+    documentTitle: doc.documentTitle,
+    filedBy: doc.filedBy,
+    filingDate: doc.filingDate,
+    formattedCertificateOfServiceDate: applicationContext
+      .getUtilities()
+      .formatDateString(doc.certificateOfServiceDate, 'MMDDYY'),
+    objections: doc.objections,
+    receivedAt: doc.receivedAt,
   };
 };
 
 /**
  * generatePrintableFilingReceiptInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case the documents were filed in
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
  * @returns {string} url for the generated document on the storage client
  */
-exports.generatePrintableFilingReceiptInteractor = async ({
+exports.generatePrintableFilingReceiptInteractor = async (
   applicationContext,
-  docketNumber,
-  documentsFiled,
-}) => {
+  { docketNumber, documentsFiled },
+) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -43,19 +46,22 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   const primaryDocument = getDocumentInfo({
     applicationContext,
     documentData: documentsFiled,
+    petitioners: caseRecord.petitioners,
   });
 
   const primaryDocumentRecord = caseEntity.docketEntries.find(
     doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
+  primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 
   const filingReceiptDocumentParams = { document: primaryDocument };
 
   if (documentsFiled.hasSupportingDocuments) {
-    filingReceiptDocumentParams.supportingDocuments = documentsFiled.supportingDocuments.map(
-      doc => getDocumentInfo({ applicationContext, documentData: doc }),
-    );
+    filingReceiptDocumentParams.supportingDocuments =
+      documentsFiled.supportingDocuments.map(doc =>
+        getDocumentInfo({ applicationContext, documentData: doc }),
+      );
   }
 
   if (documentsFiled.secondaryDocumentFile) {
@@ -66,9 +72,10 @@ exports.generatePrintableFilingReceiptInteractor = async ({
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
-    filingReceiptDocumentParams.secondarySupportingDocuments = documentsFiled.secondarySupportingDocuments.map(
-      doc => getDocumentInfo({ applicationContext, documentData: doc }),
-    );
+    filingReceiptDocumentParams.secondarySupportingDocuments =
+      documentsFiled.secondarySupportingDocuments.map(doc =>
+        getDocumentInfo({ applicationContext, documentData: doc }),
+      );
   }
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
@@ -81,7 +88,7 @@ exports.generatePrintableFilingReceiptInteractor = async ({
       docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
       filedAt: applicationContext
         .getUtilities()
-        .formatDateString(primaryDocument.receivedAt, 'DATE_TIME_TZ'),
+        .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
       filedBy: primaryDocument.filedBy,
       ...filingReceiptDocumentParams,
     },
@@ -96,13 +103,13 @@ exports.generatePrintableFilingReceiptInteractor = async ({
     useTempBucket: true,
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key,
+      useTempBucket: true,
+    });
 
   return url;
 };

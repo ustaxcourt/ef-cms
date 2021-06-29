@@ -27,7 +27,7 @@ export const CreatePractitionerUser = connect(
           <SuccessNotification />
           <ErrorNotification />
 
-          <PractitionerForm />
+          <PractitionerForm validateSequenceName="validateAddPractitionerSequence" />
 
           <div className="grid-row margin-bottom-6">
             <div className="grid-col-12">

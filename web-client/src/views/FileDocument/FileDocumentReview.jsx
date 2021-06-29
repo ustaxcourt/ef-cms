@@ -16,7 +16,6 @@ export const FileDocumentReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     showModal: state.modal.showModal,
     submitExternalDocumentSequence: sequences.submitExternalDocumentSequence,
@@ -24,14 +23,171 @@ export const FileDocumentReview = connect(
   function FileDocumentReview({
     fileDocumentHelper,
     form,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     showModal,
     submitExternalDocumentSequence,
   }) {
+    const secondaryDocument = () => (
+      <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
+        <div className="tablet:grid-col-6 margin-bottom-1">
+          <div className="tablet:margin-bottom-0 margin-bottom-205">
+            <div>
+              <label className="usa-label" htmlFor="secondary-filing">
+                {form.secondaryDocument.documentTitle}{' '}
+              </label>
+              {(form.secondaryDocumentFile &&
+                form.secondaryDocumentFile.name && (
+                  <div className="grid-row">
+                    <div className="grid-col flex-auto">
+                      <PDFPreviewButton
+                        file={form.secondaryDocumentFile}
+                        title={form.secondaryDocument.documentTitle}
+                      />
+                    </div>
+                  </div>
+                )) ||
+                'No file attached'}
+            </div>
+          </div>
+        </div>
+        <div className="tablet:grid-col-6 margin-bottom-1">
+          {fileDocumentHelper.showSecondaryFilingIncludes && (
+            <div
+              className={classNames(
+                !fileDocumentHelper.secondaryDocument.showObjection
+                  ? 'margin-bottom-0'
+                  : 'margin-bottom-5',
+              )}
+            >
+              <label className="usa-label" htmlFor="filing-includes">
+                Document includes
+              </label>
+              <ul className="ustc-unstyled-list without-margins">
+                {form.secondaryDocument.certificateOfService && (
+                  <li>
+                    Certificate of Service{' '}
+                    {
+                      fileDocumentHelper.secondaryDocument
+                        .certificateOfServiceDateFormatted
+                    }
+                  </li>
+                )}
+                {form.secondaryDocument.attachments && <li>Attachment(s)</li>}
+              </ul>
+            </div>
+          )}
+
+          {fileDocumentHelper.secondaryDocument.showObjection && (
+            <div className="margin-bottom-0">
+              <label className="usa-label" htmlFor="objections">
+                Objections?
+              </label>
+              {form.secondaryDocument.objections}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+    const supportingDocuments = () =>
+      form.supportingDocuments.map((item, idx) => (
+        <div
+          className="grid-row grid-gap overline padding-top-105 margin-top-105"
+          key={`supporting-doc-${item.documentTitle}`}
+        >
+          <div className="tablet:grid-col-6 margin-bottom-1">
+            <div className="tablet:margin-bottom-0 margin-bottom-205">
+              <label
+                className="usa-label"
+                htmlFor={`supporting-documents-${idx}`}
+              >
+                {item.documentTitle}
+              </label>
+              <div className="grid-row">
+                <div className="grid-col flex-auto">
+                  <PDFPreviewButton
+                    file={item.supportingDocumentFile}
+                    title={item.documentTitle}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="tablet:grid-col-6 margin-bottom-1">
+            {fileDocumentHelper.supportingDocuments[idx].showFilingIncludes && (
+              <div className="margin-bottom-0">
+                <label className="usa-label" htmlFor="filing-includes">
+                  Document includes
+                </label>
+                <ul className="ustc-unstyled-list without-margins">
+                  {item.certificateOfService && (
+                    <li>
+                      Certificate of Service{' '}
+                      {
+                        fileDocumentHelper.supportingDocuments[idx]
+                          .certificateOfServiceDateFormatted
+                      }
+                    </li>
+                  )}
+                  {item.attachments && <li>Attachment(s)</li>}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      ));
+
+    const secondarySupportingDocuments = () =>
+      form.secondarySupportingDocuments.map((item, idx) => (
+        <div
+          className="grid-row grid-gap overline padding-top-105 margin-top-105"
+          key={`secondary-supporting-doc-${item.documentTitle}`}
+        >
+          <div className="tablet:grid-col-6 margin-bottom-1">
+            <div className="tablet:margin-bottom-0 margin-bottom-205">
+              <label
+                className="usa-label"
+                htmlFor={`secondary-supporting-documents-${idx}`}
+              >
+                {item.documentTitle}
+              </label>
+              <div className="grid-row">
+                <div className="grid-col flex-auto">
+                  <PDFPreviewButton
+                    file={item.supportingDocumentFile}
+                    title={item.documentTitle}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="tablet:grid-col-6 margin-bottom-1">
+            {fileDocumentHelper.secondarySupportingDocuments[idx]
+              .showFilingIncludes && (
+              <div className="margin-bottom-0">
+                <label className="usa-label" htmlFor="filing-includes">
+                  Document includes
+                </label>
+                <ul className="ustc-unstyled-list without-margins">
+                  {item.certificateOfService && (
+                    <li>
+                      Certificate of Service{' '}
+                      {
+                        fileDocumentHelper.secondarySupportingDocuments[idx]
+                          .certificateOfServiceDateFormatted
+                      }
+                    </li>
+                  )}
+                  {item.attachments && <li>Attachment(s)</li>}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      ));
+
     return (
-      <React.Fragment>
+      <>
         <Focus>
           <h1
             className="heading-1 margin-bottom-0"
@@ -114,185 +270,13 @@ export const FileDocumentReview = connect(
                     </div>
                   </div>
 
-                  {form.supportingDocuments &&
-                    form.supportingDocuments.map((item, idx) => (
-                      <React.Fragment key={idx}>
-                        <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                          <div className="tablet:grid-col-6 margin-bottom-1">
-                            <div className="tablet:margin-bottom-0 margin-bottom-205">
-                              <label
-                                className="usa-label"
-                                htmlFor={`supporting-documents-${idx}`}
-                              >
-                                {item.documentTitle}
-                              </label>
-                              <div className="grid-row">
-                                <div className="grid-col flex-auto">
-                                  <PDFPreviewButton
-                                    file={item.supportingDocumentFile}
-                                    title={item.documentTitle}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tablet:grid-col-6 margin-bottom-1">
-                            {fileDocumentHelper.supportingDocuments[idx]
-                              .showFilingIncludes && (
-                              <div className="margin-bottom-0">
-                                <label
-                                  className="usa-label"
-                                  htmlFor="filing-includes"
-                                >
-                                  Document includes
-                                </label>
-                                <ul className="ustc-unstyled-list without-margins">
-                                  {item.certificateOfService && (
-                                    <li>
-                                      Certificate of Service{' '}
-                                      {
-                                        fileDocumentHelper.supportingDocuments[
-                                          idx
-                                        ].certificateOfServiceDateFormatted
-                                      }
-                                    </li>
-                                  )}
-                                  {item.attachments && <li>Attachment(s)</li>}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    ))}
+                  {form.supportingDocuments && supportingDocuments()}
 
-                  {fileDocumentHelper.showSecondaryDocument && (
-                    <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        <div className="tablet:margin-bottom-0 margin-bottom-205">
-                          <div className="">
-                            <label
-                              className="usa-label"
-                              htmlFor="secondary-filing"
-                            >
-                              {form.secondaryDocument.documentTitle}{' '}
-                            </label>
-                            {(form.secondaryDocumentFile &&
-                              form.secondaryDocumentFile.name && (
-                                <React.Fragment>
-                                  <div className="grid-row">
-                                    <div className="grid-col flex-auto">
-                                      <PDFPreviewButton
-                                        file={form.secondaryDocumentFile}
-                                        title={
-                                          form.secondaryDocument.documentTitle
-                                        }
-                                      />
-                                    </div>
-                                  </div>
-                                </React.Fragment>
-                              )) ||
-                              'No file attached'}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="tablet:grid-col-6 margin-bottom-1">
-                        {fileDocumentHelper.showSecondaryFilingIncludes && (
-                          <div
-                            className={classNames(
-                              !fileDocumentHelper.secondaryDocument
-                                .showObjection
-                                ? 'margin-bottom-0'
-                                : 'margin-bottom-5',
-                            )}
-                          >
-                            <label
-                              className="usa-label"
-                              htmlFor="filing-includes"
-                            >
-                              Document includes
-                            </label>
-                            <ul className="ustc-unstyled-list without-margins">
-                              {form.secondaryDocument.certificateOfService && (
-                                <li>
-                                  Certificate of Service{' '}
-                                  {
-                                    fileDocumentHelper.secondaryDocument
-                                      .certificateOfServiceDateFormatted
-                                  }
-                                </li>
-                              )}
-                              {form.secondaryDocument.attachments && (
-                                <li>Attachment(s)</li>
-                              )}
-                            </ul>
-                          </div>
-                        )}
-
-                        {fileDocumentHelper.secondaryDocument.showObjection && (
-                          <div className="margin-bottom-0">
-                            <label className="usa-label" htmlFor="objections">
-                              Objections?
-                            </label>
-                            {form.secondaryDocument.objections}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
+                  {fileDocumentHelper.showSecondaryDocument &&
+                    secondaryDocument()}
 
                   {form.secondarySupportingDocuments &&
-                    form.secondarySupportingDocuments.map((item, idx) => (
-                      <React.Fragment key={idx}>
-                        <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
-                          <div className="tablet:grid-col-6 margin-bottom-1">
-                            <div className="tablet:margin-bottom-0 margin-bottom-205">
-                              <label
-                                className="usa-label"
-                                htmlFor={`secondary-supporting-documents-${idx}`}
-                              >
-                                {item.documentTitle}
-                              </label>
-                              <div className="grid-row">
-                                <div className="grid-col flex-auto">
-                                  <PDFPreviewButton
-                                    file={item.supportingDocumentFile}
-                                    title={item.documentTitle}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="tablet:grid-col-6 margin-bottom-1">
-                            {fileDocumentHelper.secondarySupportingDocuments[
-                              idx
-                            ].showFilingIncludes && (
-                              <div className="margin-bottom-0">
-                                <label
-                                  className="usa-label"
-                                  htmlFor="filing-includes"
-                                >
-                                  Document includes
-                                </label>
-                                <ul className="ustc-unstyled-list without-margins">
-                                  {item.certificateOfService && (
-                                    <li>
-                                      Certificate of Service{' '}
-                                      {
-                                        fileDocumentHelper
-                                          .secondarySupportingDocuments[idx]
-                                          .certificateOfServiceDateFormatted
-                                      }
-                                    </li>
-                                  )}
-                                  {item.attachments && <li>Attachment(s)</li>}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    ))}
+                    secondarySupportingDocuments()}
                 </div>
               </div>
             </div>
@@ -309,22 +293,15 @@ export const FileDocumentReview = connect(
                         Parties Filing The Document(s)
                       </h3>
                       <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-6 margin-bottom-1">
+                        <div className="tablet:grid-col-12 margin-bottom-1">
                           <label className="usa-label" htmlFor="filing-parties">
                             Filing parties
                           </label>
                           <ul className="ustc-unstyled-list without-margins">
-                            {form.partyPrimary && (
-                              <li>
-                                {formattedCaseDetail.contactPrimary.name},
-                                Petitioner
-                              </li>
-                            )}
-                            {form.partySecondary && (
-                              <li>
-                                {formattedCaseDetail.contactSecondary.name},
-                                Petitioner
-                              </li>
+                            {fileDocumentHelper.formattedFilingParties.map(
+                              party => (
+                                <li key={party}>{party}</li>
+                              ),
                             )}
                             {form.partyIrsPractitioner && <li>Respondent</li>}
                           </ul>
@@ -413,7 +390,7 @@ export const FileDocumentReview = connect(
             confirmSequence={submitExternalDocumentSequence}
           />
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

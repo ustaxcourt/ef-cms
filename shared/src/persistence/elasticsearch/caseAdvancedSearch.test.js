@@ -15,6 +15,18 @@ describe('caseAdvancedSearch', () => {
     });
 
     expect(search).toHaveBeenCalledTimes(1);
+    expect(search.mock.calls[0][0].searchParameters.body['_source']).toEqual([
+      'caseCaption',
+      'petitioners',
+      'docketNumber',
+      'docketNumberSuffix',
+      'docketNumberWithSuffix',
+      'irsPractitioners',
+      'isSealed',
+      'privatePractitioners',
+      'receivedAt',
+      'sealedDate',
+    ]);
     expect(results).toMatchObject(['some', 'matches']);
   });
 

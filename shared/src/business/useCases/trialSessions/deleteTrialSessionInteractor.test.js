@@ -46,8 +46,7 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     await expect(
-      deleteTrialSessionInteractor({
-        applicationContext,
+      deleteTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -63,8 +62,7 @@ describe('deleteTrialSessionInteractor', () => {
     mockTrialSession = null;
 
     await expect(
-      deleteTrialSessionInteractor({
-        applicationContext,
+      deleteTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('trial session not found');
@@ -82,8 +80,7 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     await expect(
-      deleteTrialSessionInteractor({
-        applicationContext,
+      deleteTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Trial session cannot be updated after its start date');
@@ -103,8 +100,7 @@ describe('deleteTrialSessionInteractor', () => {
     };
 
     await expect(
-      deleteTrialSessionInteractor({
-        applicationContext,
+      deleteTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Trial session cannot be deleted after it is calendared');
@@ -126,8 +122,7 @@ describe('deleteTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    await deleteTrialSessionInteractor({
-      applicationContext,
+    await deleteTrialSessionInteractor(applicationContext, {
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -142,5 +137,34 @@ describe('deleteTrialSessionInteractor', () => {
         .createCaseTrialSortMappingRecords,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('should not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL,
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        preferredTrialCity: null,
+      });
+
+    await deleteTrialSessionInteractor(applicationContext, {
+      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
   });
 });

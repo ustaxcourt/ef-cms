@@ -4,7 +4,7 @@ const {
 } = require('../../utilities/JoiValidationDecorator');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
-const { omit } = require('lodash');
+const { pick } = require('lodash');
 const { WORK_ITEM_VALIDATION_RULES } = require('./EntityValidationConstants');
 
 /**
@@ -32,7 +32,24 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.completedByUserId = rawWorkItem.completedByUserId;
   this.completedMessage = rawWorkItem.completedMessage;
   this.createdAt = rawWorkItem.createdAt || createISODateString();
-  this.docketEntry = omit(rawWorkItem.docketEntry, 'workItem');
+  this.docketEntry = pick(rawWorkItem.docketEntry, [
+    'additionalInfo',
+    'createdAt',
+    'descriptionDisplay',
+    'docketEntryId',
+    'documentTitle',
+    'documentType',
+    'eventCode',
+    'filedBy',
+    'index',
+    'isFileAttached',
+    'isPaper',
+    'otherFilingParty',
+    'receivedAt',
+    'sentBy',
+    'servedAt',
+    'userId',
+  ]);
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
@@ -50,8 +67,6 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.updatedAt = rawWorkItem.updatedAt || createISODateString();
   this.workItemId = rawWorkItem.workItemId || applicationContext.getUniqueId();
 };
-
-WorkItem.validationName = 'WorkItem';
 
 joiValidationDecorator(WorkItem, WORK_ITEM_VALIDATION_RULES);
 
@@ -86,8 +101,8 @@ WorkItem.prototype.assignToUser = function ({
   return this;
 };
 
-WorkItem.prototype.setStatus = function (status) {
-  this.caseStatus = status;
+WorkItem.prototype.setStatus = function (caseStatus) {
+  this.caseStatus = caseStatus;
 };
 
 /**
@@ -103,6 +118,16 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   this.completedByUserId = user.userId;
   this.completedMessage = message;
   delete this.inProgress;
+  return this;
+};
+
+/**
+ * marks the work item as read
+ *
+ * @returns {WorkItem} the updated work item
+ */
+WorkItem.prototype.markAsRead = function () {
+  this.isRead = true;
   return this;
 };
 

@@ -14,11 +14,11 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
+const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
-    session = sessions.find(s => s.trialSessionId === result.trialSessionId);
+    session = sessions.find(s => s.trialSessionId === trialSessionId);
   }
 
   const judge = get(state.judgeUser);
@@ -26,257 +26,105 @@ const getUserIsAssignedToSession = ({ currentUser, get, result }) => {
   const isJudgeUserAssigned = session?.judge?.userId === currentUser.userId;
   const isChambersUserAssigned =
     judge &&
-    session?.judge?.userId === judge?.userId &&
-    judge?.section === currentUser.section;
+    session?.judge?.userId === judge.userId &&
+    judge.section === currentUser.section;
   const isTrialClerkUserAssigned =
     session?.trialClerk?.userId === currentUser.userId;
 
-  return (
-    isJudgeUserAssigned || isTrialClerkUserAssigned || isChambersUserAssigned
+  return !!(
+    isJudgeUserAssigned ||
+    isTrialClerkUserAssigned ||
+    isChambersUserAssigned
   );
 };
 
-export const getShowDocumentViewerLink = ({
-  hasDocument,
-  isCourtIssuedDocument,
-  isExternalUser,
-  isInitialDocument,
-  isServed,
-  isStipDecision,
-  isStricken,
-  isUnservable,
-  userHasAccessToCase,
-  userHasNoAccessToDocument,
+const getCalendarDetailsForTrialSession = ({
+  caseDocketNumber,
+  trialSessionId,
+  trialSessions,
 }) => {
-  if (!hasDocument) return false;
+  let note;
+  let addedAt;
 
-  if (isExternalUser) {
-    if (isStricken) return false;
-    if (userHasNoAccessToDocument) return false;
-
-    if (isCourtIssuedDocument && !isStipDecision) {
-      if (isUnservable) return true;
-      if (!isServed) return false;
-    } else {
-      if (!userHasAccessToCase) return false;
-      if (isInitialDocument) return true;
-      if (!isServed) return false;
-    }
+  if (!trialSessions || !trialSessions.length) {
+    return { addedAt, note };
   }
 
-  return true;
+  const foundTrialSession = trialSessions.find(
+    session => session.trialSessionId === trialSessionId,
+  );
+
+  if (foundTrialSession && foundTrialSession.caseOrder) {
+    const trialSessionCase = foundTrialSession.caseOrder.find(
+      sessionCase => sessionCase.docketNumber === caseDocketNumber,
+    );
+
+    note = trialSessionCase && trialSessionCase.calendarNotes;
+    addedAt = trialSessionCase && trialSessionCase.addedToSessionAt;
+  }
+
+  return { addedAt, note };
 };
 
 export const formattedCaseDetail = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const isExternalUser = applicationContext
-    .getUtilities()
-    .isExternalUser(user.role);
-  const permissions = get(state.permissions);
-  const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    INITIAL_DOCUMENT_TYPES,
-    SYSTEM_GENERATED_DOCUMENT_TYPES,
-    UNSERVABLE_EVENT_CODES,
-  } = applicationContext.getConstants();
-  const systemGeneratedEventCodes = Object.keys(
-    SYSTEM_GENERATED_DOCUMENT_TYPES,
-  ).map(key => {
-    return SYSTEM_GENERATED_DOCUMENT_TYPES[key].eventCode;
-  });
 
-  const {
-    formatCase,
-    formatCaseDeadlines,
-    setServiceIndicatorsForCase,
-    sortDocketEntries,
-  } = applicationContext.getUtilities();
+  const { formatCase, setServiceIndicatorsForCase } =
+    applicationContext.getUtilities();
 
-  let docketRecordSort;
   const caseDetail = get(state.caseDetail);
-
-  const caseDeadlines = get(state.caseDeadlines);
-  const docketNumber = get(state.caseDetail.docketNumber);
-  if (docketNumber) {
-    docketRecordSort = get(
-      state.sessionMetadata.docketRecordSort[docketNumber],
-    );
-  }
 
   const result = {
     ...setServiceIndicatorsForCase(caseDetail),
     ...formatCase(applicationContext, caseDetail),
   };
 
-  result.formattedDocketEntries = sortDocketEntries(
-    result.formattedDocketEntries,
-    docketRecordSort,
-  );
-
-  result.otherFilers = (result.otherFilers || []).map(otherFiler => ({
-    ...otherFiler,
-    showEAccessFlag: !isExternalUser && otherFiler.hasEAccess,
-  }));
-
-  result.otherPetitioners = (result.otherPetitioners || []).map(
-    otherPetitioner => ({
-      ...otherPetitioner,
-      showEAccessFlag: !isExternalUser && otherPetitioner.hasEAccess,
-    }),
-  );
-
-  result.contactPrimary = {
-    ...result.contactPrimary,
-    showEAccessFlag: !isExternalUser && result.contactPrimary.hasEAccess,
-  };
-
-  if (result.contactSecondary) {
-    result.contactSecondary = {
-      ...result.contactSecondary,
-      showEAccessFlag: !isExternalUser && result.contactSecondary.hasEAccess,
-    };
-  }
-
-  const getShowEditDocketRecordEntry = ({ entry, userPermissions }) => {
-    const hasSystemGeneratedDocument =
-      entry && systemGeneratedEventCodes.includes(entry.eventCode);
-    const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
-    const hasServedCourtIssuedDocument =
-      hasCourtIssuedDocument && !!entry.servedAt;
-    const hasUnservableCourtIssuedDocument =
-      entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
-
-    return (
-      userPermissions.EDIT_DOCKET_ENTRY &&
-      (hasSystemGeneratedDocument ||
-        entry.isMinuteEntry ||
-        entry.qcWorkItemsCompleted) &&
-      (!hasCourtIssuedDocument ||
-        hasServedCourtIssuedDocument ||
-        hasUnservableCourtIssuedDocument)
-    );
-  };
-
-  result.formattedDocketEntries = result.formattedDocketEntries.map(entry => {
-    const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
-    const userHasAccessToDocument = entry.isAvailableToUser;
-
-    const formattedResult = {
-      numberOfPages: 0,
-      ...entry,
-      createdAtFormatted: entry.createdAtFormatted,
-    };
-
-    let showDocumentLinks = false;
-
-    if (isExternalUser) {
-      formattedResult.isInProgress = false;
-      formattedResult.hideIcons = true;
-      formattedResult.qcWorkItemsUntouched = false;
-    } else {
-      formattedResult.isInProgress = entry.isInProgress;
-
-      formattedResult.qcWorkItemsUntouched =
-        !formattedResult.isInProgress &&
-        entry.qcWorkItemsUntouched &&
-        !entry.isCourtIssuedDocument;
-
-      formattedResult.showLoadingIcon =
-        !permissions.UPDATE_CASE &&
-        entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-    }
-
-    formattedResult.isPaper =
-      !formattedResult.isInProgress &&
-      !formattedResult.qcWorkItemsUntouched &&
-      entry.isPaper;
-
-    if (entry.documentTitle) {
-      formattedResult.descriptionDisplay = entry.documentTitle;
-      if (entry.additionalInfo && entry.addToCoversheet) {
-        formattedResult.descriptionDisplay += ` ${entry.additionalInfo}`;
-      }
-    }
-
-    formattedResult.showDocumentProcessing =
-      !permissions.UPDATE_CASE &&
-      entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-
-    formattedResult.showNotServed =
-      !formattedResult.isUnservable &&
-      entry.isNotServedDocument &&
-      !entry.isMinuteEntry;
-    formattedResult.showServed = entry.isStatusServed;
-
-    const isInitialDocument = Object.keys(INITIAL_DOCUMENT_TYPES)
-      .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
-      .includes(entry.documentType);
-
-    showDocumentLinks = getShowDocumentViewerLink({
-      hasDocument: entry.isFileAttached,
-      isCourtIssuedDocument: entry.isCourtIssuedDocument,
-      isExternalUser,
-      isInitialDocument,
-      isServed: !!entry.servedAt,
-      isStipDecision: entry.isStipDecision,
-      isStricken: entry.isStricken,
-      isUnservable: formattedResult.isUnservable,
-      userHasAccessToCase,
-      userHasNoAccessToDocument: !userHasAccessToDocument,
-    });
-
-    formattedResult.showDocumentViewerLink =
-      !isExternalUser && showDocumentLinks;
-
-    formattedResult.showLinkToDocument = isExternalUser && showDocumentLinks;
-
-    formattedResult.filingsAndProceedingsWithAdditionalInfo = '';
-    if (entry.filingsAndProceedings) {
-      formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.filingsAndProceedings}`;
-    }
-    if (entry.additionalInfo2) {
-      formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.additionalInfo2}`;
-    }
-
-    formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
-      entry,
-      userPermissions: permissions,
-    });
-
-    formattedResult.showDocumentDescriptionWithoutLink = !showDocumentLinks;
-
-    return formattedResult;
-  });
-
-  result.formattedDocketEntriesOnDocketRecord = result.formattedDocketEntries.filter(
-    d => d.isOnDocketRecord,
-  );
-
-  result.formattedPendingDocketEntriesOnDocketRecord = result.formattedDocketEntriesOnDocketRecord.filter(
-    d => d.pending && d.servedAt,
-  );
-
-  result.formattedDraftDocuments = (result.draftDocuments || []).map(
-    draftDocument => {
-      return {
-        ...draftDocument,
-        descriptionDisplay: draftDocument.documentTitle,
-        showDocumentViewerLink: permissions.UPDATE_CASE,
-      };
-    },
-  );
+  result.petitioners = applicationContext
+    .getUtilities()
+    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners });
 
   result.consolidatedCases = result.consolidatedCases || [];
+
+  const allTrialSessions = get(state.trialSessions);
+
+  const { note: trialSessionNotes } = getCalendarDetailsForTrialSession({
+    caseDocketNumber: caseDetail.docketNumber,
+    trialSessionId: caseDetail.trialSessionId,
+    trialSessions: allTrialSessions,
+  });
+
+  result.trialSessionNotes = trialSessionNotes;
+
+  if (result.hearings && result.hearings.length) {
+    result.hearings.forEach(hearing => {
+      const { addedAt, note } = getCalendarDetailsForTrialSession({
+        caseDocketNumber: caseDetail.docketNumber,
+        trialSessionId: hearing.trialSessionId,
+        trialSessions: allTrialSessions,
+      });
+
+      hearing.calendarNotes = note;
+      hearing.addedToSessionAt = addedAt;
+
+      hearing.userIsAssignedToSession = getUserIsAssignedToSession({
+        currentUser: user,
+        get,
+        trialSessionId: hearing.trialSessionId,
+      });
+    });
+
+    result.hearings.sort((a, b) => {
+      return applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.addedToSessionAt, b.addedToSessionAt);
+    });
+  }
 
   result.userIsAssignedToSession = getUserIsAssignedToSession({
     currentUser: user,
     get,
-    result,
+    trialSessionId: caseDetail.trialSessionId,
   });
 
-  result.showBlockedTag = caseDetail.blocked || caseDetail.automaticBlocked;
-  result.docketRecordSort = docketRecordSort;
-  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
   return result;
 };

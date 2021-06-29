@@ -12,8 +12,7 @@ exports.getPractitionersByNameLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getPractitionersByNameInteractor({
-        applicationContext,
+      .getPractitionersByNameInteractor(applicationContext, {
         name,
       });
   });

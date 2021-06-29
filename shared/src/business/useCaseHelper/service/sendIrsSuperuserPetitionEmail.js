@@ -14,30 +14,28 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     throw new Error('Cannot serve a docket entry without an index.');
   }
 
+  const caseDetail = applicationContext
+    .getUtilities()
+    .setServiceIndicatorsForCase(caseEntity);
   const {
     caseCaption,
-    contactPrimary,
-    contactSecondary,
     docketNumber,
     docketNumberWithSuffix,
     mailingDate,
     preferredTrialCity,
     privatePractitioners,
-  } = applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
+  } = caseDetail;
 
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];
-    const { representingPrimary, representingSecondary } = practitioner;
 
-    if (representingPrimary) {
-      representingFormatted.push(contactPrimary.name);
-    }
-
-    if (representingSecondary && contactSecondary) {
-      representingFormatted.push(contactSecondary.name);
-    }
+    caseEntity.petitioners.forEach(p => {
+      if (practitioner.isRepresenting(p.contactId)) {
+        representingFormatted.push(p.name);
+      }
+    });
 
     practitioner.representingFormatted = representingFormatted.join(', ');
   });
@@ -58,12 +56,12 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     data: {
       caseDetail: {
         caseTitle: Case.getCaseTitle(caseCaption),
-        docketNumber: docketNumber,
-        docketNumberWithSuffix: docketNumberWithSuffix,
+        docketNumber,
+        docketNumberWithSuffix,
         trialLocation: preferredTrialCity || 'No requested place of trial',
       },
-      contactPrimary,
-      contactSecondary,
+      contactPrimary: caseDetail.petitioners[0],
+      contactSecondary: caseDetail.petitioners[1],
       currentDate,
       docketEntryNumber: docketEntryEntity.index,
       documentDetail: {
@@ -97,5 +95,12 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     },
     destinations: [destination],
     templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
+  });
+
+  applicationContext.logger.info('served a document to the irs', {
+    destination,
+    docketEntryId,
+    docketNumber,
+    eventCode,
   });
 };

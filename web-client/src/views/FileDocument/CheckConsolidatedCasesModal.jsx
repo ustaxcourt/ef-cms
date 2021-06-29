@@ -32,8 +32,11 @@ export const CheckConsolidatedCasesModal = connect(
         </p>
         <FormGroup errorText={error}>
           {formattedCaseDetail.consolidatedCases.map(
-            (formattedConsolidatedCase, index) => (
-              <div className="padding-bottom-2" key={index}>
+            formattedConsolidatedCase => (
+              <div
+                className="padding-bottom-2"
+                key={formattedConsolidatedCase.docketNumber}
+              >
                 <input
                   className="usa-checkbox__input"
                   id={`case-${formattedConsolidatedCase.docketNumber}`}

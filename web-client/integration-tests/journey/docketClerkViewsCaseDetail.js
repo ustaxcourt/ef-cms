@@ -1,3 +1,5 @@
+import { contactPrimaryFromState } from '../helpers';
+
 export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
   return it('Docketclerk views case detail', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -8,6 +10,6 @@ export const docketClerkViewsCaseDetail = (test, docketNumber = null) => {
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.userId).toBeDefined();
+    expect(contactPrimaryFromState(test).contactId).toBeDefined();
   });
 };

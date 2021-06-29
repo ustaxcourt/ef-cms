@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getDefaultServiceIndicatorForPractitionerMatchesAction } from '../actions/getDefaultServiceIndicatorForPractitionerMatchesAction';
 import { getIrsPractitionersBySearchKeyAction } from '../actions/ManualAssociation/getIrsPractitionersBySearchKeyAction';
 import { isRespondentInCaseAction } from '../actions/isRespondentInCaseAction';
 import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIndicatorAction';
@@ -8,8 +9,8 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator(
-  [
+export const openAddIrsPractitionerModalSequence =
+  showProgressSequenceDecorator([
     clearAlertsAction,
     clearModalStateAction,
     setDefaultServiceIndicatorAction('modal'),
@@ -18,6 +19,10 @@ export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator
       error: [setValidationErrorsAction],
       success: [
         setRespondentsAction,
+        getDefaultServiceIndicatorForPractitionerMatchesAction(
+          'respondentMatches',
+        ),
+        setDefaultServiceIndicatorAction('modal'),
         isRespondentInCaseAction,
         {
           no: [setShowModalFactoryAction('AddIrsPractitionerModal')],
@@ -25,5 +30,4 @@ export const openAddIrsPractitionerModalSequence = showProgressSequenceDecorator
         },
       ],
     },
-  ],
-);
+  ]);

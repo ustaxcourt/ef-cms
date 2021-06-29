@@ -18,10 +18,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     ...caseDetail
   } = get(state.form);
 
-  const {
-    INITIAL_DOCUMENT_TYPES,
-    PAYMENT_STATUS,
-  } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
+    applicationContext.getConstants();
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
@@ -50,9 +48,8 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       petitionPaymentStatusFormatted = PAYMENT_STATUS.UNPAID;
   }
 
-  const preferredTrialCityFormatted = preferredTrialCity
-    ? preferredTrialCity
-    : 'No requested place of trial';
+  const preferredTrialCityFormatted =
+    preferredTrialCity || 'No requested place of trial';
 
   if (shouldShowIrsNoticeDate) {
     irsNoticeDateFormatted = applicationContext

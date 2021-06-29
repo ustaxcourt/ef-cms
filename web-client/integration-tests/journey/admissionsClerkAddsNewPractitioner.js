@@ -1,7 +1,3 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-
-const { US_STATES } = applicationContext.getConstants();
-
 export const admissionsClerkAddsNewPractitioner = test => {
   return it('admissions clerk adds a new practitioner', async () => {
     test.currentTimestamp = Date.now();
@@ -53,7 +49,7 @@ export const admissionsClerkAddsNewPractitioner = test => {
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'originalBarState',
-      value: US_STATES.OK,
+      value: 'OK',
     });
     await test.runSequence('updateFormValueSequence', {
       key: 'practitionerType',
@@ -86,8 +82,19 @@ export const admissionsClerkAddsNewPractitioner = test => {
 
     await test.runSequence('submitAddPractitionerSequence');
 
-    test.barNumber = test.getState('practitionerDetail.barNumber');
+    expect(Object.keys(test.getState('validationErrors'))).toEqual([
+      'confirmEmail',
+    ]);
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'confirmEmail',
+      value: 'caroleBaskinH8r@example.com',
+    });
+
+    await test.runSequence('submitAddPractitionerSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
+
+    test.barNumber = test.getState('practitionerDetail.barNumber');
   });
 };

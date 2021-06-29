@@ -31,7 +31,7 @@ describe('deleteOtherStatisticsAction', () => {
     expect(presenter.providers.path.success).toBeCalled();
   });
 
-  it('should take the error path if no errors are found', async () => {
+  it('should take the error path if errors are found', async () => {
     applicationContext
       .getUseCases()
       .updateOtherStatisticsInteractor.mockImplementation(() => {
@@ -49,6 +49,12 @@ describe('deleteOtherStatisticsAction', () => {
       },
     });
 
-    expect(presenter.providers.path.error).toBeCalled();
+    expect(presenter.providers.path.success).not.toHaveBeenCalled();
+    expect(presenter.providers.path.error).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Statistic could not be deleted.',
+      },
+    });
   });
 });

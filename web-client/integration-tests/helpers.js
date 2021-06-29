@@ -2,6 +2,7 @@
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -14,31 +15,38 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
+import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormData from 'form-data';
+import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import queryString from 'query-string';
+import qs from 'qs';
 import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const formattedCaseMessages = withAppContextDecorator(
@@ -68,6 +76,41 @@ export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
 
+export const callCognitoTriggerForPendingEmail = async userId => {
+  // mock application context similar to that in cognito-triggers.js
+  const apiApplicationContext = {
+    getCurrentUser: () => ({}),
+    getDocumentClient: () => {
+      return new DynamoDB.DocumentClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      });
+    },
+    getEnvironment: () => ({
+      dynamoDbTableName: 'efcms-local',
+      stage: process.env.STAGE,
+    }),
+    getPersistenceGateway: () => ({
+      getCaseByDocketNumber,
+      getDocketNumbersByUser,
+      getUserById,
+      updateCase,
+      updateUser,
+    }),
+    getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
+    logger: {
+      debug: () => {},
+      error: () => {},
+      info: () => {},
+    },
+  };
+
+  const user = await getUserRecordById(userId);
+  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+    user,
+  });
+};
+
 export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -78,13 +121,21 @@ export const getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-export const getFormattedCaseDetailForTest = async test => {
+export const getFormattedDocketEntriesForTest = async test => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber: test.docketNumber,
   });
-  return runCompute(formattedCaseDetail, {
+  return runCompute(formattedDocketEntries, {
     state: test.getState(),
   });
+};
+
+export const contactPrimaryFromState = test => {
+  return test.getState('caseDetail.petitioners.0');
+};
+
+export const contactSecondaryFromState = test => {
+  return test.getState('caseDetail.petitioners.1');
 };
 
 export const getCaseMessagesForCase = async test => {
@@ -107,6 +158,16 @@ export const getEmailsForAddress = address => {
       ':pk': `email-${address}`,
     },
     KeyConditionExpression: '#pk = :pk',
+    applicationContext,
+  });
+};
+
+export const getUserRecordById = userId => {
+  return client.get({
+    Key: {
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+    },
     applicationContext,
   });
 };
@@ -169,6 +230,7 @@ export const createCourtIssuedDocketEntry = async ({
   docketEntryId,
   docketNumber,
   eventCode,
+  filingDate,
   test,
   trialLocation,
 }) => {
@@ -193,6 +255,21 @@ export const createCourtIssuedDocketEntry = async ({
     await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
       key: 'trialLocation',
       value: trialLocation,
+    });
+  }
+
+  if (filingDate) {
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateMonth',
+      value: filingDate.month,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateDay',
+      value: filingDate.day,
+    });
+    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
+      key: 'filingDateYear',
+      value: filingDate.year,
     });
   }
 
@@ -234,11 +311,11 @@ export const getNotifications = test => {
 export const assignWorkItems = async (test, to, workItems) => {
   const users = {
     adc: {
-      name: 'Test ADC',
+      name: 'test ADC',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     },
     docketclerk: {
-      name: 'Test Docketclerk',
+      name: 'test Docketclerk',
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
@@ -255,6 +332,8 @@ export const assignWorkItems = async (test, to, workItems) => {
 };
 
 export const uploadExternalDecisionDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
   test.setState('form', {
     attachments: false,
     category: 'Decision',
@@ -263,13 +342,38 @@ export const uploadExternalDecisionDocument = async test => {
     documentTitle: 'Agreed Computation for Entry of Decision',
     documentType: 'Agreed Computation for Entry of Decision',
     eventCode: 'ACED',
+    filers: [contactPrimary.contactId],
     hasSupportingDocuments: false,
-    partyPrimary: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
     searchError: false,
-    serviceDate: null,
+    supportingDocument: null,
+    supportingDocumentFile: null,
+    supportingDocumentFreeText: null,
+    supportingDocumentMetadata: null,
+  });
+  await test.runSequence('submitExternalDocumentSequence');
+};
+
+export const uploadExternalRatificationDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
+  test.setState('form', {
+    attachments: false,
+    category: 'Miscellaneous',
+    certificateOfService: false,
+    certificateOfServiceDate: null,
+    documentTitle: 'Ratification of do the test',
+    documentType: 'Ratification',
+    eventCode: 'RATF',
+    filers: [contactPrimary.contactId],
+    freeText: 'do the test',
+    hasSupportingDocuments: false,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 115022,
+    scenario: 'Nonstandard B',
+    searchError: false,
     supportingDocument: null,
     supportingDocumentFile: null,
     supportingDocumentFreeText: null,
@@ -316,7 +420,7 @@ export const uploadPetition = async (
 
   const petitionMetadata = {
     caseType: overrides.caseType || CASE_TYPES_MAP.cdp,
-    contactPrimary: {
+    contactPrimary: overrides.contactPrimary || {
       address1: '734 Cowley Parkway',
       address2: 'Cum aut velit volupt',
       address3: 'Et sunt veritatis ei',
@@ -326,6 +430,7 @@ export const uploadPetition = async (
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'CT',
     },
     contactSecondary: overrides.contactSecondary || {},
@@ -364,7 +469,6 @@ export const uploadPetition = async (
 };
 
 export const loginAs = (test, user) => {
-  // eslint-disable-next-line jest/expect-expect
   return it(`login as ${user}`, async () => {
     await test.runSequence('updateFormValueSequence', {
       key: 'name',
@@ -374,12 +478,14 @@ export const loginAs = (test, user) => {
     await test.runSequence('submitLoginSequence', {
       path: '/',
     });
+
+    expect(test.getState('user.email')).toBeDefined();
   });
 };
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let test;
-  global.FormData = FormData;
+  global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
   };
@@ -406,21 +512,23 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  presenter.providers.applicationContext = applicationContext;
-  const { initialize: initializeSocketProvider, start, stop } = socketProvider({
+  const {
+    initialize: initializeSocketProvider,
+    start,
+    stop: stopSocket,
+  } = socketProvider({
     socketRouter,
   });
-  presenter.providers.socket = { start, stop };
+  presenter.providers.socket = { start, stop: stopSocket };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => await test.runSequence(name, obj);
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
   test.applicationContext = applicationContext;
 
-  const { window } = dom;
-
   global.window = {
-    ...window,
+    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -447,9 +555,16 @@ export const setupTest = ({ useCases = {} } = {}) => {
       removeItem: () => null,
       setItem: () => null,
     },
-    location: {},
+    location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
+      return {
+        close: jest.fn(),
+        document: {
+          write: jest.fn(),
+        },
+        location: '',
+      };
     },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
@@ -496,11 +611,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
 
   test = CerebralTest(presenter);
-  test.getSequence = name => async obj => {
-    const result = await test.runSequence(name, obj);
-    return result;
-  };
-  test.closeSocket = stop;
+  test.getSequence = seqName => async obj =>
+    await test.runSequence(seqName, obj);
+  test.closeSocket = stopSocket;
 
   test.setState('constants', applicationContext.getConstants());
 
@@ -517,10 +630,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
 const mockQuery = routeToGoTo => {
   const paramsString = routeToGoTo.split('?')[1];
-  return queryString.parse(paramsString);
+  return qs.parse(paramsString);
 };
 
-export const gotoRoute = (routes, routeToGoTo) => {
+export const gotoRoute = async (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
@@ -552,12 +665,12 @@ export const wait = time => {
   });
 };
 
-export const refreshElasticsearchIndex = async () => {
+export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
-  return await wait(2000);
+  return await wait(time);
 };
 
 export const base64ToUInt8Array = b64 => {
@@ -589,12 +702,25 @@ export const getPetitionDocumentForCase = caseDetail => {
   // In our tests, we had numerous instances of `case.docketEntries[0]`, which would
   // return the petition document most of the time, but occasionally fail,
   // producing unintended results.
-  return caseDetail.docketEntries.find(
-    document => document.documentType === 'Petition',
-  );
+  return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
   return petitionDocument.workItem;
+};
+
+export const getTextByCount = count => {
+  const baseText =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
+  const baseCount = baseText.length;
+
+  let resultText = baseText;
+  if (count > baseCount) {
+    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
+      resultText += baseText;
+    }
+  }
+
+  return resultText.slice(0, count);
 };

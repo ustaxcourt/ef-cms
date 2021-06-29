@@ -89,7 +89,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServeCourtIssuedDocumentSequence({
                       docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
+                      redirectUrl: documentViewerHelper.documentViewerLink,
                     });
                   }}
                 >
@@ -105,7 +105,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
                       docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                      redirectUrl: `/case-detail/${caseDetail.docketNumber}/document-view?docketEntryId=${viewerDocumentToDisplay.docketEntryId}`,
+                      redirectUrl: documentViewerHelper.documentViewerLink,
                     });
                   }}
                 >
@@ -116,7 +116,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/petition-qc/document-view/${viewerDocumentToDisplay.docketEntryId}`}
+                  href={documentViewerHelper.reviewAndServePetitionLink}
                   icon="paper-plane"
                   iconColor="white"
                 >
@@ -127,10 +127,20 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showSignStipulatedDecisionButton && (
                 <Button
                   link
-                  href={`/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentToDisplay.docketEntryId}/sign`}
+                  href={documentViewerHelper.signStipulatedDecisionLink}
                   icon="pencil-alt"
                 >
                   Sign Stipulated Decision
+                </Button>
+              )}
+
+              {documentViewerHelper.showCompleteQcButton && (
+                <Button
+                  link
+                  href={documentViewerHelper.completeQcLink}
+                  icon="star"
+                >
+                  Complete QC
                 </Button>
               )}
 

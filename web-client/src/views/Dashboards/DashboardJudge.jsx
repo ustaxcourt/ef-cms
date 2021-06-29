@@ -12,11 +12,10 @@ export const DashboardJudge = connect(
   function DashboardJudge({ user }) {
     return (
       <>
-        <BigHeader text={`Welcome, ${user.name}`} />
+        <BigHeader text={`Welcome, ${user.judgeTitle} ${user.name}`} />
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />
-
           <TrialSessionsSummary />
           <RecentMessages />
         </section>

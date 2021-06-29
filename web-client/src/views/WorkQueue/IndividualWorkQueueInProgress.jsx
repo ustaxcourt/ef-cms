@@ -16,7 +16,7 @@ export const IndividualWorkQueueInProgress = connect(
       <React.Fragment>
         <table
           aria-describedby="tab-my-queue"
-          className="usa-table work-queue subsection"
+          className="usa-table ustc-table subsection"
           id="my-work-queue"
         >
           <thead>
@@ -32,9 +32,9 @@ export const IndividualWorkQueueInProgress = connect(
               {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
           </thead>
-          {formattedWorkQueue.map((item, idx) => {
+          {formattedWorkQueue.map(item => {
             return (
-              <tbody key={idx}>
+              <tbody key={item.workItemId}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row">
@@ -46,10 +46,10 @@ export const IndividualWorkQueueInProgress = connect(
                   <td className="message-queue-row message-queue-case-title">
                     {item.caseTitle}
                   </td>
-                  <td className="message-queue-row message-queue-document">
+                  <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
                       <a className="case-link" href={item.editLink}>
-                        {item.docketEntry.documentTitle ||
+                        {item.docketEntry.descriptionDisplay ||
                           item.docketEntry.documentType}
                       </a>
                     </div>

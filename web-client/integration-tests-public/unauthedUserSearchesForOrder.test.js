@@ -21,9 +21,10 @@ const testClient = setupTestClient();
 testClient.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-describe('Petitioner creates case', () => {
+// Temporarily disabled for story 7387
+describe.skip('Petitioner creates case', () => {
   beforeAll(() => {
-    jest.setTimeout(10000);
+    jest.setTimeout(30000);
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -47,7 +48,7 @@ describe('Petitioner creates case', () => {
   });
 });
 
-describe('Docket clerk creates orders to search for', () => {
+describe.skip('Docket clerk creates orders to search for', () => {
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order',
@@ -77,18 +78,21 @@ describe('Docket clerk creates orders to search for', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
 });
 
-describe('Unauthed user searches for an order by keyword', () => {
+// Temporarily disabled for story 7387
+describe.skip('Unauthed user searches for an order by keyword', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserInvalidSearchForOrder(test);
   unauthedUserSearchesForOrderByKeyword(test, testClient);
 });
 
-describe('Docket clerk seals case', () => {
+// Temporarily disabled for story 7387
+describe.skip('Docket clerk seals case', () => {
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 
-describe('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
+// Temporarily disabled for story 7387
+describe.skip('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
   unauthedUserNavigatesToPublicSite(test);
   unauthedUserSearchesForSealedCaseOrderByKeyword(test, testClient);
 });

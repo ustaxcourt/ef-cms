@@ -14,7 +14,7 @@ exports.getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {
-  const caseItems = await client.query({
+  const caseItems = await client.queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
     },
@@ -24,10 +24,6 @@ exports.getCaseByDocketNumber = async ({
     KeyConditionExpression: '#pk = :pk',
     applicationContext,
   });
-
-  if (!caseItems) {
-    return null;
-  }
 
   return aggregateCaseItems(caseItems);
 };

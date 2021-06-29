@@ -7,7 +7,7 @@ terraform {
   }
 
   required_providers {
-    aws = "2.70.0"
+    aws = "3.42.0"
   }
 }
 
@@ -76,13 +76,19 @@ module "dynamsoft_us_west" {
 
 
 resource "aws_route53_record" "record_certs" {
-  name    = module.dynamsoft_us_east.resource_record_name
-  type    = module.dynamsoft_us_east.resource_record_type
-  zone_id = data.aws_route53_zone.zone.zone_id
-  records = [
-    module.dynamsoft_us_east.resource_record_value,
-  ]
-  ttl = 60
+  for_each = {
+    for dvo in module.dynamsoft_us_east.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.zone.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
 }
 
 
@@ -118,13 +124,13 @@ resource "aws_route53_record" "record_west_www" {
 
 resource "aws_acm_certificate_validation" "dns_validation_east" {
   certificate_arn         = module.dynamsoft_us_east.cert_arn
-  validation_record_fqdns = [aws_route53_record.record_certs.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-east-1
 }
 
 resource "aws_acm_certificate_validation" "dns_validation_west" {
   certificate_arn         = module.dynamsoft_us_west.cert_arn
-  validation_record_fqdns = [aws_route53_record.record_certs.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.record_certs : record.fqdn]
   provider                = aws.us-west-1
 }
 
@@ -158,9 +164,9 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
     HealthCheckId = aws_route53_health_check.public_ui_health_check.id
   }
 
-  alarm_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
   insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
-  ok_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
 resource "aws_route53_health_check" "public_ui_health_check" {
@@ -168,8 +174,9 @@ resource "aws_route53_health_check" "public_ui_health_check" {
   port              = 443
   type              = "HTTPS"
   resource_path     = "/"
-  failure_threshold = "2"
+  failure_threshold = "3"
   request_interval  = "30"
+  regions           = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
 
 resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
@@ -186,9 +193,9 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
     HealthCheckId = aws_route53_health_check.ui_health_check.id
   }
 
-  alarm_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
   insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
-  ok_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
 resource "aws_route53_health_check" "ui_health_check" {
@@ -196,6 +203,38 @@ resource "aws_route53_health_check" "ui_health_check" {
   port              = 443
   type              = "HTTPS"
   resource_path     = "/"
-  failure_threshold = "2"
+  failure_threshold = "3"
   request_interval  = "30"
+  regions           = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
+}
+
+resource "aws_cloudwatch_metric_alarm" "status_health_check" {
+  alarm_name          = "${var.dns_domain} health check endpoint"
+  namespace           = "AWS/Route53"
+  metric_name         = "HealthCheckStatus"
+  comparison_operator = "LessThanThreshold"
+  statistic           = "Minimum"
+  threshold           = "1"
+  evaluation_periods  = "2"
+  period              = "60"
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.status_health_check.id
+  }
+
+  alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
+  insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
+}
+
+resource "aws_route53_health_check" "status_health_check" {
+  fqdn               = "public-api.${var.dns_domain}"
+  port               = 443
+  type               = "HTTPS_STR_MATCH"
+  resource_path      = "/public-api/health"
+  failure_threshold  = "3"
+  request_interval   = "30"
+  invert_healthcheck = true
+  search_string      = "false"                                 # Search for any JSON property returning "false"
+  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }

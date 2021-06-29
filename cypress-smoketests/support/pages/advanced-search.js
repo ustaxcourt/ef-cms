@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
@@ -61,25 +61,14 @@ exports.createOpinion = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
-  cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+  cy.get('inputprimary-document-file').attachFile(
+    '../../fixtures/w3-dummy.pdf',
+  );
   cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 
-exports.signOpinion = () => {
-  cy.get(
-    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:last-child > div > div.grid-col-9',
-  ).click();
-  cy.get(
-    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-8 > div > div.message-document-actions > a:nth-child(3)',
-  ).click();
-  cy.url().should('contain', '/edit-order');
-  cy.get('.sign-pdf-interface').click();
-  cy.get('#save-signature-button').click();
-};
 exports.addDocketEntryAndServeOpinion = testData => {
-  cy.get(
-    '#case-detail-internal > div.grid-row.grid-gap-5 > div.grid-col-4 > div > button:last-child > div > div.grid-col-9',
-  ).click();
+  cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
   cy.get('#document-type').children().first().click();

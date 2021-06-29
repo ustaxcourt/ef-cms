@@ -10,8 +10,9 @@ exports.setWorkItemAsReadLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     const { workItemId } = event.pathParameters || {};
 
-    return await applicationContext.getUseCases().setWorkItemAsReadInteractor({
-      applicationContext,
-      workItemId: workItemId,
-    });
+    return await applicationContext
+      .getUseCases()
+      .setWorkItemAsReadInteractor(applicationContext, {
+        workItemId,
+      });
   });

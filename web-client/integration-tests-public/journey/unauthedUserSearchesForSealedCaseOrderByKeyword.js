@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
@@ -15,7 +16,9 @@ export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
 
     await test.runSequence('submitPublicOrderAdvancedSearchSequence');
 
-    expect(test.getState('searchResults')).not.toEqual(
+    expect(
+      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: testClient.draftOrders[1].docketEntryId,

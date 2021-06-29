@@ -40,6 +40,7 @@ export const CalculatePenaltiesModal = connect(
       >
         {penalties &&
           penalties.map((penalty, index) => (
+            // eslint-disable-next-line react/no-array-index-key
             <div className="margin-top-3" key={index}>
               <label className="usa-label" htmlFor={`penalty_${index}`}>
                 Penalty {index + 1} (IRS)

@@ -8,18 +8,18 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getCompletedMessagesForSectionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.section the section to get the inbox messages
  * @returns {object} the messages in the user inbox
  */
-exports.getCompletedMessagesForSectionInteractor = async ({
+exports.getCompletedMessagesForSectionInteractor = async (
   applicationContext,
-  section,
-}) => {
+  { section },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

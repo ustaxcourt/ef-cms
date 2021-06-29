@@ -5,38 +5,109 @@ const {
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
 const { Case } = require('../entities/cases/Case');
+const { isServed } = require('../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
+const handleInternalUser = ({
+  docketEntryEntity,
+  isPetitionsClerk,
+  petitionDocketEntry,
+}) => {
+  const selectedIsStin =
+    docketEntryEntity &&
+    docketEntryEntity.documentType === INITIAL_DOCUMENT_TYPES.stin.documentType;
+
+  if (isPetitionsClerk) {
+    if (selectedIsStin && petitionDocketEntry && petitionDocketEntry.servedAt) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time.',
+      );
+    }
+  } else {
+    if (selectedIsStin) {
+      throw new UnauthorizedError(
+        'Unauthorized to view case documents at this time.',
+      );
+    }
+  }
+};
+
+const handleIrsSuperUser = ({
+  docketEntryEntity,
+  key,
+  petitionDocketEntry,
+}) => {
+  if (petitionDocketEntry && !isServed(petitionDocketEntry)) {
+    throw new UnauthorizedError(
+      'Unauthorized to view case documents until the petition has been served.',
+    );
+  }
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(`Docket entry ${key} was not found.`);
+  }
+  if (!docketEntryEntity.isFileAttached) {
+    throw new NotFoundError(
+      `Docket entry ${key} does not have an attached file.`,
+    );
+  }
+};
+
+const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
+  const isUnservable = UNSERVABLE_EVENT_CODES.includes(
+    docketEntryEntity.eventCode,
+  );
+
+  if (!isServed(docketEntryEntity) && !isUnservable) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (
+    docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
+    !userAssociatedWithCase
+  ) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (docketEntryEntity.isStricken) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (docketEntryEntity.isLegacySealed) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  }
+};
+
+const getUserRoles = user => {
+  return {
+    isInternalUser: User.isInternalUser(user.role),
+    isIrsSuperuser: user.role === ROLES.irsSuperuser,
+    isPetitionsClerk: user.role === ROLES.petitionsClerk,
+  };
+};
+
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.key the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getDownloadPolicyUrlInteractor = async ({
+exports.getDownloadPolicyUrlInteractor = async (
   applicationContext,
-  docketNumber,
-  key,
-}) => {
+  { docketNumber, key },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const isInternalUser = User.isInternalUser(user && user.role);
-  const isIrsSuperuser = user && user.role && user.role === ROLES.irsSuperuser;
-  const isPetitionsClerk =
-    user && user.role && user.role === ROLES.petitionsClerk;
+  const { isInternalUser, isIrsSuperuser, isPetitionsClerk } =
+    getUserRoles(user);
 
   const caseData = await applicationContext
     .getPersistenceGateway()
@@ -50,51 +121,19 @@ exports.getDownloadPolicyUrlInteractor = async ({
   }
 
   const caseEntity = new Case(caseData, { applicationContext });
-
   const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
-
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,
   });
 
   if (isInternalUser) {
-    const selectedIsStin =
-      docketEntryEntity &&
-      docketEntryEntity.documentType ===
-        INITIAL_DOCUMENT_TYPES.stin.documentType;
-
-    if (isPetitionsClerk) {
-      if (
-        selectedIsStin &&
-        petitionDocketEntry &&
-        petitionDocketEntry.servedAt
-      ) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time.',
-        );
-      }
-    } else {
-      if (selectedIsStin) {
-        throw new UnauthorizedError(
-          'Unauthorized to view case documents at this time.',
-        );
-      }
-    }
+    handleInternalUser({
+      docketEntryEntity,
+      isPetitionsClerk,
+      petitionDocketEntry,
+    });
   } else if (isIrsSuperuser) {
-    if (petitionDocketEntry && !petitionDocketEntry.servedAt) {
-      throw new UnauthorizedError(
-        'Unauthorized to view case documents until the petition has been served.',
-      );
-    }
-
-    if (!docketEntryEntity) {
-      throw new NotFoundError(`Docket entry ${key} was not found.`);
-    }
-    if (!docketEntryEntity.isFileAttached) {
-      throw new NotFoundError(
-        `Docket entry ${key} does not have an attached file.`,
-      );
-    }
+    handleIrsSuperUser({ docketEntryEntity, key, petitionDocketEntry });
   } else {
     const userAssociatedWithCase = await applicationContext
       .getPersistenceGateway()
@@ -121,9 +160,8 @@ exports.getDownloadPolicyUrlInteractor = async ({
         );
       }
 
-      const documentIsAvailable = documentMeetsAgeRequirements(
-        docketEntryEntity,
-      );
+      const documentIsAvailable =
+        documentMeetsAgeRequirements(docketEntryEntity);
 
       const selectedIsStin =
         docketEntryEntity.documentType ===
@@ -135,31 +173,17 @@ exports.getDownloadPolicyUrlInteractor = async ({
         );
       }
 
+      const unAuthorizedToViewNonCourtIssued =
+        selectedIsStin ||
+        !userAssociatedWithCase ||
+        docketEntryEntity.isLegacySealed;
+
       if (docketEntryEntity.isCourtIssued()) {
-        if (!docketEntryEntity.servedAt) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (
-          docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
-          !userAssociatedWithCase
-        ) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        } else if (docketEntryEntity.isStricken) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
-        }
-      } else if (selectedIsStin) {
+        handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
+      } else if (unAuthorizedToViewNonCourtIssued) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
         );
-      } else {
-        if (!userAssociatedWithCase) {
-          throw new UnauthorizedError('Unauthorized');
-        }
       }
     }
   }

@@ -35,15 +35,14 @@ export const SignOrder = connect(
     signatureData,
     skipSigningOrderSequence,
   }) {
+    const yLimitToPreventServedStampOverlay = 705;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
     const renderPDFPage = pageNumber => {
-      if (process.env.CI) {
-        return;
-      }
       const canvas = canvasRef.current;
-      const context = canvas.getContext('2d');
+      const canvasContext = canvas.getContext('2d');
 
       pdfObj
         .getPage(pageNumber)
@@ -54,8 +53,8 @@ export const SignOrder = connect(
           canvas.width = viewport.width;
 
           const renderContext = {
-            canvasContext: context,
-            viewport: viewport,
+            canvasContext,
+            viewport,
           };
           return page.render(renderContext);
         })
@@ -82,11 +81,12 @@ export const SignOrder = connect(
       start();
     };
 
-    const stop = (canvasEl, sigEl, x, y, scale = 1) => {
+    const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
       setSignatureData({
         signatureApplied: true,
         signatureData: { scale, x, y },
       });
+
       canvasEl.onmousemove = null;
       canvasEl.onmousedown = null;
       sigEl.onmousemove = null;
@@ -107,6 +107,8 @@ export const SignOrder = connect(
       canvasEl.onmousemove = e => {
         const { pageX, pageY } = e;
         const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigBox = sigEl.getBoundingClientRect();
+
         const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
         const scrollYOffset = window.scrollY;
 
@@ -114,21 +116,34 @@ export const SignOrder = connect(
         y = pageY - canvasBounds.y - scrollYOffset;
 
         const uiPosX = pageX - sigParentBounds.x;
+        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
+      };
+
+      canvasEl.onmousedown = e => {
+        const { pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+        const sigBoxHeight = sigEl.getBoundingClientRect().height;
         const uiPosY =
           pageY -
           canvasBounds.y -
           scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y);
+          (canvasBounds.y - sigParentBounds.y) -
+          sigBoxHeight;
 
-        moveSig(sigEl, uiPosX, uiPosY);
-      };
-
-      canvasEl.onmousedown = () => {
-        stop(canvasEl, sigEl, x, y);
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
+        }
       };
 
       // sometimes the cursor falls on top of the signature
       // and catches these events
+
       sigEl.onmousemove = canvasEl.onmousemove;
       sigEl.onmousedown = canvasEl.onmousedown;
     };
@@ -208,17 +223,18 @@ export const SignOrder = connect(
                   <br />
                   {pdfForSigning.nameForSigningLine2}
                 </span>
-                {!process.env.CI && (
-                  <canvas
-                    className={
-                      !signatureData && signatureApplied
-                        ? 'cursor-grabbing'
-                        : 'cursor-grab'
-                    }
-                    id="sign-pdf-canvas"
-                    ref={canvasRef}
-                  ></canvas>
-                )}
+                <canvas
+                  className={
+                    !signatureData && signatureApplied
+                      ? 'cursor-grabbing'
+                      : 'cursor-grab'
+                  }
+                  id="sign-pdf-canvas"
+                  ref={canvasRef}
+                ></canvas>
+                <span id="signature-warning">
+                  You cannot apply a signature here.
+                </span>
               </div>
             </div>
           </div>

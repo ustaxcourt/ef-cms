@@ -11,15 +11,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.section the section to get the document qc
  * @returns {object} the work items in the section document inbox
  */
-exports.getDocumentQCInboxForSectionInteractor = async ({
+exports.getDocumentQCInboxForSectionInteractor = async (
   applicationContext,
-  section,
-}) => {
+  { judgeUserName, section },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
@@ -37,6 +37,7 @@ exports.getDocumentQCInboxForSectionInteractor = async ({
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
+      judgeUserName,
       section: sectionToShow,
     });
 

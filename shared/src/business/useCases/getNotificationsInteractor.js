@@ -1,15 +1,17 @@
+const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
+
 /**
  * getNotificationsInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.judgeUser optional judgeUser for additional filtering
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
-exports.getNotificationsInteractor = async ({
+exports.getNotificationsInteractor = async (
   applicationContext,
-  judgeUserId,
-}) => {
+  { judgeUserId },
+) => {
   const appContextUser = applicationContext.getCurrentUser();
   const currentUser = await applicationContext
     .getPersistenceGateway()
@@ -21,6 +23,10 @@ exports.getNotificationsInteractor = async ({
     judgeUser = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId: judgeUserId });
+  } else if (currentUser.role === ROLES.adc) {
+    judgeUser = {
+      name: CHIEF_JUDGE,
+    };
   }
 
   const { section, userId } = currentUser;
@@ -28,16 +34,9 @@ exports.getNotificationsInteractor = async ({
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
 
-  const additionalFilters = applicationContext
-    .getUtilities()
-    .filterQcItemsByAssociatedJudge({
-      applicationContext,
-      judgeUser,
-    });
-
   const filters = applicationContext
     .getUtilities()
-    .getWorkQueueFilters({ additionalFilters, user: currentUser });
+    .getWorkQueueFilters({ user: currentUser });
 
   const userInbox = await applicationContext
     .getPersistenceGateway()
@@ -58,6 +57,7 @@ exports.getNotificationsInteractor = async ({
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
       applicationContext,
+      judgeUserName: judgeUser ? judgeUser.name : null,
       section: sectionToShow,
     });
 
@@ -75,8 +75,9 @@ exports.getNotificationsInteractor = async ({
     filters['section']['inbox'],
   ).length;
 
-  const unreadMessageCount = userInbox.filter(message => !message.isRead)
-    .length;
+  const unreadMessageCount = userInbox.filter(
+    message => !message.isRead,
+  ).length;
 
   return {
     qcIndividualInProgressCount,

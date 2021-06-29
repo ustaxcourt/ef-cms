@@ -4,11 +4,11 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
-  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   serveExternallyFiledDocumentInteractor,
@@ -57,20 +57,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
           docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f806',
+          docketNumber: DOCKET_NUMBER,
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -80,6 +71,19 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketNumber: DOCKET_NUMBER,
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -107,15 +111,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      serveExternallyFiledDocumentInteractor({
-        applicationContext,
-      }),
+      serveExternallyFiledDocumentInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should update the document with a servedAt date', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -133,8 +134,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should add a coversheet to the document', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
@@ -142,56 +142,31 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
   });
 
-  it('should send electronic-service parties emails', async () => {
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0],
-    ).toMatchObject({
-      servedParties: {
-        all: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        electronic: [
-          {
-            email: 'fieri@example.com',
-            name: 'Guy Fieri',
-          },
-        ],
-        paper: [],
-      },
-    });
-  });
-
-  it('should generate and return a paper-service PDF if there are paper service parties on the case', async () => {
-    caseRecord.contactPrimary.serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
-
+  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
     applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: 'localhost:123',
+      });
 
-    const result = await serveExternallyFiledDocumentInteractor({
+    const result = await serveExternallyFiledDocumentInteractor(
       applicationContext,
-      docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
-    });
+      {
+        docketEntryId: DOCKET_ENTRY_ID,
+        docketNumber: DOCKET_NUMBER,
+      },
+    );
 
     expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
-    expect(result.paperServicePdfUrl).toEqual('www.example.com');
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
+        .mock.calls[0][0],
+    ).toMatchObject({
+      docketEntryId: DOCKET_ENTRY_ID,
+    });
+    expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
   it('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
@@ -199,6 +174,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -207,6 +183,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
@@ -227,23 +204,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        workItem: expect.objectContaining({
-          docketNumber: DOCKET_NUMBER,
-          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        }),
-      }),
-    );
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
@@ -269,6 +234,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: mockDocketEntryWithWorkItemId,
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -277,6 +243,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
@@ -297,8 +264,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
     ];
 
-    await serveExternallyFiledDocumentInteractor({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumber: DOCKET_NUMBER,
     });

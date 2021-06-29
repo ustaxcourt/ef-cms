@@ -8,17 +8,16 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 /**
  * strikes a given docket entry on a case
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketEntryId the docket entry id to strike
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the updated case after the docket entry is stricken
  */
-exports.strikeDocketEntryInteractor = async ({
+exports.strikeDocketEntryInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission = isAuthorized(

@@ -20,6 +20,10 @@ describe('Respondent requests access to a case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test, {
@@ -50,7 +54,7 @@ describe('Respondent requests access to a case', () => {
 
   loginAs(test, 'irsPractitioner1@example.com');
   respondentSearchesForCase(test);
-  respondentViewsCaseDetailOfUnassociatedCase(test, false);
+  respondentViewsCaseDetailOfUnassociatedCase(test);
   respondentRequestsAccessToCase(test, fakeFile);
   respondent1ViewsCaseDetailOfAssociatedCase(test);
   respondentFilesDocumentForAssociatedCase(test, fakeFile);

@@ -8,15 +8,15 @@ const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.userId the user to get the document qc served box
  * @returns {object} the work items in the user document served inbox
  */
-exports.getDocumentQCServedForUserInteractor = async ({
+exports.getDocumentQCServedForUserInteractor = async (
   applicationContext,
-  userId,
-}) => {
+  { userId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {

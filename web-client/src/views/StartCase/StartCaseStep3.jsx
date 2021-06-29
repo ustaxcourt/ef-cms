@@ -393,7 +393,7 @@ export const StartCaseStep3 = connect(
                   <Button
                     link
                     className="usa-link--external text-left  mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+                    href="https://www.ustaxcourt.gov/resources/forms/Ownership_Disclosure_Statement_Form_6.pdf"
                     icon="file-pdf"
                     iconColor="blue"
                     overrideMargin="margin-right-1"
@@ -402,7 +402,9 @@ export const StartCaseStep3 = connect(
                   >
                     Download Ownership Disclosure Statement (T.C. Form 6)
                   </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
+                  <span className="margin-top-0">
+                    if you haven’t already done so
+                  </span>
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="ownership-disclosure-file-label"

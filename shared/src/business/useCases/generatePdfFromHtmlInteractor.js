@@ -1,23 +1,25 @@
 /**
  * generatePdfFromHtmlInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.contentHtml the html content for the pdf
  * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
-exports.generatePdfFromHtmlInteractor = async ({
+exports.generatePdfFromHtmlInteractor = async (
   applicationContext,
-  contentHtml,
-  displayHeaderFooter = true,
-  docketNumber,
-  footerHtml,
-  headerHtml,
-  overwriteFooter,
-  overwriteHeader,
-}) => {
+  {
+    contentHtml,
+    displayHeaderFooter = true,
+    docketNumber,
+    footerHtml,
+    headerHtml,
+    overwriteFooter,
+    overwriteHeader,
+  },
+) => {
   let browser = null;
   let result = null;
 
@@ -28,13 +30,13 @@ exports.generatePdfFromHtmlInteractor = async ({
     await page.setContent(contentHtml);
 
     const headerContent = overwriteHeader
-      ? `${headerHtml ? headerHtml : ''}`
+      ? `${headerHtml || ''}`
       : ` <div style="font-size: 8px; font-family: sans-serif; float: right;">
               Page <span class="pageNumber"></span>
               of <span class="totalPages"></span>
             </div>
             <div style="float: left">
-              ${headerHtml ? headerHtml : `Docket Number: ${docketNumber}`}
+              ${headerHtml || `Docket Number: ${docketNumber}`}
             </div>`;
 
     const headerTemplate = `
@@ -45,10 +47,10 @@ exports.generatePdfFromHtmlInteractor = async ({
     `;
 
     const footerTemplate = overwriteFooter
-      ? `${footerHtml ? footerHtml : ''}`
+      ? `${footerHtml || ''}`
       : `
           <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${footerHtml ? footerHtml : ''}
+            ${footerHtml || ''}
           </div>`;
 
     result = await page.pdf({

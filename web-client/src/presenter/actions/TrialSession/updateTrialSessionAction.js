@@ -36,22 +36,25 @@ export const updateTrialSessionAction = async ({
   try {
     result = await applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor({
-        applicationContext,
+      .updateTrialSessionInteractor(applicationContext, {
         trialSession: { ...trialSession, startDate },
       });
 
     if (trialSession.swingSession && trialSession.swingSessionId) {
       await applicationContext
         .getUseCases()
-        .setTrialSessionAsSwingSessionInteractor({
-          applicationContext,
+        .setTrialSessionAsSwingSessionInteractor(applicationContext, {
           swingSessionId: result.trialSessionId,
           trialSessionId: trialSession.swingSessionId,
         });
     }
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Trial session could not be edited.',
+      },
+    });
   }
 
   return path.success({

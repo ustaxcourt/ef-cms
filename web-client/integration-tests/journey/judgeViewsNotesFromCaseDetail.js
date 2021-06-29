@@ -5,7 +5,7 @@ export const judgeViewsNotesFromCaseDetail = test => {
     });
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.judgesNote.notes')).toEqual(
+    expect(test.getState('judgesNote.notes')).toEqual(
       'this is a note added from the modal',
     );
   });

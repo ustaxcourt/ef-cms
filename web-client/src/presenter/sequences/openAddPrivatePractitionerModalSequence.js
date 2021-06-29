@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getDefaultServiceIndicatorForPractitionerMatchesAction } from '../actions/getDefaultServiceIndicatorForPractitionerMatchesAction';
 import { getPrivatePractitionersBySearchKeyAction } from '../actions/ManualAssociation/getPrivatePractitionersBySearchKeyAction';
 import { isPractitionerInCaseAction } from '../actions/isPractitionerInCaseAction';
 import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIndicatorAction';
@@ -8,16 +9,19 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const openAddPrivatePractitionerModalSequence = showProgressSequenceDecorator(
-  [
+export const openAddPrivatePractitionerModalSequence =
+  showProgressSequenceDecorator([
     clearAlertsAction,
     clearModalStateAction,
-    setDefaultServiceIndicatorAction('modal'),
     getPrivatePractitionersBySearchKeyAction,
     {
       error: [setValidationErrorsAction],
       success: [
         setPractitionersAction,
+        getDefaultServiceIndicatorForPractitionerMatchesAction(
+          'practitionerMatches',
+        ),
+        setDefaultServiceIndicatorAction('modal'),
         isPractitionerInCaseAction,
         {
           no: [setShowModalFactoryAction('AddPrivatePractitionerModal')],
@@ -25,5 +29,4 @@ export const openAddPrivatePractitionerModalSequence = showProgressSequenceDecor
         },
       ],
     },
-  ],
-);
+  ]);

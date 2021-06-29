@@ -14,6 +14,7 @@ import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
+import { limitFileSize } from './limitFileSize';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
@@ -399,15 +400,17 @@ export const ScanBatchPreviewer = connect(
               type="file"
               onChange={e => {
                 e.preventDefault();
-                const file = e.target.files[0];
-                setDocumentForUploadSequence({
-                  documentType,
-                  documentUploadMode: 'preview',
-                  file,
+                limitFileSize(e, constants.MAX_FILE_SIZE_MB, () => {
+                  const file = e.target.files[0];
+                  setDocumentForUploadSequence({
+                    documentType,
+                    documentUploadMode: 'preview',
+                    file,
+                  });
+                  if (validateSequence) {
+                    validateSequence();
+                  }
                 });
-                if (validateSequence) {
-                  validateSequence();
-                }
               }}
             />
           </FormGroup>

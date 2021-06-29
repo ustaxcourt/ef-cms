@@ -34,7 +34,7 @@ export const NonstandardForm = connect(
     return (
       <div className="nonstandard-form">
         {helper[level].showTextInput && (
-          <FormGroup errorText={validationErrors && validationErrors.freeText}>
+          <FormGroup errorText={validationErrors?.freeText}>
             <label className="usa-label" htmlFor={`${namespace}free-text`}>
               {helper[level].textInputLabel}
             </label>
@@ -59,7 +59,7 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].showTextInput2 && (
-          <FormGroup errorText={validationErrors && validationErrors.freeText2}>
+          <FormGroup errorText={validationErrors?.freeText2}>
             <label className="usa-label" htmlFor={`${namespace}free-text2`}>
               {helper[level].textInputLabel2}
             </label>
@@ -84,9 +84,7 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].previousDocumentSelectLabel && (
-          <FormGroup
-            errorText={validationErrors && validationErrors.previousDocument}
-          >
+          <FormGroup errorText={validationErrors?.previousDocument}>
             <label
               className="usa-label"
               htmlFor={`${namespace}previous-document`}
@@ -97,9 +95,7 @@ export const NonstandardForm = connect(
               aria-label="previousDocument"
               className={classNames(
                 'usa-select',
-                validationErrors &&
-                  validationErrors.previousDocument &&
-                  'usa-select--error',
+                validationErrors?.previousDocument && 'usa-select--error',
               )}
               id={`${namespace}previous-document`}
               name={`${namespace}previousDocument`}
@@ -117,16 +113,17 @@ export const NonstandardForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              {helper[level].previouslyFiledDocuments.map(
-                (previousDocument, idx) => {
-                  return (
-                    <option key={idx} value={previousDocument.docketEntryId}>
-                      {previousDocument.documentTitle ||
-                        previousDocument.documentType}
-                    </option>
-                  );
-                },
-              )}
+              {helper[level].previouslyFiledDocuments.map(previousDocument => {
+                return (
+                  <option
+                    key={previousDocument.docketEntryId}
+                    value={previousDocument.docketEntryId}
+                  >
+                    {previousDocument.documentTitle ||
+                      previousDocument.documentType}
+                  </option>
+                );
+              })}
             </select>
           </FormGroup>
         )}
@@ -137,14 +134,14 @@ export const NonstandardForm = connect(
             id="date-of-service"
             label="Service date"
             names={{
-              day: `${namespace}day`,
-              month: `${namespace}month`,
-              year: `${namespace}year`,
+              day: `${namespace}serviceDateDay`,
+              month: `${namespace}serviceDateMonth`,
+              year: `${namespace}serviceDateYear`,
             }}
             values={{
-              day: get(form, `${namespace}day`, ''),
-              month: get(form, `${namespace}month`, ''),
-              year: get(form, `${namespace}year`, ''),
+              day: get(form, `${namespace}serviceDateDay`, ''),
+              month: get(form, `${namespace}serviceDateMonth`, ''),
+              year: get(form, `${namespace}serviceDateYear`, ''),
             }}
             onBlur={validateSequence}
             onChange={updateSequence}
@@ -152,9 +149,7 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].showTrialLocationSelect && (
-          <FormGroup
-            errorText={validationErrors && validationErrors.trialLocation}
-          >
+          <FormGroup errorText={validationErrors?.trialLocation}>
             <TrialCity
               label={helper[level].textInputLabel}
               showDefaultOption={true}
@@ -176,9 +171,7 @@ export const NonstandardForm = connect(
         )}
 
         {helper[level].ordinalField && (
-          <FormGroup
-            errorText={validationErrors && validationErrors.ordinalValue}
-          >
+          <FormGroup errorText={validationErrors?.ordinalValue}>
             <fieldset
               className="usa-fieldset margin-bottom-0"
               id={`${namespace}ordinal-field-radios`}

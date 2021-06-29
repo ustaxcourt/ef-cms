@@ -1,5 +1,13 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
+import {
+  fakeFile,
+  getFormattedDocumentQCSectionInbox,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
+import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -25,10 +33,33 @@ describe('Practitioner requests access to case', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   //tests for practitioner starting a new case
   loginAs(test, 'privatePractitioner@example.com');
   practitionerCreatesNewCase(test, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(test);
+
+  // verify petition filed by private practitioner can be found in petitions Section Document QC
+  loginAs(test, 'petitionsclerk@example.com');
+  it('Petitions clerk views Section Document QC', async () => {
+    await test.runSequence('navigateToPathSequence', {
+      path: '/document-qc/section/inbox',
+    });
+    const workQueueToDisplay = test.getState('workQueueToDisplay');
+
+    expect(workQueueToDisplay.queue).toEqual('section');
+    expect(workQueueToDisplay.box).toEqual('inbox');
+
+    const inbox = await getFormattedDocumentQCSectionInbox(test);
+    const found = inbox.find(
+      workItem => workItem.docketNumber === test.docketNumber,
+    );
+
+    expect(found).toBeTruthy();
+  });
 
   //tests for practitioner requesting access to existing case
   //petitioner must first create a case for practitioner to request access to
@@ -90,7 +121,15 @@ describe('Practitioner requests access to case', () => {
 
   loginAs(test, 'privatePractitioner@example.com');
   practitionerSearchesForCase(test);
-  practitionerViewsCaseDetailWithPublicOrder(test, false);
+  practitionerViewsCaseDetailWithPublicOrder(test);
   practitionerRequestsPendingAccessToCase(test, fakeFile);
   practitionerViewsCaseDetailOfPendingCase(test);
+
+  loginAs(test, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(test);
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkSealsCase(test);
+  loginAs(test, 'irsPractitioner@example.com');
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(test, true); // passing flag for isSealed
 });

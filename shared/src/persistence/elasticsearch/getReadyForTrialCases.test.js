@@ -21,14 +21,9 @@ describe('getReadyForTrialCases', () => {
       applicationContext,
     });
 
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[0],
-    ).toMatchObject({
-      match: {
-        'status.S': {
-          operator: 'and',
-          query: CASE_STATUS_TYPES.generalDocket,
-        },
+    expect(search.mock.calls[0][0].searchParameters.body.query).toMatchObject({
+      term: {
+        'status.S': CASE_STATUS_TYPES.generalDocket,
       },
     });
   });

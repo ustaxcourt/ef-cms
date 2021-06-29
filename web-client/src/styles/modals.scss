@@ -189,6 +189,7 @@
   top: 60px;
   width: 90%;
   max-width: 700px;
+  max-height: 100vh;
   margin-bottom: 20px;
   text-align: center;
   transform: translateY(0);
@@ -244,7 +245,6 @@ button {
 .pdf-preview-content {
   height: 500px;
   border: 1px solid #ccc;
-  overflow-y: scroll;
 }
 
 @media only screen and (max-width: $medium-screen - 1px) {
@@ -346,5 +346,11 @@ button {
   }
   .usa-input {
     height: 34px;
+  }
+}
+
+#confirm-modal-delete-btn {
+  svg {
+    margin-right: 5px;
   }
 }

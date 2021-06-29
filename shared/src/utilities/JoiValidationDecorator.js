@@ -1,6 +1,6 @@
 const joi = require('joi');
 const { InvalidEntityError } = require('../errors/errors');
-const { isEmpty, pick } = require('lodash');
+const { isEmpty } = require('lodash');
 
 const setIsValidated = obj => {
   Object.defineProperty(obj, 'isValidated', {
@@ -155,34 +155,33 @@ exports.joiValidationDecorator = function (
     return isEmpty(validationErrors);
   };
 
-  entityConstructor.prototype.validateForMigration = function validateForMigration() {
-    let { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
+  entityConstructor.prototype.validateForMigration =
+    function validateForMigration() {
+      let { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
 
-    if (error) {
-      throw new InvalidEntityError(
-        entityConstructor.validationName,
-        JSON.stringify(
-          error.details.map(detail => {
-            return detail.message.replace(/"/g, "'");
-          }),
-        ),
-      );
-    }
-    setIsValidated(this);
-    return this;
-  };
+      if (error) {
+        console.log('entity with error-------------', this);
+        throw new InvalidEntityError(
+          this.entityName,
+          JSON.stringify(
+            error.details.map(detail => {
+              return detail.message.replace(/"/g, "'");
+            }),
+          ),
+        );
+      }
+      setIsValidated(this);
+      return this;
+    };
 
-  entityConstructor.prototype.validate = function validate() {
+  entityConstructor.prototype.validate = function validate(options) {
+    const applicationContext = options?.applicationContext;
+    const logErrors = options?.logErrors;
+
     if (!this.isValid()) {
-      const helpfulKeys = Object.keys(this).filter(key => key.endsWith('Id'));
-      helpfulKeys.push(
-        'docketNumber',
-        ...Object.keys(this.getFormattedValidationErrors()),
-      );
-
       const stringifyTransform = obj => {
         if (!obj) return obj;
         const transformed = {};
@@ -195,43 +194,46 @@ exports.joiValidationDecorator = function (
         });
         return transformed;
       };
-
+      if (logErrors) {
+        applicationContext.logger.error('*** Entity with error: ***', this);
+      }
+      const validationErrors = this.getValidationErrors();
       throw new InvalidEntityError(
-        entityConstructor.validationName,
-        JSON.stringify(
-          stringifyTransform(pick(this, helpfulKeys)),
-          (key, value) =>
-            this.hasOwnProperty(key) && typeof value === 'undefined'
-              ? '<undefined>'
-              : value,
-        ),
-        JSON.stringify(stringifyTransform(this.getValidationErrors())),
+        this.entityName,
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
       );
     }
     setIsValidated(this);
     return this;
   };
 
+  entityConstructor.prototype.validateWithLogging =
+    function validateWithLogging(applicationContext) {
+      return this.validate({ applicationContext, logErrors: true });
+    };
+
   entityConstructor.prototype.getFormattedValidationErrors = function () {
     return getFormattedValidationErrors(this);
   };
 
-  entityConstructor.prototype.getValidationErrors = function getValidationErrors() {
-    const { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
-    if (!error) return null;
-    const errors = {};
-    error.details.forEach(detail => {
-      if (!Number.isInteger(detail.context.key)) {
-        errors[detail.context.key || detail.type] = detail.message;
-      } else {
-        errors[detail.context.label] = detail.message;
-      }
-    });
-    return errors;
-  };
+  entityConstructor.prototype.getValidationErrors =
+    function getValidationErrors() {
+      const { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      if (!error) return null;
+      const errors = {};
+      error.details.forEach(detail => {
+        if (!Number.isInteger(detail.context.key)) {
+          errors[detail.context.key || detail.type] = detail.message;
+        } else {
+          errors[detail.context.label] = detail.message;
+        }
+      });
+      return errors;
+    };
 
   const toRawObjectPrototype = function () {
     return toRawObject(this);
@@ -241,14 +243,9 @@ exports.joiValidationDecorator = function (
 
   entityConstructor.prototype.toRawObjectFromJoi = toRawObjectPrototype;
 
-  entityConstructor.validateRawCollection = function (
-    collection,
-    { applicationContext },
-  ) {
+  entityConstructor.validateRawCollection = function (collection, args) {
     const validRawEntity = entity =>
-      new entityConstructor(entity, { applicationContext })
-        .validate()
-        .toRawObject();
+      new entityConstructor(entity, args).validate().toRawObject();
     return (collection || []).map(validRawEntity);
   };
 

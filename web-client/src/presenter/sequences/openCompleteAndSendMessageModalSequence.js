@@ -1,20 +1,33 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDateReceivedAction } from '../actions/DocketEntry/computeDateReceivedAction';
-import { computeSecondaryFormDateAction } from '../actions/FileDocument/computeSecondaryFormDateAction';
+import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setCreateMessageModalDialogModalStateAction } from '../actions/WorkItem/setCreateMessageModalDialogModalStateAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { updateMessageModalAttachmentsAction } from '../actions/updateMessageModalAttachmentsAction';
+import { updateMessageModalAfterQCAction } from '../actions/updateMessageModalAfterQCAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 export const openCompleteAndSendMessageModalSequence = [
-  computeSecondaryFormDateAction,
+  formHasSecondaryDocumentAction,
+  {
+    no: [],
+    yes: [
+      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
+      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
+    ],
+  },
   computeCertificateOfServiceFormDateAction,
-  computeDateReceivedAction,
+  getComputedFormDateFactoryAction('dateReceived'),
+  setComputeFormDateFactoryAction('dateReceived'),
+  getComputedFormDateFactoryAction('serviceDate'),
+  setComputeFormDateFactoryAction('serviceDate'),
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [
@@ -24,9 +37,9 @@ export const openCompleteAndSendMessageModalSequence = [
     ],
     success: [
       clearModalStateAction,
+      refreshExternalDocumentTitleFromEventCodeAction,
       generateTitleAction,
-      setCreateMessageModalDialogModalStateAction,
-      updateMessageModalAttachmentsAction,
+      updateMessageModalAfterQCAction,
       setShowModalFactoryAction('CreateMessageModalDialog'),
     ],
   },

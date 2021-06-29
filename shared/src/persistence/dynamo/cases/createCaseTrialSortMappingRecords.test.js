@@ -7,6 +7,12 @@ const {
 
 describe('createCaseTrialSortMappingRecords', () => {
   it('attempts to persist the case trial sort mapping records', async () => {
+    applicationContext.getDocumentClient().query = jest.fn().mockReturnValue({
+      promise: () => {
+        return Promise.resolve({ Items: [] });
+      },
+    });
+
     await createCaseTrialSortMappingRecords({
       applicationContext,
       caseSortTags: {
@@ -36,5 +42,30 @@ describe('createCaseTrialSortMappingRecords', () => {
         sk: 'hybridSortRecord',
       },
     });
+
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls.length,
+    ).toEqual(0);
+  });
+
+  it('deletes old mapping records for the given case if they exist', async () => {
+    applicationContext.getDocumentClient().query = jest.fn().mockReturnValue({
+      promise: () => {
+        return Promise.resolve({ Items: [{ sk: 'abc' }, { sk: '123' }] });
+      },
+    });
+
+    await createCaseTrialSortMappingRecords({
+      applicationContext,
+      caseSortTags: {
+        hybrid: 'hybridSortRecord',
+        nonHybrid: 'nonhybridSortRecord',
+      },
+      docketNumber: '123-20',
+    });
+
+    expect(
+      applicationContext.getDocumentClient().delete.mock.calls.length,
+    ).toEqual(2);
   });
 });

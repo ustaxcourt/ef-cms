@@ -13,17 +13,16 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketEntryIdToEdit the id of the docket entry to update
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
-exports.updateCourtIssuedOrderInteractor = async ({
+exports.updateCourtIssuedOrderInteractor = async (
   applicationContext,
-  docketEntryIdToEdit,
-  documentMetadata,
-}) => {
+  { docketEntryIdToEdit, documentMetadata },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
@@ -121,10 +120,12 @@ exports.updateCourtIssuedOrderInteractor = async ({
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
+  const result = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
 
-  return caseEntity.toRawObject();
+  return new Case(result, { applicationContext }).validate().toRawObject();
 };

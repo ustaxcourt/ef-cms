@@ -45,7 +45,7 @@ describe('bulkIndexRecords', () => {
 
     const result = await bulkIndexRecords({
       applicationContext,
-      records: records,
+      records,
     });
     expect(result.failedRecords).toEqual([]);
   });
@@ -73,7 +73,7 @@ describe('bulkIndexRecords', () => {
 
     const result = await bulkIndexRecords({
       applicationContext,
-      records: records,
+      records,
     });
 
     expect(result.failedRecords).toEqual([newImageRecord]);

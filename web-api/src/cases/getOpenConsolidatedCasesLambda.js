@@ -10,7 +10,5 @@ exports.getOpenConsolidatedCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getOpenConsolidatedCasesInteractor({
-        applicationContext,
-      });
+      .getOpenConsolidatedCasesInteractor(applicationContext);
   });

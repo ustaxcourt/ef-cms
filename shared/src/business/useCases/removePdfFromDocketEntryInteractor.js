@@ -8,17 +8,16 @@ const { UnauthorizedError } = require('../../errors/errors');
 /**
  * removePdfFromDocketEntryInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to update
  * @param {object} providers.docketEntryId the docket entry id for the file to be removed
  * @returns {object} the updated case data
  */
-exports.removePdfFromDocketEntryInteractor = async ({
+exports.removePdfFromDocketEntryInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
@@ -48,10 +47,10 @@ exports.removePdfFromDocketEntryInteractor = async ({
     caseEntity.updateDocketEntry(docketEntry);
 
     const updatedCase = await applicationContext
-      .getPersistenceGateway()
-      .updateCase({
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       });
 
     return new Case(updatedCase, { applicationContext }).toRawObject();

@@ -1,13 +1,20 @@
-import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
+import {
+  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
+  formatDocumentSearchResultRecord,
+} from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
-  const maxResultsOverride = 3;
+  const manyResultsOverride = 4;
 
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+  const {
+    DOCKET_NUMBER_SUFFIXES,
+    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
     advancedDocumentSearchHelperComputed,
@@ -17,7 +24,7 @@ describe('advancedDocumentSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-          MAX_SEARCH_RESULTS: maxResultsOverride,
+          MAX_SEARCH_RESULTS: manyResultsOverride,
         };
       },
     },
@@ -27,11 +34,11 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+          ADVANCED_SEARCH_TABS:
+            applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
         isPublic: true,
       },
@@ -40,8 +47,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
-      maxResults: maxResultsOverride,
-      showMaxResultsMessage: false,
+      manyResults: manyResultsOverride,
+      showManyResultsMessage: false,
       showSealedIcon: false,
     });
   });
@@ -50,11 +57,11 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+          ADVANCED_SEARCH_TABS:
+            applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
         isPublic: true,
       },
@@ -63,8 +70,8 @@ describe('advancedDocumentSearchHelper', () => {
     expect(result).toEqual({
       documentTypeVerbiage: 'Order',
       isPublic: true,
-      maxResults: maxResultsOverride,
-      showMaxResultsMessage: false,
+      manyResults: manyResultsOverride,
+      showManyResultsMessage: false,
       showSealedIcon: true,
     });
   });
@@ -73,11 +80,9 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
-        searchResults: [],
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -92,11 +97,9 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
-        searchResults: [],
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -107,12 +110,10 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
-        searchResults: [],
+        searchResults: { opinion: [], order: [] },
       },
     });
 
@@ -123,88 +124,88 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+          ],
         },
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-        ],
       },
     });
 
     expect(result).toMatchObject({
-      maxResults: maxResultsOverride,
+      manyResults: manyResultsOverride,
       searchResultsCount: 1,
       showLoadMore: false,
-      showMaxResultsMessage: false,
+      showManyResultsMessage: false,
       showNoMatches: false,
       showSearchResults: true,
     });
   });
 
-  it('returns showMaxResultsMessage true if maximum number of results has been reached', () => {
+  it('returns showManyResultsMessage true if maximum number of results has been reached', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '102-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '103-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              docketNumber: '104-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+          ],
         },
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '102-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '103-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            docketNumber: '104-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-        ],
       },
     });
 
     expect(result).toMatchObject({
-      maxResults: maxResultsOverride,
+      manyResults: manyResultsOverride,
       searchResultsCount: 4,
       showLoadMore: false,
-      showMaxResultsMessage: true,
+      showManyResultsMessage: true,
       showNoMatches: false,
       showSearchResults: true,
     });
@@ -214,37 +215,35 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        searchResults: {
+          order: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              docketNumberWithSuffix: '101-19Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              eventCode: 'O',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '102-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order for Stuff',
+              documentType: 'OAPF - Order for Amended Petition and Filing Fee',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+          ],
         },
-        searchResults: [
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            docketNumberWithSuffix: '101-19Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            eventCode: 'O',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '102-19',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-            docketNumberWithSuffix: '102-19P',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order for Stuff',
-            documentType: 'OAPF - Order for Amended Petition and Filing Fee',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Cohen',
-          },
-        ],
       },
     });
 
@@ -279,38 +278,36 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
+        searchResults: {
+          opinion: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              docketNumberWithSuffix: '101-19Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'My Opinion',
+              documentType: 'T.C. Opinion',
+              eventCode: 'TCOP',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '102-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Opinion for Stuff',
+              documentType: 'Summary Opinion',
+              eventCode: 'SOP',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+          ],
         },
-        searchResults: [
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            docketNumberWithSuffix: '101-19Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'My Opinion',
-            documentType: 'T.C. Opinion',
-            eventCode: 'TCOP',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Judge Buch',
-          },
-          {
-            caseCaption: 'Test Petitioner, Petitioner',
-            docketNumber: '102-19',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-            docketNumberWithSuffix: '102-19P',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Opinion for Stuff',
-            documentType: 'Summary Opinion',
-            eventCode: 'SOP',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            judge: 'Cohen',
-          },
-        ],
       },
     });
 
@@ -345,31 +342,84 @@ describe('advancedDocumentSearchHelper', () => {
   it('does not show sealed case icon for public opinion search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
-        constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
-        },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
-        searchResults: [
-          {
-            docketNumber: '101-19',
-            docketNumberSuffix: 'Z',
-            documentContents: 'Test Petitioner, Petitioner',
-            documentTitle: 'Order',
-            documentType: 'Order',
-            filingDate: '2019-03-01T05:00:00.000Z',
-            isSealed: true,
-            judge: 'Judge Buch',
-          },
-        ],
+        searchResults: {
+          opinion: [
+            {
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Opinion',
+              documentType: 'Memorandum Opinion',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              isSealed: true,
+              judge: 'Judge Buch',
+            },
+          ],
+        },
       },
     });
 
     expect(result).toMatchObject({
       searchResultsCount: 1,
       showSealedIcon: false,
+    });
+  });
+
+  describe('formatDocumentSearchResultRecord', () => {
+    it('sets formattedJudgeName to empty string when the search result is an opinion that does not have a judge', () => {
+      const mockResult = {
+        eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('');
+    });
+
+    it('sets formattedJudgeName to the judge last name when the search result is an opinion that has a judge', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
+        judge: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('Scott');
+    });
+
+    it('sets formattedSignedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
+      const mockResult = {
+        eventCode: ORDER_EVENT_CODES[0],
+        signedJudgeName: undefined,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedSignedJudgeName).toEqual('');
+    });
+
+    it('sets formattedSignedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: ORDER_EVENT_CODES[0],
+        signedJudgeName: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedSignedJudgeName).toEqual('Scott');
     });
   });
 });

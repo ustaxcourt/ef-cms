@@ -1,4 +1,11 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { CONTACT_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  contactPrimaryFromState,
+  contactSecondaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
@@ -10,10 +17,13 @@ const publicFieldsVisible = () => {
   expect(test.getState('caseDetail.docketNumber')).toBeDefined();
   expect(test.getState('caseDetail.caseCaption')).toBeDefined();
   expect(test.getState('caseDetail.docketEntries.0')).toBeDefined();
+  expect(test.getState('caseDetail.petitioners.0.contactId')).toBeDefined();
 };
 
 const associatedFieldsVisible = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toMatchObject({
+  const contactPrimary = contactPrimaryFromState(test);
+
+  expect(contactPrimary).toMatchObject({
     address1: expect.anything(),
     city: expect.anything(),
     name: expect.anything(),
@@ -23,13 +33,18 @@ const associatedFieldsVisible = () => {
 };
 
 const associatedFieldsBlocked = () => {
-  expect(test.getState('caseDetail.contactPrimary')).toEqual({
+  const contactPrimary = contactPrimaryFromState(test);
+  const contactSecondary = contactSecondaryFromState(test);
+
+  expect(contactPrimary).toEqual({
+    contactId: contactPrimary.contactId,
+    contactType: CONTACT_TYPES.primary,
+    entityName: 'PublicContact',
     name: expect.anything(),
     state: expect.anything(),
   });
-  expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
-  expect(test.getState('caseDetail.contactSecondary')).toBeUndefined();
-  expect(test.getState('caseDetail.userId')).toBeUndefined();
+  expect(contactPrimary.address1).toBeUndefined();
+  expect(contactSecondary).toBeUndefined();
 };
 
 const internalFieldsVisible = () => {
@@ -72,7 +87,6 @@ const internalFieldsBlocked = () => {
   expect(test.getState('caseDetail.orderToShowCause')).toBeUndefined();
   expect(test.getState('caseDetail.qcCompleteForTrial')).toBeUndefined();
   expect(test.getState('caseDetail.statistics')).toBeUndefined();
-  expect(test.getState('caseDetail.status')).toBeUndefined();
 
   expect(
     test.getState('caseDetail.docketEntries.0.draftOrderState'),
@@ -138,6 +152,10 @@ describe('Case permissions test', () => {
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   petitionerCreatesNewCase(test, fakeFile);
   petitionerViewsCaseDetail(test);
@@ -190,7 +208,7 @@ describe('Case permissions test', () => {
     });
 
     publicFieldsVisible();
-    associatedFieldsBlocked();
+    associatedFieldsVisible();
     internalFieldsBlocked();
     stinBlocked();
     await printableDocketRecordVisible();

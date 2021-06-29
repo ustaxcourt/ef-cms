@@ -2,9 +2,8 @@ import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
+    applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
 
   const formatCaseDetail = caseToFormat => ({
@@ -12,19 +11,15 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     isCaseSealed: !!caseToFormat.isSealed,
   });
 
-  const formattedDocketRecordWithDocument = publicCase.docketEntries.map(d =>
+  const formattedDocketRecordsWithDocuments = publicCase.docketEntries.map(d =>
     applicationContext.getUtilities().formatDocketEntry(applicationContext, d),
   );
 
-  let sortedFormattedDocketRecord = applicationContext
+  const sortedFormattedDocketRecords = applicationContext
     .getUtilities()
-    .sortDocketEntries(formattedDocketRecordWithDocument, 'byIndex');
+    .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
-  sortedFormattedDocketRecord = applicationContext
-    .getUtilities()
-    .sortDocketEntries(sortedFormattedDocketRecord, 'byDate');
-
-  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecord.map(
+  const formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry => {
       const record = cloneDeep(entry);
       let filingsAndProceedingsWithAdditionalInfo = '';
@@ -37,6 +32,20 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
       if (record.additionalInfo2) {
         filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
       }
+
+      const canDisplayDocumentLink =
+        record.isCourtIssuedDocument &&
+        record.isFileAttached &&
+        !record.isNotServedDocument &&
+        !record.isStricken &&
+        !record.isTranscript &&
+        !record.isStipDecision &&
+        EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+
+      const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
+      const showLinkToDocument =
+        canDisplayDocumentLink &&
+        record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
       return {
         action: record.action,
@@ -54,20 +63,8 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         numberOfPages: record.numberOfPages || 0,
         servedAtFormatted: record.servedAtFormatted,
         servedPartiesCode: record.servedPartiesCode,
-        showDocumentDescriptionWithoutLink:
-          record.isStricken ||
-          !record.isCourtIssuedDocument ||
-          record.isNotServedDocument ||
-          record.isTranscript ||
-          record.isStipDecision,
-        showLinkToDocument:
-          record.processingStatus ===
-            DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE &&
-          record.isCourtIssuedDocument &&
-          !record.isNotServedDocument &&
-          !record.isStricken &&
-          !record.isTranscript &&
-          !record.isStipDecision,
+        showDocumentDescriptionWithoutLink,
+        showLinkToDocument,
         showNotServed: record.isNotServedDocument,
         showServed: record.isStatusServed,
         signatory: record.signatory,
@@ -77,8 +74,11 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
 
+  const showPrintableDocketRecord = !formattedCaseDetail.isStatusNew;
+
   return {
     formattedCaseDetail,
     formattedDocketEntriesOnDocketRecord,
+    showPrintableDocketRecord,
   };
 };

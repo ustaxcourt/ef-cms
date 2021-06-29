@@ -6,12 +6,12 @@ export const WorkingCopyFilterHeader = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
+    filters: state.trialSessionWorkingCopy.filters,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
-    trialSessionWorkingCopy,
+    filters = {},
     trialSessionWorkingCopyHelper,
   }) {
     return (
@@ -34,11 +34,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-1 show-all-sessions">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.showAll) ||
-                    false
-                  }
+                  checked={!!filters.showAll}
                   className="usa-checkbox__input"
                   id="filters.showAll"
                   name="filters.showAll"
@@ -62,11 +58,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-2 grid-offset-1">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.setForTrial) ||
-                    false
-                  }
+                  checked={!!filters.setForTrial}
                   className="usa-checkbox__input"
                   id="filters.setForTrial"
                   name="filters.setForTrial"
@@ -88,11 +80,7 @@ export const WorkingCopyFilterHeader = connect(
 
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.dismissed) ||
-                    false
-                  }
+                  checked={!!filters.dismissed}
                   className="usa-checkbox__input"
                   id="filters.dismissed"
                   name="filters.dismissed"
@@ -116,11 +104,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-2">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.continued) ||
-                    false
-                  }
+                  checked={!!filters.continued}
                   className="usa-checkbox__input"
                   id="filters.continued"
                   name="filters.continued"
@@ -142,11 +126,7 @@ export const WorkingCopyFilterHeader = connect(
 
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.rule122) ||
-                    false
-                  }
+                  checked={!!filters.rule122}
                   className="usa-checkbox__input"
                   id="filters.rule122"
                   name="filters.rule122"
@@ -170,11 +150,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-2">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.aBasisReached) ||
-                    false
-                  }
+                  checked={!!filters.aBasisReached}
                   className="usa-checkbox__input"
                   id="filters.aBasisReached"
                   name="filters.aBasisReached"
@@ -196,11 +172,7 @@ export const WorkingCopyFilterHeader = connect(
 
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.settled) ||
-                    false
-                  }
+                  checked={!!filters.settled}
                   className="usa-checkbox__input"
                   id="filters.settled"
                   name="filters.settled"
@@ -224,11 +196,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-2">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.recall) ||
-                    false
-                  }
+                  checked={!!filters.recall}
                   className="usa-checkbox__input"
                   id="filters.recall"
                   name="filters.recall"
@@ -250,11 +218,7 @@ export const WorkingCopyFilterHeader = connect(
 
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.takenUnderAdvisement) ||
-                    false
-                  }
+                  checked={!!filters.takenUnderAdvisement}
                   className="usa-checkbox__input"
                   id="filters.takenUnderAdvisement"
                   name="filters.takenUnderAdvisement"
@@ -278,11 +242,7 @@ export const WorkingCopyFilterHeader = connect(
             <div className="grid-col-2">
               <div className="usa-checkbox">
                 <input
-                  checked={
-                    (trialSessionWorkingCopy.filters &&
-                      trialSessionWorkingCopy.filters.statusUnassigned) ||
-                    false
-                  }
+                  checked={!!filters.statusUnassigned}
                   className="usa-checkbox__input"
                   id="filters.statusUnassigned"
                   name="filters.statusUnassigned"

@@ -10,17 +10,16 @@ const { WorkItem } = require('../../entities/WorkItem');
 /**
  * completeWorkItemInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.completedMessage the message for completing the work item
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-exports.completeWorkItemInteractor = async ({
+exports.completeWorkItemInteractor = async (
   applicationContext,
-  completedMessage,
-  workItemId,
-}) => {
+  { completedMessage, workItemId },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
@@ -53,11 +52,6 @@ exports.completeWorkItemInteractor = async ({
     },
   });
 
-  await applicationContext.getPersistenceGateway().deleteWorkItemFromInbox({
-    applicationContext,
-    workItem: completedWorkItem,
-  });
-
   await applicationContext.getPersistenceGateway().updateWorkItem({
     applicationContext,
     workItemToUpdate: completedWorkItem,
@@ -76,18 +70,15 @@ exports.completeWorkItemInteractor = async ({
     applicationContext,
   });
 
-  caseToUpdate.docketEntries.forEach(document => {
-    if (
-      document.workItem &&
-      document.workItem.workItemId === workItemEntity.workItemId
-    ) {
-      document.workItem = workItemEntity;
+  caseToUpdate.docketEntries.forEach(doc => {
+    if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
+      doc.workItem = workItemEntity;
     }
   });
 
-  await applicationContext.getPersistenceGateway().updateCase({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseToUpdate.validate().toRawObject(),
+    caseToUpdate,
   });
 
   return completedWorkItem;

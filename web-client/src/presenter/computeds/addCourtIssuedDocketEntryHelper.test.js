@@ -1,52 +1,81 @@
+import {
+  CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { USER_ROLES } = applicationContext.getConstants();
-
-let user = {
-  role: USER_ROLES.docketClerk,
-};
-
-const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
-  addCourtIssuedDocketEntryHelperComputed,
-  {
-    ...applicationContext,
-    getConstants: () => {
-      return {
-        COURT_ISSUED_EVENT_CODES: [
-          { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
-          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
-          { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
-        ],
-        EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
-        UNSERVABLE_EVENT_CODES: ['RUHROH'],
-        USER_ROLES: {
-          petitionsClerk: USER_ROLES.petitionsClerk,
-        },
-      };
-    },
-    getCurrentUser: () => user,
-  },
-);
-
-const state = {
-  caseDetail: {
-    contactPrimary: { name: 'Banzai' },
-    contactSecondary: { name: 'Timon' },
-    docketEntries: [{ docketEntryId: '123' }],
-    irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
-    privatePractitioners: [{ name: 'Scar' }, { name: 'Zazu' }],
-  },
-  docketEntryId: '123',
-  form: {
-    generatedDocumentTitle: 'Circle of Life',
-  },
-};
-
 describe('addCourtIssuedDocketEntryHelper', () => {
+  const {
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
+
+  let user = {
+    role: USER_ROLES.docketClerk,
+  };
+  let mockConstants = {
+    CONTACT_TYPE_TITLES,
+    COURT_ISSUED_EVENT_CODES: [
+      { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
+      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
+      { code: 'Shenzi', documentType: 'Hyena', eventCode: 'O' },
+    ],
+    EVENT_CODES_REQUIRING_SIGNATURE: ['O'],
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
+    UNSERVABLE_EVENT_CODES,
+    USER_ROLES: {
+      petitionsClerk: USER_ROLES.petitionsClerk,
+    },
+  };
+
+  const addCourtIssuedDocketEntryHelper = withAppContextDecorator(
+    addCourtIssuedDocketEntryHelperComputed,
+    {
+      ...applicationContext,
+    },
+  );
+
+  const state = {
+    caseDetail: {
+      docketEntries: [{ docketEntryId: '123' }],
+      irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
+      petitioners: [
+        {
+          contactId: 'b83163ef-af5a-447f-9a79-a0e1759ed60d',
+          contactType: CONTACT_TYPES.primary,
+          name: 'Banzai',
+        },
+        {
+          contactId: '407c740a-0f44-4679-a8ca-5b4749007741',
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Timon',
+        },
+      ],
+      privatePractitioners: [
+        { name: 'Scar', representing: [] },
+        {
+          name: 'Zazu',
+          representing: ['b83163ef-af5a-447f-9a79-a0e1759ed60d'],
+        },
+      ],
+    },
+    docketEntryId: '123',
+    form: {
+      generatedDocumentTitle: 'Circle of Life',
+    },
+  };
+
+  beforeEach(() => {
+    applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext.getConstants.mockImplementation(() => mockConstants);
+  });
+
   it('should calculate document types based on constants in applicationContext', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
     expect(result.documentTypes).toEqual([
@@ -87,11 +116,15 @@ describe('addCourtIssuedDocketEntryHelper', () => {
   });
 
   it('should provide a list of service parties with a primary contact but no secondary contact', () => {
-    const noSecondary = cloneDeep(state);
-    delete noSecondary.caseDetail.contactSecondary;
+    const caseDetailWithoutSecondary = {
+      ...state.caseDetail,
+      petitioners: [state.caseDetail.petitioners[0]],
+    };
+
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: noSecondary,
+      state: { ...state, caseDetail: caseDetailWithoutSecondary },
     });
+
     expect(result.serviceParties).toMatchObject([
       { displayName: 'Banzai, Petitioner', name: 'Banzai' },
       { displayName: 'Scar, Petitioner Counsel', name: 'Scar' },
@@ -184,12 +217,13 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
         docketEntryId: '123',
         form: {
-          eventCode: 'RUHROH',
+          eventCode: UNSERVABLE_EVENT_CODES[0],
         },
       },
     });
     expect(result.showSaveAndServeButton).toEqual(false);
   });
+
   it('should return showSaveAndServeButton true if eventCode is NOT found in unservable event codes list', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
@@ -209,5 +243,47 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       },
     });
     expect(result.showSaveAndServeButton).toEqual(true);
+  });
+
+  it('should set showDocumentTypeDropdown to false when form.documentType is NODC', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'NODC',
+        },
+      },
+    });
+
+    expect(result.showDocumentTypeDropdown).toBeFalsy();
+  });
+
+  it('should set showDocumentTypeDropdown to true when form.documentType is NOT NODC', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+
+    expect(result.showDocumentTypeDropdown).toBeTruthy();
+  });
+
+  it('should set showReceivedDate to true when the document is unservable', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        ...state,
+        docketEntryId: '123',
+        form: {
+          eventCode: UNSERVABLE_EVENT_CODES[0],
+        },
+      },
+    });
+
+    expect(result.showReceivedDate).toBeTruthy();
   });
 });

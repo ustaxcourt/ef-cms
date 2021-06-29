@@ -1,6 +1,10 @@
 import { state } from 'cerebral';
 
-export const formatStatistic = ({ applicationContext, statistic }) => {
+export const formatStatistic = ({
+  applicationContext,
+  docketNumber,
+  statistic,
+}) => {
   const formattedDate =
     statistic.year ||
     applicationContext
@@ -15,20 +19,25 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
     .getUtilities()
     .formatDollars(statistic.irsTotalPenalties);
 
-  const formattedDeterminationDeficiencyAmount = statistic.determinationDeficiencyAmount
-    ? applicationContext
-        .getUtilities()
-        .formatDollars(statistic.determinationDeficiencyAmount)
-    : 'TBD';
+  const formattedDeterminationDeficiencyAmount =
+    statistic.determinationDeficiencyAmount
+      ? applicationContext
+          .getUtilities()
+          .formatDollars(statistic.determinationDeficiencyAmount)
+      : 'TBD';
 
-  const formattedDeterminationTotalPenalties = statistic.determinationTotalPenalties
-    ? applicationContext
-        .getUtilities()
-        .formatDollars(statistic.determinationTotalPenalties)
-    : 'TBD';
+  const formattedDeterminationTotalPenalties =
+    statistic.determinationTotalPenalties
+      ? applicationContext
+          .getUtilities()
+          .formatDollars(statistic.determinationTotalPenalties)
+      : 'TBD';
+
+  const editStatisticLink = `/case-detail/${docketNumber}/edit-deficiency-statistic/${statistic.statisticId}`;
 
   return {
     ...statistic,
+    editStatisticLink,
     formattedDate,
     formattedDeterminationDeficiencyAmount,
     formattedDeterminationTotalPenalties,
@@ -45,7 +54,7 @@ export const formatStatistic = ({ applicationContext, statistic }) => {
  * @returns {object} formatted statistics
  */
 export const statisticsHelper = (get, applicationContext) => {
-  const { caseType, damages, litigationCosts, statistics } = get(
+  const { caseType, damages, docketNumber, litigationCosts, statistics } = get(
     state.caseDetail,
   );
   const permissions = get(state.permissions);
@@ -60,14 +69,16 @@ export const statisticsHelper = (get, applicationContext) => {
     } else {
       date = applicationContext
         .getUtilities()
-        .formatDateString(statistic.lastDateOfPeriod, 'YYYYMMDD');
+        .formatDateString(statistic.lastDateOfPeriod);
     }
     return date;
   };
 
   if (statistics && statistics.length > 0) {
     formattedStatistics = statistics
-      .map(statistic => formatStatistic({ applicationContext, statistic }))
+      .map(statistic =>
+        formatStatistic({ applicationContext, docketNumber, statistic }),
+      )
       .sort((a, b) =>
         applicationContext
           .getUtilities()

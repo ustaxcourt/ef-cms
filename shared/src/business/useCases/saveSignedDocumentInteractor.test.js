@@ -1,6 +1,7 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PETITIONS_SECTION,
+  SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const {
   saveSignedDocumentInteractor,
@@ -56,8 +57,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should save the original, unsigned document to S3 with a new id', async () => {
-    await saveSignedDocumentInteractor({
-      applicationContext,
+    await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocketEntryId: mockOriginalDocketEntryId,
@@ -74,8 +74,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should replace the original, unsigned document with the signed document', async () => {
-    await saveSignedDocumentInteractor({
-      applicationContext,
+    await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       nameForSigning: mockSigningName,
       originalDocketEntryId: mockOriginalDocketEntryId,
@@ -91,20 +90,28 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed Stipulated Decision to the case given a Proposed Stipulated Decision', async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor(
       applicationContext,
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: 'Guy Fieri',
-      originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      signedDocketEntryId: mockSignedDocketEntryId,
-    });
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: 'Guy Fieri',
+        originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        signedDocketEntryId: mockSignedDocketEntryId,
+      },
+    );
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
+    const signedDocument = caseEntity.docketEntries.find(
+      e =>
+        e.documentType ===
+        SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
+    );
+    expect(signedDocument.docketNumber).toEqual(caseEntity.docketNumber);
 
     const signedDocketEntryEntity = caseEntity.docketEntries.find(
-      document =>
-        document.documentType === 'Stipulated Decision' &&
-        document.docketEntryId === mockSignedDocketEntryId,
+      doc =>
+        doc.documentType === 'Stipulated Decision' &&
+        doc.docketEntryId === mockSignedDocketEntryId,
     );
 
     expect(signedDocketEntryEntity.isPaper).toEqual(false);
@@ -117,13 +124,15 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it("should set the document's processing status to complete", async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor(
       applicationContext,
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: mockSigningName,
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      signedDocketEntryId: mockSignedDocketEntryId,
-    });
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: mockOriginalDocketEntryId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      },
+    );
 
     const signedDocument = caseEntity.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
@@ -134,13 +143,15 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should set the documentIdBeforeSignature', async () => {
-    const { caseEntity } = await saveSignedDocumentInteractor({
+    const { caseEntity } = await saveSignedDocumentInteractor(
       applicationContext,
-      docketNumber: mockCase.docketNumber,
-      nameForSigning: mockSigningName,
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      signedDocketEntryId: mockSignedDocketEntryId,
-    });
+      {
+        docketNumber: mockCase.docketNumber,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: mockOriginalDocketEntryId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      },
+    );
 
     const signedDocument = caseEntity.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
@@ -151,8 +162,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
-    await saveSignedDocumentInteractor({
-      applicationContext,
+    await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       nameForSigning: 'Guy Fieri',
       originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',

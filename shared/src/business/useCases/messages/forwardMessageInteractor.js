@@ -3,8 +3,8 @@ const { replyToMessage } = require('./replyToMessageInteractor');
 /**
  * forwards a message
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {array} providers.attachments array of objects containing documentId and documentTitle
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
@@ -14,18 +14,19 @@ const { replyToMessage } = require('./replyToMessageInteractor');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the message
  */
-exports.forwardMessageInteractor = async ({
+exports.forwardMessageInteractor = async (
   applicationContext,
-  attachments,
-  docketNumber,
-  message,
-  parentMessageId,
-  subject,
-  toSection,
-  toUserId,
-}) => {
-  return await replyToMessage({
-    applicationContext,
+  {
+    attachments,
+    docketNumber,
+    message,
+    parentMessageId,
+    subject,
+    toSection,
+    toUserId,
+  },
+) => {
+  return await replyToMessage(applicationContext, {
     attachments,
     docketNumber,
     message,

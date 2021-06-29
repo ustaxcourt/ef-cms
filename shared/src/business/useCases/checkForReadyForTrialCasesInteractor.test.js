@@ -28,9 +28,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -48,9 +46,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -68,9 +64,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -100,9 +94,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(
@@ -132,11 +124,33 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
 
     await expect(
-      checkForReadyForTrialCasesInteractor({
-        applicationContext,
-      }),
+      checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('should not call createCaseTrialSortMappingRecords if case has no trial city', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        preferredTrialCity: null,
+        status: CASE_STATUS_TYPES.generalDocket,
+      });
+
+    applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
+
+    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
+    applicationContext
+      .getPersistenceGateway()
+      .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
+
+    await checkForReadyForTrialCasesInteractor(applicationContext);
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).not.toBeCalled();
   });
 });

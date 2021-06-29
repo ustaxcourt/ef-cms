@@ -34,8 +34,6 @@ Statistic.prototype.init = function init(rawStatistic, { applicationContext }) {
     rawStatistic.statisticId || applicationContext.getUniqueId();
 };
 
-Statistic.validationName = 'Statistic';
-
 Statistic.VALIDATION_ERROR_MESSAGES = {
   determinationDeficiencyAmount: 'Enter deficiency as determined by Court',
   determinationTotalPenalties: 'Enter total penalties as determined by Court',

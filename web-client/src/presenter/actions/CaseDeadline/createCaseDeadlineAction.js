@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromForm } from './getCaseDeadlineFromForm';
+import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
 
 /**
  * creates a case deadline
@@ -16,7 +16,7 @@ export const createCaseDeadlineAction = async ({
   path,
   props,
 }) => {
-  const caseDeadline = getCaseDeadlineFromForm({
+  const caseDeadline = getCaseDeadlineFromFormAction({
     applicationContext,
     get,
     props,
@@ -24,8 +24,7 @@ export const createCaseDeadlineAction = async ({
 
   let createCaseDeadlineResult = await applicationContext
     .getUseCases()
-    .createCaseDeadlineInteractor({
-      applicationContext,
+    .createCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
 

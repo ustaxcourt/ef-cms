@@ -2,7 +2,7 @@ const {
   aggregateCommonQueryParams,
 } = require('../../business/utilities/aggregateCommonQueryParams');
 const {
-  MAX_SEARCH_RESULTS,
+  MAX_SEARCH_CLIENT_RESULTS,
 } = require('../../business/entities/EntityConstants');
 const { isEmpty } = require('lodash');
 const { search } = require('./searchClient');
@@ -13,20 +13,17 @@ const { search } = require('./searchClient');
  * @returns {object} the case data
  */
 exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
-  const {
-    commonQuery,
-    exactMatchesQuery,
-    nonExactMatchesQuery,
-  } = aggregateCommonQueryParams({ applicationContext, ...searchTerms });
+  const { commonQuery, exactMatchesQuery, nonExactMatchesQuery } =
+    aggregateCommonQueryParams({ applicationContext, ...searchTerms });
 
   const source = [
     'caseCaption',
-    'contactPrimary',
-    'contactSecondary',
+    'petitioners',
     'docketNumber',
     'docketNumberSuffix',
     'docketNumberWithSuffix',
     'irsPractitioners',
+    'isSealed',
     'privatePractitioners',
     'receivedAt',
     'sealedDate',
@@ -44,7 +41,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
             must: [...exactMatchesQuery, ...commonQuery],
           },
         },
-        size: MAX_SEARCH_RESULTS,
+        size: MAX_SEARCH_CLIENT_RESULTS,
       },
       index: 'efcms-case',
     },
@@ -61,7 +58,7 @@ exports.caseAdvancedSearch = async ({ applicationContext, searchTerms }) => {
               must: [...nonExactMatchesQuery, ...commonQuery],
             },
           },
-          size: MAX_SEARCH_RESULTS,
+          size: MAX_SEARCH_CLIENT_RESULTS,
         },
         index: 'efcms-case',
       },

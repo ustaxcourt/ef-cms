@@ -70,14 +70,18 @@ Workaround is available and easy
 Mostly related to an application’s UI
 Doesn't need a workaround, because it doesn't impact functionality
 
-**FOR ENGINEERING TEAM ONLY**
-Bug Resolution Steps:
- - [ ] Determine why the bug wasn't caught by a test. 
- - [ ] Determine if an automated test needs to fixed, expanded or created. If unsure, bring in others to discuss.
- - [ ] Determine if a manual test needs to be fixed, expanded or created. If unsure, bring in others to discuss.
- - [ ] If needed, automated test is created.
- - [ ] If needed, manual test is created.
- - [ ] Reason for bug has been documented.
- - [ ] Fix has been deployed to dev environment.
- - [ ] Fix has been deployed to the stage environment.
- - [ ] Bug has been tested in staging (UX or Engineering).
+## Definition of Done (Updated 4-14-21)
+**Product Owner**
+ - [ ]  Bug fix has been validated in the Court's test environment
+
+**Engineering**
+ - [ ] Automated test scripts have been written
+ - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
+ - [ ] Verify that language for docket record for internal users and external users is identical
+ - [ ] New screens have been added to pa11y scripts
+ - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html 
+ - [ ] READMEs, other appropriate docs, JSDocs and swagger/APIs fully updated
+ - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
+ - [ ] Interactors should validate entities before calling persistence methods
+ - [ ] Code refactored for clarity and to remove any known technical debt
+ - [ ] Deployed to the Court's test environment

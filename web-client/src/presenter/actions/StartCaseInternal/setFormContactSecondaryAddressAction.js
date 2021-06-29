@@ -12,6 +12,7 @@ export const setFormContactSecondaryAddressAction = ({ get, props, store }) => {
   const { contact } = props;
   store.set(state.form.contactSecondary, {
     ...contact,
+    contactId: get(state.form.contactSecondary.contactId),
     inCareOf: get(state.form.contactSecondary.inCareOf),
     name: get(state.form.contactSecondary.name),
   });

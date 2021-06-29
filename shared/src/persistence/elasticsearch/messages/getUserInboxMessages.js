@@ -7,12 +7,13 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
         bool: {
           must: [
             {
-              match: {
-                'toUserId.S': { operator: 'and', query: userId },
-              },
+              term: { 'toUserId.S': userId },
             },
             {
-              match: { 'isRepliedTo.BOOL': false },
+              term: { 'isRepliedTo.BOOL': false },
+            },
+            {
+              term: { 'isCompleted.BOOL': false },
             },
           ],
         },

@@ -27,8 +27,12 @@ describe('verify old served work items do not show up in the outbox', () => {
   let workItemId7;
   let workItemId8;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     jest.setTimeout(300000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -44,12 +48,15 @@ describe('verify old served work items do not show up in the outbox', () => {
     });
     appContext.environment.dynamoDbTableName = 'efcms-local';
 
-    const CREATED_8_DAYS_AGO = new Date();
-    const CREATED_7_DAYS_AGO = new Date();
-    const CREATED_6_DAYS_AGO = new Date();
-    CREATED_8_DAYS_AGO.setDate(new Date().getDate() - 8);
-    CREATED_7_DAYS_AGO.setDate(new Date().getDate() - 7);
-    CREATED_6_DAYS_AGO.setDate(new Date().getDate() - 6);
+    const CREATED_8_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate({ howMuch: -8, unit: 'days' });
+    const CREATED_7_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate({ howMuch: -7, unit: 'days' });
+    const CREATED_6_DAYS_AGO = applicationContext
+      .getUtilities()
+      .calculateISODate({ howMuch: -6, unit: 'days' });
 
     workItemId6 = appContext.getUniqueId();
     workItemId7 = appContext.getUniqueId();
@@ -61,7 +68,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      createdAt: CREATED_8_DAYS_AGO.toISOString(),
+      createdAt: CREATED_8_DAYS_AGO,
       docketEntry: {
         createdAt: '2019-06-25T15:14:11.924Z',
         docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
@@ -80,15 +87,15 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     workItem7Days = {
       ...workItem8Days,
-      completedAt: CREATED_7_DAYS_AGO.toISOString(),
-      createdAt: CREATED_7_DAYS_AGO.toISOString(),
+      completedAt: CREATED_7_DAYS_AGO,
+      createdAt: CREATED_7_DAYS_AGO,
       workItemId: `${workItemId7}`,
     };
 
     workItem6Days = {
       ...workItem8Days,
-      completedAt: CREATED_6_DAYS_AGO.toISOString(),
-      createdAt: CREATED_6_DAYS_AGO.toISOString(),
+      completedAt: CREATED_6_DAYS_AGO,
+      createdAt: CREATED_6_DAYS_AGO,
       workItemId: `${workItemId6}`,
     };
 

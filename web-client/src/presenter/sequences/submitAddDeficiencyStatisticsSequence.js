@@ -1,8 +1,8 @@
+import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -13,6 +13,7 @@ import { validateAddDeficiencyStatisticsAction } from '../actions/validateAddDef
 
 export const submitAddDeficiencyStatisticsSequence = [
   startShowValidationAction,
+  clearErrorAlertsAction,
   validateAddDeficiencyStatisticsAction,
   {
     error: [
@@ -24,13 +25,12 @@ export const submitAddDeficiencyStatisticsSequence = [
       showProgressSequenceDecorator([
         submitAddDeficiencyStatisticsAction,
         {
-          error: [],
+          error: [setAlertErrorAction],
           success: [
             clearFormAction,
             setSaveAlertsForNavigationAction,
-            setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
-            navigateToCaseDetailCaseInformationActionFactory(),
+            navigateToCaseDetailCaseInformationActionFactory('statistics'),
           ],
         },
       ]),

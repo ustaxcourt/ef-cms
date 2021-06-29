@@ -18,6 +18,11 @@ describe('updateMessageModalAttachmentsAction', () => {
         docketEntryId: '123',
         documentType: 'Petition',
       },
+      {
+        docketEntryId: '345',
+        documentType:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque pho.', // 252 chars
+      },
     ],
   };
 
@@ -127,6 +132,28 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.subject).toEqual('Petition');
   });
 
+  it('truncates the document title to 250 characters when updating the subject field', async () => {
+    const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        documentId: '345',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [],
+          },
+        },
+      },
+    });
+
+    expect(
+      result.state.modal.form.attachments[0].documentTitle.length,
+    ).toBeGreaterThan(250);
+    expect(result.state.modal.form.subject.length).toEqual(250);
+  });
+
   it('does NOT set the form subject field if this is NOT the first attachment to be added', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
@@ -145,5 +172,41 @@ describe('updateMessageModalAttachmentsAction', () => {
     });
 
     expect(result.state.modal.form.subject).toEqual('Testing');
+  });
+
+  it('calls getDocumentTitleWithAdditionalInfo and returns a generated document title', async () => {
+    const mockDocumentTitle = 'I was generated';
+    applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo.mockReturnValue(mockDocumentTitle);
+
+    const { state } = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        documentId: '123',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [{}], // already contains one attachment
+            subject: 'Testing',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo.mock
+        .calls[0][0],
+    ).toMatchObject({
+      docketEntry: { docketEntryId: '123', documentType: 'Petition' },
+    });
+    expect(state.modal.form.attachments[1].documentTitle).toEqual(
+      mockDocumentTitle,
+    );
   });
 });

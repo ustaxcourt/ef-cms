@@ -1,4 +1,5 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
+import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
@@ -8,31 +9,29 @@ import React from 'react';
 
 export const AddToTrialModal = connect(
   {
-    addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.addCaseToTrialSessionSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateAddToTrialSequence: sequences.validateAddToTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   function AddToTrialModal({
-    addToTrialSessionModalHelper,
     cancelSequence,
     confirmSequence,
+    isNoteRequired = false,
     modal,
+    modalHelper,
+    modalTitle,
     updateModalValueSequence,
-    validateAddToTrialSequence,
+    validateSequence,
     validationErrors,
   }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Add Case"
         confirmSequence={confirmSequence}
-        title="Add to Trial Session"
+        title={modalTitle}
       >
         <div className="margin-bottom-4" id="add-to-trial-session-modal">
           <div className="usa-form-group">
@@ -94,47 +93,60 @@ export const AddToTrialModal = connect(
               id="trial-session"
               name="trialSessionId"
               onChange={() => {
-                validateAddToTrialSequence();
+                validateSequence();
               }}
             >
               <option value="">- Select -</option>
               {!modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionsFormatted.map(
-                  trialSession => (
-                    <option
-                      key={trialSession.trialSessionId}
-                      value={trialSession.trialSessionId}
-                    >
-                      {trialSession.optionText}
-                    </option>
-                  ),
-                )}
+                modalHelper.trialSessionsFormatted.map(trialSession => (
+                  <option
+                    key={trialSession.trialSessionId}
+                    value={trialSession.trialSessionId}
+                  >
+                    {trialSession.optionText}
+                  </option>
+                ))}
               {modal.showAllLocations &&
-                addToTrialSessionModalHelper.trialSessionStatesSorted.map(
-                  (stateName, idx) => (
-                    <optgroup key={idx} label={stateName}>
-                      {addToTrialSessionModalHelper.trialSessionsFormattedByState[
-                        stateName
-                      ].map(trialSession => (
+                modalHelper.trialSessionStatesSorted.map(stateName => (
+                  <optgroup key={stateName} label={stateName}>
+                    {modalHelper.trialSessionsFormattedByState[stateName].map(
+                      trialSession => (
                         <option
                           key={trialSession.trialSessionId}
                           value={trialSession.trialSessionId}
                         >
                           {trialSession.optionText}
                         </option>
-                      ))}
-                    </optgroup>
-                  ),
-                )}
+                      ),
+                    )}
+                  </optgroup>
+                ))}
             </BindedSelect>
           </FormGroup>
-          {addToTrialSessionModalHelper.showSessionNotSetAlert && (
+
+          {modalHelper.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
               the eligible cases for this session and prioritized when the
               calendar is set.{' '}
             </Hint>
           )}
+
+          <FormGroup errorText={validationErrors.calendarNotes}>
+            <label className="usa-label" htmlFor="trial-session-note">
+              Add note{' '}
+              {!isNoteRequired && <span className="usa-hint">(optional)</span>}
+            </label>
+            <BindedTextarea
+              bind="modal.calendarNotes"
+              id="trial-session-note"
+              name="calendarNotes"
+              required={isNoteRequired}
+              onChange={() => {
+                validateSequence();
+              }}
+            ></BindedTextarea>
+          </FormGroup>
         </div>
       </ModalDialog>
     );

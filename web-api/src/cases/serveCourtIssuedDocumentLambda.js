@@ -12,8 +12,7 @@ exports.serveCourtIssuedDocumentLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .serveCourtIssuedDocumentInteractor({
-          applicationContext,
+        .serveCourtIssuedDocumentInteractor(applicationContext, {
           ...event.pathParameters,
         });
     },

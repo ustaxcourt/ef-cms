@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 
 export const AppTimeoutModal = connect(
   {
-    confirmSequence: sequences.confirmStayLoggedInSequence,
+    confirmSequence: sequences.broadcastStayLoggedInSequence,
     idleLogoutSequence: sequences.gotoIdleLogoutSequence,
     shouldIdleLogout: state.shouldIdleLogout,
   },

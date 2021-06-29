@@ -171,6 +171,13 @@
         margin-bottom: 0.5rem;
       }
 
+      .ustc-navigation-items {
+        display: block;
+        .usa-nav__primary-item:not(.nav-medium) {
+          display: inline-block;
+        }
+      }
+
       .usa-nav__primary-item {
         .usa-current::after,
         .usa-nav__link::after {
@@ -226,7 +233,7 @@
 
             &.position-right-0 {
               right: 0;
-              width: 100px;
+              width: 110px;
               text-align: right;
             }
           }
@@ -266,6 +273,11 @@
       }
     }
   }
+}
+
+.usa-search .small-search-button {
+  min-width: 90px;
+  background-image: none;
 }
 
 /* small screens: */

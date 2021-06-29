@@ -15,15 +15,20 @@ export const setDocketEntryMetaTypeAction = ({
 }) => {
   const { docketEntryId, eventCode, isMinuteEntry } = get(state.form);
 
-  const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
-  const COURT_ISSUED_EVENT_CODES_MAP = COURT_ISSUED_EVENT_CODES.map(
+  const { COURT_ISSUED_EVENT_CODES, SYSTEM_GENERATED_DOCUMENT_TYPES } =
+    applicationContext.getConstants();
+  const COURT_ISSUED_EVENT_CODES_LIST = COURT_ISSUED_EVENT_CODES.map(
     courtIssuedEvent => courtIssuedEvent.eventCode,
+  );
+
+  COURT_ISSUED_EVENT_CODES_LIST.push(
+    SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode,
   );
 
   const hasDocument = !isMinuteEntry;
 
   const isCourtIssuedDocument =
-    hasDocument && COURT_ISSUED_EVENT_CODES_MAP.includes(eventCode);
+    hasDocument && COURT_ISSUED_EVENT_CODES_LIST.includes(eventCode);
 
   let editType;
 

@@ -19,10 +19,12 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
       .getPersistenceGateway()
       .getCaseInventoryReport.mockReturnValue([]);
 
-    const results = await generatePrintableCaseInventoryReportInteractor({
+    const results = await generatePrintableCaseInventoryReportInteractor(
       applicationContext,
-      associatedJudge: 'Judge Colvin',
-    });
+      {
+        associatedJudge: 'Judge Colvin',
+      },
+    );
 
     expect(
       applicationContext.getUseCaseHelpers().generateCaseInventoryReportPdf,
@@ -37,8 +39,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
     });
 
     await expect(
-      generatePrintableCaseInventoryReportInteractor({
-        applicationContext,
+      generatePrintableCaseInventoryReportInteractor(applicationContext, {
         associatedJudge: 'Judge Colvin',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -51,9 +52,7 @@ describe('generatePrintableCaseInventoryReportInteractor', () => {
     });
 
     await expect(
-      generatePrintableCaseInventoryReportInteractor({
-        applicationContext,
-      }),
+      generatePrintableCaseInventoryReportInteractor(applicationContext, {}),
     ).rejects.toThrow('Either judge or status must be provided');
   });
 });

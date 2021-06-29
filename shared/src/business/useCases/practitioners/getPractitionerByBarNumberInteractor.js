@@ -8,13 +8,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * getPractitionerByBarNumberInteractor
  *
- * @param {object} barNumber the bar number for the practitioner to get
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.barNumber the bar number for the practitioner to get
  * @returns {Practitioner} the retrieved practitioner
  */
-exports.getPractitionerByBarNumberInteractor = async ({
+exports.getPractitionerByBarNumberInteractor = async (
   applicationContext,
-  barNumber,
-}) => {
+  { barNumber },
+) => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {

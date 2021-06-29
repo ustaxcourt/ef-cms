@@ -12,7 +12,6 @@ export const PDFPreviewErrorModal = connect(
     return (
       <ModalDialog
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="OK"
         confirmSequence={confirmSequence}
         title={title}

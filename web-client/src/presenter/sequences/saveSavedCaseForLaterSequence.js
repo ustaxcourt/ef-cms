@@ -2,14 +2,16 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
 import { getCaseDetailFormWithComputedDatesAction } from '../actions/getCaseDetailFormWithComputedDatesAction';
+import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/caseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseOnFormAction } from '../actions/setCaseOnFormAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
+import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPetitionIdAction } from '../actions/setPetitionIdAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -31,6 +33,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setValidationAlertErrorsAction,
     ],
     success: [
+      setCurrentPageAction('Interstitial'),
       clearModalAction,
       unsetDocumentSelectedForPreviewAction,
       stopShowValidationAction,
@@ -38,7 +41,8 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       saveCaseDetailInternalEditAction,
       setCaseAction,
       setCaseOnFormAction,
-      setPetitionIdAction,
+      setContactsOnFormAction,
+      getPetitionIdAction,
       setDocketEntryIdAction,
       navigateToReviewSavedPetitionAction,
     ],

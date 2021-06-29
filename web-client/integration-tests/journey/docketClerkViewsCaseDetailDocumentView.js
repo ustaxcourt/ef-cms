@@ -1,5 +1,9 @@
+import {
+  contactPrimaryFromState,
+  refreshElasticsearchIndex,
+  viewCaseDetail,
+} from '../helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { refreshElasticsearchIndex, viewCaseDetail } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -27,9 +31,10 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
 
     await refreshElasticsearchIndex();
 
+    const contactPrimary = contactPrimaryFromState(test);
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(caseDetail.userId).toBeDefined();
+    expect(contactPrimary.contactId).toBeDefined();
 
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
       docketRecordTab: 'documentView',
@@ -39,6 +44,8 @@ export const docketClerkViewsCaseDetailDocumentView = test => {
     });
 
     test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
+
+    expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
 
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),

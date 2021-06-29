@@ -7,7 +7,6 @@ import React from 'react';
 
 export const PendingReportList = connect(
   {
-    fetchPendingItemsSequence: sequences.fetchPendingItemsSequence,
     formattedPendingItems: state.formattedPendingItems,
     loadMorePendingItemsSequence: sequences.loadMorePendingItemsSequence,
     pendingReportListHelper: state.pendingReportListHelper,
@@ -21,7 +20,7 @@ export const PendingReportList = connect(
     setPendingReportSelectedJudgeSequence,
   }) {
     return (
-      <React.Fragment>
+      <>
         <div className="grid-row margin-bottom-2">
           <div className="tablet:grid-col-8">
             <div className="grid-row grid-gap">
@@ -40,8 +39,8 @@ export const PendingReportList = connect(
                 }
               >
                 <option value="">-Judge-</option>
-                {formattedPendingItems.judges.map((judge, idx) => (
-                  <option key={idx} value={judge}>
+                {formattedPendingItems.judges.map(judge => (
+                  <option key={`pending-judge-${judge}`} value={judge}>
                     {judge}
                   </option>
                 ))}
@@ -73,8 +72,8 @@ export const PendingReportList = connect(
               <th>Judge</th>
             </tr>
           </thead>
-          {formattedPendingItems.items.map((item, idx) => (
-            <tbody key={idx}>
+          {formattedPendingItems.items.map(item => (
+            <tbody key={`pending-item-${item.docketEntryId}`}>
               <tr className="pending-item-row">
                 <td>
                   <CaseLink formattedCase={item} />
@@ -82,11 +81,7 @@ export const PendingReportList = connect(
                 <td>{item.formattedFiledDate}</td>
                 <td>{item.caseTitle}</td>
                 <td>
-                  <a
-                    href={`/case-detail/${item.docketNumber}/document-view?docketEntryId=${item.docketEntryId}`}
-                  >
-                    {item.formattedName}
-                  </a>
+                  <a href={item.documentLink}>{item.formattedName}</a>
                 </td>
                 <td>{item.status}</td>
                 <td>{item.associatedJudgeFormatted}</td>
@@ -118,7 +113,7 @@ export const PendingReportList = connect(
             Load More
           </Button>
         )}
-      </React.Fragment>
+      </>
     );
   },
 );

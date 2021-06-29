@@ -5,20 +5,21 @@ const {
 const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 /**
  * getTrialSessionWorkingCopyInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSessionId id of the trial session
  * @returns {TrialSessionWorkingCopy} the trial session working copy returned from persistence
  */
-exports.getTrialSessionWorkingCopyInteractor = async ({
+exports.getTrialSessionWorkingCopyInteractor = async (
   applicationContext,
-  trialSessionId,
-}) => {
+  { trialSessionId },
+) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
@@ -26,20 +27,62 @@ exports.getTrialSessionWorkingCopyInteractor = async ({
 
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor({ applicationContext, user });
+    .getJudgeForUserChambersInteractor(applicationContext, { user });
+
+  const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
+
+  let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
 
   const trialSessionWorkingCopy = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionWorkingCopy({
       applicationContext,
       trialSessionId,
-      userId: (judgeUser && judgeUser.userId) || user.userId,
+      userId: chambersUserId,
     });
 
   if (trialSessionWorkingCopy) {
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
+    trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
       trialSessionWorkingCopy,
-    ).validate();
-    return trialSessionWorkingCopyEntity.toRawObject();
+    );
+    validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
+      .validate()
+      .toRawObject();
+  } else {
+    const trialSessionDetails = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId,
+      });
+    const trialSessionEntity = new TrialSession(trialSessionDetails, {
+      applicationContext,
+    });
+
+    const canCreateWorkingCopy =
+      (trialSessionEntity.trialClerk &&
+        trialSessionEntity.trialClerk.userId === chambersUserId) ||
+      (judgeUser &&
+        trialSessionEntity.judge &&
+        judgeUser.userId === trialSessionEntity.judge.userId);
+
+    if (canCreateWorkingCopy) {
+      trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+        trialSessionId,
+        userId: chambersUserId,
+      });
+      validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
+        .validate()
+        .toRawObject();
+      await applicationContext
+        .getPersistenceGateway()
+        .createTrialSessionWorkingCopy({
+          applicationContext,
+          trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
+        });
+    } else {
+      throw new NotFoundError('Trial session working copy not found');
+    }
   }
+  return validRawTrialSessionWorkingCopyEntity;
 };

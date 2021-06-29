@@ -23,8 +23,7 @@ describe('addDeficiencyStatisticInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      addDeficiencyStatisticInteractor({
-        applicationContext,
+      addDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing statistics');
@@ -40,8 +39,7 @@ describe('addDeficiencyStatisticInteractor', () => {
       yearOrPeriod: 'Year',
     };
 
-    const result = await addDeficiencyStatisticInteractor({
-      applicationContext,
+    const result = await addDeficiencyStatisticInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       ...statistic,
     });

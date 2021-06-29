@@ -12,12 +12,11 @@ const compareCasesByPractitioner = (a, b) => {
 };
 
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
-  const {
-    STATUS_TYPES,
-    TRIAL_STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { STATUS_TYPES, TRIAL_STATUS_TYPES } =
+    applicationContext.getConstants();
   const trialSession = get(state.trialSession) || {};
-  const { filters, sort, sortOrder } = get(state.trialSessionWorkingCopy) || {};
+  const { filters, sort, sortOrder, userNotes } =
+    get(state.trialSessionWorkingCopy) || {};
   const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
 
   //get an array of strings of the trial statuses that are set to true
@@ -63,6 +62,28 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   }));
 
   const formattedCasesByDocketRecord = makeMap(formattedCases, 'docketNumber');
+
+  Object.keys(userNotes).forEach(docketNumber => {
+    if (userNotes[docketNumber]) {
+      const caseToUpdate = formattedCases.find(
+        aCase => aCase.docketNumber === docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.userNotes = userNotes[docketNumber].notes;
+      }
+    }
+  });
+
+  trialSession.caseOrder.forEach(aCase => {
+    if (aCase.calendarNotes) {
+      const caseToUpdate = formattedCases.find(
+        theCase => theCase.docketNumber === aCase.docketNumber,
+      );
+      if (caseToUpdate) {
+        caseToUpdate.calendarNotes = aCase.calendarNotes;
+      }
+    }
+  });
 
   return {
     casesShownCount,

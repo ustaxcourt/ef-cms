@@ -4,6 +4,19 @@ const {
 const { Case } = require('../entities/cases/Case');
 const { omit } = require('lodash');
 
+const formatDateReceived = ({
+  applicationContext,
+  docketEntryEntity,
+  isPaper,
+}) => {
+  const formatString = isPaper ? 'MMDDYY' : 'MM/DD/YY hh:mm a';
+  return docketEntryEntity.createdAt
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(docketEntryEntity.createdAt, formatString)
+    : '';
+};
+
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
  *
@@ -23,38 +36,21 @@ exports.generateCoverSheetData = ({
 }) => {
   const isLodged = docketEntryEntity.lodged;
   const { certificateOfService, isPaper } = docketEntryEntity;
+  const { formatDateString } = applicationContext.getUtilities();
 
-  const dateServedFormatted =
-    (docketEntryEntity.servedAt &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.servedAt, 'MMDDYY')) ||
-    '';
+  const dateServedFormatted = docketEntryEntity.servedAt
+    ? formatDateString(docketEntryEntity.servedAt, 'MMDDYY')
+    : '';
 
-  let dateReceivedFormatted;
+  let dateReceivedFormatted = formatDateReceived({
+    applicationContext,
+    docketEntryEntity,
+    isPaper,
+  });
 
-  if (isPaper) {
-    dateReceivedFormatted =
-      (docketEntryEntity.createdAt &&
-        applicationContext
-          .getUtilities()
-          .formatDateString(docketEntryEntity.createdAt, 'MMDDYY')) ||
-      '';
-  } else {
-    dateReceivedFormatted =
-      (docketEntryEntity.createdAt &&
-        applicationContext
-          .getUtilities()
-          .formatDateString(docketEntryEntity.createdAt, 'MM/DD/YY hh:mm a')) ||
-      '';
-  }
-
-  const dateFiledFormatted =
-    (docketEntryEntity.filingDate &&
-      applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.filingDate, 'MMDDYY')) ||
-    '';
+  const dateFiledFormatted = docketEntryEntity.filingDate
+    ? formatDateString(docketEntryEntity.filingDate, 'MMDDYY')
+    : '';
 
   const caseCaptionToUse = useInitialData
     ? caseEntity.initialCaption
@@ -177,27 +173,36 @@ exports.addCoverToPdf = async ({
 /**
  * addCoversheetInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.docketEntryId the docket entry id
+ * @param {string} providers.docketNumber the docket number of the case
+ * @param {boolean} providers.filingDateUpdated flag that represents if the filing date was updated
+ * @param {boolean} providers.replaceCoversheet flag that represents if the coversheet should be replaced
+ * @param {boolean} providers.useInitialData flag that represents to use initial data
+ * @returns {Promise<*>} updated docket entry entity
  */
-exports.addCoversheetInteractor = async ({
+exports.addCoversheetInteractor = async (
   applicationContext,
-  docketEntryId,
-  docketNumber,
-  filingDateUpdated = false,
-  replaceCoversheet = false,
-  useInitialData = false,
-}) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  {
+    caseEntity = null,
+    docketEntryId,
+    docketNumber,
+    filingDateUpdated = false,
+    replaceCoversheet = false,
+    useInitialData = false,
+  },
+) => {
+  if (!caseEntity) {
+    const caseRecord = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
-  const caseEntity = new Case(caseRecord, { applicationContext });
+    caseEntity = new Case(caseRecord, { applicationContext });
+  }
 
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -231,11 +236,13 @@ exports.addCoversheetInteractor = async ({
   docketEntryEntity.setAsProcessingStatusAsCompleted();
   docketEntryEntity.setNumberOfPages(numberOfPages);
 
+  const updatedDocketEntryEntity = docketEntryEntity.validate();
+
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
     docketNumber: caseEntity.docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
+    document: updatedDocketEntryEntity.toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -243,4 +250,6 @@ exports.addCoversheetInteractor = async ({
     document: newPdfData,
     key: docketEntryId,
   });
+
+  return updatedDocketEntryEntity;
 };

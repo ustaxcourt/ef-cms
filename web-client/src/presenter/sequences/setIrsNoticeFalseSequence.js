@@ -1,13 +1,7 @@
-import { set } from 'cerebral/factories';
-import { state } from 'cerebral';
+import { setIrsNoticeFalseAction } from '../actions/setIrsNoticeFalseAction';
 
 /**
  * clear IRS notice date and set hasIrsNotice to false
  * notice date values are not required if hasIrsNotice is false
  */
-export const setIrsNoticeFalseSequence = [
-  set(state.form.irsMonth, ''),
-  set(state.form.irsDay, ''),
-  set(state.form.irsYear, ''),
-  set(state.form.hasVerifiedIrsNotice, false),
-];
+export const setIrsNoticeFalseSequence = [setIrsNoticeFalseAction];

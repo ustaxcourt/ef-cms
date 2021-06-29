@@ -1,4 +1,4 @@
-import { showContactsHelper } from '../computeds/showContactsHelper';
+import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,13 +9,44 @@ import { state } from 'cerebral';
  * @returns {object} object containing the view settings
  */
 export const editPetitionerInformationHelper = (get, applicationContext) => {
-  const { PARTY_TYPES } = applicationContext.getConstants();
-  const partyType = get(state.form.partyType);
-  const showContacts = showContactsHelper(partyType, PARTY_TYPES);
+  const { CONTACT_TYPES } = applicationContext.getConstants();
+  const permissions = get(state.permissions);
+  const { contact } = cloneDeep(get(state.form));
+  const userPendingEmail = get(state.screenMetadata.userPendingEmail);
+  const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
+  const showSealAddress = permissions.SEAL_ADDRESS;
+
+  const caseDetail = get(state.caseDetail);
+
+  const petitioners = caseDetail.petitioners.filter(
+    p => p.contactType === CONTACT_TYPES.petitioner,
+  );
+
+  const canRemovePetitioner =
+    contact.contactType === CONTACT_TYPES.petitioner && petitioners.length > 1;
+
+  const isOtherFiler =
+    contact.contactType === CONTACT_TYPES.intervenor ||
+    contact.contactType === CONTACT_TYPES.participant;
+
+  let intervenorContactId;
+  caseDetail.petitioners.forEach(party => {
+    if (party.contactType === CONTACT_TYPES.intervenor) {
+      intervenorContactId = party.contactId;
+    }
+  });
+
+  const showIntervenorRole =
+    !intervenorContactId || contact.contactId === intervenorContactId;
+
+  const showRemovePetitionerButton =
+    (isOtherFiler || canRemovePetitioner) && permissions.REMOVE_PETITIONER;
 
   return {
-    partyTypes: PARTY_TYPES,
-    showPrimaryContact: showContacts.contactPrimary,
-    showSecondaryContact: showContacts.contactSecondary,
+    showEditEmail,
+    showIntervenorRole,
+    showRemovePetitionerButton,
+    showSealAddress,
+    userPendingEmail,
   };
 };

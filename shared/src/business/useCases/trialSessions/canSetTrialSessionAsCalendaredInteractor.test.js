@@ -4,10 +4,14 @@ const {
 const {
   canSetTrialSessionAsCalendaredInteractor,
 } = require('./canSetTrialSessionAsCalendaredInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 
 const MOCK_TRIAL = {
   maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',
   startDate: '2025-12-01T00:00:00.000Z',
   term: 'Fall',
@@ -28,19 +32,11 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
       userId: 'unauthorizedUser',
     };
 
-    let error;
-
-    try {
-      canSetTrialSessionAsCalendaredInteractor({
-        applicationContext,
+    expect(() =>
+      canSetTrialSessionAsCalendaredInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).toThrow('Unauthorized');
   });
 
   it('gets the result back from the interactor', () => {
@@ -51,10 +47,12 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
 
-    const result = canSetTrialSessionAsCalendaredInteractor({
+    const result = canSetTrialSessionAsCalendaredInteractor(
       applicationContext,
-      trialSession: MOCK_TRIAL,
-    });
+      {
+        trialSession: MOCK_TRIAL,
+      },
+    );
 
     expect(result).toEqual({
       canSetAsCalendared: false,

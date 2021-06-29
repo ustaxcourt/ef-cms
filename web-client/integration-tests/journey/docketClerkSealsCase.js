@@ -1,3 +1,5 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const docketClerkSealsCase = test => {
   return it('Docketclerk seals a case', async () => {
     await test.runSequence('gotoCaseDetailSequence', {
@@ -10,5 +12,7 @@ export const docketClerkSealsCase = test => {
 
     expect(test.getState('caseDetail.sealedDate')).toBeDefined();
     expect(test.getState('caseDetail.isSealed')).toBeTruthy();
+
+    await refreshElasticsearchIndex();
   });
 };

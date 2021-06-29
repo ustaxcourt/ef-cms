@@ -7,11 +7,11 @@ const { User } = require('../entities/User');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getUploadPolicyInteractor = async ({ applicationContext, key }) => {
+exports.getUploadPolicyInteractor = async (applicationContext, { key }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {

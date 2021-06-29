@@ -1,4 +1,7 @@
 const {
+  over3000Characters,
+} = require('../../test/createTestApplicationContext');
+const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
@@ -27,6 +30,20 @@ describe('ExternalDocumentNonStandardE', () => {
         trialLocation: 'Little Rock, AR',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be invalid when documentTitle is over 3000 characters', () => {
+      const extDoc = ExternalDocumentFactory.get({
+        category: 'Motion',
+        documentTitle: over3000Characters,
+        documentType:
+          'Motion to Change Place of Submission of Declaratory Judgment Case',
+        scenario: 'Nonstandard E',
+        trialLocation: 'Little Rock, AR',
+      });
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+      });
     });
   });
 

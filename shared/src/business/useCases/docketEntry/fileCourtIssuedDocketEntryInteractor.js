@@ -2,28 +2,25 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  TRANSCRIPT_EVENT_CODE,
-  UNSERVABLE_EVENT_CODES,
-} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
+const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.fileCourtIssuedDocketEntryInteractor = async ({
+exports.fileCourtIssuedDocketEntryInteractor = async (
   applicationContext,
-  documentMeta,
-}) => {
+  { documentMeta },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =
@@ -52,15 +49,13 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
+  if (docketEntry.isOnDocketRecord) {
+    throw new Error('Docket entry has already been added to docket record');
+  }
 
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  let secondaryDate;
-  if (documentMeta.eventCode === TRANSCRIPT_EVENT_CODE) {
-    secondaryDate = documentMeta.date;
-  }
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -75,9 +70,10 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       date: documentMeta.date,
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
+      draftOrderState: null,
       editState: JSON.stringify(documentMeta),
       eventCode: documentMeta.eventCode,
-      filedBy: undefined,
+      filingDate: documentMeta.filingDate,
       freeText: documentMeta.freeText,
       isDraft: false,
       isFileAttached: true,
@@ -85,8 +81,8 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       judge: documentMeta.judge,
       numberOfPages,
       scenario: documentMeta.scenario,
-      secondaryDate,
       serviceStamp: documentMeta.serviceStamp,
+      trialLocation: documentMeta.trialLocation,
       userId: user.userId,
     },
     { applicationContext },
@@ -99,7 +95,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
       associatedJudge: caseToUpdate.associatedJudge,
       caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+      caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
@@ -132,30 +128,27 @@ exports.fileCourtIssuedDocketEntryInteractor = async ({
   });
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().updateCase({
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: caseEntity.validate().toRawObject(),
+      caseToUpdate: caseEntity,
     }),
   ];
 
+  const rawValidWorkItem = workItem.validate().toRawObject();
   if (isUnservable) {
     saveItems.push(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
         applicationContext,
         section: user.section,
         userId: user.userId,
-        workItem: workItem.validate().toRawObject(),
+        workItem: rawValidWorkItem,
       }),
     );
   } else {
     saveItems.push(
-      applicationContext.getPersistenceGateway().createUserInboxRecord({
+      applicationContext.getPersistenceGateway().saveWorkItem({
         applicationContext,
-        workItem: workItem.validate().toRawObject(),
-      }),
-      applicationContext.getPersistenceGateway().createSectionInboxRecord({
-        applicationContext,
-        workItem: workItem.validate().toRawObject(),
+        workItem: rawValidWorkItem,
       }),
     );
   }

@@ -1,5 +1,9 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
   return it('Petitions Clerk reviews petition and saves for later', async () => {
+    await refreshElasticsearchIndex();
+
     await test.runSequence('gotoWorkQueueSequence');
     expect(test.getState('currentPage')).toEqual('WorkQueue');
     await test.runSequence('chooseWorkQueueSequence', {
@@ -23,7 +27,14 @@ export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence', {});
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+
+    await test.runSequence('saveSavedCaseForLaterSequence');
+
+    expect(test.getState('validationErrors')).toEqual({});
 
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
 

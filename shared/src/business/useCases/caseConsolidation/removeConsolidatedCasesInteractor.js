@@ -8,17 +8,16 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 /**
  * removeConsolidatedCasesInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.docketNumber the docket number of the case to consolidate
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-exports.removeConsolidatedCasesInteractor = async ({
+exports.removeConsolidatedCasesInteractor = async (
   applicationContext,
-  docketNumber,
-  docketNumbersToRemove,
-}) => {
+  { docketNumber, docketNumbersToRemove },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CONSOLIDATE_CASES)) {
@@ -62,9 +61,9 @@ exports.removeConsolidatedCasesInteractor = async ({
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
-        applicationContext.getPersistenceGateway().updateCase({
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          caseToUpdate: caseEntity.validate().toRawObject(),
+          caseToUpdate: caseEntity,
         }),
       );
     }
@@ -75,9 +74,9 @@ exports.removeConsolidatedCasesInteractor = async ({
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   }
@@ -100,9 +99,9 @@ exports.removeConsolidatedCasesInteractor = async ({
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getPersistenceGateway().updateCase({
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: caseEntity.validate().toRawObject(),
+        caseToUpdate: caseEntity,
       }),
     );
   }

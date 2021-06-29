@@ -49,8 +49,7 @@ export const saveCaseDetailInternalEditAction = async ({
 
         await applicationContext
           .getUseCases()
-          .uploadDocumentAndMakeSafeInteractor({
-            applicationContext,
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: caseToUpdate[fileKey],
             key: oldPetitionDocument.docketEntryId,
             onUploadProgress: progressFunctions[fileKey],
@@ -58,13 +57,20 @@ export const saveCaseDetailInternalEditAction = async ({
       } else {
         const newDocketEntryId = await applicationContext
           .getUseCases()
-          .uploadDocumentAndMakeSafeInteractor({
-            applicationContext,
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: caseToUpdate[fileKey],
             onUploadProgress: progressFunctions[fileKey],
           });
 
-        const { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
+        let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
+
+        if (
+          fileKey === INITIAL_DOCUMENT_TYPES_FILE_MAP.requestForPlaceOfTrial
+        ) {
+          documentTitle = applicationContext
+            .getUtilities()
+            .replaceBracketed(documentTitle, caseToUpdate.preferredTrialCity);
+        }
 
         caseToUpdate.docketEntries.push({
           docketEntryId: newDocketEntryId,
@@ -77,16 +83,16 @@ export const saveCaseDetailInternalEditAction = async ({
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .saveCaseDetailInternalEditInteractor({
-      applicationContext,
+    .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
     });
 
   if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
-    await applicationContext.getUseCases().updateCaseTrialSortTagsInteractor({
-      applicationContext,
-      docketNumber: caseDetail.docketNumber,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateCaseTrialSortTagsInteractor(applicationContext, {
+        docketNumber: caseDetail.docketNumber,
+      });
   }
 
   return {

@@ -3,30 +3,25 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * generatePrintablePendingReportInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.judge the optional judge filter
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the url of the document
  */
-exports.generatePrintablePendingReportInteractor = async ({
+exports.generatePrintablePendingReportInteractor = async (
   applicationContext,
-  docketNumber,
-  judge,
-}) => {
+  { docketNumber, judge },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
-  }
-
-  //TODO: prefereably decodeURIComponent in the router/utility method for easy mocking
-  if (judge) {
-    judge = decodeURIComponent(judge);
   }
 
   let pendingDocuments = [];
@@ -37,9 +32,11 @@ exports.generatePrintablePendingReportInteractor = async ({
       .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
   } else {
     pendingDocuments = (
-      await applicationContext
-        .getUseCaseHelpers()
-        .fetchPendingItems({ applicationContext, judge })
+      await applicationContext.getPersistenceGateway().fetchPendingItems({
+        applicationContext,
+        judge,
+        unservableEventCodes: UNSERVABLE_EVENT_CODES,
+      })
     ).foundDocuments;
   }
 
@@ -84,7 +81,7 @@ exports.generatePrintablePendingReportInteractor = async ({
 
   const key = `pending-report-${applicationContext.getUniqueId()}.pdf`;
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const documentsBucket =
       applicationContext.environment.tempDocumentsBucketName;
     const s3Client = applicationContext.getStorageClient();
@@ -96,18 +93,22 @@ exports.generatePrintablePendingReportInteractor = async ({
       Key: key,
     };
 
-    s3Client.upload(params, function () {
+    s3Client.upload(params, function (err) {
+      if (err) {
+        applicationContext.logger.error('error uploading to s3', err);
+        reject(err);
+      }
       resolve();
     });
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: key,
-    useTempBucket: true,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key,
+      useTempBucket: true,
+    });
 
   return url;
 };

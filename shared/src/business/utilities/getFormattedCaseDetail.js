@@ -1,91 +1,90 @@
 const {
+  calculateDifferenceInDays,
   calculateISODate,
-  calendarDatesCompared,
   createISODateString,
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
-  COURT_ISSUED_DOCUMENT_TYPES,
+  CORRECTED_TRANSCRIPT_EVENT_CODE,
+  COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
-  SERVED_PARTIES_CODES,
+  REVISED_TRANSCRIPT_EVENT_CODE,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { ROLES } = require('../entities/EntityConstants');
-
-const getServedPartiesCode = servedParties => {
-  let servedPartiesCode = '';
-  if (servedParties && servedParties.length > 0) {
-    if (
-      servedParties.length === 1 &&
-      servedParties[0].role === ROLES.irsSuperuser
-    ) {
-      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
-    } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
-    }
-  }
-  return servedPartiesCode;
-};
+const { isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
-const documentMeetsAgeRequirements = document => {
-  const transcriptCodes = [TRANSCRIPT_EVENT_CODE];
-  const isTranscript = transcriptCodes.includes(document.eventCode);
+const documentMeetsAgeRequirements = doc => {
+  const transcriptCodes = [
+    TRANSCRIPT_EVENT_CODE,
+    CORRECTED_TRANSCRIPT_EVENT_CODE,
+    REVISED_TRANSCRIPT_EVENT_CODE,
+  ];
+  const isTranscript = transcriptCodes.includes(doc.eventCode);
   if (!isTranscript) return true;
+
+  const dateStringToCheck = doc.isLegacy ? doc.filingDate : doc.date;
   const availableOnDate = calculateISODate({
-    dateString: document.secondaryDate,
+    dateString: dateStringToCheck,
     howMuch: TRANSCRIPT_AGE_DAYS_MIN,
     units: 'days',
   });
   const rightNow = createISODateString();
+
   const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
   return meetsTranscriptAgeRequirements;
 };
 
-const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = cloneDeep(caseDeadline);
-  result.deadlineDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.deadlineDate, 'MMDDYY');
+const computeIsInProgress = ({ formattedEntry }) => {
+  return (
+    (!formattedEntry.isCourtIssuedDocument &&
+      formattedEntry.isFileAttached === false &&
+      !formattedEntry.isMinuteEntry &&
+      !formattedEntry.isUnservable) ||
+    (formattedEntry.isFileAttached === true &&
+      !isServed(formattedEntry) &&
+      !formattedEntry.isUnservable)
+  );
+};
 
-  // use the app context utility function so the time zones match when comparing dates
-  const deadlineDateMomented = applicationContext
-    .getUtilities()
-    .prepareDateFromString(result.deadlineDate);
-
-  const today = applicationContext.getUtilities().prepareDateFromString();
-
-  if (deadlineDateMomented.isBefore(today, 'day')) {
-    result.overdue = true;
-  }
-
-  return result;
+const computeIsNotServedDocument = ({ formattedEntry }) => {
+  return (
+    !isServed(formattedEntry) &&
+    !formattedEntry.isUnservable &&
+    !formattedEntry.isMinuteEntry
+  );
 };
 
 const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
-  formattedEntry.servedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.servedAt, 'MMDDYY');
+  const { formatDateString } = applicationContext.getUtilities();
 
-  formattedEntry.signedAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.signedAt, 'MMDDYY');
+  formattedEntry.servedAtFormatted = formatDateString(
+    formattedEntry.servedAt,
+    'MMDDYY',
+  );
 
-  formattedEntry.signedAtFormattedTZ = applicationContext
-    .getUtilities()
-    .formatDateString(formattedEntry.signedAt, 'DATE_TIME_TZ');
+  formattedEntry.signedAtFormatted = formatDateString(
+    formattedEntry.signedAt,
+    'MMDDYY',
+  );
+
+  formattedEntry.signedAtFormattedTZ = formatDateString(
+    formattedEntry.signedAt,
+    'DATE_TIME_TZ',
+  );
 
   if (formattedEntry.certificateOfServiceDate) {
-    formattedEntry.certificateOfServiceDateFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.certificateOfServiceDate, 'MMDDYY');
+    formattedEntry.certificateOfServiceDateFormatted = formatDateString(
+      formattedEntry.certificateOfServiceDate,
+      'MMDDYY',
+    );
   }
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
@@ -97,9 +96,9 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.documentType === 'Petition' ||
     formattedEntry.eventCode === 'P';
 
-  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_DOCUMENT_TYPES.includes(
-    formattedEntry.documentType,
-  );
+  formattedEntry.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(formattedEntry.eventCode);
 
   const qcWorkItem = formattedEntry.workItem;
 
@@ -109,17 +108,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     UNSERVABLE_EVENT_CODES.includes(formattedEntry.eventCode) ||
     formattedEntry.isLegacyServed;
 
-  formattedEntry.isInProgress =
-    (!formattedEntry.isCourtIssuedDocument &&
-      formattedEntry.isFileAttached === false &&
-      !formattedEntry.isMinuteEntry &&
-      !formattedEntry.isUnservable) ||
-    (formattedEntry.isFileAttached === true &&
-      !formattedEntry.servedAt &&
-      !formattedEntry.isUnservable);
+  formattedEntry.isInProgress = computeIsInProgress({ formattedEntry });
 
-  formattedEntry.isNotServedDocument =
-    !formattedEntry.servedAt && !formattedEntry.isLegacyServed;
+  formattedEntry.isNotServedDocument = computeIsNotServedDocument({
+    formattedEntry,
+  });
 
   formattedEntry.isTranscript =
     formattedEntry.eventCode === TRANSCRIPT_EVENT_CODE;
@@ -127,15 +120,10 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.isStipDecision =
     formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  formattedEntry.qcWorkItemsUntouched =
-    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsUntouched = qcWorkItem && !qcWorkItem.completedAt;
 
-  if (formattedEntry.servedPartiesCode !== SERVED_PARTIES_CODES.PETITIONER) {
-    // Served parties code - R = Respondent, P = Petitioner, B = Both
-    formattedEntry.servedPartiesCode = getServedPartiesCode(
-      formattedEntry.servedParties,
-    );
-  }
+  formattedEntry.qcNeeded =
+    formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
 
   if (
     formattedEntry.isCourtIssuedDocument &&
@@ -154,13 +142,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
-  formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
-    formattedEntry,
-  );
+  formattedEntry.isAvailableToUser =
+    documentMeetsAgeRequirements(formattedEntry);
 
-  formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
-    formattedEntry,
-  );
+  formattedEntry.filingsAndProceedings =
+    getFilingsAndProceedings(formattedEntry);
 
   if (!formattedEntry.descriptionDisplay) {
     formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
@@ -178,7 +164,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.eventCode = 'MISCL';
   }
 
-  return { ...formattedEntry };
+  return formattedEntry;
 };
 
 const getFilingsAndProceedings = formattedDocketEntry => {
@@ -204,14 +190,106 @@ const getFilingsAndProceedings = formattedDocketEntry => {
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
 };
 
-const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
-  caseDeadlines = caseDeadlines.map(d =>
-    formatCaseDeadline(applicationContext, d),
-  );
+/**
+ * formats trial session fields for display
+ *
+ * @returns formatted trial session fields
+ */
 
-  return caseDeadlines.sort((a, b) =>
-    String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
-  );
+const formattedTrialSessionDetails = ({
+  applicationContext,
+  judgeName,
+  trialDate,
+  trialLocation,
+  trialTime,
+}) => {
+  let formattedTrialCity;
+  let formattedAssociatedJudge;
+  let formattedTrialDate;
+
+  formattedTrialCity = trialLocation || 'Not assigned';
+  formattedAssociatedJudge = judgeName || 'Not assigned';
+
+  if (!trialDate) {
+    formattedTrialDate = 'Not scheduled';
+  } else if (trialTime) {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'YYYY-MM-DD');
+    formattedTrialDate += `T${trialTime}:00`;
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedTrialDate, 'DATE_TIME');
+  } else {
+    formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(trialDate, 'MMDDYY');
+  }
+
+  return {
+    formattedAssociatedJudge,
+    formattedTrialCity,
+    formattedTrialDate,
+  };
+};
+
+/**
+ * sets formatted values reflecting the trial scheduling status
+ * of the given case. Modify the formattedCase argument by reference.
+ */
+const formatTrialSessionScheduling = ({
+  applicationContext,
+  formattedCase,
+}) => {
+  formattedCase.formattedPreferredTrialCity =
+    formattedCase.preferredTrialCity || 'No location selected';
+  if (formattedCase.trialSessionId) {
+    if (formattedCase.status === CASE_STATUS_TYPES.calendared) {
+      formattedCase.showTrialCalendared = true;
+    } else {
+      formattedCase.showScheduled = true;
+    }
+
+    Object.assign(
+      formattedCase,
+      formattedTrialSessionDetails({
+        applicationContext,
+        judgeName: formattedCase.associatedJudge,
+        trialDate: formattedCase.trialDate,
+        trialLocation: formattedCase.trialLocation,
+        trialTime: formattedCase.trialTime,
+      }),
+    );
+
+    // TODO: get trial session note
+  } else if (formattedCase.blocked) {
+    formattedCase.showBlockedFromTrial = true;
+    formattedCase.blockedDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedCase.blockedDate, 'MMDDYY');
+  } else if (formattedCase.highPriority) {
+    formattedCase.formattedTrialDate = 'Not scheduled';
+    formattedCase.formattedAssociatedJudge = 'Not assigned';
+    formattedCase.showPrioritized = true;
+  } else {
+    formattedCase.showNotScheduled = true;
+  }
+
+  // Format hearings
+  if (formattedCase.hearings && formattedCase.hearings.length) {
+    formattedCase.hearings.forEach(hearing => {
+      Object.assign(
+        hearing,
+        formattedTrialSessionDetails({
+          applicationContext,
+          judgeName: hearing.judge && hearing.judge.name,
+          trialDate: hearing.startDate,
+          trialLocation: hearing.trialLocation,
+          trialTime: hearing.startTime,
+        }),
+      );
+    });
+  }
 };
 
 const formatCase = (applicationContext, caseDetail) => {
@@ -245,9 +323,8 @@ const formatCase = (applicationContext, caseDetail) => {
     );
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
-
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
-      entry => entry.pending && entry.servedAt,
+      entry => applicationContext.getUtilities().isPending(entry),
     );
   }
 
@@ -270,45 +347,17 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      if (counsel.representing.includes(caseDetail.contactPrimary.contactId)) {
-        counsel.representingFormatted.push({
-          name: caseDetail.contactPrimary.name,
-          secondaryName: caseDetail.contactPrimary.secondaryName,
-          title: caseDetail.contactPrimary.title,
-        });
-      }
-
-      if (
-        caseDetail.contactSecondary &&
-        counsel.representing.includes(caseDetail.contactSecondary.contactId)
-      ) {
-        counsel.representingFormatted.push({
-          name: caseDetail.contactSecondary.name,
-          secondaryName: caseDetail.contactSecondary.secondaryName,
-          title: caseDetail.contactSecondary.title,
-        });
-      }
-
-      caseDetail.otherPetitioners.forEach(otherPetitioner => {
-        if (counsel.representing.includes(otherPetitioner.contactId)) {
+      caseDetail.petitioners.forEach(p => {
+        if (counsel.representing.includes(p.contactId)) {
           counsel.representingFormatted.push({
-            name: otherPetitioner.name,
-            secondaryName: otherPetitioner.secondaryName,
-            title: otherPetitioner.title,
-          });
-        }
-      });
-
-      caseDetail.otherFilers.forEach(otherFiler => {
-        if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingFormatted.push({
-            name: otherFiler.name,
-            secondaryName: otherFiler.secondaryName,
-            title: otherFiler.title,
+            name: p.name,
+            secondaryName: p.secondaryName,
+            title: p.title,
           });
         }
       });
     }
+
     return counsel;
   };
 
@@ -317,9 +366,8 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   if (result.privatePractitioners) {
-    result.privatePractitioners = result.privatePractitioners.map(
-      formatCounsel,
-    );
+    result.privatePractitioners =
+      result.privatePractitioners.map(formatCounsel);
   }
 
   result.createdAtFormatted = applicationContext
@@ -341,56 +389,7 @@ const formatCase = (applicationContext, caseDetail) => {
     caseDetail.caseCaption || '',
   );
 
-  result.formattedPreferredTrialCity =
-    result.preferredTrialCity || 'No location selected';
-
-  if (result.trialSessionId && result.status !== CASE_STATUS_TYPES.closed) {
-    if (result.status === CASE_STATUS_TYPES.calendared) {
-      result.showTrialCalendared = true;
-    } else {
-      result.showScheduled = true;
-    }
-    result.formattedTrialCity = result.trialLocation || 'Not assigned';
-    result.formattedAssociatedJudge = result.associatedJudge || 'Not assigned';
-    if (result.trialDate) {
-      if (result.trialTime) {
-        result.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(result.trialDate, 'YYYY-MM-DD');
-        result.formattedTrialDate += `T${result.trialTime}:00`;
-        result.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(result.formattedTrialDate, 'DATE_TIME');
-      } else {
-        result.formattedTrialDate = applicationContext
-          .getUtilities()
-          .formatDateString(result.trialDate, 'MMDDYY');
-      }
-    } else {
-      result.formattedTrialDate = 'Not scheduled';
-    }
-  } else if (result.blocked || result.automaticBlocked) {
-    result.showBlockedFromTrial = true;
-    if (result.blocked) {
-      result.blockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(result.blockedDate, 'MMDDYY');
-    }
-    if (result.automaticBlocked) {
-      result.automaticBlockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(result.automaticBlockedDate, 'MMDDYY');
-      if (result.highPriority) {
-        result.showAutomaticBlockedAndHighPriority = true;
-      }
-    }
-  } else if (result.highPriority) {
-    result.formattedTrialDate = 'Not scheduled';
-    result.formattedAssociatedJudge = 'Not assigned';
-    result.showPrioritized = true;
-  } else {
-    result.showNotScheduled = true;
-  }
+  formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
   result.isConsolidatedSubCase = !!(
     result.leadDocketNumber && result.leadDocketNumber !== result.docketNumber
@@ -418,6 +417,8 @@ const formatCase = (applicationContext, caseDetail) => {
   result.canConsolidate = caseEntity.canConsolidate();
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
+  result.showPrintConfirmationLink =
+    result.irsSendDate && !result.docketEntries.some(d => d.isLegacy);
 
   if (result.consolidatedCases) {
     result.consolidatedCases = result.consolidatedCases.map(
@@ -443,7 +444,7 @@ const byIndexSortFunction = (a, b) => {
 
 const getDocketRecordSortFunc = sortByString => {
   const byDate = (a, b) => {
-    const compared = calendarDatesCompared(a.filingDate, b.filingDate);
+    const compared = calculateDifferenceInDays(a.filingDate, b.filingDate);
     if (compared === 0) {
       return byIndexSortFunction(a, b);
     }
@@ -475,17 +476,16 @@ const sortUndefined = (a, b) => {
 const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
-  const result = docketEntries.sort(sortFunc);
+  docketEntries.sort(sortFunc);
   if (isReversed) {
     // reversing AFTER the sort keeps sorting stable
-    return result.reverse().sort(sortUndefined);
+    return docketEntries.reverse().sort(sortUndefined);
   }
-  return result.sort(sortUndefined);
+  return docketEntries.sort(sortUndefined);
 };
 
 const getFormattedCaseDetail = ({
   applicationContext,
-  caseDeadlines = [],
   caseDetail,
   docketRecordSort,
 }) => {
@@ -500,7 +500,7 @@ const getFormattedCaseDetail = ({
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
-  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
+
   return result;
 };
 
@@ -508,10 +508,8 @@ module.exports = {
   TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,
-  getServedPartiesCode,
   sortDocketEntries,
 };

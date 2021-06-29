@@ -1,29 +1,18 @@
-import { applicationContext } from '../../src/applicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-  applicationContext,
-);
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const privatePractitionerSeesStrickenDocketEntry = (
   test,
   docketRecordIndex,
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-    expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(test);
 
-    const { formattedDocketEntriesOnDocketRecord } = runCompute(
-      formattedCaseDetail,
-      {
-        state: test.getState(),
-      },
-    );
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,

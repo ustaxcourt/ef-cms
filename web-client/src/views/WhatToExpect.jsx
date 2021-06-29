@@ -34,7 +34,7 @@ export const WhatToExpect = () => (
             <Button
               link
               className="usa-link--external text-left mobile-text-wrap"
-              href="https://www.ustaxcourt.gov/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
+              href="https://www.ustaxcourt.gov/resources/forms/Form_4_Statement_of_Taxpayer_Identification_Number.pdf"
               icon="file-pdf"
               iconColor="blue"
               overrideMargin="margin-right-1"
@@ -53,7 +53,7 @@ export const WhatToExpect = () => (
             <Button
               link
               className="usa-link--external text-left mobile-text-wrap"
-              href="https://www.ustaxcourt.gov/forms/Petition_Simplified_Form_2.pdf"
+              href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
               icon="file-pdf"
               iconColor="blue"
               overrideMargin="margin-right-1"
@@ -73,7 +73,7 @@ export const WhatToExpect = () => (
             <Button
               link
               className="usa-link--external text-left mobile-text-wrap"
-              href="https://www.ustaxcourt.gov/forms/Ownership_Disclosure_Statement_Form_6.pdf"
+              href="https://www.ustaxcourt.gov/resources/forms/Ownership_Disclosure_Statement_Form_6.pdf"
               icon="file-pdf"
               iconColor="blue"
               overrideMargin="margin-right-1"

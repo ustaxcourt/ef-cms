@@ -1,4 +1,4 @@
-FROM cypress/base:12.13.0
+FROM node:14.16-slim
 
 WORKDIR /home/build
 
@@ -10,4 +10,4 @@ COPY package-lock.json /home/build/nodejs/package-lock.json
 RUN cd /home/build/nodejs/ && npm ci
 RUN zip -r puppeteer_lambda_layer.zip nodejs
 
-CMD echo "zip has been created"
+CMD echo "puppeteer zip has been created"

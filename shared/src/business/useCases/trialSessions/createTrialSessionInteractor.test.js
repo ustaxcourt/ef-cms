@@ -43,8 +43,7 @@ describe('createTrialSessionInteractor', () => {
     });
 
     await expect(
-      createTrialSessionInteractor({
-        applicationContext,
+      createTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       }),
     ).rejects.toThrow();
@@ -60,8 +59,7 @@ describe('createTrialSessionInteractor', () => {
     let error;
 
     try {
-      await createTrialSessionInteractor({
-        applicationContext,
+      await createTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
       });
     } catch (e) {
@@ -72,8 +70,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('creates a trial session successfully', async () => {
-    await createTrialSessionInteractor({
-      applicationContext,
+    await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });
 
@@ -83,8 +80,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Motion/Hearing',
@@ -95,8 +91,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('sets the trial session as calendared if it is a Special session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
         sessionType: 'Special',
@@ -107,8 +102,7 @@ describe('createTrialSessionInteractor', () => {
   });
 
   it('does not set the trial session as calendared if it is a Regular session type', async () => {
-    const result = await createTrialSessionInteractor({
-      applicationContext,
+    const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });
 

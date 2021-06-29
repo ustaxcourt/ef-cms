@@ -8,7 +8,7 @@ export const MessagesIndividualCompleted = connect(
   function MessagesIndividualCompleted({ formattedMessages }) {
     return (
       <>
-        <table className="usa-table work-queue subsection">
+        <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
@@ -20,10 +20,10 @@ export const MessagesIndividualCompleted = connect(
               <th>Case Title</th>
             </tr>
           </thead>
-          {formattedMessages.map((message, idx) => {
+          {formattedMessages.map(message => {
             return (
-              <tbody key={idx}>
-                <tr key={idx}>
+              <tbody key={`message-individual-${message.messageId}`}>
+                <tr>
                   <td aria-hidden="true" className="focus-toggle" />
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
@@ -38,7 +38,7 @@ export const MessagesIndividualCompleted = connect(
                       <Button
                         link
                         className="padding-0"
-                        href={`/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`}
+                        href={message.messageDetailLink}
                       >
                         {message.subject}
                       </Button>

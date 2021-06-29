@@ -11,6 +11,8 @@ import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCActio
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCompleteDocketEntryAlertAction } from '../actions/DocketEntry/setCompleteDocketEntryAlertAction';
+import { setPaperServicePartiesAction } from '../actions/setPaperServicePartiesAction';
+import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -28,7 +30,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       createMessageAction,
       stopShowValidationAction,
       completeDocketEntryQCAction,
-      clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
@@ -38,7 +39,10 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setCaseAction,
       setAlertSuccessAction,
       getMessagesForCaseAction,
+      setPdfPreviewUrlAction,
+      setPaperServicePartiesAction,
       navigateToDocumentQCAction,
+      clearFormAction,
     ]),
   },
 ];

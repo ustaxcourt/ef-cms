@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  baseExternalDocumentValidation,
+  externalDocumentDecorator,
+} = require('./ExternalDocumentBase');
+const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -17,9 +21,7 @@ const {
  */
 function ExternalDocumentStandard() {}
 ExternalDocumentStandard.prototype.init = function init(rawProps) {
-  this.category = rawProps.category;
-  this.documentTitle = rawProps.documentTitle;
-  this.documentType = rawProps.documentType;
+  externalDocumentDecorator(this, rawProps);
   this.selectedCases = rawProps.selectedCases;
 };
 
@@ -32,8 +34,7 @@ ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
 };
 
 ExternalDocumentStandard.schema = joi.object({
-  category: JoiValidationConstants.STRING.required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
+  ...baseExternalDocumentValidation,
   documentType: JoiValidationConstants.STRING.required().when('selectedCases', {
     is: joi.array().min(1).required(),
     then: JoiValidationConstants.STRING.invalid('Proposed Stipulated Decision'),

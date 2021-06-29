@@ -12,13 +12,9 @@ exports.getCaseForPublicDocketSearchLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getCaseForPublicDocketSearchInteractor({
-          applicationContext,
+        .getCaseForPublicDocketSearchInteractor(applicationContext, {
           docketNumber: event.pathParameters.docketNumber,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

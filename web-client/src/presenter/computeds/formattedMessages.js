@@ -13,13 +13,14 @@ export const getFormattedMessages = ({ applicationContext, messages }) => {
         message.createdAt,
         applicationContext,
       ),
+      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
     }))
     .sort((a, b) => {
       return a.createdAt.localeCompare(b.createdAt);
     });
 
   const inProgressMessages = formattedCaseMessages.filter(
-    message => !message.isRepliedTo,
+    message => !message.isRepliedTo && !message.isCompleted,
   );
   const completedMessages = formattedCaseMessages.filter(
     message => message.isCompleted,

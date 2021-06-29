@@ -3,6 +3,8 @@ import { state } from 'cerebral';
 
 export const setupPercentDone = (files, store) => {
   const loadedAmounts = {};
+  // O.K. to use Date constructor for calculating time duration
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const startTime = new Date();
   const totalSizes = {};
 
@@ -31,6 +33,8 @@ export const setupPercentDone = (files, store) => {
       }
       loadedAmounts[key] = isDone ? totalSizes[key] : loaded;
       const totalSize = calculateTotalSize();
+      // O.K. to use Date constructor for calculating time duration
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       const timeElapsed = new Date() - startTime;
       const uploadedBytes = calculateTotalLoaded();
       const uploadSpeed = uploadedBytes / (timeElapsed / 1000);
@@ -114,8 +118,7 @@ export const createCaseFromPaperAction = async ({
   try {
     caseDetail = await applicationContext
       .getUseCases()
-      .filePetitionFromPaperInteractor({
-        applicationContext,
+      .filePetitionFromPaperInteractor(applicationContext, {
         applicationForWaiverOfFilingFeeFile,
         applicationForWaiverOfFilingFeeUploadProgress:
           progressFunctions.waiverOfFilingFee,

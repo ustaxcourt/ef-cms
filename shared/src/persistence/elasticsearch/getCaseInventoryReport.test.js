@@ -61,11 +61,6 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        match: { 'entityName.S': 'Case' },
-      },
-      { match: { 'pk.S': 'case|' } },
-      { match: { 'sk.S': 'case|' } },
-      {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
@@ -106,11 +101,8 @@ describe('getCaseInventoryReport', () => {
 
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
-      { match: { 'entityName.S': 'Case' } },
-      { match: { 'pk.S': 'case|' } },
-      { match: { 'sk.S': 'case|' } },
       {
-        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
+        term: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
@@ -150,15 +142,10 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        match: { 'entityName.S': 'Case' },
-      },
-      { match: { 'pk.S': 'case|' } },
-      { match: { 'sk.S': 'case|' } },
-      {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
       {
-        match_phrase: { 'status.S': CASE_STATUS_TYPES.new },
+        term: { 'status.S': CASE_STATUS_TYPES.new },
       },
     ]);
 
@@ -262,15 +249,10 @@ describe('getCaseInventoryReport', () => {
     expect(searchSpy).toHaveBeenCalled();
     expect(searchSpy.mock.calls[0][0].body.query.bool.must).toEqual([
       {
-        match: { 'entityName.S': 'Case' },
-      },
-      { match: { 'pk.S': 'case|' } },
-      { match: { 'sk.S': 'case|' } },
-      {
         match_phrase: { 'associatedJudge.S': CHIEF_JUDGE },
       },
     ]);
 
-    expect(results).toEqual({ foundCases: [], totalCount: undefined });
+    expect(results).toEqual({ foundCases: [], totalCount: 0 });
   });
 });

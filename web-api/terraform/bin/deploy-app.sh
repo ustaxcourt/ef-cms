@@ -13,6 +13,7 @@ ENVIRONMENT=$1
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
+[ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 
 
 echo "Running terraform with the following environment configs:"
@@ -27,6 +28,15 @@ echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
 echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
+echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
+echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
+
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"1.0.0"* ]]; then
+  echo "Please set your terraform version to 1.0.0 before deploying."
+  exit 1
+fi
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
@@ -49,31 +59,37 @@ fi
 
 npm run build:assets
 
-# build the cognito authorizer, api, and api-public with parcel
-pushd ../template/lambdas
-npx parcel build websockets.js cron.js streams.js log-forwarder.js cognito-authorizer.js cognito-triggers.js api-public.js api.js --target node --bundle-node-modules --no-minify
-popd
-
 # exit on any failure
 set -eo pipefail
+# build the cognito authorizer, api, and api-public with web pack
+npm run build:lambda:api
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-  GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
+  BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+  GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-    GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
   else
-    GREEN_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-    BLUE_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
   fi
+fi
+
+if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
+else
+  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
 fi
 
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
@@ -83,7 +99,6 @@ export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
-export TF_VAR_honeybadger_key=$CIRCLE_HONEYBADGER_API_KEY
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
@@ -93,7 +108,10 @@ export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
+export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
+export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
+export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan
-terraform apply --auto-approve
+terraform plan -out execution-plan
+terraform apply -auto-approve execution-plan

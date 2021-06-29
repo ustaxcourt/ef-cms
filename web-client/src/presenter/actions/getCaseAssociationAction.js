@@ -21,29 +21,33 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
     const docketNumber = get(state.caseDetail.docketNumber);
 
     isAssociated = some(caseDetailPractitioners, { userId: user.userId });
-
     if (!isAssociated) {
       pendingAssociation = await applicationContext
         .getUseCases()
-        .verifyPendingCaseForUserInteractor({
-          applicationContext,
+        .verifyPendingCaseForUserInteractor(applicationContext, {
           docketNumber,
           userId: user.userId,
         });
     }
   } else if (user.role === USER_ROLES.irsPractitioner) {
     const caseDetailRespondents = get(state.caseDetail.irsPractitioners);
+
     isAssociated = some(caseDetailRespondents, { userId: user.userId });
   } else if (user.role === USER_ROLES.petitioner) {
-    const caseUserId = get(state.caseDetail.userId);
-    isAssociated = caseUserId === user.userId;
-  } else if (user.role === USER_ROLES.irsSuperuser) {
-    const documents = get(state.caseDetail.docketEntries);
+    const caseDetail = get(state.caseDetail);
 
-    const isPetitionServed = !!documents.find(
-      doc => doc.documentType === 'Petition',
-    ).servedAt;
-    isAssociated = isPetitionServed;
+    isAssociated = !!applicationContext
+      .getUtilities()
+      .getPetitionerById(caseDetail, user.userId);
+  } else if (user.role === USER_ROLES.irsSuperuser) {
+    const caseDetail = get(state.caseDetail);
+    const caseHasServedDocketEntries = applicationContext
+      .getUtilities()
+      .caseHasServedDocketEntries(caseDetail);
+
+    isAssociated = caseHasServedDocketEntries;
+  } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
+    isAssociated = true;
   }
 
   return { isAssociated, pendingAssociation };

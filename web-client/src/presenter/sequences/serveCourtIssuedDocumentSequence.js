@@ -7,6 +7,7 @@ import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPap
 import { serveCourtIssuedDocumentAction } from '../actions/serveCourtIssuedDocumentAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
@@ -25,7 +26,7 @@ export const serveCourtIssuedDocumentSequence = showProgressSequenceDecorator([
       followRedirectAction,
       {
         default: navigateToCaseDetailAction,
-        success: [],
+        success: [setDocumentToDisplayFromDocumentIdAction],
       },
     ],
     yes: [navigateToPrintPaperServiceAction],

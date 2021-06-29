@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const caseDetailSubnavHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
+  const { USER_ROLES } = applicationContext.getConstants();
   const isInternalUser = applicationContext
     .getUtilities()
     .isInternalUser(user.role);
@@ -15,14 +16,21 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
   const selectedCaseInformationTab =
     primaryTab === 'caseInformation' ? caseInformationTab : primaryTab;
 
+  const hasPendingItems = get(state.caseDetail.hasPendingItems);
+  const caseDeadlines = get(state.caseDeadlines);
+  const isIrsPractitioner = user.role === USER_ROLES.irsPractitioner;
+
   return {
     selectedCaseInformationTab,
     showCaseInformationTab:
-      isInternalUser || (!isInternalUser && userAssociatedWithCase),
+      isInternalUser ||
+      (!isInternalUser && userAssociatedWithCase) ||
+      isIrsPractitioner,
     showCorrespondenceTab: isInternalUser,
     showDraftsTab: isInternalUser,
     showMessagesTab: isInternalUser,
     showNotesTab: isInternalUser,
+    showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,
   };
 };

@@ -10,8 +10,7 @@ exports.getCompletedMessagesForUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getCompletedMessagesForUserInteractor({
-        applicationContext,
+      .getCompletedMessagesForUserInteractor(applicationContext, {
         userId: event.pathParameters.userId,
       });
   });

@@ -2,6 +2,7 @@ import { BigHeader } from './../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInformation } from './CaseInformation';
 import { ErrorNotification } from './../ErrorNotification';
+import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
 import { IRSNotice } from './IRSNotice';
@@ -59,7 +60,9 @@ export const StartCaseInternal = connect(
                     tabName="irsNotice"
                     title="IRS Notice"
                   >
-                    <IRSNotice />
+                    <div className="blue-container">
+                      <IRSNotice validationName="validateCaseDetailSequence" />
+                    </div>
                   </Tab>
                 </Tabs>
               </div>
@@ -118,6 +121,12 @@ export const StartCaseInternal = connect(
             </div>
           </div>
         </section>
+
+        {showModal === 'FileUploadErrorModal' && (
+          <FileUploadErrorModal
+            confirmSequence={submitPetitionFromPaperSequence}
+          />
+        )}
       </>
     );
   },

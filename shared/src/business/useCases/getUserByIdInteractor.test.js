@@ -27,8 +27,7 @@ describe('getUserByIdInteractor', () => {
     );
 
     await expect(
-      getUserByIdInteractor({
-        applicationContext,
+      getUserByIdInteractor(applicationContext, {
         userId: '4f67802c-1948-4749-b070-38f7316b15c5',
       }),
     ).rejects.toThrow('Unauthorized for getting practitioner user');
@@ -45,8 +44,7 @@ describe('getUserByIdInteractor', () => {
     );
 
     await expect(
-      getUserByIdInteractor({
-        applicationContext,
+      getUserByIdInteractor(applicationContext, {
         userId: '4f67802c-1948-4749-b070-38f7316b15c5',
       }),
     ).rejects.toThrow(
@@ -60,8 +58,7 @@ describe('getUserByIdInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(MOCK_RETRIEVED_USER);
 
-    const user = await getUserByIdInteractor({
-      applicationContext,
+    const user = await getUserByIdInteractor(applicationContext, {
       userId: '4f67802c-1948-4749-b070-38f7316b15c5',
     });
 

@@ -13,9 +13,8 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral store used for
  * getting props.key and props.value
  * @param {object} providers.store the cerebral store
- * @returns {object} props
  */
-export const updatePartyTypeAction = async ({
+export const updatePartyTypeAction = ({
   applicationContext,
   get,
   props,
@@ -23,6 +22,7 @@ export const updatePartyTypeAction = async ({
 }) => {
   let partyType = '';
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+
   if (props.key === 'filingType') {
     if (props.value === 'Myself' || props.value === 'Individual petitioner') {
       partyType = PARTY_TYPES.petitioner;
@@ -79,20 +79,16 @@ export const updatePartyTypeAction = async ({
 
     const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
-    store.set(
-      state.form.contactPrimary,
-      (showContacts.contactPrimary && {
-        countryType: COUNTRY_TYPES.DOMESTIC,
-      }) ||
-        {},
-    );
-    store.set(
-      state.form.contactSecondary,
-      (showContacts.contactSecondary && {
-        countryType: COUNTRY_TYPES.DOMESTIC,
-      }) ||
-        {},
-    );
+    ['contactPrimary', 'contactSecondary'].forEach(contact => {
+      store.set(
+        state.form[contact],
+        showContacts[contact]
+          ? {
+              countryType: COUNTRY_TYPES.DOMESTIC,
+            }
+          : {},
+      );
+    });
   }
 
   if (get(state.form.filingType) !== 'A business') {

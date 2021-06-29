@@ -10,8 +10,7 @@ exports.deleteCounselFromCaseLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .deleteCounselFromCaseInteractor({
-        applicationContext,
+      .deleteCounselFromCaseInteractor(applicationContext, {
         ...event.pathParameters,
       });
   });

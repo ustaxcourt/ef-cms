@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     loadDefaultDraftViewerDocumentToDisplaySequence:
       sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence:
@@ -16,7 +16,7 @@ export const DraftDocumentViewer = connect(
       state.viewerDraftDocumentToDisplay.docketEntryId,
   },
   function DraftDocumentViewer({
-    formattedCaseDetail,
+    formattedDocketEntries,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay,
@@ -30,41 +30,43 @@ export const DraftDocumentViewer = connect(
       <>
         <div className="grid-row grid-gap-5">
           <div className="grid-col-4">
-            <div className="border border-base-lighter document-viewer--documents">
+            <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list-container">
               <div className="grid-row padding-left-205 grid-header">
                 <div className="grid-col-3">Created</div>
                 <div className="grid-col-9">Document</div>
               </div>
-              {formattedCaseDetail.formattedDraftDocuments.map(
-                draftDocument => (
-                  <Button
-                    className={classNames(
-                      'usa-button--unstyled attachment-viewer-button',
-                      viewerDraftDocumentIdToDisplay ===
-                        draftDocument.docketEntryId && 'active',
-                    )}
-                    isActive={
-                      viewerDraftDocumentIdToDisplay ===
-                      draftDocument.docketEntryId
-                    }
-                    key={draftDocument.docketEntryId}
-                    onClick={() => {
-                      setViewerDraftDocumentToDisplaySequence({
-                        viewerDraftDocumentToDisplay: draftDocument,
-                      });
-                    }}
-                  >
-                    <div className="grid-row margin-left-205">
-                      <div className="grid-col-3">
-                        {draftDocument.createdAtFormatted}
+              <div className="document-viewer--documents-list">
+                {formattedDocketEntries.formattedDraftDocuments.map(
+                  draftDocument => (
+                    <Button
+                      className={classNames(
+                        'usa-button--unstyled attachment-viewer-button',
+                        viewerDraftDocumentIdToDisplay ===
+                          draftDocument.docketEntryId && 'active',
+                      )}
+                      isActive={
+                        viewerDraftDocumentIdToDisplay ===
+                        draftDocument.docketEntryId
+                      }
+                      key={draftDocument.docketEntryId}
+                      onClick={() => {
+                        setViewerDraftDocumentToDisplaySequence({
+                          viewerDraftDocumentToDisplay: draftDocument,
+                        });
+                      }}
+                    >
+                      <div className="grid-row margin-left-205">
+                        <div className="grid-col-3">
+                          {draftDocument.createdAtFormatted}
+                        </div>
+                        <div className="grid-col-9">
+                          {draftDocument.descriptionDisplay}
+                        </div>
                       </div>
-                      <div className="grid-col-9">
-                        {draftDocument.descriptionDisplay}
-                      </div>
-                    </div>
-                  </Button>
-                ),
-              )}
+                    </Button>
+                  ),
+                )}
+              </div>
             </div>
           </div>
 

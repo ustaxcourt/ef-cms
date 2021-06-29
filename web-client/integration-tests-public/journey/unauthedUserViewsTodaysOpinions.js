@@ -1,28 +1,37 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOpinions = (test, testClient) => {
+export const unauthedUserViewsTodaysOpinions = test => {
   return it('should view todays opinions', async () => {
     await refreshElasticsearchIndex();
 
     await test.runSequence('gotoTodaysOpinionsSequence', {});
 
-    expect(test.getState('todaysOpinions')).toEqual(
+    const todaysOpinions = test.getState('todaysOpinions');
+
+    expect(todaysOpinions).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentType: 'T.C. Opinion',
+          judge: 'Judge Pugh',
           numberOfPages: 1,
+        }),
+        expect.objectContaining({
+          documentType: 'Order of Service of Transcript (Bench Opinion)',
+          signedJudgeName: 'Maurice B. Foley',
         }),
       ]),
     );
 
-    await test.runSequence('openCaseDocumentDownloadUrlSequence', {
-      docketEntryId: testClient.docketEntryId,
-      docketNumber: testClient.docketNumber,
-      isPublic: true,
-    });
+    for (let todaysOpinion of todaysOpinions) {
+      await test.runSequence('openCaseDocumentDownloadUrlSequence', {
+        docketEntryId: todaysOpinion.docketEntryId,
+        docketNumber: todaysOpinion.docketNumber,
+        isPublic: true,
+        useSameTab: true,
+      });
 
-    // this value is set in the mocked out window.open method in helpers.js
-    expect(testClient.getState('openedUrl')).toBeDefined();
-    testClient.setState('openedUrl', undefined);
+      expect(window.location.href).toContain(todaysOpinion.docketEntryId);
+      window.location.href = undefined;
+    }
   });
 };

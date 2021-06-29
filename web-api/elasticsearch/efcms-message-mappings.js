@@ -1,7 +1,7 @@
 module.exports = {
   properties: {
     'caseStatus.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'caseTitle.S': {
       type: 'text',
@@ -13,10 +13,10 @@ module.exports = {
       type: 'text',
     },
     'completedBySection.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'completedByUserId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'completedMessage.S': {
       type: 'text',
@@ -25,19 +25,19 @@ module.exports = {
       type: 'date',
     },
     'docketNumberWithSuffix.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'entityName.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'from.S': {
       type: 'text',
     },
     'fromSection.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'fromUserId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'indexedTimestamp.N': {
       type: 'text',
@@ -52,7 +52,7 @@ module.exports = {
       type: 'text',
     },
     'parentMessageId.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'subject.S': {
       type: 'text',
@@ -61,10 +61,10 @@ module.exports = {
       type: 'text',
     },
     'toSection.S': {
-      type: 'text',
+      type: 'keyword',
     },
     'toUserId.S': {
-      type: 'text',
+      type: 'keyword',
     },
   },
 };

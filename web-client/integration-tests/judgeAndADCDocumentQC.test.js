@@ -8,7 +8,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumentForCase';
+import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
@@ -47,7 +47,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
       test.createdCases.push(caseDetail.docketNumber);
       test.docketNumber = caseDetail.docketNumber;
     });
-    petitionerFilesDocumentForCase(test, fakeFile);
+    petitionerFilesADocumentForCase(test, fakeFile);
   }
 
   loginAs(test, 'docketclerk@example.com');
@@ -64,7 +64,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     await getFormattedDocumentQCSectionInbox(test);
     const judgeDocketSectionQCInboxCountAfter = getSectionInboxCount(test);
     expect(judgeDocketSectionQCInboxCountAfter).toBe(
-      judgeDocketSectionQCInboxCountBefore + 8,
+      judgeDocketSectionQCInboxCountBefore + 2,
     );
   });
 
@@ -73,7 +73,7 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
     await getFormattedDocumentQCSectionInbox(test);
     const adcDocketSectionQCInboxCountAfter = getSectionInboxCount(test);
     expect(adcDocketSectionQCInboxCountAfter).toBe(
-      adcDocketSectionQCInboxCountBefore + 4,
+      adcDocketSectionQCInboxCountBefore + 1,
     );
   });
 });

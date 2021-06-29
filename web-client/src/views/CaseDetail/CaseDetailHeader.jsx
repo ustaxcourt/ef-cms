@@ -23,6 +23,102 @@ export const CaseDetailHeader = connect(
     formattedCaseDetail,
     hideActionButtons,
   }) {
+    const externalNonMobileExternalButtons = () => (
+      <NonMobile>
+        <div className="tablet:grid-col-4">
+          {caseDetailHeaderHelper.showFileDocumentButton && (
+            <Button
+              secondary
+              className="tablet-full-width push-right margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
+              icon="file"
+              id="button-file-document"
+            >
+              File a Document
+            </Button>
+          )}
+
+          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+            <Button
+              secondary
+              className="tablet-full-width push-right margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
+              id="button-request-access"
+            >
+              Request Access to Case
+            </Button>
+          )}
+
+          {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
+            <span
+              aria-label="Request for Access Pending"
+              className="usa-tag push-right margin-right-0 padding-x-3"
+            >
+              <span aria-hidden="true">Request for Access Pending</span>
+            </span>
+          )}
+
+          {caseDetailHeaderHelper.showFileFirstDocumentButton && (
+            <Button
+              secondary
+              className="tablet-full-width push-right margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
+              icon="file"
+              id="button-first-irs-document"
+            >
+              File First IRS Document
+            </Button>
+          )}
+        </div>
+      </NonMobile>
+    );
+    const externalMobileExternalButtons = () => (
+      <Mobile>
+        <section className="usa-section grid-container margin-top-2 padding-bottom-3">
+          {caseDetailHeaderHelper.showFileDocumentButton && (
+            <Button
+              className="tablet-full-width margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
+              icon="file"
+              id="button-file-document"
+            >
+              File a Document
+            </Button>
+          )}
+
+          {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
+            <Button
+              className="tablet-full-width margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
+              id="button-request-access"
+            >
+              Request Access to Case
+            </Button>
+          )}
+
+          {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
+            <span
+              aria-label="Request for Access Pending"
+              className="usa-tag margin-right-0 padding-x-3"
+            >
+              <span aria-hidden="true">Request for Access Pending</span>
+            </span>
+          )}
+
+          {caseDetailHeaderHelper.showFileFirstDocumentButton && (
+            <Button
+              className="tablet-full-width margin-right-0"
+              href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
+              icon="file"
+              id="button-first-irs-document"
+            >
+              File First IRS Document
+            </Button>
+          )}
+        </section>
+      </Mobile>
+    );
+
     return (
       <>
         {caseDetailHeaderHelper.showSealedCaseBanner && (
@@ -58,102 +154,66 @@ export const CaseDetailHeader = connect(
                     </CaseLink>
                   </h1>
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
-                    <span
-                      aria-label={`status: ${formattedCaseDetail.status}`}
-                      className="usa-tag"
-                    >
-                      <span aria-hidden="true">
-                        {formattedCaseDetail.status}
-                      </span>
-                    </span>
-                  )}
-
-                  {caseDetailHeaderHelper.hidePublicCaseInformation &&
-                    formattedCaseDetail.associatedJudge && (
+                    <>
                       <span
-                        aria-label="associated judge"
-                        className="margin-left-1 usa-tag"
+                        aria-label={`status: ${formattedCaseDetail.status}`}
+                        className="usa-tag"
                       >
-                        <FontAwesomeIcon
-                          className="margin-right-05"
-                          icon="gavel"
-                          size="1x"
-                        />
-                        {formattedCaseDetail.associatedJudge}
+                        <span aria-hidden="true">
+                          {formattedCaseDetail.status}
+                        </span>
                       </span>
-                    )}
-
-                  {caseDetailHeaderHelper.hidePublicCaseInformation &&
-                    formattedCaseDetail.showBlockedTag && (
-                      <span className="margin-left-1 usa-tag red-tag">
-                        <FontAwesomeIcon
-                          className="margin-right-1"
-                          icon="hand-paper"
-                          size="1x"
-                        />
-                        BLOCKED
-                      </span>
-                    )}
+                      {formattedCaseDetail.associatedJudge && (
+                        <span
+                          aria-label="associated judge"
+                          className="margin-left-1 usa-tag"
+                        >
+                          <FontAwesomeIcon
+                            className="margin-right-05"
+                            icon="gavel"
+                            size="1x"
+                          />
+                          {formattedCaseDetail.associatedJudge}
+                        </span>
+                      )}
+                      {caseDetailHeaderHelper.showBlockedTag && (
+                        <span className="margin-left-1 usa-tag red-tag">
+                          <FontAwesomeIcon
+                            className="margin-right-1"
+                            icon="hand-paper"
+                            size="1x"
+                          />
+                          BLOCKED
+                        </span>
+                      )}
+                    </>
+                  )}
                 </div>
                 <p className="margin-y-0" id="case-title">
                   <span>
                     {formattedCaseDetail.caseCaption} {CASE_CAPTION_POSTFIX}
                   </span>
                 </p>
+                {caseDetailHeaderHelper.showRepresented && (
+                  <p
+                    className="margin-y-0 represented-text "
+                    id="represented-label"
+                  >
+                    <span>
+                      <FontAwesomeIcon
+                        className="margin-right-1"
+                        icon="user-friends"
+                        size="1x"
+                      />
+                      Represented
+                    </span>
+                  </p>
+                )}
               </div>
 
               {!hideActionButtons &&
-                caseDetailHeaderHelper.showExternalButtons && (
-                  <NonMobile>
-                    <div className="tablet:grid-col-4">
-                      {caseDetailHeaderHelper.showFileDocumentButton && (
-                        <Button
-                          secondary
-                          className="tablet-full-width push-right margin-right-0"
-                          href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
-                          icon="file"
-                          id="button-file-document"
-                        >
-                          File a Document
-                        </Button>
-                      )}
-
-                      {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
-                        <Button
-                          secondary
-                          className="tablet-full-width push-right margin-right-0"
-                          href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-                          id="button-request-access"
-                        >
-                          Request Access to Case
-                        </Button>
-                      )}
-
-                      {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
-                        <span
-                          aria-label="Request for Access Pending"
-                          className="usa-tag push-right margin-right-0 padding-x-3"
-                        >
-                          <span aria-hidden="true">
-                            Request for Access Pending
-                          </span>
-                        </span>
-                      )}
-
-                      {caseDetailHeaderHelper.showFileFirstDocumentButton && (
-                        <Button
-                          secondary
-                          className="tablet-full-width push-right margin-right-0"
-                          href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
-                          icon="file"
-                          id="button-first-irs-document"
-                        >
-                          File First IRS Document
-                        </Button>
-                      )}
-                    </div>
-                  </NonMobile>
-                )}
+                caseDetailHeaderHelper.showExternalButtons &&
+                externalNonMobileExternalButtons()}
 
               {!hideActionButtons &&
                 caseDetailHeaderHelper.showCaseDetailHeaderMenu && (
@@ -163,52 +223,9 @@ export const CaseDetailHeader = connect(
           </div>
         </div>
 
-        {!hideActionButtons && caseDetailHeaderHelper.showExternalButtons && (
-          <Mobile>
-            <section className="usa-section grid-container margin-top-2 padding-bottom-3">
-              {caseDetailHeaderHelper.showFileDocumentButton && (
-                <Button
-                  className="tablet-full-width margin-right-0"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/before-you-file-a-document`}
-                  icon="file"
-                  id="button-file-document"
-                >
-                  File a Document
-                </Button>
-              )}
-
-              {caseDetailHeaderHelper.showRequestAccessToCaseButton && (
-                <Button
-                  className="tablet-full-width margin-right-0"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/request-access`}
-                  id="button-request-access"
-                >
-                  Request Access to Case
-                </Button>
-              )}
-
-              {caseDetailHeaderHelper.showPendingAccessToCaseButton && (
-                <span
-                  aria-label="Request for Access Pending"
-                  className="usa-tag margin-right-0 padding-x-3"
-                >
-                  <span aria-hidden="true">Request for Access Pending</span>
-                </span>
-              )}
-
-              {caseDetailHeaderHelper.showFileFirstDocumentButton && (
-                <Button
-                  className="tablet-full-width margin-right-0"
-                  href={`/case-detail/${formattedCaseDetail.docketNumber}/file-a-document`}
-                  icon="file"
-                  id="button-first-irs-document"
-                >
-                  File First IRS Document
-                </Button>
-              )}
-            </section>
-          </Mobile>
-        )}
+        {!hideActionButtons &&
+          caseDetailHeaderHelper.showExternalButtons &&
+          externalMobileExternalButtons()}
       </>
     );
   },

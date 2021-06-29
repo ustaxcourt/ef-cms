@@ -4,20 +4,22 @@ import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
-const modalRoot = document.getElementById('modal-root');
+const modalRoot = window.document.getElementById('modal-root');
 
 export const ModalDialog = ({
-  ariaLiveMode,
   cancelLabel,
   cancelLink = false,
   cancelSequence,
   children,
   className,
+  confirmHref,
   confirmLabel,
   confirmSequence,
+  confirmTarget = '_self',
   message,
   preventCancelOnBlur,
   preventScrolling,
+  showButtons = true,
   title,
   useRunConfirmSequence = false,
 }) => {
@@ -28,60 +30,60 @@ export const ModalDialog = ({
 
   const getEl = () => {
     if (!elRef.current) {
-      elRef.current = document.createElement('div');
+      elRef.current = window.document.createElement('div');
     }
     return elRef.current;
   };
 
   const toggleNoScroll = scrollingOn => {
     if (preventScrolling && scrollingOn) {
-      document.body.classList.add('no-scroll');
-      document.addEventListener('touchmove', touchmoveTriggered, {
+      window.document.body.classList.add('no-scroll');
+      window.document.addEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     } else {
-      document.body.classList.remove('no-scroll');
-      document.removeEventListener('touchmove', touchmoveTriggered, {
+      window.document.body.classList.remove('no-scroll');
+      window.document.removeEventListener('touchmove', touchmoveTriggered, {
         passive: false,
       });
     }
   };
 
-  const runCancelSequence = event => {
-    event.stopPropagation();
+  const runCancelSequence = evt => {
+    evt.stopPropagation();
     cancelSequence.call();
   };
 
-  const runConfirmSequence = event => {
-    event.stopPropagation();
+  const runConfirmSequence = evt => {
+    evt.stopPropagation();
     confirmSequence.call();
   };
 
-  const keydownTriggered = event => {
-    if (event.keyCode === 27) {
-      return blurDialog(event);
+  const keydownTriggered = evt => {
+    if (evt.keyCode === 27) {
+      return blurDialog(evt);
     }
   };
 
-  const touchmoveTriggered = event => {
-    return event.preventDefault();
+  const touchmoveTriggered = evt => {
+    return evt.preventDefault();
   };
 
-  const blurDialog = event => {
+  const blurDialog = evt => {
     if (preventCancelOnBlur) {
       return;
     }
-    return runCancelSequence(event);
+    return runCancelSequence(evt);
   };
 
   useEffect(() => {
     modalRoot.appendChild(getEl());
-    document.addEventListener('keydown', keydownTriggered, false);
+    window.document.addEventListener('keydown', keydownTriggered, false);
     toggleNoScroll(true);
 
     return () => {
       modalRoot.removeChild(getEl());
-      document.removeEventListener('keydown', keydownTriggered, false);
+      window.document.removeEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(false);
     };
   }, []);
@@ -96,18 +98,18 @@ export const ModalDialog = ({
           onClick={blurDialog}
         >
           <div
-            aria-live={ariaLiveMode || 'assertive'}
             aria-modal="true"
             className={classNames('modal-dialog padding-205', className)}
-            role="status"
-            onClick={event => event.stopPropagation()}
+            onClick={evt => evt.stopPropagation()}
           >
             <div className="modal-header grid-container padding-x-0">
               <div className="grid-row">
                 <div className="mobile-lg:grid-col-9">
-                  <h3 className="modal-header__title" tabIndex="-1">
-                    {title}
-                  </h3>
+                  {title && (
+                    <h3 className="modal-header__title" tabIndex="-1">
+                      {title}
+                    </h3>
+                  )}
                 </div>
                 <div className="mobile-lg:grid-col-3">
                   <Button
@@ -128,24 +130,28 @@ export const ModalDialog = ({
             </div>
             {message && <p className="margin-bottom-5">{message}</p>}
             {children}
-            <div className="margin-top-5">
-              <Button
-                className="modal-button-confirm"
-                onClick={runConfirmSequence}
-              >
-                {confirmLabel}
-              </Button>
-              {cancelLabel && (
+            {showButtons && (
+              <div className="margin-top-5">
                 <Button
-                  secondary
-                  className="modal-button-cancel"
-                  link={cancelLink}
-                  onClick={runCancelSequence}
+                  className="modal-button-confirm"
+                  href={confirmHref}
+                  target={confirmTarget}
+                  onClick={runConfirmSequence}
                 >
-                  {cancelLabel}
+                  {confirmLabel}
                 </Button>
-              )}
-            </div>
+                {cancelLabel && (
+                  <Button
+                    secondary
+                    className="modal-button-cancel"
+                    link={cancelLink}
+                    onClick={runCancelSequence}
+                  >
+                    {cancelLabel}
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
         </dialog>
       </FocusLock>

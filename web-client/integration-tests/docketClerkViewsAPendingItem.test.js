@@ -1,4 +1,5 @@
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
+import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
   fakeFile,
   loginAs,
@@ -8,6 +9,7 @@ import {
   uploadProposedStipulatedDecision,
   viewCaseDetail,
 } from './helpers';
+import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -30,6 +32,10 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     };
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   let caseDetail;
   let pendingItemsCount;
 
@@ -49,7 +55,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     });
 
     await test.runSequence('gotoPendingReportSequence');
-    pendingItemsCount = (test.getState('pendingItems') || []).length;
+
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: 'Chief Judge',
+    });
+
+    pendingItemsCount = (test.getState('pendingReports.pendingItems') || [])
+      .length;
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
@@ -70,12 +82,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     await test.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('fetchPendingItemsSequence', {
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    const currentPendingItemsCount = (test.getState('pendingItems') || [])
-      .length;
+    const currentPendingItemsCount = (
+      test.getState('pendingReports.pendingItems') || []
+    ).length;
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
@@ -113,6 +126,12 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       test.getState('pendingReports.pendingItems') || []
     ).length;
 
+    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
+    const firstPendingItemReceivedAtDate = test.getState(
+      'pendingReports.pendingItems[0].receivedAt',
+    );
+    expect(caseReceivedAtDate).not.toEqual(firstPendingItemReceivedAtDate);
+
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 
     await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
@@ -125,5 +144,39 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(
       test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
+  });
+
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(test, fakeFile);
+
+  it('docket clerk views pending report items', async () => {
+    await refreshElasticsearchIndex();
+
+    await test.runSequence('gotoPendingReportSequence');
+
+    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
+    const pendingItems = test.getState('pendingReports.pendingItems');
+    const pendingItem = pendingItems.find(
+      item => item.docketEntryId === test.docketEntryId,
+    );
+
+    expect(pendingItem).toBeDefined();
+
+    const answerPendingReceivedAtFormatted = formatDateString(
+      pendingItem.receivedAt,
+      'MMDDYYYY',
+    );
+    const caseReceivedAtFormatted = formatDateString(
+      caseReceivedAtDate,
+      'MMDDYYYY',
+    );
+
+    expect(answerPendingReceivedAtFormatted).not.toEqual(
+      caseReceivedAtFormatted,
+    );
+    expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
   });
 });

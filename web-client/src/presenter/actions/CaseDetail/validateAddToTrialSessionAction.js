@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 /**
@@ -9,14 +10,18 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateAddToTrialSessionAction = ({ get, path }) => {
-  const { trialSessionId } = get(state.modal);
+  const { calendarNotes, trialSessionId } = get(state.modal);
 
-  let errors = null;
+  let errors = {};
   if (!trialSessionId) {
-    errors = { trialSessionId: 'Select a Trial Session' };
+    errors.trialSessionId = 'Select a Trial Session';
   }
 
-  if (!errors) {
+  if (calendarNotes && calendarNotes.length > 200) {
+    errors.calendarNotes = 'The length of the note must not be over 200';
+  }
+
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({ errors });

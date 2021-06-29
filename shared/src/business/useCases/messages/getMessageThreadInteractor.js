@@ -8,18 +8,18 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * gets a message thread by parent id
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the message
  */
-exports.getMessageThreadInteractor = async ({
+exports.getMessageThreadInteractor = async (
   applicationContext,
-  parentMessageId,
-}) => {
+  { parentMessageId },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MESSAGES)) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 

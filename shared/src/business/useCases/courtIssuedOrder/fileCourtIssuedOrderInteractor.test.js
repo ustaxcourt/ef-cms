@@ -1,10 +1,10 @@
 const {
   applicationContext,
-  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
@@ -20,16 +20,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
   const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
     createdAt: '',
     docketEntries: [
       {
@@ -60,6 +50,19 @@ describe('fileCourtIssuedOrderInteractor', () => {
     docketNumber: '45678-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
@@ -93,8 +96,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      fileCourtIssuedOrderInteractor({
-        applicationContext,
+      fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentType: 'Order to Show Cause',
@@ -106,8 +108,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to case', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
@@ -129,8 +130,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add order document to case and set freeText and draftOrderState.freeText to the document title if it is a generic order (eventCode O)', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -161,8 +161,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should delete draftOrderState properties if they exists on the documentMetadata, after saving the document', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: {},
@@ -196,8 +195,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should add a generic notice document to case, set freeText to the document title, and set the document to signed', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Notice to be nice',
@@ -217,15 +215,15 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(4);
-    const result = applicationContext.getPersistenceGateway().updateCase.mock
-      .calls[0][0].caseToUpdate.docketEntries[3];
+    const result =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });
 
   it('should store documentMetadata.documentContents in S3 and delete from data sent to persistence', async () => {
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentContents: 'I am some document contents',
@@ -257,15 +255,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
   });
 
-  it('should parse pdf contents', async () => {
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: Buffer.from(getFakeFile()),
-      }),
-    });
-
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+  it('should parse and scrape pdf contents', async () => {
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'TC Opinion',
@@ -277,18 +268,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     expect(
-      applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
-        .pdfBuffer instanceof ArrayBuffer,
-    ).toEqual(true);
-
-    expect(
-      Buffer.from(
-        applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
-          .pdfBuffer,
-      )
-        .toString()
-        .indexOf('%PDF'),
-    ).not.toEqual(-1);
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).toHaveBeenCalled();
   });
 
   it('should add order document to most recent message if a parentMessageId is passed in', async () => {
@@ -314,8 +295,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -366,8 +346,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         },
       ]);
 
-    await fileCourtIssuedOrderInteractor({
-      applicationContext,
+    await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to do anything',
@@ -385,10 +364,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,
@@ -397,14 +375,13 @@ describe('fileCourtIssuedOrderInteractor', () => {
 
   it('should throw an error if fails to parse pdf', async () => {
     applicationContext
-      .getUtilities()
-      .scrapePdfContents.mockImplementation(() => {
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockImplementation(() => {
         throw new Error('error parsing pdf');
       });
 
     await expect(
-      fileCourtIssuedOrderInteractor({
-        applicationContext,
+      fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'TC Opinion',

@@ -1,7 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
 import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
-import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
 import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
@@ -32,27 +31,33 @@ export const PublicSearch = connect(
   }) {
     return (
       <>
-        <BigHeader text="Welcome to the U.S. Tax Court’s Case Management System" />
+        <BigHeader text="Search" />
 
         <section className="usa-section grid-container advanced-search">
           <SuccessNotification />
-          <ErrorNotification />
 
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab="case"
+            headingLevel="2"
             onSelect={() => {
               advancedSearchTabChangeSequence();
             }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
-              <p>
+              <p className="margin-top-0">
                 Anyone can search for a case in our system for cases filed{' '}
                 <span className="text-semibold">on or after May 1, 1986</span>.
-                If you aren’t affiliated with that case, you will only see
-                limited information about that case.
               </p>
+              <ul>
+                <li>
+                  {' '}
+                  If you aren’t affiliated with a case, you will only see
+                  limited information about that case.
+                </li>
+                <li>Sealed cases will not display in search results.</li>
+              </ul>
 
               <CaseSearchForm
                 submitAdvancedSearchSequence={
@@ -64,7 +69,12 @@ export const PublicSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab id="tab-order" tabName="order" title="Order">
+            <Tab
+              disabled
+              id="tab-order"
+              tabName="order"
+              title="Order (Coming Soon)"
+            >
               <OrderSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOrderAdvancedSearchSequence
@@ -72,7 +82,12 @@ export const PublicSearch = connect(
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+            <Tab
+              disabled
+              id="tab-opinion"
+              tabName="opinion"
+              title="Opinion (Coming Soon)"
+            >
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOpinionAdvancedSearchSequence

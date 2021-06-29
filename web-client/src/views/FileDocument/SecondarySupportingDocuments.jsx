@@ -21,7 +21,10 @@ export const SecondarySupportingDocuments = connect(
       <>
         {form.hasSecondarySupportingDocuments &&
           form.secondarySupportingDocuments.map((item, idx) => (
-            <SecondarySupportingDocumentForm index={idx} key={idx} />
+            <SecondarySupportingDocumentForm
+              index={idx}
+              key={`secondary-supporting-${item.documentTitle}`}
+            />
           ))}
 
         {fileDocumentHelper.showAddSecondarySupportingDocuments && (

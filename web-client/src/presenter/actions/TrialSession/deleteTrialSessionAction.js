@@ -21,12 +21,16 @@ export const deleteTrialSessionAction = async ({
   try {
     result = await applicationContext
       .getUseCases()
-      .deleteTrialSessionInteractor({
-        applicationContext,
+      .deleteTrialSessionInteractor(applicationContext, {
         trialSessionId,
       });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Trial session could not be deleted.',
+      },
+    });
   }
 
   return path.success({

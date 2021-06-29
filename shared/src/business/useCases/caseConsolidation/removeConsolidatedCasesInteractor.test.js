@@ -70,8 +70,7 @@ describe('removeConsolidatedCasesInteractor', () => {
     });
 
     await expect(
-      removeConsolidatedCasesInteractor({
-        applicationContext,
+      removeConsolidatedCasesInteractor(applicationContext, {
         docketNumber: '102-19',
         docketNumbersToRemove: ['101-19'],
       }),
@@ -79,8 +78,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should try to get the case by its docketNumber', async () => {
-    await removeConsolidatedCasesInteractor({
-      applicationContext,
+    await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '102-19',
       docketNumbersToRemove: ['101-19'],
     });
@@ -92,8 +90,7 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
     await expect(
-      removeConsolidatedCasesInteractor({
-        applicationContext,
+      removeConsolidatedCasesInteractor(applicationContext, {
         docketNumber: '111-11',
         docketNumbersToRemove: ['101-19'],
       }),
@@ -102,8 +99,7 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('Should return a Not Found error if the case to remove cannot be found', async () => {
     await expect(
-      removeConsolidatedCasesInteractor({
-        applicationContext,
+      removeConsolidatedCasesInteractor(applicationContext, {
         docketNumber: '102-19',
         docketNumbersToRemove: ['111-11'],
       }),
@@ -111,8 +107,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should only update the removed case if the case to remove is not the lead case', async () => {
-    await removeConsolidatedCasesInteractor({
-      applicationContext,
+    await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '101-19',
       docketNumbersToRemove: ['102-19'],
     });
@@ -130,8 +125,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and all other currently consolidated cases if the case to remove is the lead case', async () => {
-    await removeConsolidatedCasesInteractor({
-      applicationContext,
+    await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '102-19',
       docketNumbersToRemove: ['101-19'],
     });
@@ -165,8 +159,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original lead case if there is only one case remaining after removal', async () => {
-    await removeConsolidatedCasesInteractor({
-      applicationContext,
+    await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '104-19',
       docketNumbersToRemove: ['105-19'],
     });
@@ -193,8 +186,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original non-lead case if there is only one case remaining after removal', async () => {
-    await removeConsolidatedCasesInteractor({
-      applicationContext,
+    await removeConsolidatedCasesInteractor(applicationContext, {
       docketNumber: '105-19',
       docketNumbersToRemove: ['104-19'],
     });

@@ -12,6 +12,10 @@ describe('chambers user skips signing an order', () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {

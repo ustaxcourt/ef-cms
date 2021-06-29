@@ -27,8 +27,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
     };
 
     await expect(
-      updateQcCompleteForTrialInteractor({
-        applicationContext,
+      updateQcCompleteForTrialInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         qcCompleteForTrial: true,
         trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
@@ -42,12 +41,14 @@ describe('updateQcCompleteForTrialInteractor', () => {
       userId: 'petitionsClerk',
     };
 
-    const result = await updateQcCompleteForTrialInteractor({
+    const result = await updateQcCompleteForTrialInteractor(
       applicationContext,
-      docketNumber: MOCK_CASE.docketNumber,
-      qcCompleteForTrial: true,
-      trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
-    });
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        qcCompleteForTrial: true,
+        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
+      },
+    );
     expect(result.qcCompleteForTrial).toEqual({
       '10aa100f-0330-442b-8423-b01690c76e3f': true,
     });

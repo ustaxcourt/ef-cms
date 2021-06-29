@@ -1,4 +1,4 @@
-const { compact, isEmpty, isEqual } = require('lodash');
+const { compact, isEmpty, isEqual, partition } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
@@ -19,16 +19,24 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
     DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
   ];
-  caseItem.isHighPriority = highPrioritySuffixes.includes(
+  caseItem.isDocketSuffixHighPriority = highPrioritySuffixes.includes(
     caseItem.docketNumberSuffix,
   );
   return caseItem;
 };
 
 exports.compareTrialSessionEligibleCases = (a, b) => {
-  if (a.isHighPriority && !b.isHighPriority) {
+  if (a.isManuallyAdded && !b.isManuallyAdded) {
     return -1;
-  } else if (!a.isHighPriority && b.isHighPriority) {
+  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
+    return 1;
+  } else if (a.highPriority && !b.highPriority) {
+    return -1;
+  } else if (!a.highPriority && b.highPriority) {
+    return 1;
+  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
+    return -1;
+  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
     return 1;
   } else {
     return exports.compareCasesByDocketNumber(a, b);
@@ -65,10 +73,8 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
     .sort(exports.compareCasesByDocketNumber);
 
-  trialSession.openCases = trialSession.allCases.filter(
-    item => item.removedFromTrial !== true,
-  );
-  trialSession.inactiveCases = trialSession.allCases.filter(
+  [trialSession.inactiveCases, trialSession.openCases] = partition(
+    trialSession.allCases,
     item => item.removedFromTrial === true,
   );
 
@@ -149,7 +155,7 @@ exports.getTrialSessionStatus = ({ applicationContext, session }) => {
     return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
     return SESSION_STATUS_GROUPS.open;
-  } else if (!session.isCalendared) {
+  } else {
     return SESSION_STATUS_GROUPS.new;
   }
 };

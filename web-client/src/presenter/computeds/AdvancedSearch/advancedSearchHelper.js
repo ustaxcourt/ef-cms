@@ -2,11 +2,6 @@ import { state } from 'cerebral';
 
 export const formatSearchResultRecord = (result, { applicationContext }) => {
   const { US_STATES } = applicationContext.getConstants();
-  result.contactPrimary = result.contactPrimary || {};
-  result.contactPrimaryName =
-    result.contactPrimary && result.contactPrimary.name;
-  result.contactSecondaryName =
-    result.contactSecondary && result.contactSecondary.name;
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
@@ -14,16 +9,13 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
-  result.fullStateNamePrimary =
-    US_STATES[result.contactPrimary.state] || result.contactPrimary.state;
-
-  if (
-    result.contactSecondary &&
-    result.contactSecondary.state &&
-    result.contactPrimary.state !== result.contactSecondary.state
-  ) {
-    result.fullStateNameSecondary =
-      US_STATES[result.contactSecondary.state] || result.contactSecondary.state;
+  if (result.petitioners) {
+    result.petitionerFullStateNames = result.petitioners.map(petitioner => {
+      return {
+        contactId: petitioner.contactId,
+        state: US_STATES[petitioner.state] || petitioner.state,
+      };
+    });
   }
 
   return result;
@@ -34,12 +26,10 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-  const {
-    CASE_SEARCH_PAGE_SIZE,
-    COUNTRY_TYPES,
-  } = applicationContext.getConstants();
-  const searchResults = get(state.searchResults);
+  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
+    applicationContext.getConstants();
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
+  const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
   const result = {
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
@@ -54,20 +44,22 @@ export const advancedSearchHelper = (get, applicationContext) => {
     );
 
     if (advancedSearchTab === 'case') {
-      paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
-        searchResult =>
+      paginatedResults.formattedSearchResults =
+        paginatedResults.searchResults.map(searchResult =>
           formatSearchResultRecord(searchResult, { applicationContext }),
-      );
+        );
     } else {
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
 
+    const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
+
+    const showManyResultsMessage = searchResults.length >= MAX_SEARCH_RESULTS;
+
     Object.assign(result, {
       ...paginatedResults,
-      maxResults: applicationContext.getConstants().MAX_SEARCH_RESULTS,
-      showMaxResultsMessage:
-        searchResults.length >=
-        applicationContext.getConstants().MAX_SEARCH_RESULTS,
+      manyResults: MAX_SEARCH_RESULTS,
+      showManyResultsMessage,
     });
   }
 
@@ -80,6 +72,7 @@ export const paginationHelper = (searchResults, currentPage, pageSize) => {
   }
 
   return {
+    numberOfResults: searchResults.length,
     searchResults: searchResults.slice(0, currentPage * pageSize),
     searchResultsCount: searchResults.length,
     showLoadMore: searchResults.length > currentPage * pageSize,

@@ -13,15 +13,14 @@ export const DatePickerComponent = ({
   onBlur,
   onChange,
   optional,
-  value = '',
   values,
 }) => {
   const datePickerRef = useRef();
   const inputRef = useRef();
+
   // YYYY-MM-DD is indeed the format required by `data-default-value`
-  const defaultValue = values
-    ? `${values.year}-${values.month}-${values.day}`
-    : value;
+  const defaultValue = `${values.year}-${values.month}-${values.day}`;
+
   useEffect(() => {
     if (datePickerRef.current) {
       datePicker.on(datePickerRef.current);
@@ -29,23 +28,15 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
-    const input = document.getElementById(`${name}-date`);
+    if (!datePickerRef.current) return;
+    const input = datePickerRef.current.querySelector('input');
     if (!input) return;
-    if (value.indexOf('-') > -1) {
-      const [year, month, day] = value.split('-');
-      input.value = `${month}/${day}/${year}`;
-    } else {
-      input.value = value;
-    }
-  }, [value]);
-
-  useEffect(() => {
-    const input = document.getElementById(`${name}-date`);
-    if (!input) return;
-    if (values && values.month && values.day && values.year) {
+    if (values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
+    } else {
+      input.value = null;
     }
-  }, [values]);
+  }, [datePickerRef, values]);
 
   const splitDate = dateString => {
     if (dateString.includes('/')) {
@@ -62,7 +53,8 @@ export const DatePickerComponent = ({
    (MM/DD/YYY) but instead returns it as YYY/MM/DD **/
 
   useEffect(() => {
-    const input = document.getElementById(`${name}-date`) || inputRef.current;
+    const input =
+      window.document.getElementById(`${name}-date`) || inputRef.current;
 
     input.addEventListener('change', e => {
       if (values) {

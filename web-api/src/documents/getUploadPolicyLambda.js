@@ -8,8 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getUploadPolicyLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext.getUseCases().getUploadPolicyInteractor({
-      applicationContext,
-      key: event.pathParameters.key,
-    });
+    return await applicationContext
+      .getUseCases()
+      .getUploadPolicyInteractor(applicationContext, {
+        key: event.pathParameters.key,
+      });
   });

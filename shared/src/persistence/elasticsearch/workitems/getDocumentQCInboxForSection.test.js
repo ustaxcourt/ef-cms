@@ -26,13 +26,14 @@ describe('getDocumentQCInboxForSection', () => {
             bool: {
               must: [
                 {
-                  match: {
-                    'pk.S': 'section|docket',
-                  },
+                  prefix: { 'pk.S': 'work-item|' },
                 },
                 {
-                  match: {
-                    'sk.S': 'work-item|',
+                  prefix: { 'sk.S': 'work-item|' },
+                },
+                {
+                  term: {
+                    'section.S': 'docket',
                   },
                 },
               ],
@@ -56,6 +57,23 @@ describe('getDocumentQCInboxForSection', () => {
           size: 1000,
         },
         index: 'efcms-work-item',
+      },
+    });
+  });
+
+  it('queries the search client for work items with the given section and a judgeUserName', async () => {
+    const mockJudgeName = 'Ashford';
+    await getDocumentQCInboxForSection({
+      applicationContext,
+      judgeUserName: mockJudgeName,
+      section: 'docket',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[3],
+    ).toEqual({
+      match: {
+        'associatedJudge.S': mockJudgeName,
       },
     });
   });

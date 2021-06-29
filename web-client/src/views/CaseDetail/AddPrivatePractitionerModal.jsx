@@ -9,10 +9,10 @@ import classNames from 'classnames';
 export const AddPrivatePractitionerModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseDetail: state.formattedCaseDetail,
     caseDetailPractitionerSearchHelper:
       state.caseDetailPractitionerSearchHelper,
     confirmSequence: sequences.associatePrivatePractitionerWithCaseSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateSequence: sequences.validateAddPrivatePractitionerSequence,
@@ -20,9 +20,9 @@ export const AddPrivatePractitionerModal = connect(
   },
   function AddPrivatePractitionerModal({
     cancelSequence,
-    caseDetail,
     caseDetailPractitionerSearchHelper,
     confirmSequence,
+    formattedCaseDetail,
     modal,
     updateModalValueSequence,
     validateSequence,
@@ -47,8 +47,7 @@ export const AddPrivatePractitionerModal = connect(
                 Counsel match(es) found
               </legend>
 
-              {caseDetailPractitionerSearchHelper.practitionerSearchResultsCount ===
-                1 && (
+              {caseDetailPractitionerSearchHelper.showOnePractitioner && (
                 <span>
                   {
                     caseDetailPractitionerSearchHelper
@@ -68,8 +67,7 @@ export const AddPrivatePractitionerModal = connect(
                 </span>
               )}
               <div className="practitioner-matches">
-                {caseDetailPractitionerSearchHelper.practitionerSearchResultsCount >
-                  1 &&
+                {caseDetailPractitionerSearchHelper.showMultiplePractitioners &&
                   caseDetailPractitionerSearchHelper.practitionerMatchesFormatted.map(
                     (counsel, idx) => (
                       <div
@@ -78,7 +76,7 @@ export const AddPrivatePractitionerModal = connect(
                           'padding-1',
                           counsel.isAlreadyInCase && 'bg-gold',
                         )}
-                        key={idx}
+                        key={counsel.userId}
                       >
                         {counsel.isAlreadyInCase && (
                           <div className="float-right text-italic padding-right-1">
@@ -124,59 +122,39 @@ export const AddPrivatePractitionerModal = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.representingPrimary}>
+          <FormGroup errorText={validationErrors.representing}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend id="representing-legend">
                 Who is this counsel representing?
               </legend>
-              <div className="usa-checkbox">
-                <input
-                  aria-describedby="representing-legend"
-                  checked={modal.representingPrimary || false}
-                  className="usa-checkbox__input"
-                  id="party-primary"
-                  name="representingPrimary"
-                  type="checkbox"
-                  onChange={e => {
-                    updateModalValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label  inline-block"
-                  htmlFor="party-primary"
-                >
-                  {caseDetail.contactPrimary.name}
-                </label>
-              </div>
 
-              {caseDetail.contactSecondary && caseDetail.contactSecondary.name && (
-                <div className="usa-checkbox">
+              {formattedCaseDetail.petitioners.map(petitioner => (
+                <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
                     aria-describedby="representing-legend"
-                    checked={modal.representingSecondary || false}
+                    checked={
+                      modal.representingMap[petitioner.contactId] || false
+                    }
                     className="usa-checkbox__input"
-                    id="party-secondary"
-                    name="representingSecondary"
+                    id={`representing-${petitioner.contactId}`}
+                    name={`representingMap.${petitioner.contactId}`}
                     type="checkbox"
                     onChange={e => {
                       updateModalValueSequence({
                         key: e.target.name,
                         value: e.target.checked,
                       });
+                      validateSequence();
                     }}
                   />
                   <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="party-secondary"
+                    className="usa-checkbox__label  inline-block"
+                    htmlFor={`representing-${petitioner.contactId}`}
                   >
-                    {caseDetail.contactSecondary.name}
+                    {petitioner.displayName}
                   </label>
                 </div>
-              )}
+              ))}
             </fieldset>
           </FormGroup>
 

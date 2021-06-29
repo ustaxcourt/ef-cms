@@ -12,15 +12,15 @@ exports.disconnectLambda = event =>
     async ({ applicationContext }) => {
       const results = await applicationContext
         .getUseCases()
-        .onDisconnectInteractor({
-          applicationContext,
+        .onDisconnectInteractor(applicationContext, {
           connectionId: event.requestContext.connectionId,
         });
 
-      applicationContext.logger.info(
-        'Connection',
-        event.requestContext.connectionId,
-      );
+      applicationContext.logger.info('Websocket disconnected', {
+        requestId: {
+          connection: event.requestContext.connectionId,
+        },
+      });
 
       return results;
     },

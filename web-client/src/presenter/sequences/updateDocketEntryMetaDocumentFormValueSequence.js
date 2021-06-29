@@ -1,16 +1,20 @@
 import { chooseMetaTypePathAction } from '../actions/EditDocketRecordEntry/chooseMetaTypePathAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
-import { setFormValueAction } from '../actions/setFormValueAction';
+import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setFileDocumentFormValueAction } from '../actions/setFileDocumentFormValueAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const updateDocketEntryMetaDocumentFormValueSequence = [
-  setFormValueAction,
+  setFileDocumentFormValueAction,
   updateDocketEntryWizardDataAction,
   chooseMetaTypePathAction,
   {
     courtIssued: [],
     document: [
+      getComputedFormDateFactoryAction('serviceDate'),
+      setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
       generateTitlePreviewAction,
     ],

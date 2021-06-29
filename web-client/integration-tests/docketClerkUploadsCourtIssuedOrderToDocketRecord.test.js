@@ -1,3 +1,4 @@
+import { docketClerkAddsDocketEntryForNoticeFromDraft } from './journey/docketClerkAddsDocketEntryForNoticeFromDraft';
 import { docketClerkAddsDocketEntryFromDraft } from './journey/docketClerkAddsDocketEntryFromDraft';
 import { docketClerkEditsAnUploadedCourtIssuedDocument } from './journey/docketClerkEditsAnUploadedCourtIssuedDocument';
 import { docketClerkEditsSignedUploadedCourtIssuedDocument } from './journey/docketClerkEditsSignedUploadedCourtIssuedDocument';
@@ -14,11 +15,15 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const test = setupTest();
-test.draftOrders = [];
 
 describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    test.draftOrders = [];
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -44,4 +49,12 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
 
   loginAs(test, 'petitioner@example.com');
   petitionerViewsCaseDetail(test, { documentCount: 3 });
+
+  loginAs(test, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
+  docketClerkViewsDraftOrder(test, 2);
+  docketClerkAddsDocketEntryForNoticeFromDraft(test, 2);
+
+  loginAs(test, 'petitioner@example.com');
+  petitionerViewsCaseDetail(test, { documentCount: 4 });
 });

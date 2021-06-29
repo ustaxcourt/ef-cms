@@ -17,15 +17,17 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       caseDetail,
     });
 
-  const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
+  const viewerDraftDocumentToDisplayDocketEntryId = get(
+    state.viewerDraftDocumentToDisplay.docketEntryId,
+  );
 
   const formattedDocumentToDisplay =
-    viewerDraftDocumentToDisplay &&
+    viewerDraftDocumentToDisplayDocketEntryId &&
     formattedCaseDetail.draftDocuments &&
     formattedCaseDetail.draftDocuments.find(
       draftDocument =>
         draftDocument.docketEntryId ===
-        viewerDraftDocumentToDisplay.docketEntryId,
+        viewerDraftDocumentToDisplayDocketEntryId,
     );
 
   if (!formattedDocumentToDisplay) {
@@ -82,6 +84,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     documentRequiresSignature && !documentIsSigned;
 
   return {
+    addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDraftDocumentToDisplayDocketEntryId}/add-court-issued-docket-entry`,
+    applySignatureLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`,
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
     showAddDocketEntryButton:

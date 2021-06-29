@@ -15,7 +15,7 @@ describe('setPractitionerDetailOnFormAction', () => {
       },
       props: {
         practitionerDetail: {
-          admissionsDate: '2019-03-01T04:00:00.000Z',
+          admissionsDate: '2019-03-01',
           firstName: 'Chandler',
           lastName: 'Bing',
         },
@@ -23,12 +23,34 @@ describe('setPractitionerDetailOnFormAction', () => {
       state: { form: {} },
     });
     expect(result.state.form).toEqual({
-      admissionsDate: '2019-03-01T04:00:00.000Z',
+      admissionsDate: '2019-03-01',
       day: '1',
       firstName: 'Chandler',
       lastName: 'Bing',
       month: '3',
       year: '2019',
     });
+  });
+
+  it('should set state.form.originalEmail to the value of props.practitionerDetail.email', async () => {
+    const mockEmail = 'test@example.com';
+
+    const { state } = await runAction(setPractitionerDetailOnFormAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        practitionerDetail: {
+          email: mockEmail,
+        },
+      },
+      state: {
+        form: {
+          originalEmail: undefined,
+        },
+      },
+    });
+
+    expect(state.form.originalEmail).toEqual(mockEmail);
   });
 });

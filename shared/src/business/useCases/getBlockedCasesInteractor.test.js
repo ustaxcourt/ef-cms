@@ -18,8 +18,7 @@ describe('getBlockedCasesInteractor', () => {
       },
     ]);
 
-    const results = await getBlockedCasesInteractor({
-      applicationContext,
+    const results = await getBlockedCasesInteractor(applicationContext, {
       trialLocation: 'Boise, Idaho',
     });
 
@@ -41,8 +40,7 @@ describe('getBlockedCasesInteractor', () => {
 
     let error;
     try {
-      await getBlockedCasesInteractor({
-        applicationContext,
+      await getBlockedCasesInteractor(applicationContext, {
         trialLocation: 'Boise, Idaho',
       });
     } catch (err) {

@@ -4,17 +4,11 @@ The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based leg
 
 ### Build Status
 
-#### develop
+[![DeepScan grade](https://deepscan.io/api/teams/8976/projects/17137/branches/383813/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8976&pid=17137&bid=383813)
 
 | develop | prod | staging | test |
 | ------- | ------ | ------- | ---- |
 | [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) |
-
-API | Front-End | Shared Code
---- | --------- | -----------
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br> | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)| [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
-
-[![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
 ## Screenshots of new system
 
@@ -185,8 +179,8 @@ digraph {
 		ElasticsearchEast
 	}
 
-	S3DocumentsEast -> S3DocumentsWest [ 
-		label = "S3 Replication" 
+	S3DocumentsEast -> S3DocumentsWest [
+		label = "S3 Replication"
 	]
 
 	DynamoDBEast -> DynamoDBWest [
@@ -217,7 +211,7 @@ This diagram was created with [Graphviz](https://graphviz.org/), and the source 
 ```dot
 digraph {
 	rankdir="LR"
-	
+
 	Code [shape = doublecircle]
 	node [style = rounded, shape = box]
 
@@ -272,10 +266,11 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 
 ### Prerequisites
 
-- Node v12.13.1
-- npm v6.12.1
+- Node v14.16.0
+- npm v6.14.11
 - ClamAV v0.101.2 (see Setup below)
--  Java 11
+- Java 11
+- jq
 
 ### Setup
 
@@ -284,6 +279,8 @@ For ClamAV, macOS users can do the following:
 - `brew install clamav`
 - `cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`
 - `sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)
+- Installing `jq`
+  - `brew install jq` for macOS users or visit https://stedolan.github.io/jq/download/
 
 Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
 
@@ -328,19 +325,22 @@ admissionsclerk@example.com
 clerkofcourt@example.com
 docketclerk@example.com
 docketclerk1@example.com
+floater@example.com
+general@example.com
 petitionsclerk@example.com
 petitionsclerk1@example.com
+reportersOffice@example.com
 trialclerk@example.com
-judge.armen@example.com
-colvinsChambers@example.com
 judge.ashford@example.com
 ashfordsChambers@example.com
 judge.buch@example.com
 buchsChambers@example.com
-judge.carluzzo@example.com
+stjudge.carluzzo@example.com
 carluzzosChambers@example.com
 judge.cohen@example.com
 cohensChambers@example.com
+judge.colvin@example.com
+colvinsChambers@example.com
 ```
 
 No password is required.
@@ -363,7 +363,10 @@ adc1@example.com – adc5@example.com
 admissionsclerk1@example.com – admissionsclerk5@example.com
 clerkofcourt1@example.com – clerkofcourt5@example.com
 docketclerk1@example.com – docketclerk5@example.com
+floater1@example.com – floater2@example.com
+general1@example.com – general2@example.com
 petitionsclerk1@example.com – petitionsclerk5@example.com
+reportersOffice1@example.com – reportersOffice2@example.com
 trialclerk1@example.com – trialclerk5@example.com
 jashford@example.com
 ashfordsChambers1@example.com - ashfordsChambers5@example.com
@@ -439,3 +442,19 @@ Follow these steps for creating the end of sprint PRs for the court.
 The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
 
 https://squizlabs.github.io/HTML_CodeSniffer/
+
+## To query elasticsearch locally, run this docker container
+
+docker run -p 3030:3030 -d appbaseio/mirage
+
+open your browser to http://localhost:3030
+
+update your .elasticsearch/config/elasticsearch.yml to have the following pasted at the bottom:
+
+```
+http.port: 9200
+http.cors.allow-origin: "/.*/"
+http.cors.enabled: true
+http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type, Content-Length, Authorization
+http.cors.allow-credentials: true
+```

@@ -2,11 +2,14 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
-  JUDGES_CHAMBERS_WITH_LEGACY,
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
 const { createUser, createUserRecords } = require('./createUser');
+
+const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambersWithLegacy();
 
 describe('createUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
@@ -159,7 +162,8 @@ describe('createUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
-        pk: 'section|privatePractitioner',
+        ...privatePractitionerUser,
+        pk: `user|${userId}`,
         sk: `user|${userId}`,
       },
     });
@@ -167,21 +171,12 @@ describe('createUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[1][0],
     ).toMatchObject({
       Item: {
-        pk: `user|${userId}`,
+        pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
         sk: `user|${userId}`,
-        ...privatePractitionerUser,
       },
     });
     expect(
       applicationContext.getDocumentClient().put.mock.calls[2][0],
-    ).toMatchObject({
-      Item: {
-        pk: 'privatePractitioner|Test Private Practitioner',
-        sk: `user|${userId}`,
-      },
-    });
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[3][0],
     ).toMatchObject({
       Item: {
         pk: 'privatePractitioner|PT1234',
@@ -213,9 +208,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[1][0],
       ).toMatchObject({
         Item: {
+          ...petitionsClerkUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...petitionsClerkUser,
         },
       });
     });
@@ -255,9 +250,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
+          ...judgeUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...judgeUser,
         },
       });
     });
@@ -298,79 +293,8 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[2][0],
       ).toMatchObject({
         Item: {
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
           ...judgeUser,
-        },
-      });
-    });
-
-    it('does not persist mapping records for practitioner without barNumber', async () => {
-      await createUserRecords({
-        applicationContext,
-        user: privatePractitionerUser,
-        userId,
-      });
-
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0],
-      ).toMatchObject({
-        Item: {
-          pk: 'section|privatePractitioner',
-          sk: `user|${userId}`,
-        },
-      });
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[1][0],
-      ).toMatchObject({
-        Item: {
           pk: `user|${userId}`,
-          sk: `user|${userId}`,
-          ...privatePractitionerUser,
-        },
-      });
-    });
-
-    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
-      await createUserRecords({
-        applicationContext,
-        user: privatePractitionerUser,
-        userId,
-      });
-
-      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
-        4,
-      );
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[0][0],
-      ).toMatchObject({
-        Item: {
-          pk: 'section|privatePractitioner',
-          sk: `user|${userId}`,
-        },
-      });
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[1][0],
-      ).toMatchObject({
-        Item: {
-          pk: `user|${userId}`,
-          sk: `user|${userId}`,
-          ...privatePractitionerUser,
-        },
-      });
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[2][0],
-      ).toMatchObject({
-        Item: {
-          pk: 'privatePractitioner|Test Private Practitioner',
-          sk: `user|${userId}`,
-        },
-      });
-      expect(
-        applicationContext.getDocumentClient().put.mock.calls[3][0],
-      ).toMatchObject({
-        Item: {
-          pk: 'privatePractitioner|PT1234',
           sk: `user|${userId}`,
         },
       });
@@ -384,13 +308,35 @@ describe('createUser', () => {
       });
 
       expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
-        2,
+        1,
       );
       expect(
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
-          pk: 'section|privatePractitioner',
+          ...privatePractitionerUserWithoutBarNumber,
+          pk: `user|${userId}`,
+          sk: `user|${userId}`,
+        },
+      });
+    });
+
+    it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
+      await createUserRecords({
+        applicationContext,
+        user: privatePractitionerUser,
+        userId,
+      });
+
+      expect(applicationContext.getDocumentClient().put.mock.calls.length).toBe(
+        3,
+      );
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[0][0],
+      ).toMatchObject({
+        Item: {
+          ...privatePractitionerUser,
+          pk: `user|${userId}`,
           sk: `user|${userId}`,
         },
       });
@@ -398,9 +344,16 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[1][0],
       ).toMatchObject({
         Item: {
-          pk: `user|${userId}`,
+          pk: 'privatePractitioner|TEST PRIVATE PRACTITIONER',
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
+        },
+      });
+      expect(
+        applicationContext.getDocumentClient().put.mock.calls[2][0],
+      ).toMatchObject({
+        Item: {
+          pk: 'privatePractitioner|PT1234',
+          sk: `user|${userId}`,
         },
       });
     });
@@ -424,9 +377,9 @@ describe('createUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutSection,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutSection,
         },
       });
     });

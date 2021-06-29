@@ -30,14 +30,7 @@ NewMessage.prototype.init = function init(rawMessage, { applicationContext }) {
   this.toUserId = rawMessage.toUserId;
 };
 
-NewMessage.validationName = 'NewMessage';
-
-NewMessage.VALIDATION_ERROR_MESSAGES = {
-  message: 'Enter a message',
-  subject: 'Enter a subject line',
-  toSection: 'Select a section',
-  toUserId: 'Select a recipient',
-};
+NewMessage.VALIDATION_ERROR_MESSAGES = Message.VALIDATION_ERROR_MESSAGES;
 
 joiValidationDecorator(
   NewMessage,

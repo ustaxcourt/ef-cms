@@ -32,9 +32,107 @@ export const ContactPrimary = connect(
     onChangeSequence,
     parentView,
     updateFormValueAndSecondaryContactInfoSequence,
-    validationErrors,
+    validationErrors = {},
     wrapperClassName,
   }) {
+    const secondaryName = () => (
+      <FormGroup
+        errorText={
+          validationErrors.contactPrimary &&
+          validationErrors.contactPrimary.secondaryName
+        }
+      >
+        <label className="usa-label" htmlFor="secondary-name">
+          {contactsHelper.contactPrimary.secondaryNameLabel}
+        </label>
+        <input
+          autoCapitalize="none"
+          className="usa-input"
+          id="secondary-name"
+          name="contactPrimary.secondaryName"
+          type="text"
+          value={data.contactPrimary.secondaryName || ''}
+          onChange={e => {
+            onChangeSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+        />
+      </FormGroup>
+    );
+
+    const displayTitle = () => (
+      <div className="usa-form-group">
+        <label className="usa-label with-hint" htmlFor="title">
+          Title{' '}
+          {contactsHelper.contactPrimary.titleHint && (
+            <span className="usa-hint">
+              ({contactsHelper.contactPrimary.titleHint})
+            </span>
+          )}
+        </label>
+        <span className="usa-hint">For example, executor, PR, etc.</span>
+        <input
+          autoCapitalize="none"
+          className="usa-input"
+          id="title"
+          name="contactPrimary.title"
+          type="text"
+          value={data.contactPrimary.title || ''}
+          onChange={e => {
+            onChangeSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+        />
+      </div>
+    );
+
+    const inCareOf = () => (
+      <FormGroup
+        errorText={
+          validationErrors.contactPrimary &&
+          validationErrors.contactPrimary.inCareOf
+        }
+      >
+        <label className="usa-label" htmlFor="inCareOf">
+          {contactsHelper.contactPrimary.inCareOfLabel ? (
+            <span>
+              {contactsHelper.contactPrimary.inCareOfLabel}{' '}
+              {contactsHelper.contactPrimary.inCareOfLabelHint && (
+                <span className="usa-hint">
+                  ({contactsHelper.contactPrimary.inCareOfLabelHint})
+                </span>
+              )}
+            </span>
+          ) : (
+            <span>
+              In care of <span className="usa-hint">(optional)</span>
+            </span>
+          )}
+        </label>
+        <input
+          autoCapitalize="none"
+          className="usa-input"
+          id="inCareOf"
+          name="contactPrimary.inCareOf"
+          type="text"
+          value={data.contactPrimary.inCareOf || ''}
+          onBlur={() => {
+            onBlurSequence();
+          }}
+          onChange={e => {
+            onChangeSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+        />
+      </FormGroup>
+    );
+
     return (
       <>
         {parentView === 'StartCase' ? (
@@ -44,11 +142,7 @@ export const ContactPrimary = connect(
         ) : (
           <h4>{contactsHelper.contactPrimary.header}</h4>
         )}
-        <div
-          className={
-            wrapperClassName ? wrapperClassName : 'blue-container contact-group'
-          }
-        >
+        <div className={wrapperClassName || 'blue-container contact-group'}>
           <FormGroup
             errorText={
               validationErrors.contactPrimary &&
@@ -77,104 +171,12 @@ export const ContactPrimary = connect(
             />
           </FormGroup>
 
-          {contactsHelper.contactPrimary.displaySecondaryName && (
-            <FormGroup
-              errorText={
-                validationErrors &&
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.secondaryName
-              }
-            >
-              <label className="usa-label" htmlFor="secondary-name">
-                {contactsHelper.contactPrimary.secondaryNameLabel}
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="secondary-name"
-                name="contactPrimary.secondaryName"
-                type="text"
-                value={data.contactPrimary.secondaryName || ''}
-                onChange={e => {
-                  onChangeSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-          )}
+          {contactsHelper.contactPrimary.displaySecondaryName &&
+            secondaryName()}
 
-          {contactsHelper.contactPrimary.displayTitle && (
-            <div className="usa-form-group">
-              <label className="usa-label with-hint" htmlFor="title">
-                Title{' '}
-                {contactsHelper.contactPrimary.titleHint && (
-                  <span className="usa-hint">
-                    ({contactsHelper.contactPrimary.titleHint})
-                  </span>
-                )}
-              </label>
-              <span className="usa-hint">For example, executor, PR, etc.</span>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="title"
-                name="contactPrimary.title"
-                type="text"
-                value={data.contactPrimary.title || ''}
-                onChange={e => {
-                  onChangeSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          )}
+          {contactsHelper.contactPrimary.displayTitle && displayTitle()}
 
-          {contactsHelper.contactPrimary.displayInCareOf && (
-            <FormGroup
-              errorText={
-                validationErrors.contactPrimary &&
-                validationErrors.contactPrimary.inCareOf
-              }
-            >
-              <label className="usa-label" htmlFor="inCareOf">
-                {contactsHelper.contactPrimary.inCareOfLabel ? (
-                  <span>
-                    {contactsHelper.contactPrimary.inCareOfLabel}{' '}
-                    {contactsHelper.contactPrimary.inCareOfLabelHint && (
-                      <span className="usa-hint">
-                        ({contactsHelper.contactPrimary.inCareOfLabelHint})
-                      </span>
-                    )}
-                  </span>
-                ) : (
-                  <span>
-                    In care of <span className="usa-hint">(optional)</span>
-                  </span>
-                )}
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="inCareOf"
-                name="contactPrimary.inCareOf"
-                type="text"
-                value={data.contactPrimary.inCareOf || ''}
-                onBlur={() => {
-                  onBlurSequence();
-                }}
-                onChange={e => {
-                  onChangeSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </FormGroup>
-          )}
+          {contactsHelper.contactPrimary.displayInCareOf && inCareOf()}
 
           <Country
             bind={bind}

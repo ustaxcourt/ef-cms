@@ -19,7 +19,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
         .getUtilities()
-        .formatDateString(formattedTrialSession.startDate, 'YYYYMMDD');
+        .formatDateString(formattedTrialSession.startDate);
       const nowDateFormatted = applicationContext
         .getUtilities()
         .formatNow('YYYYMMDD');

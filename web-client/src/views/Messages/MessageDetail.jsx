@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CaseDetailSubnavTabs } from '../CaseDetail/CaseDetailSubnavTabs';
 import { CompleteMessageModalDialog } from './CompleteMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from './ConfirmRemoveSignatureModal';
@@ -69,6 +70,7 @@ export const MessageDetail = connect(
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
     isExpanded: state.isExpanded,
+    messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
@@ -78,23 +80,24 @@ export const MessageDetail = connect(
     setMessageDetailViewerDocumentToDisplaySequence:
       sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
+    messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
-    viewerDocumentToDisplay,
   }) {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader className="margin-bottom-0" />
+        <CaseDetailSubnavTabs />
+
         <section className="usa-section grid-container message-detail">
           <SuccessNotification />
           <ErrorNotification />
@@ -196,10 +199,10 @@ export const MessageDetail = connect(
           )}
 
           {formattedMessageDetail.showOlderMessages &&
-            formattedMessageDetail.olderMessages.map((message, idx) => (
+            formattedMessageDetail.olderMessages.map(message => (
               <div
                 className="border border-base-lightest padding-top-2 padding-bottom-2 padding-left-3 padding-right-3"
-                key={idx}
+                key={`older-messages-${message.messageId}`}
               >
                 <SingleMessage indent={true} message={message} />
               </div>
@@ -208,29 +211,29 @@ export const MessageDetail = connect(
           <h2 className="margin-top-5">Attachments</h2>
 
           <div className="grid-row grid-gap-5">
-            <div className="grid-col-4">
-              <div className="border border-base-lighter document-viewer--documents">
+            <div className="grid-col-4 document-viewer--documents-list-container">
+              <div className="border border-base-lighter document-viewer--documents document-viewer--documents-list">
                 {!formattedMessageDetail.attachments.length && (
                   <div className="padding-2">There are no attachments</div>
                 )}
 
                 {formattedMessageDetail.attachments.length > 0 &&
-                  formattedMessageDetail.attachments.map((attachment, idx) => {
+                  formattedMessageDetail.attachments.map(attachment => {
                     return (
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                             attachment.documentId && 'active',
                         )}
                         isActive={
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
-                        key={idx}
+                        key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: attachment,
+                            messageViewerDocumentToDisplay: attachment,
                           });
                         }}
                       >

@@ -12,7 +12,7 @@ const { COURT_ISSUED_EVENT_CODES } = require('../../entities/EntityConstants');
  */
 exports.generateCourtIssuedDocumentTitleInteractor = ({ documentMetadata }) => {
   const filingEvent = COURT_ISSUED_EVENT_CODES.find(
-    document => documentMetadata.eventCode === document.eventCode,
+    item => documentMetadata.eventCode === item.eventCode,
   );
 
   // attempt to reset the document title to its default, bracketed

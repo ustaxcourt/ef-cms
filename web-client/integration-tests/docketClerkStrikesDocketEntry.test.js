@@ -24,6 +24,10 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     jest.setTimeout(30000);
   });
 
+  afterAll(() => {
+    test.closeSocket();
+  });
+
   loginAs(test, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(test);

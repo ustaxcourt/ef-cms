@@ -25,8 +25,7 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
       .getUsersBySearchKey.mockResolvedValue([]);
 
     try {
-      await getPrivatePractitionersBySearchKeyInteractor({
-        applicationContext,
+      await getPrivatePractitionersBySearchKeyInteractor(applicationContext, {
         searchKey: 'something',
       });
     } catch (err) {
@@ -52,10 +51,12 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
         },
       ]);
 
-    const result = await getPrivatePractitionersBySearchKeyInteractor({
+    const result = await getPrivatePractitionersBySearchKeyInteractor(
       applicationContext,
-      searchKey: 'Test Practitioner',
-    });
+      {
+        searchKey: 'Test Practitioner',
+      },
+    );
 
     expect(result).toMatchObject([{ name: 'Test Practitioner' }]);
   });

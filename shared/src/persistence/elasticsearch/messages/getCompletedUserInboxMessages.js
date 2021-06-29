@@ -13,12 +13,10 @@ exports.getCompletedUserInboxMessages = async ({
         bool: {
           must: [
             {
-              match: {
-                'completedByUserId.S': { operator: 'and', query: userId },
-              },
+              term: { 'completedByUserId.S': userId },
             },
             {
-              match: { 'isCompleted.BOOL': true },
+              term: { 'isCompleted.BOOL': true },
             },
             {
               range: {

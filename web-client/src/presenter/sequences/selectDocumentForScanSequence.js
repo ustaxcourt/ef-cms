@@ -1,18 +1,17 @@
 import { selectDocumentForPreviewAction } from '../actions/selectDocumentForPreviewAction';
-import { set } from 'cerebral/factories';
+import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setPdfPreviewUrlSequence } from '../sequences/setPdfPreviewUrlSequence';
 import { shouldShowPreviewAction } from '../actions/shouldShowPreviewAction';
-import { state } from 'cerebral';
 
 export const selectDocumentForScanSequence = [
-  set(state.currentViewMetadata.documentUploadMode, 'scan'),
+  setDocumentUploadModeAction('scan'),
   shouldShowPreviewAction,
   {
     no: [],
     yes: [
       selectDocumentForPreviewAction,
       setPdfPreviewUrlSequence,
-      set(state.currentViewMetadata.documentUploadMode, 'preview'),
+      setDocumentUploadModeAction('preview'),
     ],
   },
 ];

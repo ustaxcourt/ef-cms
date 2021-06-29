@@ -19,8 +19,7 @@ export const validateSelectDocumentTypeAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateExternalDocumentInteractor({
-      applicationContext,
+    .validateExternalDocumentInteractor(applicationContext, {
       documentMetadata,
     });
 
@@ -28,6 +27,7 @@ export const validateSelectDocumentTypeAction = ({
     return path.success();
   } else {
     const errorDisplayOrder = [
+      'documentTitle',
       'documentType',
       'freeText',
       'freeText2',

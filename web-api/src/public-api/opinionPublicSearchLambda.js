@@ -12,13 +12,9 @@ exports.opinionPublicSearchLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .opinionPublicSearchInteractor({
-          applicationContext,
+        .opinionPublicSearchInteractor(applicationContext, {
           ...event.queryStringParameters,
         });
     },
-    {
-      isPublicUser: true,
-      user: {},
-    },
+    { user: {} },
   );

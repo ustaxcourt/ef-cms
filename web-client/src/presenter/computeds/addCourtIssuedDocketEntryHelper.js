@@ -1,9 +1,9 @@
-import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    SYSTEM_GENERATED_DOCUMENT_TYPES,
     UNSERVABLE_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -25,17 +25,12 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     value: type.eventCode,
   }));
 
-  const petitioners = [caseDetail.contactPrimary];
-
-  if (!isEmpty(caseDetail.contactSecondary)) {
-    petitioners.push(caseDetail.contactSecondary);
-  }
+  const petitioners = applicationContext
+    .getUtilities()
+    .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
 
   const serviceParties = [
-    ...petitioners.map(petitioner => ({
-      ...petitioner,
-      displayName: `${petitioner.name}, Petitioner`,
-    })),
+    ...petitioners,
     ...caseDetail.privatePractitioners.map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Petitioner Counsel`,
@@ -53,13 +48,24 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
   const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
-  const showSaveAndServeButton = !UNSERVABLE_EVENT_CODES.includes(
+
+  const eventCodeIsUnservable = !!UNSERVABLE_EVENT_CODES.includes(
     form.eventCode,
   );
+
+  const showReceivedDate = eventCodeIsUnservable;
+  const showSaveAndServeButton = !eventCodeIsUnservable;
+
+  const showDocumentTypeDropdown =
+    form.eventCode !==
+    SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode;
+
   return {
     documentTypes,
     formattedDocumentTitle,
     serviceParties,
+    showDocumentTypeDropdown,
+    showReceivedDate,
     showSaveAndServeButton,
     showServiceStamp,
   };

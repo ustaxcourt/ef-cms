@@ -7,6 +7,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
+import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -14,6 +15,10 @@ test.draftOrders = [];
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
+  });
+
+  afterAll(() => {
+    test.closeSocket();
   });
 
   loginAs(test, 'petitioner@example.com');
@@ -38,10 +43,11 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   docketClerkViewsDraftOrder(test, 0);
   docketClerkSignsOrder(test, 0);
   docketClerkAddsDocketEntryFromOrder(test, 0);
-  createNewMessageOnCase(test, 0);
+  createNewMessageOnCase(test);
 
   loginAs(test, 'petitionsclerk1@example.com');
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1ServesDocumentFromMessageDetail(test);
+  petitionsClerkClicksCaseDetailTabFromMessageDetail(test);
 });

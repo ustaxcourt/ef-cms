@@ -1,4 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoReviewSavedPetitionSequence } from '../sequences/gotoReviewSavedPetitionSequence';
 import { presenter } from '../presenter-mock';
@@ -9,7 +10,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
 
   ({ PARTY_TYPES } = applicationContext.getConstants());
 
-  const MOCK_CASE = {
+  const mockCase = {
     docketEntries: [{ docketEntryId: '123', documentType: 'Petition' }],
     docketNumber: '105-15',
     partyType: PARTY_TYPES.petitioner,
@@ -17,7 +18,7 @@ describe('gotoReviewSavedPetitionSequence', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getCaseInteractor.mockReturnValue(MOCK_CASE);
+      .getCaseInteractor.mockReturnValue(mockCase);
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoReviewSavedPetitionSequence,
@@ -41,7 +42,25 @@ describe('gotoReviewSavedPetitionSequence', () => {
       applicationContext.getUseCases().getCaseInteractor,
     ).toHaveBeenCalled();
     expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
-    expect(test.getState('caseDetail')).toMatchObject(MOCK_CASE);
-    expect(test.getState('form')).toMatchObject(MOCK_CASE);
+    expect(test.getState('caseDetail')).toMatchObject(mockCase);
+    expect(test.getState('form')).toMatchObject(mockCase);
+  });
+
+  it('should not unset state.caseDetail.petitioners in the ignore path', async () => {
+    const mockDocketNumber = '199-99';
+    const mockPetitioner = MOCK_CASE.petitioners[0];
+
+    test.setState('form', { partyType: 'petitioner' });
+    test.setState('caseDetail', {
+      docketNumber: mockDocketNumber,
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [mockPetitioner],
+    });
+
+    await test.runSequence('gotoReviewSavedPetitionSequence', {
+      docketNumber: mockDocketNumber,
+    });
+
+    expect(test.getState('caseDetail.petitioners')).toEqual([mockPetitioner]);
   });
 });

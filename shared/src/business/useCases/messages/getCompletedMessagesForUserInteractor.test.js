@@ -22,9 +22,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getCompletedMessagesForUserInteractor({
-        applicationContext,
-      }),
+      getCompletedMessagesForUserInteractor(applicationContext, {}),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -64,10 +62,12 @@ describe('getCompletedMessagesForUserInteractor', () => {
       .getPersistenceGateway()
       .getCompletedUserInboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getCompletedMessagesForUserInteractor({
+    const returnedMessages = await getCompletedMessagesForUserInteractor(
       applicationContext,
-      userId: messageData.completedByUserId,
-    });
+      {
+        userId: messageData.completedByUserId,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,

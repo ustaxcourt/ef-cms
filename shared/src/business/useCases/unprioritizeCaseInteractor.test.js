@@ -5,14 +5,47 @@ const { ROLES } = require('../entities/EntityConstants');
 const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
 
 describe('unprioritizeCaseInteractor', () => {
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue({
+  let mockUser;
+
+  beforeEach(() => {
+    mockUser = {
       role: ROLES.petitionsClerk,
       userId: '7ad8dcbc-5978-4a29-8c41-02422b66f410',
-    });
+    };
+
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock.mockImplementation(
+        ({ caseEntity }) => caseEntity,
+      );
   });
 
-  it('should set the highPriority flag to false and remove the highPriorityReason and call updateCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
+  it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
+    mockUser = {};
+
+    await expect(
+      unprioritizeCaseInteractor(applicationContext, {
+        docketNumber: '123-20',
+      }),
+    ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should call updateCaseAutomaticBlock', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+
+    await unprioritizeCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
+    ).toHaveBeenCalled();
+  });
+
+  it('should set the highPriority flag to false and remove the highPriorityReason and call createCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -24,8 +57,7 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor({
-      applicationContext,
+    const result = await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -39,11 +71,11 @@ describe('unprioritizeCaseInteractor', () => {
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 
@@ -59,8 +91,7 @@ describe('unprioritizeCaseInteractor', () => {
         }),
       );
 
-    const result = await unprioritizeCaseInteractor({
-      applicationContext,
+    const result = await unprioritizeCaseInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
@@ -70,7 +101,7 @@ describe('unprioritizeCaseInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway()
-        .updateCaseTrialSortMappingRecords,
+        .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
@@ -80,16 +111,5 @@ describe('unprioritizeCaseInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
-  });
-
-  it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
-    await expect(
-      unprioritizeCaseInteractor({
-        applicationContext,
-        docketNumber: '123-20',
-      }),
-    ).rejects.toThrow('Unauthorized');
   });
 });

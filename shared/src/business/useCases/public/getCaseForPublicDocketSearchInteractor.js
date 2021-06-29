@@ -1,24 +1,24 @@
-const { Case } = require('../../entities/cases/Case');
+const { Case, isSealedCase } = require('../../entities/cases/Case');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
 /**
  * getCaseForPublicDocketSearchInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getCaseForPublicDocketSearchInteractor = async ({
+exports.getCaseForPublicDocketSearchInteractor = async (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: Case.stripLeadingZeros(docketNumber),
+      docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
   if (!caseRecord) {
@@ -29,7 +29,7 @@ exports.getCaseForPublicDocketSearchInteractor = async ({
 
   let caseDetailRaw;
 
-  if (caseRecord.sealedDate || caseRecord.isSealed) {
+  if (isSealedCase(caseRecord)) {
     const error = new UnauthorizedError(`Case ${docketNumber} is sealed.`);
     error.skipLogging = true;
     throw error;

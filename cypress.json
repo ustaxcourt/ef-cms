@@ -1,5 +1,6 @@
 {
   "baseUrl": "http://localhost:1234",
+  "browser": "edge",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true

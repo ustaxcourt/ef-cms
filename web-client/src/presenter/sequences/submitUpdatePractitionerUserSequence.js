@@ -1,33 +1,63 @@
+import { checkEmailAvailabilityAction } from '../actions/checkEmailAvailabilityAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFormDateAction } from '../actions/computeFormDateAction';
-import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmissionsDateAction';
+import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
+import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
-import { validateAddPractitionerAction } from '../actions/validateAddPractitionerAction';
+import { validatePractitionerAction } from '../actions/validatePractitionerAction';
+
+const afterSuccess = [
+  startWebSocketConnectionAction,
+  {
+    error: [
+      unsetWaitingForResponseAction,
+      setShowModalFactoryAction('WebSocketErrorModal'),
+    ],
+    success: [
+      updatePractitionerUserAction,
+      {
+        error: [setAlertErrorAction, unsetWaitingForResponseAction],
+        success: [setPractitionerDetailAction, clearScreenMetadataAction],
+      },
+    ],
+  },
+];
 
 export const submitUpdatePractitionerUserSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  computeFormDateAction,
-  validateAddPractitionerAction,
+  getComputedAdmissionsDateAction,
+  validatePractitionerAction,
   {
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
-      setCurrentPageAction('Interstitial'),
-      updatePractitionerUserAction,
+      setWaitingForResponseAction,
+      hasUpdatedEmailFactoryAction('updatedEmail'),
       {
-        error: [],
-        success: [
-          setPractitionerDetailAction,
-          setAlertSuccessAction,
-          setSaveAlertsForNavigationAction,
-          navigateToPractitionerDetailAction,
+        no: afterSuccess,
+        yes: [
+          checkEmailAvailabilityAction,
+          {
+            emailAvailable: afterSuccess,
+            emailInUse: [
+              unsetWaitingForResponseAction,
+              clearAlertsAction,
+              setAlertErrorAction,
+              setValidationErrorsAction,
+              setValidationAlertErrorsAction,
+              stopShowValidationAction,
+            ],
+          },
         ],
       },
     ],

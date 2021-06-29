@@ -31,8 +31,8 @@ export const MultiDocumentPartiesFiling = connect(
               </legend>
               <span className="usa-hint">Check all that apply.</span>
               {fileDocumentHelper.selectedCasesAsCase.map(
-                (formattedConsolidatedCase, index) => (
-                  <React.Fragment key={index}>
+                formattedConsolidatedCase => (
+                  <React.Fragment key={formattedConsolidatedCase.docketNumber}>
                     <legend
                       className="with-hint"
                       id={`who-legend-${formattedConsolidatedCase.docketNumber}`}

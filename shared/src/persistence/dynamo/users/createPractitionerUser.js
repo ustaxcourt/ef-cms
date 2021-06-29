@@ -10,26 +10,19 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
 
   await client.put({
     Item: {
-      pk: `section|${user.section}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-
-  await client.put({
-    Item: {
+      ...user,
       pk: `user|${userId}`,
       sk: `user|${userId}`,
-      ...user,
       userId,
     },
     applicationContext,
   });
 
   if (user.name && user.barNumber) {
+    const upperCaseName = user.name.toUpperCase();
     await client.put({
       Item: {
-        pk: `${user.role}|${user.name}`,
+        pk: `${user.role}|${upperCaseName}`,
         sk: `user|${userId}`,
       },
       applicationContext,
@@ -64,7 +57,9 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
     );
   }
 
-  if (user.email) {
+  const userEmail = user.email || user.pendingEmail;
+
+  if (userEmail) {
     try {
       const response = await applicationContext
         .getCognito()
@@ -76,7 +71,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
             },
             {
               Name: 'email',
-              Value: user.email,
+              Value: userEmail,
             },
             {
               Name: 'custom:role',
@@ -88,7 +83,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
             },
           ],
           UserPoolId: process.env.USER_POOL_ID,
-          Username: user.email,
+          Username: userEmail,
         })
         .promise();
 
@@ -102,7 +97,7 @@ exports.createPractitionerUser = async ({ applicationContext, user }) => {
         .getCognito()
         .adminGetUser({
           UserPoolId: process.env.USER_POOL_ID,
-          Username: user.email,
+          Username: userEmail,
         })
         .promise();
 

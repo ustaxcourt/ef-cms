@@ -18,6 +18,7 @@ const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
+const { getContactPrimary, getContactSecondary } = require('./Case');
 const { Statistic } = require('../Statistic');
 
 /**
@@ -73,6 +74,7 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   this.stinFile = rawCase.stinFile;
   this.stinFileSize = rawCase.stinFileSize;
   this.useSameAsPrimary = rawCase.useSameAsPrimary;
+  this.petitioners = rawCase.petitioners || [];
 
   this.statistics = Array.isArray(rawCase.statistics)
     ? rawCase.statistics.map(
@@ -96,14 +98,15 @@ CaseInternal.prototype.init = function init(rawCase, { applicationContext }) {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: {
-      primary: rawCase.contactPrimary,
-      secondary: rawCase.contactSecondary,
+      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
     },
-    isPaper: true,
     partyType: rawCase.partyType,
   });
-  this.contactPrimary = contacts.primary;
-  this.contactSecondary = contacts.secondary;
+  this.petitioners = [contacts.primary];
+  if (contacts.secondary) {
+    this.petitioners.push(contacts.secondary);
+  }
 };
 
 CaseInternal.VALIDATION_ERROR_MESSAGES = {
@@ -137,20 +140,19 @@ const paperRequirements = joi
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
-    applicationForWaiverOfFilingFeeFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
-      'applicationForWaiverOfFilingFeeFile',
-      {
-        is: joi.exist().not(null),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      },
-    ),
+    applicationForWaiverOfFilingFeeFileSize:
+      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'applicationForWaiverOfFilingFeeFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ),
     archivedCorrespondences: Case.VALIDATION_RULES.archivedCorrespondences,
     archivedDocketEntries: Case.VALIDATION_RULES.archivedDocketEntries,
     caseCaption: JoiValidationConstants.CASE_CAPTION.required(),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
-    contactPrimary: joi.object().required(),
-    contactSecondary: joi.object().optional().allow(null),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
@@ -184,14 +186,15 @@ const paperRequirements = joi
         then: joi.required(),
       }),
     }),
-    ownershipDisclosureFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
-      'ownershipDisclosureFile',
-      {
-        is: joi.exist().not(null),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      },
-    ),
+    ownershipDisclosureFileSize:
+      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'ownershipDisclosureFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
     ).required(),
@@ -215,6 +218,7 @@ const paperRequirements = joi
     petitionPaymentMethod: Case.VALIDATION_RULES.petitionPaymentMethod,
     petitionPaymentStatus: Case.VALIDATION_RULES.petitionPaymentStatus,
     petitionPaymentWaivedDate: Case.VALIDATION_RULES.petitionPaymentWaivedDate,
+    petitioners: Case.VALIDATION_RULES.petitioners,
     preferredTrialCity: joi
       .alternatives()
       .conditional('requestForPlaceOfTrialFile', {
@@ -233,14 +237,15 @@ const paperRequirements = joi
         otherwise: joi.object().optional(),
         then: joi.object().required(), // object of type File
       }),
-    requestForPlaceOfTrialFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
-      'requestForPlaceOfTrialFile',
-      {
-        is: joi.exist().not(null),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      },
-    ),
+    requestForPlaceOfTrialFileSize:
+      JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
+        'requestForPlaceOfTrialFile',
+        {
+          is: joi.exist().not(null),
+          otherwise: joi.optional().allow(null),
+          then: joi.required(),
+        },
+      ),
     statistics: Case.VALIDATION_RULES.statistics,
     stinFile: joi.object().optional(), // object of type File
     stinFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when('stinFile', {

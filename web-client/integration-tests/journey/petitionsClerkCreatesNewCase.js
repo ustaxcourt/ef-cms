@@ -3,12 +3,8 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
-const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-} = applicationContext.getConstants();
+const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCase = (
   test,
@@ -180,11 +176,6 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
-      value: 'test@example.com',
-    });
-
-    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
@@ -217,5 +208,8 @@ export const petitionsClerkCreatesNewCase = (
     expect(test.getState('caseDetail.preferredTrialCity')).toEqual(
       trialLocation,
     );
+    if (test.casesReadyForTrial) {
+      test.casesReadyForTrial.push(test.docketNumber);
+    }
   });
 };

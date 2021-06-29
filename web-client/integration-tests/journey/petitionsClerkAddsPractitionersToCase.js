@@ -1,4 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -8,6 +9,10 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
     const practitionerBarNumber = test.barNumber || 'PT1234';
 
     expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
@@ -36,17 +41,40 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       practitionerMatch.userId,
     );
 
+    const formattedCase = runCompute(formattedCaseDetail, {
+      state: test.getState(),
+    });
+    const contactPrimary = formattedCase.petitioners[0];
+
     await test.runSequence('updateModalValueSequence', {
-      key: 'representingPrimary',
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
+
+    if (test.intervenorContactId) {
+      await test.runSequence('updateModalValueSequence', {
+        key: `representingMap.${test.intervenorContactId}`,
+        value: true,
+      });
+    }
+
+    expect(
+      test.getState('validationErrors.practitionerSearchError'),
+    ).toBeUndefined();
 
     await test.runSequence('associatePrivatePractitionerWithCaseSequence');
 
     expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(1);
     expect(
-      test.getState('caseDetail.privatePractitioners.0.representingPrimary'),
-    ).toEqual(true);
+      test.getState('caseDetail.privatePractitioners.0.representing'),
+    ).toContain(contactPrimary.contactId);
+
+    if (test.intervenorContactId) {
+      expect(
+        test.getState('caseDetail.privatePractitioners.0.representing'),
+      ).toContain(test.intervenorContactId);
+    }
+
     expect(test.getState('caseDetail.privatePractitioners.0.name')).toEqual(
       practitionerMatch.name,
     );
@@ -59,6 +87,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
     expect(formatted.privatePractitioners[0].formattedName).toEqual(
       `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
     );
+
+    test.privatePractitioners = formatted.privatePractitioners[0];
 
     //add a second practitioner
     if (!skipSecondary) {
@@ -74,8 +104,9 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         practitionerMatch.userId,
       );
 
+      const contactSecondary = formattedCase.petitioners[1];
       await test.runSequence('updateModalValueSequence', {
-        key: 'representingSecondary',
+        key: `representingMap.${contactSecondary.contactId}`,
         value: true,
       });
 
@@ -84,10 +115,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
         2,
       );
       expect(
-        test.getState(
-          'caseDetail.privatePractitioners.1.representingSecondary',
-        ),
-      ).toEqual(true);
+        test.getState('caseDetail.privatePractitioners.1.representing'),
+      ).toEqual([contactSecondary.contactId]);
       expect(test.getState('caseDetail.privatePractitioners.1.name')).toEqual(
         practitionerMatch.name,
       );
@@ -100,6 +129,8 @@ export const petitionsClerkAddsPractitionersToCase = (test, skipSecondary) => {
       expect(formatted.privatePractitioners[1].formattedName).toEqual(
         `${practitionerMatch.name} (${practitionerMatch.barNumber})`,
       );
+
+      await refreshElasticsearchIndex();
     }
   });
 };

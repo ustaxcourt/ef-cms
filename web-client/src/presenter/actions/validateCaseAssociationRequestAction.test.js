@@ -18,7 +18,7 @@ describe('validateCaseAssociationRequest', () => {
       documentTitle: 'Entry of Appearance',
       documentType: 'Entry of Appearance',
       eventCode: '123',
-      partyPrimary: true,
+      filers: [],
       primaryDocumentFile: {},
       scenario: 'Standard',
     };

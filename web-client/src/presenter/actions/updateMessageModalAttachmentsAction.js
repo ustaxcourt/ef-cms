@@ -26,11 +26,15 @@ export const updateMessageModalAttachmentsAction = ({
         documentId,
       });
 
-    const documentTitle = document.documentTitle || document.documentType;
+    const generatedDocumentTitle = applicationContext
+      .getUtilities()
+      .getDocumentTitleWithAdditionalInfo({ docketEntry: document });
+
+    const documentTitle = generatedDocumentTitle || document.documentType;
 
     if (attachments.length === 0) {
       // This is the first attachment, so we should update the subject
-      store.set(state.modal.form.subject, documentTitle);
+      store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
 
     attachments.push({

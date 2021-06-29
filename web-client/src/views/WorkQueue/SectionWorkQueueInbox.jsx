@@ -25,7 +25,7 @@ const SectionWorkQueueTable = connect(
     return (
       <table
         aria-describedby="tab-work-queue"
-        className="usa-table work-queue subsection"
+        className="usa-table ustc-table subsection"
         id="section-work-queue"
       >
         <thead>
@@ -124,7 +124,7 @@ SectionWorkQueueTable.Row = React.memo(
               )}
             </td>
           )}
-          <td className="message-queue-row message-queue-document">
+          <td className="message-queue-row max-width-25">
             <div className="message-document-title">
               <a className="case-link" href={item.editLink}>
                 {item.docketEntry.descriptionDisplay}
@@ -169,11 +169,10 @@ SectionWorkQueueTable.Actions = connect(
           className="usa-select"
           id="options"
           name="options"
-          onChange={event => {
+          onChange={evt => {
             selectAssigneeSequence({
-              assigneeId: event.target.value,
-              assigneeName:
-                event.target.options[event.target.selectedIndex].text,
+              assigneeId: evt.target.value,
+              assigneeName: evt.target.options[evt.target.selectedIndex].text,
             });
             assignSelectedWorkItemsSequence();
           }}

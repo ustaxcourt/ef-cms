@@ -1,9 +1,18 @@
+/* eslint-disable complexity */
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const messageDocumentHelper = (get, applicationContext) => {
+  const viewerDocumentIdToDisplay = get(
+    state.messageViewerDocumentToDisplay.documentId,
+  );
+
+  if (!viewerDocumentIdToDisplay) {
+    return {};
+  }
+
   const {
-    COURT_ISSUED_DOCUMENT_TYPES,
+    COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
@@ -13,23 +22,19 @@ export const messageDocumentHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions);
-  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
-
-  if (!viewerDocumentToDisplay) {
-    return null;
-  }
+  const parentMessageId = get(state.parentMessageId);
 
   const { docketEntries } = caseDetail;
 
   const caseDocument =
     applicationContext.getUtilities().getAttachmentDocumentById({
       caseDetail,
-      documentId: viewerDocumentToDisplay.documentId,
+      documentId: viewerDocumentIdToDisplay,
       useArchived: true,
     }) || {};
 
-  const isCorrespondence = !caseDocument.entityName; // TODO: Sure this up a little
+  const isCorrespondence = !!caseDocument.correspondenceId;
 
   const documentRequiresSignature = EVENT_CODES_REQUIRING_SIGNATURE.includes(
     caseDocument.eventCode,
@@ -45,11 +50,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   let editUrl = '';
   const formattedDocument = draftDocuments.find(
-    doc => doc.docketEntryId === viewerDocumentToDisplay.documentId,
+    doc => doc.docketEntryId === viewerDocumentIdToDisplay,
   );
 
   if (formattedDocument) {
     ({ editUrl } = formattedDocument);
+    editUrl += `/${parentMessageId}`;
   }
 
   const isNotice = NOTICE_EVENT_CODES.includes(caseDocument.eventCode);
@@ -65,12 +71,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .isInternalUser(user.role);
 
   const hasDocketEntryPermission = permissions.CREATE_ORDER_DOCKET_ENTRY;
+  const hasEditCorrespondencePermission = permissions.CASE_CORRESPONDENCE;
 
-  const showAddDocketEntryButtonForRole = hasDocketEntryPermission;
   const showEditButtonForRole = isInternalUser;
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
-  const showAddDocketEntryButtonForDocument =
+  const showAddDocketEntryButton =
+    hasDocketEntryPermission &&
     !isCorrespondence &&
     caseDocument.isDraft &&
     (documentIsSigned || !documentRequiresSignature);
@@ -83,7 +90,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     caseDocument.isDraft &&
     !isNotice &&
     !isStipulatedDecision;
-  const showEditButtonForCorrespondenceDocument = isCorrespondence;
+  const showEditButtonForCorrespondenceDocument =
+    isCorrespondence && hasEditCorrespondencePermission;
 
   const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned && !documentIsArchived;
@@ -95,9 +103,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
     draftDocuments,
   });
 
-  const isCourtIssuedDocument = COURT_ISSUED_DOCUMENT_TYPES.includes(
-    caseDocument.documentType,
-  );
+  const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(caseDocument.eventCode);
 
   const showServeCourtIssuedDocumentButton =
     showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
@@ -114,16 +122,19 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    caseDocument.servedAt &&
+    applicationContext.getUtilities().isServed(caseDocument) &&
     !docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
   return {
+    addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
     archived: documentIsArchived,
+    editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
-    showAddDocketEntryButton:
-      showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
+    messageDetailLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`,
+    servePetitionLink: `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`,
+    showAddDocketEntryButton,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
@@ -139,7 +150,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
       !isNotice,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
-    showNotServed,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showRemoveSignatureButtonForDocument,
@@ -147,5 +157,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
+    signOrderLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`,
   };
 };

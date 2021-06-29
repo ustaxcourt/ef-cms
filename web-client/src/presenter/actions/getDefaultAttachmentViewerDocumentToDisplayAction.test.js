@@ -2,26 +2,47 @@ import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultA
 import { runAction } from 'cerebral/test';
 
 describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
-  it('returns state.viewerDocumentToDisplay when it is defined', async () => {
+  it('returns state.messageViewerDocumentToDisplay when it is defined and props.documentId is defined', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
         props: {
+          documentId: '9999',
           mostRecentMessage: {
             attachments: [{ documentId: '1234' }, { documentId: '2345' }],
           },
         },
         state: {
-          viewerDocumentToDisplay: { documentId: '9999' },
+          messageViewerDocumentToDisplay: { documentId: '9999' },
         },
       },
     );
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '9999' },
+      messageViewerDocumentToDisplay: { documentId: '9999' },
     });
   });
 
-  it('returns the first item in the attachments array as the viewerDocumentToDisplay', async () => {
+  it('does NOT return state.messageViewerDocumentToDisplay when it is defined and props.documentId does not match', async () => {
+    const result = await runAction(
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      {
+        props: {
+          documentId: '1234',
+          mostRecentMessage: {
+            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+          },
+        },
+        state: {
+          messageViewerDocumentToDisplay: { documentId: '9999' },
+        },
+      },
+    );
+    expect(result.output).toEqual({
+      messageViewerDocumentToDisplay: { documentId: '1234' },
+    });
+  });
+
+  it('returns the first item in the attachments array as the messageViewerDocumentToDisplay', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
@@ -33,11 +54,11 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '1234' },
+      messageViewerDocumentToDisplay: { documentId: '1234' },
     });
   });
 
-  it('returns viewerDocumentToDisplay null if there are no attachments on the message', async () => {
+  it('returns messageViewerDocumentToDisplay null if there are no attachments on the message', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
@@ -49,7 +70,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: null,
+      messageViewerDocumentToDisplay: null,
     });
   });
 
@@ -67,7 +88,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     );
 
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '2345' },
+      messageViewerDocumentToDisplay: { documentId: '2345' },
     });
   });
 
@@ -85,7 +106,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     );
 
     expect(result.output).toEqual({
-      viewerDocumentToDisplay: { documentId: '1234' },
+      messageViewerDocumentToDisplay: { documentId: '1234' },
     });
   });
 });

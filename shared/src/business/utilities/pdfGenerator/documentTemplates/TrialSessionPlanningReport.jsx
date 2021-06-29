@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 const React = require('react');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 const { ReportsHeader } = require('../components/ReportsHeader.jsx');
@@ -44,16 +45,18 @@ export const TrialSessionPlanningReport = ({
         </thead>
         <tbody>
           {locationData &&
-            locationData.map((location, idx) => {
+            locationData.map((trialLocation, idx) => {
               return (
                 <tr key={`row-${idx}`}>
-                  <td>{location.stateAbbreviation}</td>
-                  <td>{location.trialCityState}</td>
-                  <td>{location.allCaseCount}</td>
-                  <td>{location.smallCaseCount}</td>
-                  <td>{location.regularCaseCount}</td>
-                  {location.previousTermsData &&
-                    location.previousTermsData.map(getLocationDataFactory(idx))}
+                  <td>{trialLocation.stateAbbreviation}</td>
+                  <td>{trialLocation.trialCityState}</td>
+                  <td>{trialLocation.allCaseCount}</td>
+                  <td>{trialLocation.smallCaseCount}</td>
+                  <td>{trialLocation.regularCaseCount}</td>
+                  {trialLocation.previousTermsData &&
+                    trialLocation.previousTermsData.map(
+                      getLocationDataFactory(idx),
+                    )}
                 </tr>
               );
             })}

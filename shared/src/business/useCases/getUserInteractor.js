@@ -16,10 +16,10 @@ const { User } = require('../entities/User');
 /**
  * getUserInteractor
  *
- * @param {object} user the user to get
+ * @param {object} applicationContext the application context
  * @returns {User} the retrieved user
  */
-exports.getUserInteractor = async ({ applicationContext }) => {
+exports.getUserInteractor = async applicationContext => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await applicationContext

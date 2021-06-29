@@ -59,7 +59,6 @@ describe('SecondaryDocumentInformationFactory', () => {
         VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        attachments: VALIDATION_ERROR_MESSAGES.attachments,
         certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
       });
     });

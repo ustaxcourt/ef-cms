@@ -14,7 +14,6 @@ export const RequestAccessReview = connect(
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
@@ -24,7 +23,6 @@ export const RequestAccessReview = connect(
   function RequestAccessReview({
     fileDocumentHelper,
     form,
-    formattedCaseDetail,
     formCancelToggleCancelSequence,
     navigateBackSequence,
     requestAccessHelper,
@@ -117,7 +115,7 @@ export const RequestAccessReview = connect(
 
                   {form.supportingDocuments &&
                     form.supportingDocuments.map((item, idx) => (
-                      <React.Fragment key={idx}>
+                      <React.Fragment key={item.documentTitle}>
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
                             <div className="tablet:margin-bottom-0 margin-bottom-205">
@@ -181,17 +179,10 @@ export const RequestAccessReview = connect(
                           Parties
                         </label>
                         <ul className="ustc-unstyled-list without-margins">
-                          {form.representingPrimary && (
-                            <li>
-                              {formattedCaseDetail.contactPrimary.name},
-                              Petitioner
-                            </li>
-                          )}
-                          {form.representingSecondary && (
-                            <li>
-                              {formattedCaseDetail.contactSecondary.name},
-                              Petitioner
-                            </li>
+                          {requestAccessHelper.representingPartiesNames.map(
+                            name => (
+                              <li key={name}>{name}</li>
+                            ),
                           )}
                         </ul>
                       </div>

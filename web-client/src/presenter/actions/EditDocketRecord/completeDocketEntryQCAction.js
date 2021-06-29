@@ -41,18 +41,23 @@ export const completeDocketEntryQCAction = async ({
     paperServiceDocumentTitle,
     paperServiceParties,
     paperServicePdfUrl,
-  } = await applicationContext.getUseCases().completeDocketEntryQCInteractor({
-    applicationContext,
-    entryMetadata,
-  });
+  } = await applicationContext
+    .getUseCases()
+    .completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata,
+    });
 
   const updatedDocument = caseDetail.docketEntries.filter(
     doc => doc.docketEntryId === docketEntryId,
   )[0];
 
+  const computedDocumentTitle = applicationContext
+    .getUtilities()
+    .getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocument });
+
   return {
     alertSuccess: {
-      message: `${updatedDocument.documentTitle} has been completed.`,
+      message: `${computedDocumentTitle} has been completed.`,
       title: 'QC Completed',
     },
     caseDetail,

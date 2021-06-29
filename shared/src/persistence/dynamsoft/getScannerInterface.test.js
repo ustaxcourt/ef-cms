@@ -50,7 +50,7 @@ describe('getScannerInterface', () => {
     IfDisableSourceAfterAcquire: false,
     IfFeederLoaded: true,
     OpenSource: mockOpenSource,
-    RegisterEvent: (event, cb) => {
+    RegisterEvent: (scannerEvent, cb) => {
       onPostAllTransfersCb = cb;
     },
     RemoveAllImages: mockRemoveAllImages,
@@ -224,6 +224,9 @@ describe('getScannerInterface', () => {
       scanMode: SCAN_MODES.FLATBED,
     });
     expect(DWObject.IfDuplexEnabled).toEqual(false);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('can enable flatbed scanning by calling startScanSession with scanMode set to `FLATBED`', async () => {
@@ -241,6 +244,9 @@ describe('getScannerInterface', () => {
       scanMode: SCAN_MODES.FEEDER,
     });
     expect(DWObject.IfFeederEnabled).toEqual(true);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('should scan from feeder when calling startScanSession with scanMode set to `DUPLEX`', async () => {
@@ -253,15 +259,18 @@ describe('getScannerInterface', () => {
     });
     expect(DWObject.IfDuplexEnabled).toEqual(true);
     expect(DWObject.IfFeederEnabled).toEqual(true);
+    expect(
+      applicationContext.getReduceImageBlob().default().toBlob,
+    ).toHaveBeenCalled();
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
-    delete global.document;
+    delete global.window.document;
     let calls = 0;
-    global.document = {
+    global.window.document = {
       addEventListener: () => null,
       createElement: () => ({
-        cloneNode: function () {
+        cloneNode() {
           return {
             ...this,
           };
@@ -280,7 +289,6 @@ describe('getScannerInterface', () => {
         ];
       },
     };
-    // global.window.document = ;
     const scannerAPI = getScannerInterface();
     let script = await scannerAPI.loadDynamsoft({
       applicationContext,

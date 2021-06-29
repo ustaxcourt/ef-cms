@@ -4,15 +4,26 @@ import { applicationContextForClient as applicationContext } from '../../../../.
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContext;
-
-applicationContext
-  .getUseCases()
-  .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
-
 describe('addCaseToTrialSessionAction', () => {
-  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber and state.modal.trialSessionId and return alertSuccess and the caseDetail returned from the use case', async () => {
-    const result = await runAction(addCaseToTrialSessionAction, {
+  let successMock;
+  let errorMock;
+  beforeEach(() => {
+    successMock = jest.fn();
+    errorMock = jest.fn();
+
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
+    };
+  });
+
+  it('should call the addCaseToTrialSessionInteractor with the state.caseDetail.docketNumber, state.modal.trialSessionId, and state.modal.calendarNotes and return alertSuccess and the caseDetail returned from the use case', async () => {
+    applicationContext
+      .getUseCases()
+      .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+
+    await runAction(addCaseToTrialSessionAction, {
       modules: {
         presenter,
       },
@@ -21,6 +32,7 @@ describe('addCaseToTrialSessionAction', () => {
           docketNumber: '123-45',
         },
         modal: {
+          calendarNotes: 'Test',
           trialSessionId: '234',
         },
       },
@@ -31,14 +43,50 @@ describe('addCaseToTrialSessionAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().addCaseToTrialSessionInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
+      calendarNotes: 'Test',
       docketNumber: '123-45',
       trialSessionId: '234',
     });
-    expect(result.output).toHaveProperty('alertSuccess');
-    expect(result.output.caseDetail).toEqual(MOCK_CASE);
-    expect(result.output.docketNumber).toEqual('123-45');
-    expect(result.output.trialSessionId).toEqual('234');
+
+    expect(successMock.mock.calls[0][0]).toMatchObject({
+      alertSuccess: {},
+      caseDetail: MOCK_CASE,
+      docketNumber: '123-45',
+      trialSessionId: '234',
+    });
+  });
+
+  it('should take the error path if errors are found', async () => {
+    applicationContext
+      .getUseCases()
+      .addCaseToTrialSessionInteractor.mockImplementation(() => {
+        throw new Error();
+      });
+
+    await runAction(addCaseToTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-19',
+        },
+        modal: {
+          calendarNotes: 'Test',
+          trialSessionId: '234',
+        },
+      },
+    });
+
+    expect(presenter.providers.path.success).not.toHaveBeenCalled();
+    expect(presenter.providers.path.error).toHaveBeenCalled();
+    expect(errorMock.mock.calls[0][0]).toMatchObject({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Case could not be added to trial session.',
+      },
+    });
   });
 });

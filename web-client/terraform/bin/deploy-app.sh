@@ -7,6 +7,13 @@ KEY="ui-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
+tf_version=$(terraform --version)
+
+if [[ ${tf_version} != *"1.0.0"* ]]; then
+  echo "Please set your terraform version to 1.0.0 before deploying."
+  exit 1
+fi
+
 rm -rf .terraform
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
@@ -43,4 +50,4 @@ export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
-terraform apply --auto-approve
+terraform apply -auto-approve

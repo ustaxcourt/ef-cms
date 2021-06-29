@@ -33,7 +33,7 @@ export const TrialSessionsTable = connect(
                   name="sessionType"
                 >
                   <option value="">-Session type-</option>
-                  {trialSessionTypes.map(sessionType => (
+                  {Object.values(trialSessionTypes).map(sessionType => (
                     <option key={sessionType} value={sessionType}>
                       {sessionType}
                     </option>
@@ -59,8 +59,8 @@ export const TrialSessionsTable = connect(
                   name="judge"
                 >
                   <option value="">-Judge-</option>
-                  {trialSessionsHelper.trialSessionJudges.map((judge, idx) => (
-                    <option key={idx} value={judge.userId}>
+                  {trialSessionsHelper.trialSessionJudges.map(judge => (
+                    <option key={judge.name} value={judge.userId}>
                       {judge.name}
                     </option>
                   ))}
@@ -95,8 +95,8 @@ export const TrialSessionsTable = connect(
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
             </tr>
           </thead>
-          {formattedTrialSessions.map((trialDate, idxDate) => (
-            <React.Fragment key={idxDate}>
+          {formattedTrialSessions.map(trialDate => (
+            <React.Fragment key={trialDate.startOfWeekSortable}>
               <tbody>
                 <tr className="trial-date">
                   <td colSpan={5 + trialSessionsHelper.additionalColumnsShown}>
@@ -106,8 +106,8 @@ export const TrialSessionsTable = connect(
                   </td>
                 </tr>
               </tbody>
-              {trialDate.sessions.map((item, idx) => (
-                <tbody key={idx}>
+              {trialDate.sessions.map(item => (
+                <tbody key={item.trialSessionId}>
                   <tr className="trial-sessions-row">
                     <td>{item.formattedStartDate}</td>
                     <td>

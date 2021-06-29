@@ -6,7 +6,8 @@ import { sortBy } from 'lodash';
  * @param {string} section the section to fetch users from
  * @returns {Function} a function which should fetch the users in that section
  */
-export const getUsersInSectionAction = ({ section }) =>
+export const getUsersInSectionAction =
+  ({ section }) =>
   /**
    * get the users in a section
    *
@@ -23,8 +24,7 @@ export const getUsersInSectionAction = ({ section }) =>
     }
     const users = await applicationContext
       .getUseCases()
-      .getUsersInSectionInteractor({
-        applicationContext,
+      .getUsersInSectionInteractor(applicationContext, {
         section: sectionToGet,
       });
 

@@ -1,4 +1,5 @@
 import { applicationContextPublic } from '../../src/applicationContextPublic';
+import { contactPrimaryFromState } from '../../integration-tests/helpers';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -15,8 +16,9 @@ export const unauthedUserViewsCaseDetail = test => {
       docketNumber: test.docketNumber,
     });
     expect(test.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    expect(test.getState('caseDetail.contactPrimary.name')).toBeDefined();
-    expect(test.getState('caseDetail.contactPrimary.address1')).toBeUndefined();
+    const contactPrimary = contactPrimaryFromState(test);
+    expect(contactPrimary.name).toBeDefined();
+    expect(contactPrimary.address1).toBeUndefined();
 
     const helper = runCompute(publicCaseDetailHelper, {
       state: test.getState(),
@@ -27,6 +29,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Petition',
         hasDocument: true,
+        servedPartiesCode: 'R',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: true,
@@ -34,6 +37,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
       },
@@ -41,6 +45,7 @@ export const unauthedUserViewsCaseDetail = test => {
         descriptionDisplay:
           'Order of Dismissal Entered, Judge Buch for Something',
         hasDocument: true,
+        servedPartiesCode: 'B',
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
         showServed: true,
@@ -48,14 +53,16 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Transcript of Anything on 01-01-2019',
         hasDocument: true,
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
-        showServed: true,
+        showServed: false,
       },
       {
         descriptionDisplay:
           'Stipulated Decision Entered, Judge Ashford Anything',
         hasDocument: true,
+        servedPartiesCode: 'B',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: true,

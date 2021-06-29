@@ -3,20 +3,19 @@ const { put } = require('../requests');
 /**
  * updatePractitionerUserInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
  * @returns {Promise<object>} the updated user data
  */
-exports.updatePractitionerUserInteractor = ({
+exports.updatePractitionerUserInteractor = (
   applicationContext,
-  barNumber,
-  user,
-}) => {
+  { barNumber, user },
+) => {
   return put({
     applicationContext,
     body: { user },
-    endpoint: `/practitioners/${barNumber}`,
+    endpoint: `/async/practitioners/${barNumber}`,
   });
 };

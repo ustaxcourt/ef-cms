@@ -7,6 +7,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: Number.POSITIVE_INFINITY,
         },
       },
@@ -20,6 +21,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: 40,
         },
       },
@@ -33,6 +35,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: 61,
         },
       },
@@ -46,6 +49,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: 119,
         },
       },
@@ -59,6 +63,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: 3599,
         },
       },
@@ -72,6 +77,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           timeRemaining: 3600,
         },
       },
@@ -85,6 +91,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           // eslint-disable-next-line prettier/prettier
           timeRemaining: 3600 * 4 + 60 * 21,
         },
@@ -99,6 +106,7 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: true,
+          noThrottle: true,
           percentComplete: 100,
         },
       },
@@ -112,11 +120,68 @@ describe('fileUploadStatusHelper', () => {
       state: {
         fileUploadProgress: {
           isUploading: false,
+          noThrottle: true,
           percentComplete: 100,
         },
       },
     });
 
     expect(result.statusMessage).toEqual('All Done!');
+  });
+
+  describe('throttled messages', () => {
+    it('throttles the message inside of a three-second window', () => {
+      const result1 = runCompute(fileUploadStatusHelper, {
+        state: {
+          fileUploadProgress: {
+            isUploading: true,
+            noThrottle: false,
+            timeRemaining: Number.POSITIVE_INFINITY,
+          },
+        },
+      });
+
+      expect(result1.statusMessage).toEqual('Preparing Upload');
+
+      const result2 = runCompute(fileUploadStatusHelper, {
+        state: {
+          fileUploadProgress: {
+            isUploading: true,
+            noThrottle: false,
+            timeRemaining: 30,
+          },
+        },
+      });
+
+      expect(result2.statusMessage).toEqual(result1.statusMessage);
+    });
+
+    it('will update the message returned if executions are more than three seconds apart', async () => {
+      const result1 = runCompute(fileUploadStatusHelper, {
+        state: {
+          fileUploadProgress: {
+            isUploading: true,
+            noThrottle: false,
+            timeRemaining: Number.POSITIVE_INFINITY,
+          },
+        },
+      });
+
+      expect(result1.statusMessage).toEqual('Preparing Upload');
+
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      const result2 = runCompute(fileUploadStatusHelper, {
+        state: {
+          fileUploadProgress: {
+            isUploading: true,
+            noThrottle: false,
+            timeRemaining: 30,
+          },
+        },
+      });
+
+      expect(result2.statusMessage).not.toEqual(result1.statusMessage);
+    });
   });
 });

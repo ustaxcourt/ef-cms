@@ -1,581 +1,167 @@
+jest.mock('./processStreamUtilities');
 const {
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
+  processMessageEntries,
   processOtherEntries,
   processRemoveEntries,
+  processWorkItemEntries,
+} = require('./processStreamUtilities');
+const {
+  processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .bulkDeleteRecords.mockReturnValue({ failedRecords: [] });
+    // mocked in the order they are called.
+    processRemoveEntries.mockResolvedValue([]);
+    processCaseEntries.mockResolvedValue([]);
+    processDocketEntries.mockResolvedValue([]);
+    processWorkItemEntries.mockResolvedValue([]);
+    processMessageEntries.mockResolvedValue([]);
+    processOtherEntries.mockResolvedValue([]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
-  });
-
-  describe('partitionRecords', () => {
-    it('separates records by type', () => {
-      const removeRecord = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: 'case|123-45',
-            },
-            sk: {
-              S: 'case|123-45',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'Case',
-            },
-          },
-        },
-        eventName: 'REMOVE',
-      };
-
-      const caseRecord = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: 'case|123-45',
-            },
-            sk: {
-              S: 'case|123-45',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'Case',
-            },
-          },
-        },
-        eventName: 'MODIFY',
-      };
-
-      const docketEntryRecord = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: 'case|123-45',
-            },
-            sk: {
-              S: 'docket-entry|123',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'DocketEntry',
-            },
-          },
-        },
-        eventName: 'MODIFY',
-      };
-
-      const otherRecord = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: 'other-record|123',
-            },
-            sk: {
-              S: 'other-record|123',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'OtherRecord',
-            },
-          },
-        },
-        eventName: 'MODIFY',
-      };
-
-      const records = [
-        { ...removeRecord },
-        { ...caseRecord },
-        { ...docketEntryRecord },
-        { ...otherRecord },
-      ];
-
-      const result = partitionRecords(records);
-
-      expect(result).toMatchObject({
-        caseEntityRecords: [caseRecord],
-        docketEntryRecords: [docketEntryRecord],
-        otherRecords: [otherRecord],
-        removeRecords: [removeRecord],
-      });
+    partitionRecords.mockReturnValue({
+      caseEntityRecords: [],
+      docketEntryRecords: [],
+      otherRecords: [],
+      removeRecords: [],
+      workItemRecords: [],
     });
   });
 
-  describe('processRemoveEntries', () => {
-    it('do nothing when no remove records are found', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkDeleteRecords,
-      ).not.toHaveBeenCalled();
+  it('sanity check', async () => {
+    await processStreamRecordsInteractor(applicationContext, {
+      recordsToProcess: [{ my: 'record' }],
     });
 
-    it('attempt to bulk delete the records passed in', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: {
-                  S: 'case|abc',
-                },
-                sk: {
-                  S: 'docket-entry|123',
-                },
-              },
-              NewImage: null,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-      });
+    expect(partitionRecords).toHaveBeenCalled();
 
-      expect(
-        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
-            NewImage: null,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
+    expect(processRemoveEntries).toHaveBeenCalled();
+    expect(processCaseEntries).toHaveBeenCalled();
+    expect(processDocketEntries).toHaveBeenCalled();
+    expect(processWorkItemEntries).toHaveBeenCalled();
+    expect(processMessageEntries).toHaveBeenCalled();
+    expect(processOtherEntries).toHaveBeenCalled();
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 
-  describe('processCaseEntries', () => {
-    const mockGetCase = jest.fn();
-    const mockGetDocument = jest.fn();
+  describe('calls each of the "process" functions, and fails fast if one of them throws an error.', () => {
+    it('logs an error, throws an exception, and halts further execution if processRemoveEntries fails', async () => {
+      processRemoveEntries.mockRejectedValueOnce(new Error('something bad'));
 
-    it('does nothing when no other records are found', async () => {
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [],
-      });
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
+      expect(processRemoveEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processCaseEntries).not.toHaveBeenCalled();
+      expect(processDocketEntries).not.toHaveBeenCalled();
+      expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
+      expect(processOtherEntries).not.toHaveBeenCalled();
+
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
 
-    it('attempts to bulk index the records passed in', async () => {
-      const caseData = {
-        docketEntries: [],
-        docketNumber: '123-45',
-        entityName: 'Case',
-        pk: 'case|123-45',
-        sk: 'case|123-45',
-      };
+    it('logs an error, throws an exception, and halts further execution if processCaseEntries fails', async () => {
+      processCaseEntries.mockRejectedValueOnce(new Error('something bad'));
 
-      const caseDataMarshalled = {
-        docketEntries: { L: [] },
-        docketNumber: { S: '123-45' },
-        entityName: { S: 'Case' },
-        pk: { S: 'case|123-45' },
-        sk: { S: 'case|123-45' },
-      };
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-      mockGetCase.mockReturnValue({
-        ...caseData,
-      });
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processDocketEntries).not.toHaveBeenCalled();
+      expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
+      expect(processOtherEntries).not.toHaveBeenCalled();
 
-      const utils = {
-        getCase: mockGetCase,
-        getDocument: mockGetDocument,
-      };
-
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: { S: caseData.pk },
-                sk: { S: caseData.sk },
-              },
-              NewImage: caseDataMarshalled,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-        utils,
-      });
-
-      expect(mockGetCase).toHaveBeenCalled();
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
-            NewImage: {
-              case_relations: { name: 'case' },
-              docketNumber: { S: '123-45' },
-              entityName: { S: 'CaseDocketEntryMapping' },
-              pk: { S: 'case|123-45' },
-              sk: { S: 'case|123-45' },
-            },
-          },
-          eventName: 'MODIFY',
-        },
-        {
-          dynamodb: {
-            Keys: { pk: { S: caseData.pk }, sk: { S: caseData.sk } },
-            NewImage: caseDataMarshalled,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
-  });
-
-  describe('processDocketEntries', () => {
-    const mockGetCase = jest.fn();
-    const mockGetDocument = jest.fn();
-
-    const docketEntryData = {
-      docketEntryId: '123',
-      entityName: 'DocketEntry',
-      pk: 'case|123',
-      sk: 'docket-entry|123',
-    };
-
-    const docketEntryDataMarshalled = {
-      docketEntryId: { S: '123' },
-      entityName: { S: 'DocketEntry' },
-      pk: { S: 'case|123' },
-      sk: { S: 'docket-entry|123' },
-    };
-
-    const caseData = {
-      caseCaption: 'hello world',
-      contactPrimary: {
-        name: 'bob',
-      },
-      contactSecondary: null,
-      docketEntries: [docketEntryData],
-      docketNumber: '123-45',
-      docketNumberSuffix: 'W',
-      docketNumberWithSuffix: '123-45W',
-      entityName: 'Case',
-      irsPractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      isSealed: null,
-      pk: 'case|123-45',
-      privatePractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      sealedDate: null,
-      sk: 'case|123-45',
-    };
-
-    const caseDataMarshalled = {
-      caseCaption: { S: 'hello world' },
-      contactPrimary: {
-        M: {
-          name: {
-            S: 'bob',
-          },
-        },
-      },
-      contactSecondary: {
-        NULL: true,
-      },
-      docketEntries: {
-        L: [{ M: docketEntryDataMarshalled }],
-      },
-      docketNumber: { S: '123-45' },
-      docketNumberSuffix: {
-        S: 'W',
-      },
-      docketNumberWithSuffix: {
-        S: '123-45W',
-      },
-      entityName: { S: 'Case' },
-      irsPractitioners: {
-        L: [
-          {
-            M: {
-              userId: {
-                S: 'abc-123',
-              },
-            },
-          },
-        ],
-      },
-      isSealed: {
-        NULL: true,
-      },
-      pk: { S: 'case|123-45' },
-      privatePractitioners: {
-        L: [
-          {
-            M: {
-              userId: {
-                S: 'abc-123',
-              },
-            },
-          },
-        ],
-      },
-      sealedDate: {
-        NULL: true,
-      },
-      sk: { S: 'case|123-45' },
-    };
-
-    mockGetCase.mockReturnValue({
-      ...caseData,
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
 
-    mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
+    it('logs an error, throws an exception, and halts further execution if processDocketEntries fails', async () => {
+      processDocketEntries.mockRejectedValueOnce(new Error('something bad'));
 
-    const utils = {
-      getCase: mockGetCase,
-      getDocument: mockGetDocument,
-    };
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-    it('does nothing when no other records are found', async () => {
-      await processDocketEntries({
-        applicationContext,
-        docketEntryRecords: [],
-      });
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled();
+      expect(processDocketEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processWorkItemEntries).not.toHaveBeenCalled();
+      expect(processMessageEntries).not.toHaveBeenCalled();
+      expect(processOtherEntries).not.toHaveBeenCalled();
 
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
 
-    it('attempts to bulk index the records passed in', async () => {
-      await processDocketEntries({
-        applicationContext,
-        docketEntryRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: { S: docketEntryData.pk },
-                sk: { S: docketEntryData.sk },
-              },
-              NewImage: docketEntryDataMarshalled,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-        utils,
-      });
+    it('logs an error, throws an exception, and halts further execution if processWorkItemEntries fails', async () => {
+      processWorkItemEntries.mockRejectedValueOnce(new Error('something bad'));
 
-      expect(mockGetDocument).not.toHaveBeenCalled();
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-      const docketEntryCase = { ...caseDataMarshalled };
-      delete docketEntryCase.docketEntries;
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled();
+      expect(processDocketEntries).toHaveBeenCalled();
+      expect(processWorkItemEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processMessageEntries).not.toHaveBeenCalled();
+      expect(processOtherEntries).not.toHaveBeenCalled();
 
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: {
-              pk: { S: docketEntryData.pk },
-              sk: { S: docketEntryData.sk },
-            },
-            NewImage: {
-              ...docketEntryDataMarshalled,
-              case_relations: {
-                name: 'document',
-                parent: 'case|123_case|123|mapping',
-              },
-            },
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
 
-    it('fetches the document from persistence if the entry has a documentContentsId', async () => {
-      docketEntryData.documentContentsId = '123';
-      docketEntryDataMarshalled.documentContentsId = { S: '123' };
+    it('logs an error, throws an exception, and halts further execution if processMessageEntries fails', async () => {
+      processMessageEntries.mockRejectedValueOnce(new Error('something bad'));
 
-      await processDocketEntries({
-        applicationContext,
-        docketEntryRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: { S: docketEntryData.pk },
-                sk: { S: docketEntryData.sk },
-              },
-              NewImage: docketEntryDataMarshalled,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-        utils,
-      });
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-      expect(mockGetDocument).toHaveBeenCalled();
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled();
+      expect(processDocketEntries).toHaveBeenCalled();
+      expect(processWorkItemEntries).toHaveBeenCalled();
+      expect(processMessageEntries).toHaveBeenCalled(); // the one that throws an error
+      expect(processOtherEntries).not.toHaveBeenCalled();
 
-      const docketEntryCase = {
-        ...caseDataMarshalled,
-      };
-      delete docketEntryCase.docketEntries;
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: {
-              pk: { S: docketEntryData.pk },
-              sk: { S: docketEntryData.sk },
-            },
-            NewImage: {
-              ...docketEntryDataMarshalled,
-              case_relations: {
-                name: 'document',
-                parent: 'case|123_case|123|mapping',
-              },
-            },
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
-  });
-
-  describe('processOtherEntries', () => {
-    it('does nothing when no other records are found', async () => {
-      await processOtherEntries({
-        applicationContext,
-        otherRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
 
-    it('attempts to bulk import the records passed in', async () => {
-      const otherEntryData = {
-        docketEntryId: '123',
-        entityName: 'OtherEntry',
-        pk: 'other-entry|123',
-        sk: 'other-entry|123',
-      };
+    it('logs an error, throws an exception, and halts further execution if processOtherEntries fails', async () => {
+      processOtherEntries.mockRejectedValueOnce(new Error('something bad'));
 
-      const otherEntryDataMarshalled = {
-        docketEntryId: { S: '123' },
-        entityName: { S: 'OtherEntry' },
-        pk: { S: 'other-entry|123' },
-        sk: { S: 'other-entry|123' },
-      };
+      await expect(
+        processStreamRecordsInteractor(applicationContext, {
+          recordsToProcess: [{ my: 'record' }],
+        }),
+      ).rejects.toThrow();
 
-      await processOtherEntries({
-        applicationContext,
-        otherRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: { S: otherEntryData.pk },
-                sk: { S: otherEntryData.sk },
-              },
-              NewImage: otherEntryDataMarshalled,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-      });
+      expect(processRemoveEntries).toHaveBeenCalled();
+      expect(processCaseEntries).toHaveBeenCalled();
+      expect(processDocketEntries).toHaveBeenCalled();
+      expect(processWorkItemEntries).toHaveBeenCalled();
+      expect(processMessageEntries).toHaveBeenCalled();
+      expect(processOtherEntries).toHaveBeenCalled(); // the one that throws an error
 
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: {
-              pk: { S: otherEntryData.pk },
-              sk: { S: otherEntryData.sk },
-            },
-            NewImage: otherEntryDataMarshalled,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
-    });
-  });
-
-  describe('processRemoveEntries', () => {
-    it('does nothing when no other records are found', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('attempts to bulk delete the records passed in', async () => {
-      await processRemoveEntries({
-        applicationContext,
-        removeRecords: [
-          {
-            dynamodb: {
-              Keys: {
-                pk: {
-                  S: 'case|abc',
-                },
-                sk: {
-                  S: 'docket-entry|123',
-                },
-              },
-              NewImage: null,
-            },
-            eventName: 'MODIFY',
-          },
-        ],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
-          .calls[0][0].records,
-      ).toEqual([
-        {
-          dynamodb: {
-            Keys: { pk: { S: 'case|abc' }, sk: { S: 'docket-entry|123' } },
-            NewImage: null,
-          },
-          eventName: 'MODIFY',
-        },
-      ]);
+      expect(applicationContext.logger.error).toHaveBeenCalledTimes(2);
     });
   });
 });
