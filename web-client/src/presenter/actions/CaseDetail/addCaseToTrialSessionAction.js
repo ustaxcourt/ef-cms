@@ -53,8 +53,8 @@ export const addCaseToTrialSessionAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        message: 'Case could not be added to trial session. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Case could not be added to trial session.',
       },
     });
   }

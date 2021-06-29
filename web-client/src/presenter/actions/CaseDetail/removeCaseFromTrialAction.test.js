@@ -128,9 +128,8 @@ describe('removeCaseFromTrialAction', () => {
     expect(errorStub).toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalledWith({
       alertError: {
-        message:
-          'Case could not be removed from trial session. Please try again.',
-        title: 'Error',
+        message: 'Please try again.',
+        title: 'Case could not be removed from trial session.',
       },
     });
   });
