@@ -59,7 +59,7 @@ describe('submitOtherStatisticsAction', () => {
     });
   });
 
-  it('returns the error path if an error is encountered when calling the interactor', async () => {
+  it('returns the error path if an error is encountered when calling the interactor when adding a new other statistic', async () => {
     presenter.providers.applicationContext
       .getUseCases()
       .updateOtherStatisticsInteractor.mockImplementationOnce(() => {

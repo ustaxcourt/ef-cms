@@ -1,3 +1,4 @@
+import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { deleteDeficiencyStatisticsAction } from '../actions/deleteDeficiencyStatisticsAction';
@@ -10,6 +11,7 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
 export const deleteDeficiencyStatisticsSequence = [
   showProgressSequenceDecorator([
+    clearErrorAlertsAction,
     deleteDeficiencyStatisticsAction,
     {
       error: [setAlertErrorAction, clearModalAction],

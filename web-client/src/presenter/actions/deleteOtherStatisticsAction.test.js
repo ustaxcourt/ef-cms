@@ -31,7 +31,7 @@ describe('deleteOtherStatisticsAction', () => {
     expect(presenter.providers.path.success).toBeCalled();
   });
 
-  it('should take the error path if no errors are found', async () => {
+  it('should take the error path if errors are found', async () => {
     applicationContext
       .getUseCases()
       .updateOtherStatisticsInteractor.mockImplementation(() => {
