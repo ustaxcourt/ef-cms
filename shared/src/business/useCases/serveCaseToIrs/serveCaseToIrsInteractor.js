@@ -331,18 +331,6 @@ exports.serveCaseToIrsInteractor = async (
     user,
   });
 
-  // TODO: figure out why we need this for making the petitioner become served
-  // const updatedCase = await applicationContext
-  //   .getUseCaseHelpers()
-  //   .updateCaseAndAssociations({
-  //     applicationContext,
-  //     caseToUpdate: caseEntity,
-  //   });
-
-  // caseEntity = new Case(updatedCase, {
-  //   applicationContext,
-  // });
-
   await createCoversheetsForServedEntries({
     applicationContext,
     caseEntity,
