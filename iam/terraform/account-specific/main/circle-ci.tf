@@ -192,6 +192,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "dynamodb:DescribeStream",
         "dynamodb:GetRecords",
         "dynamodb:GetShardIterator",
+        "dynamodb:UpdateItem",
         "dynamodb:ListStreams",
         "dynamodb:UpdateGlobalTable",
         "dynamodb:CreateTableReplica"
