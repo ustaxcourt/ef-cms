@@ -13,8 +13,8 @@ describe('createNewPractitionerUser', () => {
       applicationContext,
       user: {
         barNumber: 'tpp1234',
-        email: 'practitioner@example.com',
         name: 'Test Private Practitioner',
+        pendingEmail: 'practitioner@example.com',
         role: ROLES.privatePractitioner,
         section: 'practitioner',
         userId: '123',

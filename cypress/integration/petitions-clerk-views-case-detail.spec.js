@@ -29,4 +29,15 @@ describe('Petitions clerk views case detail', function () {
       cy.get('.message-document-actions').children().should('have.length', 5);
     });
   });
+
+  describe('case detail tab', () => {
+    it('should not display printable docket record tab for new case', () => {
+      cy.visit('/case-detail/122-20');
+
+      cy.get('.progress-indicator').should('not.exist');
+      cy.get('button#tab-docket-sub-record');
+
+      cy.get('button#printable-docket-record-button').should('not.exist');
+    });
+  });
 });

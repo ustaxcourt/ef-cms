@@ -75,14 +75,14 @@ describe('Petitions Clerk Views Draft Documents', () => {
     // change tabs and come back to draft documents
 
     test.setState('currentViewMetadata.caseDetail.primaryTab', 'docketRecord');
-    await test.runSequence('setCaseDetailPrimaryTabSequence');
+    await test.runSequence('caseDetailPrimaryTabChangeSequence');
 
     test.setState('currentViewMetadata.caseDetail.primaryTab', 'drafts');
-    await test.runSequence('setCaseDetailPrimaryTabSequence');
+    await test.runSequence('caseDetailPrimaryTabChangeSequence');
 
-    expect(
-      test.getState('screenMetadata.draftDocumentViewerDocketEntryId'),
-    ).toEqual(draftDocuments[1].docketEntryId);
+    expect(test.getState('viewerDraftDocumentToDisplay.docketEntryId')).toEqual(
+      draftDocuments[1].docketEntryId,
+    );
 
     //leave case and come back
     await test.runSequence('gotoDashboardSequence');

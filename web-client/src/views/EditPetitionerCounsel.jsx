@@ -14,7 +14,6 @@ import React from 'react';
 
 export const EditPetitionerCounsel = connect(
   {
-    editPetitionerInformationHelper: state.editPetitionerInformationHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     formattedCaseDetail: state.formattedCaseDetail,

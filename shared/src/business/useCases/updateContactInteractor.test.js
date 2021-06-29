@@ -2,7 +2,11 @@ const {
   applicationContext,
   fakeData,
 } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, ROLES } = require('../entities/EntityConstants');
+const {
+  COUNTRY_TYPES,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../entities/EntityConstants');
 const { getContactPrimary } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { updateContactInteractor } = require('./updateContactInteractor');
@@ -110,7 +114,19 @@ describe('updates the contact on a case', () => {
     expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
   });
 
-  it('creates a work item if the primary contact is not represented by a privatePractitioner', async () => {
+  it('creates a work item if the contact is not represented by a privatePractitioner and there is no paper service on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...mockCaseContactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      });
+
     await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
@@ -124,17 +140,60 @@ describe('updates the contact on a case', () => {
     ).toBeCalled();
   });
 
-  it('does not create a work item if the primary contact is represented by a privatePractitioner', async () => {
+  it('creates a work item if the contact is represented by a privatePractitioner and there is paper service on the case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
+        petitioners: [
+          {
+            ...mockCaseContactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
         privatePractitioners: [
           {
             barNumber: '1111',
             name: 'Bob Practitioner',
             representing: [mockCaseContactPrimary.contactId],
             role: ROLES.privatePractitioner,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
+          },
+        ],
+      });
+
+    await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+        address1: '453 Electric Ave',
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toBeCalled();
+  });
+
+  it('does not create a work item if the contact is represented by a privatePractitioner and there is no paper service on the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...mockCaseContactPrimary,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+        privatePractitioners: [
+          {
+            barNumber: '1111',
+            name: 'Bob Practitioner',
+            representing: [mockCaseContactPrimary.contactId],
+            role: ROLES.privatePractitioner,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
             userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
           },
         ],
