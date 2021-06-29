@@ -1,4 +1,5 @@
 const React = require('react');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.js');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
@@ -22,7 +23,8 @@ const renderTable = ({ data, label, options }) => {
               <div>
                 {data.city && <span>{data.city}, </span>}
                 {data.state} {data.postalCode}
-                {data.country && <div>{data.country}</div>}
+                {data.countryType !== COUNTRY_TYPES.DOMESTIC &&
+                  data.country && <div>{data.country}</div>}
                 {options.showAddressAndPhoneChange && (
                   <div className="extra-margin-top">{data.phone}</div>
                 )}

@@ -26,7 +26,8 @@ exports.closeScannerSetupDialog = () => {
   cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
   cy.wait('@getDynamsoft');
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
-  cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
+  cy.get('div.dynamsoft-dialog-close', { timeout: 10000 }).should('be.visible');
+
   cy.get('body').then(body => {
     if (body.find('div.dynamsoft-backdrop').length > 0) {
       cy.get('div.dynamsoft-dialog-close').click();

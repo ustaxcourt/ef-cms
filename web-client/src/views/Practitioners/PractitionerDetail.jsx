@@ -1,15 +1,23 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerDetail = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
+    showModal: state.modal.showModal,
   },
-  function PractitionerDetail({ practitionerDetailHelper }) {
+  function PractitionerDetail({
+    gotoPrintPractitionerCasesSequence,
+    practitionerDetailHelper,
+    showModal,
+  }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -34,11 +42,26 @@ export const PractitionerDetail = connect(
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <div className="grid-col-9">
+            <div className="grid-col-8">
               <SuccessNotification />
             </div>
-            {practitionerDetailHelper.showEditLink && (
-              <div className="grid-col-3">
+
+            <div className="grid-col-4">
+              {practitionerDetailHelper.showPrintCaseListLink && (
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  icon="print"
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerDetailHelper.userId,
+                    });
+                  }}
+                >
+                  Print case list
+                </Button>
+              )}
+              {practitionerDetailHelper.showEditLink && (
                 <Button
                   link
                   className="push-right margin-bottom-1"
@@ -47,8 +70,8 @@ export const PractitionerDetail = connect(
                 >
                   Edit
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-4 margin-bottom-4">
@@ -131,7 +154,16 @@ export const PractitionerDetail = connect(
                         >
                           Email address
                         </span>
-                        {practitionerDetailHelper.emailFormatted}
+                        {practitionerDetailHelper.emailFormatted && (
+                          <div className="margin-bottom-2">
+                            {practitionerDetailHelper.emailFormatted}
+                          </div>
+                        )}
+                        {practitionerDetailHelper.pendingEmailFormatted && (
+                          <div>
+                            {practitionerDetailHelper.pendingEmailFormatted}
+                          </div>
+                        )}
                         {practitionerDetailHelper.showEAccessFlag && (
                           <FontAwesomeIcon
                             className="margin-left-05 fa-icon-blue"
@@ -251,6 +283,10 @@ export const PractitionerDetail = connect(
             </div>
           </div>
         </div>
+
+        {showModal === 'OpenPractitionerCaseListPdfModal' && (
+          <OpenPractitionerCaseListPdfModal />
+        )}
       </React.Fragment>
     );
   },

@@ -110,6 +110,19 @@ describe('genericHandler', () => {
     expect(logged).toContain('Results:');
   });
 
+  it('should not log `results` when disabled in options', async () => {
+    const callback = () => null;
+
+    await genericHandler(MOCK_EVENT, callback, {
+      applicationContext,
+      logResults: false,
+      user: MOCK_USER,
+    });
+
+    expect(logged).toContain('Request:');
+    expect(logged).not.toContain('Results:');
+  });
+
   it('returns the results of a successful execution', async () => {
     const callback = () => {
       return Promise.resolve('some data');

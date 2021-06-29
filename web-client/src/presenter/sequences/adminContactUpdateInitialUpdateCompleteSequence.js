@@ -1,5 +1,5 @@
 import { getUserContactEditCompleteAlertSuccessAction } from '../actions/getUserContactEditCompleteAlertSuccessAction';
-import { hasUpdatedEmailAction } from '../actions/hasUpdatedEmailAction';
+import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
 import { navigateToPractitionerDetailAction } from '../actions/navigateToPractitionerDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -8,7 +8,7 @@ import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForRespons
 
 export const adminContactUpdateInitialUpdateCompleteSequence = [
   unsetWaitingForResponseAction,
-  hasUpdatedEmailAction,
+  hasUpdatedEmailFactoryAction('updatedEmail'),
   {
     no: [
       getUserContactEditCompleteAlertSuccessAction,
