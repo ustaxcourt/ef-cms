@@ -51,7 +51,7 @@ describe('private practitioner views pending email journey', () => {
   petitionsClerkAddsPractitionersToCase(test, true);
 
   loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(test, true);
+  admissionsClerkAddsPractitionerEmail(test);
 
   it('admission clerk views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(

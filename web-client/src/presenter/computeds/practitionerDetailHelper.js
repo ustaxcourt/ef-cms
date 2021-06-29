@@ -8,15 +8,32 @@ export const practitionerDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .isInternalUser(user.role);
 
+  const pendingEmailFormatted = practitionerDetail.pendingEmail
+    ? `${practitionerDetail.pendingEmail} (Pending)`
+    : null;
+
+  let emailFormatted;
+
+  if (
+    practitionerDetail.email &&
+    pendingEmailFormatted !== practitionerDetail.email
+  ) {
+    emailFormatted = practitionerDetail.email;
+  } else {
+    emailFormatted = pendingEmailFormatted ? undefined : 'Not provided';
+  }
+
   return {
     ...practitionerDetail,
     additionalPhone: practitionerDetail.additionalPhone || 'Not provided',
     admissionsDateFormatted: applicationContext
       .getUtilities()
       .formatDateString(practitionerDetail.admissionsDate, 'MM/DD/YYYY'),
-    emailFormatted: practitionerDetail.email || 'Not provided',
+    emailFormatted,
     firmNameFormatted: practitionerDetail.firmName || 'None',
+    pendingEmailFormatted,
     showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
+    showPrintCaseListLink: isInternalUser,
   };
 };

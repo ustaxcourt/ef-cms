@@ -10,10 +10,6 @@ const RenderAddress = ({ contact, countryTypes }) => {
 
   return (
     <>
-      {contact.inCareOf && <div>c/o {contact.inCareOf}</div>}
-      {contact.secondaryName && <div>c/o {contact.secondaryName}</div>}
-      {contact.title && <div>{contact.title}</div>}
-      {contact.additionalName && <div>{contact.additionalName}</div>}
       {contact.address1 && <div>{contact.address1}</div>}
       {contact.address2 && <div>{contact.address2}</div>}
       {contact.address3 && <div>{contact.address3}</div>}
@@ -23,55 +19,56 @@ const RenderAddress = ({ contact, countryTypes }) => {
         {contact.postalCode && <span>{contact.postalCode}</span>}
       </div>
       {isInternational && <span>{contact.country}</span>}
-      {contact.phone && <p>{contact.phone}</p>}
+      {contact.phone && <p className="margin-top-5">{contact.phone}</p>}
     </>
   );
 };
 
-const RenderContact = ({ contact, countryTypes }) => {
+const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
   return (
-    <div className="party-details">
-      <div>
-        {contact.isAddressSealed && (
-          <div className="sealed-icon-container">
-            <div className="sealed-icon" />
-          </div>
-        )}
-        <p className="margin-bottom-0">{contact.name}</p>
-        {!contact.isAddressSealed && (
-          <RenderAddress contact={contact} countryTypes={countryTypes} />
-        )}
-        {contact.isAddressSealed && (
-          <p className="address-sealed-text">Address sealed</p>
-        )}
-      </div>
-    </div>
-  );
-};
+    <>
+      <tbody>
+        <tr className="party-details" key={contact.index}>
+          <td>
+            {contact.name}
+            {contact.additionalName && <div>{contact.additionalName}</div>}
+          </td>
+          {!contact.isAddressSealed && showContactDetails && (
+            <td>
+              <RenderAddress
+                className="address-info"
+                contact={contact}
+                countryTypes={countryTypes}
+              />
+            </td>
+          )}
+          {contact.isAddressSealed && showContactDetails && (
+            <td>
+              <p className="address-sealed-text">Address sealed</p>
+            </td>
+          )}
 
-const RenderPractitioner = ({ countryTypes, practitioner }) => {
-  return (
-    <div className="party-details">
-      <p className="margin-bottom-0">
-        {practitioner.formattedName || practitioner.name}
-      </p>
-      <RenderAddress
-        contact={{
-          ...practitioner.contact,
-          name: practitioner.name,
-        }}
-        countryTypes={countryTypes}
-      />
-      {practitioner.representingFormatted && (
-        <div className="extra-margin-top">
-          <strong>Representing</strong>
-          <br />
-          {practitioner.representingFormatted.map(p => (
-            <div key={p.name}>{p.name}</div>
-          ))}
-        </div>
-      )}
-    </div>
+          <td>
+            {contact.counselDetails.map(practitioner => {
+              return (
+                <div
+                  className="practitioner-contact"
+                  key={practitioner.email + contact.contactId}
+                >
+                  <p className="margin-top-0 margin-bottom-0">
+                    {practitioner.name}
+                  </p>
+                  <p className="margin-top-5 margin-bottom-0">
+                    {practitioner.email}
+                  </p>
+                  <p className="margin-top-5">{practitioner.phone}</p>
+                </div>
+              );
+            })}
+          </td>
+        </tr>
+      </tbody>
+    </>
   );
 };
 
@@ -136,58 +133,64 @@ export const DocketRecord = ({
         h3="Printable Docket Record"
       />
 
-      {options.includePartyDetail && (
-        <div className="party-info" id="petitioner-contacts">
-          <div className="party-info-header">{caseDetail.partyType}</div>
-          <div className="party-info-content">
-            {caseDetail.petitioners.map(p => {
-              return (
-                <RenderContact
-                  caseTitle={options.caseTitle}
-                  contact={p}
-                  countryTypes={countryTypes}
-                  key={p.contactId}
-                />
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      <div className="party-info" id="private-practitioner-contacts">
-        <div className="party-info-header">Petitioner Counsel</div>
-        <div className="party-info-content">
-          {caseDetail.privatePractitioners.length == 0 && 'Pro Se'}
-          {caseDetail.privatePractitioners.map(practitioner => {
-            if (practitioner.formattedName) {
-              return (
-                <RenderPractitioner
-                  countryTypes={countryTypes}
-                  key={practitioner.barNumber}
-                  practitioner={practitioner}
-                />
-              );
-            }
-          })}
-        </div>
-      </div>
-
-      <div className="party-info" id="irs-practitioner-contacts">
-        <div className="party-info-header">Respondent Counsel</div>
-        <div className="party-info-content">
-          {caseDetail.irsPractitioners.length == 0 && 'None'}
-          {caseDetail.irsPractitioners.map(practitioner => {
+      <div className="party-info" id="petitioner-contacts">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              {options.includePartyDetail && <th>Contact</th>}
+              <th>Counsel</th>
+            </tr>
+          </thead>
+          {caseDetail.petitioners.map(p => {
             return (
-              <RenderPractitioner
+              <RenderContact
+                caseTitle={options.caseTitle}
+                contact={p}
                 countryTypes={countryTypes}
-                key={practitioner.barNumber}
-                practitioner={practitioner}
+                key={p.contactId}
+                showContactDetails={options.includePartyDetail}
               />
             );
           })}
-        </div>
+        </table>
       </div>
 
+      <div className="party-info" id="irs-practitioner-contacts">
+        <table>
+          <thead>
+            <tr>
+              <th>Respondent Counsel</th>
+              <th>Respondent Counsel Contact</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {caseDetail.irsPractitioners.length > 0 ? (
+              caseDetail.irsPractitioners.map(irsPractitioner => {
+                return (
+                  <tr key={irsPractitioner.userId}>
+                    <td>{irsPractitioner.name}</td>
+                    <td>
+                      <div>
+                        {irsPractitioner.email && irsPractitioner.email}
+                      </div>
+                      <div>
+                        {irsPractitioner.contact?.phone &&
+                          irsPractitioner.contact.phone}
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td>None</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <table id="documents">
         <thead>
           <tr>
