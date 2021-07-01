@@ -483,9 +483,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
     '/case-documents/order-search',
     //lambdaWrapper(orderAdvancedSearchLambda),
     (req, res) => {
-      return res.status(504).send({
-        message: 'This is a gateway timneout error!',
-      });
+      return res.status(504).send(''); // TODO - REMOVE THIS
     },
   );
   // POST
