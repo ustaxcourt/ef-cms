@@ -220,9 +220,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetReduceImageBlobValue = {
-    default: jest.fn().mockReturnValue({
-      toBlob: jest.fn(),
-    }),
+    toBlob: jest.fn(),
   };
 
   const mockGetUtilities = appContextProxy({
