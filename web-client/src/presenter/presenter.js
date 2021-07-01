@@ -481,7 +481,7 @@ export const presenter = {
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    [GatewayTimeoutError, gatewayTimeoutErrorSequence],
+    [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
