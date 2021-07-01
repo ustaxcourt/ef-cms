@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
+import { GatewayTimeoutError } from './errors/GatewayTimeoutError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
@@ -479,6 +480,7 @@ export const presenter = {
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
+    [GatewayTimeoutError, notFoundErrorSequence],
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
