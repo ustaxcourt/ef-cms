@@ -13,7 +13,7 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully';
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
-import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
+// import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -63,8 +63,10 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   practitionerViewsCaseDetail(test, false);
   privatePractitionerSeesStrickenDocketEntry(test, 4);
   privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(test);
-  userSearchesForStrickenDocument(test);
+  // disabled for 7368 testing
 
-  loginAs(test, 'docketclerk@example.com');
-  userSearchesForStrickenDocument(test);
+  // userSearchesForStrickenDocument(test);
+
+  // loginAs(test, 'docketclerk@example.com');
+  // userSearchesForStrickenDocument(test);
 });
