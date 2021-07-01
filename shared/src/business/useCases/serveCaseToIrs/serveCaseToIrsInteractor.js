@@ -3,7 +3,6 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-  ROLES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -16,7 +15,7 @@ const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-exports.addDocketEntryForPaymentStatus = ({
+const addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
   user,
@@ -57,6 +56,7 @@ exports.addDocketEntryForPaymentStatus = ({
     );
   }
 };
+exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
@@ -80,6 +80,197 @@ const addDocketEntries = ({ caseEntity }) => {
       caseEntity.updateDocketEntry(foundDocketEntry);
     }
   }
+};
+
+const createPetitionWorkItems = async ({
+  applicationContext,
+  caseEntity,
+  user,
+}) => {
+  const petitionDocument = caseEntity.docketEntries.find(
+    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+  const initializeCaseWorkItem = petitionDocument.workItem;
+
+  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
+  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
+  initializeCaseWorkItem.docketNumberWithSuffix =
+    caseEntity.docketNumberWithSuffix;
+
+  initializeCaseWorkItem.setAsCompleted({
+    message: 'Served to IRS',
+    user,
+  });
+
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: PETITIONS_SECTION,
+    userId: user.userId,
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  });
+
+  await applicationContext.getPersistenceGateway().updateWorkItem({
+    applicationContext,
+    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
+  });
+};
+
+const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
+  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+
+  let pdfData = await applicationContext
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
+      applicationContext,
+      data: {
+        address: caseEntity.petitioners[0],
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
+    });
+
+  const contactSecondary = caseEntity.petitioners[1];
+  if (contactSecondary) {
+    const dataWithNoticeAttached = await generatePaperNoticeForContactSecondary(
+      {
+        applicationContext,
+        caseCaptionExtension,
+        caseEntity,
+        caseTitle,
+        contactSecondary,
+        docketNumberWithSuffix,
+        pdfData,
+        preferredTrialCity,
+        receivedAt,
+      },
+    );
+    if (dataWithNoticeAttached) {
+      pdfData = dataWithNoticeAttached;
+    }
+  }
+
+  const caseConfirmationPdfName =
+    caseEntity.getCaseConfirmationGeneratedPdfFileName();
+
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName,
+    pdfData,
+  });
+
+  let urlToReturn;
+
+  if (caseEntity.isPaper) {
+    ({ url: urlToReturn } = await applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl({
+        applicationContext,
+        key: caseConfirmationPdfName,
+        useTempBucket: false,
+      }));
+  }
+
+  return urlToReturn;
+};
+
+const createCoversheetsForServedEntries = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  for (const doc of caseEntity.docketEntries) {
+    if (doc.isFileAttached) {
+      const updatedDocketEntry = await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          caseEntity,
+          docketEntryId: doc.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          replaceCoversheet: !caseEntity.isPaper,
+          useInitialData: !caseEntity.isPaper,
+        });
+
+      caseEntity.updateDocketEntry(updatedDocketEntry);
+    }
+  }
+};
+
+const generatePaperNoticeForContactSecondary = async ({
+  applicationContext,
+  caseCaptionExtension,
+  caseEntity,
+  caseTitle,
+  contactSecondary,
+  docketNumberWithSuffix,
+  pdfData,
+  preferredTrialCity,
+  receivedAt,
+}) => {
+  const contactInformationDiff = applicationContext
+    .getUtilities()
+    .getAddressPhoneDiff({
+      newData: caseEntity.petitioners[0],
+      oldData: contactSecondary,
+    });
+
+  const addressFields = [
+    'country',
+    'countryType',
+    'address1',
+    'address2',
+    'address3',
+    'city',
+    'state',
+    'postalCode',
+  ];
+
+  const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
+    field => addressFields.includes(field),
+  );
+
+  if (!contactAddressesAreDifferent) {
+    return;
+  }
+
+  const secondaryPdfData = await applicationContext
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
+      applicationContext,
+      data: {
+        address: contactSecondary,
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
+    });
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
+  const pdfDoc = await PDFDocument.load(pdfData);
+  const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+  const coverPageDocumentPages = await pdfDoc.copyPages(
+    secondaryPdfDoc,
+    secondaryPdfDoc.getPageIndices(),
+  );
+  pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+
+  const pdfDataBuffer = await pdfDoc.save();
+  return Buffer.from(pdfDataBuffer);
 };
 
 /**
@@ -107,7 +298,7 @@ exports.serveCaseToIrsInteractor = async (
       docketNumber,
     });
 
-  const caseEntity = new Case(caseToBatch, { applicationContext });
+  let caseEntity = new Case(caseToBatch, { applicationContext });
 
   caseEntity.markAsSentToIRS();
 
@@ -116,47 +307,14 @@ exports.serveCaseToIrsInteractor = async (
   }
 
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    const initialDocumentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
-
-    const initialDocketEntry = caseEntity.docketEntries.find(
-      doc => doc.documentType === initialDocumentType.documentType,
-    );
-
-    if (initialDocketEntry && !initialDocketEntry.isMinuteEntry) {
-      initialDocketEntry.setAsServed([
-        {
-          name: 'IRS',
-          role: ROLES.irsSuperuser,
-        },
-      ]);
-      caseEntity.updateDocketEntry(initialDocketEntry);
-
-      if (
-        initialDocketEntry.documentType ===
-        INITIAL_DOCUMENT_TYPES.petition.documentType
-      ) {
-        await applicationContext
-          .getUseCaseHelpers()
-          .sendIrsSuperuserPetitionEmail({
-            applicationContext,
-            caseEntity,
-            docketEntryId: initialDocketEntry.docketEntryId,
-          });
-      } else {
-        await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-          applicationContext,
-          caseEntity,
-          docketEntryId: initialDocketEntry.docketEntryId,
-          servedParties: {
-            //IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
-            electronic: [],
-          },
-        });
-      }
-    }
+    await applicationContext.getUtilities().serveCaseDocument({
+      applicationContext,
+      caseEntity,
+      initialDocumentTypeKey,
+    });
   }
 
-  exports.addDocketEntryForPaymentStatus({
+  addDocketEntryForPaymentStatus({
     applicationContext,
     caseEntity,
     user,
@@ -167,190 +325,25 @@ exports.serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  const petitionDocument = caseEntity.docketEntries.find(
-    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-  const initializeCaseWorkItem = petitionDocument.workItem;
-
-  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
-  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
-  initializeCaseWorkItem.docketNumberWithSuffix =
-    caseEntity.docketNumberWithSuffix;
-
-  initializeCaseWorkItem.setAsCompleted({
-    message: 'Served to IRS',
+  await createPetitionWorkItems({
+    applicationContext,
+    caseEntity,
     user,
   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+  await createCoversheetsForServedEntries({
     applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
+    caseEntity,
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
-    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
+    caseEntity,
   });
-  const caseWithServedDocketEntryInformation = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
-
-  const caseEntityToUpdate = new Case(caseWithServedDocketEntryInformation, {
-    applicationContext,
-  });
-
-  for (const doc of caseEntityToUpdate.docketEntries) {
-    if (doc.isFileAttached) {
-      const updatedDocketEntry = await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId: doc.docketEntryId,
-          docketNumber: caseEntityToUpdate.docketNumber,
-          replaceCoversheet: !caseEntityToUpdate.isPaper,
-          useInitialData: !caseEntityToUpdate.isPaper,
-        });
-
-      caseEntityToUpdate.updateDocketEntry(updatedDocketEntry);
-    }
-  }
-
-  const { caseCaptionExtension, caseTitle } =
-    getCaseCaptionMeta(caseEntityToUpdate);
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } =
-    caseEntityToUpdate;
-
-  let pdfData = await applicationContext
-    .getDocumentGenerators()
-    .noticeOfReceiptOfPetition({
-      applicationContext,
-      data: {
-        address: caseEntityToUpdate.petitioners[0],
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        preferredTrialCity,
-        receivedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(receivedAt, 'MMMM D, YYYY'),
-        servedDate: applicationContext
-          .getUtilities()
-          .formatDateString(
-            caseEntityToUpdate.getIrsSendDate(),
-            'MMMM D, YYYY',
-          ),
-      },
-    });
-
-  const contactSecondary = caseEntityToUpdate.petitioners[1];
-  if (contactSecondary) {
-    const contactInformationDiff = applicationContext
-      .getUtilities()
-      .getAddressPhoneDiff({
-        newData: caseEntityToUpdate.petitioners[0],
-        oldData: contactSecondary,
-      });
-
-    const addressFields = [
-      'country',
-      'countryType',
-      'address1',
-      'address2',
-      'address3',
-      'city',
-      'state',
-      'postalCode',
-    ];
-
-    const contactAddressesAreDifferent = Object.keys(
-      contactInformationDiff,
-    ).some(field => addressFields.includes(field));
-
-    let secondaryPdfData;
-
-    if (contactAddressesAreDifferent) {
-      secondaryPdfData = await applicationContext
-        .getDocumentGenerators()
-        .noticeOfReceiptOfPetition({
-          applicationContext,
-          data: {
-            address: contactSecondary,
-            caseCaptionExtension,
-            caseTitle,
-            docketNumberWithSuffix,
-            preferredTrialCity,
-            receivedAtFormatted: applicationContext
-              .getUtilities()
-              .formatDateString(receivedAt, 'MMMM D, YYYY'),
-            servedDate: applicationContext
-              .getUtilities()
-              .formatDateString(
-                caseEntityToUpdate.getIrsSendDate(),
-                'MMMM D, YYYY',
-              ),
-          },
-        });
-
-      const { PDFDocument } = await applicationContext.getPdfLib();
-      const pdfDoc = await PDFDocument.load(pdfData);
-      const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
-      const coverPageDocumentPages = await pdfDoc.copyPages(
-        secondaryPdfDoc,
-        secondaryPdfDoc.getPageIndices(),
-      );
-      pdfDoc.insertPage(1, coverPageDocumentPages[0]);
-
-      const pdfDataBuffer = await pdfDoc.save();
-      pdfData = Buffer.from(pdfDataBuffer);
-    }
-  }
-
-  const caseConfirmationPdfName =
-    caseEntityToUpdate.getCaseConfirmationGeneratedPdfFileName();
-
-  await new Promise((resolve, reject) => {
-    const documentsBucket = applicationContext.getDocumentsBucketName();
-    const s3Client = applicationContext.getStorageClient();
-
-    const params = {
-      Body: pdfData,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: caseConfirmationPdfName,
-    };
-
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error(
-          'An error occurred while attempting to upload to S3',
-          err,
-        );
-        reject(err);
-      }
-
-      resolve();
-    });
-  });
-
-  let urlToReturn;
-
-  if (caseEntityToUpdate.isPaper) {
-    ({ url: urlToReturn } = await applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl({
-        applicationContext,
-        key: caseConfirmationPdfName,
-        useTempBucket: false,
-      }));
-  }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
-    caseToUpdate: caseEntityToUpdate,
+    caseToUpdate: caseEntity,
   });
 
   return urlToReturn;

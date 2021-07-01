@@ -45,6 +45,9 @@ const {
   PendingReport,
 } = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
 const {
+  PractitionerCaseList,
+} = require('../pdfGenerator/documentTemplates/PractitionerCaseList.jsx');
+const {
   PretrialMemorandum,
 } = require('../pdfGenerator/components/PretrialMemorandum.jsx');
 const {
@@ -95,6 +98,7 @@ const components = {
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
+  PractitionerCaseList,
   PretrialMemorandum,
   ReceiptOfFiling,
   ReportsMetaHeader,

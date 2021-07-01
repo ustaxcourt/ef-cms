@@ -28,7 +28,7 @@ describe('petitions clerk edits a petition payment fee', () => {
   loginAs(test, 'petitionsclerk@example.com');
 
   it('login as the petitions clerk and edit the case petition payment fee', async () => {
-    await test.runSequence('gotoEditPetitionDetailsSequence', {
+    await test.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -48,7 +48,12 @@ describe('petitions clerk edits a petition payment fee', () => {
       value: PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
+
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -74,7 +79,7 @@ describe('petitions clerk edits a petition payment fee', () => {
       value: 'check',
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

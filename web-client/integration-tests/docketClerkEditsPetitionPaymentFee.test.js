@@ -1,4 +1,4 @@
-import { Case } from '../../shared/src/business/entities/cases/Case';
+import { CaseQC } from '../../shared/src/business/entities/cases/CaseQC';
 import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
@@ -28,7 +28,7 @@ describe('docket clerk edits a petition payment fee', () => {
   loginAs(test, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case petition payment fee', async () => {
-    await test.runSequence('gotoEditPetitionDetailsSequence', {
+    await test.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -48,14 +48,20 @@ describe('docket clerk edits a petition payment fee', () => {
       value: PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
-      petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
+      hasVerifiedIrsNotice:
+        CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
+      petitionPaymentDate: CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod:
-        Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+        CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
+    await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
     await test.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '01',
@@ -74,7 +80,7 @@ describe('docket clerk edits a petition payment fee', () => {
       value: 'check',
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 
