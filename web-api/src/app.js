@@ -242,9 +242,9 @@ const {
 const {
   opinionAdvancedSearchLambda,
 } = require('./documents/opinionAdvancedSearchLambda');
-// const {
-//   orderAdvancedSearchLambda,
-// } = require('./documents/orderAdvancedSearchLambda');
+const {
+  orderAdvancedSearchLambda,
+} = require('./documents/orderAdvancedSearchLambda');
 const {
   privatePractitionerCaseAssociationLambda,
 } = require('./cases/privatePractitionerCaseAssociationLambda');
@@ -481,10 +481,7 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   app.get(
     '/case-documents/order-search',
-    //lambdaWrapper(orderAdvancedSearchLambda),
-    (req, res) => {
-      return res.status(504).send(''); // TODO - REMOVE THIS
-    },
+    lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
   app.post(
