@@ -79,7 +79,7 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled
+              disabled={false}
               id="tab-order"
               tabName={searchTabs.ORDER}
               title="Order (Coming Soon)"
