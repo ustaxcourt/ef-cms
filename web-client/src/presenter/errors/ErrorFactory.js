@@ -30,6 +30,7 @@ export const ErrorFactory = {
     }
     newError.originalError = e;
     newError.responseCode = responseCode;
+
     return newError;
   },
 };
