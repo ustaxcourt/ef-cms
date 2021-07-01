@@ -94,6 +94,7 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
+import { gatewayTimeoutErrorSequence } from './sequences/gatewayTimeoutErrorSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
@@ -480,7 +481,7 @@ export const presenter = {
     [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
     [NotFoundError, notFoundErrorSequence], //404
     [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    [GatewayTimeoutError, notFoundErrorSequence],
+    [GatewayTimeoutError, gatewayTimeoutErrorSequence],
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},

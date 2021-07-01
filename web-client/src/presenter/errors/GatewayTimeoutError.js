@@ -2,10 +2,10 @@ import { ActionError } from './ActionError';
 
 export class GatewayTimeoutError extends ActionError {
   // HTTP 504
-  constructor(e) {
-    const message = (e.response && e.response.data) || e.message;
+  constructor() {
+    const message = 'The server took too long to process a response.';
     super(message);
-    this.title = 'The response from the server took too long'; // TODO messaging here
+    this.title = 'Gateway Timeout'; // TODO messaging here
     this.message = message;
   }
 }
