@@ -63,7 +63,6 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   practitionerViewsCaseDetail(test, false);
   privatePractitionerSeesStrickenDocketEntry(test, 4);
   privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(test);
-
   userSearchesForStrickenDocument(test);
 
   loginAs(test, 'docketclerk@example.com');

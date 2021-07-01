@@ -5,7 +5,7 @@ import { runAction } from 'cerebral/test';
 let yesStub;
 let noStub;
 
-describe('isRespondentInCaseAction', () => {
+describe('isSearchTimeoutErrorAction', () => {
   beforeAll(() => {
     yesStub = jest.fn();
     noStub = jest.fn();
