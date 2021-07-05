@@ -61,7 +61,7 @@ Here are the steps required to verify a new email:
   - `AWS_ACCOUNT_ID`
   - `AWS_SECRET_ACCESS_KEY`
 2. Run the script:
-  - `cd scripts && ./verify-ses-email.sh`
+  - `cd web-api && ./verify-ses-email.sh`
 
 #### Manual
 1. Need to create an s3 bucket (e.g. `mail-verification.example.com`)
