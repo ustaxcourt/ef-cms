@@ -32,6 +32,9 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
   const result = {
+    isSearchEnabled: applicationContext.isFeatureEnabled(
+      'advanced_document_search',
+    ),
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };

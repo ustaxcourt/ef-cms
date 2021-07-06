@@ -81,10 +81,13 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled={true}
+              disabled={!advancedSearchHelper.isSearchEnabled}
               id="tab-order"
               tabName={searchTabs.ORDER}
-              title="Order (Coming Soon)"
+              title={
+                'Order' +
+                (!advancedSearchHelper.isSearchEnabled ? ' (Coming Soon)' : '')
+              }
             >
               <OrderSearchForm
                 submitAdvancedSearchSequence={submitOrderAdvancedSearchSequence}
@@ -92,7 +95,7 @@ export const AdvancedSearch = connect(
               <DocumentSearchResults />
             </Tab>
             <Tab
-              disabled
+              disabled={true}
               id="tab-opinion"
               tabName={searchTabs.OPINION}
               title="Opinion (Coming Soon)"
