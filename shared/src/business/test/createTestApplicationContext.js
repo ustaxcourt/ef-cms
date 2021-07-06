@@ -153,6 +153,9 @@ const {
   updateDocketEntry,
 } = require('../../persistence/dynamo/documents/updateDocketEntry');
 const {
+  updateUserRecords,
+} = require('../../persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItem,
 } = require('../../persistence/dynamo/workitems/updateWorkItem');
 const {
@@ -170,6 +173,7 @@ const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
+const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
@@ -219,9 +223,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetReduceImageBlobValue = {
-    default: jest.fn().mockReturnValue({
-      toBlob: jest.fn(),
-    }),
+    toBlob: jest.fn(),
   };
 
   const mockGetUtilities = appContextProxy({
@@ -331,6 +333,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
     replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
+    serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
@@ -364,6 +367,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -377,6 +381,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
+    practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
     receiptOfFiling: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrder: jest.fn().mockImplementation(getFakeFile),
     standingPretrialOrderForSmallCase: jest

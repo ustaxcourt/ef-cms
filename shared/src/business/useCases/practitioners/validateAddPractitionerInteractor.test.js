@@ -24,12 +24,13 @@ describe('validateAddPractitionerInteractor', () => {
     ]);
   });
 
-  it('returns null on no errors', () => {
+  it('should return null when the practitioner object is valid', () => {
     const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         birthYear: '2009',
+        confirmEmail: 'test@example.com',
         email: 'test@example.com',
         employer: 'IRS',
         firstName: 'Test',

@@ -27,6 +27,32 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
+  describe('printableDocketRecord', () => {
+    it('should show printable docket record button if the case status is not new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: false,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeTruthy();
+    });
+
+    it('should not show printable docket record button if the case status is new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: true,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeFalsy();
+    });
+  });
+
   describe('formattedDocketEntriesOnDocketRecord', () => {
     it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
       const result = runCompute(publicCaseDetailHelper, { state });

@@ -372,7 +372,7 @@ describe('processStreamUtilities', () => {
   });
 
   describe('processCaseEntries', () => {
-    const mockGetCase = jest.fn();
+    const mockGetCaseMetadataWithCounsel = jest.fn();
     const mockGetDocument = jest.fn();
 
     it('does nothing when no other records are found', async () => {
@@ -388,27 +388,57 @@ describe('processStreamUtilities', () => {
 
     it('attempts to bulk index the records passed in', async () => {
       const caseData = {
-        docketEntries: [],
         docketNumber: '123-45',
         entityName: 'Case',
+        irsPractitioners: [
+          {
+            name: 'bob',
+          },
+        ],
         pk: 'case|123-45',
+        privatePractitioners: [
+          {
+            name: 'jane',
+          },
+        ],
         sk: 'case|123-45',
       };
 
       const caseDataMarshalled = {
-        docketEntries: { L: [] },
         docketNumber: { S: '123-45' },
         entityName: { S: 'Case' },
+        irsPractitioners: {
+          L: [
+            {
+              M: {
+                name: {
+                  S: 'bob',
+                },
+              },
+            },
+          ],
+        },
         pk: { S: 'case|123-45' },
+        privatePractitioners: {
+          L: [
+            {
+              M: {
+                name: {
+                  S: 'jane',
+                },
+              },
+            },
+          ],
+        },
         sk: { S: 'case|123-45' },
       };
 
-      mockGetCase.mockReturnValue({
+      mockGetCaseMetadataWithCounsel.mockReturnValue({
         ...caseData,
       });
 
       const utils = {
-        getCase: mockGetCase,
+        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
         getDocument: mockGetDocument,
       };
 
@@ -429,7 +459,7 @@ describe('processStreamUtilities', () => {
         utils,
       });
 
-      expect(mockGetCase).toHaveBeenCalled();
+      expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalled();
 
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
@@ -442,7 +472,29 @@ describe('processStreamUtilities', () => {
               case_relations: { name: 'case' },
               docketNumber: { S: '123-45' },
               entityName: { S: 'CaseDocketEntryMapping' },
+              irsPractitioners: {
+                L: [
+                  {
+                    M: {
+                      name: {
+                        S: 'bob',
+                      },
+                    },
+                  },
+                ],
+              },
               pk: { S: 'case|123-45' },
+              privatePractitioners: {
+                L: [
+                  {
+                    M: {
+                      name: {
+                        S: 'jane',
+                      },
+                    },
+                  },
+                ],
+              },
               sk: { S: 'case|123-45' },
             },
           },
@@ -475,12 +527,12 @@ describe('processStreamUtilities', () => {
         sk: { S: 'case|123-45' },
       };
 
-      mockGetCase.mockReturnValue({
+      mockGetCaseMetadataWithCounsel.mockReturnValue({
         ...caseData,
       });
 
       const utils = {
-        getCase: mockGetCase,
+        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
         getDocument: mockGetDocument,
       };
       applicationContext
@@ -511,7 +563,6 @@ describe('processStreamUtilities', () => {
   });
 
   describe('processDocketEntries', () => {
-    const mockGetCase = jest.fn();
     const mockGetDocument = jest.fn();
 
     const docketEntryData = {
@@ -528,96 +579,9 @@ describe('processStreamUtilities', () => {
       sk: { S: 'docket-entry|123' },
     };
 
-    const caseData = {
-      caseCaption: 'hello world',
-      contactPrimary: {
-        name: 'bob',
-      },
-      contactSecondary: null,
-      docketEntries: [docketEntryData],
-      docketNumber: '123-45',
-      docketNumberSuffix: 'W',
-      docketNumberWithSuffix: '123-45W',
-      entityName: 'Case',
-      irsPractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      isSealed: null,
-      pk: 'case|123-45',
-      privatePractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      sealedDate: null,
-      sk: 'case|123-45',
-    };
-
-    const caseDataMarshalled = {
-      caseCaption: { S: 'hello world' },
-      contactPrimary: {
-        M: {
-          name: {
-            S: 'bob',
-          },
-        },
-      },
-      contactSecondary: {
-        NULL: true,
-      },
-      docketEntries: {
-        L: [{ M: docketEntryDataMarshalled }],
-      },
-      docketNumber: { S: '123-45' },
-      docketNumberSuffix: {
-        S: 'W',
-      },
-      docketNumberWithSuffix: {
-        S: '123-45W',
-      },
-      entityName: { S: 'Case' },
-      irsPractitioners: {
-        L: [
-          {
-            M: {
-              userId: {
-                S: 'abc-123',
-              },
-            },
-          },
-        ],
-      },
-      isSealed: {
-        NULL: true,
-      },
-      pk: { S: 'case|123-45' },
-      privatePractitioners: {
-        L: [
-          {
-            M: {
-              userId: {
-                S: 'abc-123',
-              },
-            },
-          },
-        ],
-      },
-      sealedDate: {
-        NULL: true,
-      },
-      sk: { S: 'case|123-45' },
-    };
-
-    mockGetCase.mockReturnValue({
-      ...caseData,
-    });
-
     mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
 
     const utils = {
-      getCase: mockGetCase,
       getDocument: mockGetDocument,
     };
 
@@ -651,9 +615,6 @@ describe('processStreamUtilities', () => {
       });
 
       expect(mockGetDocument).not.toHaveBeenCalled();
-
-      const docketEntryCase = { ...caseDataMarshalled };
-      delete docketEntryCase.docketEntries;
 
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
@@ -701,11 +662,6 @@ describe('processStreamUtilities', () => {
       });
 
       expect(mockGetDocument).toHaveBeenCalled();
-
-      const docketEntryCase = {
-        ...caseDataMarshalled,
-      };
-      delete docketEntryCase.docketEntries;
 
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
@@ -798,11 +754,6 @@ describe('processStreamUtilities', () => {
 
       expect(mockGetDocument).toHaveBeenCalled();
 
-      const docketEntryCase = {
-        ...caseDataMarshalled,
-      };
-      delete docketEntryCase.docketEntries;
-
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
           .calls[0][0].records,
@@ -849,11 +800,6 @@ describe('processStreamUtilities', () => {
       });
 
       expect(mockGetDocument).not.toHaveBeenCalled();
-
-      const docketEntryCase = {
-        ...caseDataMarshalled,
-      };
-      delete docketEntryCase.docketEntries;
 
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords.mock
