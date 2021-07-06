@@ -17,6 +17,7 @@ export const AdvancedSearch = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
+    featureFlagHelper: state.featureFlagHelper,
     searchTabs: state.constants.ADVANCED_SEARCH_TABS,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
@@ -34,6 +35,7 @@ export const AdvancedSearch = connect(
   function AdvancedSearch({
     advancedSearchHelper,
     advancedSearchTabChangeSequence,
+    featureFlagHelper,
     searchTabs,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
@@ -81,12 +83,12 @@ export const AdvancedSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled={!advancedSearchHelper.isSearchEnabled}
+              disabled={!featureFlagHelper.isSearchEnabled}
               id="tab-order"
               tabName={searchTabs.ORDER}
               title={
                 'Order' +
-                (!advancedSearchHelper.isSearchEnabled ? ' (Coming Soon)' : '')
+                (!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : '')
               }
             >
               <OrderSearchForm
