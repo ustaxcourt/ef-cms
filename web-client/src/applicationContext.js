@@ -22,6 +22,7 @@ import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
@@ -565,9 +566,7 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);
   },
