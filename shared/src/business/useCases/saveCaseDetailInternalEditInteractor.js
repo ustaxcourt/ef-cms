@@ -45,6 +45,8 @@ exports.saveCaseDetailInternalEditInteractor = async (
       docketNumber,
     });
 
+  const originalCaseEntity = new Case(caseRecord, { applicationContext });
+
   const editableFields = {
     caseCaption: caseToUpdate.caseCaption,
     caseType: caseToUpdate.caseType,
@@ -87,11 +89,7 @@ exports.saveCaseDetailInternalEditInteractor = async (
   });
 
   if (!isEmpty(caseToUpdate.contactPrimary)) {
-    const caseEntityFromCaseRecord = new Case(caseRecord, {
-      applicationContext,
-    });
-    const primaryContactId =
-      caseEntityFromCaseRecord.getContactPrimary().contactId;
+    const primaryContactId = originalCaseEntity.getContactPrimary().contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
       ...caseToUpdate.contactPrimary,
@@ -109,6 +107,17 @@ exports.saveCaseDetailInternalEditInteractor = async (
       contactId: secondaryContactId,
       contactType: CONTACT_TYPES.secondary,
     });
+  } else if (originalCaseEntity.getContactSecondary()) {
+    const originalSecondaryContactId =
+      originalCaseEntity.getContactSecondary().contactId;
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .removeCounselFromRemovedPetitioner({
+        applicationContext,
+        caseEntity: caseEntityWithFormEdits,
+        petitionerContactId: originalSecondaryContactId,
+      });
   }
 
   const caseEntity = new Case(caseEntityWithFormEdits, {
