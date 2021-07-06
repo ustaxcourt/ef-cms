@@ -79,44 +79,6 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  it('returns isSearchEnabled true when isFeatureEnabled is true', () => {
-    globalUser = {
-      role: USER_ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
-
-    applicationContext.isFeatureEnabled.mockReturnValue(true);
-
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {},
-      },
-    });
-    expect(result).toMatchObject({
-      isSearchEnabled: true,
-    });
-  });
-
-  it('returns isSearchEnabled false when isFeatureEnabled is false', () => {
-    globalUser = {
-      role: USER_ROLES.docketClerk,
-      userId: 'docketClerk',
-    };
-
-    applicationContext.isFeatureEnabled.mockReturnValue(false);
-
-    const result = runCompute(advancedSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: {},
-      },
-    });
-    expect(result).toMatchObject({
-      isSearchEnabled: false,
-    });
-  });
-
   it('returns showPractitionerSearch false when user is an external user', () => {
     globalUser = {
       role: USER_ROLES.privatePractitioner,
@@ -146,7 +108,6 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
-      isSearchEnabled: true,
       showPractitionerSearch: true,
       showStateSelect: true,
     });
@@ -164,7 +125,6 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
-      isSearchEnabled: true,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
