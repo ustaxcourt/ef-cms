@@ -15,8 +15,17 @@ const {
   getUserById,
 } = require('../../../../shared/src/persistence/dynamo/users/getUserById');
 const {
+  getUserCaseMappingsByDocketNumber,
+} = require('../../../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
+const {
+  getWebSocketConnectionsByUserId,
+} = require('../../../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
+const {
   persistUser,
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
+const {
+  sendNotificationToUser,
+} = require('../../../../shared/src/notifications/sendNotificationToUser');
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
@@ -27,10 +36,15 @@ const {
   updateCaseAndAssociations,
 } = require('../../../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} = require('../../../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
+const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
 
 const { DynamoDB } = AWS;
+
 const logger = createLogger({
   defaultMeta: {
     environment: {
@@ -51,12 +65,27 @@ const applicationContext = {
     dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
     stage: process.env.STAGE,
   }),
+  getNotificationClient: ({ endpoint }) => {
+    return new AWS.ApiGatewayManagementApi({
+      endpoint,
+      httpOptions: {
+        timeout: 900000, // 15 minutes
+      },
+    });
+  },
+  getNotificationGateway: () => ({
+    sendNotificationToUser,
+  }),
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
     getDocketNumbersByUser,
     getUserById,
+    getUserCaseMappingsByDocketNumber,
+    getWebSocketConnectionsByUserId,
     persistUser,
     updateCase,
+    updateIrsPractitionerOnCase,
+    updatePrivatePractitionerOnCase,
     updateUser,
   }),
   getUseCaseHelpers: () => ({ updateCaseAndAssociations }),

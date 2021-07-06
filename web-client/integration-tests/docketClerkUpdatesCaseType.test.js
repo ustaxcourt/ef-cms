@@ -43,7 +43,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoEditPetitionDetailsSequence', {
+    await test.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -69,7 +69,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     expect(statisticsUiHelper.showStatisticsForm).toEqual(true);
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       statistics: '"statistics" must contain at least 1 items',
@@ -77,7 +77,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     await test.runSequence('addStatisticToFormSequence');
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('validationErrors')).toEqual({
       statistics: [
@@ -103,7 +103,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 100,
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(test.getState('alertSuccess').message).toEqual('Changes saved.');

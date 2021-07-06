@@ -4,26 +4,29 @@ const {
 const {
   createPractitionerUserInteractor,
 } = require('./createPractitionerUserInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const mockUser = {
-  admissionsDate: '2019-03-01',
-  admissionsStatus: 'Active',
-  barNumber: 'AT5678',
-  birthYear: 2019,
-  employer: 'Private',
-  firmName: 'GW Law Offices',
-  firstName: 'bob',
-  lastName: 'sagot',
-  name: 'Test Attorney',
-  originalBarState: 'IL',
-  practitionerType: 'Attorney',
-  role: ROLES.privatePractitioner,
-  userId: '07044afe-641b-4d75-a84f-0698870b7650',
-};
-
 describe('create practitioner user', () => {
+  const mockUser = {
+    admissionsDate: '2019-03-01',
+    admissionsStatus: 'Active',
+    barNumber: 'AT5678',
+    birthYear: 2019,
+    employer: 'Private',
+    firmName: 'GW Law Offices',
+    firstName: 'bob',
+    lastName: 'sagot',
+    name: 'Test Attorney',
+    originalBarState: 'IL',
+    practitionerType: 'Attorney',
+    role: ROLES.privatePractitioner,
+    userId: '07044afe-641b-4d75-a84f-0698870b7650',
+  };
+
   let testUser;
 
   beforeEach(() => {
@@ -57,5 +60,26 @@ describe('create practitioner user', () => {
         user: mockUser,
       }),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should set practitioner.pendingEmail to practitioner.email and set practitioner.email to undefined', async () => {
+    const mockEmail = 'testing@example.com';
+
+    await createPractitionerUserInteractor(applicationContext, {
+      user: {
+        ...mockUser,
+        email: mockEmail,
+      },
+    });
+
+    const mockUserCall =
+      applicationContext.getPersistenceGateway().createPractitionerUser.mock
+        .calls[0][0].user;
+
+    expect(mockUserCall.email).toBeUndefined();
+    expect(mockUserCall.pendingEmail).toEqual(mockEmail);
+    expect(mockUserCall.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
   });
 });

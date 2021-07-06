@@ -46,6 +46,8 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
       .caseHasServedDocketEntries(caseDetail);
 
     isAssociated = caseHasServedDocketEntries;
+  } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
+    isAssociated = true;
   }
 
   return { isAssociated, pendingAssociation };

@@ -65,6 +65,7 @@ module.exports = {
         { from: 'node_modules/react-quill/dist', to: '.' },
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'web-client/src/favicons', to: '.' },
+        { from: 'web-client/src/site.webmanifest', to: '.' },
       ],
     }),
   ],

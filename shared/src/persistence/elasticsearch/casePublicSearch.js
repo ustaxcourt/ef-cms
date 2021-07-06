@@ -38,7 +38,6 @@ exports.casePublicSearch = async ({
     'irsPractitioners',
     'partyType',
     'petitioners',
-    'petitioners',
     'receivedAt',
     'sealedDate',
   ];
