@@ -208,7 +208,7 @@ describe('DocketEntry entity', () => {
       expect(createdDocketEntry.isValid()).toEqual(true);
     });
 
-    it('is valid when the docket entry has not been served and the filers array contains elements that are GUIDs', () => {
+    it('is valid when the docket entry has not been served and the filers array only contains elements that are GUIDs', () => {
       const createdDocketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
