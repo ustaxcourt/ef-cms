@@ -14,6 +14,11 @@ export const petitionsClerkEditsPetitionInQCPartyType = test => {
     });
 
     await test.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: true,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.name',
       value: 'William Wonka',
     });
