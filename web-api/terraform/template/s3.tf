@@ -150,9 +150,9 @@ resource "aws_s3_bucket_public_access_block" "block_temp_west" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "quarantine_documents_us_east_1" {
+resource "aws_s3_bucket" "quarantine_us_east_1" {
   provider = aws.us-east-1
-  bucket   = "${var.dns_domain}-quarantine-documents-${var.environment}-us-east-1"
+  bucket   = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
   acl      = "private"
 
   cors_rule {
@@ -180,7 +180,7 @@ resource "aws_s3_bucket" "quarantine_documents_us_east_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_quarantine_east" {
-  bucket = aws_s3_bucket.quarantine_documents_us_east_1.id
+  bucket = aws_s3_bucket.quarantine_us_east_1.id
 
   block_public_acls       = true
   block_public_policy     = true
@@ -188,9 +188,9 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_east" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket" "quarantine_documents_us_west_1" {
+resource "aws_s3_bucket" "quarantine_us_west_1" {
   provider = aws.us-west-1
-  bucket   = "${var.dns_domain}-quarantine-documents-${var.environment}-us-west-1"
+  bucket   = "${var.dns_domain}-quarantine-${var.environment}-us-west-1"
   acl      = "private"
 
   cors_rule {
@@ -218,7 +218,7 @@ resource "aws_s3_bucket" "quarantine_documents_us_west_1" {
 }
 
 resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
-  bucket                  = aws_s3_bucket.quarantine_documents_us_west_1.id
+  bucket                  = aws_s3_bucket.quarantine_us_west_1.id
   provider                = aws.us-west-1
   block_public_acls       = true
   block_public_policy     = true

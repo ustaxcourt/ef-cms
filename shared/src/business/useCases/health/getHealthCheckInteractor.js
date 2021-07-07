@@ -94,8 +94,8 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   const westS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionWest}`;
   const eastS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionEast}`;
   const westS3TempBucketName = `${efcmsDomain}-temp-documents-${applicationContext.environment.stage}-${regionWest}`;
-  const eastS3QuarantineBucketName = `${efcmsDomain}-quarantine-documents-${applicationContext.environment.stage}-${regionEast}`;
-  const westS3QuarantineBucketName = `${efcmsDomain}-quarantine-documents-${applicationContext.environment.stage}-${regionWest}`;
+  const eastS3QuarantineBucketName = `${efcmsDomain}-quarantine-${applicationContext.environment.stage}-${regionEast}`;
+  const westS3QuarantineBucketName = `${efcmsDomain}-quarantine-${applicationContext.environment.stage}-${regionWest}`;
   const appS3Bucket = `app-${currentColor}.${efcmsDomain}`;
   const publicS3Bucket = `${currentColor}.${efcmsDomain}`;
   const publicFailoverS3Bucket = `failover-${currentColor}.${efcmsDomain}`;
@@ -105,12 +105,12 @@ const getS3BucketStatus = async ({ applicationContext }) => {
     app: appS3Bucket,
     appFailover: appFailoverS3Bucket,
     eastDocuments: eastS3BucketName,
-    eastQuarantineDocuments: eastS3QuarantineBucketName,
+    eastQuarantine: eastS3QuarantineBucketName,
     eastTempDocuments: eastS3TempBucketName,
     public: publicS3Bucket,
     publicFailover: publicFailoverS3Bucket,
     westDocuments: westS3BucketName,
-    westQuarantineDocuments: westS3QuarantineBucketName,
+    westQuarantine: westS3QuarantineBucketName,
     westTempDocuments: westS3TempBucketName,
   };
 

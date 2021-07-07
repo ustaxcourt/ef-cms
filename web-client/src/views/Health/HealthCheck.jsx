@@ -131,11 +131,9 @@ export const HealthCheck = connect(
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text  grid-col-9">
-                      quarantineDocuments
+                      quarantine
                     </div>
-                    <RenderHealthStatus
-                      item={health.s3.eastQuarantineDocuments}
-                    />
+                    <RenderHealthStatus item={health.s3.eastQuarantine} />
                   </div>
                 </div>
               </div>
@@ -171,11 +169,9 @@ export const HealthCheck = connect(
                   </div>
                   <div className="margin-left-205 margin-bottom-205 grid-row">
                     <div className="health-check-text grid-col-9">
-                      quarantineDocuments
+                      quarantine
                     </div>
-                    <RenderHealthStatus
-                      item={health.s3.westQuarantineDocuments}
-                    />
+                    <RenderHealthStatus item={health.s3.westQuarantine} />
                   </div>
                 </div>
               </div>
@@ -275,12 +271,8 @@ export const HealthCheck = connect(
                   <RenderHealthStatus item={health.s3.eastTempDocuments} />
                 </div>
                 <div className="margin-left-205 margin-bottom-205 grid-row">
-                  <div className="health-check-text grid-col-9">
-                    quarantineDocuments
-                  </div>
-                  <RenderHealthStatus
-                    item={health.s3.eastQuarantineDocuments}
-                  />
+                  <div className="health-check-text grid-col-9">quarantine</div>
+                  <RenderHealthStatus item={health.s3.eastQuarantine} />
                 </div>
               </div>
             </div>
@@ -313,12 +305,8 @@ export const HealthCheck = connect(
                   <RenderHealthStatus item={health.s3.westTempDocuments} />
                 </div>
                 <div className="margin-left-205 margin-bottom-205 grid-row">
-                  <div className="health-check-text grid-col-9">
-                    quarantineDocuments
-                  </div>
-                  <RenderHealthStatus
-                    item={health.s3.westQuarantineDocuments}
-                  />
+                  <div className="health-check-text grid-col-9">quarantine</div>
+                  <RenderHealthStatus item={health.s3.westQuarantine} />
                 </div>
               </div>
             </div>
