@@ -1177,6 +1177,7 @@ const environment = {
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
+  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
@@ -1593,6 +1594,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
+    },
+    getQuarantineBucketName: () => {
+      return environment.quarantineBucketName;
     },
     getScannerResourceUri: () => {
       return (
