@@ -9,5 +9,5 @@ UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-
 aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-enabled
 STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 --query "State")
 echo $STATE
- 
+
 sleep 15
