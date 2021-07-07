@@ -1,28 +1,38 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { featureFlagHelper as featureFlagHelperComputed } from './featureFlagHelper';
-// import { runCompute } from 'cerebral/test';
-// import { withAppContextDecorator } from '../../../withAppContext';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('featureFlagHelper', () => {
-  // const featureFlagHelper = withAppContextDecorator(featureFlagHelperComputed, {
-  //   applicationContext,
-  // });
+  describe('isSearchEnabled', () => {
+    it('returns isSearchEnabled true when the advanced_document_search feature is enabled', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(true);
 
-  it('returns isSearchEnabled true when isFeatureEnabled is true', () => {
-    applicationContext.isFeatureEnabled.mockReturnValue(true);
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
 
-    const result = featureFlagHelperComputed(null, applicationContext);
-    expect(result).toMatchObject({
-      isSearchEnabled: true,
+      expect(runCompute(featureFlagHelper, {})).toMatchObject({
+        isSearchEnabled: true,
+      });
     });
-  });
 
-  it('returns isSearchEnabled false when isFeatureEnabled is false', () => {
-    applicationContext.isFeatureEnabled.mockReturnValue(false);
+    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(false);
 
-    const result = featureFlagHelperComputed(null, applicationContext);
-    expect(result).toMatchObject({
-      isSearchEnabled: false,
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      expect(runCompute(featureFlagHelper, {})).toMatchObject({
+        isSearchEnabled: false,
+      });
     });
   });
 });
