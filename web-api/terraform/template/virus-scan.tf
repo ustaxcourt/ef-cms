@@ -7,7 +7,7 @@ data "archive_file" "virus_scan_zip" {
 resource "aws_lambda_function" "virus_scan_lambda" {
   filename         = data.archive_file.virus_scan_zip.output_path
   function_name    = "virus_scan_lambda_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/virus_scan_role_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler          = "virus-scan.handler"
   source_code_hash = data.archive_file.virus_scan_zip.output_base64sha256
 
