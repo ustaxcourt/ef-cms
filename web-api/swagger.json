@@ -7982,6 +7982,10 @@
               "type": "boolean",
               "description": "the status of east temp documents bucket"
             },
+            "eastQuarantineDocuments": {
+              "type": "boolean",
+              "description": "the status of east quarantine documents bucket"
+            },
             "public": {
               "type": "boolean",
               "description": "the status of public ui bucket"
@@ -7996,7 +8000,11 @@
             },
             "westTempDocuments": {
               "type": "boolean",
-              "description": "the status of west temp documents"
+              "description": "the status of west temp documents bucket"
+            },
+            "westQuarantineDocuments": {
+              "type": "boolean",
+              "description": "the status of west quarantine documents bucket"
             }
           }
         }
