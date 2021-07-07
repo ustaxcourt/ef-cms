@@ -26,7 +26,7 @@ describe('Health check', () => {
         expect(response.body.s3.publicFailover).to.be.true;
         expect(response.body.s3.westDocuments).to.be.true;
         expect(response.body.s3.westTempDocuments).to.be.true;
-        expect(response.body.s3.westQuarantineDocuments).to.be.true;
+        expect(response.body.s3.westQuarantine).to.be.true;
       });
     });
   }
