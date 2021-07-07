@@ -42,7 +42,9 @@ resource "aws_iam_role_policy" "migration_policy" {
         {
             "Action": [
                 "dynamodb:BatchWriteItem",
+                "dynamodb:DeleteItem",
                 "dynamodb:DescribeStream",
+                "dynamodb:GetItem",
                 "dynamodb:GetRecords",
                 "dynamodb:GetShardIterator",
                 "dynamodb:ListShards",
