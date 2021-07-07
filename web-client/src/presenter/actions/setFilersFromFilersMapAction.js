@@ -11,11 +11,11 @@ export const setFilersFromFilersMapAction = ({ get, store }) => {
   let filers;
   const form = get(state.form);
 
-  if (!isEmpty(form.filersMap)) {
-    filers = Object.keys(form.filersMap)
-      .map(contactId => (form.filersMap[contactId] ? contactId : null))
-      .filter(Boolean);
-  } else {
+  filers = Object.keys(form.filersMap)
+    .map(contactId => (form.filersMap[contactId] ? contactId : null))
+    .filter(Boolean);
+
+  if (isEmpty(form.filersMap) && form.filedBy) {
     filers = [form.filedBy];
   }
 
