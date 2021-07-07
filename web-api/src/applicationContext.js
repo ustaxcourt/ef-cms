@@ -236,6 +236,11 @@ const {
   deleteDocumentFromS3,
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
+  deleteKeyCount,
+  incrementKeyCount,
+  setExpiresAt,
+} = require('../../shared/src/persistence/dynamo/helpers/store');
+const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
@@ -1283,9 +1288,11 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUser,
+    deleteKeyCount,
     fetchPendingItems,
     getSesStatus,
     incrementCounter,
+    incrementKeyCount,
     markMessageThreadRepliedTo,
     persistUser,
     putWorkItemInOutbox,
@@ -1295,6 +1302,7 @@ const gatewayMethods = {
     saveUserConnection,
     saveWorkItem,
     saveWorkItemForDocketClerkFilingExternalDocument,
+    setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
     updateCase,
