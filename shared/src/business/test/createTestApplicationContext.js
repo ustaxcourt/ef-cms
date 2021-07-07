@@ -129,6 +129,9 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
+  removeCounselFromRemovedPetitioner,
+} = require('../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
+const {
   saveWorkItem,
 } = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
@@ -355,6 +358,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    removeCounselFromRemovedPetitioner: jest
+      .fn()
+      .mockImplementation(removeCounselFromRemovedPetitioner),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
