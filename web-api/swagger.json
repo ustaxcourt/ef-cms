@@ -7982,9 +7982,9 @@
               "type": "boolean",
               "description": "the status of east temp documents bucket"
             },
-            "eastQuarantineDocuments": {
+            "eastQuarantine": {
               "type": "boolean",
-              "description": "the status of east quarantine documents bucket"
+              "description": "the status of east quarantine bucket"
             },
             "public": {
               "type": "boolean",
@@ -8002,9 +8002,9 @@
               "type": "boolean",
               "description": "the status of west temp documents bucket"
             },
-            "westQuarantineDocuments": {
+            "westQuarantine": {
               "type": "boolean",
-              "description": "the status of west quarantine documents bucket"
+              "description": "the status of west quarantine bucket"
             }
           }
         }
