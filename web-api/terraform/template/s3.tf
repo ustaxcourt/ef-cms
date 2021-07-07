@@ -179,6 +179,15 @@ resource "aws_s3_bucket" "quarantine_us_east_1" {
   }
 }
 
+resource "aws_s3_bucket_notification" "quarantine_bucket_notification" {
+  bucket = aws_s3_bucket.quarantine_us_east_1.id
+
+  queue {
+    queue_arn     = aws_sqs_queue.virus_scan_queue.arn
+    events        = ["s3:ObjectCreated:*"]
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "block_quarantine_east" {
   bucket = aws_s3_bucket.quarantine_us_east_1.id
 
@@ -225,3 +234,4 @@ resource "aws_s3_bucket_public_access_block" "block_quarantine_west" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
