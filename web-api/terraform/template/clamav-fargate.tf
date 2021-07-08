@@ -16,7 +16,7 @@ module "alb" {
   source  = "umotif-public/alb/aws"
   version = "~> 2.0"
 
-  name_prefix        = "clamav_fargate_lb_${var.environment}"
+  name_prefix        = "clamav-fargate-lb-${var.environment}"
   load_balancer_type = "application"
   internal           = false
   vpc_id             = data.aws_vpc.default.id
@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "task_ingress_80" {
 # ECS cluster and fargate
 #####
 resource "aws_ecs_cluster" "clamav_ecs_cluster" {
-  name               = "clamav_fargate_cluster_${var.environment}"
+  name               = "clamav-fargate-cluster-${var.environment}"
   capacity_providers = ["FARGATE"]
 
   default_capacity_provider_strategy {
@@ -77,7 +77,7 @@ module "fargate" {
   source = "umotif-public/ecs-fargate/aws"
   version = "~> 6.1.0"
   
-  name_prefix        = "clamav_fargate_${var.environment}"
+  name_prefix        = "clamav-fargate-${var.environment}"
   vpc_id             = data.aws_vpc.default.id
   private_subnet_ids = data.aws_subnet_ids.all.ids
   cluster_id         = aws_ecs_cluster.clamav_ecs_cluster.id
@@ -91,7 +91,7 @@ module "fargate" {
 
   target_groups = [
     {
-      target_group_name = "clamav_target_group_${var.environment}"
+      target_group_name = "clamav-target-group-${var.environment}"
       container_port    = 80
     }
   ]
