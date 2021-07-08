@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
 #####
 # VPC and subnets
 #####
@@ -78,8 +74,9 @@ resource "aws_ecs_cluster" "clamav_ecs_cluster" {
 }
 
 module "fargate" {
-  source = "../../"
-
+  source = "umotif-public/ecs-fargate/aws"
+  version = "~> 6.1.0"
+  
   name_prefix        = "clamav_fargate_${var.environment}"
   vpc_id             = data.aws_vpc.default.id
   private_subnet_ids = data.aws_subnet_ids.all.ids
