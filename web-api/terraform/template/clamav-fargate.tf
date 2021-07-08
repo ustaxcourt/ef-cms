@@ -80,9 +80,7 @@ module "fargate" {
   name_prefix        = "clamav_fargate_${var.environment}"
   vpc_id             = data.aws_vpc.default.id
   private_subnet_ids = data.aws_subnet_ids.all.ids
-  cluster_id         = aws_ecs_cluster.cluster.id
-
-  platform_version = "1.4.0"
+  cluster_id         = aws_ecs_cluster.clamav_ecs_cluster.id
 
   task_container_image   = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest"
   task_definition_cpu    = 256
@@ -97,6 +95,11 @@ module "fargate" {
       container_port    = 80
     }
   ]
+
+  health_check = {
+    port = "80"
+    path = "/"
+  }
 
   capacity_provider_strategy = [
     {
