@@ -24,7 +24,7 @@ export const validateDocketEntryAction = ({
 
   if (
     entryMetadata.dateReceivedYear &&
-    entryMetadata.dateReceivedYear.length !== 4
+    entryMetadata.dateReceivedYear.toString().length !== 4
   ) {
     if (!errors) {
       errors = {};
@@ -35,7 +35,7 @@ export const validateDocketEntryAction = ({
 
   if (
     entryMetadata.serviceDateYear &&
-    entryMetadata.serviceDateYear.length !== 4
+    entryMetadata.serviceDateYear.toString().length !== 4
   ) {
     if (!errors) {
       errors = {};

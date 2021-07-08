@@ -20,7 +20,10 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
       document: formMetadata,
     });
 
-  if (formMetadata.filingDateYear && formMetadata.filingDateYear.length !== 4) {
+  if (
+    formMetadata.filingDateYear &&
+    formMetadata.filingDateYear.toString().length !== 4
+  ) {
     if (!errors) {
       errors = {};
     }

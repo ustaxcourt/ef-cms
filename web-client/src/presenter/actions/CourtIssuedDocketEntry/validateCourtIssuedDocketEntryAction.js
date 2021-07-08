@@ -25,7 +25,7 @@ export const validateCourtIssuedDocketEntryAction = ({
       entryMetadata,
     });
 
-  if (entryMetadata.year && entryMetadata.year.length !== 4) {
+  if (entryMetadata.year && entryMetadata.year.toString().length !== 4) {
     if (!errors) {
       errors = {};
     }
@@ -35,7 +35,7 @@ export const validateCourtIssuedDocketEntryAction = ({
 
   if (
     entryMetadata.filingDateYear &&
-    entryMetadata.filingDateYear.length !== 4
+    entryMetadata.filingDateYear.toString().length !== 4
   ) {
     if (!errors) {
       errors = {};
