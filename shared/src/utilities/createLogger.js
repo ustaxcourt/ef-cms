@@ -17,7 +17,7 @@ const redact = format(logEntry => {
   return copy;
 });
 
-exports.createLogger = opts => {
+exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
     level: opts.logLevel || process.env.LOG_LEVEL || 'debug',
