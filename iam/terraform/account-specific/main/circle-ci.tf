@@ -251,7 +251,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "ecs:CreateCluster",
         "ecs:DescribeClusters",
         "ecs:RegisterTaskDefinition",
-        "ecs:DescribeTaskDefinition"
+        "ecs:DescribeTaskDefinition",
+        "ecs:DeregisterTaskDefinition"
       ],
       "Resource": [
         "*"
