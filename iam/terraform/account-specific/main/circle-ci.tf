@@ -249,7 +249,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
     {
       "Action": [
         "ecs:CreateCluster",
-        "ecs:DescribeClusters"
+        "ecs:DescribeClusters",
+        "ecs:RegisterTaskDefinition"
       ],
       "Resource": [
         "*"
@@ -258,7 +259,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
-        "iam:CreateRole"
+        "iam:CreateRole",
+        "iam:PutRolePolicy"
       ],
       "Resource": [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-execution-role",
