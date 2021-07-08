@@ -260,7 +260,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
     {
       "Action": [
         "iam:CreateRole",
-        "iam:PutRolePolicy"
+        "iam:PutRolePolicy",
+        "iam:ListRolePolicies"
       ],
       "Resource": [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-execution-role",
