@@ -237,40 +237,40 @@ const generatePaperNoticeForContactSecondary = async ({
     field => addressFields.includes(field),
   );
 
-  let secondaryPdfData;
-
-  if (contactAddressesAreDifferent) {
-    secondaryPdfData = await applicationContext
-      .getDocumentGenerators()
-      .noticeOfReceiptOfPetition({
-        applicationContext,
-        data: {
-          address: contactSecondary,
-          caseCaptionExtension,
-          caseTitle,
-          docketNumberWithSuffix,
-          preferredTrialCity,
-          receivedAtFormatted: applicationContext
-            .getUtilities()
-            .formatDateString(receivedAt, 'MMMM D, YYYY'),
-          servedDate: applicationContext
-            .getUtilities()
-            .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
-        },
-      });
-
-    const { PDFDocument } = await applicationContext.getPdfLib();
-    const pdfDoc = await PDFDocument.load(pdfData);
-    const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
-    const coverPageDocumentPages = await pdfDoc.copyPages(
-      secondaryPdfDoc,
-      secondaryPdfDoc.getPageIndices(),
-    );
-    pdfDoc.insertPage(1, coverPageDocumentPages[0]);
-
-    const pdfDataBuffer = await pdfDoc.save();
-    return Buffer.from(pdfDataBuffer);
+  if (!contactAddressesAreDifferent) {
+    return;
   }
+
+  const secondaryPdfData = await applicationContext
+    .getDocumentGenerators()
+    .noticeOfReceiptOfPetition({
+      applicationContext,
+      data: {
+        address: contactSecondary,
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        preferredTrialCity,
+        receivedAtFormatted: applicationContext
+          .getUtilities()
+          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+        servedDate: applicationContext
+          .getUtilities()
+          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+      },
+    });
+
+  const { PDFDocument } = await applicationContext.getPdfLib();
+  const pdfDoc = await PDFDocument.load(pdfData);
+  const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+  const coverPageDocumentPages = await pdfDoc.copyPages(
+    secondaryPdfDoc,
+    secondaryPdfDoc.getPageIndices(),
+  );
+  pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+
+  const pdfDataBuffer = await pdfDoc.save();
+  return Buffer.from(pdfDataBuffer);
 };
 
 /**
@@ -330,18 +330,6 @@ exports.serveCaseToIrsInteractor = async (
     caseEntity,
     user,
   });
-
-  // TODO: figure out why we need this for making the petitioner become served
-  // const updatedCase = await applicationContext
-  //   .getUseCaseHelpers()
-  //   .updateCaseAndAssociations({
-  //     applicationContext,
-  //     caseToUpdate: caseEntity,
-  //   });
-
-  // caseEntity = new Case(updatedCase, {
-  //   applicationContext,
-  // });
 
   await createCoversheetsForServedEntries({
     applicationContext,
