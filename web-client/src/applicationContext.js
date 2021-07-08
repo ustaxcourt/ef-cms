@@ -701,7 +701,7 @@ const applicationContext = {
     };
   },
   isFeatureEnabled: featureName => {
-    return getIsFeatureEnabled(featureName, user, getEnvironment());
+    return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
   setCurrentUser,
   setCurrentUserToken,
