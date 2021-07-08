@@ -100,6 +100,15 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
+                "sqs:DeleteMessage",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
+            ],
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "dynamodb:BatchGetItem",
                 "dynamodb:BatchWriteItem",
                 "dynamodb:DeleteItem",
