@@ -58,7 +58,7 @@ describe('cognito-authorizer', () => {
     jest.restoreAllMocks();
   });
 
-  it('returns unauthorized when token is missing', async () => {
+  it('this test fails! returns unauthorized when token is missing', async () => {
     event.authorizationToken = '';
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
