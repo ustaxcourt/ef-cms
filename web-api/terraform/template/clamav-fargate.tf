@@ -61,17 +61,6 @@ resource "aws_security_group_rule" "task_ingress_80" {
 }
 
 #####
-# EFS
-#####
-resource "aws_efs_file_system" "efs" {
-  creation_token = "efs-html"
-
-  tags = {
-    Name = "efs-html"
-  }
-}
-
-#####
 # ECS cluster and fargate
 #####
 resource "aws_ecs_cluster" "clamav_ecs_cluster" {
@@ -107,44 +96,19 @@ module "fargate" {
 
   target_groups = [
     {
-      target_group_name = "clamav_"
+      target_group_name = "clamav_target_group_${var.environment}"
       container_port    = 80
     }
   ]
 
-  health_check = {
-    port = "traffic-port"
-    path = "/"
-  }
-
   capacity_provider_strategy = [
     {
-      capacity_provider = "FARGATE_SPOT",
+      capacity_provider = "FARGATE",
       weight            = 100
     }
   ]
 
   task_stop_timeout = 90
-
-  task_mount_points = [
-    {
-      "sourceVolume"  = aws_efs_file_system.efs.creation_token,
-      "containerPath" = "/usr/share/nginx/html",
-      "readOnly"      = true
-    }
-  ]
-
-  volume = [
-    {
-      name = "efs-html",
-      efs_volume_configuration = [
-        {
-          "file_system_id" : aws_efs_file_system.efs.id,
-          "root_directory" : "/usr/share/nginx"
-        }
-      ]
-    }
-  ]
 
   depends_on = [
     module.alb
