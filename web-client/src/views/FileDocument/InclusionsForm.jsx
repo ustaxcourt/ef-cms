@@ -78,7 +78,7 @@ export const InclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="usa-checkbox__label"
                 htmlFor={`${type}-attachments`}
               >
                 Attachment(s)
@@ -105,7 +105,7 @@ export const InclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="usa-checkbox__label"
                 htmlFor={`${type}-certificateOfService`}
                 id={`${type}-certificateOfService-label`}
               >
