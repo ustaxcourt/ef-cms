@@ -75,9 +75,7 @@ describe('dynamodbClientService', function () {
     applicationContext.getDocumentClient().updateConsistent.mockReturnValue({
       promise: () => {
         return Promise.resolve({
-          Attributes: {
-            id: '123-20',
-          },
+          id: '123-20',
         });
       },
     });
@@ -124,7 +122,7 @@ describe('dynamodbClientService', function () {
   describe('updateConsistent', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
-      expect(result).toEqual('123-20');
+      expect(result).toEqual({ id: '123-20' });
     });
   });
 

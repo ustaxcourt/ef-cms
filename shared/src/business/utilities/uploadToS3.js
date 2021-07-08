@@ -25,7 +25,7 @@ const uploadToS3 = async ({
       if (err) {
         applicationContext.logger.error(
           'An error occurred while attempting to upload to S3',
-          err,
+          { err },
         );
         reject(err);
       }

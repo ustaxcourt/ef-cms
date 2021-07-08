@@ -33,7 +33,7 @@ describe('DocketRecord', () => {
       contactId: uuidv4(),
       contactType: CONTACT_TYPES.primary,
       counselDetails: [
-        { email: 'jeff@holo.com', name: 'Jeff Yu', phone: '867.5309' },
+        { email: 'jeff@example.com', name: 'Jeff Yu', phone: '867.5309' },
       ],
       country: 'USA',
       name: 'Test Petitioner',
@@ -194,7 +194,7 @@ describe('DocketRecord', () => {
 
     const counselDetails = wrapper.find('.practitioner-contact');
     expect(counselDetails.length).toEqual(1);
-    expect(counselDetails.text()).toContain('Jeff Yu', 'jeff@holo.com');
+    expect(counselDetails.text()).toContain('Jeff Yu', 'jeff@example.com');
   });
 
   it('renders "None" when no IRS practitioner is given', () => {
