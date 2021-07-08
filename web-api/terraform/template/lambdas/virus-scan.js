@@ -3,6 +3,11 @@
 // const applicationContext = createApplicationContext({});
 
 exports.handler = async event => {
-  const { Records } = event;
-  console.log('Records*********', JSON.stringify(Records));
+  const { body } = event.Records;
+
+  const bodyParsed = JSON.parse(body);
+
+  const record = bodyParsed.Records[0];
+
+  const { key } = record.s3.object;
 };
