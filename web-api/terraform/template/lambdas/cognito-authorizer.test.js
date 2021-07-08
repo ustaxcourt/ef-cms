@@ -51,6 +51,7 @@ describe('cognito-authorizer', () => {
 
     context = {
       awsRequestId: 'request-id',
+      logLevel: 'debug',
     };
   });
 
@@ -58,7 +59,7 @@ describe('cognito-authorizer', () => {
     jest.restoreAllMocks();
   });
 
-  it('this test fails! returns unauthorized when token is missing', async () => {
+  it('returns unauthorized when token is missing', async () => {
     event.authorizationToken = '';
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
