@@ -11,14 +11,14 @@ export const DeployedDate = connect(
 
     useEffect(() => {
       const deployedAt =
-        window.document.getElementById('last-deployed').innerText;
+        window.document.getElementById('last-deployed').content;
       setDisplayDate(deployedAt);
     }, []);
 
     return (
       <>
         {showDeployedDate && displayDate && (
-          <div id="react-deployed-date">{displayDate}</div>
+          <div id="react-deployed-date">Deployed {displayDate}</div>
         )}
       </>
     );
