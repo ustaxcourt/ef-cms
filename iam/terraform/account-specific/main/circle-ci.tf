@@ -245,6 +245,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Resource": [
         "*"
       ]
+    },
+    {
+      "Action": [
+        "ecs:CreateCluster",
+        "ecs:DescribeClusters"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Effect": "Allow"
     }
   ]
 }
