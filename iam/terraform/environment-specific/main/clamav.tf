@@ -4,16 +4,6 @@ resource "aws_iam_role" "clamav_s3_download_role" {
   assume_role_policy = "${data.aws_iam_policy_document.allow_ec2_to_assume_clamav_s3_download_role.json}"
 }
 
-resource "aws_iam_role" "clamav_task_execution_role" {
-  name               = "clamav-fargate-${var.environment}-task-execution-role"
-  assume_role_policy = "${data.aws_iam_policy_document.allow_ec2_to_assume_clamav_s3_download_role.json}"
-}
-
-resource "aws_iam_role" "clamav_task_role" {
-  name               = "clamav-fargate-${var.environment}-task-role"
-  assume_role_policy = "${data.aws_iam_policy_document.allow_ec2_to_assume_clamav_s3_download_role.json}"
-}
-
 data "aws_iam_policy_document" "allow_ec2_to_assume_clamav_s3_download_role" {
   statement {
     actions = ["sts:AssumeRole"]
