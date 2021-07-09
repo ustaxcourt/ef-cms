@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-export */
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
@@ -492,8 +491,8 @@ export const uploadPetition = async (
   return response.data;
 };
 
-export const loginAs = (cerebralTest, user) => {
-  return it(`login as ${user}`, async () => {
+export const loginAs = (cerebralTest, user) =>
+  it(`login as ${user}`, async () => {
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,
@@ -505,7 +504,6 @@ export const loginAs = (cerebralTest, user) => {
 
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
-};
 
 export const setupTest = ({ useCases = {} } = {}) => {
   let cerebralTest;
@@ -589,6 +587,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
   };
 
+  cerebralTest = CerebralTest(presenter);
+  cerebralTest.getSequence = seqName => obj =>
+    cerebralTest.runSequence(seqName, obj);
+  cerebralTest.closeSocket = stopSocket;
+
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
     return {
@@ -629,8 +632,8 @@ export const setupTest = ({ useCases = {} } = {}) => {
   };
 
   cerebralTest = CerebralTest(presenter);
-  cerebralTest.getSequence = seqName => async obj =>
-    await cerebralTest.runSequence(seqName, obj);
+  cerebralTest.getSequence = seqName => obj =>
+    cerebralTest.runSequence(seqName, obj);
   cerebralTest.closeSocket = stopSocket;
   cerebralTest.applicationContext = applicationContext;
 
@@ -644,7 +647,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
   initializeSocketProvider(cerebralTest);
 
-  return test;
+  return cerebralTest;
 };
 
 const mockQuery = routeToGoTo => {

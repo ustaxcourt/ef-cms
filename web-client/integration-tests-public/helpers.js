@@ -52,5 +52,5 @@ export const setupTest = ({ useCases = {} } = {}) => {
 
   cerebralTest.currentRouteUrl = null;
 
-  return test;
+  return cerebralTest;
 };
