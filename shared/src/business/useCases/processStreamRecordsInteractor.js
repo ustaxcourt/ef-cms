@@ -1,4 +1,5 @@
 const {
+  filterRecords,
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
@@ -52,6 +53,8 @@ exports.processStreamRecordsInteractor = async (
   applicationContext,
   { recordsToProcess },
 ) => {
+  recordsToProcess = recordsToProcess.filter(filterRecords);
+
   const {
     caseEntityRecords,
     docketEntryRecords,
