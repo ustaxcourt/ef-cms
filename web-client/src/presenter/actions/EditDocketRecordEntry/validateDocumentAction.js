@@ -20,6 +20,17 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
       document: formMetadata,
     });
 
+  if (
+    formMetadata.filingDateYear &&
+    formMetadata.filingDateYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.filingDate = errors.filingDate || 'Enter a four-digit year';
+  }
+
   let errorDisplayOrder = ['description', 'eventCode', 'filingDate', 'index'];
 
   if (editType === 'Document') {
