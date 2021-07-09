@@ -129,7 +129,7 @@ exports.updateConsistent = params => {
       ...filteredParams,
     })
     .promise()
-    .then(data => data.Attributes.id);
+    .then(data => data.Attributes);
 };
 
 /**

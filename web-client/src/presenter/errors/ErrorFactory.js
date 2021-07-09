@@ -1,4 +1,5 @@
 import { ActionError } from './ActionError';
+import { GatewayTimeoutError } from './GatewayTimeoutError';
 import { InvalidRequestError } from './InvalidRequestError';
 import { NotFoundError } from './NotFoundError';
 import { ServerInvalidResponseError } from './ServerInvalidResponseError';
@@ -17,6 +18,8 @@ export const ErrorFactory = {
       newError = new NotFoundError(e);
     } else if (401 == responseCode) {
       newError = new UnidentifiedUserError();
+    } else if (504 === responseCode) {
+      newError = new GatewayTimeoutError(e);
     } else if (/^4/.test(responseCode)) {
       newError = new InvalidRequestError(e);
     } else if (/^5/.test(responseCode)) {
