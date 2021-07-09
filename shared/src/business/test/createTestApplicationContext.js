@@ -597,6 +597,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
     getUtilities: mockGetUtilities,
+    isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
       error: jest.fn(),
