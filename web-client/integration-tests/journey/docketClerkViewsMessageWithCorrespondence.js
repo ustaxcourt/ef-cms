@@ -15,7 +15,7 @@ export const docketClerkViewsMessageWithCorrespondence = cerebralTest => {
   };
 
   it('Docket clerk views case message with correspondence attached', async () => {
-    const formattedCaseMessages = await getCaseMessagesForCase(test);
+    const formattedCaseMessages = await getCaseMessagesForCase(cerebralTest);
     expect(formattedCaseMessages.inProgressMessages.length).toBe(1);
 
     await cerebralTest.runSequence('gotoMessageDetailSequence', {

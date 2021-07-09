@@ -7,9 +7,9 @@ export const docketClerkUpdatesSealedContactAddress = (
   return it('docket clerk updates sealed contact address', async () => {
     let contact;
     if (contactType === 'contactPrimary') {
-      contact = contactPrimaryFromState(test);
+      contact = contactPrimaryFromState(cerebralTest);
     } else if (contactType === 'contactSecondary') {
-      contact = contactSecondaryFromState(test);
+      contact = contactSecondaryFromState(cerebralTest);
     }
 
     await cerebralTest.runSequence(

@@ -15,7 +15,8 @@ export const docketClerkRemovesPetitionerFromCase = cerebralTest => {
       CASE_STATUS_TYPES.new,
     );
 
-    const contactPrimaryContactId = contactPrimaryFromState(test).contactId;
+    const contactPrimaryContactId =
+      contactPrimaryFromState(cerebralTest).contactId;
 
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',

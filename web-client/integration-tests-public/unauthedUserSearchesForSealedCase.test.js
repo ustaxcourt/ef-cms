@@ -58,18 +58,18 @@ describe('Docket clerk seals the case (should not be viewable to the public)', (
 });
 
 describe('Unauthed user searches for a sealed case by docket number', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserViewsCaseDetailForSealedCase(test);
-  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserViewsCaseDetailForSealedCase(cerebralTest);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(cerebralTest);
 });
 
 describe('Unauthed user searches for a sealed case by name', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCaseByName(test);
-  unauthedUserViewsPrintableDocketRecordForSealedCase(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserSearchesForSealedCaseByName(cerebralTest);
+  unauthedUserViewsPrintableDocketRecordForSealedCase(cerebralTest);
 });
 
 describe('Unauthed user searches for a sealed case and does not route to the case detail page', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForSealedCasesByDocketNumber(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserSearchesForSealedCasesByDocketNumber(cerebralTest);
 });

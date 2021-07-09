@@ -7,7 +7,7 @@ export const docketClerkEditsPetitionerInformation = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
       CASE_STATUS_TYPES.new,
@@ -33,11 +33,11 @@ export const docketClerkEditsPetitionerInformation = cerebralTest => {
 
     await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(contactPrimaryFromState(test).additionalName).toEqual(
+    expect(contactPrimaryFromState(cerebralTest).additionalName).toEqual(
       'Bob Additional Name',
     );
 
-    expect(contactPrimaryFromState(test).name).toEqual('Bob');
+    expect(contactPrimaryFromState(cerebralTest).name).toEqual('Bob');
 
     expect(
       cerebralTest.getState(

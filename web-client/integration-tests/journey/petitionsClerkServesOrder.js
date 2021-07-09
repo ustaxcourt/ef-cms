@@ -4,7 +4,7 @@ export const petitionsClerkServesOrder = cerebralTest => {
   return it('Petitions Clerk serves the order', async () => {
     const { docketEntryId } = test;
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,

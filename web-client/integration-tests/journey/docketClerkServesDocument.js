@@ -6,7 +6,7 @@ import {
 export const docketClerkServesDocument = (cerebralTest, draftOrderIndex) => {
   return it(`Docket Clerk serves the order after the docket entry has been created ${draftOrderIndex}`, async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 

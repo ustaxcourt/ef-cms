@@ -11,7 +11,7 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
@@ -73,8 +73,8 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
       value: petitionDocument.docketEntryId,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
@@ -114,7 +114,7 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

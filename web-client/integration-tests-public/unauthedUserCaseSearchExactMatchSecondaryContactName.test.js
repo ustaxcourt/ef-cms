@@ -76,7 +76,7 @@ function createCaseWithSecondaryName(name) {
 }
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns search results we expect in the correct order', async () => {
     const queryParams = {

@@ -110,7 +110,7 @@ export const petitionerFilesADocumentForCase = (cerebralTest, fakeFile) => {
       },
     );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

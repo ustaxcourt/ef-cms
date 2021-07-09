@@ -356,7 +356,7 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
 };
 
 export const uploadExternalDecisionDocument = async cerebralTest => {
-  const contactPrimary = contactPrimaryFromState(test);
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
   cerebralTest.setState('form', {
     attachments: false,
@@ -381,7 +381,7 @@ export const uploadExternalDecisionDocument = async cerebralTest => {
 };
 
 export const uploadExternalRatificationDocument = async cerebralTest => {
-  const contactPrimary = contactPrimaryFromState(test);
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
   cerebralTest.setState('form', {
     attachments: false,
@@ -545,12 +545,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
   presenter.providers.socket = { start, stop: stopSocket };
 
-  cerebralTest = CerebralTest(presenter);
-  cerebralTest.getSequence = seqName => async obj =>
-    await cerebralTest.runSequence(seqName, obj);
-  cerebralTest.closeSocket = stopSocket;
-  cerebralTest.applicationContext = applicationContext;
-
   global.window = {
     ...dom.window,
     DOMParser: () => {
@@ -638,6 +632,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
   cerebralTest.getSequence = seqName => async obj =>
     await cerebralTest.runSequence(seqName, obj);
   cerebralTest.closeSocket = stopSocket;
+  cerebralTest.applicationContext = applicationContext;
 
   cerebralTest.setState('constants', applicationContext.getConstants());
 
@@ -647,7 +642,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
       route,
     });
   });
-  initializeSocketProvider(test);
+  initializeSocketProvider(cerebralTest);
 
   return test;
 };

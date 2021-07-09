@@ -83,7 +83,7 @@ function createCase(name) {
 }
 
 describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns search results we expect in the correct order', async () => {
     const queryParams = {

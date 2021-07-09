@@ -85,7 +85,7 @@ describe(`Petitioner creates cases with name ${firstName}`, () => {
 });
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('should return case with contactPrimary name match as the first result and case with contactSecondary name match as the second result', async () => {
     const queryParams = {

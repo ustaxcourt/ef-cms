@@ -85,7 +85,7 @@ function createCaseWithCaption(captionString) {
 }
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it(`returns search results for ${captionSearchTerm} we expect in the correct order`, async () => {
     const queryParams = {

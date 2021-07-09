@@ -9,7 +9,7 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 export const docketClerkEditsDocketEntryStandard = cerebralTest => {
   return it('docket clerk edits docket entry with Standard scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     expect(docketEntryId).toBeDefined();
@@ -62,7 +62,7 @@ export const docketClerkEditsDocketEntryStandard = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 
@@ -77,7 +77,7 @@ export const docketClerkEditsDocketEntryStandard = cerebralTest => {
       document => document.docketEntryId === docketEntryId,
     );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(updatedDocument).toMatchObject({
       documentTitle: 'Entry of Appearance',

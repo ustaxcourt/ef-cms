@@ -23,7 +23,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
     });
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
@@ -45,7 +45,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
     });
 
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     noticeOfChangeOfAddressQCItem.index =
@@ -74,7 +74,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

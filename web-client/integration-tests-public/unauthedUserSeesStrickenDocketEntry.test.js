@@ -64,10 +64,10 @@ describe('Docketclerk QCs and Strikes a docket entry', () => {
 });
 
 describe('Unauthed user views stricken docket entry for externally-filed document', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
   unauthedUserSeesStrickenDocketEntry(cerebralTest, 3);
-  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
 });
 
 describe('Docketclerk creates an order and strikes it', () => {
@@ -87,11 +87,11 @@ describe('Docketclerk creates an order and strikes it', () => {
 
 describe('Unauthed user views stricken docket entry for order', () => {
   unauthedUserSeesStrickenDocketEntry(cerebralTest, 4);
-  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
+  unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
 });
 
 // Temporarily disabled for story 7387
 describe.skip('Unauthed user searches for stricken order', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesForStrickenOrder(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserSearchesForStrickenOrder(cerebralTest);
 });

@@ -18,7 +18,7 @@ export const unauthedUserSeesStrickenDocketEntry = (
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.name).toBeDefined();
 
     const { formattedDocketEntriesOnDocketRecord } = runCompute(

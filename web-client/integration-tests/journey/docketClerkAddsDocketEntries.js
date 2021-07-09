@@ -56,7 +56,7 @@ export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
       value: 100,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

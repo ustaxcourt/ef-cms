@@ -108,9 +108,9 @@ describe('Docket clerk creates and serves a Stipulated Decision (should not be v
 });
 
 describe('Unauthed user searches for a case and views a case detail page', () => {
-  unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesByMeta(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  unauthedUserSearchesByMeta(cerebralTest);
   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
-  unauthedUserViewsCaseDetail(test);
-  unauthedUserViewsPrintableDocketRecord(test);
+  unauthedUserViewsCaseDetail(cerebralTest);
+  unauthedUserViewsPrintableDocketRecord(cerebralTest);
 });

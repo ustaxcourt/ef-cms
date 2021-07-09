@@ -21,7 +21,7 @@ export const docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService =
 
       const caseWithNoPaperService = cerebralTest.getState('caseDetail');
 
-      const contactPrimary = contactPrimaryFromState(test);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
 
       expect(contactPrimary.serviceIndicator).not.toEqual(
         SERVICE_INDICATOR_TYPES.SI_PAPER,

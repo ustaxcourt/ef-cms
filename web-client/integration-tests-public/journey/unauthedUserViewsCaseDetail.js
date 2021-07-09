@@ -16,7 +16,7 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.currentRouteUrl.includes('/case-detail')).toBeTruthy();
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.name).toBeDefined();
     expect(contactPrimary.address1).toBeUndefined();
 

@@ -3,7 +3,7 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
@@ -20,7 +20,7 @@ export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,

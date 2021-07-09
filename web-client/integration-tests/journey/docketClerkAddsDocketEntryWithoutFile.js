@@ -46,7 +46,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (
       value: overrides.dateReceivedYear || 2018,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
@@ -97,7 +97,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     cerebralTest.docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Administrative Record',

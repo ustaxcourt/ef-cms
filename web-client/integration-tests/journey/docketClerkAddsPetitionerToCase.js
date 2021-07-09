@@ -37,7 +37,7 @@ export const docketClerkAddsPetitionerToCase = (
       value: '6126788888',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence('setSelectedAddressOnFormSequence', {
       contactId: contactPrimary.contactId,

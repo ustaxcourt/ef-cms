@@ -59,7 +59,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = (
       value: 100,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: `filersMap.${contactPrimary.contactId}`,
