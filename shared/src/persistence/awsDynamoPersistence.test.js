@@ -7,12 +7,9 @@ const { incrementCounter } = require('./dynamo/helpers/incrementCounter');
 
 describe('awsDynamoPersistence', function () {
   beforeEach(() => {
-    client.query = jest.fn().mockReturnValue([
-      {
-        pk: '123',
-        sk: '123',
-      },
-    ]);
+    client.updateConsistent = jest.fn().mockReturnValue({
+      id: 1,
+    });
   });
 
   describe('incrementCounter', () => {
