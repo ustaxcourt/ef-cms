@@ -25,7 +25,10 @@ describe('Petitions Clerk Views Draft Documents', () => {
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
 
   it('views case detail', async () => {
-    await viewCaseDetail({ docketNumber: cerebralTest.docketNumber, test });
+    await viewCaseDetail({
+      cerebralTest,
+      docketNumber: cerebralTest.docketNumber,
+    });
   });
 
   petitionsClerkAddsOrderToCase(cerebralTest);

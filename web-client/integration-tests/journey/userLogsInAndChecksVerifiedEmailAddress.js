@@ -29,7 +29,7 @@ export const userLogsInAndChecksVerifiedEmailAddress = (
     });
 
     if (user === 'petitioner') {
-      const contactPrimary = contactPrimaryFromState(test);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
       const petitionerEmail = contactPrimary.email;
 
       expect(petitionerEmail).toEqual(mockUpdatedEmail);

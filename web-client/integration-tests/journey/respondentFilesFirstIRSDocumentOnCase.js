@@ -37,7 +37,9 @@ export const respondentFilesFirstIRSDocumentOnCase = (
 
     expect(fileDocHelper.showSecondaryParty).toBeTruthy();
 
-    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
+    expect(contactSecondaryFromState(cerebralTest).name).toEqual(
+      'Jimothy Schultz',
+    );
 
     const documentToSelect = {
       category: 'Answer (filed by respondent only)',

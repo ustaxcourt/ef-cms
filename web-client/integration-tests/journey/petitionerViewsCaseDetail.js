@@ -9,7 +9,7 @@ const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
   return it('petitioner views case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix =

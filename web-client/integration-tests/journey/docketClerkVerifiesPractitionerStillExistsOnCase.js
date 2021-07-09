@@ -11,7 +11,7 @@ export const docketClerkVerifiesPractitionerStillExistsOnCase =
 
       // checking that removing the represented petitioner did not disassociate the counsel from other petitioners
       expect(caseDetail.privatePractitioners[0].representing).toEqual([
-        contactPrimaryFromState(test).contactId,
+        contactPrimaryFromState(cerebralTest).contactId,
       ]);
       expect(caseDetail.privatePractitioners[0].representing).not.toContain(
         cerebralTest.intervenorContactId,

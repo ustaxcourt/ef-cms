@@ -7,7 +7,7 @@ export const irsSuperuserSearchForUnservedCase = cerebralTest => {
     await cerebralTest.runSequence('submitCaseSearchSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const petitionDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentTitle === 'Petition',

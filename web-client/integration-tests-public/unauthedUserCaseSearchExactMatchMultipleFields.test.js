@@ -221,7 +221,7 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
 });
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it(`returns search results we expect in the correct order when searching for "${firstName} ${lastName}"`, async () => {
     const queryParams = {

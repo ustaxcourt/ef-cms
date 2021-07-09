@@ -12,12 +12,12 @@ export const petitionerEditsCasePrimaryContactPhone = cerebralTest => {
 
     await cerebralTest.runSequence('submitEditContactSequence');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.phone).toEqual('999-999-9999');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>

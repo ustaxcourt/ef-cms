@@ -12,5 +12,5 @@ describe('Unauthed user views health check', () => {
     cerebralTest.closeSocket();
   });
 
-  unauthedUserViewsHealthCheck(test);
+  unauthedUserViewsHealthCheck(cerebralTest);
 });

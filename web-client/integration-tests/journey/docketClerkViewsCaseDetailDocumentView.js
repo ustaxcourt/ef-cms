@@ -31,7 +31,7 @@ export const docketClerkViewsCaseDetailDocumentView = cerebralTest => {
 
     await refreshElasticsearchIndex();
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
     expect(contactPrimary.contactId).toBeDefined();

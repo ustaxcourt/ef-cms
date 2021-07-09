@@ -2,7 +2,7 @@ import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerNavigatesToEditContact = cerebralTest => {
   it('petitioner views contact edit page', async () => {
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     const contactIdToUse = contactPrimary.contactId;
 
     await cerebralTest.runSequence('gotoContactEditSequence', {

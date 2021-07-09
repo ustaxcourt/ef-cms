@@ -18,8 +18,8 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(
       cerebralTest.getState(`form.representingMap.${contactPrimary.contactId}`),

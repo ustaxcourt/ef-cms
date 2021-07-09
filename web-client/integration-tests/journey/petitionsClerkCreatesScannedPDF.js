@@ -6,7 +6,7 @@ export const petitionsClerkCreatesScannedPDF = cerebralTest => {
       'currentViewMetadata.documentSelectedForScan',
     );
 
-    setBatchPages({ test });
+    setBatchPages({ cerebralTest });
 
     await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
       documentType: selectedDocumentType,

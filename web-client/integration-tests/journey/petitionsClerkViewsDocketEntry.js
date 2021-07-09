@@ -7,7 +7,7 @@ export const petitionsClerkViewsDocketEntry = (
   return it('Petitions Clerk views the docket entry for the given document', async () => {
     const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const docketRecordEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === docketEntryId,

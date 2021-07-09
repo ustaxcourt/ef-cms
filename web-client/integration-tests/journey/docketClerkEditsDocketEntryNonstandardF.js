@@ -9,7 +9,7 @@ const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 export const docketClerkEditsDocketEntryNonstandardF = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard F scenario', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[0];
     const petitionDocument = getPetitionDocumentForCase(
@@ -58,7 +58,7 @@ export const docketClerkEditsDocketEntryNonstandardF = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test));
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
     const docketEntriesAfter = formattedDocketEntriesOnDocketRecord.length;
 

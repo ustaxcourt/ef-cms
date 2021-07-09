@@ -10,8 +10,8 @@ export const practitionerViewsCaseDetailOfOwnedCase = cerebralTest => {
     expect(
       cerebralTest.getState('caseDetail.privatePractitioners.0.name'),
     ).toEqual('Test Private Practitioner');
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
     expect(
       cerebralTest.getState('caseDetail.privatePractitioners.0.representing'),
     ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);

@@ -28,7 +28,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     );
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
     expect(caseDetail.docketNumber).toEqual(cerebralTest.docketNumber);

@@ -9,7 +9,7 @@ export const docketClerkServesOrderOnPaperParties = (
 ) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 

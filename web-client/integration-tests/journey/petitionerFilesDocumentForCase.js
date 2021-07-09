@@ -180,7 +180,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'Motion for Leave to File Out of Time Statement Anything',
     );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

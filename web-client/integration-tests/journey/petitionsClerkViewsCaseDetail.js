@@ -33,6 +33,6 @@ export const petitionsClerkViewsCaseDetail = (
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
-    expect(contactPrimaryFromState(test).contactId).toBeDefined();
+    expect(contactPrimaryFromState(cerebralTest).contactId).toBeDefined();
   });
 };

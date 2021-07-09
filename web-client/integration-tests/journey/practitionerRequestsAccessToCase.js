@@ -36,7 +36,9 @@ export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
 
     expect(requestHelper.showSecondaryParty).toBeTruthy();
 
-    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
+    expect(contactSecondaryFromState(cerebralTest).name).toEqual(
+      'Jimothy Schultz',
+    );
 
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
@@ -124,13 +126,13 @@ export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
       filers: VALIDATION_ERROR_MESSAGES.filers,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: `filersMap.${contactPrimary.contactId}`,
       value: true,
     });
 
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: `filersMap.${contactSecondary.contactId}`,
       value: true,

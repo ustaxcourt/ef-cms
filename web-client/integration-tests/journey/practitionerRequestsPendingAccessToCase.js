@@ -69,7 +69,7 @@ export const practitionerRequestsPendingAccessToCase = (
       value: fakeFile,
     });
 
-    const contactSecondary = contactSecondaryFromState(test);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: `filersMap.${contactSecondary.contactId}`,
       value: true,

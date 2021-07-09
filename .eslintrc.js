@@ -73,6 +73,7 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
+    'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',

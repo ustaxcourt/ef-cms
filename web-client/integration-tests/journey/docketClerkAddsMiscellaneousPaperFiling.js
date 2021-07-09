@@ -38,7 +38,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       value: 100,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

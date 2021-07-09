@@ -9,9 +9,9 @@ export const privatePractitionerSeesStrickenDocketEntry = (
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.name).toBeDefined();
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(

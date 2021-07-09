@@ -23,14 +23,14 @@ export const petitionerEditsCasePrimaryContactAddressAndPhone =
 
       await cerebralTest.runSequence('submitEditContactSequence');
 
-      const contactPrimary = contactPrimaryFromState(test);
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
 
       expect(contactPrimary.address1).toEqual('101 Main St.');
       expect(contactPrimary.address3).toEqual('Apt. 101');
       expect(contactPrimary.phone).toEqual('111-111-1111');
 
       const { formattedDocketEntriesOnDocketRecord } =
-        await getFormattedDocketEntriesForTest(test);
+        await getFormattedDocketEntriesForTest(cerebralTest);
 
       const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
         entry =>

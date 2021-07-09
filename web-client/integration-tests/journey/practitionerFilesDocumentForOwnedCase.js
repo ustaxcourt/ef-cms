@@ -107,7 +107,7 @@ export const practitionerFilesDocumentForOwnedCase = (
       },
     );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

@@ -145,7 +145,7 @@ export const docketClerkEditsDocketEntryMeta = (
     expect(pendingDocketEntry.pending).toEqual(true);
 
     const { formattedPendingDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     cerebralTest.updatedDocketEntryId = pendingDocketEntry.docketEntryId;
 

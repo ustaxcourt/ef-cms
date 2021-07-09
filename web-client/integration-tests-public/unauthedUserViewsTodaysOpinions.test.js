@@ -61,12 +61,12 @@ describe('Unauthed user views todays opinions', () => {
   docketClerkAddsOSTDocketEntryFromOrder(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
-  unauthedUserViewsTodaysOpinions(test);
-  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(test);
+  unauthedUserViewsTodaysOpinions(cerebralTest);
+  unauthedUserViewsTodaysOrdersWithoutBenchOpinion(cerebralTest);
 
   // opinions for sealed cases should still be public
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOpinions(test);
+  unauthedUserViewsTodaysOpinions(cerebralTest);
 });

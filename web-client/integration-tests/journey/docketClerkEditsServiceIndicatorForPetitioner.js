@@ -6,7 +6,7 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
   expectedServiceIndicator = null,
 ) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
-    let contactPrimary = contactPrimaryFromState(test);
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
@@ -27,7 +27,7 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
 
     await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,

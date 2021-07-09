@@ -11,7 +11,7 @@ export const associatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
   cerebralTest => {
     return it('associated user views case detail for a case with a legacy sealed document', async () => {
       const { formattedDocketEntriesOnDocketRecord } =
-        await getFormattedDocketEntriesForTest(test);
+        await getFormattedDocketEntriesForTest(cerebralTest);
 
       const legacySealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
         entry => entry.docketEntryId === cerebralTest.docketEntryId,

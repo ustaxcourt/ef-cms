@@ -44,7 +44,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       key: 'primaryDocumentFileSize',
       value: 100,
     });
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
@@ -78,7 +78,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     expect(cerebralTest.getState('form')).toEqual({});
 
     const { formattedPendingDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     expect(formattedPendingDocketEntriesOnDocketRecord).toEqual([]);
   });
