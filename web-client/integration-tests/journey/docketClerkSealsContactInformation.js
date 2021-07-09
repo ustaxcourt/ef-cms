@@ -20,7 +20,7 @@ export const docketClerkSealsContactInformation = (
     } else if (contactType === 'contactSecondary') {
       contactToSeal = contactSecondaryFromState(cerebralTest);
     } else {
-      contactToSeal = test
+      contactToSeal = cerebralTest
         .getState(`caseDetail.${contactType}`)
         .find(contact => contact.isAddressSealed === false);
     }
@@ -48,7 +48,7 @@ export const docketClerkSealsContactInformation = (
     } else if (contactType === 'contactSecondary') {
       contactToSeal = contactSecondaryFromState(cerebralTest);
     } else {
-      contactToSeal = test
+      contactToSeal = cerebralTest
         .getState(`caseDetail.${contactType}`)
         .find(c => c.contactId === contactToSeal.contactId);
     }

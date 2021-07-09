@@ -19,7 +19,7 @@ export const petitionsClerkViewsCaseWithSealedContact = (
     } else if (contactType === 'contactSecondary') {
       sealedContact = contactSecondaryFromState(cerebralTest);
     } else {
-      sealedContact = test
+      sealedContact = cerebralTest
         .getState(`caseDetail.${contactType}`)
         .find(c => c.isAddressSealed === true);
     }

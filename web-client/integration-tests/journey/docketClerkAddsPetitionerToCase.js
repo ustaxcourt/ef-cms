@@ -68,7 +68,7 @@ export const docketClerkAddsPetitionerToCase = (
     );
 
     if (overrides.contactType === 'intervenor') {
-      cerebralTest.intervenorContactId = test
+      cerebralTest.intervenorContactId = cerebralTest
         .getState('caseDetail.petitioners')
         .find(p => p.contactType === CONTACT_TYPES.intervenor).contactId;
     }

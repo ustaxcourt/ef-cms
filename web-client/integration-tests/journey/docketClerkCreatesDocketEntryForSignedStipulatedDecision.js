@@ -31,11 +31,11 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
       expect(cerebralTest.getState('currentPage')).toEqual(
         'CaseDetailInternal',
       );
-      const documents = test
+      const documents = cerebralTest
         .getState('caseDetail.docketEntries')
         .filter(d => d.isOnDocketRecord);
       expect(documents.length).toEqual(4);
-      const stipDecisionDocument = test
+      const stipDecisionDocument = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentType === 'Stipulated Decision');
       expect(stipDecisionDocument.servedAt).toBeDefined();

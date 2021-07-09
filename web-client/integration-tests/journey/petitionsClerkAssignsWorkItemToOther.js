@@ -17,7 +17,7 @@ export const petitionsClerkAssignsWorkItemToOther = cerebralTest => {
     ).workItemId;
 
     // verify that there is an unassigned work item in the section queue; we will assign it
-    const workItemToReassign = test
+    const workItemToReassign = cerebralTest
       .getState('workQueue')
       .find(
         workItem =>

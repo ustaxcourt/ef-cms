@@ -119,7 +119,7 @@ describe('Document title journey', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const exhibitDocketEntry = test
+    const exhibitDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.eventCode === 'EXH');
 

@@ -10,7 +10,7 @@ export const petitionsClerkViewsWorkQueue = cerebralTest => {
       box: 'inbox',
       queue: 'section',
     });
-    const workItem = test
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(
         workItemInQueue =>

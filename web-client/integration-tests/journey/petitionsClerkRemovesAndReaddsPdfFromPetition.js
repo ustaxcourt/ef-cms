@@ -20,7 +20,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
 
     await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    const deletedDocument = test
+    const deletedDocument = cerebralTest
       .getState('form.docketEntries')
       .find(doc => doc.docketEntryId === docketEntryIdToDelete);
     expect(deletedDocument).toBeUndefined();
@@ -52,7 +52,7 @@ export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const newApwFileDocketEntryId = test
+    const newApwFileDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(
         doc =>

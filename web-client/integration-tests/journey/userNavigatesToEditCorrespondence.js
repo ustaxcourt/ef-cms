@@ -4,7 +4,7 @@ export const userNavigatesToEditCorrespondence = (
   user,
 ) =>
   it(`${user} navigates to edit correspondence`, async () => {
-    cerebralTest.correspondenceDocument = test
+    cerebralTest.correspondenceDocument = cerebralTest
       .getState('caseDetail.correspondence')
       .find(
         _correspondence =>

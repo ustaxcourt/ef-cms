@@ -77,7 +77,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(cerebralTest.getState('form')).toEqual({});
 
-    cerebralTest.docketEntryId = test
+    cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'EVID').docketEntryId;
   });

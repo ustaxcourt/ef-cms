@@ -6,7 +6,7 @@ export const petitionsClerkViewsWorkQueueAfterReassign = cerebralTest => {
       box: 'inbox',
       queue: 'my',
     });
-    const workItem = test
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(
         workItemInQueue =>

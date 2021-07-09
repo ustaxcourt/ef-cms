@@ -22,10 +22,10 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (
     await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
     const docketEntryIdToReplace = cerebralTest.getState('docketEntryId');
-    const previousPetitionDocument = test
+    const previousPetitionDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
-    const previousDocketRecordEntry = test
+    const previousDocketRecordEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const previousPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {
@@ -37,7 +37,7 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (
 
     await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    const deletedDocument = test
+    const deletedDocument = cerebralTest
       .getState('form.docketEntries')
       .find(doc => doc.docketEntryId === docketEntryIdToReplace);
     expect(deletedDocument).toBeUndefined();
@@ -62,10 +62,10 @@ export const petitionsClerkRemovesAndReaddsPetitionFile = (
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const updatedPetitionDocument = test
+    const updatedPetitionDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode);
-    const updatedDocketRecordEntry = test
+    const updatedDocketRecordEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.docketEntryId === docketEntryIdToReplace);
     const updatedPetitionFormattedWorkItem = runCompute(formattedWorkQueue, {

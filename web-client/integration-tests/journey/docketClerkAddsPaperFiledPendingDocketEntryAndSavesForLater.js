@@ -66,7 +66,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
       isSavingForLater: true,
     });
 
-    cerebralTest.docketEntryId = test
+    cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'A').docketEntryId;
 
