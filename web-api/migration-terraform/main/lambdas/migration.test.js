@@ -29,29 +29,7 @@ describe('migration', () => {
   });
 
   describe('getFilteredGlobalEvents', () => {
-    it('should not try to migrate global table dynamo events', async () => {
-      const items = await getFilteredGlobalEvents({
-        Records: [
-          {
-            dynamodb: {
-              NewImage: {
-                'aws:rep:updatetime': {
-                  N: 10,
-                },
-              },
-              OldImage: {
-                'aws:rep:updatetime': {
-                  N: 10,
-                },
-              },
-            },
-          },
-        ],
-      });
-      expect(items.length).toBe(0);
-    });
-
-    it('should return non global table dynamo events', async () => {
+    it('should return everything', async () => {
       const items = await getFilteredGlobalEvents({
         Records: [
           {
