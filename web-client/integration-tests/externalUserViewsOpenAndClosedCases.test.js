@@ -11,7 +11,6 @@ const cerebralTest = setupTest();
 describe('external user views open and closed cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    loginAs(cerebralTest, 'docketclerk@example.com');
   });
 
   afterAll(() => {
