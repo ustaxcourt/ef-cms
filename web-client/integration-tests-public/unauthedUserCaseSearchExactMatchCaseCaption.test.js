@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -59,7 +59,7 @@ function createCaseWithCaption(captionString) {
       });
 
       afterAll(() => {
-        test.closeSocket();
+        cerebralTest.closeSocket();
       });
 
       loginAs(testClient, 'petitioner@example.com');
@@ -68,13 +68,13 @@ function createCaseWithCaption(captionString) {
         const caseDetail = await uploadPetition(testClient);
 
         expect(caseDetail.docketNumber).toBeDefined();
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
         testClient.docketNumber = caseDetail.docketNumber;
         createdDocketNumbers.push(caseDetail.docketNumber);
       });
 
       const newCaseCaption = `${captionString}, Petitioner`;
-      updateCaseCaption(test.docketNumber, newCaseCaption);
+      updateCaseCaption(cerebralTest.docketNumber, newCaseCaption);
     });
 
     describe('Petitions clerk serves case to IRS', () => {
@@ -94,10 +94,13 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: captionSearchTerm,
     };
 
-    test.setState('advancedSearchForm.caseSearchByName', queryParams);
-    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
+      'submitPublicCaseAdvancedSearchSequence',
+      {},
+    );
 
-    const searchResults = test.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

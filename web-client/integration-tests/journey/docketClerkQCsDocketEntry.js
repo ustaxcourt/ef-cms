@@ -1,6 +1,6 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkQCsDocketEntry = (test, data = {}) => {
+export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test);
@@ -10,14 +10,14 @@ export const docketClerkQCsDocketEntry = (test, data = {}) => {
 
     const { docketEntryId } = formattedDocketEntriesOnDocketRecord[data.index];
 
-    await test.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
       docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
-    await test.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test));

@@ -6,7 +6,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionerViewsCaseDetail = (test, overrides = {}) => {
+export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
   return it('petitioner views case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test);
@@ -15,19 +15,19 @@ export const petitionerViewsCaseDetail = (test, overrides = {}) => {
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(test.docketNumber);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(cerebralTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}${docketNumberSuffix}`,
+      `${cerebralTest.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.docketEntries.length).toEqual(documentCount);
 

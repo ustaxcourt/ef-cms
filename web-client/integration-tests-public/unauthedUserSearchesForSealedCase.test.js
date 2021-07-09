@@ -13,7 +13,7 @@ import { unauthedUserSearchesForSealedCasesByDocketNumber } from './journey/unau
 import { unauthedUserViewsCaseDetailForSealedCase } from './journey/unauthedUserViewsCaseDetailForSealedCase';
 import { unauthedUserViewsPrintableDocketRecordForSealedCase } from './journey/unauthedUserViewsPrintableDocketRecordForSealedCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -23,7 +23,7 @@ describe('Petitioner creates case to search for', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -42,7 +42,7 @@ describe('Petitioner creates case to search for', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });

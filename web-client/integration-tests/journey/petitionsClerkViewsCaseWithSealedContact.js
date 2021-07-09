@@ -4,13 +4,13 @@ const {
 } = require('../helpers');
 
 export const petitionsClerkViewsCaseWithSealedContact = (
-  test,
+  cerebralTest,
   contactType,
   docketNumber,
 ) => {
   return it(`Petitions clerk views case with sealed ${contactType}`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: docketNumber || test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: docketNumber || cerebralTest.docketNumber,
     });
 
     let sealedContact;

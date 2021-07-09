@@ -1,15 +1,17 @@
 import { contactPrimaryFromState } from '../helpers';
 
-export const judgeViewsCaseDetail = test => {
+export const judgeViewsCaseDetail = cerebralTest => {
   return it('Judge views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
+    );
 
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();

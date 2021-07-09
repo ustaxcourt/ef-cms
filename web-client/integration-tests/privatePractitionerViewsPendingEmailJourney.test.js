@@ -12,7 +12,7 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('private practitioner views pending email journey', () => {
   beforeAll(() => {
@@ -20,12 +20,12 @@ describe('private practitioner views pending email journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -38,20 +38,20 @@ describe('private practitioner views pending email journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkMigratesPractitionerWithoutEmail(test);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkMigratesPractitionerWithoutEmail(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(test);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsPractitionerEmail(cerebralTest);
 
   it('admission clerk views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
@@ -59,21 +59,21 @@ describe('private practitioner views pending email journey', () => {
     );
 
     const partiesHelper = runCompute(partiesInformationHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const practitionerWithPendingEmail =
       partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-        prac => prac.barNumber === test.barNumber,
+        prac => prac.barNumber === cerebralTest.barNumber,
       );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
-      `${test.pendingEmail} (Pending)`,
+      `${cerebralTest.pendingEmail} (Pending)`,
     );
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerRequestsAccessToCase(test, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
 
   it('unassociated private practitioner views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
@@ -81,16 +81,16 @@ describe('private practitioner views pending email journey', () => {
     );
 
     const partiesHelper = runCompute(partiesInformationHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const practitionerWithPendingEmail =
       partiesHelper.formattedPetitioners[0].representingPractitioners.find(
-        prac => prac.barNumber === test.barNumber,
+        prac => prac.barNumber === cerebralTest.barNumber,
       );
 
     expect(practitionerWithPendingEmail.formattedPendingEmail).toBe(
-      `${test.pendingEmail} (Pending)`,
+      `${cerebralTest.pendingEmail} (Pending)`,
     );
   });
 });

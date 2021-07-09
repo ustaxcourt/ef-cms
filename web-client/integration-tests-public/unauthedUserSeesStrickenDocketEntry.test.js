@@ -22,7 +22,7 @@ import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearch
 import { unauthedUserSearchesForStrickenOrder } from './journey/unauthedUserSearchesForStrickenOrder';
 import { unauthedUserSeesStrickenDocketEntry } from './journey/unauthedUserSeesStrickenDocketEntry';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 testClient.draftOrders = [];
 
@@ -32,14 +32,14 @@ describe('Petitioner creates a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(testClient);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
 });
@@ -65,8 +65,8 @@ describe('Docketclerk QCs and Strikes a docket entry', () => {
 
 describe('Unauthed user views stricken docket entry for externally-filed document', () => {
   unauthedUserNavigatesToPublicSite(test);
-  unauthedUserSearchesByDocketNumber(test, testClient);
-  unauthedUserSeesStrickenDocketEntry(test, 3);
+  unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
+  unauthedUserSeesStrickenDocketEntry(cerebralTest, 3);
   unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
 });
 
@@ -86,7 +86,7 @@ describe('Docketclerk creates an order and strikes it', () => {
 });
 
 describe('Unauthed user views stricken docket entry for order', () => {
-  unauthedUserSeesStrickenDocketEntry(test, 4);
+  unauthedUserSeesStrickenDocketEntry(cerebralTest, 4);
   unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(test);
 });
 

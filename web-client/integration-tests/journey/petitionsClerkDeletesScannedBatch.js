@@ -1,15 +1,17 @@
-export const petitionsClerkDeletesScannedBatch = test => {
+export const petitionsClerkDeletesScannedBatch = cerebralTest => {
   return it('Petitions clerk deletes a batch', async () => {
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
-    const batches = test.getState(`scanner.batches.${selectedDocumentType}`);
+    const batches = cerebralTest.getState(
+      `scanner.batches.${selectedDocumentType}`,
+    );
 
-    await test.runSequence('openConfirmDeleteBatchModalSequence', {
+    await cerebralTest.runSequence('openConfirmDeleteBatchModalSequence', {
       batchIndexToDelete: 0,
     });
 
-    await test.runSequence('removeBatchSequence');
+    await cerebralTest.runSequence('removeBatchSequence');
 
     expect(batches).toHaveLength(0);
   });

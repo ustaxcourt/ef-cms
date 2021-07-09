@@ -5,160 +5,160 @@ const { VALIDATION_ERROR_MESSAGES } = Case;
 
 const { CASE_TYPES_MAP, PAYMENT_STATUS } = applicationContext.getConstants();
 
-export const petitionsClerkUpdatesCaseDetail = test => {
+export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
   return it('Petitions clerk updates case detail', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     // irsNoticeDate - invalid
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: 'twentyoughteight',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
     });
 
     // irsNoticeDate - valid
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('validateCaseDetailSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     // irsNoticeDate - valid
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
 
-    await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('validateCaseDetailSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(null);
+    expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(null);
 
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     // irsNoticeDate - valid
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDay',
       value: '24',
     });
-    await test.runSequence('validateCaseDetailSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('validateCaseDetailSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     // petitionPaymentDate
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
     });
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2018',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateMonth',
       value: '12',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '24',
     });
-    await test.runSequence('validateCaseDetailSequence');
+    await cerebralTest.runSequence('validateCaseDetailSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     //error on save
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: '',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: '',
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       caseType: VALIDATION_ERROR_MESSAGES.caseType,
       procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
     });
-    expect(test.getState('alertError')).toEqual({
+    expect(cerebralTest.getState('alertError')).toEqual({
       messages: [
         VALIDATION_ERROR_MESSAGES.caseType,
         VALIDATION_ERROR_MESSAGES.procedureType,
@@ -167,28 +167,28 @@ export const petitionsClerkUpdatesCaseDetail = test => {
     });
 
     //user changes value and hits save
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.whistleblower,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
       value: 'Regular',
     });
     //submit and route to case detail
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    await test.runSequence('navigateToPathSequence', {
-      path: `/case-detail/${test.docketNumber}`,
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('navigateToPathSequence', {
+      path: `/case-detail/${cerebralTest.docketNumber}`,
     });
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('caseDetail.irsNoticeDate')).toEqual(
+    expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
     );
-    expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
+    expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2018-12-24T05:00:00.000Z',
     );
   });
