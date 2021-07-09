@@ -16,7 +16,7 @@ export const associatedUserAdvancedSearchForSealedCase = cerebralTest => {
     await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(
-      test
+      cerebralTest
         .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(result => result.docketNumber === cerebralTest.docketNumber),
     ).toBeDefined();

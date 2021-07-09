@@ -60,7 +60,7 @@ export const petitionsClerkAdvancedSearchForCase = cerebralTest => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      test
+      cerebralTest
         .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
         .find(result => result.docketNumber === cerebralTest.docketNumber),
     ).toBeDefined();

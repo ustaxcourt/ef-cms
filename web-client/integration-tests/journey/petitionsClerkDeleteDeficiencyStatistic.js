@@ -12,7 +12,7 @@ export const petitionsClerkDeleteDeficiencyStatistic = cerebralTest => {
     await cerebralTest.runSequence('deleteDeficiencyStatisticsSequence');
 
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.statistics')
         .find(s => s.statisticId === statisticId),
     ).toBeUndefined();

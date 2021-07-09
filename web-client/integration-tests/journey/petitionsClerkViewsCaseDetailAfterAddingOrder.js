@@ -15,7 +15,7 @@ export const petitionsClerkViewsCaseDetailAfterAddingOrder = cerebralTest => {
     );
     expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(4);
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentTitle === 'Order of Dismissal and Decision'),
     ).toBeDefined();

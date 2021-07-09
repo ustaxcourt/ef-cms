@@ -5,7 +5,7 @@ export const petitionsClerkVerifyNotEligibleCase = cerebralTest => {
     });
 
     expect(
-      test
+      cerebralTest
         .getState('trialSession.eligibleCases')
         .find(
           eligibleCase =>
