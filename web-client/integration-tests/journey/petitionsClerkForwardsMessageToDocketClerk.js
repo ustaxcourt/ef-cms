@@ -1,57 +1,60 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkForwardsMessageToDocketClerk = test => {
+export const petitionsClerkForwardsMessageToDocketClerk = cerebralTest => {
   const { DOCKET_SECTION } = applicationContext.getConstants();
 
   return it('petitions clerk forwards the message to docket clerk', async () => {
-    await test.runSequence('openForwardMessageModalSequence');
+    await cerebralTest.runSequence('openForwardMessageModalSequence');
 
-    expect(test.getState('modal.form')).toMatchObject({
-      parentMessageId: test.parentMessageId,
-      subject: test.testMessageSubject,
+    expect(cerebralTest.getState('modal.form')).toMatchObject({
+      parentMessageId: cerebralTest.parentMessageId,
+      subject: cerebralTest.testMessageSubject,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Four years of malfeasance unreported. This cannot stand.',
     });
 
-    await test.runSequence('forwardMessageSequence');
+    await cerebralTest.runSequence('forwardMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       toSection: expect.anything(),
       toUserId: expect.anything(),
     });
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: DOCKET_SECTION,
-    });
+    await cerebralTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: DOCKET_SECTION,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '1805d1ab-18d0-43ec-bafb-654e83405416', //docketclerk
     });
 
-    await test.runSequence('forwardMessageSequence');
+    await cerebralTest.runSequence('forwardMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('messageDetail').length).toEqual(3);
+    expect(cerebralTest.getState('messageDetail').length).toEqual(3);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();

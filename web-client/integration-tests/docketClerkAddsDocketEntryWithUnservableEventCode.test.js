@@ -15,8 +15,8 @@ import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
@@ -26,98 +26,125 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUploadsACourtIssuedDocument(test, fakeFile);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
 
   it('adds a docket entry with an unservable event code', async () => {
     const getHelper = () => {
       return runCompute(
         withAppContextDecorator(addCourtIssuedDocketEntryHelper),
         {
-          state: test.getState(),
+          state: cerebralTest.getState(),
         },
       );
     };
 
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: test.draftOrders[0].docketEntryId,
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     expect(getHelper().showReceivedDate).toEqual(false);
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: UNSERVABLE_EVENT_CODES[0], // CTRA
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: UNSERVABLE_EVENT_CODES[0], // CTRA
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'for test',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'for test',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'month',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'day',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'year',
-      value: '2020',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'month',
+        value: '1',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'day',
+        value: '1',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'year',
+        value: '2020',
+      },
+    );
 
     expect(getHelper().showReceivedDate).toEqual(true);
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       filingDate: 'Enter a filing date',
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateMonth',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateDay',
-      value: '1',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateYear',
-      value: '2021',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: '1',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: '1',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: '2021',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
       docketRecordIndex: 3,
     });
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'pending',
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'pending',
+        value: true,
+      },
+    );
 
-    await test.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     await refreshElasticsearchIndex();
@@ -125,7 +152,7 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     const headerHelper = runCompute(
       withAppContextDecorator(caseDetailHeaderHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -134,20 +161,22 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     const caseDetailSubnav = runCompute(
       withAppContextDecorator(caseDetailSubnavHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
     expect(caseDetailSubnav.showTrackedItemsNotification).toBeTruthy();
 
-    await test.runSequence('gotoPendingReportSequence');
+    await cerebralTest.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    const pendingItems = test.getState('pendingReports.pendingItems');
+    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     expect(
-      pendingItems.find(item => item.docketNumber === test.docketNumber),
+      pendingItems.find(
+        item => item.docketNumber === cerebralTest.docketNumber,
+      ),
     ).toBeDefined();
   });
 });

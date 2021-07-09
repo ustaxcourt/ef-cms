@@ -3,14 +3,14 @@ import {
   getFormattedDocketEntriesForTest,
 } from '../helpers';
 
-export const petitionerEditsCasePrimaryContactPhone = test => {
+export const petitionerEditsCasePrimaryContactPhone = cerebralTest => {
   return it('petitioner updates primary contact phone', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '9999999999',
     });
 
-    await test.runSequence('submitEditContactSequence');
+    await cerebralTest.runSequence('submitEditContactSequence');
 
     const contactPrimary = contactPrimaryFromState(test);
 

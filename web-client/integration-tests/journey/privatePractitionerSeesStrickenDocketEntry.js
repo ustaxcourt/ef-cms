@@ -4,7 +4,7 @@ import {
 } from '../helpers';
 
 export const privatePractitionerSeesStrickenDocketEntry = (
-  test,
+  cerebralTest,
   docketRecordIndex,
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
@@ -17,7 +17,7 @@ export const privatePractitionerSeesStrickenDocketEntry = (
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
-    test.docketEntryId = formattedDocketEntry.docketEntryId;
+    cerebralTest.docketEntryId = formattedDocketEntry.docketEntryId;
 
     expect(formattedDocketEntry.isStricken).toEqual(true);
     expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(

@@ -6,24 +6,28 @@ const trialSessionWorkingCopyHelper = withAppContextDecorator(
   trialSessionWorkingCopyHelperComputed,
 );
 
-export const trialClerkViewsTrialSessionWorkingCopyWithNotes = test => {
+export const trialClerkViewsTrialSessionWorkingCopyWithNotes = cerebralTest => {
   return it('Trial Clerk views trial session working copy with notes', async () => {
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionWorkingCopy');
-    expect(test.getState('trialSessionWorkingCopy.trialSessionId')).toEqual(
-      test.trialSessionId,
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
     );
+    expect(
+      cerebralTest.getState('trialSessionWorkingCopy.trialSessionId'),
+    ).toEqual(cerebralTest.trialSessionId);
 
     let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const { docketNumber } = workingCopyHelper.formattedCases[0];
 
     expect(
-      test.getState(`trialSessionWorkingCopy.userNotes.${docketNumber}.notes`),
+      cerebralTest.getState(
+        `trialSessionWorkingCopy.userNotes.${docketNumber}.notes`,
+      ),
     ).toEqual('this is a note added from the modal');
   });
 };

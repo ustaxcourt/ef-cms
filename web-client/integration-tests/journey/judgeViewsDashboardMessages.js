@@ -1,9 +1,9 @@
-export const judgeViewsDashboardMessages = (test, messageSubjects) => {
+export const judgeViewsDashboardMessages = (cerebralTest, messageSubjects) => {
   return it('Judge views dashboard messages', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    expect(test.getState('currentPage')).toEqual('DashboardJudge');
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
 
-    const messages = test.getState('messages');
+    const messages = cerebralTest.getState('messages');
     expect(messages.length).toBeGreaterThan(1);
 
     messageSubjects.forEach(subject => {

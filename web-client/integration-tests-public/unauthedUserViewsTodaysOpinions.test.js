@@ -15,7 +15,7 @@ import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOpinions } from './journey/unauthedUserViewsTodaysOpinions';
 import { unauthedUserViewsTodaysOrdersWithoutBenchOpinion } from './journey/unauthedUserViewsTodaysOrdersWithoutBenchOpinion';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 
 testClient.draftOrders = [];
@@ -23,11 +23,11 @@ testClient.draftOrders = [];
 describe('Unauthed user views todays opinions', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    test.draftOrders = [];
+    cerebralTest.draftOrders = [];
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
