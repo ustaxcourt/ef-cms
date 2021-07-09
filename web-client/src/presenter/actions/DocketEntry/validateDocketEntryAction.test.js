@@ -58,4 +58,100 @@ describe('validateDocketEntryAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  describe('dateReceived', () => {
+    it('returns an error message if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateDocketEntryInteractor.mockReturnValue(null);
+
+      await runAction(validateDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            dateReceivedYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.dateReceived).toEqual(
+        'Enter a four-digit year',
+      );
+    });
+
+    it('does not overwrite errors returned from the validateDocketEntryInteractor if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateDocketEntryInteractor.mockReturnValue({
+          dateReceived: 'The date was invalid',
+        });
+
+      await runAction(validateDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            dateReceivedYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.dateReceived).toEqual(
+        'The date was invalid',
+      );
+    });
+  });
+
+  describe('serviceDate', () => {
+    it('returns an error message if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateDocketEntryInteractor.mockReturnValue(null);
+
+      await runAction(validateDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            serviceDateYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.serviceDate).toEqual(
+        'Enter a four-digit year',
+      );
+    });
+
+    it('does not overwrite errors returned from the validateDocketEntryInteractor if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateDocketEntryInteractor.mockReturnValue({
+          serviceDate: 'The date was invalid',
+        });
+
+      await runAction(validateDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            serviceDateYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.serviceDate).toEqual(
+        'The date was invalid',
+      );
+    });
+  });
 });
