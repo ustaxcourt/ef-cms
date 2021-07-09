@@ -43,7 +43,7 @@ describe('logger', () => {
   it('defaults to using a console logger if not specified', async () => {
     const middleware = logger();
 
-    jest.spyOn(console, 'log');
+    jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
       req.locals.logger.info('test', () => {
         expect(console.log).toHaveBeenCalled();
