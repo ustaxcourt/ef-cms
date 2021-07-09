@@ -11,7 +11,7 @@ export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    const { docketEntryId } = test;
+    const { docketEntryId } = cerebralTest;
 
     const draftOrderDocument = helper.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
