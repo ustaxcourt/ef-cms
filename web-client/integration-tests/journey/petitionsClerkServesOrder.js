@@ -2,7 +2,7 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const petitionsClerkServesOrder = cerebralTest => {
   return it('Petitions Clerk serves the order', async () => {
-    const { docketEntryId } = test;
+    const { docketEntryId } = cerebralTest;
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
