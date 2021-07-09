@@ -1,8 +1,82 @@
-# Electronic Filing / Case Management System
+# Electronic Filing / Case Management System (DAWSON)
 
-The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based legacy case management system operated through several, disparate desktop applications installed on individual workstations. Flexion was awarded a competitive bid in October 2018 to develop and deploy a new web-based electronic filing and case management system that would provide a single integrated point to handle all communication, documentation, and task workflows associated with moving a case through the Court from inception to completion. The new system would allow the public to file new cases, track them, and submit additional information about their cases through a secure online portal, instead of the current mail-based, paper petitioning process. It also provides the Court with the means to transfer most of their paper-based processes and workflows into easier, more efficient online ones.
+## Overview
 
-### Build Status
+**The [United States Tax Court](https://ustaxcourt.gov/)** is an independent Federal court that provides a forum for settling disputes between taxpayers and the Internal Revenue Service. There are approximately 200 employees at the Court and they handle approximately 60,000 petitions each year. About 60% of these petitions are filed from people without lawyers.
+
+**DAWSON (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) that kept meticulous records.
+
+**Flexion** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a federal digital service team serving as advisors to the U.S. Tx Court and have paired with the U.S. Tax Court since the inception of DAWSON.
+
+### User types
+
+- **Petitioners** - Citizens filing a petition with the court; if filing without legal representation, referred to as pro-se petitioner
+- **Practitioners** - Attorneys who file a petition on behalf of a petitioner
+- **Internal court users** - System users responsible for managing cases within the system, work at Tax Court
+- **IRS attorneys** - Work for IRS and file answers to petitions
+- **General public** - Can search for a case on public website and see certain details about it that are open to the public
+
+### Project status
+
+DAWSON is in active use and is continually updated to deploy enhancements and new features.
+
+- [Release notes](https://www.ustaxcourt.gov/release_notes.html) for DAWSON
+- [How we work](./docs/how-we-work.md) has our principles, product team, technical strategy, meetings cadence, tools, etc.
+- [Onboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=onboarding.md) or [offboard](https://github.com/ustaxcourt/ef-cms/issues/new?template=offboarding.md) a teammate
+- [Documentation](./docs/README.md) about the CI/CD setup, API, style guide, UX, code review, etc.
+- [Ongoing development documentation](./wikiwiki/README.md) such as designs, research data, user workflows, etc.
+- [Product roadmap](https://docs.google.com/document/d/1g3D1zPNQqVsWhJ6uGIVcHA04IdBHgYcOCm9roaSfFNk/edit) 🔒
+- [Goals of DAWSON](https://docs.google.com/document/d/1xCh1hbXjJItOWlQ2MH-GDDc0KWho88KKcHfUJcpHkSs/edit) 🔒
+
+### Backlog
+
+| Backlog | Location
+|---------|----------
+| User stories and feature work <br>(Primary backlog) | [GitHub issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues#workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/board?repos=152320868); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/extension).
+| Refactoring and bugs | [Trello cards in Flexion’s OpEx/DevEx board](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex). 🔒
+| Court-related decisions, processes, and environment work | [GitHub issues in this repository](https://github.com/ustaxcourt/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
+| Court’s Authority to Operate process | [GitHub issues in this repository](https://github.com/ustaxcourt/ato/projects). 🔒
+
+### Screenshots
+
+<table>
+	<tr>
+		<td>
+			<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" height="200" alt="Case detail page / Docket record"></a>
+			<p>Case detail page / Docket record</p>
+		</td>
+		<td>
+			<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" height="200" alt="Quality control for documents"></a>
+			<p>Quality control for documents</p>
+		</td>
+	</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" height="200" alt="Validating a petition"></a>
+			<p>Validating a petition</p>
+		</td>
+		<td>
+			<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" height="200" alt="Trial session details"></a>
+			<p>Trial session details</p>
+		</td>
+	</tr>
+</table>
+
+### Milestones
+
+- Dec 27, 2020 - DAWSON MVP launched and first petition received
+- Nov 25, 2020 - Legacy data migration of 957,000 cases (5.5M PDFs) complete
+- Nov 21, 2020 - Legacy system goes dark for legacy data transfer and court-wide quality control of records
+- Nov 2, 2018 - [First code](https://github.com/ustaxcourt/ef-cms/pull/5) delivered and accepted by the Court
+- Oct 11, 2018 - [First commit](https://github.com/ustaxcourt/ef-cms/commit/8d797f3554399bb94bafb39e32616d48eabb6790) of code
+- Sep 27, 2018 - Contract awarded to Flexion
+- Aug 2, 2018 - [Final solicitation](https://github.com/ustaxcourt/case-management-rfq) posted
+- May 14 - 16, 2018 - Procurement workshop with 18F
+
+## Technical overview
 
 [![DeepScan grade](https://deepscan.io/api/teams/8976/projects/17137/branches/383813/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=8976&pid=17137&bid=383813)
 
@@ -10,242 +84,35 @@ The [U.S. Tax Court](https://ustaxcourt.gov/) currently uses a non-web-based leg
 | ------- | ------ | ------- | ---- |
 | [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) |
 
-## Screenshots of new system
+API | Front-End | Shared Code
+--- | --------- | -----------
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-api&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-api)<br> | [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-front-end&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-front-end)| [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=coverage)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)<br>[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ef-cms-shared&metric=security_rating)](https://sonarcloud.io/dashboard?id=ef-cms-shared)
 
-### Case detail page / Docket record
-<a href="docs/images/screenshot_docket.png"><img src="docs/images/screenshot_docket.png" width="80%" style="float: left; margin: 0 4px;" /></a>
-
-### Quality control for documents
-<a href="docs/images/screenshot_qc.png"><img src="docs/images/screenshot_qc.png" width="80%" style="float: left; margin: 0 4px;" /></a>
-
-### Validating a Petition
-
-<a href="docs/images/screenshot_petition.png"><img src="docs/images/screenshot_petition.png" width="80%" style="float: left; margin: 4px 4px 0 0;" /></a>
-
-### Trial session details
-
-<a href="docs/images/screenshot_trialsession.png"><img src="docs/images/screenshot_trialsession.png" width="80%" style="float: left; margin: 4px 0 0 4px;" /></a>
-
-<br clear="both">
+[![Known Vulnerabilities](https://snyk.io//test/github/flexion/ef-cms/badge.svg?targetFile=package.json)](https://snyk.io//test/github/flexion/ef-cms?targetFile=package.json)
 
 The fork of this project in which the bulk of development is occurring is [Flexion’s fork](https://github.com/flexion/ef-cms), but all changes are pulled into the U.S. Tax Court’s repository every two weeks.
 
-Artifacts for ongoing development such as designs, research data, user workflows etc. are located in the [wiki](https://github.com/flexion/ef-cms/wiki). See also [documentation about how we work](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/how-we-work.md): our principles, product team, technical strategy, meetings cadence, tools, etc.
+This is a React-based JavaScript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`web-api/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. Deployment is done via CircleCI.
 
-## Technical overview
+### Local development
 
-This is a React-based JavaScript application. It’s housed in a [monorepo](https://en.wikipedia.org/wiki/Monorepo) that contains the front end (`web-client/`) and the back end (`web-api/`), with a third project housing resources that are shared between the front and back ends (`shared/`). It’s architected for Amazon Web Services, with a strong reliance on [Lambda](https://aws.amazon.com/lambda/), scripted with Terraform. The project is heavily containerized, using Docker, and can be run locally, despite the serverless architecture. All CI/CD processes are found in `management/`. Deployment is done via CircleCI.
-
-## Documentation
-
-For documentation about the CI/CD setup, API, style guide, UX, code review, etc., see [docs/README.md](docs/README.md).
-
-## AWS diagram
-
-![System architecture diagram, described by the code below](https://user-images.githubusercontent.com/14930/91787473-f76f8b80-ebd7-11ea-8fee-d4cbd19730e5.png)
-
-<details>
-<summary>Source for diagram</summary><br>
-
-This diagram was created with [Graphviz](https://graphviz.org/), and the source is below for future edits. Use an online editor, such as [Edotor](https://edotor.net/), and download the resulting graph PNG to update the image. Don’t forget to copy-paste the source back into this page for next time an edit is needed!
-
-```dot
-digraph {
-	User [shape = doublecircle]
-
-	node [style = "rounded, filled", shape = box]
-
-	node [fillcolor = "#0d7ea2", fontcolor = "#ffffff"]
-	Cognito [label = "Cognito\nUser Auth"]
-
-	node [fillcolor = "#d72d79"]
-	SESEast [label = "SES\nOutbound Email"]
-
-	node [fillcolor = "#008480"]
-	Route53 [label = "Route53\nDNS"]
-
-	node [fillcolor = "#d54309"]
-	CloudFront [label = "CloudFront\nCDN"]
-
-	node [fillcolor = "#e41d3d"]
-	APIGatewayEast [label = "API Gateway\nAuthorized API"]
-	APIGatewayPublicEast [label = "API Gateway\nPublic API"]
-	APIGatewayWebSocketEast [label = "API Gateway\nAuthorized WebSocket"]
-
-	node [fillcolor = "#4866ff"]
-	ELBEast [label = "ELB"]
-	ELBWest [label = "ELB (Failover)"]
-
-	node [fillcolor = "#cf4900"]
-	ElasticsearchEast [label = "Elasticsearch"]
-
-	node [fillcolor = "#936f38"]
-	DynamoDBEast [label = "DynamoDB"]
-	DynamoDBWest [label = "DynamoDB (Failover)"]
-
-	node [fillcolor = "#f8dfe2", fontcolor = "#000000"]
-	LambdaAPIEast [label = "Lambda\nAuthorized API"]
-	LambdaAPIAsyncEast [label = "Lambda\nAsync API"]
-	LambdaStreamsEast [label = "Lambda\nStreams"]
-	LambdaCognitoAuthorizerEast [label = "Lambda\nCognito Authorizer"]
-	LambdaAPIPublicEast [label = "Lambda\nPublic API"]
-	LambdaWebSocketConnectEast [label = "Lambda\nWebSocket Connect"]
-	LambdaHeaderSecurityEast [label = "Lambda\nSecurity Headers"]
-	LambdaCognitoPostConfirmationEast [label = "Lambda\nCognito Post Confirmation"]
-
-	node [fillcolor = "#dee5ff"]
-	EC2East [label = "EC2\nDynamsoft"]
-	EC2West [label = "EC2\nDynamsoft (Failover)"]
-
-	node [fillcolor = "#dbebde"]
-	S3DocumentsEast [label = "S3\nDocuments"]
-	S3DocumentsWest [label = "S3\nDocuments (Failover)"]
-	S3PrivateUIEast [label = "S3\nAuthorized UI"]
-	S3PrivateUIWest [label = "S3\nAuthorized UI (Failover)"]
-	S3PublicUIEast [label = "S3\nPublic UI"]
-	S3PublicUIWest [label = "S3\nPublic UI (Failover)"]
-	S3SoftwareEast [label = "S3\nDynamsoft"]
-
-	User -> Route53 -> {
-		APIGatewayEast
-		APIGatewayPublicEast
-		APIGatewayWebSocketEast
-		ELBEast
-		ELBWest
-	}
-
-	User -> Cognito -> Route53
-
-	User -> CloudFront -> {
-		S3PrivateUIEast
-		S3PublicUIEast
-
-		LambdaHeaderSecurityEast
-
-		S3PrivateUIWest
-		S3PublicUIWest
-	}
-
-	subgraph cluster_east {
-		label = "us-east-1"
-		labeljust = "l"
-
-		Cognito
-		LambdaCognitoPostConfirmationEast
-		SESEast
-
-		APIGatewayEast -> {
-			LambdaAPIEast
-			LambdaAPIAsyncEast
-			LambdaStreamsEast
-			LambdaCognitoAuthorizerEast
-		}
-
-		APIGatewayPublicEast -> {
-			LambdaAPIPublicEast
-		}
-
-		APIGatewayWebSocketEast -> {
-			LambdaWebSocketConnectEast
-			LambdaCognitoAuthorizerEast
-		}
-
-		S3PrivateUIEast
-		S3PublicUIEast
-		S3SoftwareEast
-		S3DocumentsEast
-
-		DynamoDBEast
-
-		ElasticsearchEast
-
-		LambdaHeaderSecurityEast
-
-		ELBEast -> EC2East -> S3SoftwareEast
-	}
-
-	Cognito -> LambdaCognitoPostConfirmationEast -> SESEast
-
-	LambdaAPIEast -> {
-		S3DocumentsEast
-		DynamoDBEast
-		ElasticsearchEast
-		SESEast
-	}
-
-	LambdaAPIPublicEast -> {
-		S3DocumentsEast
-		DynamoDBEast
-		ElasticsearchEast
-	}
-
-	S3DocumentsEast -> S3DocumentsWest [
-		label = "S3 Replication"
-	]
-
-	DynamoDBEast -> DynamoDBWest [
-		label = "Global Tables"
-	]
-
-	subgraph cluster_west {
-		label = "us-west-1"
-		labeljust = "l"
-
-		S3PrivateUIWest
-		S3PublicUIWest
-		S3DocumentsWest
-		ELBWest -> EC2West -> S3SoftwareEast
-		DynamoDBWest
-	}
-}
-```
-</details>
-
-![Code delivery pipeline described by code below.](https://user-images.githubusercontent.com/14930/91789441-a9a95200-ebdc-11ea-91d7-02ce5e6e9392.png)
-
-<details>
-<summary>Source for diagram</summary><br>
-
-This diagram was created with [Graphviz](https://graphviz.org/), and the source is below for future edits. Use an online editor, such as [Edotor](https://edotor.net/), and download the resulting graph PNG to update the image. Don’t forget to copy-paste the source back into this page for next time an edit is needed!
-
-```dot
-digraph {
-	rankdir="LR"
-
-	Code [shape = doublecircle]
-	node [style = rounded, shape = box]
-
-	Code -> GitHub -> CircleCI
-	CircleCI -> SonarCloud
-	CircleCI -> AWS [label = "via Terraform"]
-}
-```
-</details>
-
-## Backlog
-
-There are a few backlogs related to the project:
-
-| Items | Location
-|-------|----------
-| User stories and feature work <br>(Primary backlog) | [GitHub issues in Flexion’s repository](https://github.com/flexion/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
-| Refactoring and bugs | [Trello cards in Flexion’s OpEx/DevEx board](https://trello.com/b/9tgrIFfA/ef-cms-opex-devex).
-| Court-related decisions, processes, and environment work | [GitHub issues in this repository](https://github.com/ustaxcourt/ef-cms/issues); scrum board visible using the [ZenHub browser plugin](https://www.zenhub.com/).
-| Data migration script work | [GitHub issues in this private repository](https://github.com/ustaxcourt/ef-cms-migration/issues); scrum board using [GitHub projects](https://github.com/ustaxcourt/ef-cms-migration/projects).
-
-## Testing everything
+#### Testing everything
 
 To exercise the CI/CD pipeline locally, run the following:
 
-`./docker-test-all.sh`
+```sh
+./docker-test-all.sh
+```
 
 This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral tests, Pa11y, etc. over all the components.
 
-## Running / verifying the project via Docker
+#### Running / verifying the project via Docker
 
 Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it:
 
-`./docker-run.sh`
+```sh
+./docker-run.sh
+```
 
 - You can access the UI at http://localhost:1234
 - You can access the public UI at http://localhost:5678
@@ -257,14 +124,15 @@ Once [you have Docker installed](https://docs.docker.com/install/), the followin
 
 Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
 
-### ECR
+#### ECR
+
 ECR is Amazon’s Docker container registry that holds images for `ef-cms` builds on CircleCI. Currently, images can be managed in the AWS ECR console under the `ef-cms-us-east-1`. If you need to update the Docker image, you can do so (with appropriate permissions) by running `./docker-to-ecr.sh`. This command will build an image per the `Dockerfile-CI` config, tag it as `latest` and push it to the repo in ECR.
 
-## Running this project locally without Docker
+#### Running this project locally without Docker
 
 The EF-CMS is comprised of two components: the API and the UI. Both must be run in order to function.
 
-### Prerequisites
+##### Prerequisites
 
 - Node v14.16.0
 - npm v6.14.11
@@ -272,7 +140,7 @@ The EF-CMS is comprised of two components: the API and the UI. Both must be run 
 - Java 11
 - jq
 
-### Setup
+##### Setup
 
 - Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
 For ClamAV, macOS users can do the following:
@@ -286,30 +154,30 @@ Both the front-end (`/web-client`) and API (`/web-api`) share code that exists i
 
 - `npm i`
 
-#### Terminal A
+###### Terminal A
 
 - `npm run start:api`
 
-##### Other Start Commands
+Other start commands:
 
 - Run `cd web-client && npm run start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
 - Run `npm run start:public` to start the UI for the public access portion of the site
 
-#### Terminal B
+###### Terminal B
 
 - `npm run start:client`
 
-## Login and test users
+#### Login and test users
 
 There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
 
-### Mock login
+##### Mock login
 
 You can log in using the following accounts.
 
-#### External Users
+###### External Users
 
-```
+```txt
 petitioner@example.com
 privatePractitioner@example.com
 privatePractitioner1 - privatePractitioner4@example.com
@@ -318,8 +186,9 @@ irsPractitioner1 - irsPractitioner4@example.com
 irsSuperuser@example.com
 ```
 
-#### Internal Users
-```
+###### Internal Users
+
+```txt
 adc@example.com
 admissionsclerk@example.com
 clerkofcourt@example.com
@@ -345,20 +214,22 @@ colvinsChambers@example.com
 
 No password is required.
 
-### AWS Cognito
+##### AWS Cognito
 
 To use Cognito, start the web client with `npm run dev:cognito` (instead of `npm start`) You can then log in with the following accounts.
 
-#### External Users
-```
+###### External Users
+
+```txt
 petitioner1@example.com – petitioner5@example.com
 privatePractitioner1@example.com – privatePractitioner10@example.com
 irsPractitioner1@example.com – irsPractitioner10@example.com
 service.agent.test@irs.gov (IRS Superuser)
 ```
 
-#### Internal Users
-```
+###### Internal Users
+
+```txt
 adc1@example.com – adc5@example.com
 admissionsclerk1@example.com – admissionsclerk5@example.com
 clerkofcourt1@example.com – clerkofcourt5@example.com
@@ -380,9 +251,9 @@ For a full list of available users, see [court_users.csv](web-api/court_users.cs
 
 The password for all accounts is set as an environment variable: `DEFAULT_ACCOUNT_PASS`.
 
-## Editor configuration
+#### Editor configuration
 
-### Atom.io
+##### Atom.io
 
 Install the following for best results:
 
@@ -391,11 +262,7 @@ Install the following for best results:
 - https://atom.io/packages/linter-eslint
 - https://atom.io/packages/prettier-atom (enable ESLint and StyleLint integrations in settings)
 
-## Contributing
-
-See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
-
-## Testing / Coverage Tips
+#### Testing / Coverage Tips
 
 - Run all tests with `npm run test`
 - The web client, API, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively
@@ -414,6 +281,41 @@ All files |        0 |        0 |        0 |        0 |                   |
 - Funcs: % of functions executed in the code
 - Uncovered Line #s: lines not covered by tests
 
+#### Accessibility HTML_CodeSniffer Bookmarklet
+
+The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
+
+https://squizlabs.github.io/HTML_CodeSniffer/
+
+#### Querying Elasticsearch locally
+
+To query elasticsearch locally, run this docker container
+
+```sh
+docker run -p 3030:3030 -d appbaseio/mirage
+```
+
+- Open your browser to http://localhost:3030
+
+- Update your `.elasticsearch/config/elasticsearch.yml` to have the following pasted at the bottom:
+
+  ```yml
+  http.port: 9200
+  http.cors.allow-origin: "/.*/"
+  http.cors.enabled: true
+  http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type, Content-Length, Authorization
+  http.cors.allow-credentials: true
+  ```
+
+## Load testing
+
+See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Maven load tests.
+
+## Contributing
+
+See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
+
+
 ## Public domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
@@ -421,40 +323,3 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 > This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
-
-## Creating end-of-sprint pull requests
-
-Follow these steps for creating the end of sprint PRs for the court.
-
-1. Create a PR from `develop` -> `staging`
-2. Verify PR passed
-3. Merge PR and verify staging deployed correctly in CircleCI
-4. Create a PR from `staging` -> `master`
-5. Verify PR passed
-6. Merge PR and verify prod deployed correctly in CircleCI
-7. Create a PR from `flexion/ef-cms master` -> `ustaxcourt/ef-cms staging`
-8. When PR comments come in, make changes to master to fix the comments
-9. After the court approves and merges PR, merge master into develop
-10. Create a release in GitHub as sprint_00x against master and put the same description planned to be in the PR description for the court
-
-## Accessibility HTML_CodeSniffer Bookmarklet
-
-The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
-
-https://squizlabs.github.io/HTML_CodeSniffer/
-
-## To query elasticsearch locally, run this docker container
-
-docker run -p 3030:3030 -d appbaseio/mirage
-
-open your browser to http://localhost:3030
-
-update your .elasticsearch/config/elasticsearch.yml to have the following pasted at the bottom:
-
-```
-http.port: 9200
-http.cors.allow-origin: "/.*/"
-http.cors.enabled: true
-http.cors.allow-headers: X-Requested-With,X-Auth-Token,Content-Type, Content-Length, Authorization
-http.cors.allow-credentials: true
-```
