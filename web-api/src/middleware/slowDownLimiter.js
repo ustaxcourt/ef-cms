@@ -1,15 +1,9 @@
 const createApplicationContext = require('../applicationContext');
 
 exports.slowDownLimiter = key => async (req, res, next) => {
-  const DELAY_TIME = process.env.LIMITER_DELAY_TIME
-    ? parseInt(process.env.LIMITER_DELAY_TIME)
-    : 200;
-  const WINDOW_TIME = process.env.LIMITER_WINDOW_TIME
-    ? parseInt(process.env.LIMITER_WINDOW_TIME)
-    : 10000;
-  const MAX_COUNT = process.env.LIMITER_MAX_REQUESTS
-    ? parseInt(process.env.LIMITER_MAX_REQUESTS)
-    : 5;
+  const DELAY_TIME = 200;
+  const WINDOW_TIME = 10000;
+  const MAX_COUNT = 5;
   const applicationContext = createApplicationContext(null);
 
   const results = await applicationContext
