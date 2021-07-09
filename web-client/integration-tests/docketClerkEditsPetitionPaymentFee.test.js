@@ -96,7 +96,7 @@ describe('docket clerk edits a petition payment fee', () => {
     );
 
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.docketEntries')
         .find(
           r => r.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,

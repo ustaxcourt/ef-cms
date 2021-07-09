@@ -22,7 +22,7 @@ export const chambersUserViewsCaseDetailAfterAddingOrder = (
       expectedDocumentCount,
     );
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentTitle === 'Order of Dismissal and Decision'),
     ).toBeDefined();

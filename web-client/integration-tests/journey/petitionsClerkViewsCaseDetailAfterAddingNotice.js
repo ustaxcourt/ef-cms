@@ -21,7 +21,7 @@ export const petitionsClerkViewsCaseDetailAfterAddingNotice = (
       expectedDocumentCount,
     );
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentTitle === 'Notice to Need a Nap'),
     ).toBeDefined();
