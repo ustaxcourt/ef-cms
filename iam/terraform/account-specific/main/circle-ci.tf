@@ -271,6 +271,17 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-role"
       ],
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ecs:DescribeServices",
+        "ecs:UpdateService",
+        "ecs:DeleteService"
+      ],
+      "Resource": [
+        "arn:aws:ecs:us-east-1:************:service/clamav-fargate-cluster-*/clamav-fargate-*"
+      ],
+      "Effect": "Allow"
     }
   ]
 }
