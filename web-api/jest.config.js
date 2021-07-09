@@ -24,5 +24,6 @@ module.exports = {
       statements: 99,
     },
   },
+  testEnvironment: 'node',
   verbose: false,
 };
