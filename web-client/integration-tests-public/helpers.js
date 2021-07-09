@@ -49,7 +49,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
 
   cerebralTest = CerebralTest(presenter);
-
+  cerebralTest.closeSocket = () => {
+    /* no-op */
+  };
   cerebralTest.currentRouteUrl = null;
 
   return cerebralTest;

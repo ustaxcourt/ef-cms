@@ -15,7 +15,7 @@ export const petitionsClerkVerifiesAssignedWorkItem = (
 
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
-    const workItem = test
+    const workItem = cerebralTest
       .getState('workQueue')
       .find(workItemInQueue => workItemInQueue.workItemId === workItemId);
     expect(workItem).toBeDefined();

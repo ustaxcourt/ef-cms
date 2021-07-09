@@ -69,7 +69,7 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
     expect(cerebralTest.getState('form')).toEqual({});
 
-    const miscellaneousDocument = test
+    const miscellaneousDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.eventCode === 'MISC');
 

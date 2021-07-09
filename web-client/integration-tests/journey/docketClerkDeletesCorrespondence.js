@@ -17,7 +17,7 @@ export const docketClerkDeletesCorrespondence = (
 
     await cerebralTest.runSequence('deleteCorrespondenceDocumentSequence');
 
-    const deletedCorrespondence = test
+    const deletedCorrespondence = cerebralTest
       .getState('caseDetail.correspondence')
       .find(
         c =>

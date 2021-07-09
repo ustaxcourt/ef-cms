@@ -27,7 +27,7 @@ export const docketClerkEditsSignedUploadedCourtIssuedDocument = (
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const caseDocument = test
+    const caseDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.docketEntryId === cerebralTest.docketEntryId);
     expect(caseDocument.signedAt).toEqual(null);

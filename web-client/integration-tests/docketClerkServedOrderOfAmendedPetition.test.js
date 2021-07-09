@@ -55,7 +55,7 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
   docketClerkViewsCaseDetail(cerebralTest);
 
   it('verify the docket entries title is set correctly', () => {
-    const servedEntry = test
+    const servedEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(
         d => d.docketEntryId === cerebralTest.docketRecordEntry.docketEntryId,

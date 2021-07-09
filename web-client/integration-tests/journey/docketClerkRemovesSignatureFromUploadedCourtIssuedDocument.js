@@ -14,7 +14,7 @@ export const docketClerkRemovesSignatureFromUploadedCourtIssuedDocument =
         'CaseDetailInternal',
       );
 
-      const caseDocument = test
+      const caseDocument = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.docketEntryId === cerebralTest.docketEntryId);
 

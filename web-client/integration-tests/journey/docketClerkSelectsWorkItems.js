@@ -1,6 +1,6 @@
 export const docketClerkSelectsWorkItems = cerebralTest => {
   return it('Docket clerk selects some work items', async () => {
-    const unassignedWorkItem = test
+    const unassignedWorkItem = cerebralTest
       .getState('workQueue')
       .find(
         workItem =>

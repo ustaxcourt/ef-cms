@@ -13,7 +13,7 @@ export const petitionsClerkAssignsWorkItemToSelf = cerebralTest => {
     ).workItemId;
 
     // verify that there is an unassigned work item in the section queue; we will assign it
-    const unassignedWorkItem = test
+    const unassignedWorkItem = cerebralTest
       .getState('workQueue')
       .find(
         workItem =>

@@ -15,7 +15,7 @@ export const petitionsClerkServesPetitionFromDocumentView = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const petitionDocketEntryId = test
+    const petitionDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.eventCode === 'P').docketEntryId;
 

@@ -6,7 +6,7 @@ export const docketClerkViewsNoticeOfChangeOfAddress = cerebralTest => {
     });
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const noticeDocument = test
+    const noticeDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.documentTitle === 'Notice of Change of Address');
 

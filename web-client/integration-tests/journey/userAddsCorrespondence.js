@@ -30,7 +30,7 @@ export const userAddsCorrespondence = (
     );
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
     const displayedCorrespondenceId = cerebralTest.getState('correspondenceId');
-    const mostRecentCorrespondence = test
+    const mostRecentCorrespondence = cerebralTest
       .getState('caseDetail.correspondence')
       .slice(-1)
       .pop();

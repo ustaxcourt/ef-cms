@@ -137,7 +137,7 @@ describe('docket clerk edits the petitioner information', () => {
     expect(contactPrimary.address2).toBeUndefined();
     expect(contactPrimary.address3).toBeUndefined();
 
-    const noticeDocument = test
+    const noticeDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.documentTitle === 'Notice of Change of Address');
     expect(noticeDocument.servedAt).toBeDefined();

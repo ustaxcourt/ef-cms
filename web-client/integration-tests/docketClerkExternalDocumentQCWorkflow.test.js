@@ -166,7 +166,7 @@ describe('Create a work item', () => {
       return workItem.workItemId === decisionWorkItem.workItemId;
     });
 
-    const noticeDocketEntry = test
+    const noticeDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(doc => doc.documentType === 'Notice of Docket Change');
 
