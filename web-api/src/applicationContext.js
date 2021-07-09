@@ -1172,13 +1172,54 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
+
+  const mainRegion = environment.region;
+  const fallbackRegion =
+    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
+  const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+
   if (!dynamoCache[type]) {
-    dynamoCache[type] = new DynamoDB({
+    const mainRegionDB = new DynamoDB({
       endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
+        ? environment.masterDynamoDbEndpoint // east
+        : mainRegionEndpoint,
+      region: useMasterRegion ? environment.masterRegion : mainRegion,
     });
+
+    const fallbackRegionDB = new DynamoDB({
+      endpoint: useMasterRegion
+        ? fallbackRegionEndpoint // east
+        : environment.masterDynamoDbEndpoint, // east
+      region: useMasterRegion ? fallbackRegion : environment.masterRegion,
+    });
+
+    const fallbackHandler = key => params => {
+      return new Promise((resolve, reject) => {
+        mainRegionDB[key](params)
+          .catch(err => {
+            if (
+              err.code === 'ResourceNotFoundException' ||
+              err.statusCode === 503
+            ) {
+              return fallbackRegionDB[key](params);
+            }
+            throw err;
+          })
+          .then(resolve)
+          .catch(reject);
+      });
+    };
+
+    dynamoCache[type] = {
+      batchGet: fallbackHandler('batchGet'),
+      batchWrite: fallbackHandler('batchWrite'),
+      get: fallbackHandler('get'),
+      put: fallbackHandler('put'),
+      query: fallbackHandler('query'),
+      scan: fallbackHandler('scan'),
+      update: fallbackHandler('update'),
+    };
   }
   return dynamoCache[type];
 };
