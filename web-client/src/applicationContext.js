@@ -1,4 +1,7 @@
-import * as reduce from 'image-blob-reduce';
+import ImageBlobReduce from 'image-blob-reduce';
+const reduce = ImageBlobReduce({
+  pica: ImageBlobReduce.pica({ features: ['js'] }),
+});
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -22,6 +25,7 @@ import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
@@ -41,6 +45,7 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -565,9 +570,7 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);
   },
@@ -699,6 +702,9 @@ const applicationContext = {
       sortDocketEntries,
       validateDateAndCreateISO,
     };
+  },
+  isFeatureEnabled: featureName => {
+    return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
   setCurrentUser,
   setCurrentUserToken,
