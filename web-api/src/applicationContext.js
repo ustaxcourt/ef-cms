@@ -1182,21 +1182,23 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
     });
 
     const fallbackHandler = key => params => {
-      return new Promise((resolve, reject) => {
-        mainRegionDB[key](params)
-          .promise()
-          .catch(err => {
-            if (
-              err.code === 'ResourceNotFoundException' ||
-              err.statusCode === 503
-            ) {
-              return fallbackRegionDB[key](params).promise();
-            }
-            throw err;
-          })
-          .then(resolve)
-          .catch(reject);
-      });
+      return {
+        promise: new Promise((resolve, reject) => {
+          mainRegionDB[key](params)
+            .promise()
+            .catch(err => {
+              if (
+                err.code === 'ResourceNotFoundException' ||
+                err.statusCode === 503
+              ) {
+                return fallbackRegionDB[key](params).promise();
+              }
+              throw err;
+            })
+            .then(resolve)
+            .catch(reject);
+        }),
+      };
     };
 
     dynamoClientCache[type] = {
