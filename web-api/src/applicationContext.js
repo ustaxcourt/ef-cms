@@ -1159,19 +1159,6 @@ const environment = {
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
-  if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
-  }
-  return dynamoClientCache[type];
-};
-
-const getDynamoClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
 
   const mainRegion = environment.region;
   const fallbackRegion =
@@ -1179,30 +1166,31 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
   const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
   const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
 
-  if (!dynamoCache[type]) {
-    const mainRegionDB = new DynamoDB({
+  if (!dynamoClientCache[type]) {
+    const mainRegionDB = new DynamoDB.DocumentClient({
       endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint // east
+        ? environment.masterDynamoDbEndpoint
         : mainRegionEndpoint,
       region: useMasterRegion ? environment.masterRegion : mainRegion,
     });
 
-    const fallbackRegionDB = new DynamoDB({
+    const fallbackRegionDB = new DynamoDB.DocumentClient({
       endpoint: useMasterRegion
-        ? fallbackRegionEndpoint // east
-        : environment.masterDynamoDbEndpoint, // east
+        ? fallbackRegionEndpoint
+        : environment.masterDynamoDbEndpoint,
       region: useMasterRegion ? fallbackRegion : environment.masterRegion,
     });
 
     const fallbackHandler = key => params => {
       return new Promise((resolve, reject) => {
         mainRegionDB[key](params)
+          .promise()
           .catch(err => {
             if (
               err.code === 'ResourceNotFoundException' ||
               err.statusCode === 503
             ) {
-              return fallbackRegionDB[key](params);
+              return fallbackRegionDB[key](params).promise();
             }
             throw err;
           })
@@ -1211,7 +1199,7 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
       });
     };
 
-    dynamoCache[type] = {
+    dynamoClientCache[type] = {
       batchGet: fallbackHandler('batchGet'),
       batchWrite: fallbackHandler('batchWrite'),
       get: fallbackHandler('get'),
@@ -1220,6 +1208,19 @@ const getDynamoClient = ({ useMasterRegion = false } = {}) => {
       scan: fallbackHandler('scan'),
       update: fallbackHandler('update'),
     };
+  }
+  return dynamoClientCache[type];
+};
+
+const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+  if (!dynamoCache[type]) {
+    dynamoCache[type] = new DynamoDB({
+      endpoint: useMasterRegion
+        ? environment.masterDynamoDbEndpoint
+        : environment.dynamoDbEndpoint,
+      region: useMasterRegion ? environment.masterRegion : environment.region,
+    });
   }
   return dynamoCache[type];
 };
