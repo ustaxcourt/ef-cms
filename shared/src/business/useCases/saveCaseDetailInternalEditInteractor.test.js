@@ -1,16 +1,16 @@
 const {
-  CASE_STATUS_TYPES,
-  CASE_TYPES_MAP,
   CONTACT_TYPES,
-  COUNTRY_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
-  ROLES,
 } = require('../entities/EntityConstants');
 const {
   getContactPrimary,
   getContactSecondary,
 } = require('../entities/cases/Case');
+const {
+  MOCK_PRACTITIONER,
+  petitionsClerkUser,
+} = require('../../test/mockUsers');
 const {
   saveCaseDetailInternalEditInteractor,
 } = require('./saveCaseDetailInternalEditInteractor');
@@ -19,81 +19,39 @@ const { MOCK_CASE } = require('../../test/mockCase');
 const { omit } = require('lodash');
 
 describe('updateCase', () => {
-  const mockContactPrimaryId = '9565ed58-2a74-4dec-a34a-c87dde49f3c0';
-
   const mockCase = {
-    caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.other,
-    createdAt: applicationContext.getUtilities().createISODateString(),
+    ...MOCK_CASE,
     docketEntries: [
       {
-        docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumber: '56789-18',
-        documentType: 'Petition',
-        eventCode: 'P',
-        filedBy: 'Test Petitioner',
-        userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
+        ...MOCK_CASE.docketEntries[0],
         workItem: {
-          docketEntry: {
-            createdAt: '2019-03-11T21:56:01.625Z',
-            docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            documentType: 'Petition',
-            eventCode: 'P',
-          },
-          docketNumber: '56789-18',
+          docketEntry: MOCK_CASE.docketEntries[0],
+          docketNumber: MOCK_CASE.docketNumber,
           isInitializeCase: true,
           section: PETITIONS_SECTION,
           sentBy: 'petitioner',
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
         },
       },
-      {
-        docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumber: '56789-18',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-      },
-      {
-        docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumber: '56789-18',
-        documentType: 'Motion for Continuance',
-        eventCode: 'M006',
-        filedBy: 'Test Petitioner',
-        userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-      },
     ],
-    docketNumber: '56789-18',
-    filingType: 'Myself',
-    partyType: PARTY_TYPES.petitioner,
+  };
+
+  const mockContactSecondaryId = 'dce93a76-9c95-4dad-8c02-ea4b7ccb0c57';
+
+  const mockCaseWithContactSecondary = {
+    ...mockCase,
+    partyType: PARTY_TYPES.petitionerSpouse,
     petitioners: [
+      ...mockCase.petitioners,
       {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: mockContactPrimaryId,
-        contactType: CONTACT_TYPES.primary,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
+        ...mockCase.petitioners[0],
+        contactId: mockContactSecondaryId,
+        contactType: CONTACT_TYPES.secondary,
       },
     ],
-    preferredTrialCity: 'Washington, District of Columbia',
-    procedureType: 'Regular',
-    status: CASE_STATUS_TYPES.new,
-    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
-  const petitionsClerkUser = {
-    name: 'petitions clerk',
-    role: ROLES.petitionsClerk,
-    userId: '54cddcd9-d012-4874-b74f-73732c95d42b',
-  };
-
-  beforeAll(() => {
+  beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     applicationContext
@@ -128,11 +86,6 @@ describe('updateCase', () => {
   });
 
   it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.petitionsClerk,
-      userId: 'fee757df-666f-4ebe-94a0-7a342d438345',
-    });
-
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
         caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
@@ -143,25 +96,6 @@ describe('updateCase', () => {
 
   it('should update contactSecondary', async () => {
     const mockAddress = '1234 Something Lane';
-    const mockCaseWithContactSecondary = {
-      ...mockCase,
-      partyType: PARTY_TYPES.petitionerSpouse,
-      petitioners: [
-        ...mockCase.petitioners,
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactId: '41535712-c502-41a5-827c-26890e72733f',
-          contactType: CONTACT_TYPES.secondary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
-      ],
-    };
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -242,7 +176,6 @@ describe('updateCase', () => {
   });
 
   it('should remove a new initial filing document from the case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
     const mockRQT = {
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
       docketNumber: MOCK_CASE.docketNumber,
@@ -325,5 +258,70 @@ describe('updateCase', () => {
     expect(result.petitioners[0].contactId).toEqual(
       mockCase.petitioners[0].contactId,
     );
+  });
+
+  it('should remove contactSecondary if changing from a party type with primary and secondary to a party type with only primary', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCaseWithContactSecondary);
+
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCaseWithContactSecondary,
+          contactPrimary: getContactPrimary(mockCase),
+          partyType: PARTY_TYPES.petitioner,
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+    );
+
+    expect(result.petitioners.length).toEqual(1);
+  });
+
+  it('should remove contactSecondary from privatePractitioner representing array if changing from a party type with primary and secondary to a party type with only primary', async () => {
+    const mockCaseWithContactSecondaryRepresented = {
+      ...mockCaseWithContactSecondary,
+      privatePractitioners: [
+        {
+          ...MOCK_PRACTITIONER,
+          representing: [
+            mockCase.petitioners[0].contactId,
+            mockContactSecondaryId,
+          ],
+        },
+        {
+          ...MOCK_PRACTITIONER,
+          representing: [mockCase.petitioners[0].contactId],
+          userId: 'fed59505-2abd-4a93-b504-b90ad73da0ac',
+        },
+      ],
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        mockCaseWithContactSecondaryRepresented,
+      );
+
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCaseWithContactSecondaryRepresented,
+          contactPrimary: getContactPrimary(mockCase),
+          partyType: PARTY_TYPES.petitioner,
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+    );
+
+    expect(result.privatePractitioners[0].representing).toEqual([
+      mockCase.petitioners[0].contactId,
+    ]);
+    expect(result.privatePractitioners[1].representing).toEqual([
+      mockCase.petitioners[0].contactId,
+    ]);
   });
 });

@@ -1,3 +1,7 @@
+import ImageBlobReduce from 'image-blob-reduce';
+const reduce = ImageBlobReduce({
+  pica: ImageBlobReduce.pica({ features: ['js'] }),
+});
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -42,7 +46,6 @@ import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
-import { resizeImage } from 'simple-image-resize';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
@@ -615,13 +618,7 @@ const applicationContext = {
     };
   },
   getPublicSiteUrl,
-  getReduceImageBlob: () => ({
-    toBlob: (blob, { max }) => {
-      return resizeImage(new File([blob], 'blob'), {
-        maxWidth: max,
-      });
-    },
-  }),
+  getReduceImageBlob: () => reduce,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
       const scanner = await import(
