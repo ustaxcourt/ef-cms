@@ -1116,6 +1116,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
+const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { Message } = require('../../shared/src/business/entities/Message');
@@ -1157,50 +1158,6 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const fallbackHandler = ({
-  fallbackRegion,
-  fallbackRegionEndpoint,
-  key,
-  mainRegion,
-  mainRegionEndpoint,
-  useMasterRegion,
-}) => {
-  const mainRegionDB = new DynamoDB.DocumentClient({
-    endpoint: useMasterRegion
-      ? environment.masterDynamoDbEndpoint
-      : mainRegionEndpoint,
-    region: useMasterRegion ? environment.masterRegion : mainRegion,
-  });
-
-  const fallbackRegionDB = new DynamoDB.DocumentClient({
-    endpoint: useMasterRegion
-      ? fallbackRegionEndpoint
-      : environment.masterDynamoDbEndpoint,
-    region: useMasterRegion ? fallbackRegion : environment.masterRegion,
-  });
-
-  return params => {
-    return {
-      promise: () =>
-        new Promise((resolve, reject) => {
-          mainRegionDB[key](params)
-            .promise()
-            .catch(err => {
-              if (
-                err.code === 'ResourceNotFoundException' ||
-                err.statusCode === 503
-              ) {
-                return fallbackRegionDB[key](params).promise();
-              }
-              throw err;
-            })
-            .then(resolve)
-            .catch(reject);
-        }),
-    };
-  };
-};
-
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
   const mainRegion = environment.region;
@@ -1214,11 +1171,15 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   )
     ? 'http://localhost:8000'
     : `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const { masterDynamoDbEndpoint, masterRegion } = environment;
+
   const config = {
     fallbackRegion,
     fallbackRegionEndpoint,
     mainRegion,
     mainRegionEndpoint,
+    masterDynamoDbEndpoint,
+    masterRegion,
     useMasterRegion,
   };
 
