@@ -1,7 +1,6 @@
 [
   {
     "image": "{aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest",
-    "command": "bash ./run.sh",
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
