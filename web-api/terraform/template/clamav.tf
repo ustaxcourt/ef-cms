@@ -155,6 +155,14 @@ resource "aws_ecs_cluster" "cluster" {
   capacity_providers = ["FARGATE"]
 }
 
+data "aws_event_queue" "clamav_event_queue" {
+  url = aws_event_queue.clamav_event_queue.url
+}
+
+data "aws_s3_bucket" "quarantine_bucket" {
+  bucket_domain_name = aws_s3_bucket.quarantine_bucket.bucket_domain_name
+}
+
 resource "aws_ecs_task_definition" "definition" {
   family                   = "clamav_fargate_task_${var.environment}"
   task_role_arn            = var.ecs_task_role
