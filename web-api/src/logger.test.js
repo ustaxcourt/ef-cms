@@ -4,6 +4,9 @@ const { transports } = require('winston');
 
 describe('logger', () => {
   let req, res, NODE_ENV;
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
 
   beforeEach(() => {
     ({ NODE_ENV } = process.env);

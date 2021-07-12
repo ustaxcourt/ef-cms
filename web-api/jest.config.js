@@ -3,7 +3,7 @@ module.exports = {
   ...baseConfig,
   collectCoverage: true,
   collectCoverageFrom: [
-    'bulkImportPractitionerUsers.js',
+    // 'bulkImportPractitionerUsers.js',
     'switch-environment-color.js',
     'src/**/*.js',
     'migration-terraform/main/lambdas/migrations/*.js',
