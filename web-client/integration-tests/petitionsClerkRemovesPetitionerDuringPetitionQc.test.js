@@ -18,7 +18,7 @@ describe('petitions clerk removes petitioner during petition QC', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Create test case with a primary and secondary petitioner', async () => {
     const caseDetail = await uploadPetition(
       cerebralTest,
