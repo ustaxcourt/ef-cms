@@ -157,6 +157,17 @@ resource "aws_ecs_cluster" "cluster" {
   capacity_providers = ["FARGATE"]
 }
 
+data "template_file" "task_consumer" {
+  template = file("consumer.json")
+
+  vars = {
+    aws_account_id = data.aws_caller_identity.current.account_id
+    environment    = var.environment
+    region         = var.region
+    dns_domain     = var.dns_domain.id
+  }
+}
+
 resource "aws_ecs_task_definition" "definition" {
   family                   = "clamav_fargate_task_${var.environment}"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
@@ -166,36 +177,7 @@ resource "aws_ecs_task_definition" "definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
 
-  container_definitions = <<DEFINTIION
-    [
-      {
-        "image" : "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest",
-        "command" : "bash ./run.sh",
-        "logConfiguration" : {
-          "logDriver" : "awslogs",
-          "options" : {
-            "awslogs-region" : "us-east-1",
-            "awslogs-group" : "/aws/ecs/clamav_fargate_${var.environment}",
-            "awslogs-stream-prefix" : "project"
-          }
-        },
-        "environment" : [
-          {
-            "name" : "SQS_QUEUE_URL",
-            "value" : "https://sqs.us-east-1.amazonaws.com/${data.aws_caller_identity.current.account_id}/s3_clamav_event_${var.environment}"
-          },
-          {
-            "name" : "QUARANTINE_BUCKET",
-            "value" : "${var.dns_domain}-quarantine"
-          },
-          {
-            "name" : "CLEAN_BUCKET",
-            "value" : "${var.dns_domain}-documents-${var.environment}-${var.region}"
-          }
-        ]
-      }
-  ]
-DEFINTIION
+  container_definitions = data.template_file.task_consumer.rendered
 
   depends_on = [
     aws_iam_role.ecs_task_role,
