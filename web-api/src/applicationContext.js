@@ -1203,12 +1203,17 @@ const fallbackHandler = ({
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
-
   const mainRegion = environment.region;
   const fallbackRegion =
     environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('localhost')
+    ? 'http://localhost:8000'
+    : `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
+    'localhost',
+  )
+    ? 'http://localhost:8000'
+    : `dynamodb.${fallbackRegion}.amazonaws.com`;
   const config = {
     fallbackRegion,
     fallbackRegionEndpoint,
