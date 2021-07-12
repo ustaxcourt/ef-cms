@@ -5,27 +5,27 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsCaseDetailAfterAddingNotice } from './journey/petitionsClerkViewsCaseDetailAfterAddingNotice';
 import { petitionsClerkViewsDraftDocumentsForNotice } from './journey/petitionsClerkViewsDraftDocumentsForNotice';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 describe('Petitions Clerk Create Notice Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsNoticeToCase(test);
-  petitionsClerkViewsCaseDetailAfterAddingNotice(test, 4);
-  petitionsClerkViewsDraftDocumentsForNotice(test, 1);
-  petitionsClerkAddsDocketEntryFromOrder(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsNoticeToCase(cerebralTest);
+  petitionsClerkViewsCaseDetailAfterAddingNotice(cerebralTest, 4);
+  petitionsClerkViewsDraftDocumentsForNotice(cerebralTest, 1);
+  petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
 });

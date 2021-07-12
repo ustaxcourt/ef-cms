@@ -1,9 +1,11 @@
-export const chambersViewsTrialSessionWorkingCopy = test => {
+export const chambersViewsTrialSessionWorkingCopy = cerebralTest => {
   return it('Chambers views trial session working copy', async () => {
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('currentPage')).toEqual('TrialSessionWorkingCopy');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
+    );
   });
 };
