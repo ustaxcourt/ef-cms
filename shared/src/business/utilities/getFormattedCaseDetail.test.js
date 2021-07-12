@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   PAYMENT_STATUS,
+  SERVED_PARTIES_CODES,
 } = require('../entities/EntityConstants');
 const {
   formatCase,
@@ -651,6 +652,46 @@ describe('getFormattedCaseDetail', () => {
 
       expect(result).toMatchObject(MOCK_CASE);
       expect(result).not.toHaveProperty('consolidatedCases');
+    });
+
+    describe('servedPartiesCode', () => {
+      it('should keep the same servedPartiesCode if it exists already on the docket entry', () => {
+        const result = formatCase(applicationContext, {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              isFileAttached: true,
+              isLegacySealed: true,
+              isOnDocketRecord: true,
+              servedAt: getDateISO(),
+              servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+            },
+          ],
+        });
+
+        expect(result.formattedDocketEntries[0].servedPartiesCode).toBe(
+          SERVED_PARTIES_CODES.RESPONDENT,
+        );
+      });
+
+      it('should getServedPartiesCode if it does not exist already on the docket entry', () => {
+        const result = formatCase(applicationContext, {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              isFileAttached: true,
+              isLegacySealed: true,
+              isOnDocketRecord: true,
+              servedAt: getDateISO(),
+              servedParties: 'Test Petitioner',
+            },
+          ],
+        });
+
+        expect(result.formattedDocketEntries[0].servedPartiesCode).toBe(
+          SERVED_PARTIES_CODES.BOTH,
+        );
+      });
     });
 
     describe('qcNeeded', () => {
