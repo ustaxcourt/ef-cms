@@ -1,5 +1,6 @@
-const AWS = require('aws-sdk');
-const { DynamoDB } = AWS;
+const {
+  getDynamoEndpoints,
+} = require('../../shared/src/utilities/getDynamoEndpoints');
 
 const fallbackHandler = ({
   fallbackRegion,
@@ -11,14 +12,15 @@ const fallbackHandler = ({
   masterRegion,
   useMasterRegion,
 }) => {
-  const mainRegionDB = new DynamoDB.DocumentClient({
-    endpoint: useMasterRegion ? masterDynamoDbEndpoint : mainRegionEndpoint,
-    region: useMasterRegion ? masterRegion : mainRegion,
-  });
-
-  const fallbackRegionDB = new DynamoDB.DocumentClient({
-    endpoint: useMasterRegion ? fallbackRegionEndpoint : masterDynamoDbEndpoint,
-    region: useMasterRegion ? fallbackRegion : masterRegion,
+  const { fallbackRegionDB, mainRegionDB } = getDynamoEndpoints({
+    fallbackRegion,
+    fallbackRegionEndpoint,
+    key,
+    mainRegion,
+    mainRegionEndpoint,
+    masterDynamoDbEndpoint,
+    masterRegion,
+    useMasterRegion,
   });
 
   return params => {

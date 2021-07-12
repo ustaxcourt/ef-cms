@@ -80,4 +80,25 @@ describe('fallbackHandler', () => {
     }).promise();
     expect(mockGet).toHaveBeenCalledTimes(2);
   });
+
+  it('should throw an error if the main dynamodb region is throwing other types of errors', async () => {
+    mockGet.mockImplementationOnce(() => ({
+      promise: () =>
+        Promise.reject({
+          statusCode: 500,
+        }),
+    }));
+
+    mockGet.mockImplementationOnce(() => ({
+      promise: () => Promise.reject({}),
+    }));
+
+    await expect(
+      fallbackHandler({
+        key: 'get',
+      })({
+        TableName: 'testing',
+      }).promise(),
+    ).rejects.toEqual({ statusCode: 500 });
+  });
 });
