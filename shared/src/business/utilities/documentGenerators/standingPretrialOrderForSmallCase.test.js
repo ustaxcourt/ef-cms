@@ -40,10 +40,6 @@ describe('documentGenerators', () => {
         return sass;
       });
 
-      applicationContext.getPug.mockImplementation(() => {
-        return require('pug');
-      });
-
       applicationContext
         .getUseCases()
         .generatePdfFromHtmlInteractor.mockImplementation(
