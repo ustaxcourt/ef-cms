@@ -1157,33 +1157,32 @@ const environment = {
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
-const getDocumentClient = ({ useMasterRegion = false } = {}) => {
-  const type = useMasterRegion ? 'master' : 'region';
+const fallbackHandler = ({
+  fallbackRegion,
+  fallbackRegionEndpoint,
+  key,
+  mainRegion,
+  mainRegionEndpoint,
+  useMasterRegion,
+}) => {
+  const mainRegionDB = new DynamoDB.DocumentClient({
+    endpoint: useMasterRegion
+      ? environment.masterDynamoDbEndpoint
+      : mainRegionEndpoint,
+    region: useMasterRegion ? environment.masterRegion : mainRegion,
+  });
 
-  const mainRegion = environment.region;
-  const fallbackRegion =
-    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
-  const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
-  const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const fallbackRegionDB = new DynamoDB.DocumentClient({
+    endpoint: useMasterRegion
+      ? fallbackRegionEndpoint
+      : environment.masterDynamoDbEndpoint,
+    region: useMasterRegion ? fallbackRegion : environment.masterRegion,
+  });
 
-  if (!dynamoClientCache[type]) {
-    const mainRegionDB = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : mainRegionEndpoint,
-      region: useMasterRegion ? environment.masterRegion : mainRegion,
-    });
-
-    const fallbackRegionDB = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? fallbackRegionEndpoint
-        : environment.masterDynamoDbEndpoint,
-      region: useMasterRegion ? fallbackRegion : environment.masterRegion,
-    });
-
-    const fallbackHandler = key => params => {
-      return {
-        promise: new Promise((resolve, reject) => {
+  return params => {
+    return {
+      promise: () =>
+        new Promise((resolve, reject) => {
           mainRegionDB[key](params)
             .promise()
             .catch(err => {
@@ -1198,23 +1197,43 @@ const getDocumentClient = ({ useMasterRegion = false } = {}) => {
             .then(resolve)
             .catch(reject);
         }),
-      };
     };
+  };
+};
 
+const getDocumentClient = ({ useMasterRegion = false } = {}) => {
+  const type = useMasterRegion ? 'master' : 'region';
+
+  const mainRegion = environment.region;
+  const fallbackRegion =
+    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
+  const mainRegionEndpoint = `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const config = {
+    fallbackRegion,
+    fallbackRegionEndpoint,
+    mainRegion,
+    mainRegionEndpoint,
+    useMasterRegion,
+  };
+
+  if (!dynamoClientCache[type]) {
     dynamoClientCache[type] = {
-      batchGet: fallbackHandler('batchGet'),
-      batchWrite: fallbackHandler('batchWrite'),
-      get: fallbackHandler('get'),
-      put: fallbackHandler('put'),
-      query: fallbackHandler('query'),
-      scan: fallbackHandler('scan'),
-      update: fallbackHandler('update'),
+      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
+      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
+      get: fallbackHandler({ key: 'get', ...config }),
+      put: fallbackHandler({ key: 'put', ...config }),
+      query: fallbackHandler({ key: 'query', ...config }),
+      scan: fallbackHandler({ key: 'scan', ...config }),
+      update: fallbackHandler({ key: 'update', ...config }),
     };
   }
   return dynamoClientCache[type];
 };
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  // we don't need fallback logic here because the only method we use is describeTable
+  // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
     dynamoCache[type] = new DynamoDB({
