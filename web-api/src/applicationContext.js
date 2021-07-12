@@ -494,6 +494,9 @@ const {
   getDownloadPolicyUrlInteractor,
 } = require('../../shared/src/business/useCases/getDownloadPolicyUrlInteractor');
 const {
+  getDynamoEndpoint,
+} = require('../../shared/src/persistence/dynamo/helpers/getDynamoEndpoint');
+const {
   getEligibleCasesForTrialCity,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getEligibleCasesForTrialCity');
 const {
@@ -1286,6 +1289,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     createUser,
     fetchPendingItems,
+    getDynamoEndpoint,
     getSesStatus,
     incrementCounter,
     markMessageThreadRepliedTo,
