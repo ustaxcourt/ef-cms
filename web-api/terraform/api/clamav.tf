@@ -166,7 +166,7 @@ resource "aws_ecs_task_definition" "definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
 
-  container_definitions = jsonencode(
+  container_definitions = <<DEFINTIION
     [
       {
         "image" : "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest",
@@ -194,5 +194,11 @@ resource "aws_ecs_task_definition" "definition" {
           }
         ]
       }
-  ])
+  ]
+DEFINTIION
+
+  depends_on = [
+    aws_iam_role.ecs_task_role,
+    aws_iam_role.ecs_task_execution_role
+  ]
 }
