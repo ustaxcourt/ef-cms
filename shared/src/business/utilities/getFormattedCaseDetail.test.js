@@ -660,10 +660,6 @@ describe('getFormattedCaseDetail', () => {
           ...MOCK_CASE,
           docketEntries: [
             {
-              isFileAttached: true,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: getDateISO(),
               servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
             },
           ],
@@ -679,10 +675,6 @@ describe('getFormattedCaseDetail', () => {
           ...MOCK_CASE,
           docketEntries: [
             {
-              isFileAttached: true,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: getDateISO(),
               servedParties: 'Test Petitioner',
             },
           ],
