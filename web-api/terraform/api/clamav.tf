@@ -158,7 +158,7 @@ resource "aws_ecs_cluster" "cluster" {
 }
 
 data "template_file" "task_consumer" {
-  template = file("consumer.json")
+  template = file("${path.module}/../api/consumer.json")
 
   vars = {
     aws_account_id = data.aws_caller_identity.current.account_id
