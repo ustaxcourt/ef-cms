@@ -14,13 +14,13 @@
 #   etag   = filemd5("worker.js")
 # }
 
-resource "aws_s3_bucket_public_access_block" "clamav" {
-  bucket                  = aws_s3_bucket.clamav_s3_download.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+# resource "aws_s3_bucket_public_access_block" "clamav" {
+#   bucket                  = aws_s3_bucket.clamav_s3_download.id
+#   block_public_acls       = true
+#   block_public_policy     = true
+#   ignore_public_acls      = true
+#   restrict_public_buckets = true
+# }
 
 resource "aws_s3_bucket" "quarantine_bucket" {
   bucket = "${var.dns_domain}-quarantine"
