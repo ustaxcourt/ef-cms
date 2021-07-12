@@ -1,7 +1,7 @@
-export const petitionsClerkViewsScanView = test => {
+export const petitionsClerkViewsScanView = cerebralTest => {
   return it('Petitions clerk views the Petition tab selected by default', async () => {
     expect(
-      test.getState('currentViewMetadata.documentSelectedForScan'),
+      cerebralTest.getState('currentViewMetadata.documentSelectedForScan'),
     ).toEqual('petitionFile');
   });
 };

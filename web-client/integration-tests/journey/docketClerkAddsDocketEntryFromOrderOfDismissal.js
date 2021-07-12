@@ -4,7 +4,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
-  test,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk adds a docket entry from an Order of Dismissal', async () => {
@@ -14,11 +14,11 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -26,58 +26,69 @@ export const docketClerkAddsDocketEntryFromOrderOfDismissal = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     helperComputed = runCompute(
       withAppContextDecorator(addCourtIssuedDocketEntryNonstandardHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(test.getState('form.eventCode')).toEqual('OD');
-    expect(test.getState('form.documentType')).toEqual('Order of Dismissal');
+    expect(cerebralTest.getState('form.eventCode')).toEqual('OD');
+    expect(cerebralTest.getState('form.documentType')).toEqual(
+      'Order of Dismissal',
+    );
     expect(helperComputed.showJudge).toBeTruthy();
-    expect(test.getState('form.judge')).toBeFalsy();
+    expect(cerebralTest.getState('form.judge')).toBeFalsy();
     expect(helperComputed.showFreeText).toBeTruthy();
-    expect(test.getState('form.freeText')).toBeFalsy();
+    expect(cerebralTest.getState('form.freeText')).toBeFalsy();
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'judge',
-      value: 'Buch',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'judge',
+        value: 'Buch',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'for Something',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'for Something',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'attachments',
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'attachments',
+        value: true,
+      },
+    );
 
-    expect(test.getState('form.generatedDocumentTitle')).toContain(
+    expect(cerebralTest.getState('form.generatedDocumentTitle')).toContain(
       'Judge Buch for Something',
     );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

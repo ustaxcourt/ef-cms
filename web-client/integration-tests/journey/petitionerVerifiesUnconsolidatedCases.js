@@ -1,9 +1,10 @@
-export const petitionerVerifiesUnconsolidatedCases = test => {
+export const petitionerVerifiesUnconsolidatedCases = cerebralTest => {
   return it('Petitioner verifies the cases were unconsolidated', async () => {
-    const cases = test.getState('openCases');
+    const cases = cerebralTest.getState('openCases');
 
     const casesWithConsolidation = cases.filter(
-      caseDetail => caseDetail.leadDocketNumber === test.leadDocketNumber,
+      caseDetail =>
+        caseDetail.leadDocketNumber === cerebralTest.leadDocketNumber,
     );
     expect(casesWithConsolidation.length).toEqual(0);
   });

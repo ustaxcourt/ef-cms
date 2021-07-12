@@ -1,8 +1,8 @@
-export const unauthedUserViewsPrintableDocketRecord = test => {
+export const unauthedUserViewsPrintableDocketRecord = cerebralTest => {
   return it('View printable docket record', async () => {
-    await test.runSequence('gotoPublicPrintableDocketRecordSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPublicPrintableDocketRecordSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
   });
 };

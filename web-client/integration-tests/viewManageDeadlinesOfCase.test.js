@@ -6,7 +6,7 @@ import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCase
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
 import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('View and manage the deadlines of a case', () => {
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
@@ -24,52 +24,52 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   describe('Create a case', () => {
-    loginAs(test, 'petitioner@example.com');
+    loginAs(cerebralTest, 'petitioner@example.com');
     it('login as a petitioner and create a case', async () => {
-      const caseDetail = await uploadPetition(test);
+      const caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
     });
   });
 
   describe('View a case with no deadlines', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsCaseWithNoDeadlines(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkViewsCaseWithNoDeadlines(cerebralTest);
   });
 
   describe('Create 2 case deadlines', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkCreatesACaseDeadline(test, overrides);
-    petitionsClerkCreatesACaseDeadline(test, overrides);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkCreatesACaseDeadline(cerebralTest, overrides);
+    petitionsClerkCreatesACaseDeadline(cerebralTest, overrides);
   });
 
   describe('View case deadline list on case', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewCaseDeadline(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkViewCaseDeadline(cerebralTest);
   });
 
   describe('View the deadlines report', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsDeadlineReportForSingleCase(test, overrides);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkViewsDeadlineReportForSingleCase(cerebralTest, overrides);
   });
 
   describe('Edit a case deadline on case', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkEditsCaseDeadline(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkEditsCaseDeadline(cerebralTest);
   });
 
   describe('Delete case deadlines on case', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkDeletesCaseDeadline(test);
-    petitionsClerkDeletesCaseDeadline(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkDeletesCaseDeadline(cerebralTest);
+    petitionsClerkDeletesCaseDeadline(cerebralTest);
   });
 
   describe('View a case with no deadlines', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkViewsCaseWithNoDeadlines(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkViewsCaseWithNoDeadlines(cerebralTest);
   });
 });
