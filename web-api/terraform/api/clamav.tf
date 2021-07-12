@@ -193,11 +193,4 @@ resource "aws_ecs_task_definition" "definition" {
         ]
       }
   ])
-
-  depends_on = [
-    aws_iam_role.ecs_task_role,
-    aws_iam_role.ecs_task_execution_role,
-    aws_s3_bucket.quarantine_bucket,
-    aws_event_queue.clamav_event_queue
-  ]
 }
