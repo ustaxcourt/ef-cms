@@ -188,15 +188,15 @@ resource "aws_ecs_task_definition" "definition" {
         "environment" : [
           {
             "name" : "SQS_QUEUE_URL",
-            "value" : "${aws_event_queue.clamav_event_queue.url}"
+            "value" : "https://sqs.us-east-1.amazonaws.com/${data.aws_caller_identity.current.account_id}/s3_clamav_event_${var.environment}"
           },
           {
             "name" : "QUARANTINE_BUCKET",
-            "value" : "${aws_s3_bucket.quarantine_bucket.bucket_domain_name}"
+            "value" : "${var.dns_domain}-quarantine"
           },
           {
             "name" : "CLEAN_BUCKET",
-            "value" : "${var.dns_domain}-documents-${var.environment}-us-east-1"
+            "value" : "${var.dns_domain}-documents-${var.environment}-${var.region}"
           }
         ]
       }
