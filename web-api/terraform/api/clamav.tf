@@ -22,6 +22,8 @@
 #   restrict_public_buckets = true
 # }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "quarantine_bucket" {
   bucket = "${var.dns_domain}-quarantine"
 }
