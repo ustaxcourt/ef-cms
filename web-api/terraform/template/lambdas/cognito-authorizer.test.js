@@ -15,7 +15,7 @@ const {
 const { handler } = require('./cognito-authorizer');
 const { transports } = require('winston');
 
-describe.skip('cognito-authorizer', () => {
+describe('cognito-authorizer', () => {
   let event, context, transport;
 
   beforeEach(() => {
