@@ -73,8 +73,8 @@ resource "aws_ecs_task_definition" "definition" {
   container_definitions = <<DEFINITION
 [
   {
-    "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/project:latest",
-    "name": "project-container",
+    "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest",
+    "name": "clamav_container",
     "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
