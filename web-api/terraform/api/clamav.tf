@@ -42,7 +42,7 @@ resource "aws_sqs_queue" "clamav_event_queue" {
       "Action": ["sqs:SendMessage", "sqs:ReceiveMessage"],
       "Resource": "arn:aws:sqs:*:*:s3_clamav_event_${var.environment}",
       "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.quarantine_bucket.arn}" }
+        "ArnEquals": { "aws:SourceArn": "${data.aws_s3_bucket.quarantine_bucket.arn}" }
       }
     }
   ]
@@ -51,7 +51,7 @@ POLICY
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = aws_s3_bucket.quarantine_bucket.id
+  bucket = data.aws_s3_bucket.quarantine_bucket.id
 
   queue {
     queue_arn = aws_sqs_queue.clamav_event_queue.arn
