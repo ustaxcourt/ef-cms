@@ -487,10 +487,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
-  const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(null, { css: '' }),
-  };
-
   const mockGetEmailClient = {
     sendBulkTemplatedEmail: jest.fn(),
   };
@@ -573,7 +569,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
     }),
-    getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
