@@ -12,7 +12,6 @@ const {
   standingPretrialOrderForSmallCase,
 } = require('./standingPretrialOrderForSmallCase');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -30,10 +29,6 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
 
       applicationContext
         .getUseCases()
