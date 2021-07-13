@@ -25,7 +25,7 @@
 data "aws_caller_identity" "current" {}
 
 data "aws_s3_bucket" "quarantine_bucket" {
-  bucket = "${var.dns_domain}-quarantine-${var.region}"
+  bucket = "${var.dns_domain}-quarantine-${var.environment}-${var.region}"
 }
 
 # SQS
