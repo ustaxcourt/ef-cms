@@ -21,9 +21,8 @@ exports.getCaseDeadlinesByDateRange = async ({
     {
       range: {
         'deadlineDate.S': {
-          format: 'strict_date_time', // ISO-8601 time stamp
-          gte: startDate,
-          lte: endDate,
+          gte: `${startDate}||/h`,
+          lte: `${endDate}||/h`,
         },
       },
     },
@@ -31,8 +30,10 @@ exports.getCaseDeadlinesByDateRange = async ({
 
   if (judge) {
     queryArray.push({
-      match: {
-        'associatedJudge.S': { query: judge },
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['associatedJudge.S'],
+        query: `"${judge}"`,
       },
     });
   }
