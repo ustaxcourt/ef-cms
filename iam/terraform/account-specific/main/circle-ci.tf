@@ -281,7 +281,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "ecs:DeleteService"
       ],
       "Resource": [
-        "arn:aws:ecs:us-east-1:************:service/clamav-fargate-cluster-*/clamav-fargate-*"
+        "arn:aws:ecs:us-east-1:************:service/clamav_fargate_cluster_*/clamav_service_*"
       ],
       "Effect": "Allow"
     }
