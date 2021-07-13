@@ -6,7 +6,6 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { trialCalendar } = require('./trialCalendar');
 
 describe('documentGenerators', () => {
@@ -25,10 +24,6 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
 
       applicationContext
         .getUseCases()

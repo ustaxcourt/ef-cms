@@ -6,7 +6,6 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { OBJECTIONS_OPTIONS_MAP } = require('../../entities/EntityConstants');
 const { receiptOfFiling } = require('./receiptOfFiling');
 
@@ -26,10 +25,6 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
 
       applicationContext
         .getUseCases()
