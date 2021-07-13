@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sass = require('sass');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -30,10 +29,6 @@ describe('documentGenerators', () => {
       applicationContext.getChromiumBrowser.mockImplementation(
         getChromiumBrowser,
       );
-
-      applicationContext.getNodeSass.mockImplementation(() => {
-        return sass;
-      });
 
       applicationContext
         .getUseCases()
