@@ -22,42 +22,42 @@
 #   restrict_public_buckets = true
 # }
 
-data "aws_caller_identity" "current" {}
+# data "aws_caller_identity" "current" {}
 
-data "aws_s3_bucket" "quarantine_bucket" {
-  bucket = "${var.dns_domain}-quarantine-${var.environment}-${var.region}"
-}
+# data "aws_s3_bucket" "quarantine_bucket" {
+#   bucket = "${var.dns_domain}-quarantine-${var.environment}-${var.region}"
+# }
 
-# SQS
-resource "aws_sqs_queue" "clamav_event_queue" {
-  name = "s3_clamav_event_${var.environment}"
+# # SQS
+# resource "aws_sqs_queue" "clamav_event_queue" {
+#   name = "s3_clamav_event_${var.environment}"
 
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": ["sqs:SendMessage", "sqs:ReceiveMessage"],
-      "Resource": "arn:aws:sqs:*:*:s3_clamav_event_${var.environment}",
-      "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${data.aws_s3_bucket.quarantine_bucket.arn}" }
-      }
-    }
-  ]
-}
-POLICY
-}
+#   policy = <<POLICY
+# {
+#   "Version": "2012-10-17",
+#   "Statement": [
+#     {
+#       "Effect": "Allow",
+#       "Principal": "*",
+#       "Action": ["sqs:SendMessage", "sqs:ReceiveMessage"],
+#       "Resource": "arn:aws:sqs:*:*:s3_clamav_event_${var.environment}",
+#       "Condition": {
+#         "ArnEquals": { "aws:SourceArn": "${data.aws_s3_bucket.quarantine_bucket.arn}" }
+#       }
+#     }
+#   ]
+# }
+# POLICY
+# }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = data.aws_s3_bucket.quarantine_bucket.id
+# resource "aws_s3_bucket_notification" "bucket_notification" {
+#   bucket = data.aws_s3_bucket.quarantine_bucket.id
 
-  queue {
-    queue_arn = aws_sqs_queue.clamav_event_queue.arn
-    events    = ["s3:ObjectCreated:*"]
-  }
-}
+#   queue {
+#     queue_arn = aws_sqs_queue.clamav_event_queue.arn
+#     events    = ["s3:ObjectCreated:*"]
+#   }
+# }
 
 # ECS Fargate: see fargate.tf
 
@@ -93,94 +93,94 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 # }
 
 # Networking for Fargate
-data "aws_vpc" "default" {
-  default = true
-}
+# data "aws_vpc" "default" {
+#   default = true
+# }
 
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.default.id
-}
+# data "aws_subnet_ids" "all" {
+#   vpc_id = data.aws_vpc.default.id
+# }
 
-resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "clamav_fargate_execution_${var.environment}"
+# resource "aws_iam_role" "ecs_task_execution_role" {
+#   name = "clamav_fargate_execution_${var.environment}"
 
-  assume_role_policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Action": "sts:AssumeRole",
-     "Principal": {
-       "Service": "ecs-tasks.amazonaws.com"
-     },
-     "Effect": "Allow",
-     "Sid": ""
-   }
- ]
-}
-EOF
-}
+#   assume_role_policy = <<EOF
+# {
+#  "Version": "2012-10-17",
+#  "Statement": [
+#    {
+#      "Action": "sts:AssumeRole",
+#      "Principal": {
+#        "Service": "ecs-tasks.amazonaws.com"
+#      },
+#      "Effect": "Allow",
+#      "Sid": ""
+#    }
+#  ]
+# }
+# EOF
+# }
 
-resource "aws_iam_role" "ecs_task_role" {
-  name = "clamav_fargate_task_${var.environment}"
+# resource "aws_iam_role" "ecs_task_role" {
+#   name = "clamav_fargate_task_${var.environment}"
 
-  assume_role_policy = <<EOF
-{
- "Version": "2012-10-17",
- "Statement": [
-   {
-     "Action": "sts:AssumeRole",
-     "Principal": {
-       "Service": "ecs-tasks.amazonaws.com"
-     },
-     "Effect": "Allow",
-     "Sid": ""
-   }
- ]
-}
-EOF
-}
+#   assume_role_policy = <<EOF
+# {
+#  "Version": "2012-10-17",
+#  "Statement": [
+#    {
+#      "Action": "sts:AssumeRole",
+#      "Principal": {
+#        "Service": "ecs-tasks.amazonaws.com"
+#      },
+#      "Effect": "Allow",
+#      "Sid": ""
+#    }
+#  ]
+# }
+# EOF
+# }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_attachment" {
-  role       = aws_iam_role.ecs_task_execution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-}
+# resource "aws_iam_role_policy_attachment" "ecs_task_execution_policy_attachment" {
+#   role       = aws_iam_role.ecs_task_execution_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+# }
 
-resource "aws_iam_role_policy_attachment" "s3_task" {
-  role       = aws_iam_role.ecs_task_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
+# resource "aws_iam_role_policy_attachment" "s3_task" {
+#   role       = aws_iam_role.ecs_task_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+# }
 
-resource "aws_ecs_cluster" "cluster" {
-  name = "clamav_fargate_cluster_${var.environment}"
+# resource "aws_ecs_cluster" "cluster" {
+#   name = "clamav_fargate_cluster_${var.environment}"
 
-  capacity_providers = ["FARGATE"]
-}
+#   capacity_providers = ["FARGATE"]
+# }
 
-data "template_file" "task_consumer" {
-  template = file("${path.module}/../api/consumer.json")
+# data "template_file" "task_consumer" {
+#   template = file("${path.module}/../api/consumer.json")
 
-  vars = {
-    aws_account_id = data.aws_caller_identity.current.account_id
-    environment    = var.environment
-    region         = var.region
-    dns_domain     = var.dns_domain
-  }
-}
+#   vars = {
+#     aws_account_id = data.aws_caller_identity.current.account_id
+#     environment    = var.environment
+#     region         = var.region
+#     dns_domain     = var.dns_domain
+#   }
+# }
 
-resource "aws_ecs_task_definition" "definition" {
-  family                   = "clamav_fargate_task_${var.environment}"
-  task_role_arn            = aws_iam_role.ecs_task_role.arn
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  network_mode             = "awsvpc"
-  cpu                      = "256"
-  memory                   = "512"
-  requires_compatibilities = ["FARGATE"]
+# resource "aws_ecs_task_definition" "definition" {
+#   family                   = "clamav_fargate_task_${var.environment}"
+#   task_role_arn            = aws_iam_role.ecs_task_role.arn
+#   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+#   network_mode             = "awsvpc"
+#   cpu                      = "256"
+#   memory                   = "512"
+#   requires_compatibilities = ["FARGATE"]
 
-  container_definitions = data.template_file.task_consumer.rendered
+#   container_definitions = data.template_file.task_consumer.rendered
 
-  depends_on = [
-    aws_iam_role.ecs_task_role,
-    aws_iam_role.ecs_task_execution_role
-  ]
-}
+#   depends_on = [
+#     aws_iam_role.ecs_task_role,
+#     aws_iam_role.ecs_task_execution_role
+#   ]
+# }
