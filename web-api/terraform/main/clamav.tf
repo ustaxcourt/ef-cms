@@ -194,4 +194,8 @@ resource "aws_ecs_service" "clamav_service" {
   task_definition = aws_ecs_task_definition.definition.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+
+  network_configuration {
+    subnets = data.aws_subnet_ids.all
+  }
 }
