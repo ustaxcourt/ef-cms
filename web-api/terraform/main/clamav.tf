@@ -196,6 +196,6 @@ resource "aws_ecs_service" "clamav_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = data.aws_subnet_ids.all
+    subnets = data.aws_subnet_ids.all.ids
   }
 }
