@@ -268,8 +268,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "iam:ListRolePolicies"
       ],
       "Resource": [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-execution-role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav-fargate-*-task-role"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_fargate_execution_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_fargate_task_*"
       ],
       "Effect": "Allow"
     },
