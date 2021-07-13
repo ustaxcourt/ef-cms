@@ -179,10 +179,19 @@ resource "aws_ecs_task_definition" "definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
 
+
   container_definitions = data.template_file.task_consumer_east.rendered
 
   depends_on = [
     aws_iam_role.ecs_task_role,
     aws_iam_role.ecs_task_execution_role
   ]
+}
+
+resource "aws_ecs_service" "clamav_service" {
+  name            = "clamav"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.definition.arn
+  desired_count   = 1
+  launch_type     = "FARGATE"
 }
