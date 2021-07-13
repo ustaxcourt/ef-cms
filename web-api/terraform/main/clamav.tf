@@ -22,10 +22,12 @@
 #   restrict_public_buckets = true
 # }
 
+
+
 data "aws_caller_identity" "current" {}
 
 data "aws_s3_bucket" "quarantine_bucket" {
-  bucket = "${var.dns_domain}-quarantine-${var.environment}-${var.region}"
+  bucket = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
 }
 
 # SQS
@@ -157,13 +159,13 @@ resource "aws_ecs_cluster" "cluster" {
   capacity_providers = ["FARGATE"]
 }
 
-data "template_file" "task_consumer" {
+data "template_file" "task_consumer_east" {
   template = file("clamav_container_definition.json")
 
   vars = {
     aws_account_id = data.aws_caller_identity.current.account_id
     environment    = var.environment
-    region         = var.region
+    region         = "us-east-1"
     dns_domain     = var.dns_domain
   }
 }
@@ -177,7 +179,7 @@ resource "aws_ecs_task_definition" "definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
 
-  container_definitions = data.template_file.task_consumer.rendered
+  container_definitions = data.template_file_east.task_consumer.rendered
 
   depends_on = [
     aws_iam_role.ecs_task_role,
