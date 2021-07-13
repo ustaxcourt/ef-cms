@@ -179,7 +179,7 @@ resource "aws_ecs_task_definition" "definition" {
   memory                   = "512"
   requires_compatibilities = ["FARGATE"]
 
-  container_definitions = data.template_file_east.task_consumer.rendered
+  container_definitions = data.template_file.task_consumer_east.rendered
 
   depends_on = [
     aws_iam_role.ecs_task_role,
