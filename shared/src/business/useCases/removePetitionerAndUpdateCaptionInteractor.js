@@ -34,7 +34,7 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -48,23 +48,13 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  const practitioners =
-    caseEntity.getPractitionersRepresenting(petitionerContactId);
-  for (const practitioner of practitioners) {
-    if (!practitioner.isRepresenting(petitionerContactId)) continue;
-
-    if (practitioner.representing.length === 1) {
-      caseEntity.removePrivatePractitioner(practitioner);
-
-      await applicationContext.getPersistenceGateway().deleteUserFromCase({
-        applicationContext,
-        docketNumber,
-        userId: practitioner.userId,
-      });
-    } else if (practitioner.representing.length > 1) {
-      caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-    }
-  }
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId,
+    });
 
   caseEntity.removePetitioner(petitionerContactId);
 
