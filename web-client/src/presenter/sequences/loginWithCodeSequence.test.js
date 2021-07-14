@@ -28,7 +28,7 @@ describe('loginWithCodeSequence', () => {
     jest.spyOn(global, 'setInterval').mockImplementation(cb => cb());
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
-      route: async () => null,
+      route: () => null,
     };
     presenter.sequences = {
       loginWithCodeSequence,
