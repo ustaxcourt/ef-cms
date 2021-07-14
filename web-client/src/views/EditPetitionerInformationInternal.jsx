@@ -26,7 +26,6 @@ export const EditPetitionerInformationInternal = connect(
     openRemovePetitionerModalSequence:
       sequences.openRemovePetitionerModalSequence,
     openSealAddressModalSequence: sequences.openSealAddressModalSequence,
-    partiesInformationHelper: state.partiesInformationHelper,
     screenMetadata: state.screenMetadata,
     showModal: state.modal.showModal,
     submitEditPetitionerSequence: sequences.submitEditPetitionerSequence,
@@ -41,7 +40,6 @@ export const EditPetitionerInformationInternal = connect(
     formCancelToggleCancelSequence,
     openRemovePetitionerModalSequence,
     openSealAddressModalSequence,
-    partiesInformationHelper,
     screenMetadata,
     showModal,
     submitEditPetitionerSequence,
@@ -87,7 +85,7 @@ export const EditPetitionerInformationInternal = connect(
               >
                 <option value="">- Select -</option>
                 <option value="petitioner">Petitioner</option>
-                {partiesInformationHelper.showIntervenorRole && (
+                {editPetitionerInformationHelper.showIntervenorRole && (
                   <option value="intervenor">Intervenor</option>
                 )}
                 <option value="participant">Participant</option>

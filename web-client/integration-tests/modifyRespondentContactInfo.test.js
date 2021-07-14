@@ -12,7 +12,7 @@ const test = setupTest();
 
 describe('Modify Respondent Contact Information', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(40000);
   });
 
   afterAll(() => {
@@ -45,7 +45,7 @@ describe('Modify Respondent Contact Information', () => {
 
   it('wait for ES index', async () => {
     // waiting for the associated cases to be updated, and THEN an index
-    await refreshElasticsearchIndex();
+    await refreshElasticsearchIndex(5000);
   });
 
   for (let i = 0; i < 3; i++) {

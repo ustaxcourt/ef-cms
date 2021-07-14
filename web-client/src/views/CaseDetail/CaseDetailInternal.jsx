@@ -8,7 +8,7 @@ import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
 import { DocumentViewer } from '../DocketRecord/DocumentViewer';
 import { DraftDocuments } from '../DraftDocuments/DraftDocuments';
-import { EditPetitionDetails } from './EditPetitionDetails';
+import { EditCaseDetails } from './EditCaseDetails';
 import { ErrorNotification } from '../ErrorNotification';
 import { MessagesCompleted } from './MessagesCompleted';
 import { MessagesInProgress } from './MessagesInProgress';
@@ -29,13 +29,13 @@ export const CaseDetailInternal = connect(
       state.currentViewMetadata.caseDetail.caseDetailInternalTabs,
     clearViewerDocumentToDisplaySequence:
       sequences.clearViewerDocumentToDisplaySequence,
-    showEditPetition: state.currentViewMetadata.caseDetail.showEditPetition,
+    showEditCase: state.currentViewMetadata.caseDetail.showEditCase,
     showModal: state.modal.showModal,
   },
   function CaseDetailInternal({
     caseDetailInternalTabs,
     clearViewerDocumentToDisplaySequence,
-    showEditPetition,
+    showEditCase,
     showModal,
   }) {
     return (
@@ -125,10 +125,10 @@ export const CaseDetailInternal = connect(
               <Correspondence />
             </>
           )}
-          {caseDetailInternalTabs.caseInformation && showEditPetition && (
-            <EditPetitionDetails />
+          {caseDetailInternalTabs.caseInformation && showEditCase && (
+            <EditCaseDetails />
           )}
-          {caseDetailInternalTabs.caseInformation && !showEditPetition && (
+          {caseDetailInternalTabs.caseInformation && !showEditCase && (
             <Tabs
               bind="currentViewMetadata.caseDetail.caseInformationTab"
               className="classic-horizontal-header3 tab-border"

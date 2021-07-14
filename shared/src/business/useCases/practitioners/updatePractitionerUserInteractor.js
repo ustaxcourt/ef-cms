@@ -5,7 +5,6 @@ const {
 const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
 const { omit, union } = require('lodash');
 const { Practitioner } = require('../../entities/Practitioner');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
@@ -82,10 +81,6 @@ exports.updatePractitionerUserInteractor = async (
     throw new Error('Bar number does not match user data.');
   }
 
-  if (!userHasAccount && userIsUpdatingEmail) {
-    user.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-  }
-
   if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({ applicationContext, user });
   }
@@ -95,7 +90,7 @@ exports.updatePractitionerUserInteractor = async (
     {
       ...user,
       barNumber: oldUser.barNumber,
-      email: oldUser.email || user.updatedEmail,
+      email: oldUser.email,
     },
     { applicationContext },
   )

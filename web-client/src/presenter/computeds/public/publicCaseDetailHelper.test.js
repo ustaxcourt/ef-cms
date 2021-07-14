@@ -27,6 +27,32 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
+  describe('printableDocketRecord', () => {
+    it('should show printable docket record button if the case status is not new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: false,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeTruthy();
+    });
+
+    it('should not show printable docket record button if the case status is new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: true,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeFalsy();
+    });
+  });
+
   describe('formattedDocketEntriesOnDocketRecord', () => {
     it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
       const result = runCompute(publicCaseDetailHelper, { state });
@@ -478,7 +504,7 @@ describe('publicCaseDetailHelper', () => {
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
       },
       {
         createdAt: '2018-12-25T20:49:28.192Z',
@@ -493,7 +519,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
       },
       {
         createdAt: '2019-12-24T20:49:28.192Z',
@@ -509,7 +535,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2019-12-24T21:49:28.192Z',
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
       },
       {
         createdAt: '2019-12-24T20:49:28.192Z',
@@ -617,7 +643,7 @@ describe('publicCaseDetailHelper', () => {
         index: 5,
         isPaper: undefined,
         servedAtFormatted: undefined,
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,
@@ -637,7 +663,7 @@ describe('publicCaseDetailHelper', () => {
         index: 6,
         isPaper: undefined,
         servedAtFormatted: '11/27/18',
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
@@ -656,7 +682,7 @@ describe('publicCaseDetailHelper', () => {
         index: 7,
         isPaper: undefined,
         servedAtFormatted: '12/24/19',
-        servedPartiesCode: undefined,
+        servedPartiesCode: '',
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
