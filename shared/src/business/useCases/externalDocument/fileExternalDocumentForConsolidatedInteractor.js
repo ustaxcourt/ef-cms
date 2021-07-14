@@ -225,6 +225,13 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
 
           caseEntity.addDocketEntry(docketEntryEntity);
 
+          await applicationContext
+            .getUseCases()
+            .addCoversheetInteractor(applicationContext, {
+              caseEntity: caseEntity.docketNumber,
+              docketEntryId,
+            });
+
           if (isAutoServed) {
             docketEntryEntity.setAsServed(servedParties.all);
 
