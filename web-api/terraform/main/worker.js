@@ -129,6 +129,8 @@ const receiveMessages = () =>
   sqs.receiveMessage(params, async (err, data) => {
     if (err) {
       console.log('Receive Error', err);
+      console.log('params', params);
+      console.log('env', process.env);
     } else if (data.Messages) {
       console.log('we have messages ', data.Messages);
 
