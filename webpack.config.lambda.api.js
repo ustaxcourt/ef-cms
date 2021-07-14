@@ -11,7 +11,6 @@ module.exports = {
       './web-api/terraform/template/lambdas/cognito-triggers.js',
     cron: './web-api/terraform/template/lambdas/cron.js',
     streams: './web-api/terraform/template/lambdas/streams.js',
-    'virus-scan': './web-api/terraform/template/lambdas/virus-scan.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
   output: {
