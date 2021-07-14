@@ -22,6 +22,7 @@ export const PublicFilingsAndProceedings = connect(
           <Button
             link
             aria-label={`View PDF: ${entry.descriptionDisplay}`}
+            className={classNames('text-left', 'view-pdf-link')}
             onClick={() => {
               openCaseDocumentDownloadUrlSequence({
                 docketEntryId: entry.docketEntryId,

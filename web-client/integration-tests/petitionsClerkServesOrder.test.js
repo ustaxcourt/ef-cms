@@ -5,8 +5,8 @@ import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -14,15 +14,15 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreateOrder(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkAddsDocketEntryFromOrder(test);
-  petitionsClerkServesOrder(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreateOrder(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
+  petitionsClerkServesOrder(cerebralTest);
 });

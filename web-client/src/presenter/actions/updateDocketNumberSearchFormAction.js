@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const updateDocketNumberSearchFormAction = async ({ props, store }) => {
+export const updateDocketNumberSearchFormAction = ({ props, store }) => {
   store.set(
     state.advancedSearchForm.docketNumberSearch[props.key],
     props.value,

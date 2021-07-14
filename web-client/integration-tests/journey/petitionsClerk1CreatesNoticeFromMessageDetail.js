@@ -1,40 +1,42 @@
-export const petitionsClerk1CreatesNoticeFromMessageDetail = test => {
+export const petitionsClerk1CreatesNoticeFromMessageDetail = cerebralTest => {
   return it('petitions clerk 1 creates notice from message detail', async () => {
-    const { messageId } = test.getState('messageDetail')[0];
-    await test.runSequence('openCreateOrderChooseTypeModalSequence', {
-      parentMessageId: test.parentMessageId,
+    const { messageId } = cerebralTest.getState('messageDetail')[0];
+    await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence', {
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
-    expect(test.getState('modal.showModal')).toBe('CreateOrderChooseTypeModal');
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'CreateOrderChooseTypeModal',
+    );
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: 'NOT',
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'documentTitle',
       value: 'A Notice Created From A Message',
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    await test.runSequence('gotoCreateOrderSequence', {
-      docketNumber: test.docketNumber,
-      documentTitle: test.getState('modal.documentTitle'),
-      documentType: test.getState('modal.documentType'),
-      eventCode: test.getState('modal.eventCode'),
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+    await cerebralTest.runSequence('gotoCreateOrderSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      documentTitle: cerebralTest.getState('modal.documentTitle'),
+      documentType: cerebralTest.getState('modal.documentType'),
+      eventCode: cerebralTest.getState('modal.eventCode'),
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    expect(test.getState('currentPage')).toBe('CreateOrder');
+    expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('currentPage')).toBe('MessageDetail');
-    const messageDetail = test.getState('messageDetail');
+    expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
+    const messageDetail = cerebralTest.getState('messageDetail');
     expect(messageDetail[0].messageId).toBe(messageId);
   });
 };

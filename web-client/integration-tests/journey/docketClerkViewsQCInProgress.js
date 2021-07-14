@@ -1,26 +1,26 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkViewsQCInProgress = (test, shouldExist) => {
+export const docketClerkViewsQCInProgress = (cerebralTest, shouldExist) => {
   return it('Docket clerk views My Document QC - In Progress', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',
     });
 
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inProgress');
 
-    const inProgressQueue = test.getState('workQueue');
+    const inProgressQueue = cerebralTest.getState('workQueue');
     const inProgressWorkItem = inProgressQueue.find(
       workItem =>
         workItem.docketEntry.docketEntryId ===
-        test.docketRecordEntry.docketEntryId,
+        cerebralTest.docketRecordEntry.docketEntryId,
     );
     if (shouldExist) {
       expect(inProgressWorkItem).toBeTruthy();
