@@ -258,7 +258,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('gotoEditPetitionDetailsSequence', {
+    await test.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: test.docketNumber,
     });
 
@@ -284,7 +284,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: '24',
     });
 
-    await test.runSequence('updatePetitionDetailsSequence');
+    await test.runSequence('updateCaseDetailsSequence');
 
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test);

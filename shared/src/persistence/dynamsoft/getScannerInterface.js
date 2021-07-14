@@ -152,7 +152,6 @@ exports.getScannerInterface = () => {
               blobs.map(blob =>
                 applicationContext
                   .getReduceImageBlob()
-                  .default()
                   .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
               ),
             );

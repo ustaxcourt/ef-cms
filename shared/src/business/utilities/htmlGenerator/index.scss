@@ -20,6 +20,18 @@ h2 {
   text-align: center;
 }
 
+.text-align-left {
+  text-align: left;
+}
+
+.text-no-underline {
+  text-decoration: none;
+}
+
+.text-size-small {
+  font-size: 12px;
+}
+
 .bu {
   font-weight: bold;
   text-decoration: underline;
@@ -110,6 +122,14 @@ th {
 
 .width-half {
   width: 49%;
+}
+
+.width-100 {
+  width: 100px;
+}
+
+.width-250 {
+  width: 250px;
 }
 
 .margin-top-40 {
@@ -471,7 +491,6 @@ th {
 #document-docket-record {
   // TODO: These are basically cards, and could be refactored for more reusability
   .party-info {
-    border: 1px solid #ccc;
     margin: 12px 0 12px 0;
   }
 
@@ -483,19 +502,17 @@ th {
     font-weight: bold;
   }
 
-  .party-info-content {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-    padding: 0 10px 10px 10px;
-  }
-
   .party-details {
     width: 25%;
   }
 
   .docket-record-table {
     margin-top: 30px;
+  }
+
+  .practitioner-contact {
+    min-height: 50px;
+    margin-top: 0;
   }
 }
 

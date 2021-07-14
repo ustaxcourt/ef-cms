@@ -1,6 +1,7 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
+  callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,
   contactSecondaryFromState,
   loginAs,
@@ -178,6 +179,63 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     );
 
     await refreshElasticsearchIndex();
+  });
+
+  loginAs(test, 'admissionsclerk@example.com');
+  it('Admissions Clerk updates petitioner email address', async () => {
+    const NEW_EMAIL = `new${Math.random()}@example.com`;
+
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(test);
+    test.contactPrimaryId = contactPrimary.contactId;
+
+    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
+      contactId: contactPrimary.contactId,
+      docketNumber: test.docketNumber,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.updatedEmail',
+      value: NEW_EMAIL,
+    });
+
+    await test.runSequence('updateFormValueSequence', {
+      key: 'contact.confirmEmail',
+      value: NEW_EMAIL,
+    });
+
+    await test.runSequence('submitEditPetitionerSequence');
+    expect(test.getState('validationErrors')).toEqual({});
+
+    await test.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
+
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+
+    await refreshElasticsearchIndex();
+  });
+
+  it('petitioner verifies email via cognito', async () => {
+    await callCognitoTriggerForPendingEmail(test.contactPrimaryId);
+  });
+
+  it('admissions clerk verifies petitioner service preference was not updated', async () => {
+    await test.runSequence('gotoCaseDetailSequence', {
+      docketNumber: test.docketNumber,
+    });
+
+    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    const contactPrimary = contactPrimaryFromState(test);
+
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_NONE,
+    );
   });
 
   it('Petitions clerk removes a practitioner from a case', async () => {

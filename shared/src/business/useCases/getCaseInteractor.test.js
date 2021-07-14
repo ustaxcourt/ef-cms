@@ -290,6 +290,7 @@ describe('getCaseInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: true,
+        isStatusNew: false,
         partyType: undefined,
         receivedAt: undefined,
       });

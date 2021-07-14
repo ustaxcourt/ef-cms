@@ -1,9 +1,12 @@
 const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   updateCasesForPetitioner,
   updatePractitionerCases,
 } = require('./verifyUserPendingEmailInteractor');
 const { Practitioner } = require('../../entities/Practitioner');
-const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 /**
@@ -58,6 +61,7 @@ exports.setUserEmailFromPendingEmailInteractor = async (
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   } else {
     userEntity = new User({

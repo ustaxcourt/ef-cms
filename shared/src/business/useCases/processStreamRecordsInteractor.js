@@ -23,6 +23,15 @@ const getDocument = ({ applicationContext: appContext, documentContentsId }) =>
     useTempBucket: false,
   });
 
+const getCaseMetadataWithCounsel = ({
+  applicationContext: appContext,
+  docketNumber,
+}) =>
+  appContext.getPersistenceGateway().getCaseMetadataWithCounsel({
+    applicationContext: appContext,
+    docketNumber,
+  });
+
 const getMessage = ({
   applicationContext: appContext,
   docketNumber,
@@ -57,6 +66,7 @@ exports.processStreamRecordsInteractor = async (
 
   const utils = {
     getCase,
+    getCaseMetadataWithCounsel,
     getDocument,
     getMessage,
   };

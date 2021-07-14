@@ -28,8 +28,7 @@ if (process.env.CI) {
   initialUrls.push({
     actions: ['wait for element #ci-environment to be visible'],
     notes: 'Confirm Pa11y is running against client in CI mode',
-    url:
-      'http://localhost:1234/mock-login?token=petitioner&path=/&info=verify-ci-client-environment',
+    url: 'http://localhost:1234/mock-login?token=petitioner&path=/&info=verify-ci-client-environment',
   });
 }
 

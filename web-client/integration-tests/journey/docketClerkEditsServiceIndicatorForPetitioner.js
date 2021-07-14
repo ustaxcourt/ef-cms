@@ -19,26 +19,6 @@ export const docketClerkEditsServiceIndicatorForPetitioner = (
 
     await test.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
-      value: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-
-    if (!expectedServiceIndicator) {
-      await test.runSequence('submitEditPetitionerSequence');
-      expect(test.getState('validationErrors')).toMatchObject({
-        contact: {
-          serviceIndicator: expect.anything(),
-        },
-      });
-
-      const contactPrimaryResult = contactPrimaryFromState(test);
-
-      expect(contactPrimaryResult.serviceIndicator).toEqual(
-        SERVICE_INDICATOR_TYPES.SI_NONE,
-      );
-    }
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contact.serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 

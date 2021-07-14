@@ -1,5 +1,6 @@
 const React = require('react');
 const { ChangeOfAddress } = require('./ChangeOfAddress.jsx');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.js');
 const { shallow } = require('enzyme');
 
 describe('ChangeOfAddress', () => {
@@ -249,5 +250,47 @@ describe('ChangeOfAddress', () => {
 
     const newTable = wrapper.find('#contact_info_New');
     expect(newTable.find('tbody tr').text()).not.toContain(newData.country);
+  });
+
+  it('does not show country if countryType is domestic', () => {
+    options.showAddressAndPhoneChange = true;
+
+    oldData.countryType = COUNTRY_TYPES.DOMESTIC;
+    newData.countryType = COUNTRY_TYPES.DOMESTIC;
+
+    const wrapper = shallow(
+      <ChangeOfAddress
+        name="Joe Exotic"
+        newData={newData}
+        oldData={oldData}
+        options={options}
+      />,
+    );
+    const oldTable = wrapper.find('#contact_info_Old');
+    expect(oldTable.find('tbody tr').text()).not.toContain(oldData.country);
+
+    const newTable = wrapper.find('#contact_info_New');
+    expect(newTable.find('tbody tr').text()).not.toContain(newData.country);
+  });
+
+  it('shows country if countryType is international', () => {
+    options.showAddressAndPhoneChange = true;
+
+    oldData.countryType = COUNTRY_TYPES.INTERNATIONAL;
+    newData.countryType = COUNTRY_TYPES.INTERNATIONAL;
+
+    const wrapper = shallow(
+      <ChangeOfAddress
+        name="Joe Exotic"
+        newData={newData}
+        oldData={oldData}
+        options={options}
+      />,
+    );
+    const oldTable = wrapper.find('#contact_info_Old');
+    expect(oldTable.find('tbody tr').text()).toContain(oldData.country);
+
+    const newTable = wrapper.find('#contact_info_New');
+    expect(newTable.find('tbody tr').text()).toContain(newData.country);
   });
 });
