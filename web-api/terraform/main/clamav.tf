@@ -95,12 +95,52 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
 # }
 
 # Networking for Fargate
-data "aws_vpc" "default" {
-  default = true
+# network.tf
+resource "aws_vpc" "clamav_vpc" {
+  cidr_block = "10.0.0.0/16"
 }
 
-data "aws_subnet_ids" "all" {
-  vpc_id = data.aws_vpc.default.id
+resource "aws_subnet" "private" {
+  vpc_id     = aws_vpc.clamav_vpc.id
+  cidr_block = "10.0.2.0/24"
+}
+
+resource "aws_route_table" "private" {
+  vpc_id = aws_vpc.clamav_vpc.id
+}
+
+
+resource "aws_route_table_association" "private_subnet" {
+  subnet_id      = aws_subnet.private.id
+  route_table_id = aws_route_table.private.id
+}
+
+resource "aws_eip" "nat" {
+  vpc = true
+}
+
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.clamav_vpc.id
+}
+
+
+resource "aws_route" "private_ngw" {
+  route_table_id         = aws_route_table.private.id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.ngw.id
+}
+
+resource "aws_security_group" "egress-all" {
+  name        = "egress_all"
+  description = "Allow all outbound traffic"
+  vpc_id      = aws_vpc.clamav_vpc.id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
@@ -196,7 +236,14 @@ resource "aws_ecs_service" "clamav_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = data.aws_subnet_ids.all.ids
-    assign_public_ip = true # temporary
+    assign_public_ip = false
+
+    subnets = [
+      aws_subnet.private.id
+    ]
+
+    security_groups = [
+      aws_security_group.egress-all.id
+    ]
   }
 }
