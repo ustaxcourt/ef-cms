@@ -1,5 +1,4 @@
-process.env.test = true; // prevent the auto init
-const { CSV_HEADERS, init } = require('./bulkImportJudgeUsers');
+const { CSV_HEADERS, init } = require('./bulkImportJudgeUsers.helpers');
 
 jest.mock('./importHelpers', () => ({
   getServices: jest.fn().mockResolvedValue({
@@ -16,8 +15,9 @@ const { readCsvFile } = require('./importHelpers');
 let mockLegacyJudge;
 let mockCurrentJudge;
 
-describe('bulkImportJudgeUsers', () => {
+describe('bulkImportJudgeUsers helpers', () => {
   beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
     mockLegacyJudge = {
       email: 'judgeFieri@example.com',
       judgeFullName: 'Fieri',

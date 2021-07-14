@@ -818,6 +818,9 @@ const {
   removeConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor');
 const {
+  removeCounselFromRemovedPetitioner,
+} = require('../../shared/src/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
+const {
   removeCoversheet,
 } = require('../../shared/src/business/useCaseHelper/coverSheets/removeCoversheet');
 const {
@@ -1672,6 +1675,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
+        removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
         sendEmailVerificationLink,

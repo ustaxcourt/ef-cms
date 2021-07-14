@@ -4,6 +4,9 @@ const { transports } = require('winston');
 
 describe('logger', () => {
   let req, res, NODE_ENV;
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
 
   beforeEach(() => {
     ({ NODE_ENV } = process.env);
@@ -43,7 +46,7 @@ describe('logger', () => {
   it('defaults to using a console logger if not specified', async () => {
     const middleware = logger();
 
-    jest.spyOn(console, 'log');
+    jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
       req.locals.logger.info('test', () => {
         expect(console.log).toHaveBeenCalled();

@@ -3,32 +3,32 @@ import {
   getFormattedDocketEntriesForTest,
 } from '../helpers';
 
-export const petitionerEditsCasePrimaryContactAddress = test => {
+export const petitionerEditsCasePrimaryContactAddress = cerebralTest => {
   return it('petitioner updates primary contact address', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '100 Main St.',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
       value: 'Grand View Apartments',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address3',
       value: 'Apt. 104',
     });
 
-    await test.runSequence('submitEditContactSequence');
+    await cerebralTest.runSequence('submitEditContactSequence');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.address1).toEqual('100 Main St.');
     expect(contactPrimary.address2).toEqual('Grand View Apartments');
     expect(contactPrimary.address3).toEqual('Apt. 104');
 
     const { formattedDocketEntriesOnDocketRecord } =
-      await getFormattedDocketEntriesForTest(test);
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>

@@ -7,7 +7,7 @@ import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsC
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Generate Notices of Trial Session with Electronically Service', () => {
   beforeAll(() => {
@@ -15,7 +15,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const caseCount = 2;
@@ -26,7 +26,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     trialLocation,
   };
 
-  test.casesReadyForTrial = [];
+  cerebralTest.casesReadyForTrial = [];
 
   const createdDocketNumbers = [];
 
@@ -46,21 +46,24 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     docketClerkSetsCaseReadyForTrial(testSession);
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(
+    cerebralTest,
+    overrides,
+  );
+  docketClerkViewsTrialSessionList(cerebralTest);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
-    makeCaseReadyForTrial(test, id, overrides);
+    makeCaseReadyForTrial(cerebralTest, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(cerebralTest, () => {
     return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
-  petitionsClerkCompletesAndSetsTrialSession(test);
-  petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
+  petitionsClerkCompletesAndSetsTrialSession(cerebralTest);
+  petitionsClerkViewsDocketRecordAfterSettingTrial(cerebralTest, {
     documentTitle: 'Standing Pretrial Order', // this is the default, but setting so it's more explicit
   });
 });

@@ -19,120 +19,120 @@ const statisticsFormHelper = withAppContextDecorator(
 
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
-export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
+export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
   return it('Petitions clerk edits Petition IRS Notice', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
       tab: 'IrsNotice',
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
 
     // No IRS notice
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
 
     // Set case type
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.cdp,
     });
 
     let noticeUiHelper = runCompute(caseDetailEditHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     let statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(noticeUiHelper.shouldShowIrsNoticeDate).toEqual(false);
     expect(statisticsUiHelper.showStatisticsForm).toEqual(false);
 
     // Has IRS notice
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
 
     noticeUiHelper = runCompute(caseDetailEditHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(noticeUiHelper.shouldShowIrsNoticeDate).toEqual(true);
     expect(statisticsUiHelper.showStatisticsForm).toEqual(false);
 
     // Set case type to deficiency
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.deficiency,
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.showStatisticsForm).toEqual(true);
 
-    let statistics = test.getState('form.statistics');
+    let statistics = cerebralTest.getState('form.statistics');
 
     expect(statistics.length).toEqual(0);
 
     // Add statistic
-    await test.runSequence('addStatisticToFormSequence');
+    await cerebralTest.runSequence('addStatisticToFormSequence');
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
-    statistics = test.getState('form.statistics');
+    statistics = cerebralTest.getState('form.statistics');
 
     expect(statistics.length).toEqual(1);
     expect(statisticsUiHelper.showAddMoreStatisticsButton).toEqual(true);
 
     // Add 11 more statistics (reaching the maximum number of 12)
     for (let i = 1; i < 12; i++) {
-      await test.runSequence('addStatisticToFormSequence');
+      await cerebralTest.runSequence('addStatisticToFormSequence');
     }
-    statistics = test.getState('form.statistics');
+    statistics = cerebralTest.getState('form.statistics');
 
     expect(statistics.length).toEqual(12);
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.showAddMoreStatisticsButton).toEqual(false);
 
     // Attempt to add statistic after max is reached
-    await test.runSequence('addStatisticToFormSequence');
-    statistics = test.getState('form.statistics');
+    await cerebralTest.runSequence('addStatisticToFormSequence');
+    statistics = cerebralTest.getState('form.statistics');
 
     expect(statistics.length).toEqual(12);
 
     // Attempt to submit without required statistics fields
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    let errors = test.getState('validationErrors.statistics');
+    let errors = cerebralTest.getState('validationErrors.statistics');
 
     expect(errors[0].enterAllValues).toContain(
       'Enter year, deficiency amount, and total penalties',
     );
 
     // Change between a statistic period and year
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.yearOrPeriod',
       value: 'Period',
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.statisticOptions[0].showYearInput).toBeFalsy();
@@ -141,45 +141,45 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     );
 
     // Attempt to submit without required (period) statistics fields
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = test.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors.statistics');
 
     expect(errors[0].enterAllValues).toContain(
       'Enter year, deficiency amount, and total penalties',
     );
 
     // Switch back to year input
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.yearOrPeriod',
       value: 'Year',
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(statisticsUiHelper.statisticOptions[0].showYearInput).toEqual(true);
     expect(statisticsUiHelper.statisticOptions[0].showPeriodInput).toBeFalsy();
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = test.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors.statistics');
 
     expect(errors[0].enterAllValues).toContain(
       'Enter year, deficiency amount, and total penalties',
     );
 
     // Select calculate penalties for the first statistic
-    await test.runSequence('showCalculatePenaltiesModalSequence', {
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       statisticIndex: 0,
     });
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
-    let modal = test.getState('modal');
+    let modal = cerebralTest.getState('modal');
 
     expect(modal.statisticIndex).toEqual(0);
     expect(modal.penalties).toMatchObject(['', '', '', '', '']);
@@ -188,63 +188,63 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
 
     // Add 5 more penalty inputs in the modal (reaching the maximum number of 10)
     for (let i = 5; i < 10; i++) {
-      await test.runSequence('addPenaltyInputSequence');
+      await cerebralTest.runSequence('addPenaltyInputSequence');
     }
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
-    modal = test.getState('modal');
+    modal = cerebralTest.getState('modal');
 
     expect(modal.penalties.length).toEqual(10); // contains 5 additional elements in penalties array
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(false); // UI should not allow additional to be created
 
     // Attempt to add penalty inputs in modal after max is reached
-    await test.runSequence('addPenaltyInputSequence');
+    await cerebralTest.runSequence('addPenaltyInputSequence');
 
-    modal = test.getState('modal');
+    modal = cerebralTest.getState('modal');
 
     expect(modal.penalties.length).toEqual(10);
 
     // Add some penalties and calculate the sum
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.0',
       value: '1',
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.1',
       value: '2',
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.2',
       value: '3.01',
     });
 
-    await test.runSequence('calculatePenaltiesSequence');
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
 
-    statistics = test.getState('form.statistics');
-    modal = test.getState('modal');
+    statistics = cerebralTest.getState('form.statistics');
+    modal = cerebralTest.getState('modal');
 
     expect(statistics[0].irsTotalPenalties).toEqual('$6.01');
     expect(modal.showModal).toBeUndefined();
 
     // Attempt to insert a non-number into currency amount inputs
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.irsDeficiencyAmount',
       value: '$100',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.irsTotalPenalties',
       value: '1,000',
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = test.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors.statistics');
 
     expect(errors[0].enterAllValues).toContain(
       'Enter year, deficiency amount, and total penalties',
@@ -253,44 +253,44 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = test => {
     // Add 11 more statistics (reaching the maximum number of 12) back to form - they were removed
     // before by empty statistic filtering
     for (let i = 1; i < 12; i++) {
-      await test.runSequence('addStatisticToFormSequence');
+      await cerebralTest.runSequence('addStatisticToFormSequence');
     }
-    statistics = test.getState('form.statistics');
+    statistics = cerebralTest.getState('form.statistics');
 
     expect(statistics.length).toEqual(12);
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     // Fill out all statistics values except the last one and submit
     // -- the last one should be removed from the form because it was not filled in
     for (let i = 0; i < 11; i++) {
-      await test.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.year`,
         value: 2019,
       });
 
-      await test.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.irsDeficiencyAmount`,
         value: 1000 + i,
       });
 
-      await test.runSequence('updateFormValueSequence', {
+      await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.irsTotalPenalties`,
         value: 100 + i,
       });
     }
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    errors = test.getState('validationErrors.statistics');
+    errors = cerebralTest.getState('validationErrors.statistics');
     expect(errors).toBeUndefined();
 
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
     let reviewUiHelper = runCompute(reviewSavedPetitionHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(reviewUiHelper.formattedStatistics).toEqual([

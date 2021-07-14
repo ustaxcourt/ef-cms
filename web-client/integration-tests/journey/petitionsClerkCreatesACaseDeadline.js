@@ -3,25 +3,28 @@ import { refreshElasticsearchIndex } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
-export const petitionsClerkCreatesACaseDeadline = (test, overrides = {}) => {
+export const petitionsClerkCreatesACaseDeadline = (
+  cerebralTest,
+  overrides = {},
+) => {
   return it('Petitions clerk creates a case deadline', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openCreateCaseDeadlineModalSequence');
+    await cerebralTest.runSequence('openCreateCaseDeadlineModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('createCaseDeadlineSequence');
+    await cerebralTest.runSequence('createCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
       description: VALIDATION_ERROR_MESSAGES.description[1],
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'description',
       value: `We're talking away
 I don't know what
@@ -36,37 +39,37 @@ I'll be gone
 In a day or two`,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'month',
       value: overrides.month || '8',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'day',
       value: overrides.day || '12',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'year',
       value: overrides.year || '2025',
     });
 
-    await test.runSequence('validateCaseDeadlineSequence');
+    await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       description: VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'description',
       value: overrides.description || "We're talking away...",
     });
 
-    await test.runSequence('validateCaseDeadlineSequence');
+    await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('createCaseDeadlineSequence');
+    await cerebralTest.runSequence('createCaseDeadlineSequence');
 
     await refreshElasticsearchIndex();
   });

@@ -5,35 +5,36 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkViewsAssignedWorkItemEditLink = test => {
+export const docketClerkViewsAssignedWorkItemEditLink = cerebralTest => {
   return it('Docket clerk views Individual Document QC - Inbox', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('my');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const inboxWorkItem = workQueueFormatted.find(
-      workItem => workItem.docketEntry.docketEntryId === test.docketEntryId,
+      workItem =>
+        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(inboxWorkItem.editLink).toContain('/edit');
 
-    await test.runSequence('gotoDocketEntryQcSequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
   });
 };
