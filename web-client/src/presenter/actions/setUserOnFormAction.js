@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.form
  * @returns {Promise} async action
  */
-export const setUserOnFormAction = async ({ props, store }) => {
+export const setUserOnFormAction = ({ props, store }) => {
   store.set(state.form, {
     barNumber: props.user.barNumber,
     contact: props.user.contact,
