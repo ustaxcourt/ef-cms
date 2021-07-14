@@ -7,8 +7,8 @@ import reactQuill from 'react-quill';
 const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
-const ReactQuill = React.lazy(() => {
-  const Size = reactQuill.Quill.import('attributors/style/size');
+const ReactQuill = React.lazy(async () => {
+  const Size = await reactQuill.Quill.import('attributors/style/size');
   Size.whitelist = fontSizes;
   reactQuill.Quill.register(Size, true);
 
