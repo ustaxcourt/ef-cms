@@ -58,6 +58,14 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.clamav_vpc.id
 }
 
+resource "aws_route_table" "public" {
+  vpc_id = aws_vpc.clamav_vpc.id
+}
+
+resource "aws_route_table_association" "public_subnet" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public.id
+}
 
 resource "aws_route_table_association" "private_subnet" {
   subnet_id      = aws_subnet.private.id
