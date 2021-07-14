@@ -177,8 +177,8 @@ resource "aws_ecs_task_definition" "definition" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "1024"
+  memory_reservation       = "2048"
   requires_compatibilities = ["FARGATE"]
-
 
   container_definitions = data.template_file.task_consumer_east.rendered
 
@@ -196,6 +196,7 @@ resource "aws_ecs_service" "clamav_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = data.aws_subnet_ids.all.ids
+    subnets          = data.aws_subnet_ids.all.ids
+    assign_public_ip = true # temporary
   }
 }
