@@ -17,7 +17,7 @@
       },
       {
         "name": "QUARANTINE_BUCKET",
-        "value": "${dns_domain}-quarantine-${region}"
+        "value": "${dns_domain}-quarantine-${environment}-${region}"
       },
       {
         "name": "CLEAN_BUCKET",
