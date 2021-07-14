@@ -4,26 +4,19 @@ const {
   createISODateString,
 } = require('./DateHandler');
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('../entities/cases/Case');
-const {
   CASE_STATUS_TYPES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   PAYMENT_STATUS,
   REVISED_TRANSCRIPT_EVENT_CODE,
-  SERVED_PARTIES_CODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
+const { isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
@@ -45,26 +38,6 @@ const documentMeetsAgeRequirements = doc => {
 
   const meetsTranscriptAgeRequirements = availableOnDate <= rightNow;
   return meetsTranscriptAgeRequirements;
-};
-
-const formatCaseDeadline = (applicationContext, caseDeadline) => {
-  const result = cloneDeep(caseDeadline);
-  result.deadlineDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(result.deadlineDate, 'MMDDYY');
-
-  // use the app context utility function so the time zones match when comparing dates
-  const deadlineDateMomented = applicationContext
-    .getUtilities()
-    .prepareDateFromString(result.deadlineDate);
-
-  const today = applicationContext.getUtilities().prepareDateFromString();
-
-  if (deadlineDateMomented.isBefore(today, 'day')) {
-    result.overdue = true;
-  }
-
-  return result;
 };
 
 const computeIsInProgress = ({ formattedEntry }) => {
@@ -147,18 +120,10 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.isStipDecision =
     formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  formattedEntry.qcWorkItemsUntouched =
-    qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsUntouched = qcWorkItem && !qcWorkItem.completedAt;
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
-
-  if (formattedEntry.servedPartiesCode !== SERVED_PARTIES_CODES.PETITIONER) {
-    // Served parties code - R = Respondent, P = Petitioner, B = Both
-    formattedEntry.servedPartiesCode = getServedPartiesCode(
-      formattedEntry.servedParties,
-    );
-  }
 
   if (
     formattedEntry.isCourtIssuedDocument &&
@@ -177,13 +142,11 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
   }
 
-  formattedEntry.isAvailableToUser = documentMeetsAgeRequirements(
-    formattedEntry,
-  );
+  formattedEntry.isAvailableToUser =
+    documentMeetsAgeRequirements(formattedEntry);
 
-  formattedEntry.filingsAndProceedings = getFilingsAndProceedings(
-    formattedEntry,
-  );
+  formattedEntry.filingsAndProceedings =
+    getFilingsAndProceedings(formattedEntry);
 
   if (!formattedEntry.descriptionDisplay) {
     formattedEntry.descriptionDisplay = formattedEntry.documentTitle;
@@ -225,16 +188,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
-};
-
-const formatCaseDeadlines = (applicationContext, caseDeadlines = []) => {
-  caseDeadlines = caseDeadlines.map(d =>
-    formatCaseDeadline(applicationContext, d),
-  );
-
-  return caseDeadlines.sort((a, b) =>
-    String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
-  );
 };
 
 /**
@@ -311,11 +264,9 @@ const formatTrialSessionScheduling = ({
     // TODO: get trial session note
   } else if (formattedCase.blocked) {
     formattedCase.showBlockedFromTrial = true;
-    if (formattedCase.blocked) {
-      formattedCase.blockedDateFormatted = applicationContext
-        .getUtilities()
-        .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-    }
+    formattedCase.blockedDateFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(formattedCase.blockedDate, 'MMDDYY');
   } else if (formattedCase.highPriority) {
     formattedCase.formattedTrialDate = 'Not scheduled';
     formattedCase.formattedAssociatedJudge = 'Not assigned';
@@ -372,7 +323,6 @@ const formatCase = (applicationContext, caseDetail) => {
     );
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);
-
     result.pendingItemsDocketEntries = result.formattedDocketEntries.filter(
       entry => applicationContext.getUtilities().isPending(entry),
     );
@@ -397,51 +347,17 @@ const formatCase = (applicationContext, caseDetail) => {
     if (counsel.representing) {
       counsel.representingFormatted = [];
 
-      const contactPrimary = getContactPrimary(caseDetail);
-
-      if (counsel.representing.includes(contactPrimary.contactId)) {
-        counsel.representingFormatted.push({
-          name: contactPrimary.name,
-          secondaryName: contactPrimary.secondaryName,
-          title: contactPrimary.title,
-        });
-      }
-
-      const contactSecondary = getContactSecondary(caseDetail);
-
-      if (
-        contactSecondary &&
-        counsel.representing.includes(contactSecondary.contactId)
-      ) {
-        counsel.representingFormatted.push({
-          name: contactSecondary.name,
-          secondaryName: contactSecondary.secondaryName,
-          title: contactSecondary.title,
-        });
-      }
-
-      const otherPetitioners = getOtherPetitioners(caseDetail);
-
-      otherPetitioners.forEach(otherPetitioner => {
-        if (counsel.representing.includes(otherPetitioner.contactId)) {
+      caseDetail.petitioners.forEach(p => {
+        if (counsel.representing.includes(p.contactId)) {
           counsel.representingFormatted.push({
-            name: otherPetitioner.name,
-            secondaryName: otherPetitioner.secondaryName,
-            title: otherPetitioner.title,
-          });
-        }
-      });
-
-      getOtherFilers(caseDetail).forEach(otherFiler => {
-        if (counsel.representing.includes(otherFiler.contactId)) {
-          counsel.representingFormatted.push({
-            name: otherFiler.name,
-            secondaryName: otherFiler.secondaryName,
-            title: otherFiler.title,
+            name: p.name,
+            secondaryName: p.secondaryName,
+            title: p.title,
           });
         }
       });
     }
+
     return counsel;
   };
 
@@ -450,9 +366,8 @@ const formatCase = (applicationContext, caseDetail) => {
   }
 
   if (result.privatePractitioners) {
-    result.privatePractitioners = result.privatePractitioners.map(
-      formatCounsel,
-    );
+    result.privatePractitioners =
+      result.privatePractitioners.map(formatCounsel);
   }
 
   result.createdAtFormatted = applicationContext
@@ -571,7 +486,6 @@ const sortDocketEntries = (docketEntries = [], sortByString = '') => {
 
 const getFormattedCaseDetail = ({
   applicationContext,
-  caseDeadlines = [],
   caseDetail,
   docketRecordSort,
 }) => {
@@ -586,10 +500,6 @@ const getFormattedCaseDetail = ({
     docketRecordSort,
   );
   result.docketRecordSort = docketRecordSort;
-  result.caseDeadlines = formatCaseDeadlines(applicationContext, caseDeadlines);
-
-  result.contactPrimary = getContactPrimary(caseDetail);
-  result.contactSecondary = getContactSecondary(caseDetail);
 
   return result;
 };
@@ -598,7 +508,6 @@ module.exports = {
   TRANSCRIPT_AGE_DAYS_MIN,
   documentMeetsAgeRequirements,
   formatCase,
-  formatCaseDeadlines,
   formatDocketEntry,
   getFilingsAndProceedings,
   getFormattedCaseDetail,

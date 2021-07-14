@@ -1,3 +1,4 @@
+import { SERVED_PARTIES_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from './publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
@@ -24,6 +25,32 @@ describe('publicCaseDetailHelper', () => {
         docketNumber: '123-45',
       },
     };
+  });
+
+  describe('printableDocketRecord', () => {
+    it('should show printable docket record button if the case status is not new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: false,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeTruthy();
+    });
+
+    it('should not show printable docket record button if the case status is new', () => {
+      const result = runCompute(publicCaseDetailHelper, {
+        state: {
+          caseDetail: {
+            docketEntries: [],
+            isStatusNew: true,
+          },
+        },
+      });
+      expect(result.showPrintableDocketRecord).toBeFalsy();
+    });
   });
 
   describe('formattedDocketEntriesOnDocketRecord', () => {
@@ -411,6 +438,7 @@ describe('publicCaseDetailHelper', () => {
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
       },
       {
         additionalInfo: 'additionalInfo!',
@@ -429,6 +457,7 @@ describe('publicCaseDetailHelper', () => {
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
       {
         createdAt: '2018-10-25T20:49:28.192Z',
@@ -444,6 +473,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         status: 'served',
       },
       {
@@ -459,6 +489,7 @@ describe('publicCaseDetailHelper', () => {
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         signatory: 'abc',
       },
       {
@@ -473,6 +504,7 @@ describe('publicCaseDetailHelper', () => {
         isOnDocketRecord: true,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedPartiesCode: undefined,
       },
       {
         createdAt: '2018-12-25T20:49:28.192Z',
@@ -487,6 +519,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2018-11-27T20:49:28.192Z',
+        servedPartiesCode: undefined,
       },
       {
         createdAt: '2019-12-24T20:49:28.192Z',
@@ -502,6 +535,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2019-12-24T21:49:28.192Z',
+        servedPartiesCode: undefined,
       },
       {
         createdAt: '2019-12-24T20:49:28.192Z',
@@ -517,6 +551,7 @@ describe('publicCaseDetailHelper', () => {
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         servedAt: '2019-12-24T21:49:28.192Z',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
       {
         createdAt: '2019-12-25T20:49:28.192Z',
@@ -532,6 +567,7 @@ describe('publicCaseDetailHelper', () => {
         isStricken: false,
         numberOfPages: 0,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
     ];
     const result = runCompute(publicCaseDetailHelper, { state });
@@ -548,7 +584,7 @@ describe('publicCaseDetailHelper', () => {
         index: 1,
         isPaper: undefined,
         servedAtFormatted: undefined,
-        servedPartiesCode: '',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,
@@ -567,7 +603,7 @@ describe('publicCaseDetailHelper', () => {
         index: 3,
         isPaper: undefined,
         servedAtFormatted: '11/27/18',
-        servedPartiesCode: '',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
         showNotServed: false,
@@ -587,7 +623,7 @@ describe('publicCaseDetailHelper', () => {
         index: 4,
         isPaper: undefined,
         servedAtFormatted: undefined,
-        servedPartiesCode: '',
+        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,
@@ -607,7 +643,7 @@ describe('publicCaseDetailHelper', () => {
         index: 5,
         isPaper: undefined,
         servedAtFormatted: undefined,
-        servedPartiesCode: '',
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,
@@ -627,7 +663,7 @@ describe('publicCaseDetailHelper', () => {
         index: 6,
         isPaper: undefined,
         servedAtFormatted: '11/27/18',
-        servedPartiesCode: '',
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
@@ -646,7 +682,7 @@ describe('publicCaseDetailHelper', () => {
         index: 7,
         isPaper: undefined,
         servedAtFormatted: '12/24/19',
-        servedPartiesCode: '',
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
@@ -664,6 +700,7 @@ describe('publicCaseDetailHelper', () => {
         index: 8,
         isStricken: false,
         servedAtFormatted: '12/24/19',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
@@ -679,6 +716,7 @@ describe('publicCaseDetailHelper', () => {
         filingsAndProceedingsWithAdditionalInfo: '',
         hasDocument: true,
         index: 9,
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: false,
@@ -696,7 +734,7 @@ describe('publicCaseDetailHelper', () => {
         index: 2,
         isPaper: undefined,
         servedAtFormatted: undefined,
-        servedPartiesCode: '',
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,

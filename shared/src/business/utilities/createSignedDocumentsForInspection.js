@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 // This utility is used to create signed documents for visual inspection
 // without the need to run the entire application.
 
@@ -27,17 +29,19 @@ const main = async () => {
 
   for (let inputFileName of inputFiles) {
     const pdfData = new Uint8Array(fs.readFileSync(inputFileName));
-    const signedResult = await generateSignedDocumentInteractor({
+    const signedResult = await generateSignedDocumentInteractor(
       applicationContext,
-      pageIndex: 0,
-      pdfData,
-      posX: 0,
-      posY: 0,
-      sigTextData: {
-        signatureName: '(Signed) Maurice B. Foley',
-        signatureTitle: 'Chief Judge',
+      {
+        pageIndex: 0,
+        pdfData,
+        posX: 0,
+        posY: 0,
+        sigTextData: {
+          signatureName: '(Signed) Maurice B. Foley',
+          signatureTitle: 'Chief Judge',
+        },
       },
-    });
+    );
 
     fs.writeFileSync(
       path.join(signedDocumentsFolder, path.basename(inputFileName)),

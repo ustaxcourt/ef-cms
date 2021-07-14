@@ -31,18 +31,19 @@ export const submitEditDeficiencyStatisticAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().updateDeficiencyStatisticInteractor({
-      applicationContext,
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      docketNumber,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
-      statisticId,
-      year,
-      yearOrPeriod,
-    });
+    await applicationContext
+      .getUseCases()
+      .updateDeficiencyStatisticInteractor(applicationContext, {
+        determinationDeficiencyAmount,
+        determinationTotalPenalties,
+        docketNumber,
+        irsDeficiencyAmount,
+        irsTotalPenalties,
+        lastDateOfPeriod,
+        statisticId,
+        year,
+        yearOrPeriod,
+      });
 
     let successMessageDate;
 

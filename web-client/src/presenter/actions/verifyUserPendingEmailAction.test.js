@@ -23,7 +23,7 @@ describe('verifyUserPendingEmailAction', () => {
     });
     expect(
       applicationContext.getUseCases().verifyUserPendingEmailInteractor.mock
-        .calls[0][0].token,
+        .calls[0][1].token,
     ).toEqual('abc');
   });
 });

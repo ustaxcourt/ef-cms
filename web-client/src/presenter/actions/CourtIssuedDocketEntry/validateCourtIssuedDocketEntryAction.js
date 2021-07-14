@@ -21,10 +21,28 @@ export const validateCourtIssuedDocketEntryAction = ({
 
   let errors = applicationContext
     .getUseCases()
-    .validateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    .validateCourtIssuedDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
+
+  if (entryMetadata.year && entryMetadata.year.toString().length !== 4) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.date = errors.date || 'Enter a four-digit year';
+  }
+
+  if (
+    entryMetadata.filingDateYear &&
+    entryMetadata.filingDateYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.filingDate = errors.filingDate || 'Enter a four-digit year';
+  }
 
   // Additional validation to determine if the signature required warning should be displayed
   if (EVENT_CODES_REQUIRING_SIGNATURE.includes(entryMetadata.eventCode)) {

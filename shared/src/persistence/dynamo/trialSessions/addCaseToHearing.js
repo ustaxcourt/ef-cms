@@ -19,9 +19,9 @@ exports.addCaseToHearing = async ({
     // Create mapping record
     put({
       Item: {
+        ...trialSession,
         pk: `case|${docketNumber}`,
         sk: `hearing|${trialSession.trialSessionId}`,
-        ...trialSession,
       },
       applicationContext,
     }),

@@ -3,14 +3,12 @@ exports.goToCreateCase = () => {
 };
 
 exports.goToReviewCase = testData => {
-  cy.server();
-  cy.route('POST', '**/paper').as('postPaperCase');
+  cy.intercept('POST', '**/paper').as('postPaperCase');
   cy.get('button#submit-case').scrollIntoView().click();
-  cy.wait('@postPaperCase');
-  cy.get('@postPaperCase').should(xhr => {
-    expect(xhr.responseBody).to.have.property('docketNumber');
+  cy.wait('@postPaperCase').then(({ response }) => {
+    expect(response.body).to.have.property('docketNumber');
     if (testData) {
-      testData.createdPaperDocketNumber = xhr.responseBody.docketNumber;
+      testData.createdPaperDocketNumber = response.body.docketNumber;
     }
   });
 };
@@ -25,11 +23,11 @@ exports.serveCaseToIrs = () => {
 };
 
 exports.closeScannerSetupDialog = () => {
-  cy.server();
-  cy.route2('webtwain.install.js').as('getDynamsoft');
+  cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
   cy.wait('@getDynamsoft');
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
-  cy.wait(2000); // eslint-disable-line cypress/no-unnecessary-waiting
+  cy.get('div.dynamsoft-dialog-close', { timeout: 10000 }).should('be.visible');
+
   cy.get('body').then(body => {
     if (body.find('div.dynamsoft-backdrop').length > 0) {
       cy.get('div.dynamsoft-dialog-close').click();

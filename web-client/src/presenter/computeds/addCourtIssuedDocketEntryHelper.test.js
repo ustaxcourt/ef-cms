@@ -1,4 +1,7 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CONTACT_TYPES,
+  CONTACT_TYPE_TITLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -16,6 +19,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     role: USER_ROLES.docketClerk,
   };
   let mockConstants = {
+    CONTACT_TYPE_TITLES,
     COURT_ISSUED_EVENT_CODES: [
       { code: 'Simba', documentType: 'Lion', eventCode: 'ROAR' },
       { code: 'Shenzi', documentType: 'Hyena', eventCode: 'HAHA' },
@@ -41,12 +45,23 @@ describe('addCourtIssuedDocketEntryHelper', () => {
       docketEntries: [{ docketEntryId: '123' }],
       irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, name: 'Banzai' },
-        { contactType: CONTACT_TYPES.secondary, name: 'Timon' },
+        {
+          contactId: 'b83163ef-af5a-447f-9a79-a0e1759ed60d',
+          contactType: CONTACT_TYPES.primary,
+          name: 'Banzai',
+        },
+        {
+          contactId: '407c740a-0f44-4679-a8ca-5b4749007741',
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Timon',
+        },
       ],
       privatePractitioners: [
         { name: 'Scar', representing: [] },
-        { name: 'Zazu', representing: [] },
+        {
+          name: 'Zazu',
+          representing: ['b83163ef-af5a-447f-9a79-a0e1759ed60d'],
+        },
       ],
     },
     docketEntryId: '123',

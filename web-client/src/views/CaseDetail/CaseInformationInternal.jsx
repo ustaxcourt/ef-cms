@@ -10,7 +10,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({
+const CaseDetails = ({
   caseDetail,
   caseInformationHelper,
   openCleanModalSequence,
@@ -519,8 +519,8 @@ export const CaseInformationInternal = connect(
               <div className="card height-full">
                 <div className="content-wrapper">
                   <h3 className="underlined">
-                    Petition Details
-                    {caseDetailHelper.showEditPetitionDetailsButton && (
+                    Case Details
+                    {caseDetailHelper.showEditCaseDetailsButton && (
                       <Button
                         link
                         className="margin-left-2 padding-0"
@@ -550,7 +550,7 @@ export const CaseInformationInternal = connect(
                     </If>
                   </h3>
 
-                  <PetitionDetails
+                  <CaseDetails
                     caseDetail={formattedCaseDetail}
                     caseInformationHelper={caseInformationHelper}
                     openCleanModalSequence={openCleanModalSequence}

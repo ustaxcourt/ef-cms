@@ -626,10 +626,12 @@
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Has an associated PDF in S3."
             isLegacyServed: 
               type: "boolean"
               flags: 
                 presence: "optional"
+                description: "Indicates whether or not the legacy document was served prior to being migrated to the new system."
             isMinuteEntry: 
               type: "boolean"
               flags: 
@@ -708,6 +710,22 @@
                   name: "max"
                   args: 
                     date: "now"
+            servedPartiesCode: 
+              type: "string"
+              flags: 
+                only: true
+                presence: "optional"
+                description: "Served parties code to override system-computed code."
+              rules: 
+                - 
+                  name: "min"
+                  args: 
+                    limit: 1
+              allow: 
+                - "B"
+                - "P"
+                - "R"
+                - null
     docketNumber: 
       type: "string"
       flags: 

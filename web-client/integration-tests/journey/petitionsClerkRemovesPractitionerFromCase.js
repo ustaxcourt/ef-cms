@@ -2,14 +2,25 @@ export const petitionsClerkRemovesPractitionerFromCase = test => {
   return it('Petitions clerk removes a practitioner from a case', async () => {
     expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = test.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.removeFromCase',
-      value: true,
+    await test.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: test.docketNumber,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    expect(test.getState('validationErrors')).toEqual({});
+    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+
+    await test.runSequence('openRemovePetitionerCounselModalSequence');
+
+    expect(test.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await test.runSequence('removePetitionerCounselFromCaseSequence');
 
     expect(test.getState('validationErrors')).toEqual({});
 

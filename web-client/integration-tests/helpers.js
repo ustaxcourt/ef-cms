@@ -2,6 +2,7 @@
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -14,18 +15,25 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
+import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
@@ -37,8 +45,8 @@ import riotRoute from 'riot-route';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const formattedDocketEntries = withAppContextDecorator(
+  formattedDocketEntriesComputed,
 );
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 const formattedCaseMessages = withAppContextDecorator(
@@ -68,6 +76,41 @@ export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
 
+export const callCognitoTriggerForPendingEmail = async userId => {
+  // mock application context similar to that in cognito-triggers.js
+  const apiApplicationContext = {
+    getCurrentUser: () => ({}),
+    getDocumentClient: () => {
+      return new DynamoDB.DocumentClient({
+        endpoint: 'http://localhost:8000',
+        region: 'us-east-1',
+      });
+    },
+    getEnvironment: () => ({
+      dynamoDbTableName: 'efcms-local',
+      stage: process.env.STAGE,
+    }),
+    getPersistenceGateway: () => ({
+      getCaseByDocketNumber,
+      getDocketNumbersByUser,
+      getUserById,
+      updateCase,
+      updateUser,
+    }),
+    getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
+    logger: {
+      debug: () => {},
+      error: () => {},
+      info: () => {},
+    },
+  };
+
+  const user = await getUserRecordById(userId);
+  await setUserEmailFromPendingEmailInteractor(apiApplicationContext, {
+    user,
+  });
+};
+
 export const getFormattedDocumentQCMyInbox = async test => {
   await test.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -78,24 +121,22 @@ export const getFormattedDocumentQCMyInbox = async test => {
   });
 };
 
-export const getFormattedCaseDetailForTest = async test => {
+export const getFormattedDocketEntriesForTest = async test => {
   await test.runSequence('gotoCaseDetailSequence', {
     docketNumber: test.docketNumber,
   });
-  return runCompute(formattedCaseDetail, {
+  return runCompute(formattedDocketEntries, {
     state: test.getState(),
   });
 };
 
-export const contactPrimaryFromState = test =>
-  applicationContext
-    .getUtilities()
-    .getContactPrimary(test.getState('caseDetail'));
+export const contactPrimaryFromState = test => {
+  return test.getState('caseDetail.petitioners.0');
+};
 
-export const contactSecondaryFromState = test =>
-  applicationContext
-    .getUtilities()
-    .getContactSecondary(test.getState('caseDetail'));
+export const contactSecondaryFromState = test => {
+  return test.getState('caseDetail.petitioners.1');
+};
 
 export const getCaseMessagesForCase = async test => {
   await test.runSequence('gotoCaseDetailSequence', {
@@ -120,6 +161,7 @@ export const getEmailsForAddress = address => {
     applicationContext,
   });
 };
+
 export const getUserRecordById = userId => {
   return client.get({
     Key: {
@@ -290,6 +332,8 @@ export const assignWorkItems = async (test, to, workItems) => {
 };
 
 export const uploadExternalDecisionDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
   test.setState('form', {
     attachments: false,
     category: 'Decision',
@@ -298,8 +342,8 @@ export const uploadExternalDecisionDocument = async test => {
     documentTitle: 'Agreed Computation for Entry of Decision',
     documentType: 'Agreed Computation for Entry of Decision',
     eventCode: 'ACED',
+    filers: [contactPrimary.contactId],
     hasSupportingDocuments: false,
-    partyPrimary: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
     scenario: 'Standard',
@@ -313,6 +357,8 @@ export const uploadExternalDecisionDocument = async test => {
 };
 
 export const uploadExternalRatificationDocument = async test => {
+  const contactPrimary = contactPrimaryFromState(test);
+
   test.setState('form', {
     attachments: false,
     category: 'Miscellaneous',
@@ -321,9 +367,9 @@ export const uploadExternalRatificationDocument = async test => {
     documentTitle: 'Ratification of do the test',
     documentType: 'Ratification',
     eventCode: 'RATF',
+    filers: [contactPrimary.contactId],
     freeText: 'do the test',
     hasSupportingDocuments: false,
-    partyPrimary: true,
     primaryDocumentFile: fakeFile,
     primaryDocumentFileSize: 115022,
     scenario: 'Nonstandard B',
@@ -384,6 +430,7 @@ export const uploadPetition = async (
       name: 'Mona Schultz',
       phone: '+1 (884) 358-9729',
       postalCode: '77546',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'CT',
     },
     contactSecondary: overrides.contactSecondary || {},
@@ -431,8 +478,6 @@ export const loginAs = (test, user) => {
     await test.runSequence('submitLoginSequence', {
       path: '/',
     });
-
-    await wait(500);
 
     expect(test.getState('user.email')).toBeDefined();
   });
@@ -513,6 +558,13 @@ export const setupTest = ({ useCases = {} } = {}) => {
     location: { replace: jest.fn() },
     open: url => {
       test.setState('openedUrl', url);
+      return {
+        close: jest.fn(),
+        document: {
+          write: jest.fn(),
+        },
+        location: '',
+      };
     },
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),

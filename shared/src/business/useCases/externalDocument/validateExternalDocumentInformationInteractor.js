@@ -5,15 +5,15 @@ const {
 /**
  * validateExternalDocumentInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.documentMetadata the document metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateExternalDocumentInformationInteractor = ({
+exports.validateExternalDocumentInformationInteractor = (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   const externalDocument = ExternalDocumentInformationFactory.get(
     documentMetadata,
     { applicationContext },

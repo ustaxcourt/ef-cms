@@ -17,16 +17,15 @@ export const generateDocketRecordPdfUrlAction = async ({
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
 
-  const { shouldIncludePartyDetail } = props;
+  const { isAssociated: shouldIncludePartyDetail } = props;
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().generateDocketRecordPdfInteractor({
-    applicationContext,
-    docketNumber: caseDetail.docketNumber,
-    docketRecordSort,
-    includePartyDetail: shouldIncludePartyDetail,
-  });
+  const { url } = await applicationContext
+    .getUseCases()
+    .generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      docketRecordSort,
+      includePartyDetail: shouldIncludePartyDetail,
+    });
 
   return { pdfUrl: url };
 };

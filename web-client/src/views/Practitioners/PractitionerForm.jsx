@@ -2,8 +2,9 @@ import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
+import { PractitionerLoginServiceEmailForm } from './PractitionerLoginServiceEmailForm';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { props, sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerForm = connect(
@@ -16,6 +17,7 @@ export const PractitionerForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
+    validateSequence: sequences[props.validateSequenceName],
     validationErrors: state.validationErrors,
   },
   function PractitionerForm({
@@ -28,6 +30,7 @@ export const PractitionerForm = connect(
     usStates,
     usStatesOther,
     validateSequence,
+    validateSequenceName,
     validationErrors,
   }) {
     return (
@@ -269,7 +272,7 @@ export const PractitionerForm = connect(
                     bind="form"
                     changeCountryTypeSequenceName="countryTypeUserContactChangeSequence"
                     type="contact"
-                    onBlurSequenceName="validateSequence"
+                    onBlurSequenceName={validateSequenceName}
                     onChangeSequenceName="updateFormValueSequence"
                   />
                 </div>
@@ -278,76 +281,14 @@ export const PractitionerForm = connect(
           </div>
         </div>
 
-        {createPractitionerUserHelper.isEditingPractitioner && (
-          <div className="margin-bottom-4">
-            <h2>Login & Service Email</h2>
-            <div className="blue-container">
-              <div className="grid-row margin-bottom-6">
-                <div className="desktop:grid-col-3">
-                  <p className="usa-label margin-bottom-05">
-                    Current email address
-                  </p>
-                  {createPractitionerUserHelper.formattedOriginalEmail}
-                </div>
-                {form.pendingEmail && (
-                  <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
-                    <p className="usa-label margin-bottom-05">
-                      Pending email address
-                    </p>
-                    {form.pendingEmail}
-                  </div>
-                )}
-              </div>
-              <div>
-                <h4>Change Login & Service Email</h4>
-                <FormGroup
-                  errorText={
-                    validationErrors.updatedEmail || validationErrors.email
-                  }
-                >
-                  <label className="usa-label" htmlFor="updatedEmail">
-                    New email address
-                  </label>
-                  <input
-                    autoCapitalize="none"
-                    className="usa-input"
-                    id="updatedEmail"
-                    name="updatedEmail"
-                    type="text"
-                    value={form.updatedEmail || ''}
-                    onBlur={() => validateSequence()}
-                    onChange={e =>
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </FormGroup>
-                <FormGroup errorText={validationErrors.confirmEmail}>
-                  <label className="usa-label" htmlFor="confirm-email">
-                    Re-enter new email address
-                  </label>
-                  <input
-                    autoCapitalize="none"
-                    className="usa-input"
-                    id="confirm-email"
-                    name="confirmEmail"
-                    type="text"
-                    value={form.confirmEmail || ''}
-                    onBlur={() => validateSequence()}
-                    onChange={e =>
-                      updateFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </FormGroup>
-              </div>
-            </div>
-          </div>
-        )}
+        <PractitionerLoginServiceEmailForm
+          emailFormName={
+            createPractitionerUserHelper.isEditingPractitioner
+              ? 'updatedEmail'
+              : 'email'
+          }
+          validateSequenceName={validateSequenceName}
+        />
 
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
@@ -378,7 +319,7 @@ export const PractitionerForm = connect(
                         {Object.keys(usStates).map(abbrev => {
                           const fullStateName = usStates[abbrev];
                           return (
-                            <option key={fullStateName} value={fullStateName}>
+                            <option key={fullStateName} value={abbrev}>
                               {fullStateName}
                             </option>
                           );

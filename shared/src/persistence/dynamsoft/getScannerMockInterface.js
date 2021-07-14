@@ -121,13 +121,20 @@ exports.getScannerInterface = () => {
 
     return Promise.all(promises)
       .then(async blobs => {
-        const blobBuffers = [];
+        const COVER_SHEET_WIDTH_IN_PX = 866;
 
-        for (let blob of blobs) {
-          blobBuffers.push(
-            new Uint8Array(await new Response(blob).arrayBuffer()),
-          );
-        }
+        const scaledDownBlobs = await Promise.all(
+          blobs.map(blob =>
+            applicationContext
+              .getReduceImageBlob()
+              .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
+          ),
+        );
+
+        const blobBuffers = await Promise.all(
+          scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
+        );
+
         response.scannedBuffer = blobBuffers;
         DWObject.RemoveAllImages();
         return response;

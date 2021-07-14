@@ -1,5 +1,7 @@
 export const workQueueSectionHelper = (get, applicationContext) => {
-  const { CHAMBERS_SECTIONS_LABELS } = applicationContext.getConstants();
+  const CHAMBERS_SECTIONS_LABELS = applicationContext
+    .getPersistenceGateway()
+    .getChambersSectionsLabels();
 
   const sectionDisplay = key => {
     return (
@@ -21,8 +23,13 @@ export const workQueueSectionHelper = (get, applicationContext) => {
     return CHAMBERS_SECTIONS_LABELS[key];
   };
 
+  const chambersSections = applicationContext
+    .getPersistenceGateway()
+    .getChambersSections();
+
   return {
     chambersDisplay,
+    chambersSections,
     sectionDisplay,
   };
 };

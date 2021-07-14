@@ -14,10 +14,22 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
   const formMetadata = get(state.form);
   const editType = get(state.screenMetadata.editType); // Document, CourtIssued, NoDocument
 
-  let errors = applicationContext.getUseCases().validateDocumentInteractor({
-    applicationContext,
-    document: formMetadata,
-  });
+  let errors = applicationContext
+    .getUseCases()
+    .validateDocumentInteractor(applicationContext, {
+      document: formMetadata,
+    });
+
+  if (
+    formMetadata.filingDateYear &&
+    formMetadata.filingDateYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.filingDate = errors.filingDate || 'Enter a four-digit year';
+  }
 
   let errorDisplayOrder = ['description', 'eventCode', 'filingDate', 'index'];
 
@@ -25,10 +37,11 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
     errors = omit(
       {
         ...errors,
-        ...applicationContext.getUseCases().validateDocketEntryInteractor({
-          applicationContext,
-          entryMetadata: formMetadata,
-        }),
+        ...applicationContext
+          .getUseCases()
+          .validateDocketEntryInteractor(applicationContext, {
+            entryMetadata: formMetadata,
+          }),
       },
       ['dateReceived'],
     );
@@ -53,8 +66,7 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
       ...errors,
       ...applicationContext
         .getUseCases()
-        .validateCourtIssuedDocketEntryInteractor({
-          applicationContext,
+        .validateCourtIssuedDocketEntryInteractor(applicationContext, {
           entryMetadata: formMetadata,
         }),
     };

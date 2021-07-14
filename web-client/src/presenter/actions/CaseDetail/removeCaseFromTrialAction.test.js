@@ -28,7 +28,7 @@ describe('removeCaseFromTrialAction', () => {
 
     expect(
       applicationContext.getUseCases().removeCaseFromTrialInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
       trialSessionId: mockTrialSessionId,
@@ -53,7 +53,7 @@ describe('removeCaseFromTrialAction', () => {
 
     expect(
       applicationContext.getUseCases().removeCaseFromTrialInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
       trialSessionId: mockTrialSessionId,

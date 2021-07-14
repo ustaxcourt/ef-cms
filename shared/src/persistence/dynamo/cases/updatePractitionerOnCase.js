@@ -8,9 +8,9 @@ exports.updateIrsPractitionerOnCase = async ({
 }) =>
   client.put({
     Item: {
+      ...practitioner,
       pk: `case|${docketNumber}`,
       sk: `irsPractitioner|${userId}`,
-      ...practitioner,
     },
     applicationContext,
   });
@@ -23,9 +23,9 @@ exports.updatePrivatePractitionerOnCase = async ({
 }) =>
   client.put({
     Item: {
+      ...practitioner,
       pk: `case|${docketNumber}`,
       sk: `privatePractitioner|${userId}`,
-      ...practitioner,
     },
     applicationContext,
   });

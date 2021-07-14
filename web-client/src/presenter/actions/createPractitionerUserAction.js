@@ -18,14 +18,15 @@ export const createPractitionerUserAction = async ({
 }) => {
   const practitioner = get(state.form);
   practitioner.admissionsDate = props.computedDate;
+  practitioner.confirmEmail = undefined;
 
   try {
     const practitionerUser = await applicationContext
       .getUseCases()
-      .createPractitionerUserInteractor({
-        applicationContext,
+      .createPractitionerUserInteractor(applicationContext, {
         user: practitioner,
       });
+
     return path.success({
       alertSuccess: {
         message: 'Practitioner added.',

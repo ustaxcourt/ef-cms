@@ -8,8 +8,7 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
 
 describe('validateCaseDeadlineInteractor', () => {
   it('returns the expected errors object on an empty case deadline', () => {
-    const errors = validateCaseDeadlineInteractor({
-      applicationContext,
+    const errors = validateCaseDeadlineInteractor(applicationContext, {
       caseDeadline: {},
     });
 
@@ -27,8 +26,7 @@ describe('validateCaseDeadlineInteractor', () => {
       docketNumber: '123-20',
     };
 
-    const errors = validateCaseDeadlineInteractor({
-      applicationContext,
+    const errors = validateCaseDeadlineInteractor(applicationContext, {
       caseDeadline: mockCaseDeadline,
     });
 

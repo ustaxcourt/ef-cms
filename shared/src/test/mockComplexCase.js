@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const { CONTACT_TYPES } = require('../business/entities/EntityConstants');
 
 exports.MOCK_COMPLEX_CASE = {
@@ -8,7 +9,6 @@ exports.MOCK_COMPLEX_CASE = {
   caseCaption: 'Richard Allen and Brian Chandler',
   caseNote: 'No case notes in Blackstone',
   caseType: 'Deficiency',
-
   correspondence: [
     {
       correspondenceId: '2929afe9-2711-4383-bef8-669dcfb8ccf9',
@@ -3480,7 +3480,7 @@ exports.MOCK_COMPLEX_CASE = {
       address1: '953 Thompson Square Apt. 628',
       city: 'Laurenstad',
       contactId: '0B22BB5F-D8DE-49A4-8182-5A39C5666E51',
-      contactType: CONTACT_TYPES.primary,
+      contactType: CONTACT_TYPES.petitioner,
       country: 'U.S.A.',
       countryType: 'domestic',
       isAddressSealed: false,
@@ -3493,7 +3493,7 @@ exports.MOCK_COMPLEX_CASE = {
       address1: '4468 Grant Station',
       city: 'Loganmouth',
       contactId: 'AF03BDE3-6442-4DB2-9228-EECEB60CFEAD',
-      contactType: CONTACT_TYPES.secondary,
+      contactType: CONTACT_TYPES.intervenor,
       country: 'U.S.A.',
       countryType: 'domestic',
       email: 'maryhunter@example.com',

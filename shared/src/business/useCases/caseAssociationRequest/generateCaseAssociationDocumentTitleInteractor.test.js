@@ -7,16 +7,25 @@ const {
 
 describe('generateCaseAssociationDocumentTitle', () => {
   it('generates a document title', async () => {
-    const title = await generateCaseAssociationDocumentTitleInteractor({
+    const mockPrimaryId = 'df21f551-abe2-4755-80d2-d76b19528d6e';
+    const title = await generateCaseAssociationDocumentTitleInteractor(
       applicationContext,
-      caseAssociationRequest: {
-        documentTitleTemplate: 'Substitution of Counsel for [Petitioner Names]',
-        documentType: 'Substitution of Counsel',
-        representingPrimary: true,
+      {
+        caseAssociationRequest: {
+          documentTitleTemplate:
+            'Substitution of Counsel for [Petitioner Names]',
+          documentType: 'Substitution of Counsel',
+          filers: [mockPrimaryId],
+        },
+        petitioners: [
+          { contactId: mockPrimaryId, name: 'Test Petitioner' },
+          {
+            contactId: 'dc184c34-5f03-4fcb-9aff-920c737d80ff',
+            name: 'Another Petitioner',
+          },
+        ],
       },
-      contactPrimaryName: 'Test Petitioner',
-      contactSecondaryName: 'Another Petitioner',
-    });
+    );
 
     expect(title).toEqual('Substitution of Counsel for Petr. Test Petitioner');
   });

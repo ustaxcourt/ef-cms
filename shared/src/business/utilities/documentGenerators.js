@@ -22,10 +22,44 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
+      overwriteHeader: true,
+    });
+
+  return pdf;
+};
+
+const practitionerCaseList = async ({ applicationContext, data }) => {
+  // data: barNumber, closedCases, openCases, practitionerName,
+  const template = reactTemplateGenerator({
+    componentName: 'PractitionerCaseList',
+    data,
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: template,
+    options: {
+      overwriteMain: true,
+      title: '',
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor(applicationContext, {
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
       overwriteHeader: true,
     });
 
@@ -82,8 +116,7 @@ const changeOfAddress = async ({ applicationContext, content }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber,
@@ -121,8 +154,7 @@ const coverSheet = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
@@ -186,8 +218,7 @@ const docketRecord = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber,
@@ -234,8 +265,7 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
@@ -268,8 +298,7 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
@@ -305,8 +334,7 @@ const noticeOfTrialIssued = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
@@ -358,8 +386,7 @@ const order = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
@@ -406,8 +433,7 @@ const pendingReport = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
@@ -466,8 +492,7 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
@@ -482,12 +507,8 @@ const standingPretrialOrderForSmallCase = async ({
   applicationContext,
   data,
 }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderForSmallCaseTemplate = reactTemplateGenerator(
     {
@@ -521,8 +542,7 @@ const standingPretrialOrderForSmallCase = async ({
 
   const pdfWithHeader = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
@@ -549,8 +569,7 @@ const standingPretrialOrderForSmallCase = async ({
 
   const pdfWithoutHeader = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithoutHeader,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
@@ -565,12 +584,8 @@ const standingPretrialOrderForSmallCase = async ({
 };
 
 const standingPretrialOrder = async ({ applicationContext, data }) => {
-  const {
-    caseCaptionExtension,
-    caseTitle,
-    docketNumberWithSuffix,
-    trialInfo,
-  } = data;
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
+    data;
 
   const reactStandingPretrialOrderTemplate = reactTemplateGenerator({
     componentName: 'StandingPretrialOrder',
@@ -602,8 +617,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   const pdfWithHeader = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
@@ -630,8 +644,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   const pdfWithoutHeader = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithoutHeader,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
@@ -646,12 +659,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 };
 
 const caseInventoryReport = async ({ applicationContext, data }) => {
-  const {
-    formattedCases,
-    reportTitle,
-    showJudgeColumn,
-    showStatusColumn,
-  } = data;
+  const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
+    data;
 
   const caseInventoryReportTemplate = reactTemplateGenerator({
     componentName: 'CaseInventoryReport',
@@ -688,8 +697,7 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
@@ -736,8 +744,7 @@ const trialCalendar = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
@@ -785,8 +792,7 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
 
   const pdf = await applicationContext
     .getUseCases()
-    .generatePdfFromHtmlInteractor({
-      applicationContext,
+    .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
@@ -808,6 +814,7 @@ module.exports = {
   noticeOfTrialIssued,
   order,
   pendingReport,
+  practitionerCaseList,
   receiptOfFiling,
   standingPretrialOrder,
   standingPretrialOrderForSmallCase,
