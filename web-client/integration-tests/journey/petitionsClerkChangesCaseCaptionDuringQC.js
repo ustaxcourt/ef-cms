@@ -2,40 +2,44 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionsClerkChangesCaseCaptionDuringQC = test => {
+export const petitionsClerkChangesCaseCaptionDuringQC = cerebralTest => {
   return it('Petitions clerk changes case caption for an e-filed petition during petition QC, serves it, and verifies that a docket entry is added', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
 
-    const initialCaption = test.getState('form.caseCaption');
+    const initialCaption = cerebralTest.getState('form.caseCaption');
 
-    await test.runSequence('updateFormValueAndCaseCaptionSequence', {
+    await cerebralTest.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'A brand new name',
     });
 
-    expect(test.getState('form.caseCaption')).toContain('A brand new name');
-
-    await test.runSequence('saveSavedCaseForLaterSequence');
-
-    expect(test.getState('caseDetail.initialCaption')).toEqual(initialCaption);
-    expect(test.getState('caseDetail.caseCaption')).toContain(
+    expect(cerebralTest.getState('form.caseCaption')).toContain(
       'A brand new name',
     );
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('gotoWorkQueueSequence', {
+    expect(cerebralTest.getState('caseDetail.initialCaption')).toEqual(
+      initialCaption,
+    );
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toContain(
+      'A brand new name',
+    );
+
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
+
+    await cerebralTest.runSequence('gotoWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
-    const workItems = test.getState('workQueue');
+    const workItems = cerebralTest.getState('workQueue');
     const thisWorkItem = workItems.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(thisWorkItem.docketNumberWithSuffix).not.toContain(
@@ -43,11 +47,11 @@ export const petitionsClerkChangesCaseCaptionDuringQC = test => {
     );
     expect(thisWorkItem.caseTitle).toContain('A brand new name');
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const docketEntries = test.getState('caseDetail.docketEntries');
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
 
     const caseAmended = docketEntries.find(entry =>
       entry.documentTitle.startsWith('Caption of case is amended'),

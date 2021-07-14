@@ -186,6 +186,62 @@ describe('DocketEntry entity', () => {
     });
   });
 
+  describe('filers array validation', () => {
+    it('is valid when the docket entry has been served and the filers array contains a non-GUID value', () => {
+      const createdDocketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filers: ['Manually edited filers for served docket entry'],
+          servedAt: applicationContext.getUtilities().createISODateString(),
+          servedParties: [
+            {
+              email: 'me@example.com',
+              extra: 'extra',
+              name: 'me',
+              role: 'irsSuperuser',
+            },
+          ],
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(createdDocketEntry.isValid()).toEqual(true);
+    });
+
+    it('is valid when the docket entry has not been served and the filers array only contains elements that are GUIDs', () => {
+      const createdDocketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filers: [
+            '639c7b5a-a314-4094-bfeb-714161eea59a',
+            '26c2ebb3-8297-4dbc-971a-2cc45febcb9c',
+          ],
+          servedAt: undefined,
+          servedParties: undefined,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(createdDocketEntry.isValid()).toEqual(true);
+    });
+
+    it('is invalid when the docket entry has not been served and the filers array contains elements that are non-GUID values', () => {
+      const createdDocketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          filers: ['639c7b5a-a314-4094-bfeb-714161eea59a', 'Not a guid'],
+          servedAt: undefined,
+          servedParties: undefined,
+        },
+        { applicationContext, petitioners: MOCK_PETITIONERS },
+      );
+
+      expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
+        'filers[1]': '"filers[1]" must be a valid GUID',
+      });
+    });
+  });
+
   describe('secondaryDocument validation', () => {
     it('should not set value of secondaryDocument if the scenario is not Nonstandard H', () => {
       const createdDocketEntry = new DocketEntry(

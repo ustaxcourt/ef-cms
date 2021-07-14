@@ -2,7 +2,7 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList.js';
 import { loginAs, setupTest } from './helpers';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 const TRIAL_CITY = 'Washington, District of Columbia';
 
@@ -19,18 +19,20 @@ describe('Migrate legacy cases that are ready for trial', () => {
     trialLocation: TRIAL_CITY,
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, options);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, options);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
   it('docket clerk should see migrated case as eligible for trial on session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.eligibleCases').length).toEqual(1);
-    expect(test.getState('trialSession.eligibleCases')[0].docketNumber).toEqual(
-      SEEDED_DOCKET_NUMBER_UNBLOCKED,
+    expect(cerebralTest.getState('trialSession.eligibleCases').length).toEqual(
+      1,
     );
+    expect(
+      cerebralTest.getState('trialSession.eligibleCases')[0].docketNumber,
+    ).toEqual(SEEDED_DOCKET_NUMBER_UNBLOCKED);
   });
 });

@@ -49,7 +49,7 @@ export const PartiesFiling = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label inline-block"
+                    className="usa-checkbox__label"
                     htmlFor={`filing-${petitioner.contactId}`}
                   >
                     {petitioner.displayName}
@@ -73,7 +73,7 @@ export const PartiesFiling = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor="party-irs-practitioner"
                 >
                   Respondent
