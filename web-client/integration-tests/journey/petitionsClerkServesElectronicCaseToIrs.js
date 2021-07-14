@@ -1,15 +1,15 @@
-export const petitionsClerkServesElectronicCaseToIrs = test => {
-  return it(`Petitions clerk serves an electronically-filed case (${test.docketNumber}) to IRS`, async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+export const petitionsClerkServesElectronicCaseToIrs = cerebralTest => {
+  return it(`Petitions clerk serves an electronically-filed case (${cerebralTest.docketNumber}) to IRS`, async () => {
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('openConfirmServeToIrsModalSequence');
+    await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
 
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
   });
 };

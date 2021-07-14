@@ -396,12 +396,14 @@ const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
+const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
+const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
 const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
@@ -477,10 +479,14 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
   app.get(
     '/case-documents/opinion-search',
+    userIdLimiter('opinion-search'),
+    slowDownLimiter('document-search-limiter'),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
+    userIdLimiter('order-search'),
+    slowDownLimiter('document-search-limiter'),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST

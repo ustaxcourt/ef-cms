@@ -18,7 +18,7 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('a docket clerk uploads a pending item and sees that it is pending', () => {
   beforeAll(() => {
@@ -33,134 +33,138 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
   let pendingItemsCount;
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    caseDetail = await uploadPetition(test);
+    caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as a docket clerk and check pending items count', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDetail.docketNumber,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
-    await test.runSequence('gotoPendingReportSequence');
+    await cerebralTest.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    pendingItemsCount = (test.getState('pendingReports.pendingItems') || [])
-      .length;
+    pendingItemsCount = (
+      cerebralTest.getState('pendingReports.pendingItems') || []
+    ).length;
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(test);
+  docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(cerebralTest);
   it('docket clerk checks pending items count has not increased for a docket entry saved for later', async () => {
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: caseDetail.docketNumber,
-      test,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
 
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoPendingReportSequence');
+    await cerebralTest.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
     const currentPendingItemsCount = (
-      test.getState('pendingReports.pendingItems') || []
+      cerebralTest.getState('pendingReports.pendingItems') || []
     ).length;
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: caseDetail.docketNumber,
-      test,
     });
-    await uploadProposedStipulatedDecision(test);
+    await uploadProposedStipulatedDecision(cerebralTest);
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('docket clerk checks pending items count has increased and views pending document', async () => {
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: caseDetail.docketNumber,
-      test,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoPendingReportSequence');
+    await cerebralTest.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
     const currentPendingItemsCount = (
-      test.getState('pendingReports.pendingItems') || []
+      cerebralTest.getState('pendingReports.pendingItems') || []
     ).length;
 
-    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
-    const firstPendingItemReceivedAtDate = test.getState(
+    const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
+    const firstPendingItemReceivedAtDate = cerebralTest.getState(
       'pendingReports.pendingItems[0].receivedAt',
     );
     expect(caseReceivedAtDate).not.toEqual(firstPendingItemReceivedAtDate);
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 
-    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
-      docketRecordTab: 'documentView',
-      viewerDocumentToDisplay: {
-        docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+    await cerebralTest.runSequence(
+      'changeTabAndSetViewerDocumentToDisplaySequence',
+      {
+        docketRecordTab: 'documentView',
+        viewerDocumentToDisplay: {
+          docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+        },
       },
-    });
+    );
 
     expect(
-      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(test, fakeFile);
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, fakeFile);
 
   it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoPendingReportSequence');
+    await cerebralTest.runSequence('gotoPendingReportSequence');
 
-    await test.runSequence('setPendingReportSelectedJudgeSequence', {
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
 
-    const caseReceivedAtDate = test.getState('caseDetail.receivedAt');
-    const pendingItems = test.getState('pendingReports.pendingItems');
+    const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
+    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     const pendingItem = pendingItems.find(
-      item => item.docketEntryId === test.docketEntryId,
+      item => item.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(pendingItem).toBeDefined();

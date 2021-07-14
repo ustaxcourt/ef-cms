@@ -14,6 +14,9 @@ describe('removeRepresentingFromPractitioners', () => {
           {
             representing: ['ggg', '123'],
           },
+          {
+            representing: ['ggg'],
+          },
         ],
       },
       {
@@ -26,6 +29,9 @@ describe('removeRepresentingFromPractitioners', () => {
       representing: ['abc'],
     });
     expect(caseToVerify.privatePractitioners[1]).toMatchObject({
+      representing: ['ggg'],
+    });
+    expect(caseToVerify.privatePractitioners[2]).toMatchObject({
       representing: ['ggg'],
     });
   });

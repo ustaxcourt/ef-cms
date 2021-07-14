@@ -86,4 +86,100 @@ describe('validateCourtIssuedDocketEntryAction', () => {
       documentType: 'Signature required for this document.',
     });
   });
+
+  describe('date', () => {
+    it('returns an error message if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
+
+      await runAction(validateCourtIssuedDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            year: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.date).toEqual(
+        'Enter a four-digit year',
+      );
+    });
+
+    it('does not overwrite errors returned from the validateCourtIssuedDocketEntryInteractor if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateCourtIssuedDocketEntryInteractor.mockReturnValue({
+          date: 'The date was invalid',
+        });
+
+      await runAction(validateCourtIssuedDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            year: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.date).toEqual(
+        'The date was invalid',
+      );
+    });
+  });
+
+  describe('filingDate', () => {
+    it('returns an error message if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateCourtIssuedDocketEntryInteractor.mockReturnValue(null);
+
+      await runAction(validateCourtIssuedDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            filingDateYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
+        'Enter a four-digit year',
+      );
+    });
+
+    it('does not overwrite errors returned from the validateCourtIssuedDocketEntryInteractor if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateCourtIssuedDocketEntryInteractor.mockReturnValue({
+          filingDate: 'The date was invalid',
+        });
+
+      await runAction(validateCourtIssuedDocketEntryAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocketEntry,
+            filingDateYear: '20',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
+        'The date was invalid',
+      );
+    });
+  });
 });
