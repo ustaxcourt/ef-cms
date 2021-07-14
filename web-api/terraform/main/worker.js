@@ -54,6 +54,11 @@ const processMessage = async message => {
 
   console.log('message body ', parsedBody);
 
+  if (!parsedBody.Records) {
+    await deleteMessage(message);
+    return;
+  }
+
   const documentId = parsedBody.Records[0].s3.object.key;
 
   // fetch document from s3 quarantine bucket
@@ -86,7 +91,7 @@ const processMessage = async message => {
     await s3
       .putObject({
         Body: pdfData,
-        Bucket: process.env.CLEAN_DOCUMENTS_BUCKET,
+        Bucket: process.env.CLEAN_BUCKET,
         ContentType: 'application/pdf',
         Key: documentId,
       })
