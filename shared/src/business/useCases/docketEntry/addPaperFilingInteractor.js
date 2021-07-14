@@ -27,7 +27,12 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.addPaperFilingInteractor = async (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -129,15 +134,6 @@ exports.addPaperFilingInteractor = async (
     docketEntryEntity.setAsServed(servedParties.all);
   }
 
-  if (isFileAttached) {
-    docketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        docketEntryId,
-      });
-  }
-
   caseEntity.addDocketEntry(docketEntryEntity);
   caseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -150,6 +146,24 @@ exports.addPaperFilingInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  if (generateCoversheet) {
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
+
+  if (isFileAttached) {
+    docketEntryEntity.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId,
+      });
+  }
 
   let paperServicePdfUrl;
 

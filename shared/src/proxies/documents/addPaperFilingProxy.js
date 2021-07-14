@@ -14,13 +14,19 @@ const { post } = require('../requests');
  */
 exports.addPaperFilingInteractor = (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentMetadata,
+      generateCoversheet,
       isSavingForLater,
       primaryDocumentFileId,
     },

@@ -24,7 +24,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.editPaperFilingInteractor = async (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -132,6 +137,15 @@ exports.editPaperFilingInteractor = async (
       const servedParties = aggregatePartiesForService(caseEntity);
       docketEntryEntity.setAsServed(servedParties.all);
       docketEntryEntity.setAsProcessingStatusAsCompleted();
+
+      if (generateCoversheet) {
+        await applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            docketEntryId: docketEntryEntity.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+          });
+      }
 
       caseEntity.updateDocketEntry(docketEntryEntity);
 
