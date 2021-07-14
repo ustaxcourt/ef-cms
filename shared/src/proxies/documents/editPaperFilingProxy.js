@@ -12,13 +12,19 @@ const { put } = require('../requests');
  */
 exports.editPaperFilingInteractor = (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const { docketNumber } = documentMetadata;
   return put({
     applicationContext,
     body: {
       documentMetadata,
+      generateCoversheet,
       isSavingForLater,
       primaryDocumentFileId,
     },
