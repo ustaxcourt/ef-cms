@@ -11,8 +11,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('external users perform an advanced search for orders', () => {
   beforeAll(() => {
@@ -20,62 +20,62 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case #1', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'this is a thing that I can search for, Jiminy Cricket',
     documentTitle: 'Order',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesDocument(cerebralTest, 0);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(test, 'privatePractitioner1@example.com');
-  unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  unassociatedUserSearchesForServedOrderInUnsealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(test, {
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(test, 'irsPractitioner2@example.com');
-  unassociatedUserSearchesForServedOrderInUnsealedCase(test, {
+  loginAs(cerebralTest, 'irsPractitioner2@example.com');
+  unassociatedUserSearchesForServedOrderInUnsealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSealsCase(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSealsCase(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(
-    test,
+    cerebralTest,
     {
       draftOrderIndex: 0,
       keyword: 'Jiminy Cricket',
@@ -83,15 +83,15 @@ describe('external users perform an advanced search for orders', () => {
     true,
   );
 
-  loginAs(test, 'privatePractitioner1@example.com');
-  unassociatedUserSearchesForServedOrderInSealedCase(test, {
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   associatedUserSearchesForServedOrder(
-    test,
+    cerebralTest,
     {
       draftOrderIndex: 0,
       keyword: 'Jiminy Cricket',
@@ -99,8 +99,8 @@ describe('external users perform an advanced search for orders', () => {
     true,
   );
 
-  loginAs(test, 'irsPractitioner2@example.com');
-  unassociatedUserSearchesForServedOrderInSealedCase(test, {
+  loginAs(cerebralTest, 'irsPractitioner2@example.com');
+  unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });

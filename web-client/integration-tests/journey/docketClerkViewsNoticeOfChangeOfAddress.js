@@ -1,12 +1,12 @@
-export const docketClerkViewsNoticeOfChangeOfAddress = test => {
+export const docketClerkViewsNoticeOfChangeOfAddress = cerebralTest => {
   return it('Docket clerk views Notice of Change of Address on the docket record', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const noticeDocument = test
+    const noticeDocument = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(d => d.documentTitle === 'Notice of Change of Address');
 

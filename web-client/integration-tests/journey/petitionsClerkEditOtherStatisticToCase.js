@@ -1,18 +1,18 @@
-export const petitionsClerkEditOtherStatisticToCase = test => {
+export const petitionsClerkEditOtherStatisticToCase = cerebralTest => {
   return it('petitions clerk edits other statistic on the case', async () => {
-    await test.runSequence('gotoEditOtherStatisticsSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditOtherStatisticsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('caseDetail.damages')).toEqual(5678);
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(1234);
+    expect(cerebralTest.getState('caseDetail.damages')).toEqual(5678);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(1234);
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'litigationCosts',
       value: 99,
     });
 
-    await test.runSequence('submitEditOtherStatisticsSequence');
+    await cerebralTest.runSequence('submitEditOtherStatisticsSequence');
 
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(99);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(99);
   });
 };

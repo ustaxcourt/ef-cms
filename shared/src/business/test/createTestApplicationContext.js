@@ -129,6 +129,9 @@ const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
+  removeCounselFromRemovedPetitioner,
+} = require('../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
+const {
   saveWorkItem,
 } = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
@@ -220,9 +223,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetReduceImageBlobValue = {
-    default: jest.fn().mockReturnValue({
-      toBlob: jest.fn(),
-    }),
+    toBlob: jest.fn(),
   };
 
   const mockGetUtilities = appContextProxy({
@@ -357,6 +358,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    removeCounselFromRemovedPetitioner: jest
+      .fn()
+      .mockImplementation(removeCounselFromRemovedPetitioner),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
@@ -483,10 +487,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
-  const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(null, { css: '' }),
-  };
-
   const mockGetEmailClient = {
     sendBulkTemplatedEmail: jest.fn(),
   };
@@ -569,17 +569,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
     }),
-    getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn(() => ({
-      compile: () => {
-        return () => null;
-      },
-    })),
+    getPug: jest.fn().mockReturnValue(require('pug')),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),

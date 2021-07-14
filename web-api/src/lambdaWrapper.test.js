@@ -2,6 +2,9 @@ const { lambdaWrapper } = require('./lambdaWrapper');
 
 describe('lambdaWrapper', () => {
   let req, res;
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
 
   beforeEach(() => {
     req = {
