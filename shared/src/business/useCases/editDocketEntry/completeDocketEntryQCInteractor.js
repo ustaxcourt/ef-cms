@@ -230,6 +230,7 @@ exports.completeDocketEntryQCInteractor = async (
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
+  let noticeUpdatedDocketEntry;
 
   if (
     overridePaperServiceAddress ||
@@ -286,7 +287,7 @@ exports.completeDocketEntryQCInteractor = async (
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocketEntry = new DocketEntry(
+    noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,
@@ -337,19 +338,6 @@ exports.completeDocketEntryQCInteractor = async (
       document: newPdfData,
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
-
-    const paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntity,
-        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-      });
-
-    if (servedParties.paper.length > 0) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
-    }
   }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -364,6 +352,20 @@ exports.completeDocketEntryQCInteractor = async (
         docketEntryId,
         docketNumber: caseEntity.docketNumber,
       });
+  }
+
+  if (needsNoticeOfDocketChange) {
+    const paperServiceResult = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntity,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
+    if (servedParties.paper.length > 0) {
+      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+    }
   }
 
   return {

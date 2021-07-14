@@ -306,6 +306,11 @@ exports.serveCaseToIrsInteractor = async (
     addDocketEntries({ caseEntity });
   }
 
+  await createCoversheetsForServedEntries({
+    applicationContext,
+    caseEntity,
+  });
+
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     await applicationContext.getUtilities().serveCaseDocument({
       applicationContext,
@@ -329,11 +334,6 @@ exports.serveCaseToIrsInteractor = async (
     applicationContext,
     caseEntity,
     user,
-  });
-
-  await createCoversheetsForServedEntries({
-    applicationContext,
-    caseEntity,
   });
 
   const urlToReturn = await generateNoticeOfReceipt({
