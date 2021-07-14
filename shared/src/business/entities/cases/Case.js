@@ -1201,12 +1201,13 @@ const getPractitionersRepresenting = function (rawCase, petitionerContactId) {
 Case.prototype.removeRepresentingFromPractitioners = function (
   petitionerContactId,
 ) {
-  this.privatePractitioners.forEach(practitioner =>
-    practitioner.representing.splice(
-      practitioner.representing.indexOf(petitionerContactId),
-      1,
-    ),
-  );
+  this.privatePractitioners.forEach(practitioner => {
+    const representingArrayIndex =
+      practitioner.representing.indexOf(petitionerContactId);
+    if (representingArrayIndex >= 0) {
+      practitioner.representing.splice(representingArrayIndex, 1);
+    }
+  });
 };
 
 /**

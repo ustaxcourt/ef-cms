@@ -3,8 +3,8 @@ const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 
 const {
-  migrateItems: migration0035,
-} = require('./migrations/0035-in-care-of-to-additional-name');
+  migrateItems: bugMigration0035,
+} = require('./migrations/bug-0035-private-practitioner-representing');
 const {
   migrateItems: migration0036,
 } = require('./migrations/0036-phone-number-format');
@@ -31,8 +31,9 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.debug('about to run migration 0035');
-  items = await migration0035(items);
+
+  applicationContext.logger.info('about to run bug migration 0035');
+  items = await bugMigration0035(items, documentClient);
 
   applicationContext.logger.debug('about to run migration 0036');
   items = await migration0036(items);

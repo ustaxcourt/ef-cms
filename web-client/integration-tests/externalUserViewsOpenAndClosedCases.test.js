@@ -6,38 +6,37 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { privatePractitionerViewsOpenAndClosedCases } from './journey/privatePractitionerViewsOpenAndClosedCases';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('external user views open and closed cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    loginAs(test, 'docketclerk@example.com');
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create the case to close', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToClosed(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsOpenAndClosedCases(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsOpenAndClosedCases(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  privatePractitionerViewsOpenAndClosedCases(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  privatePractitionerViewsOpenAndClosedCases(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  irsPractitionerViewsOpenAndClosedCases(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  irsPractitionerViewsOpenAndClosedCases(cerebralTest);
 });

@@ -1,28 +1,28 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const unassociatedUserSearchesForServedOrderInUnsealedCase = (
-  test,
+  cerebralTest,
   options,
 ) => {
   return it('unassociated user searches for served order in an unsealed case', async () => {
-    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-    test.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: options.keyword,
         startDate: '1000-01-01',
       },
     });
 
-    await test.runSequence('submitOrderAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId:
-            test.draftOrders[options.draftOrderIndex].docketEntryId,
+            cerebralTest.draftOrders[options.draftOrderIndex].docketEntryId,
         }),
       ]),
     );
