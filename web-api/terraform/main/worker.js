@@ -129,8 +129,6 @@ const receiveMessages = () =>
   sqs.receiveMessage(params, async (err, data) => {
     if (err) {
       console.log('Receive Error', err);
-      console.log('params', params);
-      console.log('env', process.env);
     } else if (data.Messages) {
       console.log('we have messages ', data.Messages);
 
@@ -140,7 +138,7 @@ const receiveMessages = () =>
         } catch (e) {
           console.log('unable to process message', e);
           console.log(message);
-          if (e.message.contains('The specified key does not exist')) {
+          if (e.message?.contains('The specified key does not exist')) {
             // delete the message
             // TODO: this is failing, probably wrap in a try catch and print error
             await deleteMessage(message);
