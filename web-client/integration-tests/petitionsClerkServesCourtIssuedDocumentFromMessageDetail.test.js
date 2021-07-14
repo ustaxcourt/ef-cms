@@ -7,6 +7,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1ServesDocumentFromMessageDetail } from './journey/petitionsClerk1ServesDocumentFromMessageDetail';
 import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
+import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
 const test = setupTest();
 test.draftOrders = [];
@@ -48,4 +49,5 @@ describe('Petitions Clerk Serves Court Issued Document From Message Detail', () 
   petitionsClerk1ViewsMessageInbox(test);
   petitionsClerk1ViewsMessageDetail(test);
   petitionsClerk1ServesDocumentFromMessageDetail(test);
+  petitionsClerkClicksCaseDetailTabFromMessageDetail(test);
 });

@@ -8,7 +8,7 @@ For Production (`ENV` would be `prod`), this process is entirely manual. For the
 
 Here are the steps involved:
 
-1. Ensure you have the right values in the `efcms-deploy-ENV` DynamoDB table:
+1. Update the values in the `efcms-deploy-ENV` DynamoDB table:
    - `migrate`: `true`
    - `destination-table-version`: `beta` (or `alpha`; it's the alternative to the current value of `source-table-version`)
 
@@ -18,61 +18,38 @@ Here are the steps involved:
 
      This is the suffix for the DynamoDB table (`efcms-ENV-SUFFIX`) that contains the records for the application. Any writes to it during the migration, should be caught via the DynamoDB stream subscription and passed over to the destination table. We might be able to use other values if restoring from a backup.
 
-2. Ensure you have the proper environmental variables set:
+2. Setup the destination environments
+    - delete the efcms-ENV-VERSION on east-1 and west-1
+    - delete the efcms-search-ENV-VERSION elasticsearch cluster
+
+
+3. Run a circle deploy
+
+4. Monitor and wait for elasticsearch to no longer have much indexing activity to know when the reindexing is done.
+
+5. (on prod only) verify the destination color seems ok (manually test)
+
+6. (on prod only) Ensure you have the proper environmental variables set:
    - `ENV`: The environment receiving the migration
-   - `MIGRATE_FLAG`: You should set this to `true` if you are performing a migration
-   - `DESTINATION_TABLE`: This is the DynamoDB table receiving the update. Depending on what you specified above: `efcms-ENV-alpha` or `efcms-ENV-beta`
-   - `SOURCE_TABLE`: This is the DynamoDB table from which information will be migrated. `efcms-ENV-alpha` or `efcms-ENV-beta`
-   - `ZONE_NAME`: The Hosted Zone for the install (e.g., `ef-cms.ustaxcourt.gov`)
+   - `AWS_ACCOUNT_ID`: The aws account id
+   - `CURRENT_COLOR`: The current color we are on
+   - `DEPLOYING_COLOR`: The color we are deploying to
    - `EFCMS_DOMAIN`: The Domain for the environment (e.g., `mig.ef-cms.ustaxcourt.gov`)
+   - `ZONE_NAME`: The Hosted Zone for the install (e.g., `ef-cms.ustaxcourt.gov`)
    - `AWS_ACCESS_KEY_ID`: Your AWS credentials
    - `AWS_ACCESS_SECRET_ACCESS_KEY`: Your AWS credentials
-3. Because you are deploying the migration infrastructure from your machine, **you MUST be on the latest version of the codebase** branch checked out in order for this to work!
 
-   ```bash
-   git checkout staging
-   git pull
-   ```
-
-4. Deploy the migration infrastructure with the following script. This sets up the SQS queues and Lambdas to perform the migration:
-
-    ```bash
-    npm run deploy:migration -- ${ENV}
-    ```
-
-5. Using AWS CLI, set the `STREAM_ARN` environmental with the following command:
-
-    ```bash
-    export STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
-    ```
-
-6. Kickoff the the migration scripts by sending items to the SQS queue:
-
-    ```bash
-    npm run start:migration -- ${ENV}
-    ```
-
-7. This next script will run until the SQS Queue is empty. You can also monitor this in the AWS Console by going to **Amazon SQS** > **Queues** > **migration_segments_queue_ENV**, and then clicking the Monitoring tab
-
-    ```bash
-    ./wait-for-migration-to-finish.sh
-    ```
-
-    Keep an eye out for errors in the logs for the Lambda (More info!).
-
-    And look for items in the **migration_segments_queue_ENV_dl** This is the Dead Letter Queue. These items may need to be run again. Errors may need to be handled. If they cannot be solved, we may need to adjust the migration script(s) and re-run the migration.
-
-8. Finally, destroy the Migration infrastructure (the SQS queues):
-
-    ```bash
-    npm run destroy:migration -- ${ENV}
-    ```
-
-9. When complete, Elasticsearch is probably busily reindexing the newly migrated DB. When you are ready to accept the deployment, perform the following command to switch the colors:
+6. (on prod only) When you are ready to accept the deployment, perform the following command to switch the colors:
 
     ```bash
     npm run switch-colors -- $ENV
-    ```
+
+7. Finally, destroy the Migration infrastructure (the SQS queues):
+
+```bash
+npm run destroy:migration -- ${ENV}
+
+```
 
 ## First Time Deployment
 
@@ -96,9 +73,9 @@ If this is the first time running a blue/green deployment on the environment:
 9. Run the following command to set the environment's migrate flag to **false** (for next time):
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'```
 10. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
-    ```./web-api/verify-ses-email.sh```
+    ```./scripts/verify-ses-email.sh```
 11. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
-    ```./web-client/switch-colors.sh```
+    ```./scripts/switch-colors.sh```
 
 
 ## If a Migration is not necessary

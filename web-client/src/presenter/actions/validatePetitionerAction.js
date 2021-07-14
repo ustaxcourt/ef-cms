@@ -17,9 +17,6 @@ export const validatePetitionerAction = ({
   path,
   store,
 }) => {
-  const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
-
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
 
@@ -30,22 +27,6 @@ export const validatePetitionerAction = ({
         contactInfo: contact,
         existingPetitioners: caseDetail.petitioners,
       }) || {};
-
-  const caseContact = applicationContext
-    .getUtilities()
-    .getPetitionerById(caseDetail, contact.contactId);
-  if (
-    [
-      SERVICE_INDICATOR_TYPES.SI_PAPER,
-      SERVICE_INDICATOR_TYPES.SI_NONE,
-    ].includes(caseContact.serviceIndicator) &&
-    contact.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-  ) {
-    errors = {
-      ...errors,
-      ...SERVICE_INDICATOR_ERROR,
-    };
-  }
 
   store.set(state.validationErrors.contact, errors);
 

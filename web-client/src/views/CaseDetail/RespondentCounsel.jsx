@@ -22,7 +22,7 @@ const RespondentCounsel = connect(
   }) {
     return (
       <>
-        <div className="grid-row ">
+        <div className="grid-row margin-bottom-2">
           <div className="grid-col-6">
             <h2>Respondent Counsel</h2>
           </div>
@@ -33,17 +33,20 @@ const RespondentCounsel = connect(
           {partiesInformationHelper.formattedRespondents.map(
             irsPractitioner => (
               <div
-                className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-5 margin-bottom-4"
+                className="tablet:grid-col-9 mobile:grid-col-9 desktop:grid-col-4 margin-bottom-4 petitioner-card"
                 key={irsPractitioner.userId}
               >
                 <div className="card height-full margin-bottom-0">
                   <div className="content-wrapper parties-card">
-                    <h3>
+                    <h3 className="text-wrap">
                       {irsPractitioner.name} {`(${irsPractitioner.barNumber})`}
+                    </h3>
+                    <div className="bg-primary text-white padding-1 margin-bottom-2">
+                      Respondent Counsel
                       {irsPractitioner.canEditRespondent && (
                         <Button
                           link
-                          className="width-auto margin-top-1 padding-0 margin-right-05 float-right"
+                          className="width-auto white-edit-link padding-0 margin-right-0 float-right"
                           href={`/case-detail/${caseDetail.docketNumber}/edit-respondent-counsel/${irsPractitioner.barNumber}`}
                           icon="edit"
                           id="edit-respondent-counsel"
@@ -51,8 +54,7 @@ const RespondentCounsel = connect(
                           Edit
                         </Button>
                       )}
-                    </h3>
-                    <hr className="respondent-card-header" />
+                    </div>
                     <AddressDisplay
                       contact={{
                         ...irsPractitioner.contact,
