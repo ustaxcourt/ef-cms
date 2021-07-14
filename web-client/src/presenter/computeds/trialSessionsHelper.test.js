@@ -241,7 +241,7 @@ describe('trialSessionsHelper', () => {
   });
 
   describe('trialSessionJudges', () => {
-    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is Open', async () => {
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is Open', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
@@ -277,7 +277,7 @@ describe('trialSessionsHelper', () => {
       );
     });
 
-    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is New', async () => {
+    it('returns only non-legacy judges when state.currentViewMetadata.trialSessions.tab is New', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
@@ -313,7 +313,7 @@ describe('trialSessionsHelper', () => {
       );
     });
 
-    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is Closed', async () => {
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is Closed', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
@@ -349,7 +349,7 @@ describe('trialSessionsHelper', () => {
       );
     });
 
-    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is All', async () => {
+    it('returns all current and legacy judges when state.currentViewMetadata.trialSessions.tab is All', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           currentViewMetadata: {
