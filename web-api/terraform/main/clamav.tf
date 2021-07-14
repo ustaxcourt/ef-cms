@@ -146,7 +146,6 @@ resource "aws_ecs_task_definition" "definition" {
   network_mode             = "awsvpc"
   cpu                      = "256"
   memory                   = "1024"
-  memory_reservation       = "2048"
   requires_compatibilities = ["FARGATE"]
 
   container_definitions = data.template_file.task_consumer_east.rendered
