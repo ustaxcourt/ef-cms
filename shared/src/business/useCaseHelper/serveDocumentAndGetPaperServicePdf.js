@@ -19,13 +19,6 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId,
-    servedParties,
-  });
-
   if (servedParties.paper.length > 0) {
     const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -56,6 +49,13 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
       applicationContext,
       file: paperServicePdfData,
       useTempBucket: true,
+    });
+
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId,
+      servedParties,
     });
 
     return { pdfUrl: url };
