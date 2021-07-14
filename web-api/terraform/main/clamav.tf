@@ -172,6 +172,11 @@ resource "aws_iam_role_policy_attachment" "s3_task" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sqs_task" {
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSQSFullAccess"
+}
+
 resource "aws_ecs_cluster" "cluster" {
   name = "clamav_fargate_cluster_${var.environment}"
 
