@@ -294,7 +294,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
     ).toEqual(0);
   });
 
-  it('verifies the service indicator for the second petitioner reverts to electronic', async () => {
+  it('verifies the service indicator for the second petitioner reverts to electronic', () => {
     const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(contactSecondary.serviceIndicator).toEqual(

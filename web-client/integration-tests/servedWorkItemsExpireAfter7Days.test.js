@@ -27,7 +27,7 @@ describe('verify old served work items do not show up in the outbox', () => {
   let workItemId7;
   let workItemId8;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     jest.setTimeout(300000);
   });
 
