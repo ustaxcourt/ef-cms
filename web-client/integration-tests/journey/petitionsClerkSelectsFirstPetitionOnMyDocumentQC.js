@@ -1,6 +1,6 @@
 export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC =
   cerebralTest => {
-    return it('Petitions clerk selects first petition on My Document QC', async () => {
+    return it('Petitions clerk selects first petition on My Document QC', () => {
       const workItem = cerebralTest
         .getState('workQueue')
         .find(

@@ -2,7 +2,7 @@ export const petitionsClerk1VerifiesCaseStatusOnMessage = (
   cerebralTest,
   expectedCaseStatus,
 ) => {
-  return it('Petitions Clerk1 verifies updated caseStatus on messages', async () => {
+  return it('Petitions Clerk1 verifies updated caseStatus on messages', () => {
     const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(

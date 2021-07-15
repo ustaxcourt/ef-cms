@@ -12,7 +12,7 @@ const { v2ApiWrapper } = require('./v2ApiWrapper');
 exports.getCaseLambda = (event, options = {}) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    ({ applicationContext }) => {
       return v2ApiWrapper(async () => {
         const caseObject = await applicationContext
           .getUseCases()
