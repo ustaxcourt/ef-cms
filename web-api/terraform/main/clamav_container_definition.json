@@ -1,6 +1,6 @@
 [
   {
-    "image": "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav:latest",
+    "image": "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav:${environment}",
     "name": "clamav",
     "logConfiguration": {
       "logDriver": "awslogs",
