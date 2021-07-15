@@ -37,7 +37,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Request for Place of Trial at Seattle, Washington',
         hasDocument: false,
-        servedPartiesCode: '',
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
       },
@@ -53,7 +53,7 @@ export const unauthedUserViewsCaseDetail = test => {
       {
         descriptionDisplay: 'Transcript of Anything on 01-01-2019',
         hasDocument: true,
-        servedPartiesCode: '',
+        servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showServed: false,
