@@ -12,7 +12,8 @@ const migrateItems = async (items, documentClient) => {
       item.pk.startsWith('case|') &&
       item.sk.startsWith('docket-entry|') &&
       item.servedAt &&
-      item.servedParties
+      item.servedParties &&
+      !item.servedPartiesCode
     ) {
       // served public docket entries without servedPartiesCode should compute it
 
