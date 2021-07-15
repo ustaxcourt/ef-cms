@@ -11,7 +11,7 @@ describe('submitCaseSearchSequence', () => {
     presenter.providers.props = { docketNumber: () => '111-19' };
 
     presenter.providers.router = {
-      route: async route => routeStub(route),
+      route: route => routeStub(route),
     };
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {

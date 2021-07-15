@@ -1158,6 +1158,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
+const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { Message } = require('../../shared/src/business/entities/Message');
 const { scan } = require('../../shared/src/persistence/dynamodbClientService');
@@ -1191,6 +1192,7 @@ const environment = {
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
+  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
@@ -1200,18 +1202,47 @@ const environment = {
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
+  const mainRegion = environment.region;
+  const fallbackRegion =
+    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
+  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('localhost')
+    ? 'http://localhost:8000'
+    : `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
+    'localhost',
+  )
+    ? 'http://localhost:8000'
+    : `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const { masterDynamoDbEndpoint, masterRegion } = environment;
+
+  const config = {
+    fallbackRegion,
+    fallbackRegionEndpoint,
+    mainRegion,
+    mainRegionEndpoint,
+    masterDynamoDbEndpoint,
+    masterRegion,
+    useMasterRegion,
+  };
+
   if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
+    dynamoClientCache[type] = {
+      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
+      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
+      delete: fallbackHandler({ key: 'delete', ...config }),
+      get: fallbackHandler({ key: 'get', ...config }),
+      put: fallbackHandler({ key: 'put', ...config }),
+      query: fallbackHandler({ key: 'query', ...config }),
+      scan: fallbackHandler({ key: 'scan', ...config }),
+      update: fallbackHandler({ key: 'update', ...config }),
+    };
   }
   return dynamoClientCache[type];
 };
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  // we don't need fallback logic here because the only method we use is describeTable
+  // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
     dynamoCache[type] = new DynamoDB({
@@ -1548,7 +1579,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           getSendStatistics: () => {
             // mock this out so the health checks pass on smoke tests
             return {
-              promise: async () => ({
+              promise: () => ({
                 SendDataPoints: [
                   {
                     Rejects: 0,
@@ -1559,7 +1590,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           },
           sendBulkTemplatedEmail: () => {
             return {
-              promise: async () => {
+              promise: () => {
                 return { Status: [] };
               },
             };
@@ -1597,7 +1628,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: async () => {
+    getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
 
@@ -1612,6 +1643,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
+    },
+    getQuarantineBucketName: () => {
+      return environment.quarantineBucketName;
     },
     getScannerResourceUri: () => {
       return (
@@ -1908,7 +1942,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       info: logger.info.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
-      return execPromise(
+      return await execPromise(
         `clamscan ${
           process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
         } ${filePath}`,

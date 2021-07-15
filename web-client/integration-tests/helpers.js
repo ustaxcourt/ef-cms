@@ -655,7 +655,7 @@ const mockQuery = routeToGoTo => {
   return qs.parse(paramsString);
 };
 
-export const gotoRoute = async (routes, routeToGoTo) => {
+export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(

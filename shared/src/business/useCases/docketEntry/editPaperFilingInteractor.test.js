@@ -125,6 +125,7 @@ describe('editPaperFilingInteractor', () => {
         filers: [mockPrimaryId],
         isFileAttached: true,
       },
+      generateCoversheet: true,
       primaryDocumentFileId: mockDocketEntryId,
     });
 
@@ -139,6 +140,9 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
   });
 
   it('should return paper service pdf url if the case has paper service parties', async () => {
@@ -272,6 +276,54 @@ describe('editPaperFilingInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+  });
+
+  it('does not send the service email if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    await expect(
+      editPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'My Document',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filers: [mockPrimaryId],
+          isFileAttached: true,
+        },
+        generateCoversheet: true,
+        primaryDocumentFileId: mockDocketEntryId,
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+  });
+
+  it('should add a coversheet if generateCoversheet is true', async () => {
+    await editPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'My Document',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filers: [mockPrimaryId],
+        isFileAttached: true,
+      },
+      generateCoversheet: true,
+      primaryDocumentFileId: mockDocketEntryId,
+    });
+
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
   });
 
   it('should throw an error if the document is ready for service but is already pending service', async () => {

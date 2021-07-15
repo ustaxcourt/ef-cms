@@ -21,13 +21,19 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.generateCoversheet true if coversheet must be generated
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
 exports.addPaperFilingInteractor = async (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -145,15 +151,6 @@ exports.addPaperFilingInteractor = async (
     docketEntryEntity.setAsServed(servedParties.all);
   }
 
-  if (isFileAttached) {
-    docketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        docketEntryId,
-      });
-  }
-
   caseEntity.addDocketEntry(docketEntryEntity);
   caseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -166,6 +163,24 @@ exports.addPaperFilingInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  if (generateCoversheet) {
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
+
+  if (isFileAttached) {
+    docketEntryEntity.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId,
+      });
+  }
 
   let paperServicePdfUrl;
 

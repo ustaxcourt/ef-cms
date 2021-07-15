@@ -100,7 +100,7 @@ describe('admissions clerk creates user for case', () => {
     expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
   });
 
-  it('admissions clerk checks pending email for petitioner on case with unverified email', async () => {
+  it('admissions clerk checks pending email for petitioner on case with unverified email', () => {
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     expect(cerebralTest.getState('screenMetadata.pendingEmails')).toEqual({

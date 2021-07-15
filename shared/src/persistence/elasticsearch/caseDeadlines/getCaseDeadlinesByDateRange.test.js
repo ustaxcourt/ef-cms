@@ -33,15 +33,15 @@ describe('getCaseDeadlinesByDateRange', () => {
     );
     expect(search.mock.calls[0][0].searchParameters.body.from).toEqual(0);
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[0].range[
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter[0].range[
         'deadlineDate.S'
       ].gte,
-    ).toEqual(START_DATE);
+    ).toEqual(`${START_DATE}||/h`);
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[1].range[
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter[0].range[
         'deadlineDate.S'
       ].lte,
-    ).toEqual(END_DATE);
+    ).toEqual(`${END_DATE}||/h`);
   });
 
   it('returns results from the search client using pageSize that is passed in if it is less than DEADLINE_REPORT_PAGE_SIZE', async () => {
@@ -82,10 +82,12 @@ describe('getCaseDeadlinesByDateRange', () => {
     });
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must[2],
+      search.mock.calls[0][0].searchParameters.body.query.bool.must[0],
     ).toEqual({
-      match: {
-        'associatedJudge.S': { operator: 'and', query: 'Buch' },
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['associatedJudge.S'],
+        query: '"Buch"',
       },
     });
   });
