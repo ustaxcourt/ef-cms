@@ -9,11 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @returns {object} the new documentUploadMode
  */
-export const removeScannedPdfAction = async ({
-  applicationContext,
-  get,
-  store,
-}) => {
+export const removeScannedPdfAction = ({ applicationContext, get, store }) => {
   const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentSelectedForScan = get(
