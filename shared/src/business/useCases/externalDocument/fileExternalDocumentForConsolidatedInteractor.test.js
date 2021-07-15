@@ -212,7 +212,32 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     expect(nonLowestDocketNumberCase.docketEntries[4].workItem).toBeUndefined();
   });
 
-  it('should file multiple documents for each case if a secondary document is provided', async () => {
+  it('should add a coversheet to each document', async () => {
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: docketEntryId0,
+        secondaryDocument: {
+          docketEntryId: docketEntryId1,
+          documentTitle: 'Redacted',
+          documentType: 'Redacted',
+          eventCode: 'REDC',
+          filedBy: 'Test Petitioner',
+        },
+      },
+      leadDocketNumber: docketNumber0,
+    });
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(4);
+  });
+
+  it('should file multiple documents for each case if a secondary document is provided and add a cover sheet to each', async () => {
     expect(caseRecords[0].docketEntries.length).toEqual(4);
     expect(caseRecords[1].docketEntries.length).toEqual(4);
 
@@ -240,6 +265,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].docketEntries.length).toEqual(6);
     expect(result[1].docketEntries.length).toEqual(6);
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(4);
   });
 
   it('should file multiple documents for each case when supporting documents are provided', async () => {
@@ -288,6 +317,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].docketEntries.length).toEqual(8);
     expect(result[1].docketEntries.length).toEqual(8);
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(8);
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
@@ -316,5 +349,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     ).toMatchObject({
       caseTitle: 'Guy Fieri',
     });
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(4);
   });
 });

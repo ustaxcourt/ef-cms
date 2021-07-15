@@ -51,7 +51,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       p => (p.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC),
     );
 
-    await serveDocumentAndGetPaperServicePdf({
+    const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
       caseEntity,
       docketEntryId: mockDocketEntryId,
@@ -61,6 +61,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).not.toBeCalled();
+    expect(result).toEqual(undefined);
   });
 
   it('should call getObject and appendPaperServiceAddressPageToPdf and return the pdf url if there are paper service parties on the case', async () => {

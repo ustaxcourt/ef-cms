@@ -230,7 +230,6 @@ exports.completeDocketEntryQCInteractor = async (
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
-  let noticeUpdatedDocketEntry;
 
   if (
     overridePaperServiceAddress ||
@@ -281,13 +280,21 @@ exports.completeDocketEntryQCInteractor = async (
       paperServicePdfUrl = url;
       paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
+    if (needsNewCoversheet) {
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
   } else if (needsNoticeOfDocketChange) {
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       docketChangeInfo,
     });
 
-    noticeUpdatedDocketEntry = new DocketEntry(
+    let noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,
@@ -338,23 +345,16 @@ exports.completeDocketEntryQCInteractor = async (
       document: newPdfData,
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
-  }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
+    if (needsNewCoversheet) {
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+        });
+    }
 
-  if (needsNewCoversheet) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-      });
-  }
-
-  if (needsNoticeOfDocketChange) {
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
@@ -362,11 +362,26 @@ exports.completeDocketEntryQCInteractor = async (
         caseEntity,
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
+
     if (servedParties.paper.length > 0) {
-      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+    }
+  } else {
+    if (needsNewCoversheet) {
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+        });
     }
   }
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
 
   return {
     caseDetail: caseEntity.toRawObject(),
