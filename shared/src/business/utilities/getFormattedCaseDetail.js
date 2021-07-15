@@ -16,7 +16,7 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
+const { isServed } = require('../entities/DocketEntry');
 
 const TRANSCRIPT_AGE_DAYS_MIN = 90;
 const documentMeetsAgeRequirements = doc => {
@@ -124,10 +124,6 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
-
-  formattedEntry.servedPartiesCode =
-    formattedEntry.servedPartiesCode ||
-    getServedPartiesCode(formattedEntry.servedParties);
 
   if (
     formattedEntry.isCourtIssuedDocument &&
