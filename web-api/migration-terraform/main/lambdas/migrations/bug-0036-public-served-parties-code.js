@@ -20,6 +20,15 @@ const migrateItems = async items => {
     ) {
       item.servedPartiesCode = getServedPartiesCode(item.servedParties);
       new DocketEntry(item, { applicationContext }).validateForMigration();
+
+      applicationContext.logger.info(
+        'Adding served parties code for docket entry',
+        {
+          pk: item.pk,
+          sk: item.sk,
+        },
+      );
+
       itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
