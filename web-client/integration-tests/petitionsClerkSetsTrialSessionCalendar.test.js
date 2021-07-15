@@ -78,7 +78,7 @@ describe('petitions clerk sets a trial session calendar', () => {
     markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
     petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-    it('petitions clerk should be redirected to print paper service for the trial session', async () => {
+    it('petitions clerk should be redirected to print paper service for the trial session', () => {
       expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );
