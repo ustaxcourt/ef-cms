@@ -299,4 +299,98 @@ describe('addPaperFilingInteractor', () => {
       caseTitle: Case.getCaseTitle(mockCase.caseCaption),
     });
   });
+
+  it('should throw an error if the document is ready for service but is already pending service', async () => {
+    const docketEntry = mockCase.docketEntries[0];
+    docketEntry.isPendingService = true;
+    docketEntry.isFileAttached = true;
+
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          ...docketEntry,
+        },
+        isSavingForLater: false,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not throw an error indicating the document is already pending service if the document is not ready for service', async () => {
+    const docketEntry = mockCase.docketEntries[0];
+    docketEntry.isPendingService = true;
+    docketEntry.isFileAttached = false; // one of the conditions for ready for service
+
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          ...docketEntry,
+        },
+        isSavingForLater: false,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).resolves.not.toThrow();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document if its ready for service', async () => {
+    const docketEntry = mockCase.docketEntries[0];
+    docketEntry.isPendingService = false;
+    docketEntry.isFileAttached = true;
+
+    await addPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        ...docketEntry,
+      },
+      isSavingForLater: false,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCase.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCase.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should not call the persistence method to set and unset the pending service status on the document if its not ready for service', async () => {
+    const docketEntry = mockCase.docketEntries[0];
+    docketEntry.isPendingService = false;
+    docketEntry.isFileAttached = true;
+
+    await addPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        ...docketEntry,
+      },
+      isSavingForLater: true, // one of the conditions for ready for service
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).not.toHaveBeenCalled();
+  });
 });
