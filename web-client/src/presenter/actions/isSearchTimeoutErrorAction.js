@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence
  */
 
-export const isSearchTimeoutErrorAction = async ({ get, path }) => {
+export const isSearchTimeoutErrorAction = ({ get, path }) => {
   const currentPage = get(state.currentPage);
 
   if (currentPage === 'AdvancedSearch') {
