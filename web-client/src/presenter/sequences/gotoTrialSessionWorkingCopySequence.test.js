@@ -29,14 +29,14 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
     userId: mockJudgeUserId,
   };
 
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoTrialSessionWorkingCopySequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext
       .getUseCases()
@@ -53,11 +53,11 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
       .getUseCases()
       .getTrialSessionDetailsInteractor.mockReturnValue(mockTrialSession);
 
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: mockTrialSessionId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       trialSession: mockTrialSession,
       trialSessionId: mockTrialSessionId,
       trialSessionWorkingCopy: mockWorkingCopy,

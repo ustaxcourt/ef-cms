@@ -1,15 +1,15 @@
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
-export const unauthedUserViewsTodaysOrdersOnSealedCase = test => {
+export const unauthedUserViewsTodaysOrdersOnSealedCase = cerebralTest => {
   return it('should view todays orders on sealed case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoTodaysOrdersSequence', {});
+    await cerebralTest.runSequence('gotoTodaysOrdersSequence', {});
 
-    expect(test.getState('todaysOrders.results')).not.toEqual(
+    expect(cerebralTest.getState('todaysOrders.results')).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          documentTitle: test.documentTitle,
+          documentTitle: cerebralTest.documentTitle,
           documentType: 'Order',
           numberOfPages: 1,
         }),

@@ -14,7 +14,7 @@ export const updateAdvancedSearchFormAction =
    * @param {object} providers.store the cerebral store object
    * @param {object} providers.props the cerebral props object
    */
-  async ({ props, store }) => {
+  ({ props, store }) => {
     const formType = formName || props.formType;
     store.set(state.advancedSearchForm[formType][props.key], props.value);
   };

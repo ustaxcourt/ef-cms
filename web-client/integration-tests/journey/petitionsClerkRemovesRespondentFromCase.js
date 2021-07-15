@@ -1,22 +1,28 @@
-export const petitionsClerkRemovesRespondentFromCase = test => {
+export const petitionsClerkRemovesRespondentFromCase = cerebralTest => {
   return it('Petitions clerk removes a respondent from a case', async () => {
-    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(2);
+    expect(cerebralTest.getState('caseDetail.irsPractitioners').length).toEqual(
+      2,
+    );
 
-    const barNumber = test.getState('caseDetail.irsPractitioners.1.barNumber');
+    const barNumber = cerebralTest.getState(
+      'caseDetail.irsPractitioners.1.barNumber',
+    );
 
-    await test.runSequence('gotoEditRespondentCounselSequence', {
+    await cerebralTest.runSequence('gotoEditRespondentCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openRemoveRespondentCounselModalSequence');
+    await cerebralTest.runSequence('openRemoveRespondentCounselModalSequence');
 
-    expect(test.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'RemoveRespondentCounselModal',
     );
 
-    await test.runSequence('removeRespondentCounselFromCaseSequence');
+    await cerebralTest.runSequence('removeRespondentCounselFromCaseSequence');
 
-    expect(test.getState('caseDetail.irsPractitioners').length).toEqual(1);
+    expect(cerebralTest.getState('caseDetail.irsPractitioners').length).toEqual(
+      1,
+    );
   });
 };

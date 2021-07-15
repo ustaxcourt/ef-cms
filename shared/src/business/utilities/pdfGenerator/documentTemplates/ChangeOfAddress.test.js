@@ -188,14 +188,11 @@ describe('ChangeOfAddress', () => {
   it('does not show inCareOf if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.inCareOf;
-    delete oldData.inCareOf;
-
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
-        newData={newData}
-        oldData={oldData}
+        newData={{ ...newData, inCareOf: undefined }}
+        oldData={{ ...oldData, inCareOf: undefined }}
         options={options}
       />,
     );
@@ -213,14 +210,11 @@ describe('ChangeOfAddress', () => {
   it('does not show city if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.city;
-    delete oldData.city;
-
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
-        newData={newData}
-        oldData={oldData}
+        newData={{ ...newData, city: undefined }}
+        oldData={{ ...oldData, city: undefined }}
         options={options}
       />,
     );
@@ -234,14 +228,11 @@ describe('ChangeOfAddress', () => {
   it('does not show country if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.country;
-    delete oldData.country;
-
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
-        newData={newData}
-        oldData={oldData}
+        newData={{ ...newData, country: undefined }}
+        oldData={{ ...oldData, country: undefined }}
         options={options}
       />,
     );

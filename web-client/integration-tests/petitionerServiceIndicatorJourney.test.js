@@ -12,8 +12,8 @@ import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSub
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Petitioner Service Indicator Journey', () => {
   beforeAll(() => {
@@ -21,27 +21,27 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  petitionsClerkSubmitsPaperCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
   // verify it is paper
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk verifies petitioner service indicator is paper', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -50,200 +50,219 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactPrimary.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
       value: 'petitioner@example.com',
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('modal.showModal')).toEqual('MatchingEmailFoundModal');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'MatchingEmailFoundModal',
+    );
 
-    await test.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
+      'Changes saved.',
+    );
   });
 
   // verify it is electronic
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk verifies petitioner service indicator is now electronic', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('IRS Practitioner verifies service indicator is electronic', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   // seal address
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk seals address and verifies petitioner service indicator is electronic', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    let contactPrimary = contactPrimaryFromState(test);
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('openSealAddressModalSequence', {
+    await cerebralTest.runSequence('openSealAddressModalSequence', {
       contactToSeal: contactPrimary,
     });
 
-    expect(test.getState('modal.showModal')).toEqual('SealAddressModal');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'SealAddressModal',
+    );
 
-    await test.runSequence('sealAddressSequence');
-    expect(test.getState('alertSuccess.message')).toContain(
+    await cerebralTest.runSequence('sealAddressSequence');
+    expect(cerebralTest.getState('alertSuccess.message')).toContain(
       'Address sealed for',
     );
 
-    contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Electronic');
   });
 
   // add private practitioner
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
   // verify None for docket clerk
   // verify None for irsPractitioner
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk verifies petitioner service indicator shows none, with sealed address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
-  loginAs(test, 'irsPractitioner1@example.com'); // unassociated practitioner
+  loginAs(cerebralTest, 'irsPractitioner1@example.com'); // unassociated practitioner
   it('IRS Practitioner verifies service indicator for contact shows none with sealed address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
   // explicitly set petitioner to Paper
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Updates petitioner service indicator to paper', async () => {
-    const contactToEdit = contactPrimaryFromState(test);
+    const contactToEdit = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactToEdit.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactToEdit.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: 'Paper',
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
+      'Changes saved.',
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   // verify Paper for irsPractitioner
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is paper, with sealed address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual('Paper');
   });
 
   // explicitly set petitioner to Paper
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Updates petitioner service indicator to none', async () => {
-    let contactPrimary = contactPrimaryFromState(test);
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: contactPrimary.contactId,
-      docketNumber: test.docketNumber,
-    });
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: 'None',
     });
 
-    await test.runSequence('submitEditPetitionerSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('alertSuccess.message')).toEqual('Changes saved.');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
+      'Changes saved.',
+    );
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -251,49 +270,51 @@ describe('Petitioner Service Indicator Journey', () => {
     expect(contactPrimary.serviceIndicator).toEqual('None');
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Removes private practitioner from case and check service indicator is electronic when contact has an email', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const barNumber = test.getState(
+    const barNumber = cerebralTest.getState(
       'caseDetail.privatePractitioners.0.barNumber',
     );
 
-    await test.runSequence('gotoEditPetitionerCounselSequence', {
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
 
-    await test.runSequence('openRemovePetitionerCounselModalSequence');
+    await cerebralTest.runSequence('openRemovePetitionerCounselModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'RemovePetitionerCounselModal',
     );
 
-    await test.runSequence('removePetitionerCounselFromCaseSequence');
+    await cerebralTest.runSequence('removePetitionerCounselFromCaseSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
     expect(contactPrimary.email).toBeDefined();
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('IRS Practitioner verifies service indicator for contact is electronic, with sealed address', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );

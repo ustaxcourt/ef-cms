@@ -11,7 +11,7 @@ import { petitionsClerkViewsCreateNewCase } from './journey/petitionsClerkViewsC
 import { petitionsClerkViewsScanView } from './journey/petitionsClerkViewsScanView';
 import { practitionerViewsCaseDetailWithPaperService } from './journey/practitionerViewsCaseDetailWithPaperService';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Case from Paper Document Scan journey', () => {
   let scannerSourceIndex = 0;
@@ -34,43 +34,43 @@ describe('Case from Paper Document Scan journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCreateNewCase(test);
-  petitionsClerkViewsScanView(test);
-  petitionsClerkSelectsScannerSource(test, {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCreateNewCase(cerebralTest);
+  petitionsClerkViewsScanView(cerebralTest);
+  petitionsClerkSelectsScannerSource(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkAddsScannedBatch(test, {
+  petitionsClerkAddsScannedBatch(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkDeletesScannedBatch(test);
-  petitionsClerkAddsScannedBatch(test, {
+  petitionsClerkDeletesScannedBatch(cerebralTest);
+  petitionsClerkAddsScannedBatch(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkAddsScannedBatch(test, {
+  petitionsClerkAddsScannedBatch(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkDeletesMultipleScannedBatches(test, { numBatches: 2 });
-  petitionsClerkAddsScannedBatch(test, {
+  petitionsClerkDeletesMultipleScannedBatches(cerebralTest, { numBatches: 2 });
+  petitionsClerkAddsScannedBatch(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkRescansAddedBatch(test);
-  petitionsClerkAddsScannedBatch(test, {
+  petitionsClerkRescansAddedBatch(cerebralTest);
+  petitionsClerkAddsScannedBatch(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  petitionsClerkCreatesScannedPDF(test);
-  petitionsClerkCreatesNewCase(test, fakeFile, undefined, false);
-  petitionsClerkSubmitsPaperCaseToIrs(test);
+  petitionsClerkCreatesScannedPDF(cerebralTest);
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
+  petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  practitionerViewsCaseDetailWithPaperService(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  practitionerViewsCaseDetailWithPaperService(cerebralTest);
 });
