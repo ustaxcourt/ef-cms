@@ -5,37 +5,37 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkAssignWorkItemToSelf = test => {
+export const docketClerkAssignWorkItemToSelf = cerebralTest => {
   return it('Docket clerk assigns the selected work items to self', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
-    let sectionWorkQueue = test.getState('workQueue');
+    let sectionWorkQueue = cerebralTest.getState('workQueue');
 
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const selectedWorkItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
-    test.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
+    cerebralTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
 
     expect(selectedWorkItem).toMatchObject({
       assigneeId: null,
     });
 
-    test.setState('selectedWorkItems', [selectedWorkItem]);
-    test.setState('assigneeName', 'Test Docketclerk');
-    test.setState('assigneeId', '1805d1ab-18d0-43ec-bafb-654e83405416');
+    cerebralTest.setState('selectedWorkItems', [selectedWorkItem]);
+    cerebralTest.setState('assigneeName', 'Test Docketclerk');
+    cerebralTest.setState('assigneeId', '1805d1ab-18d0-43ec-bafb-654e83405416');
 
-    await test.runSequence('assignSelectedWorkItemsSequence');
+    await cerebralTest.runSequence('assignSelectedWorkItemsSequence');
 
-    sectionWorkQueue = test.getState('workQueue');
+    sectionWorkQueue = cerebralTest.getState('workQueue');
     const assignedSelectedWorkItem = sectionWorkQueue.find(
       workItem => workItem.workItemId === selectedWorkItem.workItemId,
     );

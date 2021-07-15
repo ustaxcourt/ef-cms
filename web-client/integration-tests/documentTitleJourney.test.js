@@ -17,10 +17,10 @@ describe('Document title journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  const test = setupTest();
+  const cerebralTest = setupTest();
 
   const formattedWorkQueue = withAppContextDecorator(
     formattedWorkQueueComputed,
@@ -30,20 +30,20 @@ describe('Document title journey', () => {
     completeDocumentTypeSectionHelperComputed,
   );
 
-  loginAs(test, 'privatePractitioner2@example.com');
-  practitionerCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  practitionerCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('Practitioner files Exhibit(s) document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const documentToSelect = {
@@ -55,112 +55,127 @@ describe('Document title journey', () => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Exhibit(s)');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Exhibit(s)');
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: false,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'attachments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket clerk QCs Exhibits docket entry and adds additionalInfo', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const exhibitDocketEntry = test
+    const exhibitDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(entry => entry.eventCode === 'EXH');
 
-    await test.runSequence('gotoDocketEntryQcSequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: exhibitDocketEntry.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'additionalInfo',
       value: 'Is this pool safe for diving? It deep ends.',
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'addToCoversheet',
       value: true,
     });
 
-    await test.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Exhibit(s) Is this pool safe for diving? It deep ends. has been completed.',
     );
 
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'outbox',
       queue: 'my',
     });
 
     const workQueueFormatted = runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     const exhibitOutboxWorkItem = workQueueFormatted.find(
       workItem =>
         workItem.docketEntry.docketEntryId === exhibitDocketEntry.docketEntryId,
     );
-    test.docketEntryId = exhibitDocketEntry.docketEntryId;
+    cerebralTest.docketEntryId = exhibitDocketEntry.docketEntryId;
 
     expect(exhibitOutboxWorkItem.docketEntry.descriptionDisplay).toEqual(
       'Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
   });
 
-  loginAs(test, 'privatePractitioner2@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('Practitioner files amendment to Exhibit(s) document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
     const documentToSelect = {
       category: 'Miscellaneous',
@@ -174,22 +189,25 @@ describe('Document title journey', () => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    test.setState('docketEntryId', undefined);
+    cerebralTest.setState('docketEntryId', undefined);
 
     const completeDocumentTypeSection = runCompute(
       completeDocumentTypeSectionHelper,
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -199,28 +217,34 @@ describe('Document title journey', () => {
       ).documentTitle,
     ).toEqual('Exhibit(s) Is this pool safe for diving? It deep ends.');
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'previousDocument',
-      value: test.docketEntryId,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'previousDocument',
+        value: cerebralTest.docketEntryId,
+      },
+    );
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(test.getState('form.documentTitle')).toEqual(
+    expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'First Amendment to Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 });

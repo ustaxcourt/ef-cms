@@ -1,34 +1,42 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { getPetitionerById } from '../../../shared/src/business/entities/cases/Case';
 
-export const docketClerkRemovesIntervenorFromCase = test => {
+export const docketClerkRemovesIntervenorFromCase = cerebralTest => {
   return it('docket clerk removes intervenor from petitioners', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.status')).not.toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
       CASE_STATUS_TYPES.new,
     );
 
-    await test.runSequence('gotoEditPetitionerInformationInternalSequence', {
-      contactId: test.intervenorContactId,
-      docketNumber: test.docketNumber,
-    });
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: cerebralTest.intervenorContactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('openRemovePetitionerModalSequence');
+    await cerebralTest.runSequence('openRemovePetitionerModalSequence');
 
-    expect(test.getState('modal.showModal')).toBe('RemovePetitionerModal');
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'RemovePetitionerModal',
+    );
 
-    await test.runSequence('openRemovePetitionerModalSequence');
-    await test.runSequence('removePetitionerAndUpdateCaptionSequence');
+    await cerebralTest.runSequence('openRemovePetitionerModalSequence');
+    await cerebralTest.runSequence('removePetitionerAndUpdateCaptionSequence');
 
-    expect(test.getState('alertSuccess.message')).toBe(
+    expect(cerebralTest.getState('alertSuccess.message')).toBe(
       'Intervenor successfully removed.',
     );
 
     expect(
-      getPetitionerById(test.getState('caseDetail'), test.intervenorContactId),
+      getPetitionerById(
+        cerebralTest.getState('caseDetail'),
+        cerebralTest.intervenorContactId,
+      ),
     ).toBeUndefined();
   });
 };

@@ -2,7 +2,7 @@ import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/
 import { docketClerkEditsPaperFiledDocketEntryFromQC } from './journey/docketClerkEditsPaperFiledDocketEntryFromQC';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket clerk saves and then edits a paper filing', () => {
   beforeAll(() => {
@@ -10,17 +10,17 @@ describe('Docket clerk saves and then edits a paper filing', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk1@example.com');
-  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(test, fakeFile);
-  docketClerkEditsPaperFiledDocketEntryFromQC(test);
+  loginAs(cerebralTest, 'docketclerk1@example.com');
+  docketClerkAddsPaperFiledDocketEntryAndSavesForLater(cerebralTest, fakeFile);
+  docketClerkEditsPaperFiledDocketEntryFromQC(cerebralTest);
 });

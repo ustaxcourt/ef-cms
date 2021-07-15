@@ -15,7 +15,7 @@ import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
 import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Create Docket Entry From Scans', () => {
   let scannerSourceIndex = 0;
@@ -40,34 +40,36 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile, { caseType: CASE_TYPES_MAP.cdp });
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile, {
+    caseType: CASE_TYPES_MAP.cdp,
+  });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsDocketEntryWithoutFile(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsDocketEntryWithoutFile(cerebralTest);
 
-  docketClerkViewsQCInProgress(test, true);
-  docketClerkViewsSectionQCInProgress(test, true);
-  docketClerkViewsEditDocketRecord(test);
+  docketClerkViewsQCInProgress(cerebralTest, true);
+  docketClerkViewsSectionQCInProgress(cerebralTest, true);
+  docketClerkViewsEditDocketRecord(cerebralTest);
 
-  selectScannerSource(test, {
+  selectScannerSource(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  addBatchesForScanning(test, {
+  addBatchesForScanning(cerebralTest, {
     scannerSourceIndex,
     scannerSourceName,
   });
-  createPDFFromScannedBatches(test);
+  createPDFFromScannedBatches(cerebralTest);
 
-  docketClerkAddsDocketEntryFile(test, fakeFile);
-  docketClerkSavesAndServesDocketEntry(test);
+  docketClerkAddsDocketEntryFile(cerebralTest, fakeFile);
+  docketClerkSavesAndServesDocketEntry(cerebralTest);
 
-  docketClerkViewsQCInProgress(test, false);
-  docketClerkViewsSectionQCInProgress(test, false);
+  docketClerkViewsQCInProgress(cerebralTest, false);
+  docketClerkViewsSectionQCInProgress(cerebralTest, false);
 });

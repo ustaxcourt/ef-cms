@@ -4,7 +4,7 @@ import { gotoPrintablePendingReportSequence } from '../sequences/gotoPrintablePe
 import { presenter } from '../presenter-mock';
 
 describe('gotoPrintablePendingReportSequence', () => {
-  let test;
+  let cerebralTest;
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -18,15 +18,17 @@ describe('gotoPrintablePendingReportSequence', () => {
     presenter.sequences = {
       gotoPrintablePendingReportSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
   it('Should show the Printable Pending Report page', async () => {
-    test.setState('currentPage', 'SomeOtherPage');
-    await test.runSequence('gotoPrintablePendingReportSequence', {});
-    expect(test.getState('currentPage')).toBe('SimplePdfPreviewPage');
-    expect(test.getState('pdfPreviewUrl')).toBe(
+    cerebralTest.setState('currentPage', 'SomeOtherPage');
+    await cerebralTest.runSequence('gotoPrintablePendingReportSequence', {});
+    expect(cerebralTest.getState('currentPage')).toBe('SimplePdfPreviewPage');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBe(
       'http://example.com/mock-pdf-url',
     );
-    expect(test.getState('screenMetadata.headerTitle')).toBe('Pending Report');
+    expect(cerebralTest.getState('screenMetadata.headerTitle')).toBe(
+      'Pending Report',
+    );
   });
 });

@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting error / scanner state
  * @returns {void}
  */
-export const handleScanErrorAction = async ({ props, store }) => {
+export const handleScanErrorAction = ({ props, store }) => {
   const err = props.error;
   if (err.message && err.message.includes('no images in buffer')) {
     store.set(state.modal.showModal, 'EmptyHopperModal');

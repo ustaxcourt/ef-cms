@@ -16,7 +16,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     };
   });
 
-  it('returns the yes path when form.contact.updatedEmail is defined', async () => {
+  it('returns the yes path when form.contact.updatedEmail is defined', () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {
@@ -37,7 +37,7 @@ describe('hasUpdatedPetitionerEmailAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when form.contact.updatedEmail is not defined', async () => {
+  it('returns the no path when form.contact.updatedEmail is not defined', () => {
     runAction(hasUpdatedPetitionerEmailAction, {
       modules: { presenter },
       state: {

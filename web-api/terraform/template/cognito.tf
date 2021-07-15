@@ -11,6 +11,13 @@ resource "aws_cognito_user_pool" "pool" {
     email_subject_by_link = "U.S. Tax Court account verification"
   }
 
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "verified_email"
+      priority = 1
+    }
+  }
+
   sms_authentication_message = "{####}"
 
   lambda_config {

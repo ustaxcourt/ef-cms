@@ -11,17 +11,19 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { some } from 'lodash';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 const publicFieldsVisible = () => {
-  expect(test.getState('caseDetail.docketNumber')).toBeDefined();
-  expect(test.getState('caseDetail.caseCaption')).toBeDefined();
-  expect(test.getState('caseDetail.docketEntries.0')).toBeDefined();
-  expect(test.getState('caseDetail.petitioners.0.contactId')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.caseCaption')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.docketEntries.0')).toBeDefined();
+  expect(
+    cerebralTest.getState('caseDetail.petitioners.0.contactId'),
+  ).toBeDefined();
 };
 
 const associatedFieldsVisible = () => {
-  const contactPrimary = contactPrimaryFromState(test);
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
   expect(contactPrimary).toMatchObject({
     address1: expect.anything(),
@@ -33,8 +35,8 @@ const associatedFieldsVisible = () => {
 };
 
 const associatedFieldsBlocked = () => {
-  const contactPrimary = contactPrimaryFromState(test);
-  const contactSecondary = contactSecondaryFromState(test);
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
+  const contactSecondary = contactSecondaryFromState(cerebralTest);
 
   expect(contactPrimary).toEqual({
     contactId: contactPrimary.contactId,
@@ -48,96 +50,136 @@ const associatedFieldsBlocked = () => {
 };
 
 const internalFieldsVisible = () => {
-  expect(test.getState('caseDetail.archivedCorrespondences')).toBeDefined();
-  expect(test.getState('caseDetail.archivedDocketEntries')).toBeDefined();
-  expect(test.getState('caseDetail.associatedJudge')).toBeDefined();
-  expect(test.getState('caseDetail.correspondence')).toBeDefined();
-  expect(test.getState('caseDetail.statistics')).toBeDefined();
-  expect(test.getState('caseDetail.status')).toBeDefined();
+  expect(
+    cerebralTest.getState('caseDetail.archivedCorrespondences'),
+  ).toBeDefined();
+  expect(
+    cerebralTest.getState('caseDetail.archivedDocketEntries'),
+  ).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.associatedJudge')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.correspondence')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.statistics')).toBeDefined();
+  expect(cerebralTest.getState('caseDetail.status')).toBeDefined();
 };
 
 const internalFieldsBlocked = () => {
-  expect(test.getState('caseDetail.archivedCorrespondences')).toBeUndefined();
-  expect(test.getState('caseDetail.archivedDocketEntries')).toBeUndefined();
-  expect(test.getState('caseDetail.associatedJudge')).toBeUndefined();
-  expect(test.getState('caseDetail.automaticBlocked')).toBeUndefined();
-  expect(test.getState('caseDetail.automaticBlockedDate')).toBeUndefined();
-  expect(test.getState('caseDetail.automaticBlockedReason')).toBeUndefined();
-  expect(test.getState('caseDetail.blocked')).toBeUndefined();
-  expect(test.getState('caseDetail.blockedDate')).toBeUndefined();
-  expect(test.getState('caseDetail.blockedReason')).toBeUndefined();
-  expect(test.getState('caseDetail.caseNote')).toBeUndefined();
-  expect(test.getState('caseDetail.correspondence')).toBeUndefined();
-  expect(test.getState('caseDetail.damages')).toBeUndefined();
-  expect(test.getState('caseDetail.highPriority')).toBeUndefined();
-  expect(test.getState('caseDetail.highPriorityReason')).toBeUndefined();
-  expect(test.getState('caseDetail.judgeUserId')).toBeUndefined();
-  expect(test.getState('caseDetail.litigationCosts')).toBeUndefined();
-  expect(test.getState('caseDetail.noticeOfAttachments')).toBeUndefined();
   expect(
-    test.getState('caseDetail.orderDesignatingPlaceOfTrial'),
+    cerebralTest.getState('caseDetail.archivedCorrespondences'),
   ).toBeUndefined();
-  expect(test.getState('caseDetail.orderForAmendedPetition')).toBeUndefined();
   expect(
-    test.getState('caseDetail.orderForAmendedPetitionAndFilingFee'),
+    cerebralTest.getState('caseDetail.archivedDocketEntries'),
   ).toBeUndefined();
-  expect(test.getState('caseDetail.orderForFilingFee')).toBeUndefined();
-  expect(test.getState('caseDetail.orderForOds')).toBeUndefined();
-  expect(test.getState('caseDetail.orderForRatification')).toBeUndefined();
-  expect(test.getState('caseDetail.orderToShowCause')).toBeUndefined();
-  expect(test.getState('caseDetail.qcCompleteForTrial')).toBeUndefined();
-  expect(test.getState('caseDetail.statistics')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.associatedJudge')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.automaticBlocked')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.automaticBlockedDate'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.automaticBlockedReason'),
+  ).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.blocked')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.blockedDate')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.blockedReason')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.correspondence')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.damages')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.highPriority')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.highPriorityReason'),
+  ).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.judgeUserId')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.litigationCosts')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.noticeOfAttachments'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.orderDesignatingPlaceOfTrial'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.orderForAmendedPetition'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.orderForAmendedPetitionAndFilingFee'),
+  ).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.orderForFilingFee')).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.orderForOds')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.orderForRatification'),
+  ).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.orderToShowCause')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.qcCompleteForTrial'),
+  ).toBeUndefined();
+  expect(cerebralTest.getState('caseDetail.statistics')).toBeUndefined();
 
   expect(
-    test.getState('caseDetail.docketEntries.0.draftOrderState'),
-  ).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.editState')).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.isDraft')).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.judge')).toBeUndefined();
-  expect(
-    test.getState('caseDetail.docketEntries.0.judgeUserId'),
-  ).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.pending')).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.qcAt')).toBeUndefined();
-  expect(
-    test.getState('caseDetail.docketEntries.0.qcByUserId'),
-  ).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.signedAt')).toBeUndefined();
-  expect(
-    test.getState('caseDetail.docketEntries.0.signedByUserId'),
+    cerebralTest.getState('caseDetail.docketEntries.0.draftOrderState'),
   ).toBeUndefined();
   expect(
-    test.getState('caseDetail.docketEntries.0.signedJudgeName'),
+    cerebralTest.getState('caseDetail.docketEntries.0.editState'),
   ).toBeUndefined();
   expect(
-    test.getState('caseDetail.docketEntries.0.signedJudgeUserId'),
+    cerebralTest.getState('caseDetail.docketEntries.0.isDraft'),
   ).toBeUndefined();
   expect(
-    test.getState('caseDetail.docketEntries.0.strickenBy'),
+    cerebralTest.getState('caseDetail.docketEntries.0.judge'),
   ).toBeUndefined();
   expect(
-    test.getState('caseDetail.docketEntries.0.strickenByUserId'),
+    cerebralTest.getState('caseDetail.docketEntries.0.judgeUserId'),
   ).toBeUndefined();
-  expect(test.getState('caseDetail.docketEntries.0.workItem')).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.pending'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.qcAt'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.qcByUserId'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.signedAt'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.signedByUserId'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeName'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeUserId'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.strickenBy'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.strickenByUserId'),
+  ).toBeUndefined();
+  expect(
+    cerebralTest.getState('caseDetail.docketEntries.0.workItem'),
+  ).toBeUndefined();
 };
 
 const stinVisible = () => {
   expect(
-    some(test.getState('caseDetail.docketEntries'), { eventCode: 'STIN' }),
+    some(cerebralTest.getState('caseDetail.docketEntries'), {
+      eventCode: 'STIN',
+    }),
   ).toBe(true);
 };
 
 const stinBlocked = () => {
   expect(
-    some(test.getState('caseDetail.docketEntries'), { eventCode: 'STIN' }),
+    some(cerebralTest.getState('caseDetail.docketEntries'), {
+      eventCode: 'STIN',
+    }),
   ).toBe(false);
 };
 
 const printableDocketRecordVisible = async () => {
-  await test.runSequence('gotoPrintableDocketRecordSequence', {
-    docketNumber: test.docketNumber,
+  await cerebralTest.runSequence('gotoPrintableDocketRecordSequence', {
+    docketNumber: cerebralTest.docketNumber,
   });
-  expect(test.getState('pdfPreviewUrl')).toBeDefined();
+  expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 };
 
 describe('Case permissions test', () => {
@@ -153,16 +195,16 @@ describe('Case permissions test', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsCaseDetail(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsCaseDetail(cerebralTest);
   it('Petitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -172,11 +214,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irsSuperuser@example.com');
   it('IRS Super User views case detail when the case has NOT been served', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -186,11 +228,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Unassociated private practitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -200,11 +242,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('Unassociated IRS practitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -214,11 +256,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'petitioner2@example.com');
+  loginAs(cerebralTest, 'petitioner2@example.com');
   it('Unassociated petitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -228,11 +270,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -242,11 +284,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('Petitions Clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -256,12 +298,12 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  petitionsClerkSubmitsCaseToIrs(test);
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
   it('Petitions Clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -271,11 +313,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('Docket Clerk views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();
@@ -285,11 +327,11 @@ describe('Case permissions test', () => {
     await printableDocketRecordVisible();
   });
 
-  loginAs(test, 'irsSuperuser@example.com');
+  loginAs(cerebralTest, 'irsSuperuser@example.com');
   it('IRS Super User views case detail when the case has been served', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     publicFieldsVisible();

@@ -11,7 +11,7 @@ const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
   applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
-  test,
+  cerebralTest,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
 ) => {
@@ -149,65 +149,73 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   ];
 
   it('should default to parties tab when creating a new case', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
-    expect(test.getState('currentViewMetadata.startCaseInternal.tab')).toBe(
-      'partyInfo',
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(
+      cerebralTest.getState('currentViewMetadata.startCaseInternal.tab'),
+    ).toBe('partyInfo');
   });
 
-  it('should default to Regular procedureType when creating a new case', async () => {
-    expect(test.getState('form.procedureType')).toEqual(DEFAULT_PROCEDURE_TYPE);
+  it('should default to Regular procedureType when creating a new case', () => {
+    expect(cerebralTest.getState('form.procedureType')).toEqual(
+      DEFAULT_PROCEDURE_TYPE,
+    );
   });
 
   it('should generate case caption from primary and secondary contact information', async () => {
     for (const item of formValues) {
       if (item.key === 'partyType') {
-        await test.runSequence(
+        await cerebralTest.runSequence(
           'updateStartCaseInternalPartyTypeSequence',
           item,
         );
       } else if (item.key === 'petitionPaymentStatus') {
-        await test.runSequence('updatePetitionPaymentFormValueSequence', item);
+        await cerebralTest.runSequence(
+          'updatePetitionPaymentFormValueSequence',
+          item,
+        );
       } else {
-        await test.runSequence('updateFormValueSequence', item);
+        await cerebralTest.runSequence('updateFormValueSequence', item);
       }
     }
 
-    await test.runSequence('updateFormValueAndSecondaryContactInfoSequence', {
-      key: 'useSameAsPrimary',
-      value: true,
-    });
-    await test.runSequence(
+    await cerebralTest.runSequence(
+      'updateFormValueAndSecondaryContactInfoSequence',
+      {
+        key: 'useSameAsPrimary',
+        value: true,
+      },
+    );
+    await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',
       primaryContactName,
     );
-    await test.runSequence('validatePetitionFromPaperSequence');
+    await cerebralTest.runSequence('validatePetitionFromPaperSequence');
 
-    expect(test.getState('form.caseCaption')).toBe(
+    expect(cerebralTest.getState('form.caseCaption')).toBe(
       'Shawn Johnson & Julius Lenhart, Deceased, Shawn Johnson, Surviving Spouse, Petitioners',
     );
-    expect(test.getState('form.contactSecondary.address1')).toBe(
-      test.getState('form.contactPrimary.address1'),
+    expect(cerebralTest.getState('form.contactSecondary.address1')).toBe(
+      cerebralTest.getState('form.contactPrimary.address1'),
     );
-    expect(test.getState('form.contactSecondary.city')).toBe(
-      test.getState('form.contactPrimary.city'),
+    expect(cerebralTest.getState('form.contactSecondary.city')).toBe(
+      cerebralTest.getState('form.contactPrimary.city'),
     );
-    expect(test.getState('form.contactSecondary.country')).toBe(
-      test.getState('form.contactPrimary.country'),
+    expect(cerebralTest.getState('form.contactSecondary.country')).toBe(
+      cerebralTest.getState('form.contactPrimary.country'),
     );
-    expect(test.getState('form.contactSecondary.postalCode')).toBe(
-      test.getState('form.contactPrimary.postalCode'),
+    expect(cerebralTest.getState('form.contactSecondary.postalCode')).toBe(
+      cerebralTest.getState('form.contactPrimary.postalCode'),
     );
-    expect(test.getState('form.contactSecondary.email')).toBe(
-      test.getState('form.contactPrimary.email'),
+    expect(cerebralTest.getState('form.contactSecondary.email')).toBe(
+      cerebralTest.getState('form.contactPrimary.email'),
     );
-    expect(test.getState('form.contactSecondary.phone')).toBe(
-      test.getState('form.contactPrimary.phone'),
+    expect(cerebralTest.getState('form.contactSecondary.phone')).toBe(
+      cerebralTest.getState('form.contactPrimary.phone'),
     );
-    expect(test.getState('form.contactSecondary.inCareOf')).toBe(
+    expect(cerebralTest.getState('form.contactSecondary.inCareOf')).toBe(
       'Nora Stanton Barney',
     );
   });
@@ -215,32 +223,32 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   const updatedCaseCaption = 'Ada Lovelace is awesome';
 
   it('should regenerate case caption when primary contact name is changed', async () => {
-    await test.runSequence('updateFormValueAndCaseCaptionSequence', {
+    await cerebralTest.runSequence('updateFormValueAndCaseCaptionSequence', {
       key: 'contactPrimary.name',
       value: 'Ada Lovelace',
     });
 
-    expect(test.getState('form.caseCaption')).toBe(
+    expect(cerebralTest.getState('form.caseCaption')).toBe(
       'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse, Petitioners',
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseCaption',
       value: updatedCaseCaption,
     });
 
-    expect(test.getState('form.caseCaption')).toBe(updatedCaseCaption);
+    expect(cerebralTest.getState('form.caseCaption')).toBe(updatedCaseCaption);
   });
 
   it('should create case and navigate to review screen when case information has been validated', async () => {
-    await test.runSequence('submitPetitionFromPaperSequence');
-    expect(test.getState('alertError')).toBeUndefined();
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
     const helper = runCompute(reviewSavedPetitionHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper).toMatchObject({
@@ -251,11 +259,13 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       shouldShowIrsNoticeDate: false,
     });
 
-    expect(test.getState('caseDetail')).toMatchObject({
+    expect(cerebralTest.getState('caseDetail')).toMatchObject({
       caseCaption: updatedCaseCaption,
       isPaper: true,
     });
 
-    test.docketNumber = test.getState('caseDetail.docketNumber');
+    cerebralTest.docketNumber = cerebralTest.getState(
+      'caseDetail.docketNumber',
+    );
   });
 };

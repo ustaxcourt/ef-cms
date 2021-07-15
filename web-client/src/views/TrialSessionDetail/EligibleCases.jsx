@@ -97,7 +97,7 @@ export const EligibleCases = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label inline-block"
+                        className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
                       ></label>
                     </div>

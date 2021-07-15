@@ -1,15 +1,15 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { DocumentSearch } from '../../../shared/src/business/entities/documents/DocumentSearch';
 
-export const unauthedUserInvalidSearchForOrder = test => {
+export const unauthedUserInvalidSearchForOrder = cerebralTest => {
   return it('Search for order without a keyword', async () => {
-    await test.runSequence('gotoPublicSearchSequence');
+    await cerebralTest.runSequence('gotoPublicSearchSequence');
 
-    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-    await test.runSequence('submitPublicOrderAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitPublicOrderAdvancedSearchSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
     });
   });

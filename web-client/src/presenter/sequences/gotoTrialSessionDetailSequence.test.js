@@ -17,14 +17,14 @@ describe('gotoTrialSessionDetailSequence', () => {
     trialLocation: 'Birmingham, Alabama',
   };
 
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoTrialSessionDetailSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should set up state for an uncalendared session with eligible cases and case order', async () => {
@@ -55,11 +55,11 @@ describe('gotoTrialSessionDetailSequence', () => {
       .getUseCases()
       .getEligibleCasesForTrialSessionInteractor.mockReturnValue(eligibleCases);
 
-    await test.runSequence('gotoTrialSessionDetailSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: mockTrialSessionId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       trialSession: {
         ...mockUncalendaredSession,
         eligibleCases: [
@@ -109,11 +109,11 @@ describe('gotoTrialSessionDetailSequence', () => {
         calendaredCases,
       );
 
-    await test.runSequence('gotoTrialSessionDetailSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: mockTrialSessionId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       trialSession: {
         ...mockUncalendaredSession,
         calendaredCases: [

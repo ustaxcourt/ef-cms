@@ -254,7 +254,7 @@ export const PrimaryDocumentForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="usa-checkbox__label"
                 htmlFor="add-to-coversheet"
               >
                 Add to cover sheet
@@ -349,10 +349,7 @@ export const PrimaryDocumentForm = connect(
                         validateDocketEntrySequence();
                       }}
                     />
-                    <label
-                      className="usa-checkbox__label inline-block"
-                      htmlFor="pending"
-                    >
+                    <label className="usa-checkbox__label" htmlFor="pending">
                       Add to pending report
                     </label>
                   </div>

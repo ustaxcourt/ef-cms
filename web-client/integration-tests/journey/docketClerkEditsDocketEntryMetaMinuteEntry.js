@@ -1,39 +1,54 @@
-export const docketClerkEditsDocketEntryMetaMinuteEntry = test => {
+export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
   return it('docket clerk edits docket entry meta for a minute entry', async () => {
-    expect(test.getState('currentPage')).toEqual('EditDocketEntryMeta');
+    expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDate',
-      value: '2020-01-04',
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDate',
+        value: '2020-01-04',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: '04',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: '01',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: '2020',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'Request for Place of Trial at Boise, Idaho',
+      },
+    );
+
+    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateDay',
-      value: '04',
-    });
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateMonth',
-      value: '01',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'filingDateYear',
-      value: '2020',
-    });
-
-    await test.runSequence('updateDocketEntryMetaDocumentFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Request for Place of Trial at Boise, Idaho',
-    });
-
-    await test.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    expect(test.getState('validationErrors')).toEqual({});
-
-    expect(test.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
   });

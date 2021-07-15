@@ -1,4 +1,3 @@
-/* eslint-disable jest/no-export */
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
@@ -111,39 +110,39 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   });
 };
 
-export const getFormattedDocumentQCMyInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyInbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocketEntriesForTest = async test => {
-  await test.runSequence('gotoCaseDetailSequence', {
-    docketNumber: test.docketNumber,
+export const getFormattedDocketEntriesForTest = async cerebralTest => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
   });
   return runCompute(formattedDocketEntries, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const contactPrimaryFromState = test => {
-  return test.getState('caseDetail.petitioners.0');
+export const contactPrimaryFromState = cerebralTest => {
+  return cerebralTest.getState('caseDetail.petitioners.0');
 };
 
-export const contactSecondaryFromState = test => {
-  return test.getState('caseDetail.petitioners.1');
+export const contactSecondaryFromState = cerebralTest => {
+  return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async test => {
-  await test.runSequence('gotoCaseDetailSequence', {
-    docketNumber: test.docketNumber,
+export const getCaseMessagesForCase = async cerebralTest => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
   });
   return runCompute(formattedCaseMessages, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
@@ -186,117 +185,141 @@ export const deleteEmails = emails => {
   );
 };
 
-export const getFormattedDocumentQCSectionInbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocumentQCMyOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const getFormattedDocumentQCSectionOutbox = async test => {
-  await test.runSequence('chooseWorkQueueSequence', {
+export const getFormattedDocumentQCSectionOutbox = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
     queue: 'section',
   });
   return runCompute(formattedWorkQueue, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   });
 };
 
-export const serveDocument = async ({ docketEntryId, docketNumber, test }) => {
-  await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+export const serveDocument = async ({
+  cerebralTest,
+  docketEntryId,
+  docketNumber,
+}) => {
+  await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
-  await test.runSequence('openConfirmInitiateServiceModalSequence');
-  await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+  await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+  await cerebralTest.runSequence(
+    'serveCourtIssuedDocumentFromDocketEntrySequence',
+  );
 };
 
 export const createCourtIssuedDocketEntry = async ({
+  cerebralTest,
   docketEntryId,
   docketNumber,
   eventCode,
   filingDate,
-  test,
   trialLocation,
 }) => {
-  await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+  await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
     docketEntryId,
     docketNumber,
   });
 
   if (eventCode) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: eventCode,
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: eventCode,
+      },
+    );
   }
 
-  await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-    key: 'judge',
-    value: 'Judge Buch',
-  });
+  await cerebralTest.runSequence(
+    'updateCourtIssuedDocketEntryFormValueSequence',
+    {
+      key: 'judge',
+      value: 'Judge Buch',
+    },
+  );
 
   if (trialLocation) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'trialLocation',
-      value: trialLocation,
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'trialLocation',
+        value: trialLocation,
+      },
+    );
   }
 
   if (filingDate) {
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateMonth',
-      value: filingDate.month,
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateDay',
-      value: filingDate.day,
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'filingDateYear',
-      value: filingDate.year,
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: filingDate.month,
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: filingDate.day,
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: filingDate.year,
+      },
+    );
   }
 
-  await test.runSequence('submitCourtIssuedDocketEntrySequence');
+  await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 };
 
-export const getIndividualInboxCount = test => {
+export const getIndividualInboxCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   }).individualInboxCount;
 };
 
-export const getSectionInboxCount = test => {
+export const getSectionInboxCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   }).sectionInboxCount;
 };
 
-export const getSectionInProgressCount = test => {
+export const getSectionInProgressCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   }).sectionInProgressCount;
 };
 
-export const getIndividualInProgressCount = test => {
+export const getIndividualInProgressCount = cerebralTest => {
   return runCompute(workQueueHelper, {
-    state: test.getState(),
+    state: cerebralTest.getState(),
   }).individualInProgressCount;
 };
 
@@ -304,11 +327,11 @@ export const findWorkItemByDocketNumber = (queue, docketNumber) => {
   return queue.find(workItem => workItem.docketNumber === docketNumber);
 };
 
-export const getNotifications = test => {
-  return test.getState('notifications');
+export const getNotifications = cerebralTest => {
+  return cerebralTest.getState('notifications');
 };
 
-export const assignWorkItems = async (test, to, workItems) => {
+export const assignWorkItems = async (cerebralTest, to, workItems) => {
   const users = {
     adc: {
       name: 'test ADC',
@@ -319,22 +342,22 @@ export const assignWorkItems = async (test, to, workItems) => {
       userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     },
   };
-  await test.runSequence('selectAssigneeSequence', {
+  await cerebralTest.runSequence('selectAssigneeSequence', {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
   for (let workItem of workItems) {
-    await test.runSequence('selectWorkItemSequence', {
+    await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem,
     });
   }
-  await test.runSequence('assignSelectedWorkItemsSequence');
+  await cerebralTest.runSequence('assignSelectedWorkItemsSequence');
 };
 
-export const uploadExternalDecisionDocument = async test => {
-  const contactPrimary = contactPrimaryFromState(test);
+export const uploadExternalDecisionDocument = async cerebralTest => {
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-  test.setState('form', {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -353,13 +376,13 @@ export const uploadExternalDecisionDocument = async test => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
-  await test.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadExternalRatificationDocument = async test => {
-  const contactPrimary = contactPrimaryFromState(test);
+export const uploadExternalRatificationDocument = async cerebralTest => {
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-  test.setState('form', {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Miscellaneous',
     certificateOfService: false,
@@ -379,11 +402,11 @@ export const uploadExternalRatificationDocument = async test => {
     supportingDocumentFreeText: null,
     supportingDocumentMetadata: null,
   });
-  await test.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async test => {
-  test.setState('form', {
+export const uploadProposedStipulatedDecision = async cerebralTest => {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -400,11 +423,11 @@ export const uploadProposedStipulatedDecision = async test => {
     scenario: 'Standard',
     searchError: false,
   });
-  await test.runSequence('submitExternalDocumentSequence');
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
 export const uploadPetition = async (
-  test,
+  cerebralTest,
   overrides = {},
   loginUsername = 'petitioner@example.com',
 ) => {
@@ -463,28 +486,27 @@ export const uploadPetition = async (
     },
   });
 
-  test.setState('caseDetail', response.data);
+  cerebralTest.setState('caseDetail', response.data);
 
   return response.data;
 };
 
-export const loginAs = (test, user) => {
-  return it(`login as ${user}`, async () => {
-    await test.runSequence('updateFormValueSequence', {
+export const loginAs = (cerebralTest, user) =>
+  it(`login as ${user}`, async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,
     });
 
-    await test.runSequence('submitLoginSequence', {
+    await cerebralTest.runSequence('submitLoginSequence', {
       path: '/',
     });
 
-    expect(test.getState('user.email')).toBeDefined();
+    expect(cerebralTest.getState('user.email')).toBeDefined();
   });
-};
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let test;
+  let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
     return fakeFile;
@@ -521,12 +543,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
   });
   presenter.providers.socket = { start, stop: stopSocket };
 
-  test = CerebralTest(presenter);
-  test.getSequence = seqName => async obj =>
-    await test.runSequence(seqName, obj);
-  test.closeSocket = stopSocket;
-  test.applicationContext = applicationContext;
-
   global.window = {
     ...dom.window,
     DOMParser: () => {
@@ -557,7 +573,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
     location: { replace: jest.fn() },
     open: url => {
-      test.setState('openedUrl', url);
+      cerebralTest.setState('openedUrl', url);
       return {
         close: jest.fn(),
         document: {
@@ -570,6 +586,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
       getData: () => Promise.resolve(getFakeFile(true)),
     },
   };
+
+  cerebralTest = CerebralTest(presenter);
+  cerebralTest.getSequence = seqName => obj =>
+    cerebralTest.runSequence(seqName, obj);
+  cerebralTest.closeSocket = stopSocket;
 
   const originalUseCases = applicationContext.getUseCases();
   presenter.providers.applicationContext.getUseCases = () => {
@@ -610,22 +631,23 @@ export const setupTest = ({ useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  test = CerebralTest(presenter);
-  test.getSequence = seqName => async obj =>
-    await test.runSequence(seqName, obj);
-  test.closeSocket = stopSocket;
+  cerebralTest = CerebralTest(presenter);
+  cerebralTest.getSequence = seqName => obj =>
+    cerebralTest.runSequence(seqName, obj);
+  cerebralTest.closeSocket = stopSocket;
+  cerebralTest.applicationContext = applicationContext;
 
-  test.setState('constants', applicationContext.getConstants());
+  cerebralTest.setState('constants', applicationContext.getConstants());
 
-  router.initialize(test, (route, cb) => {
+  router.initialize(cerebralTest, (route, cb) => {
     routes.push({
       cb,
       route,
     });
   });
-  initializeSocketProvider(test);
+  initializeSocketProvider(cerebralTest);
 
-  return test;
+  return cerebralTest;
 };
 
 const mockQuery = routeToGoTo => {
@@ -633,7 +655,7 @@ const mockQuery = routeToGoTo => {
   return qs.parse(paramsString);
 };
 
-export const gotoRoute = async (routes, routeToGoTo) => {
+export const gotoRoute = (routes, routeToGoTo) => {
   for (let route of routes) {
     // eslint-disable-next-line security/detect-non-literal-regexp
     const regex = new RegExp(
@@ -653,8 +675,8 @@ export const gotoRoute = async (routes, routeToGoTo) => {
   throw new Error(`route ${routeToGoTo} not found`);
 };
 
-export const viewCaseDetail = async ({ docketNumber, test }) => {
-  await test.runSequence('gotoCaseDetailSequence', {
+export const viewCaseDetail = async ({ cerebralTest, docketNumber }) => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
     docketNumber,
   });
 };
@@ -683,13 +705,15 @@ export const base64ToUInt8Array = b64 => {
   return bytes;
 };
 
-export const setBatchPages = ({ test }) => {
-  const selectedDocumentType = test.getState(
+export const setBatchPages = ({ cerebralTest }) => {
+  const selectedDocumentType = cerebralTest.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = test.getState(`scanner.batches.${selectedDocumentType}`);
+  let batches = cerebralTest.getState(
+    `scanner.batches.${selectedDocumentType}`,
+  );
 
-  test.setState(
+  cerebralTest.setState(
     `scanner.batches.${selectedDocumentType}`,
     batches.map(batch => ({
       ...batch,

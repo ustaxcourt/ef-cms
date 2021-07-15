@@ -1,47 +1,47 @@
 import { wait } from '../helpers';
 
-export const petitionsClerkSetsARemoteTrialSessionsSchedule = test => {
+export const petitionsClerkSetsARemoteTrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Remote Trial Sessions Schedule', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    await test.runSequence('openSetCalendarModalSequence');
+    await cerebralTest.runSequence('openSetCalendarModalSequence');
 
-    expect(test.getState('alertWarning.message')).toEqual(
+    expect(cerebralTest.getState('alertWarning.message')).toEqual(
       'Provide remote proceeding information to set this trial session.',
     );
 
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'meetingId',
       value: '123456789',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'password',
       value: '123456789',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'joinPhoneNumber',
       value: '123456789',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'chambersPhoneNumber',
       value: '123456789',
     });
 
-    await test.runSequence('updateTrialSessionSequence');
+    await cerebralTest.runSequence('updateTrialSessionSequence');
 
-    await test.runSequence('openSetCalendarModalSequence');
+    await cerebralTest.runSequence('openSetCalendarModalSequence');
 
-    expect(test.getState('alertWarning.message')).toBeUndefined();
+    expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
-    await test.runSequence('setTrialSessionCalendarSequence');
+    await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
     await wait(1000);
   });

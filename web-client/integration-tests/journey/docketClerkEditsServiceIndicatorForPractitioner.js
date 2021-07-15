@@ -1,40 +1,46 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const docketClerkEditsServiceIndicatorForPractitioner = test => {
+export const docketClerkEditsServiceIndicatorForPractitioner = cerebralTest => {
   return it('docket clerk edits service indicator for a practitioner', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const barNumber = test.getState(
+    const barNumber = cerebralTest.getState(
       'caseDetail.privatePractitioners.0.barNumber',
     );
 
-    await test.runSequence('gotoEditPetitionerCounselSequence', {
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('currentPage')).toEqual('EditPetitionerCounsel');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
 
-    expect(test.getState('form.serviceIndicator')).toEqual(
+    expect(cerebralTest.getState('form.serviceIndicator')).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     expect(
-      test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),
+      cerebralTest.getState(
+        'caseDetail.privatePractitioners.0.serviceIndicator',
+      ),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
-    await test.runSequence('submitEditPetitionerCounselSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
     expect(
-      test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),
+      cerebralTest.getState(
+        'caseDetail.privatePractitioners.0.serviceIndicator',
+      ),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 };

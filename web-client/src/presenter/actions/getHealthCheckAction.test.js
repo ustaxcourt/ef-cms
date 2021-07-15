@@ -22,6 +22,8 @@ describe('getHealthCheckAction', () => {
         'dev.ustc-case-mgmt.flexion.us': false,
         'dev.ustc-case-mgmt.flexion.us-documents-local-us-east-1': false,
         'dev.ustc-case-mgmt.flexion.us-documents-local-us-west-1': false,
+        'dev.ustc-case-mgmt.flexion.us-quarantine-local-us-east-1': false,
+        'dev.ustc-case-mgmt.flexion.us-quarantine-local-us-west-1': false,
         'dev.ustc-case-mgmt.flexion.us-temp-documents-local-us-east-1': false,
         'dev.ustc-case-mgmt.flexion.us-temp-documents-local-us-west-1': false,
         'failover.dev.ustc-case-mgmt.flexion.us': false,

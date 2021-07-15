@@ -17,7 +17,7 @@ export const loadPdfAction = ({ applicationContext, props, router, store }) => {
   return new Promise((resolve, reject) => {
     const reader = applicationContext.getFileReaderInstance();
 
-    reader.onload = async () => {
+    reader.onload = () => {
       let binaryFile;
       if (isBase64Encoded) {
         const base64File = reader.result.replace(/[^,]+,/, '');

@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.props used for getting signature data
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.signatureData
  */
-export const setPDFSignatureDataAction = async ({ props, store }) => {
+export const setPDFSignatureDataAction = ({ props, store }) => {
   const { isPdfAlreadySigned, signatureApplied, signatureData } = props;
   store.set(state.pdfForSigning.signatureData, signatureData);
   store.set(state.pdfForSigning.signatureApplied, signatureApplied);

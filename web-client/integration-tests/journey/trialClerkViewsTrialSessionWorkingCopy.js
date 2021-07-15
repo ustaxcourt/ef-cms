@@ -1,17 +1,23 @@
-export const trialClerkViewsTrialSessionWorkingCopy = test => {
+export const trialClerkViewsTrialSessionWorkingCopy = cerebralTest => {
   return it('Trial Clerk views trial session working copy', async () => {
-    await test.runSequence('gotoTrialSessionWorkingCopySequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionWorkingCopy');
-    expect(test.getState('trialSessionWorkingCopy.trialSessionId')).toEqual(
-      test.trialSessionId,
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'TrialSessionWorkingCopy',
     );
-    expect(test.getState('trialSessionWorkingCopy.filters.showAll')).toEqual(
-      true,
+    expect(
+      cerebralTest.getState('trialSessionWorkingCopy.trialSessionId'),
+    ).toEqual(cerebralTest.trialSessionId);
+    expect(
+      cerebralTest.getState('trialSessionWorkingCopy.filters.showAll'),
+    ).toEqual(true);
+    expect(cerebralTest.getState('trialSessionWorkingCopy.sort')).toEqual(
+      'docket',
     );
-    expect(test.getState('trialSessionWorkingCopy.sort')).toEqual('docket');
-    expect(test.getState('trialSessionWorkingCopy.sortOrder')).toEqual('asc');
-    expect(test.getState('trialSession.caseOrder').length).toEqual(1);
+    expect(cerebralTest.getState('trialSessionWorkingCopy.sortOrder')).toEqual(
+      'asc',
+    );
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(1);
   });
 };

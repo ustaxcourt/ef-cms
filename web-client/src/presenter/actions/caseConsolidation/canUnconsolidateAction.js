@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {object} the path to take next
  */
-export const canUnconsolidateAction = async ({ get, path }) => {
+export const canUnconsolidateAction = ({ get, path }) => {
   const casesToRemove = get(state.modal.casesToRemove) || {};
   const docketNumbersToRemove = Object.entries(casesToRemove)
     .filter(([, shouldRemove]) => shouldRemove)

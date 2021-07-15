@@ -5,7 +5,7 @@ import { presenter } from '../presenter-mock';
 
 describe('chooseWorkQueueSequence', () => {
   const { PETITIONS_SECTION } = applicationContext.getConstants();
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -23,17 +23,17 @@ describe('chooseWorkQueueSequence', () => {
     presenter.sequences = {
       chooseWorkQueueSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should set the workQueueToDisplay to match the props passed in', async () => {
-    test.setState('workQueueToDisplay', null);
-    await test.runSequence('chooseWorkQueueSequence', {
+    cerebralTest.setState('workQueueToDisplay', null);
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
       workItems: [],
     });
-    expect(test.getState('workQueueToDisplay')).toEqual({
+    expect(cerebralTest.getState('workQueueToDisplay')).toEqual({
       box: 'inbox',
       queue: 'section',
     });

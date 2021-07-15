@@ -2,24 +2,24 @@ import { DocketEntryFactory } from '../../../shared/src/business/entities/docket
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsTrackedDocketEntry = (
-  test,
+  cerebralTest,
   fakeFile,
   paperServiceRequested = false,
 ) => {
   const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
   return it('Docketclerk adds tracked paper filing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(test.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
@@ -29,71 +29,76 @@ export const docketClerkAddsTrackedDocketEntry = (
     });
 
     // primary document
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedDay',
       value: 1,
     });
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedYear',
       value: 2018,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFileSize',
       value: 100,
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      },
+    );
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'APPL',
     });
 
-    expect(test.getState('form.documentType')).toEqual('Application');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Application');
 
-    await test.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'freeText',
       value: 'Application for Flavortown',
     });
 
-    await test.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     if (!paperServiceRequested) {
-      expect(test.getState('alertSuccess').message).toEqual(
+      expect(cerebralTest.getState('alertSuccess').message).toEqual(
         'Your entry has been added to docket record.',
       );
 
-      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
     } else {
-      expect(test.getState('pdfPreviewUrl')).toBeDefined();
-      expect(test.getState('currentPage')).toEqual('PrintPaperService');
+      expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
+      expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     }
-    expect(test.getState('form')).toEqual({});
+    expect(cerebralTest.getState('form')).toEqual({});
 
-    expect(test.getState('caseDetail.hasPendingItems')).toEqual(true);
-    expect(test.getState('caseDetail.automaticBlocked')).toEqual(true);
+    expect(cerebralTest.getState('caseDetail.hasPendingItems')).toEqual(true);
+    expect(cerebralTest.getState('caseDetail.automaticBlocked')).toEqual(true);
   });
 };

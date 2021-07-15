@@ -19,7 +19,7 @@ describe('withAppContextDecorator', () => {
     expect(myFunc).toHaveBeenCalledWith(mockGet, mockAppContext);
   });
 
-  it('decorated function throws errors when NOT using USTC_DEBUG environment flag', async () => {
+  it('decorated function throws errors when NOT using USTC_DEBUG environment flag', () => {
     const throwsFunc = jest.fn(getFn => {
       if (getFn) {
         throw new Error('decorated function threw an error');
@@ -42,7 +42,7 @@ describe('withAppContextDecorator', () => {
     expect(throwsFunc).toHaveBeenCalledWith(mockGet, mockAppContext);
   });
 
-  it('decorated function will not re-throw error even if invocation throws errors when using USTC_DEBUG environment flag', async () => {
+  it('decorated function will not re-throw error even if invocation throws errors when using USTC_DEBUG environment flag', () => {
     process.env.USTC_DEBUG = 'true';
     const throwsFunc = jest.fn(getFn => {
       if (getFn) {

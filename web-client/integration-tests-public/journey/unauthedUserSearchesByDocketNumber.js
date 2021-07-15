@@ -1,42 +1,54 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
-export const unauthedUserSearchesByDocketNumber = (test, params) => {
+export const unauthedUserSearchesByDocketNumber = (cerebralTest, params) => {
   return it('Search for cases by docket number', async () => {
     let searchResults;
     const queryParams = {
       docketNumber: params.docketNumber,
     };
-    test.docketNumber = params.docketNumber;
+    cerebralTest.docketNumber = params.docketNumber;
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
       value: '123-xx',
     });
-    await test.runSequence('submitPublicCaseDocketNumberSearchSequence', {});
-    searchResults = test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`);
+    await cerebralTest.runSequence(
+      'submitPublicCaseDocketNumberSearchSequence',
+      {},
+    );
+    searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
+    );
     expect(searchResults).toEqual([]);
-    expect(test.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
+    expect(cerebralTest.currentRouteUrl.indexOf('/case-detail')).toEqual(-1);
 
-    await test.runSequence('clearAdvancedSearchFormSequence', {
+    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'caseSearchByDocketNumber',
     });
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
     ).toBeUndefined();
     expect(
-      test.getState('advancedSearchForm.caseSearchByDocketNumber'),
+      cerebralTest.getState('advancedSearchForm.caseSearchByDocketNumber'),
     ).toEqual({});
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
       value: queryParams.docketNumber,
     });
-    await test.runSequence('submitPublicCaseDocketNumberSearchSequence', {});
-    searchResults = test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`);
+    await cerebralTest.runSequence(
+      'submitPublicCaseDocketNumberSearchSequence',
+      {},
+    );
+    searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
+    );
     expect(
-      test.currentRouteUrl.indexOf(`/case-detail/${params.docketNumber}`),
+      cerebralTest.currentRouteUrl.indexOf(
+        `/case-detail/${params.docketNumber}`,
+      ),
     ).toEqual(0);
   });
 };

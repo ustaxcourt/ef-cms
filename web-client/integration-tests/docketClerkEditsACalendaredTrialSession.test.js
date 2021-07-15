@@ -8,7 +8,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk edits a calendared trial session', () => {
   beforeEach(() => {
@@ -16,56 +16,58 @@ describe('Docket Clerk edits a calendared trial session', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Helena, Montana, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
   let caseDetail;
-  test.casesReadyForTrial = [];
+  cerebralTest.casesReadyForTrial = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'petitioner@example.com');
+    loginAs(cerebralTest, 'petitioner@example.com');
     it('login as a petitioner and create 3 cases', async () => {
-      caseDetail = await uploadPetition(test);
+      caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      test.casesReadyForTrial.push({ docketNumber: caseDetail.docketNumber });
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.casesReadyForTrial.push({
+        docketNumber: caseDetail.docketNumber,
+      });
+      cerebralTest.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkManuallyAddsCaseToTrial(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
   }
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  markAllCasesAsQCed(test, () =>
-    test.casesReadyForTrial.map(d => d.docketNumber),
+  markAllCasesAsQCed(cerebralTest, () =>
+    cerebralTest.casesReadyForTrial.map(d => d.docketNumber),
   );
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToClosed(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToClosed(cerebralTest);
 
   const overrides = {
     fieldToUpdate: 'judge',
@@ -74,15 +76,15 @@ describe('Docket Clerk edits a calendared trial session', () => {
       userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
     },
   };
-  docketClerkEditsTrialSession(test, overrides);
+  docketClerkEditsTrialSession(cerebralTest, overrides);
 
   it('verify that there are 3 cases on the trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.caseOrder').length).toBe(3);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toBe(3);
   });
 
-  docketClerkVerifiesCaseStatusIsUnchanged(test);
+  docketClerkVerifiesCaseStatusIsUnchanged(cerebralTest);
 });

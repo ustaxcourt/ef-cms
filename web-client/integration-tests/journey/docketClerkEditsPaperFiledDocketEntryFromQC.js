@@ -1,20 +1,20 @@
-export const docketClerkEditsPaperFiledDocketEntryFromQC = test => {
+export const docketClerkEditsPaperFiledDocketEntryFromQC = cerebralTest => {
   return it('Docket clerk edits paper-filed docket entry from QC', async () => {
-    await test.runSequence('gotoEditPaperFilingSequence', {
-      docketEntryId: test.docketEntryId,
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateDocketEntryFormValueSequence', {
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'secondaryDocument.eventCode',
       value: 'A',
     });
 
-    await test.runSequence('openConfirmPaperServiceModalSequence');
+    await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('form.documentTitle')).toEqual(
+    expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Motion for Leave to File Answer',
     );
   });

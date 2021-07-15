@@ -2,7 +2,7 @@ const {
   COUNTRY_TYPES,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
 } = require('../shared/src/business/entities/EntityConstants');
-const { formatRecord } = require('./bulkImportPractitionerUsers');
+const { formatRecord } = require('./bulkImportPractitionerUsers.helpers');
 
 describe('formatRecord', () => {
   it('formats a record for a practitioner with default values for certain fields when no value is supplied', () => {

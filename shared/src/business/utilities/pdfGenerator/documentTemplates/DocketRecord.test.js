@@ -248,7 +248,7 @@ describe('DocketRecord', () => {
 
     const rowEl = docketRecord.find('tbody tr').at(0).text();
 
-    expect(rowEl).toContain(entries[0].index);
+    expect(rowEl).toContain(`${entries[0].index}`);
     expect(rowEl).toContain(entries[0].createdAtFormatted);
     expect(rowEl).toContain(entries[0].eventCode);
     expect(rowEl).toContain(entries[0].descriptionDisplay);

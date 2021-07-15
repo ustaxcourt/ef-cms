@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or failure)
  * @returns {string} the scanner source name from local storage
  */
-export const isRespondentInCaseAction = async ({ get, path }) => {
+export const isRespondentInCaseAction = ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
   const irsPractitioners = get(state.modal.respondentMatches);
   if (

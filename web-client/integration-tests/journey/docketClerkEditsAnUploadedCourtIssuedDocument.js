@@ -3,66 +3,69 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkEditsAnUploadedCourtIssuedDocument = (
-  test,
+  cerebralTest,
   fakeFile,
   draftOrderIndex,
 ) => {
   return it('Docket Clerk edits an uploaded court issued document', async () => {
     let caseDetailFormatted;
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
     );
     expect(draftOrderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditUploadCourtIssuedDocumentSequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
-    });
+    await cerebralTest.runSequence(
+      'gotoEditUploadCourtIssuedDocumentSequence',
+      {
+        docketEntryId: draftOrderDocument.docketEntryId,
+      },
+    );
 
-    await test.runSequence('validateUploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('validateUploadCourtIssuedDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('clearExistingDocumentSequence');
+    await cerebralTest.runSequence('clearExistingDocumentSequence');
 
-    await test.runSequence('editUploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('editUploadCourtIssuedDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile: 'Upload a document',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'freeText',
       value: 'Some other content',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile,
     });
-    await test.runSequence('validateUploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('validateUploadCourtIssuedDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('editUploadCourtIssuedDocumentSequence');
+    await cerebralTest.runSequence('editUploadCourtIssuedDocumentSequence');
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -71,7 +74,7 @@ export const docketClerkEditsAnUploadedCourtIssuedDocument = (
       prev.createdAt > current.createdAt ? prev : current,
     );
     expect(newDraftOrder).toBeTruthy();
-    test.draftOrders.push(newDraftOrder);
-    test.docketEntryId = newDraftOrder.docketEntryId;
+    cerebralTest.draftOrders.push(newDraftOrder);
+    cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

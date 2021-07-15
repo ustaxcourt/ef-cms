@@ -1,17 +1,17 @@
-export const petitionsClerkDeletesCaseNote = test => {
+export const petitionsClerkDeletesCaseNote = cerebralTest => {
   return it('petitions clerk deletes case note from a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('caseDetail.caseNote')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('caseDetail.caseNote')).toEqual(
       'this is a note added from the modal',
     );
 
-    await test.runSequence('openDeleteCaseNoteConfirmModalSequence');
+    await cerebralTest.runSequence('openDeleteCaseNoteConfirmModalSequence');
 
-    await test.runSequence('deleteCaseNoteSequence');
+    await cerebralTest.runSequence('deleteCaseNoteSequence');
 
-    expect(test.getState('caseDetail.caseNote')).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
   });
 };

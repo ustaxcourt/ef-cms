@@ -1,12 +1,12 @@
 import { fakeFile } from '../helpers';
 
-export const respondentUploadsProposedStipulatedDecision = test => {
+export const respondentUploadsProposedStipulatedDecision = cerebralTest => {
   return it('respondent uploads a proposed stipulated decision', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    test.setState('form', {
+    cerebralTest.setState('form', {
       attachments: false,
       category: 'Decision',
       certificateOfService: false,
@@ -23,8 +23,8 @@ export const respondentUploadsProposedStipulatedDecision = test => {
       scenario: 'Standard',
       searchError: false,
     });
-    await test.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 };

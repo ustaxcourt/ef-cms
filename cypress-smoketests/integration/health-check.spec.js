@@ -21,10 +21,12 @@ describe('Health check', () => {
         expect(response.body.s3.appFailover).to.be.true;
         expect(response.body.s3.eastDocuments).to.be.true;
         expect(response.body.s3.eastTempDocuments).to.be.true;
+        expect(response.body.s3.eastQuarantine).to.be.true;
         expect(response.body.s3.public).to.be.true;
         expect(response.body.s3.publicFailover).to.be.true;
         expect(response.body.s3.westDocuments).to.be.true;
         expect(response.body.s3.westTempDocuments).to.be.true;
+        expect(response.body.s3.westQuarantine).to.be.true;
       });
     });
   }

@@ -10,31 +10,36 @@ const caseDetailHeaderHelper = withAppContextDecorator(
 );
 const fileDocumentHelper = withAppContextDecorator(fileDocumentHelperComputed);
 
-export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
+export const respondentFilesFirstIRSDocumentOnCase = (
+  cerebralTest,
+  fakeFile,
+) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Respondent files first IRS document on a case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const headerHelper = runCompute(caseDetailHeaderHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(headerHelper.showFileFirstDocumentButton).toBeTruthy();
 
-    await test.runSequence('gotoFileDocumentSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const fileDocHelper = runCompute(fileDocumentHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(fileDocHelper.showSecondaryParty).toBeTruthy();
 
-    expect(contactSecondaryFromState(test).name).toEqual('Jimothy Schultz');
+    expect(contactSecondaryFromState(cerebralTest).name).toEqual(
+      'Jimothy Schultz',
+    );
 
     const documentToSelect = {
       category: 'Answer (filed by respondent only)',
@@ -45,68 +50,98 @@ export const respondentFilesFirstIRSDocumentOnCase = (test, fakeFile) => {
     };
 
     for (const key of Object.keys(documentToSelect)) {
-      await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-        key,
-        value: documentToSelect[key],
-      });
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key,
+          value: documentToSelect[key],
+        },
+      );
     }
 
-    await test.runSequence('validateSelectDocumentTypeSequence');
+    await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('completeDocumentSelectSequence');
+    await cerebralTest.runSequence('completeDocumentSelectSequence');
 
-    expect(test.getState('form.documentType')).toEqual('Answer');
+    expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
-    expect(test.getState('form.partyPrimary')).toEqual(undefined);
+    expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfService',
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfService',
+        value: true,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'hasSupportingDocuments',
-      value: false,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'hasSupportingDocuments',
+        value: false,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'attachments',
-      value: false,
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'attachments',
+        value: false,
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'objections',
+        value: OBJECTIONS_OPTIONS_MAP.NO,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '12',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '12',
-    });
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2000',
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceMonth',
+        value: '12',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceDay',
+        value: '12',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'certificateOfServiceYear',
+        value: '2000',
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      },
+    );
 
-    await test.runSequence('updateFileDocumentWizardFormValueSequence', {
-      key: 'partyIrsPractitioner',
-      value: true,
-    });
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: 'partyIrsPractitioner',
+        value: true,
+      },
+    );
 
-    await test.runSequence('reviewExternalDocumentInformationSequence');
+    await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('submitExternalDocumentSequence');
+    await cerebralTest.runSequence('submitExternalDocumentSequence');
   });
 };

@@ -1,17 +1,22 @@
 export const docketClerkRemovesSignatureFromUploadedCourtIssuedDocument =
-  test => {
+  cerebralTest => {
     return it('Docket Clerk removes signature from an uploaded court issued document', async () => {
-      await test.runSequence('openConfirmRemoveSignatureModalSequence', {
-        docketEntryIdToEdit: test.docketEntryId,
-      });
+      await cerebralTest.runSequence(
+        'openConfirmRemoveSignatureModalSequence',
+        {
+          docketEntryIdToEdit: cerebralTest.docketEntryId,
+        },
+      );
 
-      await test.runSequence('removeSignatureSequence');
+      await cerebralTest.runSequence('removeSignatureSequence');
 
-      expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
 
-      const caseDocument = test
+      const caseDocument = cerebralTest
         .getState('caseDetail.docketEntries')
-        .find(d => d.docketEntryId === test.docketEntryId);
+        .find(d => d.docketEntryId === cerebralTest.docketEntryId);
 
       expect(caseDocument.signedAt).toEqual(null);
     });

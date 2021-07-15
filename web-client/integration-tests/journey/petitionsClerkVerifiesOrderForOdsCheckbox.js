@@ -1,95 +1,102 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const petitionsClerkVerifiesOrderForOdsCheckbox = (test, fakeFile) => {
+export const petitionsClerkVerifiesOrderForOdsCheckbox = (
+  cerebralTest,
+  fakeFile,
+) => {
   return it('Petitions clerk verifies that the Order for ODS checkbox is correctly checked and unchecked', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
 
-    await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
+    await cerebralTest.runSequence('updateStartCaseInternalPartyTypeSequence', {
       key: 'partyType',
       value: PARTY_TYPES.petitioner,
     });
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
 
-    await test.runSequence('updateStartCaseInternalPartyTypeSequence', {
+    await cerebralTest.runSequence('updateStartCaseInternalPartyTypeSequence', {
       key: 'partyType',
       value: PARTY_TYPES.corporation,
     });
 
-    expect(test.getState('form.orderForOds')).toBeTruthy();
+    expect(cerebralTest.getState('form.orderForOds')).toBeTruthy();
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      test.getState('validationErrors.ownershipDisclosureFile'),
+      cerebralTest.getState('validationErrors.ownershipDisclosureFile'),
     ).toBeUndefined();
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: false,
     });
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('validationErrors.ownershipDisclosureFile')).toEqual(
-      CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile,
-    );
+    expect(
+      cerebralTest.getState('validationErrors.ownershipDisclosureFile'),
+    ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.ownershipDisclosureFile);
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: true,
     });
 
     // simulate switching to ODS document tab
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'ownershipDisclosureFile',
     });
 
-    await test.runSequence('setDocumentUploadModeSequence', {
+    await cerebralTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'ownershipDisclosureFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
 
-    await test.runSequence('openConfirmDeletePDFModalSequence');
+    await cerebralTest.runSequence('openConfirmDeletePDFModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('ConfirmDeletePDFModal');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmDeletePDFModal',
+    );
 
-    await test.runSequence('removeScannedPdfSequence');
+    await cerebralTest.runSequence('removeScannedPdfSequence');
 
-    expect(test.getState('form.ownershipDisclosureFile')).toBeUndefined();
-    expect(test.getState('form.orderForOds')).toBeTruthy();
+    expect(
+      cerebralTest.getState('form.ownershipDisclosureFile'),
+    ).toBeUndefined();
+    expect(cerebralTest.getState('form.orderForOds')).toBeTruthy();
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForOds',
       value: false,
     });
 
-    await test.runSequence('cerebralBindSimpleSetStateSequence', {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'currentViewMetadata.documentSelectedForScan',
       value: 'petitionFile',
     });
 
-    await test.runSequence('setDocumentUploadModeSequence', {
+    await cerebralTest.runSequence('setDocumentUploadModeSequence', {
       documentUploadMode: 'upload',
     });
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'petitionFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('form.orderForOds')).toBeFalsy();
+    expect(cerebralTest.getState('form.orderForOds')).toBeFalsy();
   });
 };

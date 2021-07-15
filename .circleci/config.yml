@@ -43,6 +43,7 @@ jobs:
           name: Web Client - Integration Test
           command: |
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              SKIP_CACHE_INVALIDATION=true \
@@ -56,6 +57,7 @@ jobs:
              AWS_ACCESS_KEY_ID=S3RVER \
              AWS_SECRET_ACCESS_KEY=S3RVER \
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
@@ -110,6 +112,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -172,6 +175,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -232,6 +236,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -300,6 +305,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000

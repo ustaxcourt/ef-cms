@@ -34,7 +34,7 @@ describe('PetitionService', () => {
     state: 'AL',
   };
 
-  const docketEntryNumber = 1;
+  const docketEntryNumber = '1';
 
   const documentDetail = {
     docketEntryId: '1234',
@@ -227,12 +227,12 @@ describe('PetitionService', () => {
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const irs = wrapper.find('#computer-readable');
+    const irsText = wrapper.find('#computer-readable').text();
 
-    expect(irs.text()).toContain(caseDetail.docketNumber);
-    expect(irs.text()).not.toContain(caseDetail.docketNumberWithSuffix);
-    expect(irs.text()).toContain(docketEntryNumber);
-    expect(irs.text()).toContain(documentDetail.docketEntryId);
-    expect(irs.text()).toContain(documentDetail.eventCode);
+    expect(irsText).toContain(caseDetail.docketNumber);
+    expect(irsText).not.toContain(caseDetail.docketNumberWithSuffix);
+    expect(irsText).toContain(docketEntryNumber);
+    expect(irsText).toContain(documentDetail.docketEntryId);
+    expect(irsText).toContain(documentDetail.eventCode);
   });
 });

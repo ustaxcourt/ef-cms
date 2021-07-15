@@ -5,18 +5,18 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner =
-  test => {
+  cerebralTest => {
     return it('Docket Clerk does not view QC item for NCA for represented petitioner', async () => {
-      await test.runSequence('chooseWorkQueueSequence', {
+      await cerebralTest.runSequence('chooseWorkQueueSequence', {
         box: 'inbox',
         queue: 'section',
       });
       const workQueueFormatted = runCompute(formattedWorkQueue, {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       });
 
       const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
-        workItem => workItem.docketNumber === test.docketNumber,
+        workItem => workItem.docketNumber === cerebralTest.docketNumber,
       );
 
       expect(noticeOfChangeOfAddressQCItem).toBeUndefined();

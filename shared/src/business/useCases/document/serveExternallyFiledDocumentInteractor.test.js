@@ -28,9 +28,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       pdfData: testPdfDoc,
     });
 
-    applicationContext.getPug.mockImplementation(() => ({
-      compile: () => () => '',
-    }));
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,

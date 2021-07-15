@@ -5,7 +5,7 @@ import { docketClerkViewsCaseDetail } from './journey/docketClerkViewsCaseDetail
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk updates a hearing session', () => {
   beforeEach(() => {
@@ -13,33 +13,33 @@ describe('Docket Clerk updates a hearing session', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  test.createdTrialSessions = [];
+  cerebralTest.createdTrialSessions = [];
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  docketClerkAddsCaseToHearing(test, 'Low blast radius', 0);
+  docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
 
-  docketClerkEditsTrialSession(test);
+  docketClerkEditsTrialSession(cerebralTest);
 
-  docketClerkViewsCaseDetail(test);
+  docketClerkViewsCaseDetail(cerebralTest);
 
   it('should NOT set the trialSessionId on the case', () => {
-    expect(test.getState('caseDetail.trialSessionId')).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.trialSessionId')).toBeUndefined();
   });
 });

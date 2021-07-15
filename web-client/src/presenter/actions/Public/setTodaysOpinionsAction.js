@@ -5,6 +5,6 @@ import { state } from 'cerebral';
  * @param {object} props the props object
  * @param {object} store the store object
  */
-export const setTodaysOpinionsAction = async ({ props, store }) => {
+export const setTodaysOpinionsAction = ({ props, store }) => {
   store.set(state.todaysOpinions, props.todaysOpinions);
 };

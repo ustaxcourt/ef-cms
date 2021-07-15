@@ -206,10 +206,7 @@ export const EditPetitionerInformationInternal = connect(
                       });
                     }}
                   />
-                  <label
-                    className="usa-checkbox__label inline-block"
-                    htmlFor="seal-address"
-                  >
+                  <label className="usa-checkbox__label" htmlFor="seal-address">
                     Seal address
                   </label>
                 </div>

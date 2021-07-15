@@ -9,7 +9,7 @@ import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('petitioner files document', () => {
   beforeAll(() => {
@@ -17,17 +17,17 @@ describe('petitioner files document', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCancelsCreateCase(test);
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
-  petitionerFilesDocumentForCase(test, fakeFile);
-  petitionerViewsCaseDetailAfterFilingDocument(test);
-  petitionerFilesAmendedMotion(test, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCancelsCreateCase(cerebralTest);
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
+  petitionerViewsCaseDetail(cerebralTest);
+  petitionerFilesDocumentForCase(cerebralTest, fakeFile);
+  petitionerViewsCaseDetailAfterFilingDocument(cerebralTest);
+  petitionerFilesAmendedMotion(cerebralTest, fakeFile);
 });

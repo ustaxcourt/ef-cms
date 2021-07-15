@@ -99,6 +99,31 @@ describe('addPaperFilingInteractor', () => {
     ).toEqual('c54ba5a9-b37b-479d-9201-067ec6e335bb');
   });
 
+  it('should add a coversheet if generateCoversheet is true', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      generateCoversheet: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toBeCalled();
+  });
+
   it('should return paper service url if the case has paper service parties', async () => {
     const mockPdfUrl = 'www.example.com';
 
@@ -197,6 +222,7 @@ describe('addPaperFilingInteractor', () => {
         isFileAttached: true,
         isPaper: true,
       },
+      generateCoversheet: true,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -212,6 +238,9 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
+    ).toBeCalled();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
     ).toBeCalled();
   });
 
@@ -268,6 +297,33 @@ describe('addPaperFilingInteractor', () => {
           isFileAttached: true,
           isPaper: true,
         },
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+  });
+
+  it('does not send the service email if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    await expect(
+      addPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: mockCase.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        generateCoversheet: true,
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow(new Error('bad!'));

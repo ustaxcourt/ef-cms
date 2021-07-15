@@ -6,48 +6,57 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkAddEditsCalendarNote = (test, addingOrEditing) => {
+export const docketClerkAddEditsCalendarNote = (
+  cerebralTest,
+  addingOrEditing,
+) => {
   return it(`Docket Clerk ${addingOrEditing} calendar note`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    let caseDetail = test.getState('caseDetail');
+    let caseDetail = cerebralTest.getState('caseDetail');
 
-    await test.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
-    expect(test.getState('modal.notes')).toEqual(caseDetail.trialSessionNotes);
+    expect(cerebralTest.getState('modal.notes')).toEqual(
+      caseDetail.trialSessionNotes,
+    );
 
-    await test.runSequence('clearModalFormSequence');
+    await cerebralTest.runSequence('clearModalFormSequence');
 
-    caseDetail = test.getState('caseDetail');
+    caseDetail = cerebralTest.getState('caseDetail');
 
-    expect(test.getState('modal.notes')).toEqual(caseDetail.trialSessionNotes);
+    expect(cerebralTest.getState('modal.notes')).toEqual(
+      caseDetail.trialSessionNotes,
+    );
 
-    await test.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       note: caseDetail.trialSessionNotes,
     });
 
     const updatedNote = 'This is a new note';
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: updatedNote,
     });
 
-    await test.runSequence('updateCalendarNoteSequence');
+    await cerebralTest.runSequence('updateCalendarNoteSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertSuccess.message')).toEqual('Note saved.');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
+      'Note saved.',
+    );
 
     caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(caseDetail.trialSessionNotes).toEqual(updatedNote);
-    test.calendarNote = caseDetail.trialSessionNotes;
+    cerebralTest.calendarNote = caseDetail.trialSessionNotes;
   });
 };

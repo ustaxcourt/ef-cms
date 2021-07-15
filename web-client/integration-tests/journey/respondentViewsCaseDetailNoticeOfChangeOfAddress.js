@@ -1,25 +1,27 @@
 import { refreshElasticsearchIndex } from '../helpers';
 export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
-  test,
+  cerebralTest,
   createdDocketNumberIndex,
 ) => {
   return it('respondent views case detail notice of change of address', async () => {
     await refreshElasticsearchIndex();
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.createdDocketNumbers[createdDocketNumberIndex],
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.createdDocketNumbers[createdDocketNumberIndex],
     });
 
-    const currentUser = test.getState('user');
-    const irsPractitioners = test.getState('caseDetail.irsPractitioners');
+    const currentUser = cerebralTest.getState('user');
+    const irsPractitioners = cerebralTest.getState(
+      'caseDetail.irsPractitioners',
+    );
     const irsPractitioner = irsPractitioners.find(
       practitioner => practitioner.userId === currentUser.userId,
     );
 
     expect(irsPractitioner.contact).toMatchObject({
-      address1: test.updatedRespondentAddress,
+      address1: cerebralTest.updatedRespondentAddress,
     });
 
-    const documents = test.getState('caseDetail.docketEntries');
+    const documents = cerebralTest.getState('caseDetail.docketEntries');
 
     const changeOfAddressDocument = documents.find(
       document => document.documentType === 'Notice of Change of Address',

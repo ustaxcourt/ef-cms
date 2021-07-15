@@ -21,7 +21,7 @@ describe('servePaperFiledDocumentAction', () => {
   it('serves a paper filed document', async () => {
     applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(() => {
         return { pdfUrl };
       });
 
@@ -56,7 +56,7 @@ describe('servePaperFiledDocumentAction', () => {
   it('returns hasPaper false when there is no pdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(() => {
         return {};
       });
 

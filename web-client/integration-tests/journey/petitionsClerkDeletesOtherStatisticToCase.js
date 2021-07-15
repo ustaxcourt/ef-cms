@@ -1,14 +1,14 @@
-export const petitionsClerkDeletesOtherStatisticToCase = test => {
+export const petitionsClerkDeletesOtherStatisticToCase = cerebralTest => {
   return it('petitions clerk deletes other statistic on the case', async () => {
-    await test.runSequence('gotoEditOtherStatisticsSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditOtherStatisticsSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('caseDetail.damages')).toBeDefined();
-    expect(test.getState('caseDetail.litigationCosts')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.damages')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toBeDefined();
 
-    await test.runSequence('deleteOtherStatisticsSequence');
+    await cerebralTest.runSequence('deleteOtherStatisticsSequence');
 
-    expect(test.getState('caseDetail.litigationCosts')).toEqual(null);
-    expect(test.getState('caseDetail.damages')).toEqual(null);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(null);
+    expect(cerebralTest.getState('caseDetail.damages')).toEqual(null);
   });
 };

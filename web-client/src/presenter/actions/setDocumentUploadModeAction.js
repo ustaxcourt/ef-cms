@@ -13,7 +13,7 @@ export const setDocumentUploadModeAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
    */
-  async ({ props, store }) => {
+  ({ props, store }) => {
     store.set(
       state.currentViewMetadata.documentUploadMode,
       props.documentUploadMode || documentUploadMode,

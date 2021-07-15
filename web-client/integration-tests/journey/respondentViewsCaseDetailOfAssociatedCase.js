@@ -1,11 +1,11 @@
-export const respondentViewsCaseDetailOfAssociatedCase = test => {
+export const respondentViewsCaseDetailOfAssociatedCase = cerebralTest => {
   return it('Respondent views case detail of associated case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('caseDetail.irsPractitioners.0.name')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('caseDetail.irsPractitioners.0.name')).toEqual(
       'Test IRS Practitioner',
     );
   });

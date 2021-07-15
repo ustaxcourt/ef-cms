@@ -2,22 +2,22 @@ import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/Enti
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForSealedCaseOrderByKeyword = (
-  test,
+  cerebralTest,
   testClient,
 ) => {
   return it('Search for sealed case order by keyword', async () => {
     await refreshElasticsearchIndex();
 
-    test.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'dismiss',
       },
     });
 
-    await test.runSequence('submitPublicOrderAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitPublicOrderAdvancedSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({

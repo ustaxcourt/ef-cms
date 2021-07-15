@@ -1,8 +1,8 @@
-export const irsSuperuserSearchForCase = test => {
+export const irsSuperuserSearchForCase = cerebralTest => {
   return it('irsSuperuser searches for case by docket number from dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
-    test.setState('header.searchTerm', test.docketNumber);
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    await cerebralTest.runSequence('gotoDashboardSequence');
+    cerebralTest.setState('header.searchTerm', cerebralTest.docketNumber);
+    await cerebralTest.runSequence('submitCaseSearchSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
   });
 };

@@ -205,7 +205,7 @@ export const CaseInfo = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="usa-checkbox__label"
                 htmlFor="order-designating-place-of-trial"
               >
                 Order Designating Place of Trial
@@ -239,7 +239,7 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="order-for-filing-fee"
             >
               Order for Filing Fee
@@ -271,7 +271,7 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="order-for-ratification"
             >
               Order for Ratification of Petition
@@ -293,7 +293,7 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="notice-of-attachments"
             >
               Notice of Attachments in the Nature of Evidence
@@ -315,7 +315,7 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="order-for-amended-petition"
             >
               Order for Amended Petition
@@ -337,7 +337,7 @@ export const CaseInfo = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="order-for-amended-petition-and-filing-fee"
             >
               Order for Amended Petition and Filing Fee

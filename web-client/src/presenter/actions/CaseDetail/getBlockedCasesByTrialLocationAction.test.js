@@ -8,7 +8,7 @@ describe('getBlockedCasesByTrialLocationAction', () => {
 
   applicationContext
     .getUseCases()
-    .getBlockedCasesInteractor.mockImplementation(async () => {
+    .getBlockedCasesInteractor.mockImplementation(() => {
       return [
         {
           blocked: true,

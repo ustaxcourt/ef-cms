@@ -7,22 +7,22 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument =
-  test => {
+  cerebralTest => {
     return it('unassociated user views case detail for a case with a legacy sealed document', async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
-        docketNumber: test.docketNumber,
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
       });
 
       const formattedCase = runCompute(formattedCaseDetail, {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       });
 
       expect(formattedCase.docketEntries).toEqual([]);
 
       await expect(
-        test.runSequence('openCaseDocumentDownloadUrlSequence', {
-          docketEntryId: test.docketEntryId,
-          docketNumber: test.docketNumber,
+        cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
+          docketEntryId: cerebralTest.docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
           isPublic: false,
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');

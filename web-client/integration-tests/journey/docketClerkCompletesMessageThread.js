@@ -7,52 +7,52 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkCompletesMessageThread = test => {
+export const docketClerkCompletesMessageThread = cerebralTest => {
   return it('docket clerk completes message thread', async () => {
-    await test.runSequence('openCompleteMessageModalSequence');
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'form.message',
       value: 'Win, Win, Win, Win',
     });
 
-    await test.runSequence('completeMessageSequence');
+    await cerebralTest.runSequence('completeMessageSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('messageDetail').length).toEqual(3);
+    expect(cerebralTest.getState('messageDetail').length).toEqual(3);
 
     const messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     expect(messageDetailFormatted.isCompleted).toEqual(true);
 
     await refreshElasticsearchIndex();
 
     //message should no longer be shown in inbox
-    await test.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    let messages = test.getState('messages');
+    let messages = cerebralTest.getState('messages');
 
     let foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).not.toBeDefined();
 
     //message thread should be shown in completed box
-    await test.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'completed',
       queue: 'my',
     });
 
-    messages = test.getState('messages');
+    messages = cerebralTest.getState('messages');
 
     foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();

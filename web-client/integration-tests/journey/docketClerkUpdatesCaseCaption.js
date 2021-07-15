@@ -1,55 +1,59 @@
-export const docketClerkUpdatesCaseCaption = test => {
+export const docketClerkUpdatesCaseCaption = cerebralTest => {
   return it('Docket clerk updates case caption', async () => {
-    test.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('caseDetail.caseCaption')).toEqual(
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual(
       'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    const judges = test.getState('modal.judges');
+    const judges = cerebralTest.getState('modal.judges');
 
     const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
     expect(legacyJudge).toBeFalsy();
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
 
-    expect(test.getState('modal.caseCaption')).toEqual(
+    expect(cerebralTest.getState('modal.caseCaption')).toEqual(
       'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseCaption',
       value: 'Mark Althavan Andrews',
     });
 
-    await test.runSequence('clearModalSequence');
+    await cerebralTest.runSequence('clearModalSequence');
 
-    expect(test.getState('caseDetail.caseCaption')).toEqual(
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual(
       'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
-    expect(test.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('modal')).toEqual({});
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
-    expect(test.getState('modal.caseCaption')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
+    expect(cerebralTest.getState('modal.caseCaption')).toEqual(
       'Daenerys Stormborn, Deceased, Daenerys Stormborn 2, Surviving Spouse, Petitioner',
     );
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseCaption',
       value: 'Sisqo',
     });
 
-    await test.runSequence('submitUpdateCaseModalSequence');
+    await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
-    expect(test.getState('caseDetail.caseCaption')).toEqual('Sisqo');
-    expect(test.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual('Sisqo');
+    expect(cerebralTest.getState('modal')).toEqual({});
   });
 };
