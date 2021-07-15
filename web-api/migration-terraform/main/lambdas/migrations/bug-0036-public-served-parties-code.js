@@ -1,11 +1,12 @@
 const createApplicationContext = require('../../../../src/applicationContext');
+const DocketEntry = require('../../../../../shared/src/business/entities/DocketEntry');
 const {
-  Case,
-} = require('../../../../../shared/src/business/entities/cases/Case');
+  getServedPartiesCode,
+} = require('../../../../../shared/src/business/entities/DocketEntry');
 
 const applicationContext = createApplicationContext({});
 
-const migrateItems = async (items, documentClient) => {
+const migrateItems = async items => {
   const itemsAfter = [];
   for (const item of items) {
     if (
@@ -15,59 +16,9 @@ const migrateItems = async (items, documentClient) => {
       item.servedParties &&
       !item.servedPartiesCode
     ) {
-      // served public docket entries without servedPartiesCode should compute it
-
-      const docketNumber = item.pk.split('|')[1];
-
-      const caseRecord = await documentClient
-        .get({
-          Key: {
-            pk: `case|${docketNumber}`,
-            sk: `case|${docketNumber}`,
-          },
-          TableName: process.env.SOURCE_TABLE,
-        })
-        .promise()
-        .then(res => {
-          return res.Item;
-        });
-
-      if (item.representing.length) {
-        new Case(
-          { ...caseRecord, privatePractitioners: [item] },
-          {
-            applicationContext,
-          },
-        ).validateForMigration();
-
-        applicationContext.logger.info(
-          'Updating representing array for private practitioner record',
-          {
-            pk: item.pk,
-            sk: item.sk,
-          },
-        );
-
-        itemsAfter.push(item);
-      } else {
-        applicationContext.logger.info(
-          'Deleting private practitioner record because representing is empty',
-          {
-            pk: item.pk,
-            sk: item.sk,
-          },
-        );
-
-        await documentClient
-          .delete({
-            Key: {
-              pk: `user|${item.userId}`,
-              sk: `case|${docketNumber}`,
-            },
-            TableName: process.env.SOURCE_TABLE,
-          })
-          .promise();
-      }
+      item.servedParties = getServedPartiesCode(item.servedParties);
+      new DocketEntry(item, { applicationContext }).validateForMigration();
+      itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
     }

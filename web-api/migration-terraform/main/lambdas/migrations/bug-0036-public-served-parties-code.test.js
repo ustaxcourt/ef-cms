@@ -2,30 +2,18 @@ const {
   MOCK_DOCUMENTS,
 } = require('../../../../../shared/src/test/mockDocuments');
 const {
-  MOCK_PRACTITIONER,
-} = require('../../../../../shared/src/test/mockUsers');
+  SERVED_PARTIES_CODES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
 const { migrateItems } = require('./bug-0036-public-served-parties-code');
 
 describe('migrateItems', () => {
   let mockDocketEntryItem;
-  let documentClient;
 
   beforeEach(() => {
     mockDocketEntryItem = {
       ...MOCK_DOCUMENTS[0],
       pk: 'case|999-99',
       sk: 'docket-entry|d3989b49-dea9-4c1a-88fd-379b972032d8',
-    };
-
-    documentClient = {
-      delete: jest.fn().mockReturnValue({
-        promise: () => {},
-      }),
-      get: () => ({
-        promise: async () => ({
-          Item: mockDocketEntryItem,
-        }),
-      }),
     };
   });
 
@@ -40,7 +28,7 @@ describe('migrateItems', () => {
         sk: 'docket-entry|101-21',
       },
     ];
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
     expect(results).toEqual([
       {
@@ -54,7 +42,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it.only('should not modify docket entries that do not have a servedParties array', async () => {
+  it('should not modify docket entries that do not have a servedParties array', async () => {
     const items = [
       {
         ...mockDocketEntryItem,
@@ -64,68 +52,52 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
     expect(results[0].servedPartiesCode).toBeUndefined();
   });
 
-  it('should remove contactId from private practitioner representing array if that contactId does not map to a petitioner on the case', async () => {
+  it('should not modify docket entries that do not have servedAt', async () => {
     const items = [
       {
-        pk: 'case|999-99',
-        sk: 'privatePractitioner|d3989b49-dea9-4c1a-88fd-379b972032d8',
-        ...MOCK_PRACTITIONER,
-        representing: [
-          MOCK_CASE.petitioners[0].contactId,
-          'b147ae4b-9cb2-42da-8155-a8db5b307e48', // uuid for a petitioner that is not on the case
-        ],
+        ...mockDocketEntryItem,
+        servedParties: [],
+        servedPartiesCode: undefined,
       },
     ];
 
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
-    expect(results[0].representing).toEqual([
-      MOCK_CASE.petitioners[0].contactId,
-    ]);
+    expect(results[0].servedAt).toBeUndefined();
   });
 
-  it('should remove private practitioner from case if representing array does not contain any petitioners on the case', async () => {
+  it('should not modify docket entries that have a servedPartiesCode', async () => {
     const items = [
       {
-        pk: 'case|999-99',
-        sk: 'privatePractitioner|d3989b49-dea9-4c1a-88fd-379b972032d8',
-        ...MOCK_PRACTITIONER,
-        representing: [
-          'b147ae4b-9cb2-42da-8155-a8db5b307e48', // uuid for a petitioner that is not on the case
-        ],
+        ...mockDocketEntryItem,
+        servedAt: '',
+        servedParties: [],
+        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
     ];
 
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
-    expect(results).toEqual([]);
-    expect(documentClient.delete.mock.calls[0][0].Key).toEqual({
-      pk: `user|${MOCK_PRACTITIONER.userId}`,
-      sk: items[0].pk,
-    });
+    expect(results[0].servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
   });
 
-  it('should remove private practitioner from case if representing array is empty', async () => {
+  it('should modify docket entries that do not have a servedPartiesCode', async () => {
     const items = [
       {
-        pk: 'case|999-99',
-        sk: 'privatePractitioner|d3989b49-dea9-4c1a-88fd-379b972032d8',
-        ...MOCK_PRACTITIONER,
-        representing: [],
+        ...mockDocketEntryItem,
+        servedAt: '',
+        servedParties: [],
+        servedPartiesCode: undefined,
       },
     ];
 
-    const results = await migrateItems(items, documentClient);
+    const results = await migrateItems(items);
 
-    expect(results).toEqual([]);
-    expect(documentClient.delete.mock.calls[0][0].Key).toEqual({
-      pk: `user|${MOCK_PRACTITIONER.userId}`,
-      sk: items[0].pk,
-    });
+    expect(results[0].servedPartiesCode).toBeDefined();
   });
 });
