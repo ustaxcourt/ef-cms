@@ -261,9 +261,6 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
-        "ecs:DescribeServices",
-        "ecs:UpdateService",
-        "ecs:DeleteService",
         "ecs:CreateCluster",
         "ecs:DescribeClusters",
         "ecs:RegisterTaskDefinition",
@@ -271,6 +268,17 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "ecs:DeregisterTaskDefinition",
         "ecs:CreateService",
         "ecs:DeleteCluster"
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "ecs:DescribeServices",
+        "ecs:UpdateService",
+        "ecs:DeleteService"
       ],
       "Resource": [
         "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:service/clamav_fargate_cluster_*/clamav_service_*"
