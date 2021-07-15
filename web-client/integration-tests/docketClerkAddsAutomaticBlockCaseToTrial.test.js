@@ -48,7 +48,7 @@ describe('Adds automatic block case to trial', () => {
   cerebralTest.casesReadyForTrial = [];
   petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
 
-  it('should be able to add a trial session to an automatically blocked case', async () => {
+  it('should be able to add a trial session to an automatically blocked case', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
