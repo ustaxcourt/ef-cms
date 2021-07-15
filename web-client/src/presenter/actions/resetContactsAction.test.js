@@ -185,4 +185,27 @@ describe('resetContactsAction', () => {
       partyType: PARTY_TYPES.petitioner,
     });
   });
+
+  it('delete the useSameAsPrimary from state.form', async () => {
+    const { state } = await runAction(resetContactsAction, {
+      modules: { presenter },
+      state: {
+        form: {
+          contactPrimary: {
+            address1: '123 Abc Ln',
+            city: 'Bobville',
+            contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'test@example.com',
+            name: 'Bob',
+            phone: '1234567890',
+            state: 'AL',
+            zip: '12345',
+          },
+        },
+      },
+    });
+
+    expect(state.form.useSameAsPrimary).toBeUndefined();
+  });
 });
