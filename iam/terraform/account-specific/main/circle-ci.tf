@@ -248,21 +248,6 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
-        "ecs:CreateCluster",
-        "ecs:DescribeClusters",
-        "ecs:RegisterTaskDefinition",
-        "ecs:DescribeTaskDefinition",
-        "ecs:DeregisterTaskDefinition",
-        "ecs:CreateService",
-        "ecs:DeleteCluster"
-      ],
-      "Resource": [
-        "*"
-      ],
-      "Effect": "Allow"
-    },
-    {
-      "Action": [
         "iam:CreateRole",
         "iam:PutRolePolicy",
         "iam:ListRolePolicies",
@@ -278,7 +263,14 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Action": [
         "ecs:DescribeServices",
         "ecs:UpdateService",
-        "ecs:DeleteService"
+        "ecs:DeleteService",
+        "ecs:CreateCluster",
+        "ecs:DescribeClusters",
+        "ecs:RegisterTaskDefinition",
+        "ecs:DescribeTaskDefinition",
+        "ecs:DeregisterTaskDefinition",
+        "ecs:CreateService",
+        "ecs:DeleteCluster"
       ],
       "Resource": [
         "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:service/clamav_fargate_cluster_*/clamav_service_*"
