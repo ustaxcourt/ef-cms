@@ -5271,6 +5271,306 @@
     "completedBy": "Test Docketclerk"
   },
   {
+    "archivedCorrespondences": [
+  
+    ],
+    "archivedDocketEntries": [
+  
+    ],
+    "associatedJudge": "Chief Judge",
+    "automaticBlocked": true,
+    "automaticBlockedDate": "2021-03-02T20:53:43.241Z",
+    "automaticBlockedReason": "Due Date",
+    "aws:rep:deleting": false,
+    "aws:rep:updateregion": "us-east-1",
+    "aws:rep:updatetime": 1626281816.433001,
+    "caseCaption": "LISA MARIE ALAPA, Petitioner",
+    "caseType": "Deficiency",
+    "correspondence": [
+  
+    ],
+    "createdAt": "2021-01-03T21:25:44.446Z",
+    "docketEntries": [
+  
+    ],
+    "docketNumber": "105-21",
+    "docketNumberSuffix": "S",
+    "docketNumberWithSuffix": "105-21S",
+    "entityName": "Case",
+    "filingType": "Myself",
+    "hasPendingItems": false,
+    "hasVerifiedIrsNotice": false,
+    "hearings": [
+  
+    ],
+    "indexedTimestamp": 1618334303279,
+    "initialCaption": "LISA ALAPA, Petitioner",
+    "initialDocketNumberSuffix": "S",
+    "irsNoticeDate": null,
+    "irsPractitioners": [
+  
+    ],
+    "isPaper": false,
+    "isSealed": false,
+    "noticeOfAttachments": false,
+    "noticeOfTrialDate": "2021-01-03T21:25:44.446Z",
+    "orderDesignatingPlaceOfTrial": false,
+    "orderForAmendedPetition": false,
+    "orderForAmendedPetitionAndFilingFee": false,
+    "orderForFilingFee": true,
+    "orderForOds": false,
+    "orderForRatification": false,
+    "orderToShowCause": false,
+    "partyType": "Petitioner",
+    "petitioners": [
+      {
+        "address1": "14 NOONAN RANCH CIR",
+        "city": "SANTA ROSA",
+        "contactId": "d015888f-81e9-4c80-a950-299e0a649b18",
+        "contactType": "petitioner",
+        "countryType": "domestic",
+        "email": "8a3bedae94e7f7e83d17f38542bc1dfa@ef-cms.ustaxcourt.gov",
+        "isAddressSealed": false,
+        "name": "LISA MARIE ALAPA",
+        "phone": "707-291-8005",
+        "postalCode": "95403",
+        "sealedAndUnavailable": false,
+        "serviceIndicator": "Electronic",
+        "state": "CA"
+      }
+    ],
+    "petitionPaymentDate": null,
+    "petitionPaymentStatus": "Not paid",
+    "petitionPaymentWaivedDate": null,
+    "pk": "case|105-21",
+    "preferredTrialCity": "San Francisco, California",
+    "privatePractitioners": [
+  
+    ],
+    "procedureType": "Small",
+    "qcCompleteForTrial": {
+  
+    },
+    "receivedAt": "2021-01-06T13:20:59.925Z",
+    "sk": "case|105-21",
+    "sortableDocketNumber": 21000105,
+    "statistics": [
+      {
+        "entityName": "Statistic",
+        "irsDeficiencyAmount": "9054.00",
+        "irsTotalPenalties": "1811.00",
+        "statisticId": "0feb1823-7fcf-4efe-b498-5c7d421257bf",
+        "year": "2017",
+        "yearOrPeriod": "Year"
+      }
+    ],
+    "status": "General Docket - At Issue (Ready for Trial)"
+  },
+  {
+    "addToCoversheet": false,
+    "aws:rep:deleting": false,
+    "aws:rep:updateregion": "us-east-1",
+    "aws:rep:updatetime": 1626213965.245003,
+    "createdAt": "2021-01-03T21:25:44.446Z",
+    "docketEntryId": "0c1eb8d0-c993-4660-b4f1-327399376e8f",
+    "docketNumber": "105-21",
+    "documentTitle": "Petition",
+    "documentType": "Petition",
+    "draftOrderState": null,
+    "entityName": "DocketEntry",
+    "eventCode": "P",
+    "filedBy": "Petr. LISA ALAPA",
+    "filers": [
+      "d015888f-81e9-4c80-a950-299e0a649b18"
+    ],
+    "filingDate": "2021-01-03T21:25:44.446Z",
+    "index": 1,
+    "isDraft": false,
+    "isFileAttached": true,
+    "isMinuteEntry": false,
+    "isOnDocketRecord": true,
+    "isStricken": false,
+    "numberOfPages": 3,
+    "partySecondary": false,
+    "pending": false,
+    "pk": "case|105-21",
+    "privatePractitioners": [
+  
+    ],
+    "processingStatus": "complete",
+    "receivedAt": "2021-01-03T05:00:00.000Z",
+    "servedAt": "2021-01-06T13:22:48.982Z",
+    "servedParties": [
+      {
+        "name": "IRS",
+        "role": "irsSuperuser"
+      }
+    ],
+    "sk": "docket-entry|0c1eb8d0-c993-4660-b4f1-327399376e8f",
+    "userId": "d015888f-81e9-4c80-a950-299e0a649b18",
+    "workItem": {
+      "assigneeId": "d7d4bcfa-2abd-4055-b1b6-8e45af897759",
+      "assigneeName": "Brook Poyer",
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "New",
+      "caseTitle": "LISA MARIE ALAPA",
+      "completedAt": "2021-01-06T13:22:49.472Z",
+      "completedBy": "Santrisha Mapson",
+      "completedByUserId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+      "completedMessage": "Served to IRS",
+      "createdAt": "2021-01-03T21:25:44.447Z",
+      "docketEntry": {
+        "createdAt": "2021-01-03T21:25:44.446Z",
+        "docketEntryId": "0c1eb8d0-c993-4660-b4f1-327399376e8f",
+        "documentTitle": "Petition",
+        "documentType": "Petition",
+        "entityName": "DocketEntry",
+        "eventCode": "P",
+        "filedBy": "Petr. LISA ALAPA",
+        "filingDate": "2021-01-03T21:25:44.446Z",
+        "isDraft": false,
+        "isFileAttached": true,
+        "isMinuteEntry": false,
+        "isOnDocketRecord": true,
+        "isStricken": false,
+        "partyPrimary": true,
+        "partySecondary": false,
+        "pending": false,
+        "privatePractitioners": [
+  
+        ],
+        "processingStatus": "pending",
+        "receivedAt": "2021-01-03T21:25:44.446Z",
+        "servedAt": "2021-01-06T13:22:48.982Z",
+        "userId": "d015888f-81e9-4c80-a950-299e0a649b18"
+      },
+      "docketNumber": "105-21",
+      "docketNumberWithSuffix": "105-21S",
+      "entityName": "WorkItem",
+      "highPriority": false,
+      "isInitializeCase": true,
+      "section": "petitions",
+      "sentBy": "Justine Miles",
+      "sentBySection": "petitions",
+      "sentByUserId": "22cde0e4-77f1-4f99-9586-5765149c8d5f",
+      "updatedAt": "2021-01-03T21:25:44.447Z",
+      "workItemId": "b341af0b-2cc4-49ab-a530-6e34072eb410"
+    }
+  },
+  {
+    "addToCoversheet": false,
+    "attachments": false,
+    "aws:rep:deleting": false,
+    "aws:rep:updateregion": "us-east-1",
+    "aws:rep:updatetime": 1626213998.791002,
+    "createdAt": "2021-01-06T13:31:22.627Z",
+    "date": null,
+    "docketEntryId": "acb15d06-225f-49e9-b4f1-7664ba524d43",
+    "docketNumber": "105-21",
+    "documentContentsId": "fb02f94f-d885-4109-b055-490867a2e53b",
+    "documentIdBeforeSignature": "d339a622-7336-499b-81bc-6a184b838882",
+    "documentTitle": "Order for Filing Fee on 2-23-2021",
+    "documentType": "Order",
+    "draftOrderState": null,
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"Order for Filing Fee on 2-23-2021\",\"serviceStamp\":\"Served\",\"date\":null,\"generatedDocumentTitle\":\"Order for Filing Fee on 2-23-2021\",\"docketEntryId\":\"acb15d06-225f-49e9-b4f1-7664ba524d43\",\"docketNumber\":\"105-21\"}",
+    "entityName": "DocketEntry",
+    "eventCode": "O",
+    "filers": [
+  
+    ],
+    "filingDate": "2021-01-06T13:33:02.316Z",
+    "freeText": "Order for Filing Fee on 2-23-2021",
+    "index": 4,
+    "isDraft": false,
+    "isFileAttached": true,
+    "isMinuteEntry": false,
+    "isOnDocketRecord": true,
+    "isStricken": false,
+    "numberOfPages": 1,
+    "pending": false,
+    "pk": "case|105-21",
+    "processingStatus": "complete",
+    "receivedAt": "2021-01-06T05:00:00.000Z",
+    "relationship": "primaryDocument",
+    "scenario": "Type A",
+    "servedAt": "2021-01-06T13:33:02.003Z",
+    "servedParties": [
+      {
+        "email": "8a3bedae94e7f7e83d17f38542bc1dfa@ef-cms.ustaxcourt.gov",
+        "name": "LISA MARIE ALAPA"
+      }
+    ],
+    "serviceStamp": "Served",
+    "signedAt": "2021-01-06T13:31:22.628Z",
+    "signedByUserId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+    "signedJudgeName": "Maurice B. Foley",
+    "sk": "docket-entry|acb15d06-225f-49e9-b4f1-7664ba524d43",
+    "userId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+    "workItem": {
+      "assigneeId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+      "assigneeName": "Santrisha Mapson",
+      "associatedJudge": "Chief Judge",
+      "caseStatus": "General Docket - Not at Issue",
+      "caseTitle": "LISA MARIE ALAPA",
+      "completedAt": "2021-01-06T13:33:02.208Z",
+      "completedBy": "Santrisha Mapson",
+      "completedByUserId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+      "completedMessage": "completed",
+      "createdAt": "2021-01-06T13:32:36.449Z",
+      "docketEntry": {
+        "attachments": false,
+        "createdAt": "2021-01-06T13:31:22.627Z",
+        "date": null,
+        "docketEntryId": "acb15d06-225f-49e9-b4f1-7664ba524d43",
+        "docketNumber": "105-21",
+        "documentContentsId": "fb02f94f-d885-4109-b055-490867a2e53b",
+        "documentIdBeforeSignature": "d339a622-7336-499b-81bc-6a184b838882",
+        "documentTitle": "Order for Filing Fee on 2-23-2021",
+        "documentType": "Order",
+        "draftOrderState": null,
+        "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"Order for Filing Fee on 2-23-2021\",\"serviceStamp\":\"Served\",\"date\":null,\"generatedDocumentTitle\":\"Order for Filing Fee on 2-23-2021\",\"docketEntryId\":\"acb15d06-225f-49e9-b4f1-7664ba524d43\",\"docketNumber\":\"105-21\"}",
+        "entityName": "DocketEntry",
+        "eventCode": "O",
+        "filingDate": "2021-01-06T13:30:18.346Z",
+        "freeText": "Order for Filing Fee on 2-23-2021",
+        "isDraft": false,
+        "isFileAttached": true,
+        "isMinuteEntry": false,
+        "isOnDocketRecord": true,
+        "isStricken": false,
+        "numberOfPages": 1,
+        "pending": false,
+        "processingStatus": "complete",
+        "receivedAt": "2021-01-06T13:30:18.346Z",
+        "relationship": "primaryDocument",
+        "scenario": "Type A",
+        "servedAt": "2021-01-06T13:33:02.003Z",
+        "servedParties": [
+          {
+            "email": "8a3bedae94e7f7e83d17f38542bc1dfa@ef-cms.ustaxcourt.gov",
+            "name": "LISA MARIE ALAPA"
+          }
+        ],
+        "serviceStamp": "Served",
+        "signedAt": "2021-01-06T13:31:22.628Z",
+        "signedByUserId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+        "signedJudgeName": "Maurice B. Foley",
+        "userId": "2556e916-60f1-42d8-b98c-2634fac8f08c"
+      },
+      "docketNumber": "105-21",
+      "docketNumberWithSuffix": "105-21S",
+      "entityName": "WorkItem",
+      "hideFromPendingMessages": true,
+      "highPriority": false,
+      "section": "petitions",
+      "sentBy": "Santrisha Mapson",
+      "sentBySection": "petitions",
+      "sentByUserId": "2556e916-60f1-42d8-b98c-2634fac8f08c",
+      "updatedAt": "2021-01-06T13:32:36.450Z",
+      "workItemId": "974bf0f4-6575-48ec-94bd-62d40badead0"
+    }
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "gsi1pk": "work-item|fae3cbf6-c250-4f22-adf0-f380076ab2d9",

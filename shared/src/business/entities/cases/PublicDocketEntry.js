@@ -45,6 +45,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
   this.servedAt = rawDocketEntry.servedAt;
+  this.servedParties = rawDocketEntry.servedParties;
   this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
 };
 
