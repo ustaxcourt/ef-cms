@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the paths for next execution
  * @returns {object} the path to execute next
  */
-export const canFileInConsolidatedCasesAction = async ({ get, path }) => {
+export const canFileInConsolidatedCasesAction = ({ get, path }) => {
   const permissions = get(state.permissions);
   const hasPermission = permissions.FILE_IN_CONSOLIDATED;
   const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
