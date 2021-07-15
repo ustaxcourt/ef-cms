@@ -1,6 +1,6 @@
 export const docketClerkVerifiesEditCourtIssuedNonstandardFields =
   cerebralTest => {
-    return it('docket clerk verifies that nonstandard fields are displayed on court-issued docket entry edit form', async () => {
+    return it('docket clerk verifies that nonstandard fields are displayed on court-issued docket entry edit form', () => {
       expect(cerebralTest.getState('currentPage')).toEqual(
         'EditDocketEntryMeta',
       );

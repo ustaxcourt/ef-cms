@@ -1575,7 +1575,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           getSendStatistics: () => {
             // mock this out so the health checks pass on smoke tests
             return {
-              promise: async () => ({
+              promise: () => ({
                 SendDataPoints: [
                   {
                     Rejects: 0,
@@ -1586,7 +1586,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           },
           sendBulkTemplatedEmail: () => {
             return {
-              promise: async () => {
+              promise: () => {
                 return { Status: [] };
               },
             };
@@ -1624,7 +1624,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: async () => {
+    getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
 
@@ -1938,7 +1938,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       info: logger.info.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
-      return execPromise(
+      return await execPromise(
         `clamscan ${
           process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
         } ${filePath}`,
