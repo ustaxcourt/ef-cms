@@ -6,6 +6,9 @@ const {
   migrateItems: bugMigration0035,
 } = require('./migrations/bug-0035-private-practitioner-representing');
 const {
+  migrateItems: bugMigration0036,
+} = require('./migrations/bug-0036-public-served-parties-code');
+const {
   migrateItems: migration0036,
 } = require('./migrations/0036-phone-number-format');
 const {
@@ -31,9 +34,11 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-
   applicationContext.logger.info('about to run bug migration 0035');
   items = await bugMigration0035(items, documentClient);
+
+  applicationContext.logger.info('about to run bug migration 0036');
+  items = await bugMigration0036(items, documentClient);
 
   applicationContext.logger.debug('about to run migration 0036');
   items = await migration0036(items);
