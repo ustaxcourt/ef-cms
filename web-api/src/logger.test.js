@@ -70,6 +70,40 @@ describe('logger', () => {
     );
   });
 
+  it('sets logger.defaultMeta.environment color stage to from the environment variables', async () => {
+    process.env.NODE_ENV = 'production';
+    process.env.CURRENT_COLOR = 'blue';
+    process.env.STAGE = 'someEnv';
+
+    await subject(req, res);
+    const instance = req.locals.logger;
+
+    instance.info = jest.fn();
+
+    res.end();
+    expect(instance.defaultMeta.environment).toEqual({
+      color: 'blue',
+      stage: 'someEnv',
+    });
+  });
+
+  it('sets logger.defaultMeta.environment color to green and stage to local when those environment variables are undefined', async () => {
+    delete process.env.CURRENT_COLOR;
+    delete process.env.STAGE;
+    process.env.NODE_ENV = 'production';
+
+    await subject(req, res);
+    const instance = req.locals.logger;
+
+    instance.info = jest.fn();
+
+    res.end();
+    expect(instance.defaultMeta.environment).toEqual({
+      color: 'green',
+      stage: 'local',
+    });
+  });
+
   it('passes request IDs to event if set in production', async () => {
     process.env.NODE_ENV = 'production';
 
