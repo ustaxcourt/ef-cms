@@ -1116,6 +1116,7 @@ const {
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
+const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { Message } = require('../../shared/src/business/entities/Message');
@@ -1159,18 +1160,47 @@ const environment = {
 
 const getDocumentClient = ({ useMasterRegion = false } = {}) => {
   const type = useMasterRegion ? 'master' : 'region';
+  const mainRegion = environment.region;
+  const fallbackRegion =
+    environment.region === 'us-west-1' ? 'us-east-1' : 'us-west-1';
+  const mainRegionEndpoint = environment.dynamoDbEndpoint.includes('localhost')
+    ? 'http://localhost:8000'
+    : `dynamodb.${mainRegion}.amazonaws.com`;
+  const fallbackRegionEndpoint = environment.dynamoDbEndpoint.includes(
+    'localhost',
+  )
+    ? 'http://localhost:8000'
+    : `dynamodb.${fallbackRegion}.amazonaws.com`;
+  const { masterDynamoDbEndpoint, masterRegion } = environment;
+
+  const config = {
+    fallbackRegion,
+    fallbackRegionEndpoint,
+    mainRegion,
+    mainRegionEndpoint,
+    masterDynamoDbEndpoint,
+    masterRegion,
+    useMasterRegion,
+  };
+
   if (!dynamoClientCache[type]) {
-    dynamoClientCache[type] = new DynamoDB.DocumentClient({
-      endpoint: useMasterRegion
-        ? environment.masterDynamoDbEndpoint
-        : environment.dynamoDbEndpoint,
-      region: useMasterRegion ? environment.masterRegion : environment.region,
-    });
+    dynamoClientCache[type] = {
+      batchGet: fallbackHandler({ key: 'batchGet', ...config }),
+      batchWrite: fallbackHandler({ key: 'batchWrite', ...config }),
+      delete: fallbackHandler({ key: 'delete', ...config }),
+      get: fallbackHandler({ key: 'get', ...config }),
+      put: fallbackHandler({ key: 'put', ...config }),
+      query: fallbackHandler({ key: 'query', ...config }),
+      scan: fallbackHandler({ key: 'scan', ...config }),
+      update: fallbackHandler({ key: 'update', ...config }),
+    };
   }
   return dynamoClientCache[type];
 };
 
 const getDynamoClient = ({ useMasterRegion = false } = {}) => {
+  // we don't need fallback logic here because the only method we use is describeTable
+  // which is used for actually checking if the table in the same region exists.
   const type = useMasterRegion ? 'master' : 'region';
   if (!dynamoCache[type]) {
     dynamoCache[type] = new DynamoDB({
