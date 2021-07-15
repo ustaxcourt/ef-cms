@@ -455,4 +455,27 @@ describe('fileExternalDocumentInteractor', () => {
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
   });
+
+  it('should not send the service email if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+  });
 });

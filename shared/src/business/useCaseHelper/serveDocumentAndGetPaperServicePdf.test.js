@@ -90,4 +90,37 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     ).toBeCalled();
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
+
+  it('should not send the service email if an error occurs while appending paper service address page to the PDF', async () => {
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockRejectedValueOnce(
+        new Error('bad!'),
+      );
+
+    await expect(
+      serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntity,
+        docketEntryId: mockDocketEntryId,
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+  });
 });
