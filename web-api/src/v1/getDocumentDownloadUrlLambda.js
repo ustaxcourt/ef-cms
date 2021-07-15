@@ -14,7 +14,7 @@ const { v1ApiWrapper } = require('./v1ApiWrapper');
 exports.getDocumentDownloadUrlLambda = (event, options = {}) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    ({ applicationContext }) => {
       return v1ApiWrapper(async () => {
         const urlObject = await applicationContext
           .getUseCases()

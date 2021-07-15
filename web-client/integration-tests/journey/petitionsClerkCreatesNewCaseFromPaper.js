@@ -158,7 +158,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     ).toBe('partyInfo');
   });
 
-  it('should default to Regular procedureType when creating a new case', async () => {
+  it('should default to Regular procedureType when creating a new case', () => {
     expect(cerebralTest.getState('form.procedureType')).toEqual(
       DEFAULT_PROCEDURE_TYPE,
     );
