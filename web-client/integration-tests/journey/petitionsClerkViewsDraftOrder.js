@@ -6,7 +6,7 @@ export const petitionsClerkViewsDraftOrder = (
   cerebralTest,
   draftOrderIndex,
 ) => {
-  return it('Petitions Clerk views draft order', async () => {
+  return it('Petitions Clerk views draft order', () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {

@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsDraftOrder = (cerebralTest, draftOrderIndex) => {
-  return it('Docket Clerk views draft order', async () => {
+  return it('Docket Clerk views draft order', () => {
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
