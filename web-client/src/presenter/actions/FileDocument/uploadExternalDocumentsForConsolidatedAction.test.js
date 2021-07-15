@@ -7,7 +7,6 @@ import { uploadExternalDocumentsForConsolidatedAction } from './uploadExternalDo
 describe('uploadExternalDocumentsForConsolidatedAction', () => {
   const { uploadExternalDocumentsInteractor } =
     applicationContext.getUseCases();
-  const { addCoversheetInteractor } = applicationContext.getUseCases();
   presenter.providers.applicationContext = applicationContext;
 
   beforeAll(() => {
@@ -17,7 +16,7 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
     };
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the pending document', async () => {
+  it('should call uploadExternalDocumentsInteractor for a single document file', async () => {
     uploadExternalDocumentsInteractor.mockReturnValue({
       caseDetail: [
         {
@@ -36,7 +35,6 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
           ],
         },
       ],
-      docketEntryIdsAdded: ['f6b81f4d-1e47-423a-8caf-6d2fdc3d3859'],
     });
 
     await runAction(uploadExternalDocumentsForConsolidatedAction, {
@@ -59,11 +57,6 @@ describe('uploadExternalDocumentsForConsolidatedAction', () => {
         attachments: true,
         docketNumber: MOCK_CASE.docketNumber,
       },
-    });
-    expect(addCoversheetInteractor.mock.calls.length).toEqual(1);
-    expect(addCoversheetInteractor.mock.calls[0][1]).toMatchObject({
-      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
