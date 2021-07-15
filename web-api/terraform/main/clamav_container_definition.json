@@ -1,7 +1,7 @@
 [
   {
-    "image": "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:latest",
-    "name": "clamav_spike",
+    "image": "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav:latest",
+    "name": "clamav",
     "logConfiguration": {
       "logDriver": "awslogs",
       "options": {
