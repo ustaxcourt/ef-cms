@@ -13,7 +13,7 @@ const { v2ApiWrapper } = require('./v2ApiWrapper');
 exports.getReconciliationReportLambda = (event, options = {}) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    ({ applicationContext }) => {
       return v2ApiWrapper(async () => {
         const report = await applicationContext
           .getUseCases()
