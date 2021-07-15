@@ -13,7 +13,7 @@ exports.getUploadPolicy = ({ applicationContext, key }) =>
   new Promise((resolve, reject) => {
     applicationContext.getStorageClient().createPresignedPost(
       {
-        Bucket: applicationContext.getQuarantineBucketName(),
+        Bucket: applicationContext.getDocumentsBucketName(),
         Conditions: [
           ['starts-with', '$key', key],
           ['starts-with', '$Content-Type', ''],
