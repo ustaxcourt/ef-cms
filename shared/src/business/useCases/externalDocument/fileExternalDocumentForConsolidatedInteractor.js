@@ -130,7 +130,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
 
   const saveCasesMap = {};
   const saveWorkItems = [];
-  const sendEmails = [];
 
   for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
     if (docketEntryId && metadata) {
@@ -225,6 +224,13 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
 
           caseEntity.addDocketEntry(docketEntryEntity);
 
+          await applicationContext
+            .getUseCases()
+            .addCoversheetInteractor(applicationContext, {
+              caseEntity: caseEntity.docketNumber,
+              docketEntryId,
+            });
+
           if (isAutoServed) {
             docketEntryEntity.setAsServed(servedParties.all);
 
@@ -254,7 +260,6 @@ exports.fileExternalDocumentForConsolidatedInteractor = async (
 
   const savedCases = await Promise.all(saveCases);
   await Promise.all(saveWorkItems);
-  await Promise.all(sendEmails);
 
   return savedCases;
 };

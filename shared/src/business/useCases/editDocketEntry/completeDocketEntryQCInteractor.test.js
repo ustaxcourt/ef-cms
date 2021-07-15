@@ -438,6 +438,33 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
+  it('should not send the service email if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    await expect(
+      completeDocketEntryQCInteractor(applicationContext, {
+        entryMetadata: {
+          addToCoversheet: true,
+          additionalInfo: 'additional info',
+          additionalInfo2: 'additional info',
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: caseRecord.docketEntries[0].documentTitle,
+          documentType: caseRecord.docketEntries[0].documentType,
+          eventCode: caseRecord.docketEntries[0].eventCode,
+          filedBy: 'Resp.',
+          filers: [mockPrimaryId],
+        },
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+  });
+
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
     caseRecord.petitioners = [
       {
