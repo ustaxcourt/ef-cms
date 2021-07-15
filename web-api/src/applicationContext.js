@@ -1035,6 +1035,9 @@ const {
   updateDocketEntryMetaInteractor,
 } = require('../../shared/src/business/useCases/docketEntry/updateDocketEntryMetaInteractor');
 const {
+  updateDocketEntryPendingServiceStatus,
+} = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryPendingServiceStatus');
+const {
   updateDocketEntryProcessingStatus,
 } = require('../../shared/src/persistence/dynamo/documents/updateDocketEntryProcessingStatus');
 const {
@@ -1314,6 +1317,7 @@ const gatewayMethods = {
     updateCase,
     updateCaseHearing,
     updateDocketEntry,
+    updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
     updateMessage,
