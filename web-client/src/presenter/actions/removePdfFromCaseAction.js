@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} the new documentUploadMode
  */
-export const removePdfFromCaseAction = async ({ get }) => {
+export const removePdfFromCaseAction = ({ get }) => {
   const form = get(state.form);
   const docketEntryId = get(state.docketEntryId);
 
