@@ -50,6 +50,21 @@ exports.editPaperFilingInteractor = async (
     docketEntryId: primaryDocumentFileId,
   });
 
+  if (!isSavingForLater) {
+    if (currentDocketEntry.isPendingService) {
+      throw new Error('Docket entry is already being served');
+    } else {
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId: currentDocketEntry.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          status: true,
+        });
+    }
+  }
+
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
     additionalInfo: documentMetadata.additionalInfo,
@@ -234,6 +249,17 @@ exports.editPaperFilingInteractor = async (
       applicationContext,
       caseToUpdate: caseEntity,
     });
+
+  if (!isSavingForLater) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: currentDocketEntry.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: false,
+      });
+  }
 
   return {
     caseDetail: new Case(result, { applicationContext })

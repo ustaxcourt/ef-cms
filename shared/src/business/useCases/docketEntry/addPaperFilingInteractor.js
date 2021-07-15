@@ -65,15 +65,31 @@ exports.addPaperFilingInteractor = async (
     DOCUMENT_RELATIONSHIPS.PRIMARY,
   ];
 
+  const readyForService = metadata.isFileAttached && !isSavingForLater;
+
   if (!docketEntryId) {
     throw new Error('Did not receive a primaryDocumentFileId');
+  }
+
+  if (readyForService) {
+    if (metadata.isPendingService) {
+      throw new Error('Docket entry is already being served');
+    } else {
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId: metadata.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          status: true,
+        });
+    }
   }
 
   const servedParties = aggregatePartiesForService(caseEntity);
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
-  const readyForService = metadata.isFileAttached && !isSavingForLater;
   const docketEntryEntity = new DocketEntry(
     {
       ...baseMetadata,
@@ -182,6 +198,17 @@ exports.addPaperFilingInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });
+
+  if (readyForService) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: metadata.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: false,
+      });
+  }
 
   return { caseDetail: caseEntity.toRawObject(), paperServicePdfUrl };
 };
