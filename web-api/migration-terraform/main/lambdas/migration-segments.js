@@ -6,6 +6,9 @@ const {
   migrateItems: bugMigration0035,
 } = require('./migrations/bug-0035-private-practitioner-representing');
 const {
+  migrateItems: migration0036,
+} = require('./migrations/0036-phone-number-format');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -31,6 +34,9 @@ const migrateRecords = async ({ documentClient, items }) => {
 
   applicationContext.logger.info('about to run bug migration 0035');
   items = await bugMigration0035(items, documentClient);
+
+  applicationContext.logger.debug('about to run migration 0036');
+  items = await migration0036(items);
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);

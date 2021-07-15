@@ -20,7 +20,12 @@ export const sealCaseAction = async ({ applicationContext, get, path }) => {
         docketNumber,
       });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Please try again',
+        title: 'Case could not be sealed.',
+      },
+    });
   }
 
   return path.success({
