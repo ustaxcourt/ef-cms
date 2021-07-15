@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {object} the file from browser memory or document from the case detail
  */
-export const getDocumentSelectedForPreviewAction = async ({
+export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
 }) => {

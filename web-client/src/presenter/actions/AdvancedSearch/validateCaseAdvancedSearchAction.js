@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const validateCaseAdvancedSearchAction = async ({
+export const validateCaseAdvancedSearchAction = ({
   applicationContext,
   get,
   path,
