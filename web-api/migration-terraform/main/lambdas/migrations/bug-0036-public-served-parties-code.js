@@ -1,5 +1,7 @@
 const createApplicationContext = require('../../../../src/applicationContext');
-const DocketEntry = require('../../../../../shared/src/business/entities/DocketEntry');
+const {
+  DocketEntry,
+} = require('../../../../../shared/src/business/entities/DocketEntry');
 const {
   getServedPartiesCode,
 } = require('../../../../../shared/src/business/entities/DocketEntry');
@@ -16,7 +18,7 @@ const migrateItems = async items => {
       item.servedParties &&
       !item.servedPartiesCode
     ) {
-      item.servedParties = getServedPartiesCode(item.servedParties);
+      item.servedPartiesCode = getServedPartiesCode(item.servedParties);
       new DocketEntry(item, { applicationContext }).validateForMigration();
       itemsAfter.push(item);
     } else {

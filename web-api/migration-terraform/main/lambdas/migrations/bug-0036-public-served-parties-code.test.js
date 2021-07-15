@@ -11,7 +11,7 @@ describe('migrateItems', () => {
 
   beforeEach(() => {
     mockDocketEntryItem = {
-      ...MOCK_DOCUMENTS[0],
+      ...MOCK_DOCUMENTS[2],
       pk: 'case|999-99',
       sk: 'docket-entry|d3989b49-dea9-4c1a-88fd-379b972032d8',
     };
@@ -61,22 +61,20 @@ describe('migrateItems', () => {
     const items = [
       {
         ...mockDocketEntryItem,
-        servedParties: [],
+        servedAt: undefined,
         servedPartiesCode: undefined,
       },
     ];
 
     const results = await migrateItems(items);
 
-    expect(results[0].servedAt).toBeUndefined();
+    expect(results[0].servedPartiesCode).toBeUndefined();
   });
 
   it('should not modify docket entries that have a servedPartiesCode', async () => {
     const items = [
       {
         ...mockDocketEntryItem,
-        servedAt: '',
-        servedParties: [],
         servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       },
     ];
@@ -90,8 +88,6 @@ describe('migrateItems', () => {
     const items = [
       {
         ...mockDocketEntryItem,
-        servedAt: '',
-        servedParties: [],
         servedPartiesCode: undefined,
       },
     ];
