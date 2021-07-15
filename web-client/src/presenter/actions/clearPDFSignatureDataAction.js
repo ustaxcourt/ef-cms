@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.signatureData
  */
-export const clearPDFSignatureDataAction = async ({ store }) => {
+export const clearPDFSignatureDataAction = ({ store }) => {
   store.unset(state.pdfForSigning.signatureData);
   store.set(state.pdfForSigning.signatureApplied, false);
 };
