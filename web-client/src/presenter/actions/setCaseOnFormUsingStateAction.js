@@ -11,8 +11,6 @@ import { state } from 'cerebral';
  */
 export const setCaseOnFormUsingStateAction = ({ get, store }) => {
   const caseDetail = cloneDeep(get(state.caseDetail));
-
   store.set(state.form, caseDetail);
-
   return { caseDetail };
 };
