@@ -22,21 +22,9 @@ resource "aws_iam_policy" "access_clamav_s3_bucket" {
 
 data "aws_iam_policy_document" "allow_read_access_to_clamav_s3_bucket" {
   statement {
-    actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.dns_domain}-monitor-script/*"]
-  }
-  statement {
     actions   = ["sqs:*"]
     resources = ["arn:aws:sqs:*:${data.aws_caller_identity.current.account_id}:s3_clamav_event_*"]
   }
-  statement {
-    actions   = ["s3:*"]
-    resources = [
-      "arn:aws:s3:::exp1.ustc-case-mgmt.flexion.us-documents-exp1-us-east-1/*",
-      "arn:aws:s3:::exp1.ustc-case-mgmt.flexion.us-quarantine/*"
-    ]
-  }
-  
 }
 
 resource "aws_iam_role_policy_attachment" "allow_clamav_role_access_to_clamav_s3_bucket" {
