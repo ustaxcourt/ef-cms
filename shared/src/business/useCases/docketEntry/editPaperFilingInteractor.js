@@ -18,6 +18,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.generateCoversheet true if coversheet must be generated
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added

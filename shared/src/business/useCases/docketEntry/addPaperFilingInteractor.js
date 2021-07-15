@@ -21,6 +21,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.generateCoversheet true if coversheet must be generated
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
