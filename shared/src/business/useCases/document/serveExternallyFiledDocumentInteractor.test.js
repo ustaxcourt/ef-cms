@@ -29,7 +29,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });

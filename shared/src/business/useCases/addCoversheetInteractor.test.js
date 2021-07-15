@@ -79,7 +79,7 @@ describe('addCoversheetInteractor', () => {
     jest.setTimeout(30000);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
@@ -230,7 +230,7 @@ describe('addCoversheetInteractor', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     };
 
-    it('displays Certificate of Service when the document is filed with a certificate of service', async () => {
+    it('displays Certificate of Service when the document is filed with a certificate of service', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -254,7 +254,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.certificateOfService).toEqual(true);
     });
 
-    it('does NOT display Certificate of Service when the document is filed without a certificate of service', async () => {
+    it('does NOT display Certificate of Service when the document is filed without a certificate of service', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -277,7 +277,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.certificateOfService).toEqual(false);
     });
 
-    it('generates correct filed date', async () => {
+    it('generates correct filed date', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -301,7 +301,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateFiledLodged).toEqual('04/19/19');
     });
 
-    it('shows does not show the filing date if the document does not have a valid filingDate', async () => {
+    it('shows does not show the filing date if the document does not have a valid filingDate', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -325,7 +325,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateFiledLodged).toEqual('');
     });
 
-    it('returns a filing date label of Filed if the document was NOT lodged', async () => {
+    it('returns a filing date label of Filed if the document was NOT lodged', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -349,7 +349,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateFiledLodgedLabel).toEqual('Filed');
     });
 
-    it('returns a filing date label of Lodged if the document was lodged', async () => {
+    it('returns a filing date label of Lodged if the document was lodged', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -374,7 +374,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateFiledLodgedLabel).toEqual('Lodged');
     });
 
-    it('shows the received date WITH time if electronically filed', async () => {
+    it('shows the received date WITH time if electronically filed', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -399,7 +399,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('04/19/19 10:45 am');
     });
 
-    it('does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
+    it('does not show the received date if the document does not have a valid createdAt and is electronically filed', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -425,7 +425,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('');
     });
 
-    it('shows the received date WITHOUT time if filed by paper', async () => {
+    it('shows the received date WITHOUT time if filed by paper', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -449,7 +449,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('04/19/19');
     });
 
-    it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', async () => {
+    it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -474,7 +474,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateReceived).toEqual('');
     });
 
-    it('displays the date served if present in MMDDYYYY format', async () => {
+    it('displays the date served if present in MMDDYYYY format', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -500,7 +500,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateServed).toEqual('04/20/19');
     });
 
-    it('does not display the service date if servedAt is not present', async () => {
+    it('does not display the service date if servedAt is not present', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -525,7 +525,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.dateServed).toEqual('');
     });
 
-    it('returns the docket number along with a Docket Number label', async () => {
+    it('returns the docket number along with a Docket Number label', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -550,7 +550,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.docketNumberWithSuffix).toEqual('102-19');
     });
 
-    it('returns the docket number with suffix along with a Docket Number label', async () => {
+    it('returns the docket number with suffix along with a Docket Number label', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -576,7 +576,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.docketNumberWithSuffix).toEqual('102-19S');
     });
 
-    it('displays Electronically Filed when the document is filed electronically', async () => {
+    it('displays Electronically Filed when the document is filed electronically', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -600,7 +600,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.electronicallyFiled).toEqual(true);
     });
 
-    it('does NOT display Electronically Filed when the document is filed by paper', async () => {
+    it('does NOT display Electronically Filed when the document is filed by paper', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -624,7 +624,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.electronicallyFiled).toEqual(false);
     });
 
-    it('returns the mailing date if present', async () => {
+    it('returns the mailing date if present', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -649,7 +649,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.mailingDate).toEqual('04/16/2019');
     });
 
-    it('returns an empty string for the mailing date if NOT present', async () => {
+    it('returns an empty string for the mailing date if NOT present', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -673,7 +673,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.mailingDate).toEqual('');
     });
 
-    it('generates cover sheet data appropriate for multiple petitioners', async () => {
+    it('generates cover sheet data appropriate for multiple petitioners', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -697,7 +697,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseCaptionExtension).toEqual('Petitioners');
     });
 
-    it('generates cover sheet data appropriate for a single petitioner', async () => {
+    it('generates cover sheet data appropriate for a single petitioner', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {
@@ -721,7 +721,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
     });
 
-    it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {
+    it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: {

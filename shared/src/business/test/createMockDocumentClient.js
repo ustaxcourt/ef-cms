@@ -55,7 +55,7 @@ const createMockDocumentClient = () => {
         arr.push(mockDynamoUsers[`${pk} ${sk}`]);
       }
       return {
-        promise: async () => ({
+        promise: () => ({
           Responses: {
             ['efcms-local']: arr,
           },
@@ -64,18 +64,18 @@ const createMockDocumentClient = () => {
     }),
     batchWrite: jest.fn().mockImplementation(() => {
       return {
-        promise: async () => null,
+        promise: () => null,
       };
     }),
     delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       delete mockDynamoUsers[`${pk} ${sk}`];
       return {
-        promise: async () => null,
+        promise: () => null,
       };
     }),
     get: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       return {
-        promise: async () => ({
+        promise: () => ({
           Item: mockDynamoUsers[`${pk} ${sk}`],
         }),
       };
@@ -84,7 +84,7 @@ const createMockDocumentClient = () => {
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
       return {
-        promise: async () => null,
+        promise: () => null,
       };
     }),
     query: jest
@@ -112,7 +112,7 @@ const createMockDocumentClient = () => {
           }
         }
         return {
-          promise: async () => ({
+          promise: () => ({
             Items: arr,
           }),
         };
@@ -142,7 +142,7 @@ const createMockDocumentClient = () => {
           }
         }
         return {
-          promise: async () => ({
+          promise: () => ({
             Items: arr,
           }),
         };
@@ -195,7 +195,7 @@ const createMockDocumentClient = () => {
             };
           }
           return {
-            promise: async () => ({
+            promise: () => ({
               Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
             }),
           };
@@ -203,7 +203,7 @@ const createMockDocumentClient = () => {
       ),
     updateConsistent: jest.fn().mockImplementation(() => {
       return {
-        promise: async () => null,
+        promise: () => null,
       };
     }),
   };
