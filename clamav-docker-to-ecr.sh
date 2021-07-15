@@ -13,6 +13,6 @@ AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID:-$(aws sts get-caller-identity --query "Account"
 # shellcheck disable=SC2091
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
 
-docker build --no-cache -t "clamav_spike:$DESTINATION_TAG" -f ./web-api/terraform/main/Dockerfile ./web-api/terraform/main/
-docker tag "clamav_spike:$DESTINATION_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:$DESTINATION_TAG"
-docker push "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/clamav_spike:$DESTINATION_TAG"
+docker build --no-cache -t "clamav:$DESTINATION_TAG" -f ./web-api/terraform/main/Dockerfile ./web-api/terraform/main/
+docker tag "clamav:$DESTINATION_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/clamav:$DESTINATION_TAG"
+docker push "$AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/clamav:$DESTINATION_TAG"
