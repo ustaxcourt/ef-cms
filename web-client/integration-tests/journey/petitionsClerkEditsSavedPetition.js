@@ -1,10 +1,10 @@
-export const petitionsClerkEditsSavedPetition = test => {
+export const petitionsClerkEditsSavedPetition = cerebralTest => {
   return it('Petitions Clerk edits saved petition', async () => {
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
       tab: 'IrsNotice',
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
   });
 };

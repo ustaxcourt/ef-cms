@@ -1,30 +1,37 @@
-export const docketClerkDeletesCorrespondence = (test, correspondenceTitle) =>
+export const docketClerkDeletesCorrespondence = (
+  cerebralTest,
+  correspondenceTitle,
+) =>
   it('Docket clerk deletes correspondence', async () => {
-    await test.runSequence('openConfirmDeleteCorrespondenceModalSequence', {
-      correspondenceId: test.correspondenceDocument.correspondenceId,
-      documentTitle: correspondenceTitle,
-    });
+    await cerebralTest.runSequence(
+      'openConfirmDeleteCorrespondenceModalSequence',
+      {
+        correspondenceId: cerebralTest.correspondenceDocument.correspondenceId,
+        documentTitle: correspondenceTitle,
+      },
+    );
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'DeleteCorrespondenceModal',
     );
 
-    await test.runSequence('deleteCorrespondenceDocumentSequence');
+    await cerebralTest.runSequence('deleteCorrespondenceDocumentSequence');
 
-    const deletedCorrespondence = test
+    const deletedCorrespondence = cerebralTest
       .getState('caseDetail.correspondence')
       .find(
         c =>
-          c.correspondenceId === test.correspondenceDocument.correspondenceId,
+          c.correspondenceId ===
+          cerebralTest.correspondenceDocument.correspondenceId,
       );
     expect(deletedCorrespondence).toBeUndefined();
 
-    expect(test.getState('caseDetail.messages')).toEqual(
+    expect(cerebralTest.getState('caseDetail.messages')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           attachments: expect.arrayContaining([
             expect.objectContaining({
-              documentId: test.correspondenceDocument.correspondenceId,
+              documentId: cerebralTest.correspondenceDocument.correspondenceId,
             }),
           ]),
         }),

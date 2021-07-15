@@ -1,18 +1,25 @@
-export const petitionsClerkCancelsAddingDeficiencyStatisticToCase = test => {
-  return it('Petitions clerk cancels adding deficiency statistic to case', async () => {
-    await test.runSequence('gotoAddDeficiencyStatisticsSequence', {
-      docketNumber: test.docketNumber,
+export const petitionsClerkCancelsAddingDeficiencyStatisticToCase =
+  cerebralTest => {
+    return it('Petitions clerk cancels adding deficiency statistic to case', async () => {
+      await cerebralTest.runSequence('gotoAddDeficiencyStatisticsSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'AddDeficiencyStatistics',
+      );
+
+      await cerebralTest.runSequence('cancelAddStatisticSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
+      expect(
+        cerebralTest.getState(
+          'currentViewMetadata.caseDetail.caseInformationTab',
+        ),
+      ).toEqual('statistics');
     });
-
-    expect(test.getState('currentPage')).toEqual('AddDeficiencyStatistics');
-
-    await test.runSequence('cancelAddStatisticSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(
-      test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
-    ).toEqual('statistics');
-  });
-};
+  };

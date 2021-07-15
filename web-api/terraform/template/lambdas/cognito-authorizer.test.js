@@ -51,6 +51,7 @@ describe('cognito-authorizer', () => {
 
     context = {
       awsRequestId: 'request-id',
+      logLevel: 'debug',
     };
   });
 
