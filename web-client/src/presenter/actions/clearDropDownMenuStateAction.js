@@ -4,6 +4,6 @@
  * @param {object} props the cerebral the cerebral props object
  * @param {object} store the cerebral store object
  */
-export const clearDropDownMenuStateAction = async ({ props, store }) => {
+export const clearDropDownMenuStateAction = ({ props, store }) => {
   store.unset(props.menuState);
 };

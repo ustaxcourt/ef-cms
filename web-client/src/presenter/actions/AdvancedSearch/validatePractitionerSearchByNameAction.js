@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const validatePractitionerSearchByNameAction = async ({ get, path }) => {
+export const validatePractitionerSearchByNameAction = ({ get, path }) => {
   const { practitionerName } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );

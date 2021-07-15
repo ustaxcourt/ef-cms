@@ -7,7 +7,7 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} continue path for the sequence
  */
-export const getShouldMarkMessageAsReadAction = async ({
+export const getShouldMarkMessageAsReadAction = ({
   applicationContext,
   path,
   props,
