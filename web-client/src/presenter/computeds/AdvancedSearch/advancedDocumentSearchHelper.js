@@ -61,7 +61,7 @@ export const formatDocumentSearchResultRecord = (
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
-  result.numberOfPagesFormatted = result.numberOfPages || 'n/a';
+  result.numberOfPagesFormatted = result.numberOfPages ?? 'n/a';
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {
