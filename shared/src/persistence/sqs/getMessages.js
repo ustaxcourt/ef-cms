@@ -1,8 +1,2 @@
-const createApplicationContext = require('../../../src/applicationContext');
-const applicationContext = createApplicationContext({});
-
-export const getMessages = async ({ appContext }) => {
-  return await applicationContext
-    .getMessagingClient()
-    .getMessages({ applicationContext: appContext });
-};
+export const getMessages = ({ applicationContext }) =>
+  applicationContext.getMessagingClient().getMessages({ applicationContext });

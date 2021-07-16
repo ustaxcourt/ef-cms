@@ -241,6 +241,9 @@ const {
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
 const {
+  deleteMessage,
+} = require('../../shared/src/persistence/sqs/deleteMessage');
+const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
@@ -465,6 +468,9 @@ const {
 const {
   getDocumentContentsForDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor');
+const {
+  getDocumentIdFromSQSMessage,
+} = require('../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
@@ -1157,6 +1163,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+const { getMessages } = require('../../shared/src/persistence/sqs/getMessages');
 const { Message } = require('../../shared/src/business/entities/Message');
 const { scan } = require('../../shared/src/persistence/dynamodbClientService');
 const { User } = require('../../shared/src/business/entities/User');
@@ -1371,6 +1378,7 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
+  deleteMessage,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1398,6 +1406,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDocketNumbersByUser,
   getDocument,
+  getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
   getDocumentQCServedForSection,
@@ -1410,6 +1419,7 @@ const gatewayMethods = {
   getInternalUsers,
   getMessageById,
   getMessageThreadByParentId,
+  getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
   getPractitionersByName,

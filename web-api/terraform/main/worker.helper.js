@@ -8,9 +8,10 @@ export const scanMessages = ({ applicationContext, messages }) => {
           .getDocumentIdFromSQSMessage(message),
         scanCompleteCallback: applicationContext
           .getPersistenceGateway()
-          .getScanCompleteCallback({
+          .deleteMessage({
             applicationContext,
             message,
+            queueUrl: applicationContext.environment.virusScanQueueUrl,
           }),
       }),
   );
