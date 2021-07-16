@@ -22,7 +22,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
   let workItemId8;
   let caseDetail;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     jest.setTimeout(30000);
   });
 

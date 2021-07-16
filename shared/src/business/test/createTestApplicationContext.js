@@ -576,6 +576,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn().mockReturnValue(require('pug')),
+    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),

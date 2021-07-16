@@ -1189,6 +1189,7 @@ const environment = {
   masterDynamoDbEndpoint:
     process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
+  quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
@@ -1574,7 +1575,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           getSendStatistics: () => {
             // mock this out so the health checks pass on smoke tests
             return {
-              promise: async () => ({
+              promise: () => ({
                 SendDataPoints: [
                   {
                     Rejects: 0,
@@ -1585,7 +1586,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
           },
           sendBulkTemplatedEmail: () => {
             return {
-              promise: async () => {
+              promise: () => {
                 return { Status: [] };
               },
             };
@@ -1623,7 +1624,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getNotificationGateway: () => ({
       sendNotificationToUser,
     }),
-    getPdfJs: async () => {
+    getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
 
@@ -1638,6 +1639,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
+    },
+    getQuarantineBucketName: () => {
+      return environment.quarantineBucketName;
     },
     getScannerResourceUri: () => {
       return (
@@ -1934,7 +1938,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       info: logger.info.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
-      return execPromise(
+      return await execPromise(
         `clamscan ${
           process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
         } ${filePath}`,
