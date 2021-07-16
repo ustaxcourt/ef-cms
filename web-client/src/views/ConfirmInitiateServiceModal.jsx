@@ -28,11 +28,9 @@ export const ConfirmInitiateServiceModal = connect(
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={() => {
-          confirmSequence
-            ? confirmSequence()
-            : serveCourtIssuedDocumentFromDocketEntrySequence();
-        }}
+        confirmSequence={
+          confirmSequence || serveCourtIssuedDocumentFromDocketEntrySequence
+        }
         disableSubmit={waitingForResponse}
         title="Are You Ready to Initiate Service?"
       >
