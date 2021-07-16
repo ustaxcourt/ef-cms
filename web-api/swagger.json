@@ -3028,12 +3028,12 @@
           "type": "string"
         }
       ],
-      "post": {
+      "get": {
         "tags": [
           "documents"
         ],
-        "summary": "triggers the virus scan function",
-        "description": "Endpoint that triggers the virus scan function for the specified document.\n",
+        "summary": "gets the status of the virus scan for the document",
+        "description": "Endpoint that the status of the virus scan for the document.\n",
         "produces": [
           "application/json"
         ],
