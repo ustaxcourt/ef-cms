@@ -8,13 +8,12 @@ const tmp = require('tmp');
  * @param {object} providers the providers object
  * @param {object} providers.key the S3 document ID
  * @param {object} providers.scanCompleteCallback to execute after scanning completes
- * @returns {Promise}
+ * @returns {Promise} resolves when complete
  */
 exports.virusScanPdfInteractor = async (
   applicationContext,
   { key, scanCompleteCallback },
 ) => {
- 
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

@@ -1,2 +1,2 @@
-export const getMessages = ({ applicationContext }) =>
+exports.getMessages = ({ applicationContext }) =>
   applicationContext.getMessagingClient().getMessages({ applicationContext });

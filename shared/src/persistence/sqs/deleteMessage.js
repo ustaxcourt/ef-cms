@@ -1,4 +1,4 @@
-export const deleteMessage = ({ applicationContext, message, queueUrl }) =>
+exports.deleteMessage = ({ applicationContext, message, queueUrl }) =>
   applicationContext
     .getMessagingClient()
     .deleteMessage({
