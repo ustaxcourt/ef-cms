@@ -1,6 +1,6 @@
 export const docketClerkVerifiesDocketEntryMetaUpdatesInEditForm =
   cerebralTest => {
-    return it('docket clerk verifies docket entry meta updates in edit form', async () => {
+    return it('docket clerk verifies docket entry meta updates in edit form', () => {
       expect(cerebralTest.getState('currentPage')).toEqual(
         'EditDocketEntryMeta',
       );

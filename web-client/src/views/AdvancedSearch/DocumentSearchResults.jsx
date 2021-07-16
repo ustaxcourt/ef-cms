@@ -86,7 +86,7 @@ export const DocumentSearchResults = connect(
                           {result.documentTitle}
                         </Button>
                       </td>
-                      <td>{result.numberOfPages}</td>
+                      <td>{result.numberOfPagesFormatted}</td>
                       <td>{result.formattedFiledDate}</td>
                       <td>
                         {result.formattedSignedJudgeName ||

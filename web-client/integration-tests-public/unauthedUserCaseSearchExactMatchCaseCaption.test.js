@@ -17,7 +17,7 @@ const { COUNTRY_TYPES } = applicationContext.getConstants();
 const updatedLastName = faker.name.lastName();
 const createdDocketNumbers = [];
 
-const updateCaseCaption = async (docketNumber, caseCaption) => {
+const updateCaseCaption = (docketNumber, caseCaption) => {
   loginAs(testClient, 'docketclerk@example.com');
 
   it(`updates the case caption for ${docketNumber} to ${caseCaption}`, async () => {

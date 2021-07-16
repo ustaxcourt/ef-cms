@@ -1,5 +1,5 @@
 export const petitionerVerifiesConsolidatedCases = cerebralTest => {
-  return it('Petitioner verifies there are consolidated cases', async () => {
+  return it('Petitioner verifies there are consolidated cases', () => {
     const cases = cerebralTest.getState('openCases');
 
     const casesWithConsolidation = cases.filter(

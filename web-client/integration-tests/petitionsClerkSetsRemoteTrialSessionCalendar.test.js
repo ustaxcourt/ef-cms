@@ -79,7 +79,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
 
     petitionsClerkSetsARemoteTrialSessionsSchedule(cerebralTest);
 
-    it('petitions clerk should be redirected to print paper service for the trial session', async () => {
+    it('petitions clerk should be redirected to print paper service for the trial session', () => {
       expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );

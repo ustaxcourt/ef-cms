@@ -52,7 +52,6 @@ describe('uploadExternalDocumentsInteractor', () => {
     });
     expect(result).toMatchObject({
       caseDetail: expect.anything(),
-      docketEntryIdsAdded: expect.any(Array),
     });
   });
 
