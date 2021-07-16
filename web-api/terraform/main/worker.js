@@ -1,10 +1,17 @@
 const createApplicationContext = require('../../../src/applicationContext');
 const applicationContext = createApplicationContext({});
 
-const getMessages = async ({ applicationContextWhat }) => {
+const getMessages = async ({ appContext }) => {
   return await applicationContext
     .getMessagingClient()
-    .getMessages({ applicationContext: applicationContextWhat });
+    .getMessages({ applicationContext: appContext });
+};
+
+const getDocumentIdFromSQSMessage = message => {
+  const { Body: body } = message;
+  const parsedBody = JSON.parse(body);
+  const documentId = parsedBody.Records[0].s3.object.key;
+  return documentId;
 };
 
 const getScanCompleteCallback = async ({ applicationContextWhat, message }) => {
@@ -17,32 +24,27 @@ const getScanCompleteCallback = async ({ applicationContextWhat, message }) => {
     .promise();
 };
 
-const scanMessages = async ({ applicationContextWhat, messages }) => {
-  const scanCalls = [];
-  messages.map(message => {
-    scanCalls.push(
-      applicationContextWhat
-        .getUseCases()
-        .virusScanPdfInteractor(applicationContextWhat, {
-          key: message.s3.object.key,
-          scanCompleteCallback: getScanCompleteCallback({
-            applicationContextWhat,
-            message,
-          }),
-        }),
-    );
-  });
+const scanMessages = ({ appContext, messages }) => {
+  const scanCalls = messages.map(message =>
+    appContext.getUseCases().virusScanPdfInteractor(appContext, {
+      key: getDocumentIdFromSQSMessage(message),
+      scanCompleteCallback: getScanCompleteCallback({
+        appContext,
+        message,
+      }),
+    }),
+  );
+
+  return Promise.all(scanCalls);
 };
 
-const main = async () => {
-  // TODO: use the applicationContext to call a use case to scan the PDF
-  setTimeout(function () {
-    console.log('hello world');
+const main = () => {
+  setTimeout(async function () {
+    const messages = await getMessages({
+      appContext: applicationContext,
+    });
+    await scanMessages({ appContext: applicationContext, messages });
   }, 10 * 1000);
-
-  const messages = await getMessages({
-    applicationContextWhat: applicationContext,
-  });
 };
 
 main();
