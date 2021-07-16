@@ -19,7 +19,7 @@ describe('validatePdfInteractor', () => {
     });
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
@@ -67,7 +67,7 @@ describe('validatePdfInteractor', () => {
 
   it('throws an error and deletes the document from S3 when the PDF is actually a png', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testInvalidPdfDoc,
       }),
     });
@@ -122,7 +122,7 @@ describe('validatePdfInteractor', () => {
   });
 
   describe('removePdf', () => {
-    it('calls the persistence method for removing a document from S3 based on the given key', async () => {
+    it('calls the persistence method for removing a document from S3 based on the given key', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -137,7 +137,7 @@ describe('validatePdfInteractor', () => {
       });
     });
 
-    it('calls the debug method with the given key and message for context', async () => {
+    it('calls the debug method with the given key and message for context', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -153,7 +153,7 @@ describe('validatePdfInteractor', () => {
       );
     });
 
-    it('calls the debug method with a generic message when one is not given', async () => {
+    it('calls the debug method with a generic message when one is not given', () => {
       removePdf({
         applicationContext,
         key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',

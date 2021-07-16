@@ -14,7 +14,7 @@ describe('virusScanPdfInteractor', () => {
       environment: { documentsBucketName: 'documents' },
       getStorageClient: () => ({
         getObject: jest.fn().mockReturnValue({
-          promise: async () => ({
+          promise: () => ({
             Body: testAsset('sample.pdf'),
           }),
         }),
@@ -23,7 +23,7 @@ describe('virusScanPdfInteractor', () => {
       logger: {
         error: () => null,
       },
-      runVirusScan: async () => true,
+      runVirusScan: () => true,
     };
     const cleanParams = {
       key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -42,7 +42,7 @@ describe('virusScanPdfInteractor', () => {
       environment: { documentsBucketName: 'documents' },
       getStorageClient: () => ({
         getObject: jest.fn().mockReturnValue({
-          promise: async () => ({
+          promise: () => ({
             Body: testAsset('fake-virus.pdf'),
           }),
         }),
@@ -51,7 +51,7 @@ describe('virusScanPdfInteractor', () => {
       logger: {
         error: () => null,
       },
-      runVirusScan: async () => {
+      runVirusScan: () => {
         throw new Error('');
       },
     };
@@ -69,7 +69,7 @@ describe('virusScanPdfInteractor', () => {
       environment: { documentsBucketName: 'documents' },
       getStorageClient: () => ({
         getObject: jest.fn().mockReturnValue({
-          promise: async () => ({
+          promise: () => ({
             Body: testAsset('fake-virus.pdf'),
           }),
         }),
@@ -78,7 +78,7 @@ describe('virusScanPdfInteractor', () => {
       logger: {
         error: () => null,
       },
-      runVirusScan: async () => {
+      runVirusScan: () => {
         const err = new Error('');
         err.code = 1;
         throw err;
