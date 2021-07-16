@@ -14,58 +14,29 @@ const testAsset = filename => {
 describe('virusScanPdfInteractor', () => {
   const mockDocumentsBucketName = 'mockDocuments';
   const mockQuarantineBucketName = 'mockDocuments';
-  const mockVirusScanQueueUrl = 'mockQueueUrl';
   const mockDocumentId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-  const mockReceiptHandle = '83ae0b62-0fb2-4092-96b6-695dfdf9cad5';
+  const scanCallbackMock = jest.fn();
 
   beforeAll(() => {
     applicationContext.environment = {
       documentsBucketName: mockDocumentsBucketName,
       quarantineBucketName: mockQuarantineBucketName,
-      virusScanQueueUrl: mockVirusScanQueueUrl,
     };
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: testAsset('sample.pdf'),
-      }),
-    });
-  });
-
-  it('should call deleteMessage and not call putObject or deleteObject if Records is undefined', async () => {
-    await virusScanPdfInteractor(applicationContext, {
-      message: {
-        Body: JSON.stringify({
-          Records: undefined,
+      promise: () =>
+        Promise.resolve({
+          Body: testAsset('sample.pdf'),
         }),
-        ReceiptHandle: mockReceiptHandle,
-      },
     });
-
-    expect(
-      applicationContext.getMessagingClient().deleteMessage.mock.calls[0][0],
-    ).toMatchObject({
-      QueueUrl: mockVirusScanQueueUrl,
-      ReceiptHandle: mockReceiptHandle,
-    });
-    expect(
-      applicationContext.getStorageClient().putObject,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getStorageClient().deleteObject,
-    ).not.toHaveBeenCalled();
   });
 
-  it('should copy file to documents bucket, delete from quarantine bucket, and delete message if file is clean', async () => {
+  it('should copy file to documents bucket, delete from quarantine bucket, and invoke callback if file is clean', async () => {
     applicationContext.runVirusScan.mockReturnValue(true);
 
     await virusScanPdfInteractor(applicationContext, {
-      message: {
-        Body: JSON.stringify({
-          Records: [{ s3: { object: { key: mockDocumentId } } }],
-        }),
-        ReceiptHandle: mockReceiptHandle,
-      },
+      key: mockDocumentId,
+      scanCompleteCallback: scanCallbackMock,
     });
 
     expect(
@@ -80,15 +51,10 @@ describe('virusScanPdfInteractor', () => {
       Bucket: mockQuarantineBucketName,
       Key: mockDocumentId,
     });
-    expect(
-      applicationContext.getMessagingClient().deleteMessage.mock.calls[0][0],
-    ).toMatchObject({
-      QueueUrl: mockVirusScanQueueUrl,
-      ReceiptHandle: mockReceiptHandle,
-    });
+    expect(scanCallbackMock).toHaveBeenCalled();
   });
 
-  it('should NOT copy file to documents bucket, delete from quarantine bucket, or delete message if file is NOT clean', async () => {
+  it('should NOT copy file to documents bucket, NOT delete from quarantine bucket, but successfully invoke callback if file is NOT clean', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
       const err = new Error('a virus!');
       err.code = 1;
@@ -96,12 +62,8 @@ describe('virusScanPdfInteractor', () => {
     });
 
     await virusScanPdfInteractor(applicationContext, {
-      message: {
-        Body: JSON.stringify({
-          Records: [{ s3: { object: { key: mockDocumentId } } }],
-        }),
-        ReceiptHandle: mockReceiptHandle,
-      },
+      key: mockDocumentId,
+      scanCompleteCallback: scanCallbackMock,
     });
 
     expect(
@@ -110,12 +72,10 @@ describe('virusScanPdfInteractor', () => {
     expect(
       applicationContext.getStorageClient().deleteObject,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getMessagingClient().deleteMessage,
-    ).not.toHaveBeenCalled();
+    expect(scanCallbackMock).toHaveBeenCalled();
   });
 
-  it('should call applicationContext.logger.error with file infected message if file is not clean and error code is 1', async () => {
+  it('should call applicationContext.logger.info with file infected message AND invoke scanCompleteCallback if file is not clean and error code is 1', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
       const err = new Error('a virus!');
       err.code = 1;
@@ -123,20 +83,17 @@ describe('virusScanPdfInteractor', () => {
     });
 
     await virusScanPdfInteractor(applicationContext, {
-      message: {
-        Body: JSON.stringify({
-          Records: [{ s3: { object: { key: mockDocumentId } } }],
-        }),
-        ReceiptHandle: mockReceiptHandle,
-      },
+      key: mockDocumentId,
+      scanCompleteCallback: scanCallbackMock,
     });
 
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    expect(applicationContext.logger.info.mock.calls[0][0]).toEqual(
       'file was infected',
     );
+    expect(scanCallbackMock).toHaveBeenCalled();
   });
 
-  it('should call applicationContext.logger.error with something happened message if file is not clean and error code is NOT 1', async () => {
+  it('should call applicationContext.logger.error with something happened message and NOT invoke scanCompleteCallback if file is not clean and error code is NOT 1', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
       const err = new Error('a virus!');
       err.code = 2;
@@ -144,16 +101,13 @@ describe('virusScanPdfInteractor', () => {
     });
 
     await virusScanPdfInteractor(applicationContext, {
-      message: {
-        Body: JSON.stringify({
-          Records: [{ s3: { object: { key: mockDocumentId } } }],
-        }),
-        ReceiptHandle: mockReceiptHandle,
-      },
+      key: mockDocumentId,
+      scanCompleteCallback: scanCallbackMock,
     });
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'something else happened',
     );
+    expect(scanCallbackMock).not.toHaveBeenCalled();
   });
 });
