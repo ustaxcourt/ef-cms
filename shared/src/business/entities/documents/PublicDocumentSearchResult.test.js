@@ -68,4 +68,20 @@ describe('Public Document Search Result entity', () => {
 
     expect(validationErrors).toBeNull();
   });
+
+  it('passes validation even if numberOfPages is null', () => {
+    const searchResult = new PublicDocumentSearchResult({
+      caseCaption: 'This is a case caption',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '12345-67',
+      documentTitle: 'This is a matching document',
+      documentType: 'Memorandum Opinion',
+      eventCode: 'MOP',
+      isSealed: true,
+      numberOfPages: null,
+    });
+    const validationErrors = searchResult.getFormattedValidationErrors();
+
+    expect(validationErrors).toBeNull();
+  });
 });
