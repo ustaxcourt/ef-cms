@@ -54,9 +54,9 @@ exports.virusScanPdfInteractor = async (
   } catch (e) {
     if (e.code === 1) {
       await scanCompleteCallback();
-      applicationContext.logger.info('file was infected', e);
+      applicationContext.logger.info('File was infected', e);
     } else {
-      applicationContext.logger.error('something else happened', e);
+      applicationContext.logger.error('Failed to scan', e);
     }
   }
 };

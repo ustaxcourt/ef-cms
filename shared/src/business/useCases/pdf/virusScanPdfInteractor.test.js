@@ -88,7 +88,7 @@ describe('virusScanPdfInteractor', () => {
     });
 
     expect(applicationContext.logger.info.mock.calls[0][0]).toEqual(
-      'file was infected',
+      'File was infected',
     );
     expect(scanCallbackMock).toHaveBeenCalled();
   });
@@ -106,7 +106,7 @@ describe('virusScanPdfInteractor', () => {
     });
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'something else happened',
+      'Failed to scan',
     );
     expect(scanCallbackMock).not.toHaveBeenCalled();
   });
