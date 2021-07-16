@@ -14,5 +14,3 @@ const main = () => {
 };
 
 main();
-
-module.exports = {};
