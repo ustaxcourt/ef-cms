@@ -241,6 +241,9 @@ const {
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
 const {
+  deleteMessage,
+} = require('../../shared/src/persistence/sqs/deleteMessage');
+const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
@@ -465,6 +468,9 @@ const {
 const {
   getDocumentContentsForDocketEntryInteractor,
 } = require('../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor');
+const {
+  getDocumentIdFromSQSMessage,
+} = require('../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage');
 const {
   getDocumentQCInboxForSection,
 } = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
@@ -1160,6 +1166,7 @@ const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
+const { getMessages } = require('../../shared/src/persistence/sqs/getMessages');
 const { Message } = require('../../shared/src/business/entities/Message');
 const { scan } = require('../../shared/src/persistence/dynamodbClientService');
 const { User } = require('../../shared/src/business/entities/User');
@@ -1176,6 +1183,7 @@ const {
   EnvironmentCredentials,
   S3,
   SES,
+  SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -1197,6 +1205,7 @@ const environment = {
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
   stage: process.env.STAGE || 'local',
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+  virusScanQueueUrl: process.env.VIRUS_SCAN_QUEUE_URL || '',
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };
 
@@ -1259,6 +1268,7 @@ let dynamoClientCache = {};
 let dynamoCache = {};
 let s3Cache;
 let sesCache;
+let sqsCache;
 let searchClientCache;
 
 const entitiesByName = {
@@ -1372,6 +1382,7 @@ const gatewayMethods = {
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFromS3,
+  deleteMessage,
   deleteRecord,
   deleteSectionOutboxRecord,
   deleteTrialSession,
@@ -1399,6 +1410,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDocketNumbersByUser,
   getDocument,
+  getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
   getDocumentQCServedForSection,
@@ -1411,6 +1423,7 @@ const gatewayMethods = {
   getInternalUsers,
   getMessageById,
   getMessageThreadByParentId,
+  getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
   getPractitionersByName,
@@ -1611,6 +1624,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
+    getMessagingClient: () => {
+      if (!sqsCache) {
+        sqsCache = new SQS({
+          apiVersion: '2012-11-05',
+        });
+      }
+      return sqsCache;
+    },
     getNodeSass: () => {
       return sass;
     },
@@ -1942,11 +1963,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       info: logger.info.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
-      return await execPromise(
-        `clamscan ${
-          process.env.CLAMAV_DEF_DIR ? `-d ${process.env.CLAMAV_DEF_DIR}` : ''
-        } ${filePath}`,
-      );
+      return await execPromise(`clamdscan ${filePath}`);
     },
   };
 };
