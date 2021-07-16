@@ -117,6 +117,7 @@ DocketEntry.prototype.init = function init(
   this.isMinuteEntry = rawDocketEntry.isMinuteEntry || false;
   this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord || false;
   this.isPaper = rawDocketEntry.isPaper;
+  this.isPendingService = rawDocketEntry.isPendingService;
   this.isSealed = rawDocketEntry.isSealed;
   this.isStricken = rawDocketEntry.isStricken || false;
   this.lodged = rawDocketEntry.lodged;
