@@ -620,6 +620,9 @@ const {
   getStampBoxCoordinates,
 } = require('../../shared/src/business/utilities/getStampBoxCoordinates');
 const {
+  getStatusOfVirusScanInteractor,
+} = require('../../shared/src/business/useCases/document/getStatusOfVirusScanInteractor');
+const {
   getTableStatus,
 } = require('../../shared/src/persistence/dynamo/getTableStatus');
 const {
@@ -1846,6 +1849,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getPublicCaseInteractor,
         getPublicDownloadPolicyUrlInteractor,
         getReconciliationReportInteractor,
+        getStatusOfVirusScanInteractor,
         getTodaysOpinionsInteractor,
         getTodaysOrdersInteractor,
         getTrialSessionDetailsInteractor,
