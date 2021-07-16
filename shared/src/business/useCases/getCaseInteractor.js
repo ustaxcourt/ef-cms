@@ -16,7 +16,7 @@ const { NotFoundError } = require('../../errors/errors');
 const { PublicCase } = require('../entities/cases/PublicCase');
 const { User } = require('../entities/User');
 
-const getSealedCase = async ({
+const getSealedCase = ({
   applicationContext,
   caseRecord,
   isAssociatedWithCase,
@@ -53,7 +53,7 @@ const getSealedCase = async ({
   }
 };
 
-const getCaseForExternalUser = async ({
+const getCaseForExternalUser = ({
   applicationContext,
   caseRecord,
   isAssociatedWithCase,

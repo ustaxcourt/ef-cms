@@ -31,7 +31,7 @@ describe('validateAddPetitionerInteractor', () => {
     };
   });
 
-  it('should not return validation errors when contact is valid and a case caption is present', async () => {
+  it('should not return validation errors when contact is valid and a case caption is present', () => {
     const errors = validateAddPetitionerInteractor(applicationContext, {
       contact: mockContact,
     });
@@ -39,7 +39,7 @@ describe('validateAddPetitionerInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('should return errors when the contact is invalid', async () => {
+  it('should return errors when the contact is invalid', () => {
     mockContact = {
       ...mockContact,
       address1: undefined,
@@ -56,7 +56,7 @@ describe('validateAddPetitionerInteractor', () => {
     });
   });
 
-  it('should return an error when second intervenor is added', async () => {
+  it('should return an error when second intervenor is added', () => {
     mockContact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
