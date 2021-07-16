@@ -1,6 +1,8 @@
 const fs = require('fs');
 const tmp = require('tmp');
 
+const queueHasRecords = () => {};
+
 /**
  * virusScanPdfInteractor
  *
@@ -9,7 +11,10 @@ const tmp = require('tmp');
  * @param {object} providers.message the message received from SQS
  * @returns {object} errors (null if no errors)
  */
-exports.virusScanPdfInteractor = async (applicationContext, { message }) => {
+exports.virusScanPdfInteractor = async (
+  applicationContext,
+  { key, scanCompleteCallback },
+) => {
   // get the document from the quarantine bucket
   // write actual file contents to temp directory so it can be scanned
   // try {
@@ -22,28 +27,28 @@ exports.virusScanPdfInteractor = async (applicationContext, { message }) => {
   // }
 
   // CA question - should this part go in a handler and this interactor just take in a key?
-  const { Body: body } = message;
-  const parsedBody = JSON.parse(body);
+  // const { Body: body } = message;
+  // const parsedBody = JSON.parse(body);
 
-  if (!parsedBody.Records) {
-    await applicationContext
-      .getMessagingClient()
-      .deleteMessage({
-        QueueUrl: applicationContext.environment.virusScanQueueUrl,
-        ReceiptHandle: message.ReceiptHandle,
-      })
-      .promise();
-    return;
-  }
+  // if (!parsedBody.Records) {
+  //   await applicationContext
+  //     .getMessagingClient()
+  //     .deleteMessage({
+  //       QueueUrl: applicationContext.environment.virusScanQueueUrl,
+  //       ReceiptHandle: message.ReceiptHandle,
+  //     })
+  //     .promise();
+  //   return;
+  // }
 
-  const documentId = parsedBody.Records[0].s3.object.key;
+  // const documentId = parsedBody.Records[0].s3.object.key;
   // end CA question block
 
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.quarantineBucketName,
-      Key: documentId,
+      Key: key,
     })
     .promise();
 
@@ -63,7 +68,7 @@ exports.virusScanPdfInteractor = async (applicationContext, { message }) => {
         Body: pdfData,
         Bucket: applicationContext.environment.documentsBucketName,
         ContentType: 'application/pdf',
-        Key: documentId,
+        Key: key,
       })
       .promise();
 
@@ -71,20 +76,15 @@ exports.virusScanPdfInteractor = async (applicationContext, { message }) => {
       .getStorageClient()
       .deleteObject({
         Bucket: applicationContext.environment.quarantineBucketName,
-        Key: documentId,
+        Key: key,
       })
       .promise();
 
-    await applicationContext
-      .getMessagingClient()
-      .deleteMessage({
-        QueueUrl: applicationContext.environment.virusScanQueueUrl,
-        ReceiptHandle: message.ReceiptHandle,
-      })
-      .promise();
+    await scanCompleteCallback();
   } catch (e) {
     if (e.code === 1) {
-      applicationContext.logger.error('file was infected', e);
+      await scanCompleteCallback();
+      applicationContext.logger.info('file was infected', e);
     } else {
       applicationContext.logger.error('something else happened', e);
     }
