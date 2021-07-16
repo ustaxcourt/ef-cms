@@ -1,7 +1,15 @@
+const createApplicationContext = require('../../src/applicationContext');
+const applicationContext = createApplicationContext({});
+const { scanMessages } = require('./worker.helper');
+
 const main = () => {
-  // TODO: use the applicationContext to call a use case to scan the PDF
-  setTimeout(function () {
-    console.log('hello world');
+  setTimeout(async function () {
+    const messages = await applicationContext
+      .getPersistenceGateway()
+      .getMessages({
+        appContext: applicationContext,
+      });
+    await scanMessages({ appContext: applicationContext, messages });
   }, 10 * 1000);
 };
 
