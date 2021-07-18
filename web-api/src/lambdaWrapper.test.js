@@ -81,6 +81,19 @@ describe('lambdaWrapper', () => {
     expect(res.send).toHaveBeenCalled();
   });
 
+  it('calls res.send with when there is no res.body and when header is application/json', async () => {
+    await lambdaWrapper(() => {
+      return {
+        body: undefined,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+    })(req, res);
+    expect(JSON.parse).toHaveBeenCalled();
+    expect(res.send).toHaveBeenCalledWith(undefined);
+  });
+
   it('calls res.redirect if header Location is set', async () => {
     await lambdaWrapper(() => {
       return {
