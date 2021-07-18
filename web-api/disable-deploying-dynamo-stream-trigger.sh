@@ -10,4 +10,4 @@ aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-
 STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 --query "State")
 echo $STATE
 
-sleep 15
+sleep 90
