@@ -26,7 +26,7 @@ export const petitionerEditsCasePrimaryContactAddressAndPhone = test => {
 
     expect(contactPrimary.address1).toEqual('101 Main St.');
     expect(contactPrimary.address3).toEqual('Apt. 101');
-    expect(contactPrimary.phone).toEqual('1111111111');
+    expect(contactPrimary.phone).toEqual('111-111-1111');
 
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test);

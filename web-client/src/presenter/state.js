@@ -36,6 +36,7 @@ import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
+import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -144,6 +145,7 @@ const helpers = {
   editPetitionerInformationHelper,
   editStatisticFormHelper,
   externalUserCasesHelper,
+  featureFlagHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,

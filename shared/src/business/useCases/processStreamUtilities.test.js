@@ -1,5 +1,5 @@
+/* eslint-disable max-lines */
 const {
-  filterRecords,
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
@@ -19,101 +19,6 @@ describe('processStreamUtilities', () => {
     applicationContext
       .getPersistenceGateway()
       .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
-  });
-
-  describe('filterRecords', () => {
-    const getMockRecord = ({
-      deleting = false,
-      id = null,
-      newTime = 'newTime',
-      oldTime = 'oldTime',
-      removeRecord = false,
-    }) => {
-      const mockRecord = {
-        dynamodb: {
-          NewImage: {
-            'aws:rep:deleting': {
-              BOOL: deleting,
-            },
-            'aws:rep:updatetime': {
-              N: newTime,
-            },
-          },
-          OldImage: {
-            'aws:rep:deleting': {
-              BOOL: false,
-            },
-            'aws:rep:updatetime': {
-              N: oldTime,
-            },
-          },
-        },
-        eventName: removeRecord ? 'REMOVE' : 'MODIFY',
-        id, // this is just an identifier for the test output and not actually on these records
-      };
-
-      if (removeRecord) {
-        delete mockRecord.dynamodb.NewImage; // remove events do not have a NewImage
-      }
-
-      return mockRecord;
-    };
-
-    beforeEach(() => {
-      process.env.NODE_ENV = 'production'; // necessary to evaluate other conditionals
-    });
-
-    afterEach(() => {
-      process.env.NODE_ENV = undefined; // resetting back after each test
-    });
-
-    it('filters out records with a deleting value of true', () => {
-      const record1 = getMockRecord({ deleting: true, id: '1' }); // should be filtered out
-      const record2 = getMockRecord({ id: '2' }); // should pass filter
-      const recordsToProcess = [record1, record2];
-
-      const result = recordsToProcess.filter(filterRecords);
-
-      expect(result).toMatchObject([record2]);
-    });
-
-    it('filters out records with where the updatetime did not change', () => {
-      const record1 = getMockRecord({
-        id: '1',
-        newTime: 'sameTime',
-        oldTime: 'sameTime',
-      }); // should be filtered out
-      const record2 = getMockRecord({
-        id: '2',
-        newTime: 'someTime',
-        oldTime: 'anotherTime',
-      }); // should pass filter
-      const recordsToProcess = [record1, record2];
-
-      const result = recordsToProcess.filter(filterRecords);
-
-      expect(result).toMatchObject([record2]);
-    });
-
-    it('returns records with a REMOVE event', () => {
-      const record1 = getMockRecord({
-        id: '1',
-        newTime: 'sameTime',
-        oldTime: 'sameTime',
-        removeRecord: false,
-      }); // should be filtered out
-      const record2 = getMockRecord({
-        id: '2',
-        newTime: 'sameTime',
-        oldTime: 'sameTime',
-        removeRecord: true,
-      }); // should pass filter
-      const recordsToProcess = [record1, record2];
-
-      const result = recordsToProcess.filter(filterRecords);
-
-      expect(result).toMatchObject([record2]);
-    });
   });
 
   describe('partitionRecords', () => {

@@ -14,7 +14,7 @@ export const petitionerEditsCasePrimaryContactPhone = test => {
 
     const contactPrimary = contactPrimaryFromState(test);
 
-    expect(contactPrimary.phone).toEqual('9999999999');
+    expect(contactPrimary.phone).toEqual('999-999-9999');
 
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(test);

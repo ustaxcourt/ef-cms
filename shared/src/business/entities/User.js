@@ -13,6 +13,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { formatPhoneNumber } = require('../utilities/formatPhoneNumber');
 
 /**
  * constructor
@@ -49,7 +50,7 @@ const userDecorator = (obj, rawObj, filtered = false) => {
       city: rawObj.contact.city,
       country: rawObj.contact.country,
       countryType: rawObj.contact.countryType,
-      phone: rawObj.contact.phone,
+      phone: formatPhoneNumber(rawObj.contact.phone),
       postalCode: rawObj.contact.postalCode,
       state: rawObj.contact.state,
     };
