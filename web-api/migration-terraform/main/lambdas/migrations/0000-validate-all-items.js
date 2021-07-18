@@ -8,7 +8,25 @@ const migrateItems = items => {
     );
 
     if (entityConstructor) {
-      new entityConstructor(item, { applicationContext }).validate();
+      try {
+        new entityConstructor(item, { applicationContext }).validate({
+          applicationContext,
+          logErrors: true,
+        });
+      } catch (err) {
+        const errors = new entityConstructor(item, {
+          applicationContext,
+        }).getFormattedValidationErrors();
+        applicationContext.logger.error(
+          `${item.entityName} failed validation: ${err}`,
+          {
+            errors,
+            pk: item.pk,
+            sk: item.sk,
+          },
+        );
+        throw err;
+      }
     }
   }
   return items;
