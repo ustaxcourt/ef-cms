@@ -43,6 +43,13 @@ describe('ErrorFactory', () => {
     expect(result.className).toEqual('ServerInvalidResponseError');
     expect(result.title).toEqual('An error has occurred');
   });
+  it('creates GatewayTimeoutError errors for status code 504', () => {
+    const error = new Error();
+    error.response = { data: 'Unauthorized', status: 504 };
+    const result = ErrorFactory.getError(error);
+    expect(result.className).toEqual('GatewayTimeoutError');
+    expect(result.title).toEqual('The system is taking too long to respond');
+  });
   it('creates InvalidRequestError errors for other 4XX status codes', () => {
     const error = new Error();
     error.response = { data: 'message', status: 418 };

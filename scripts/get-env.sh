@@ -22,6 +22,8 @@ elif [[ $BRANCH == 'experimental3' ]] ; then
   echo 'exp3'
 elif [[ $BRANCH == 'experimental4' ]] ; then
   echo 'exp4'
+elif [[ $BRANCH == 'experimental5' ]] ; then
+  echo 'exp5'
 elif [[ $BRANCH == 'irs' ]] ; then
   echo 'irs'
 elif [[ $BRANCH == 'test' ]] ; then
