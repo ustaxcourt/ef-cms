@@ -126,7 +126,7 @@ export const AdvancedDocumentSearch = connect(
                 </BindedSelect>
               </div>
               <div className=" date-search-row">
-                <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
+                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row">
                   <DateRangePickerComponent
                     endDateErrorText={
                       validationErrors.dateRangeRequired ||
@@ -134,12 +134,12 @@ export const AdvancedDocumentSearch = connect(
                     }
                     endDateOptional={true}
                     endName="endDate"
-                    endPickerCls="grid-col-12"
+                    // endPickerCls="grid-col-12"
                     endValue={advancedSearchForm[formType].endDate}
-                    pickerSpacer={() => (
-                      <div className="margin-left-3 margin-top-2" />
-                    )}
-                    rangePickerCls="grid-row grid-gap-lg"
+                    // pickerSpacer={() => (
+                    //   <div className="margin-left-3 margin-top-2" />
+                    // )}
+                    // rangePickerCls="grid-row grid-gap-lg"
                     showHint={true}
                     startDateErrorText={
                       validationErrors.dateRangeRequired ||
@@ -147,7 +147,7 @@ export const AdvancedDocumentSearch = connect(
                     }
                     startDateOptional={true}
                     startName="startDate"
-                    startPickerCls="grid-col-12"
+                    // startPickerCls="grid-col-12"
                     startValue={advancedSearchForm[formType].startDate}
                     onChangeEnd={e => {
                       updateSequence({
