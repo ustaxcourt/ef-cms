@@ -784,7 +784,7 @@ workflows:
       #           - experimental5
       - switch-colors:
           requires:
-            - build-and-deploy
+            - deploy
           filters:
             branches:
               only:
