@@ -22,16 +22,29 @@ export const ConfirmInitiateServiceModal = connect(
     serveCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse,
   }) {
+    let isSubmitDebounced = false;
+
+    const debounceSubmit = (timeout = 100) => {
+      isSubmitDebounced = true;
+
+      setTimeout(() => {
+        isSubmitDebounced = false;
+      }, timeout);
+    };
+
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={
-          confirmSequence || serveCourtIssuedDocumentFromDocketEntrySequence
-        }
-        disableSubmit={waitingForResponse}
+        confirmSequence={() => {
+          debounceSubmit(200);
+          confirmSequence
+            ? confirmSequence()
+            : serveCourtIssuedDocumentFromDocketEntrySequence();
+        }}
+        disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">
