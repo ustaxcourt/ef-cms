@@ -12,6 +12,7 @@ export const ConfirmModal = connect(
     onConfirm: sequences[props.onConfirmSequence],
     onDelete: sequences[props.onDeleteSequence],
     showModal: state.modal.showModal,
+    waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmModal({
     cancelLabel,
@@ -35,6 +36,7 @@ export const ConfirmModal = connect(
     showModal,
     showModalWhen,
     title,
+    waitingForResponse,
   }) {
     hasErrorState = hasErrorState || false;
     headerIcon = headerIcon || null;
@@ -117,7 +119,11 @@ export const ConfirmModal = connect(
         {(!noConfirm || !noCancel || showDelete) && (
           <div className="margin-top-5">
             {!noConfirm && (
-              <Button id="confirm" onClick={runConfirmSequence}>
+              <Button
+                disabled={waitingForResponse}
+                id="confirm"
+                onClick={runConfirmSequence}
+              >
                 {confirmLabel}
               </Button>
             )}
