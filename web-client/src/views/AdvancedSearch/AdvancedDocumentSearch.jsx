@@ -27,10 +27,10 @@ export const AdvancedDocumentSearch = connect(
       return (
         <>
           <FormGroup
-            className="margin-bottom-0 right-gray-border"
+            className="margin-bottom-0 right-gray-border advanced-search-full-width padding-top-6"
             errorText={validationErrors.chooseOneValue}
           >
-            <div className="grid-row flex-no-wrap grid-gap-6">
+            <div className="grid-row flex-no-wrap grid-gap-3">
               <div className="">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
@@ -76,12 +76,12 @@ export const AdvancedDocumentSearch = connect(
               </div>
             </div>
           </FormGroup>
-          <FormGroup className="maxw-full">
+          <FormGroup className="advanced-search-full-width">
             <div className="grid-row flex-no-wrap grid-gap-6">
               {formType === 'opinionSearch' && (
                 <div className=" opinion-type-search-row">
                   <label
-                    className="usa-label padding-top-105"
+                    className="usa-label padding-top-6"
                     htmlFor="order-opinion"
                   >
                     Opinion type
@@ -103,7 +103,7 @@ export const AdvancedDocumentSearch = connect(
               )}
               <div className=" judge-search-row">
                 <label
-                  className="usa-label padding-top-105"
+                  className="usa-label padding-top-6"
                   htmlFor="order-judge"
                 >
                   Judge
@@ -126,13 +126,13 @@ export const AdvancedDocumentSearch = connect(
                 </BindedSelect>
               </div>
               <div className=" date-search-row">
-                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
+                <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
                   <DateRangePickerComponent
                     endDateErrorText={
                       validationErrors.dateRangeRequired ||
                       validationErrors.endDate
                     }
-                    endDateOptional={true}
+                    endDateOptional={false}
                     endName="endDate"
                     // endPickerCls="grid-col-12"
                     endValue={advancedSearchForm[formType].endDate}
@@ -145,7 +145,7 @@ export const AdvancedDocumentSearch = connect(
                       validationErrors.dateRangeRequired ||
                       validationErrors.startDate
                     }
-                    startDateOptional={true}
+                    startDateOptional={false}
                     startName="startDate"
                     // startPickerCls="grid-col-12"
                     startValue={advancedSearchForm[formType].startDate}
