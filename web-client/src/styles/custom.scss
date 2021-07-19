@@ -1798,3 +1798,7 @@ button.change-scanner-button {
     color: color($theme-color-warning);
   }
 }
+
+#document-advanced .advanced-search-full-width {
+  max-width: 100%;
+}
