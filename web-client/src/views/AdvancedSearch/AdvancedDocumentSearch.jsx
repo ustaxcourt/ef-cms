@@ -139,7 +139,7 @@ export const AdvancedDocumentSearch = connect(
                     // pickerSpacer={() => (
                     //   <div className="margin-left-3 margin-top-2" />
                     // )}
-                    // rangePickerCls="grid-row grid-gap-lg"
+                    rangePickerCls="grid-row grid-gap-lg"
                     showHint={true}
                     startDateErrorText={
                       validationErrors.dateRangeRequired ||

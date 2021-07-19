@@ -1,6 +1,6 @@
 import { FormGroup } from '../FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
-// import classNames from 'classnames';
+import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
 import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
 
@@ -14,7 +14,7 @@ export const DateRangePickerComponent = ({
   onChangeEnd,
   onChangeStart,
   // pickerSpacer,
-  // rangePickerCls,
+  rangePickerCls,
   showHint,
   startDateErrorText,
   startDateOptional,
@@ -33,8 +33,8 @@ export const DateRangePickerComponent = ({
   useEffect(() => {
     if (
       startDatePickerRef.current &&
-      endDatePickerRef.current &&
-      dateRangePickerRef.current
+      endDatePickerRef.current
+      // && dateRangePickerRef.current
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -96,63 +96,69 @@ export const DateRangePickerComponent = ({
 
   return (
     <>
-      <div className={startPickerCls}>
-        <FormGroup
-          errorText={startDateErrorText}
-          formGroupRef={startDatePickerRef}
-        >
-          <label
-            className="usa-label"
-            htmlFor={`${startName}-date-start`}
-            id={`${startName}-date-start-label`}
+      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+        <div className={startPickerCls}>
+          <FormGroup
+            errorText={startDateErrorText}
+            formGroupRef={startDatePickerRef}
           >
-            {startLabel || 'Start date'}{' '}
-            {startDateOptional && <span className="usa-hint">(optional)</span>}
-          </label>
-          {displayHint && (
-            <div className="usa-hint" id={`${startName}-date-start-hint`}>
-              MM/DD/YYYY
+            <label
+              className="usa-label"
+              htmlFor={`${startName}-date-start`}
+              id={`${startName}-date-start-label`}
+            >
+              {startLabel || 'Start date'}{' '}
+              {startDateOptional && (
+                <span className="usa-hint">(optional)</span>
+              )}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${startName}-date-start-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
+                className="usa-input"
+                id={`${startName}-date-start`}
+                name={`${startName}-date-start`}
+                ref={startDateInputRef}
+                type="text"
+              />
             </div>
-          )}
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
-              className="usa-input"
-              id={`${startName}-date-start`}
-              name={`${startName}-date-start`}
-              ref={startDateInputRef}
-              type="text"
-            />
-          </div>
-        </FormGroup>
-      </div>
-
-      <div className={endPickerCls}>
-        <FormGroup errorText={endDateErrorText} formGroupRef={endDatePickerRef}>
-          <label
-            className="usa-label"
-            htmlFor={`${endName}-date-end`}
-            id={`${endName}-date-end-label`}
+          </FormGroup>
+        </div>
+        <div className={endPickerCls}>
+          <FormGroup
+            errorText={endDateErrorText}
+            formGroupRef={endDatePickerRef}
           >
-            {endLabel || 'End date'}{' '}
-            {endDateOptional && <span className="usa-hint">(optional)</span>}
-          </label>
-          {displayHint && (
-            <div className="usa-hint" id={`${endName}-date-end-hint`}>
-              MM/DD/YYYY
+            <label
+              className="usa-label"
+              htmlFor={`${endName}-date-end`}
+              id={`${endName}-date-end-label`}
+            >
+              {endLabel || 'End date'}{' '}
+              {endDateOptional && <span className="usa-hint">(optional)</span>}
+            </label>
+            {displayHint && (
+              <div className="usa-hint" id={`${endName}-date-end-hint`}>
+                MM/DD/YYYY
+              </div>
+            )}
+            <div className="usa-date-picker">
+              <input
+                aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
+                className="usa-input"
+                id={`${endName}-date-end`}
+                name={`${endName}-date-end`}
+                ref={endDateInputRef}
+                type="text"
+              />
             </div>
-          )}
-          <div className="usa-date-picker">
-            <input
-              aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
-              className="usa-input"
-              id={`${endName}-date-end`}
-              name={`${endName}-date-end`}
-              ref={endDateInputRef}
-              type="text"
-            />
-          </div>
-        </FormGroup>
+          </FormGroup>
+        </div>
       </div>
     </>
   );
