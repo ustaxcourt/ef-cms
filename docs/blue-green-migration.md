@@ -75,7 +75,7 @@ If this is the first time running a blue/green deployment on the environment:
 10. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
     ```./web-api/verify-ses-email.sh```
 11. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
-    ```./scripts/switch-colors.sh```
+    ```./web-client/switch-colors.sh```
 
 
 ## If a Migration is not necessary
