@@ -30,7 +30,7 @@ export const AdvancedDocumentSearch = connect(
             className="margin-bottom-0 right-gray-border"
             errorText={validationErrors.chooseOneValue}
           >
-            <div className="grid-row flex-no-wrap">
+            <div className="grid-row flex-no-wrap grid-gap-6">
               <div className="">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
@@ -76,8 +76,8 @@ export const AdvancedDocumentSearch = connect(
               </div>
             </div>
           </FormGroup>
-          <FormGroup>
-            <div className="grid-row flex-no-wrap">
+          <FormGroup className="maxw-full">
+            <div className="grid-row flex-no-wrap grid-gap-6">
               {formType === 'opinionSearch' && (
                 <div className=" opinion-type-search-row">
                   <label
@@ -126,7 +126,7 @@ export const AdvancedDocumentSearch = connect(
                 </BindedSelect>
               </div>
               <div className=" date-search-row">
-                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap">
+                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
                   <DateRangePickerComponent
                     endDateErrorText={
                       validationErrors.dateRangeRequired ||
