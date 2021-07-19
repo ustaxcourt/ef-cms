@@ -49,16 +49,23 @@ export const OrderSearch = connect(
         </div>
         <div className="blue-container order-search-container">
           <form
-            className="grid-container grid-row"
+            className=" "
             onSubmit={e => {
               e.preventDefault();
               submitAdvancedSearchSequence();
             }}
           >
-            <div className="grid-col" id="order-basic">
+            <AdvancedDocumentSearch
+              formType="orderSearch"
+              judges={judges}
+              updateSequence={updateAdvancedOrderSearchFormValueSequence}
+              validateSequence={validateOrderSearchSequence}
+              validationErrors={validationErrors}
+            />
+            <div id="order-basic">
               <NonMobile>
-                <div className="grid-row margin-top-10">
-                  <div className="tablet:grid-col-12">
+                <div className=" margin-top-10">
+                  <div className="">
                     <Button
                       className="margin-bottom-0"
                       id="advanced-search-button"
@@ -82,13 +89,6 @@ export const OrderSearch = connect(
                 </div>
               </NonMobile>
             </div>
-            <AdvancedDocumentSearch
-              formType="orderSearch"
-              judges={judges}
-              updateSequence={updateAdvancedOrderSearchFormValueSequence}
-              validateSequence={validateOrderSearchSequence}
-              validationErrors={validationErrors}
-            />
           </form>
         </div>
       </>

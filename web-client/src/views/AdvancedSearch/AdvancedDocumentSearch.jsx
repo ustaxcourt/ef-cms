@@ -26,13 +26,12 @@ export const AdvancedDocumentSearch = connect(
     const narrowYourSearch = () => {
       return (
         <>
-          <h4 id="narrow-search-header">Narrow your Search (optional)</h4>
           <FormGroup
             className="margin-bottom-0"
             errorText={validationErrors.chooseOneValue}
           >
             <div className="grid-row">
-              <div className="grid-col-3">
+              <div className="">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
                 </label>
@@ -51,10 +50,10 @@ export const AdvancedDocumentSearch = connect(
                   }}
                 />
               </div>
-              <div className="grid-col-2">
+              <div className="">
                 <div className="text-center padding-top-6">or</div>
               </div>
-              <div className="grid-col-7">
+              <div className="">
                 <label className="usa-label" htmlFor="title-or-name">
                   Case title / Petitioner’s name
                 </label>
@@ -78,89 +77,94 @@ export const AdvancedDocumentSearch = connect(
             </div>
           </FormGroup>
           <FormGroup>
-            {formType === 'opinionSearch' && (
-              <div className="grid-row opinion-type-search-row">
+            <div className="grid-row">
+              {formType === 'opinionSearch' && (
+                <div className=" opinion-type-search-row">
+                  <label
+                    className="usa-label padding-top-105"
+                    htmlFor="order-opinion"
+                  >
+                    Opinion type
+                  </label>
+                  <BindedSelect
+                    bind={`advancedSearchForm.${formType}.opinionType`}
+                    className="usa-input"
+                    id="order-opinion"
+                    name="opinionType"
+                  >
+                    <option value="">- Select -</option>
+                    {opinionDocumentTypes.map(opinionType => (
+                      <option key={opinionType} value={opinionType}>
+                        {opinionType}
+                      </option>
+                    ))}
+                  </BindedSelect>
+                </div>
+              )}
+              <div className=" judge-search-row">
                 <label
                   className="usa-label padding-top-105"
-                  htmlFor="order-opinion"
+                  htmlFor="order-judge"
                 >
-                  Opinion type
+                  Judge
                 </label>
                 <BindedSelect
-                  bind={`advancedSearchForm.${formType}.opinionType`}
+                  bind={`advancedSearchForm.${formType}.judge`}
                   className="usa-input"
-                  id="order-opinion"
-                  name="opinionType"
+                  id="order-judge"
+                  name="judge"
                 >
                   <option value="">- Select -</option>
-                  {opinionDocumentTypes.map(opinionType => (
-                    <option key={opinionType} value={opinionType}>
-                      {opinionType}
+                  {judges.map(judge => (
+                    <option
+                      key={judge.judgeFullName}
+                      value={judge.judgeFullName}
+                    >
+                      {judge.name}
                     </option>
                   ))}
                 </BindedSelect>
               </div>
-            )}
-            <div className="grid-row judge-search-row">
-              <label
-                className="usa-label padding-top-105"
-                htmlFor="order-judge"
-              >
-                Judge
-              </label>
-              <BindedSelect
-                bind={`advancedSearchForm.${formType}.judge`}
-                className="usa-input"
-                id="order-judge"
-                name="judge"
-              >
-                <option value="">- Select -</option>
-                {judges.map(judge => (
-                  <option key={judge.judgeFullName} value={judge.judgeFullName}>
-                    {judge.name}
-                  </option>
-                ))}
-              </BindedSelect>
-            </div>
-            <div className="grid-row date-search-row">
-              <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
-                <DateRangePickerComponent
-                  endDateErrorText={
-                    validationErrors.dateRangeRequired ||
-                    validationErrors.endDate
-                  }
-                  endDateOptional={true}
-                  endName="endDate"
-                  endPickerCls="grid-col-12"
-                  endValue={advancedSearchForm[formType].endDate}
-                  pickerSpacer={() => (
-                    <div className="margin-left-3 margin-top-2" />
-                  )}
-                  rangePickerCls="grid-row grid-gap-lg"
-                  showHint={true}
-                  startDateErrorText={
-                    validationErrors.dateRangeRequired ||
-                    validationErrors.startDate
-                  }
-                  startDateOptional={true}
-                  startName="startDate"
-                  startPickerCls="grid-col-12"
-                  startValue={advancedSearchForm[formType].startDate}
-                  onChangeEnd={e => {
-                    updateSequence({
-                      key: 'endDate',
-                      value: e.target.value,
-                    });
-                    validateSequence();
-                  }}
-                  onChangeStart={e => {
-                    updateSequence({
-                      key: 'startDate',
-                      value: e.target.value,
-                    });
-                    validateSequence();
-                  }}
-                />
+              <div className=" date-search-row">
+                <div className="grid-container padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0">
+                  <DateRangePickerComponent
+                    endDateErrorText={
+                      validationErrors.dateRangeRequired ||
+                      validationErrors.endDate
+                    }
+                    endDateOptional={true}
+                    endName="endDate"
+                    endPickerCls="grid-col-12"
+                    endValue={advancedSearchForm[formType].endDate}
+                    pickerSpacer={() => (
+                      <div className="margin-left-3 margin-top-2" />
+                    )}
+                    rangePickerCls="grid-row grid-gap-lg"
+                    showHint={true}
+                    startDateErrorText={
+                      validationErrors.dateRangeRequired ||
+                      validationErrors.startDate
+                    }
+                    startDateOptional={true}
+                    startName="startDate"
+                    startPickerCls="grid-col-12"
+                    startValue={advancedSearchForm[formType].startDate}
+                    onChangeEnd={e => {
+                      updateSequence({
+                        key: 'endDate',
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                    onChangeStart={e => {
+                      updateSequence({
+                        key: 'startDate',
+                        value: e.target.value,
+                      });
+                      validateSequence();
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </FormGroup>
@@ -171,18 +175,18 @@ export const AdvancedDocumentSearch = connect(
     return (
       <>
         <NonMobile>
-          <div className="grid-col" id="document-advanced">
+          <div className="grid-row" id="document-advanced">
             {narrowYourSearch()}
           </div>
         </NonMobile>
 
         <Mobile>
-          <div className="grid-row" id="document-advanced">
+          <div className="" id="document-advanced">
             {narrowYourSearch()}
           </div>
 
-          <div className="grid-row">
-            <div className="grid-col-12">
+          <div className="">
+            <div className="">
               <Button
                 className="margin-bottom-0"
                 id="advanced-search-button"
