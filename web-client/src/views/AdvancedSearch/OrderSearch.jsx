@@ -8,6 +8,7 @@ import React from 'react';
 
 export const OrderSearch = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
@@ -16,6 +17,7 @@ export const OrderSearch = connect(
     validationErrors: state.validationErrors,
   },
   function OrderSearch({
+    advancedSearchForm,
     clearAdvancedSearchFormSequence,
     judges,
     submitAdvancedSearchSequence,
@@ -25,11 +27,23 @@ export const OrderSearch = connect(
   }) {
     return (
       <>
-        <div
-          className="header-with-blue-background grid-row"
-          id="search-orders-header"
-        >
-          <h3>Search Orders</h3>
+        <div className="header-with-blue-background">
+          <p>Search orders (required)</p>
+          <input
+            aria-describedby="search-orders-header search-description"
+            className="usa-input maxw-full"
+            id="order-search"
+            name="keyword"
+            type="text"
+            value={advancedSearchForm.orderSearch.keyword || ''}
+            onBlur={() => validateOrderSearchSequence()}
+            onChange={e => {
+              updateAdvancedOrderSearchFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
         </div>
         <div className="blue-container order-search-container">
           <form
