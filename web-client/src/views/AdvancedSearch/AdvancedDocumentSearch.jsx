@@ -27,10 +27,10 @@ export const AdvancedDocumentSearch = connect(
       return (
         <>
           <FormGroup
-            className="margin-bottom-0"
+            className="margin-bottom-0 right-gray-border"
             errorText={validationErrors.chooseOneValue}
           >
-            <div className="grid-row">
+            <div className="grid-row flex-no-wrap">
               <div className="">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
@@ -77,7 +77,7 @@ export const AdvancedDocumentSearch = connect(
             </div>
           </FormGroup>
           <FormGroup>
-            <div className="grid-row">
+            <div className="grid-row flex-no-wrap">
               {formType === 'opinionSearch' && (
                 <div className=" opinion-type-search-row">
                   <label
@@ -126,7 +126,7 @@ export const AdvancedDocumentSearch = connect(
                 </BindedSelect>
               </div>
               <div className=" date-search-row">
-                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row">
+                <div className="padding-top-2 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap">
                   <DateRangePickerComponent
                     endDateErrorText={
                       validationErrors.dateRangeRequired ||
@@ -175,7 +175,7 @@ export const AdvancedDocumentSearch = connect(
     return (
       <>
         <NonMobile>
-          <div className="grid-row" id="document-advanced">
+          <div className="grid-row grid-gap-6" id="document-advanced">
             {narrowYourSearch()}
           </div>
         </NonMobile>
