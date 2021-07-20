@@ -1,7 +1,10 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { loginAs, setupTest } from './helpers';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('order search journey', () => {
   beforeEach(() => {
@@ -17,6 +20,74 @@ describe('order search journey', () => {
 
   afterAll(() => {
     cerebralTest.closeSocket();
+  });
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+
+  it('Creates case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'welcome to flavortown',
+    documentTitle: 'welcome to flavortown',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'welcome to flavortown',
+    documentTitle: 'hold on',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'wait till the partys over',
+    documentTitle: 'welcome to flavortown',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'nasty weather',
+    documentTitle: 'welcome to something flavortown',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'welcome from flavortown',
+    documentTitle: 'welcome from flavortown',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'welcome to flavor-town',
+    documentTitle: 'welcome to flavor-town',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: 'welcome to flavortown.',
+    documentTitle: 'burning down the house',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
