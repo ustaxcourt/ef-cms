@@ -64,7 +64,7 @@ export const OrderSearch = connect(
             />
             <div id="order-basic">
               <NonMobile>
-                <div className=" margin-top-10">
+                <div className="">
                   <div className="">
                     <Button
                       className="margin-bottom-0"

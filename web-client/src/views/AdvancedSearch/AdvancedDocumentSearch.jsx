@@ -76,7 +76,7 @@ export const AdvancedDocumentSearch = connect(
               </div>
             </div>
           </FormGroup>
-          <FormGroup className="advanced-search-full-width">
+          <FormGroup className="advanced-search-full-width margin-bottom-0">
             <div className="grid-row flex-no-wrap grid-gap-6">
               {formType === 'opinionSearch' && (
                 <div className=" opinion-type-search-row">
