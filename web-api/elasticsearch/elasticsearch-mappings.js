@@ -8,7 +8,7 @@ const efcmsWorkItemMappings = require('./efcms-work-item-mappings');
 
 /*
 
-To use query predicates of "term" or "prefix", column mapping should be of 
+To use query predicates of "term" or "prefix", column mapping should be of
 `type: "keyword"`
 This is especially useful when combined with a `term` query when searching for
 exact text matches (no wildcards) akin to `WHERE someCol="string literal"`
