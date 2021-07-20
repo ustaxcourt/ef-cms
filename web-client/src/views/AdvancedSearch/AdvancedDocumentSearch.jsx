@@ -2,7 +2,7 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { SearchDateRangePickerComponent } from '../../ustc-ui/DateInput/SearchDateRangePickerComponent';
+import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -132,22 +132,7 @@ export const AdvancedDocumentSearch = connect(
                       validationErrors.dateRangeRequired ||
                       validationErrors.endDate
                     }
-                    endDateOptional={false}
-                    endName="endDate"
-                    // endPickerCls="grid-col-12"
                     endValue={advancedSearchForm[formType].endDate}
-                    // pickerSpacer={() => (
-                    //   <div className="margin-left-3 margin-top-2" />
-                    // )}
-                    rangePickerCls="grid-row grid-gap-lg"
-                    showHint={true}
-                    startDateErrorText={
-                      validationErrors.dateRangeRequired ||
-                      validationErrors.startDate
-                    }
-                    startDateOptional={false}
-                    startName="startDate"
-                    // startPickerCls="grid-col-12"
                     startValue={advancedSearchForm[formType].startDate}
                     onChangeEnd={e => {
                       updateSequence({
