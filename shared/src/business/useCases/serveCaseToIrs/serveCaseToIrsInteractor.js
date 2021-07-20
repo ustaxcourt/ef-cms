@@ -333,13 +333,6 @@ exports.serveCaseToIrsInteractor = async (
     caseEntity,
   });
 
-  applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
-
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
-
   for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
     await applicationContext.getUtilities().serveCaseDocument({
       applicationContext,
@@ -347,6 +340,11 @@ exports.serveCaseToIrsInteractor = async (
       initialDocumentTypeKey,
     });
   }
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
 
   return urlToReturn;
 };
