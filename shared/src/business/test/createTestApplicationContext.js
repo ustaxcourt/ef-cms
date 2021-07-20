@@ -102,6 +102,13 @@ const {
   getDocumentQCInboxForUser: getDocumentQCInboxForUserPersistence,
 } = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForUser');
 const {
+  getDocumentQCInProgressForSection:
+    getDocumentQCInProgressForSectionPersistence,
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInProgressForSection');
+const {
+  getDocumentQCInProgressForUser: getDocumentQCInProgressForUserPersistence,
+} = require('../../persistence/elasticsearch/workitems/getDocumentQCInProgressForUser');
+const {
   getDocumentTitleWithAdditionalInfo,
 } = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
 const {
@@ -442,6 +449,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDocumentQCInProgressForSection: jest
+      .fn()
+      .mockImplementation(getDocumentQCInProgressForSectionPersistence),
+    getDocumentQCInProgressForUser: jest
+      .fn()
+      .mockImplementation(getDocumentQCInProgressForUserPersistence),
     getDocumentQCInboxForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),

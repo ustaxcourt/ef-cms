@@ -478,6 +478,18 @@ const {
   getDocumentQCInboxForUserInteractor,
 } = require('../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor');
 const {
+  getDocumentQCInProgressForSection,
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInProgressForSection');
+const {
+  getDocumentQCInProgressForSectionInteractor,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCInProgressForSectionInteractor');
+const {
+  getDocumentQCInProgressForUser,
+} = require('../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInProgressForUser');
+const {
+  getDocumentQCInProgressForUserInteractor,
+} = require('../../shared/src/business/useCases/workitems/getDocumentQCInProgressForUserInteractor');
+const {
   getDocumentQCServedForSection,
 } = require('../../shared/src/persistence/dynamo/workitems/getDocumentQCServedForSection');
 const {
@@ -1394,6 +1406,8 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDocketNumbersByUser,
   getDocument,
+  getDocumentQCInProgressForSection,
+  getDocumentQCInProgressForUser,
   getDocumentQCInboxForSection,
   getDocumentQCInboxForUser,
   getDocumentQCServedForSection,
@@ -1792,6 +1806,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
         getDocumentContentsForDocketEntryInteractor,
+        getDocumentQCInProgressForSectionInteractor,
+        getDocumentQCInProgressForUserInteractor,
         getDocumentQCInboxForSectionInteractor,
         getDocumentQCInboxForUserInteractor,
         getDocumentQCServedForSectionInteractor,
