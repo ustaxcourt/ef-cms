@@ -1,8 +1,8 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SearchDateRangePickerComponent } from '../../ustc-ui/DateInput/SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -127,7 +127,7 @@ export const AdvancedDocumentSearch = connect(
               </div>
               <div className=" date-search-row">
                 <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
-                  <DateRangePickerComponent
+                  <SearchDateRangePickerComponent
                     endDateErrorText={
                       validationErrors.dateRangeRequired ||
                       validationErrors.endDate

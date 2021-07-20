@@ -13,7 +13,7 @@ export const DateRangePickerComponent = ({
   endValue,
   onChangeEnd,
   onChangeStart,
-  // pickerSpacer,
+  pickerSpacer,
   rangePickerCls,
   showHint,
   startDateErrorText,
@@ -33,8 +33,8 @@ export const DateRangePickerComponent = ({
   useEffect(() => {
     if (
       startDatePickerRef.current &&
-      endDatePickerRef.current
-      // && dateRangePickerRef.current
+      endDatePickerRef.current &&
+      dateRangePickerRef.current
     ) {
       datePicker.on(startDatePickerRef.current);
       datePicker.on(endDatePickerRef.current);
@@ -91,11 +91,11 @@ export const DateRangePickerComponent = ({
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  // const Spacer = pickerSpacer;
+  const Spacer = pickerSpacer;
   const displayHint = showHint !== undefined ? showHint : true;
 
   return (
-    <>
+    <FormGroup formGroupRef={dateRangePickerRef}>
       <div className={classNames('usa-date-range-picker', rangePickerCls)}>
         <div className={startPickerCls}>
           <FormGroup
@@ -129,6 +129,9 @@ export const DateRangePickerComponent = ({
             </div>
           </FormGroup>
         </div>
+
+        {Spacer && <Spacer />}
+
         <div className={endPickerCls}>
           <FormGroup
             errorText={endDateErrorText}
@@ -160,6 +163,6 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
       </div>
-    </>
+    </FormGroup>
   );
 };
