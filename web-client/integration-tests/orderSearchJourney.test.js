@@ -3,7 +3,7 @@ import { loginAs, setupTest } from './helpers';
 
 const cerebralTest = setupTest();
 
-describe('order search journey', () => {
+describe.skip('order search journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
