@@ -7,14 +7,14 @@ import dateRangePicker from 'uswds/src/js/components/date-range-picker';
 
 export const SearchDateRangePickerComponent = connect(
   {
+    advancedSearchForm: state.advancedSearchForm,
     validationErrors: state.validationErrors,
   },
   function SearchDateRangePickerComponent({
-    endDateErrorText,
-    endValue,
-    onChangeEnd,
-    onChangeStart,
-    startValue,
+    advancedSearchForm,
+    formType,
+    updateSequence,
+    validateSequence,
     validationErrors,
   }) {
     const dateRangePickerRef = useRef();
@@ -37,7 +37,7 @@ export const SearchDateRangePickerComponent = connect(
       const startHiddenInput = window.document.querySelector(
         'input[name="startDate-date-start"]',
       );
-      if (!startValue && startInput) {
+      if (!advancedSearchForm[formType].startDate && startInput) {
         startInput.value = '';
         startHiddenInput.value = '';
         const backspaceEvent = new CustomEvent('change', {
@@ -48,14 +48,14 @@ export const SearchDateRangePickerComponent = connect(
         startInput.dispatchEvent(backspaceEvent);
         startHiddenInput.dispatchEvent(backspaceEvent);
       }
-    }, [startValue]);
+    }, [advancedSearchForm[formType].startDate]);
 
     useEffect(() => {
       const endInput = window.document.getElementById('endDate-date-end');
       const endHiddenInput = window.document.querySelector(
         'input[name="endDate-date-end"]',
       );
-      if (!endValue && endInput) {
+      if (!advancedSearchForm[formType].endDate && endInput) {
         endInput.value = '';
         endHiddenInput.value = '';
         const backspaceEvent = new CustomEvent('change', {
@@ -66,16 +66,28 @@ export const SearchDateRangePickerComponent = connect(
         endInput.dispatchEvent(backspaceEvent);
         endHiddenInput.dispatchEvent(backspaceEvent);
       }
-    }, [endValue]);
+    }, [advancedSearchForm[formType].endDate]);
 
     useEffect(() => {
       if (startDateInputRef.current && endDateInputRef.current) {
         window.document
           .getElementById('endDate-date-end')
-          .addEventListener('change', onChangeEnd);
+          .addEventListener('change', e => {
+            updateSequence({
+              key: 'endDate',
+              value: e.target.value,
+            });
+            validateSequence();
+          });
         window.document
           .getElementById('startDate-date-start')
-          .addEventListener('change', onChangeStart);
+          .addEventListener('change', e => {
+            updateSequence({
+              key: 'startDate',
+              value: e.target.value,
+            });
+            validateSequence();
+          });
       }
     }, [startDateInputRef, endDateInputRef]);
 
@@ -109,7 +121,12 @@ export const SearchDateRangePickerComponent = connect(
           </div>
         </FormGroup>
 
-        <FormGroup errorText={endDateErrorText} formGroupRef={endDatePickerRef}>
+        <FormGroup
+          errorText={
+            validationErrors.dateRangeRequired || validationErrors.endDate
+          }
+          formGroupRef={endDatePickerRef}
+        >
           <label
             className="usa-label"
             htmlFor="endDate-date-end"

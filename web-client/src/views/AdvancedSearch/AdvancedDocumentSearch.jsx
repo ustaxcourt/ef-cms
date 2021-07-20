@@ -128,26 +128,9 @@ export const AdvancedDocumentSearch = connect(
               <div className=" date-search-row">
                 <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
                   <SearchDateRangePickerComponent
-                    endDateErrorText={
-                      validationErrors.dateRangeRequired ||
-                      validationErrors.endDate
-                    }
-                    endValue={advancedSearchForm[formType].endDate}
-                    startValue={advancedSearchForm[formType].startDate}
-                    onChangeEnd={e => {
-                      updateSequence({
-                        key: 'endDate',
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
-                    onChangeStart={e => {
-                      updateSequence({
-                        key: 'startDate',
-                        value: e.target.value,
-                      });
-                      validateSequence();
-                    }}
+                    formType={formType}
+                    updateSequence={updateSequence}
+                    validateSequence={validateSequence}
                   />
                 </div>
               </div>
