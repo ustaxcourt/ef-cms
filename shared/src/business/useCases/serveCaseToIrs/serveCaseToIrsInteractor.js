@@ -333,6 +333,8 @@ exports.serveCaseToIrsInteractor = async (
     caseEntity,
   });
 
+  applicationContext.getUtilities().setServiceIndicatorsForCase(caseEntity);
+
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity,
