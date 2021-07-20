@@ -57,7 +57,7 @@ InternalDocumentSearchResult.schema = joi.object().keys({
   isSealed: joi.boolean(),
   isStricken: joi.boolean(),
   judge: JoiValidationConstants.STRING.optional(),
-  numberOfPages: joi.number().integer(),
+  numberOfPages: joi.number().integer().optional().allow(null),
   sealedDate: JoiValidationConstants.ISO_DATE,
   signedJudgeName: JoiValidationConstants.STRING.optional(),
 });

@@ -409,9 +409,11 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetStorageClient = appContextProxy({
+    deleteObject: jest.fn().mockReturnValue({ promise: () => {} }),
     getObject: jest.fn().mockReturnValue({
       promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
     }),
+    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
   });
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -489,6 +491,10 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetEmailClient = {
     sendBulkTemplatedEmail: jest.fn(),
+  };
+
+  const mockGetMessagingClient = {
+    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -569,6 +575,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
     }),
+    getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
@@ -576,6 +583,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
     getPug: jest.fn().mockReturnValue(require('pug')),
+    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
@@ -596,6 +604,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       info: jest.fn(),
       warn: jest.fn(),
     },
+    runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };

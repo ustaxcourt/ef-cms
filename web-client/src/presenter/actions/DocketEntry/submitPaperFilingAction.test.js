@@ -47,7 +47,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
@@ -116,7 +116,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
@@ -156,7 +156,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
@@ -200,7 +200,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
@@ -242,7 +242,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,
@@ -291,7 +291,7 @@ describe('submitPaperFilingAction', () => {
       applicationContext.getUseCases().validatePdfInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).not.toHaveBeenCalled();
     expect(result.output).toEqual({
       caseDetail,

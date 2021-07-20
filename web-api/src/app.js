@@ -219,6 +219,9 @@ const {
   getReconciliationReportLambda: v2GetReconciliationReportLambda,
 } = require('./v2/getReconciliationReportLambda');
 const {
+  getStatusOfVirusScanLambda,
+} = require('./documents/getStatusOfVirusScanLambda');
+const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
@@ -405,7 +408,6 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -750,9 +752,9 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
 }
 
-app.post(
-  '/clamav/documents/:key/virus-scan',
-  lambdaWrapper(virusScanPdfLambda),
+app.get(
+  '/documents/:key/virus-scan',
+  lambdaWrapper(getStatusOfVirusScanLambda),
 );
 
 /**
