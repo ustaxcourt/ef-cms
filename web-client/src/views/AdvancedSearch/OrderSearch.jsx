@@ -62,7 +62,7 @@ export const OrderSearch = connect(
               validateSequence={validateOrderSearchSequence}
               validationErrors={validationErrors}
             />
-            <div id="order-basic">
+            <div className="padding-left-2" id="order-basic">
               <NonMobile>
                 <div className="">
                   <div className="">
