@@ -1,12 +1,16 @@
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITH_TRIAL_SESSION,
+} = require('../../test/mockCase');
 const {
   updateCaseContextInteractor,
 } = require('./updateCaseContextInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
 
 describe('updateCaseContextInteractor', () => {
@@ -50,11 +54,52 @@ describe('updateCaseContextInteractor', () => {
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
   });
 
+  it('should not remove the case from trial if the old and new case status match', async () => {
+    const result = await updateCaseContextInteractor(applicationContext, {
+      associatedJudge: 'Judge Rachael',
+      caseStatus: CASE_STATUS_TYPES.new,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.new);
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
+    const MOCK_TRIAL = {
+      chambersPhoneNumber: '1111111',
+      joinPhoneNumber: '0987654321',
+      judge: {
+        name: 'Chief Judge',
+        userId: '822366b7-e47c-413e-811f-d29113d09b06',
+      },
+      maxCases: 100,
+      meetingId: '1234567890',
+      password: 'abcdefg',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      sessionType: 'Regular',
+      startDate: '2025-12-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialLocation: 'Birmingham, Alabama',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
+
     const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Rachael',
       caseStatus: CASE_STATUS_TYPES.cav,
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: MOCK_CASE_WITH_TRIAL_SESSION.docketNumber,
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
