@@ -3,7 +3,7 @@ import { loginAs, setupTest } from './helpers';
 
 const cerebralTest = setupTest();
 
-describe.skip('order search journey', () => {
+describe('order search journey', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
@@ -20,13 +20,13 @@ describe.skip('order search journey', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('searches for an order by keyword `welcome to flavortown`', async () => {
+  it('searches for an order by keyword `"welcome to flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        keyword: 'welcome to flavortown',
+        keyword: '"welcome to flavortown"',
       },
     });
 
@@ -59,13 +59,13 @@ describe.skip('order search journey', () => {
     expect(searchResults.length).toEqual(4);
   });
 
-  it('searches for an order by keyword `welcome from flavortown`', async () => {
+  it('searches for an order by keyword `"welcome from flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        keyword: 'welcome from flavortown',
+        keyword: '"welcome from flavortown"',
       },
     });
 
@@ -85,13 +85,13 @@ describe.skip('order search journey', () => {
     expect(searchResults.length).toEqual(1);
   });
 
-  it('searches for an order by keyword `welcome to flavor-town`', async () => {
+  it('searches for an order by keyword `"welcome to flavor-town"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        keyword: 'welcome to flavor-town',
+        keyword: '"welcome to flavor-town"',
       },
     });
 
@@ -111,13 +111,13 @@ describe.skip('order search journey', () => {
     expect(searchResults.length).toEqual(1);
   });
 
-  it('searches for an order by keyword `Welcome to Flavortown`', async () => {
+  it('searches for an order by keyword `"Welcome to Flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        keyword: 'Welcome to Flavortown',
+        keyword: '"Welcome to Flavortown"',
       },
     });
 
@@ -150,13 +150,13 @@ describe.skip('order search journey', () => {
     expect(searchResults.length).toEqual(4);
   });
 
-  it('searches for an order by keyword `welcomes to flavortown`', async () => {
+  it('searches for an order by keyword `"welcomes to flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        keyword: 'welcomes to flavortown',
+        keyword: '"welcomes to flavortown"',
       },
     });
 
