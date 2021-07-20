@@ -27,7 +27,7 @@ export const AdvancedDocumentSearch = connect(
       return (
         <>
           <FormGroup
-            className="margin-bottom-0 right-gray-border advanced-search-full-width padding-top-6 padding-right-9"
+            className="margin-bottom-0 right-gray-border advanced-search-full-width padding-top-6 padding-right-9 padding-left-2"
             errorText={validationErrors.chooseOneValue}
           >
             <div className="grid-row flex-no-wrap grid-gap-3">
@@ -175,7 +175,7 @@ export const AdvancedDocumentSearch = connect(
     return (
       <>
         <NonMobile>
-          <div className="grid-row grid-gap-6" id="document-advanced">
+          <div className="grid-row" id="document-advanced">
             {narrowYourSearch()}
           </div>
         </NonMobile>
