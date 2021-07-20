@@ -15,7 +15,7 @@
 
   // eslint-disable-next-line spellcheck/spell-checker
   /*
-    Supported versions can be found at 
+    Supported versions can be found at
     https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version
     Changes to the API version ought to also be reflected in
     - elasticsearch.tf
@@ -33,7 +33,7 @@
       region: environment.region,
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass: connectionClass,
+    connectionClass,
     host: {
       host: environment.elasticsearchEndpoint,
       port: process.env.ELASTICSEARCH_PORT || 443,

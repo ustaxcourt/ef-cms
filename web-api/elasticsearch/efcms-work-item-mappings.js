@@ -6,6 +6,9 @@ module.exports = {
     'associatedJudge.S': {
       type: 'text',
     },
+    'caseIsInProgress.BOOL': {
+      type: 'boolean',
+    },
     'completedAt.S': {
       type: 'text',
     },
