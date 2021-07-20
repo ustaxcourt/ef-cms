@@ -49,7 +49,6 @@ export const OrderSearch = connect(
         </div>
         <div className="blue-container order-search-container">
           <form
-            className=" "
             onSubmit={e => {
               e.preventDefault();
               submitAdvancedSearchSequence();
@@ -65,27 +64,25 @@ export const OrderSearch = connect(
             <div className="padding-left-2" id="order-basic">
               <NonMobile>
                 <div>
-                  <div>
-                    <Button
-                      className="margin-bottom-0"
-                      id="advanced-search-button"
-                      type="submit"
-                    >
-                      Search
-                    </Button>
-                    <Button
-                      link
-                      className="padding-0 ustc-button--mobile-inline"
-                      onClick={e => {
-                        e.preventDefault();
-                        clearAdvancedSearchFormSequence({
-                          formType: 'orderSearch',
-                        });
-                      }}
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
+                  <Button
+                    className="margin-bottom-0"
+                    id="advanced-search-button"
+                    type="submit"
+                  >
+                    Search
+                  </Button>
+                  <Button
+                    link
+                    className="padding-0 ustc-button--mobile-inline"
+                    onClick={e => {
+                      e.preventDefault();
+                      clearAdvancedSearchFormSequence({
+                        formType: 'orderSearch',
+                      });
+                    }}
+                  >
+                    Clear Search
+                  </Button>
                 </div>
               </NonMobile>
             </div>

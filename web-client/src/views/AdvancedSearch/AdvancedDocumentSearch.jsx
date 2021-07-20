@@ -31,7 +31,7 @@ export const AdvancedDocumentSearch = connect(
             errorText={validationErrors.chooseOneValue}
           >
             <div className="grid-row flex-no-wrap grid-gap-3">
-              <div className="">
+              <div>
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
                 </label>
@@ -50,10 +50,10 @@ export const AdvancedDocumentSearch = connect(
                   }}
                 />
               </div>
-              <div className="">
+              <div>
                 <div className="text-center padding-top-6">or</div>
               </div>
-              <div className="">
+              <div>
                 <label className="usa-label" htmlFor="title-or-name">
                   Case title / Petitioner’s name
                 </label>
@@ -79,7 +79,7 @@ export const AdvancedDocumentSearch = connect(
           <FormGroup className="advanced-search-full-width margin-bottom-0 padding-left-9">
             <div className="grid-row flex-no-wrap grid-gap-6">
               {formType === 'opinionSearch' && (
-                <div className=" opinion-type-search-row">
+                <div className="opinion-type-search-row">
                   <label
                     className="usa-label padding-top-6"
                     htmlFor="order-opinion"
@@ -101,7 +101,7 @@ export const AdvancedDocumentSearch = connect(
                   </BindedSelect>
                 </div>
               )}
-              <div className=" judge-search-row">
+              <div className="judge-search-row">
                 <label
                   className="usa-label padding-top-6"
                   htmlFor="order-judge"
@@ -125,7 +125,7 @@ export const AdvancedDocumentSearch = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <div className=" date-search-row">
+              <div className="date-search-row">
                 <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap grid-gap-6">
                   <SearchDateRangePickerComponent
                     formType={formType}
@@ -149,32 +149,28 @@ export const AdvancedDocumentSearch = connect(
         </NonMobile>
 
         <Mobile>
-          <div className="" id="document-advanced">
-            {narrowYourSearch()}
-          </div>
+          <div id="document-advanced">{narrowYourSearch()}</div>
 
-          <div className="">
-            <div className="">
-              <Button
-                className="margin-bottom-0"
-                id="advanced-search-button"
-                type="submit"
-              >
-                Search
-              </Button>
-              <Button
-                link
-                className="ustc-button--mobile-inline"
-                onClick={e => {
-                  e.preventDefault();
-                  clearAdvancedSearchFormSequence({
-                    formType,
-                  });
-                }}
-              >
-                Clear Search
-              </Button>
-            </div>
+          <div>
+            <Button
+              className="margin-bottom-0"
+              id="advanced-search-button"
+              type="submit"
+            >
+              Search
+            </Button>
+            <Button
+              link
+              className="ustc-button--mobile-inline"
+              onClick={e => {
+                e.preventDefault();
+                clearAdvancedSearchFormSequence({
+                  formType,
+                });
+              }}
+            >
+              Clear Search
+            </Button>
           </div>
         </Mobile>
       </>
