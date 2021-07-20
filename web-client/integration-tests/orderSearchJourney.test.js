@@ -41,6 +41,21 @@ describe('order search journey', () => {
         docketNumber: '313-21',
         documentTitle: 'welcome to flavortown',
       },
+      {
+        docketNumber: '313-21',
+        documentContents: 'welcome to flavortown',
+      },
+      {
+        docketNumber: '313-21',
+        documentContents: 'welcome to flavortown',
+        documentTitle: 'welcome to flavortown',
+      },
+      {
+        docketNumber: '313-21',
+        documentContents: 'welcome to flavortown.',
+      },
     ]);
+
+    expect(searchResults.length).toEqual(4);
   });
 });
