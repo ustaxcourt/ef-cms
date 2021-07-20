@@ -1,6 +1,15 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 const cerebralTest = setupTest();
@@ -34,6 +43,7 @@ describe('order search journey', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
+  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'welcome to flavortown',
     documentTitle: 'welcome to flavortown',
@@ -41,6 +51,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesDocument(cerebralTest, 0);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'welcome to flavortown',
@@ -49,6 +62,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkServesDocument(cerebralTest, 1);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'wait till the partys over',
@@ -57,6 +73,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocument(cerebralTest, 2);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'nasty weather',
@@ -65,6 +84,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 3);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 3);
+  docketClerkServesDocument(cerebralTest, 3);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'welcome from flavortown',
@@ -73,6 +95,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 4);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 4);
+  docketClerkServesDocument(cerebralTest, 4);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'welcome to flavor-town',
@@ -81,6 +106,9 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 5);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 5);
+  docketClerkServesDocument(cerebralTest, 5);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: 'welcome to flavortown.',
@@ -89,14 +117,19 @@ describe('order search journey', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
+  docketClerkSignsOrder(cerebralTest, 6);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 6);
+  docketClerkServesDocument(cerebralTest, 6);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('searches for an order by keyword `"welcome to flavortown"`', async () => {
+    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
         keyword: '"welcome to flavortown"',
       },
     });
@@ -110,21 +143,22 @@ describe('order search journey', () => {
     expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: '313-21',
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
           documentTitle: 'welcome to flavortown',
         }),
         expect.objectContaining({
-          docketNumber: '313-21',
-          documentContents: 'welcome to flavortown',
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
         }),
         expect.objectContaining({
-          docketNumber: '313-21',
-          documentContents: 'welcome to flavortown',
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
           documentTitle: 'welcome to flavortown',
         }),
         expect.objectContaining({
-          docketNumber: '313-21',
-          documentContents: 'welcome to flavortown.',
+          docketEntryId: cerebralTest.draftOrders[6].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
         }),
       ]),
     );
@@ -132,12 +166,13 @@ describe('order search journey', () => {
     expect(searchResults.length).toEqual(4);
   });
 
-  it.skip('searches for an order by keyword `"welcome from flavortown"`', async () => {
+  it('searches for an order by keyword `"welcome from flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
         keyword: '"welcome from flavortown"',
       },
     });
@@ -150,7 +185,8 @@ describe('order search journey', () => {
 
     expect(searchResults).toEqual([
       expect.objectContaining({
-        docketNumber: '313-21',
+        docketEntryId: cerebralTest.draftOrders[4].docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
         documentTitle: 'welcome from flavortown',
       }),
     ]);
@@ -158,12 +194,13 @@ describe('order search journey', () => {
     expect(searchResults.length).toEqual(1);
   });
 
-  it.skip('searches for an order by keyword `"welcome to flavor-town"`', async () => {
+  it('searches for an order by keyword `"welcome to flavor-town"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
         keyword: '"welcome to flavor-town"',
       },
     });
@@ -176,7 +213,8 @@ describe('order search journey', () => {
 
     expect(searchResults).toEqual([
       expect.objectContaining({
-        docketNumber: '313-21',
+        docketEntryId: cerebralTest.draftOrders[5].docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
         documentTitle: 'welcome to flavor-town',
       }),
     ]);
@@ -184,12 +222,13 @@ describe('order search journey', () => {
     expect(searchResults.length).toEqual(1);
   });
 
-  it.skip('searches for an order by keyword `"Welcome to Flavortown"`', async () => {
+  it('searches for an order by keyword `"Welcome to Flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
         keyword: '"Welcome to Flavortown"',
       },
     });
@@ -200,35 +239,39 @@ describe('order search journey', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
     );
 
-    expect(searchResults).toEqual([
-      expect.objectContaining({
-        docketNumber: '313-21',
-        documentTitle: 'welcome to flavortown',
-      }),
-      expect.objectContaining({
-        docketNumber: '313-21',
-        documentContents: 'welcome to flavortown',
-      }),
-      expect.objectContaining({
-        docketNumber: '313-21',
-        documentContents: 'welcome to flavortown',
-        documentTitle: 'welcome to flavortown',
-      }),
-      expect.objectContaining({
-        docketNumber: '313-21',
-        documentContents: 'welcome to flavortown.',
-      }),
-    ]);
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+          documentTitle: 'welcome to flavortown',
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+          documentTitle: 'welcome to flavortown',
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[6].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
 
     expect(searchResults.length).toEqual(4);
   });
 
-  it.skip('searches for an order by keyword `"welcomes to flavortown"`', async () => {
+  it('searches for an order by keyword `"welcomes to flavortown"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
         keyword: '"welcomes to flavortown"',
       },
     });
