@@ -31,7 +31,6 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({ documentClient, items }) => {
-
   applicationContext.logger.info('about to run bug migration 0035');
   items = await bugMigration0035(items, documentClient);
 
