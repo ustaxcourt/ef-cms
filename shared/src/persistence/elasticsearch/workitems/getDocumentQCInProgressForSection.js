@@ -5,6 +5,7 @@ exports.getDocumentQCInboxForSection = async ({
   judgeUserName,
   section,
 }) => {
+  console.log('!!!', section);
   const query = {
     body: {
       query: {
@@ -16,12 +17,6 @@ exports.getDocumentQCInboxForSection = async ({
             {
               prefix: { 'sk.S': 'work-item|' },
             },
-            // TODO: add caseIsInProgress to both inbox and in progress queries
-            // {
-            //   exists: {
-            //     field: 'caseIsInProgress.BOOL',
-            //   },
-            // },
             {
               term: {
                 'section.S': section,

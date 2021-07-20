@@ -1,31 +1,21 @@
 const { search } = require('../searchClient');
 
-exports.getDocumentQCInboxForSection = async ({
-  applicationContext,
-  judgeUserName,
-  section,
-}) => {
+exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
   const query = {
     body: {
       query: {
         bool: {
           must: [
             {
+              term: {
+                'assigneeId.S': userId,
+              },
+            },
+            {
               prefix: { 'pk.S': 'work-item|' },
             },
             {
               prefix: { 'sk.S': 'work-item|' },
-            },
-            // TODO: add caseIsInProgress to both inbox and in progress queries
-            // {
-            //   exists: {
-            //     field: 'caseIsInProgress.BOOL',
-            //   },
-            // },
-            {
-              term: {
-                'section.S': section,
-              },
             },
           ],
           must_not: {
@@ -50,20 +40,10 @@ exports.getDocumentQCInboxForSection = async ({
     index: 'efcms-work-item',
   };
 
-  if (judgeUserName) {
-    query.body.query.bool.must.push({
-      match: {
-        'associatedJudge.S': `${judgeUserName}`,
-      },
-    });
-  }
-
   const { results } = await search({
     applicationContext,
     searchParameters: query,
   });
-
-  console.log('!!!', section, results.length);
 
   return results;
 };
