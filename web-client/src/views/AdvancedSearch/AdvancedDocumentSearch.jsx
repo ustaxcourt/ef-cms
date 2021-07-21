@@ -27,7 +27,7 @@ export const AdvancedDocumentSearch = connect(
       return (
         <>
           <FormGroup
-            className="margin-bottom-0 right-gray-border bottom-gray-border advanced-search-full-width desktop:padding-top-6 desktop:padding-right-9 desktop:padding-left-2"
+            className="margin-bottom-0 right-gray-border advanced-search-full-width padding-top-4 padding-right-9 padding-left-2"
             errorText={validationErrors.chooseOneValue}
           >
             <div className="grid-row nowrap-large-screens grid-gap-3">
@@ -103,7 +103,7 @@ export const AdvancedDocumentSearch = connect(
               )}
               <div className="judge-search-row">
                 <label
-                  className="usa-label padding-top-6"
+                  className="usa-label padding-top-4"
                   htmlFor="order-judge"
                 >
                   Judge
