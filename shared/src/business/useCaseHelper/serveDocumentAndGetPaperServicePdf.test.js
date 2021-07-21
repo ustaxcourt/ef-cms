@@ -120,7 +120,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     ).rejects.toThrow(new Error('bad!'));
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toBeCalled();
   });
 });
