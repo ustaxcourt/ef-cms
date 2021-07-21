@@ -38,6 +38,12 @@ Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on 
 
 [Judge User Interviews (June 2019) - Findings](https://docs.google.com/presentation/d/1HBD21K_sKtOnuJTu6aXse8qt8bSn5ImpX649YmyOzZ0/edit?usp=sharing)
 
+
+### User Management Interviews (March 2021)
+[Docket Clerk Interview Guide](https://docs.google.com/document/d/1njo72yNjZgmr2BEF2pzbjh46AT5BfI62PaP3rW8KQKQ/edit#)
+
+[PR 65 Research Interviews - Recommendations](https://drive.google.com/file/d/10_HYyEr1xDiLN8xGAkiLWooRxR8a6a2D/view?usp=sharing) 
+
 ## Continuous Research
 Post-launch, the team continues with research and testing activities.
 

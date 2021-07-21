@@ -55,36 +55,38 @@ const createMockDocumentClient = () => {
         arr.push(mockDynamoUsers[`${pk} ${sk}`]);
       }
       return {
-        promise: async () => ({
-          Responses: {
-            ['efcms-local']: arr,
-          },
-        }),
+        promise: () =>
+          Promise.resolve({
+            Responses: {
+              ['efcms-local']: arr,
+            },
+          }),
       };
     }),
     batchWrite: jest.fn().mockImplementation(() => {
       return {
-        promise: async () => null,
+        promise: () => Promise.resolve(null),
       };
     }),
     delete: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       delete mockDynamoUsers[`${pk} ${sk}`];
       return {
-        promise: async () => null,
+        promise: () => Promise.resolve(null),
       };
     }),
     get: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
       return {
-        promise: async () => ({
-          Item: mockDynamoUsers[`${pk} ${sk}`],
-        }),
+        promise: () =>
+          Promise.resolve({
+            Item: mockDynamoUsers[`${pk} ${sk}`],
+          }),
       };
     }),
     getData: () => mockDynamoUsers,
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
       return {
-        promise: async () => null,
+        promise: () => Promise.resolve(null),
       };
     }),
     query: jest
@@ -112,9 +114,10 @@ const createMockDocumentClient = () => {
           }
         }
         return {
-          promise: async () => ({
-            Items: arr,
-          }),
+          promise: () =>
+            Promise.resolve({
+              Items: arr,
+            }),
         };
       }),
     queryFull: jest
@@ -142,9 +145,10 @@ const createMockDocumentClient = () => {
           }
         }
         return {
-          promise: async () => ({
-            Items: arr,
-          }),
+          promise: () =>
+            Promise.resolve({
+              Items: arr,
+            }),
         };
       }),
     update: jest
@@ -195,15 +199,16 @@ const createMockDocumentClient = () => {
             };
           }
           return {
-            promise: async () => ({
-              Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
-            }),
+            promise: () =>
+              Promise.resolve({
+                Attributes: mockDynamoUsers[`${Key.pk} ${Key.sk}`],
+              }),
           };
         },
       ),
     updateConsistent: jest.fn().mockImplementation(() => {
       return {
-        promise: async () => null,
+        promise: () => Promise.resolve(null),
       };
     }),
   };

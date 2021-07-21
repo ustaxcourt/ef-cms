@@ -6,7 +6,7 @@ const { CASE_STATUS_TYPES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setLeadCase', () => {
-  it('Should set the leadDocketNumber on the given case', async () => {
+  it('Should set the leadDocketNumber on the given case', () => {
     const leadDocketNumber = '101-20';
     const caseEntity = new Case(
       {

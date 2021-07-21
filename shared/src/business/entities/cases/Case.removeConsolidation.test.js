@@ -6,7 +6,7 @@ const { CASE_STATUS_TYPES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('removeConsolidation', () => {
-  it('Should unset the leadDocketNumber on the given case', async () => {
+  it('Should unset the leadDocketNumber on the given case', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
