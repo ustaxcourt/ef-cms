@@ -133,7 +133,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });

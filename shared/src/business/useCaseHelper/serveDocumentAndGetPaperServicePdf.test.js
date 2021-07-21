@@ -19,7 +19,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     caseEntity = new Case(MOCK_CASE, { applicationContext });
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });

@@ -12,6 +12,10 @@ module.exports = {
     index: {
       analysis: {
         analyzer: {
+          english_exact: {
+            filter: ['lowercase'],
+            tokenizer: 'standard',
+          },
           ustc_analyzer: {
             default: {
               type: 'simple',
