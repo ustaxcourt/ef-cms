@@ -1526,7 +1526,7 @@ button.change-scanner-button {
       height: 375px;
     }
 
-    .flex-no-wrap-desktop-only {
+    .nowrap-large-screens {
       flex-wrap: nowrap;
     }
   }
@@ -1539,10 +1539,6 @@ button.change-scanner-button {
 
     .bottom-gray-border {
       border-bottom: 1px solid color($theme-color-base-light);
-    }
-
-    .flex-no-wrap-desktop-only {
-      flex-wrap: wrap;
     }
   }
 }
