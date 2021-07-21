@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const path = require('path');
 
-const [ENV] = process.argv.slice(2);
+const { ENV } = process.env;
 
 if (!ENV) {
   throw new Error('Please provide an environment.');
