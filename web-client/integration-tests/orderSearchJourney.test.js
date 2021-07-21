@@ -5,6 +5,7 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 
 import {
+  embedWithLegalIpsumText,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -45,7 +46,7 @@ describe('order search journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'welcome to flavortown',
+    documentContents: embedWithLegalIpsumText('welcome to flavortown'),
     documentTitle: 'welcome to flavortown',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -56,7 +57,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'welcome to flavortown',
+    documentContents: embedWithLegalIpsumText('welcome to flavortown'),
     documentTitle: 'hold on',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -67,7 +68,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 1);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'wait till the partys over',
+    documentContents: embedWithLegalIpsumText('wait till the partys over'),
     documentTitle: 'welcome to flavortown',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -78,7 +79,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 2);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'nasty weather',
+    documentContents: embedWithLegalIpsumText('nasty weather'),
     documentTitle: 'welcome to something flavortown',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -89,7 +90,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 3);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'welcome from flavortown',
+    documentContents: embedWithLegalIpsumText('welcome from flavortown'),
     documentTitle: 'welcome from flavortown',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -100,7 +101,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 4);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'welcome to flavor-town',
+    documentContents: embedWithLegalIpsumText('welcome to flavor-town'),
     documentTitle: 'welcome to flavor-town',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -111,7 +112,7 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 5);
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: 'welcome to flavortown.',
+    documentContents: embedWithLegalIpsumText('welcome to flavortown.'),
     documentTitle: 'burning down the house',
     eventCode: 'O',
     expectedDocumentType: 'Order',

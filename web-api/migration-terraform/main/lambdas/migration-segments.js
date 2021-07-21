@@ -6,6 +6,9 @@ const {
   migrateItems: bugMigration0035,
 } = require('./migrations/bug-0035-private-practitioner-representing');
 const {
+  migrateItems: bugMigration0036,
+} = require('./migrations/bug-0036-public-served-parties-code');
+const {
   migrateItems: devexMigration0037,
 } = require('./migrations/devex-0037-combine-work-items');
 const {
@@ -36,6 +39,9 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({ documentClient, items }) => {
   applicationContext.logger.info('about to run bug migration 0035');
   items = await bugMigration0035(items, documentClient);
+
+  applicationContext.logger.info('about to run bug migration 0036');
+  items = await bugMigration0036(items);
 
   applicationContext.logger.debug('about to run migration 0036');
   items = await migration0036(items);
