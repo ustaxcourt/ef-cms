@@ -156,8 +156,13 @@ export const AdvancedSearch = connect(
                 }}
               >
                 <option value={searchTabs.CASE}>Case</option>
-                <option value={searchTabs.ORDER}>Order</option>
-                <option value={searchTabs.OPINION}>
+                <option
+                  disabled={!featureFlagHelper.isSearchEnabled}
+                  value={searchTabs.ORDER}
+                >
+                  {!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : ''}
+                </option>
+                <option disabled={true} value={searchTabs.OPINION}>
                   Opinion (Coming Soon)
                 </option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
