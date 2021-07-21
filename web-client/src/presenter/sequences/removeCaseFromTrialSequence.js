@@ -1,6 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { removeCaseFromTrialAction } from '../actions/CaseDetail/removeCaseFromTrialAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -15,10 +16,15 @@ export const removeCaseFromTrialSequence = [
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       removeCaseFromTrialAction,
-      setAlertSuccessAction,
-      clearModalAction,
-      clearModalStateAction,
-      setCaseAction,
+      {
+        error: [setAlertErrorAction, clearModalAction, clearModalStateAction],
+        success: [
+          setAlertSuccessAction,
+          clearModalAction,
+          clearModalStateAction,
+          setCaseAction,
+        ],
+      },
     ]),
   },
 ];

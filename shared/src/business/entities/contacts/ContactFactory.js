@@ -16,6 +16,7 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { cloneDeep } = require('lodash');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 
 const ContactFactory = {};
 
@@ -372,7 +373,7 @@ ContactFactory.createContactFactory = ({
       this.isAddressSealed = rawContact.isAddressSealed || false;
       this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
       this.name = rawContact.name;
-      this.phone = rawContact.phone;
+      this.phone = formatPhoneNumber(rawContact.phone);
       this.postalCode = rawContact.postalCode;
       this.secondaryName = rawContact.secondaryName;
       this.serviceIndicator = rawContact.serviceIndicator;

@@ -22,6 +22,8 @@ elif [[ $BRANCH == 'experimental3' ]] ; then
   echo "${EFCMS_DOMAIN_EXP3}"
 elif [[ $BRANCH == 'experimental4' ]] ; then
   echo "${EFCMS_DOMAIN_EXP4}"
+elif [[ $BRANCH == 'experimental5' ]] ; then
+  echo "${EFCMS_DOMAIN_EXP5}"
 elif [[ $BRANCH == 'irs' ]] ; then
   echo "${EFCMS_DOMAIN_IRS}"
 elif [[ $BRANCH == 'test' ]] ; then
