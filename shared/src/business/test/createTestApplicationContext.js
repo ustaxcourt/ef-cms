@@ -197,7 +197,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPdfJsReturnValue = {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
-        getPage: async () => ({
+        getPage: () => ({
           cleanup: () => {},
           getViewport: () => ({
             height: 100,
