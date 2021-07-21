@@ -109,9 +109,9 @@ const createPetitionWorkItems = async ({
     workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 };
 

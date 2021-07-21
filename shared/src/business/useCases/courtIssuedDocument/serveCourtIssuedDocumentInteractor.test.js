@@ -299,7 +299,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
@@ -348,7 +348,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
