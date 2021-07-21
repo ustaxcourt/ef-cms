@@ -11,7 +11,7 @@ describe('updateWorkItemTrialDate', () => {
 
   it('should call client.update with passed in trial date and work item pk and sk', async () => {
     const mockTrialDate = '2019-08-25T05:00:00.000Z';
-    const mockPk = 'work-item|pk';
+    const mockPk = 'case|pk';
     const mockSk = 'work-item|sk';
 
     await updateWorkItemTrialDate({
