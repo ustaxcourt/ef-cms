@@ -161,8 +161,11 @@ import {
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
+import { getConstants } from './getConstants';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
+import { getDocumentQCInProgressForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInProgressForSectionProxy';
+import { getDocumentQCInProgressForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInProgressForUserProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
@@ -303,8 +306,6 @@ import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virus
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
-import { getConstants } from './getConstants';
-
 let user;
 let broadcastChannel;
 
@@ -393,6 +394,8 @@ const allUseCases = {
   getConsolidatedCasesByCaseInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
+  getDocumentQCInProgressForSectionInteractor,
+  getDocumentQCInProgressForUserInteractor,
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
