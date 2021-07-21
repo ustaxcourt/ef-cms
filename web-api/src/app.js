@@ -177,6 +177,12 @@ const {
   getDocumentQCInboxForUserLambda,
 } = require('./workitems/getDocumentQCInboxForUserLambda');
 const {
+  getDocumentQCInProgressForSectionLambda,
+} = require('./workitems/getDocumentQCInProgressForSectionLambda');
+const {
+  getDocumentQCInProgressForUserLambda,
+} = require('./workitems/getDocumentQCInProgressForUserLambda');
+const {
   getDocumentQCServedForSectionLambda,
 } = require('./workitems/getDocumentQCServedForSectionLambda');
 const {
@@ -864,6 +870,10 @@ app.get(
   '/sections/:section/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForSectionLambda),
 );
+app.get(
+  '/sections/:section/document-qc/in-progress',
+  lambdaWrapper(getDocumentQCInProgressForSectionLambda),
+);
 
 /**
  * trial-sessions
@@ -949,6 +959,10 @@ app.put(
 app.get(
   '/users/:userId/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForUserLambda),
+);
+app.get(
+  '/users/:userId/document-qc/in-progress',
+  lambdaWrapper(getDocumentQCInProgressForUserLambda),
 );
 app.get(
   '/users/:userId/document-qc/served',
