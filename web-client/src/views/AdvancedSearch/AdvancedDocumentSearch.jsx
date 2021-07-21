@@ -30,7 +30,7 @@ export const AdvancedDocumentSearch = connect(
             className="margin-bottom-0 right-gray-border bottom-gray-border advanced-search-full-width desktop:padding-top-6 desktop:padding-right-9 desktop:padding-left-2"
             errorText={validationErrors.chooseOneValue}
           >
-            <div className="grid-row flex-no-wrap-desktop-only grid-gap-3">
+            <div className="grid-row nowrap-large-screens grid-gap-3">
               <div className="margin-bottom-3 desktop:margin-bottom-0">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
@@ -77,7 +77,7 @@ export const AdvancedDocumentSearch = connect(
             </div>
           </FormGroup>
           <FormGroup className="advanced-search-full-width margin-bottom-0 desktop:padding-left-9">
-            <div className="grid-row flex-no-wrap-desktop-only grid-gap-6">
+            <div className="grid-row nowrap-large-screens grid-gap-6">
               {formType === 'opinionSearch' && (
                 <div className="opinion-type-search-row">
                   <label
@@ -126,7 +126,7 @@ export const AdvancedDocumentSearch = connect(
                 </BindedSelect>
               </div>
               <div className="date-search-row">
-                <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row flex-no-wrap-desktop-only grid-gap-6">
+                <div className="padding-top-105 padding-left-0 padding-right-0 margin-left-0 margin-right-0 grid-row nowrap-large-screens grid-gap-6">
                   <SearchDateRangePickerComponent
                     formType={formType}
                     updateSequence={updateSequence}
