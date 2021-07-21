@@ -1,6 +1,9 @@
 const { search } = require('../searchClient');
 
-exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
+exports.getDocumentQCInProgressForUser = async ({
+  applicationContext,
+  userId,
+}) => {
   const query = {
     body: {
       query: {

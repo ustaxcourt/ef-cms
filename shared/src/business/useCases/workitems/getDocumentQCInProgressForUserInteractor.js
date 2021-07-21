@@ -6,6 +6,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
 /**
+ * getDocumentQCInProgressForUserInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object

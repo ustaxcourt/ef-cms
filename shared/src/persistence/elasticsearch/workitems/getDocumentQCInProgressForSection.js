@@ -1,6 +1,6 @@
 const { search } = require('../searchClient');
 
-exports.getDocumentQCInboxForSection = async ({
+exports.getDocumentQCInProgressForSection = async ({
   applicationContext,
   judgeUserName,
   section,
