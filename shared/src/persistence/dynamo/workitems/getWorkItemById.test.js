@@ -8,17 +8,29 @@ describe('getWorkItemById', () => {
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([
       {
-        pk: 'abc',
-        sk: 'abc',
+        gsi1pk: 'work-item|abc',
+        pk: 'case|abc',
+        sk: 'work-item|abc',
+        workItemId: 'abc',
+      },
+      {
+        gsi1pk: 'work-item|abc',
+        pk: 'section-outbox|abc',
+        sk: 'work-item|abc',
         workItemId: 'abc',
       },
     ]);
   });
 
-  it('makes a post request to the expected endpoint with the expected data', async () => {
+  it('returns the result from query that has a pk starting with case|', async () => {
     const result = await getWorkItemById({
       applicationContext,
     });
-    expect(result).toEqual({ pk: 'abc', sk: 'abc', workItemId: 'abc' });
+    expect(result).toEqual({
+      gsi1pk: 'work-item|abc',
+      pk: 'case|abc',
+      sk: 'work-item|abc',
+      workItemId: 'abc',
+    });
   });
 });

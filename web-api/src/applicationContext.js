@@ -1120,9 +1120,6 @@ const {
   updateWorkItemDocketNumberSuffix,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix');
 const {
-  updateWorkItemInCase,
-} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
-const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
 const {
@@ -1355,7 +1352,6 @@ const gatewayMethods = {
     updateUserCaseNote,
     updateUserEmail,
     updateWorkItem,
-    updateWorkItemInCase,
   }),
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
