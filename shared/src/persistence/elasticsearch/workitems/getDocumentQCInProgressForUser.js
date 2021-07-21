@@ -20,6 +20,11 @@ exports.getDocumentQCInProgressForUser = async ({
             {
               prefix: { 'sk.S': 'work-item|' },
             },
+            {
+              term: {
+                'caseIsInProgress.BOOL': true,
+              },
+            },
           ],
           must_not: {
             exists: {

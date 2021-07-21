@@ -16,23 +16,24 @@ exports.getDocumentQCInboxForSection = async ({
             {
               prefix: { 'sk.S': 'work-item|' },
             },
-            // TODO: add caseIsInProgress to both inbox and in progress queries
-            // {
-            //   exists: {
-            //     field: 'caseIsInProgress.BOOL',
-            //   },
-            // },
             {
               term: {
                 'section.S': section,
               },
             },
           ],
-          must_not: {
-            exists: {
-              field: 'completedAt.S',
+          must_not: [
+            {
+              exists: {
+                field: 'completedAt.S',
+              },
             },
-          },
+            {
+              term: {
+                'caseIsInProgress.BOOL': true,
+              },
+            },
+          ],
           should: [
             {
               term: {

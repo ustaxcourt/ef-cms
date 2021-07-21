@@ -22,6 +22,11 @@ exports.getDocumentQCInProgressForSection = async ({
                 'section.S': section,
               },
             },
+            {
+              term: {
+                'caseIsInProgress.BOOL': true,
+              },
+            },
           ],
           must_not: {
             exists: {

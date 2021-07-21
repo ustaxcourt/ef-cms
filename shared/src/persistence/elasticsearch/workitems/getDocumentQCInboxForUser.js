@@ -18,11 +18,18 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
               prefix: { 'sk.S': 'work-item|' },
             },
           ],
-          must_not: {
-            exists: {
-              field: 'completedAt.S',
+          must_not: [
+            {
+              exists: {
+                field: 'completedAt.S',
+              },
             },
-          },
+            {
+              term: {
+                'caseIsInProgress.BOOL': true,
+              },
+            },
+          ],
           should: [
             {
               term: {
