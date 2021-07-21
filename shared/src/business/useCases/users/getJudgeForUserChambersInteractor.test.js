@@ -57,7 +57,7 @@ describe('getJudgeForUserChambersInteractor', () => {
     applicationContext
       .getUseCases()
       .getUsersInSectionInteractor.mockImplementation(
-        async (appContext, { section }) => {
+        (appContext, { section }) => {
           return allUsers.filter(user => user.section === section);
         },
       );

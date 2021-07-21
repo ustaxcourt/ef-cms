@@ -197,7 +197,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockResolvedValue(1);
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
