@@ -1,4 +1,4 @@
-import { getTextByCount, gotoRoute } from './helpers';
+import { embedWithLegalIpsumText, getTextByCount, gotoRoute } from './helpers';
 
 describe('helpers', () => {
   describe('gotoRoute', () => {
@@ -58,6 +58,16 @@ describe('helpers', () => {
       expect(dummyText1.length).toEqual(100);
       expect(dummyText2.length).toEqual(202);
       expect(dummyText3.length).toEqual(3003);
+    });
+  });
+
+  describe('embedWithLegalIpsumText', () => {
+    it('returns some pre-defined dummy text with the given phrase embedded', () => {
+      const text = embedWithLegalIpsumText('podcasts about peanut butter');
+
+      expect(text).toContain('While this license do not apply to');
+      expect(text).toContain('podcasts about peanut butter');
+      expect(text).toContain('related documents be drafted in English');
     });
   });
 });
