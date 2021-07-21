@@ -1,3 +1,5 @@
+/* eslint-disable id-denylist */
+
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
@@ -12,7 +14,7 @@ module.exports = {
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif|pdf|woff|woff2|ttf)$/i,
-        use: ['file-loader'],
+        type: 'asset',
       },
       {
         test: /\.css$/i,

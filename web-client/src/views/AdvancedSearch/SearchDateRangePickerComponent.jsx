@@ -100,7 +100,7 @@ export const SearchDateRangePickerComponent = connect(
           formGroupRef={startDatePickerRef}
         >
           <label
-            className="usa-label"
+            className="usa-label margin-bottom-0"
             htmlFor="startDate-date-start"
             id="startDate-date-start-label"
           >
@@ -128,7 +128,7 @@ export const SearchDateRangePickerComponent = connect(
           formGroupRef={endDatePickerRef}
         >
           <label
-            className="usa-label"
+            className="usa-label margin-bottom-0"
             htmlFor="endDate-date-end"
             id="endDate-date-end-label"
           >
