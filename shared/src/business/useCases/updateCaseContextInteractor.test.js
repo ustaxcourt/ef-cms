@@ -1,7 +1,7 @@
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
-  TRIAL_SESSION_PROCEEDING_TYPES,
+  ROLES,
 } = require('../entities/EntityConstants');
 const {
   MOCK_CASE,
@@ -11,7 +11,7 @@ const {
   updateCaseContextInteractor,
 } = require('./updateCaseContextInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { ROLES } = require('../entities/EntityConstants');
+const { MOCK_TRIAL_REMOTE } = require('../../test/mockTrial');
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {
@@ -68,24 +68,6 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
-    const MOCK_TRIAL = {
-      chambersPhoneNumber: '1111111',
-      joinPhoneNumber: '0987654321',
-      judge: {
-        name: 'Chief Judge',
-        userId: '822366b7-e47c-413e-811f-d29113d09b06',
-      },
-      maxCases: 100,
-      meetingId: '1234567890',
-      password: 'abcdefg',
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-      sessionType: 'Regular',
-      startDate: '2025-12-01T00:00:00.000Z',
-      term: 'Fall',
-      termYear: '2025',
-      trialLocation: 'Birmingham, Alabama',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
@@ -94,7 +76,7 @@ describe('updateCaseContextInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REMOTE);
 
     const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Rachael',
