@@ -12,7 +12,7 @@ exports.getDocumentQCInProgressForUserLambda = event =>
 
     return await applicationContext
       .getUseCases()
-      .getDocumentQCInProgressForForUserInteractor(applicationContext, {
+      .getDocumentQCInProgressForUserInteractor(applicationContext, {
         userId,
       });
   });
