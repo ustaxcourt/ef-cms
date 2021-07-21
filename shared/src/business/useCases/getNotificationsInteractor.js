@@ -34,10 +34,6 @@ exports.getNotificationsInteractor = async (
     .getUtilities()
     .getDocQcSectionForUser(currentUser);
 
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ user: currentUser });
-
   const userInbox = await applicationContext
     .getPersistenceGateway()
     .getUserInboxMessages({ applicationContext, userId });
@@ -53,6 +49,13 @@ exports.getNotificationsInteractor = async (
       userId,
     });
 
+  const documentQCIndividualInProgress = await applicationContext
+    .getPersistenceGateway()
+    .getDocumentQCInProgressForUser({
+      applicationContext,
+      userId,
+    });
+
   const documentQCSectionInbox = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCInboxForSection({
@@ -61,29 +64,23 @@ exports.getNotificationsInteractor = async (
       section: sectionToShow,
     });
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
-
-  const qcSectionInProgressCount = documentQCSectionInbox.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox.filter(
-    filters['section']['inbox'],
-  ).length;
+  const documentQCSectionInProgress = await applicationContext
+    .getPersistenceGateway()
+    .getDocumentQCInProgressForSection({
+      applicationContext,
+      judgeUserName: judgeUser ? judgeUser.name : null,
+      section: sectionToShow,
+    });
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
   ).length;
 
   return {
-    qcIndividualInProgressCount,
-    qcIndividualInboxCount,
-    qcSectionInProgressCount,
-    qcSectionInboxCount,
+    qcIndividualInProgressCount: documentQCIndividualInProgress.length,
+    qcIndividualInboxCount: documentQCIndividualInbox.length,
+    qcSectionInProgressCount: documentQCSectionInProgress.length,
+    qcSectionInboxCount: documentQCSectionInbox.length,
     qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
       .length,
     unreadMessageCount,
