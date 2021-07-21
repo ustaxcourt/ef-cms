@@ -26,6 +26,11 @@ export const OrderSearch = connect(
   }) {
     return (
       <>
+        <p>
+          Enter keywords in quotes to search for exact matches only. For
+          example, search “innocent spouse” for results containing that exact
+          phrase.
+        </p>
         <div className="bg-primary-dark text-white padding-4">
           <p className="margin-top-0 ">
             <span className="text-semibold">Search orders </span>(required)
