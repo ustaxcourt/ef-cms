@@ -1,28 +1,16 @@
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setForHearingInteractor } from './setForHearingInteractor';
 const {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../test/mockCase');
-const {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
+const { ROLES } = require('../../entities/EntityConstants');
 
 describe('setForHearingInteractor', () => {
   let mockCurrentUser;
   let mockTrialSession;
   let mockCase;
-
-  const MOCK_TRIAL = {
-    maxCases: 100,
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
-    startDate: '2025-12-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-  };
 
   beforeEach(() => {
     mockCurrentUser = {
@@ -30,7 +18,7 @@ describe('setForHearingInteractor', () => {
       userId: '8675309b-18d0-43ec-bafb-654e83405411',
     };
 
-    mockTrialSession = MOCK_TRIAL;
+    mockTrialSession = MOCK_TRIAL_REMOTE;
 
     mockCase = MOCK_CASE;
 
