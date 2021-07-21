@@ -1105,9 +1105,6 @@ const {
   updateUserRecords,
 } = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
 const {
-  updateWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
-const {
   updateWorkItemAssociatedJudge,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
 const {
@@ -1351,7 +1348,6 @@ const gatewayMethods = {
     updateUser,
     updateUserCaseNote,
     updateUserEmail,
-    updateWorkItem,
   }),
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
