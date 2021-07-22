@@ -51,7 +51,7 @@ export const submitPaperFilingAction = async ({
   if (isFileAttachedNow) {
     await applicationContext
       .getUseCases()
-      .virusScanPdfInteractor(applicationContext, {
+      .getStatusOfVirusScanInteractor(applicationContext, {
         key: docketEntryId,
       });
 
@@ -69,6 +69,7 @@ export const submitPaperFilingAction = async ({
       .getUseCases()
       .editPaperFilingInteractor(applicationContext, {
         documentMetadata,
+        generateCoversheet,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
       }));
@@ -77,18 +78,10 @@ export const submitPaperFilingAction = async ({
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
         documentMetadata,
+        generateCoversheet,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
       }));
-  }
-
-  if (generateCoversheet) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
   }
 
   return {

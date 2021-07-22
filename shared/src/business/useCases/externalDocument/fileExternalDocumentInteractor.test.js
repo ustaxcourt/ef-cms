@@ -169,6 +169,14 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(1);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock.calls
+        .length,
+    ).toBe(1);
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
@@ -189,6 +197,53 @@ describe('fileExternalDocumentInteractor', () => {
     ).toMatchObject({
       caseTitle: caseRecord.caseCaption,
     });
+  });
+
+  it('should add a coversheet to each document', async () => {
+    await fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Motion for Leave to File',
+        documentType: 'Motion for Leave to File',
+        eventCode: 'M115',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          documentTitle: 'Motion for Judgment on the Pleadings',
+          documentType: 'Motion for Judgment on the Pleadings',
+          eventCode: 'M121',
+          filedBy: 'Test Petitioner',
+        },
+        secondarySupportingDocuments: [
+          {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+            documentTitle: 'Motion for in Camera Review',
+            documentType: 'Motion for in Camera Review',
+            eventCode: 'M135',
+            filedBy: 'Test Petitioner',
+          },
+        ],
+        supportingDocuments: [
+          {
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335be',
+            documentTitle: 'Civil Penalty Approval Form',
+            documentType: 'Civil Penalty Approval Form',
+            eventCode: 'CIVP',
+            filedBy: 'Test Petitioner',
+          },
+        ],
+      },
+    });
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(4);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock.calls
+        .length,
+    ).toBe(4);
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -290,6 +345,10 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
     expect(updatedCase.docketEntries[3].status).toBeUndefined();
     expect(updatedCase.docketEntries[3].servedAt).toBeUndefined();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(1);
   });
 
   it('should create a high-priority work item if the case status is calendared', async () => {
@@ -403,5 +462,28 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toBeCalled();
+  });
+
+  it('should not send the service email if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    await expect(
+      fileExternalDocumentInteractor(applicationContext, {
+        documentMetadata: {
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toBeCalled();
   });
 });
