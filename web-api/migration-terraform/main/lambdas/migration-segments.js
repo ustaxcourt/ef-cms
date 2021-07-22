@@ -137,7 +137,7 @@ const hasMigrationRan = async key => {
         pk: `migration|${key}`,
         sk: `migration|${key}`,
       },
-      TableName: `efcms-deploy-${process.env.ENV}`,
+      TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
     })
     .promise();
   return { [key]: !!Item };
