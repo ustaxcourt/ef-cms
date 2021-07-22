@@ -36,7 +36,7 @@ export const submitCourtIssuedOrderAction = async ({
 
   await applicationContext
     .getUseCases()
-    .virusScanPdfInteractor(applicationContext, {
+    .getStatusOfVirusScanInteractor(applicationContext, {
       key: docketEntryId,
     });
 
