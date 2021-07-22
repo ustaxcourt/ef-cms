@@ -61,4 +61,8 @@ resource "aws_dynamodb_table" "efcms-table-east" {
   replica {
     region_name = "us-west-1"
   }
+  timeouts {
+    create = "2h"
+    update = "2h"
+  }
 }
