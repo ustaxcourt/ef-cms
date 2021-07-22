@@ -52,6 +52,25 @@ describe('todaysOrdersHelper', () => {
     expect(result.formattedCurrentDate).toEqual(formattedCurrentDate);
   });
 
+  it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+    const result = runCompute(todaysOrdersHelper, { state });
+    expect(result.formattedOrders).toMatchObject([
+      {
+        numberOfPagesFormatted: 'n/a',
+      },
+    ]);
+  });
+
+  it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+    state.todaysOrders.results[0].numberOfPages = 0;
+    const result = runCompute(todaysOrdersHelper, { state });
+    expect(result.formattedOrders).toMatchObject([
+      {
+        numberOfPagesFormatted: 0,
+      },
+    ]);
+  });
+
   describe('proxy sort order parameter', () => {
     it('should return todaysOrdersSort either from state if defined', () => {
       const result = runCompute(todaysOrdersHelper, {
