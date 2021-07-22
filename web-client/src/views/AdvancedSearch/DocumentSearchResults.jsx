@@ -28,13 +28,17 @@ export const DocumentSearchResults = connect(
             {advancedDocumentSearchHelper.showManyResultsMessage && (
               <WarningNotificationComponent
                 alertWarning={{
-                  message: 'Narrow your search by adding search terms.',
+                  message: 'Refine your search by adding search c.',
                   title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
                 }}
                 dismissable={false}
                 scrollToTop={false}
               />
             )}
+
+            <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+              {advancedDocumentSearchHelper.numberOfResults} match(es) shown
+            </div>
 
             <table className="usa-table search-results ustc-table responsive-table">
               <thead>
