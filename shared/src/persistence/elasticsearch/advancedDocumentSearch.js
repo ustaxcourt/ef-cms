@@ -63,7 +63,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   }
-
+  console.log('query!!!!', docketEntryQueryParams);
   if (omitSealed) {
     caseMustNot.push({
       term: { 'isSealed.BOOL': true },
