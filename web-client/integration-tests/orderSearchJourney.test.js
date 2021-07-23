@@ -330,6 +330,35 @@ describe('order search journey', () => {
     expect(searchResults.length).toEqual(4);
   });
 
+  it('searches for an order with the boolean AND operator `"wait till" + "partys over"`', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
+        keyword: '"wait till" + "partys over"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+          documentTitle: 'welcome to flavortown',
+        }),
+      ]),
+    );
+    expect(searchResults.length).toEqual(1);
+  });
+
   it('searches for an order with the boolean AND operator `"welcome" + "to flavortown" + "where the gravitational force of bacon warps the laws of space and time"`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
