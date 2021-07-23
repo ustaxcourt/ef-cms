@@ -1,10 +1,10 @@
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
@@ -13,31 +13,13 @@ describe('addCaseToTrialSessionInteractor', () => {
   let mockTrialSession;
   let mockCase;
 
-  const MOCK_TRIAL = {
-    chambersPhoneNumber: '1111111',
-    joinPhoneNumber: '0987654321',
-    judge: {
-      name: 'Chief Judge',
-      userId: '822366b7-e47c-413e-811f-d29113d09b06',
-    },
-    maxCases: 100,
-    meetingId: '1234567890',
-    password: 'abcdefg',
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
-    startDate: '2025-12-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-  };
-
   beforeEach(() => {
     mockCurrentUser = {
       role: ROLES.petitionsClerk,
       userId: '8675309b-18d0-43ec-bafb-654e83405411',
     };
 
-    mockTrialSession = MOCK_TRIAL;
+    mockTrialSession = MOCK_TRIAL_REMOTE;
 
     mockCase = MOCK_CASE;
 
@@ -80,7 +62,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
   it('throws an error if the case is already part of the trial session', async () => {
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
       isCalendared: true,
     };
@@ -95,7 +77,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
   it('returns the expected case with new trial session info', async () => {
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };
@@ -123,7 +105,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
   it('should add calendarNotes for the case to the trial session', async () => {
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };
@@ -147,7 +129,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
   it('sets work items to high priority if the trial session is calendared', async () => {
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };

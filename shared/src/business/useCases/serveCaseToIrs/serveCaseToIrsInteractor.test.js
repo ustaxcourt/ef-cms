@@ -510,6 +510,146 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
   });
+
+  it('should not call serveCaseDocument if an error occurs while adding a coversheet', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
+
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    await expect(
+      serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUtilities().serveCaseDocument,
+    ).not.toBeCalled();
+  });
+
+  it('should not call serveCaseDocument if an error occurs while updating docket number record', async () => {
+    jest
+      .spyOn(Case.prototype, 'updateDocketNumberRecord')
+      .mockImplementation(() => {
+        throw new Error('bad!');
+      });
+
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    await expect(
+      serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUtilities().serveCaseDocument,
+    ).not.toBeCalled();
+
+    jest.restoreAllMocks();
+  });
+
+  it('should not call serveCaseDocument if an error occurs while updating case caption docket record', async () => {
+    jest
+      .spyOn(Case.prototype, 'updateCaseCaptionDocketRecord')
+      .mockImplementation(() => {
+        throw new Error('bad!');
+      });
+
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketNumber: '101-18',
+          documentTitle: 'Request for Place of Trial Flavortown, AR',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RPT',
+          filedBy: 'Test Petitioner',
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    await expect(
+      serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(new Error('bad!'));
+
+    expect(
+      applicationContext.getUtilities().serveCaseDocument,
+    ).not.toBeCalled();
+
+    jest.restoreAllMocks();
+  });
 });
 
 describe('addDocketEntryForPaymentStatus', () => {
