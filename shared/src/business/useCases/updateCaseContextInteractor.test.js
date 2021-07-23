@@ -1,13 +1,17 @@
 const {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
+  ROLES,
 } = require('../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITH_TRIAL_SESSION,
+} = require('../../test/mockCase');
 const {
   updateCaseContextInteractor,
 } = require('./updateCaseContextInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+const { MOCK_TRIAL_REMOTE } = require('../../test/mockTrial');
 
 describe('updateCaseContextInteractor', () => {
   beforeAll(() => {
@@ -50,11 +54,34 @@ describe('updateCaseContextInteractor', () => {
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);
   });
 
+  it('should not remove the case from trial if the old and new case status match', async () => {
+    const result = await updateCaseContextInteractor(applicationContext, {
+      associatedJudge: 'Judge Rachael',
+      caseStatus: CASE_STATUS_TYPES.new,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.new);
+    expect(
+      applicationContext.getPersistenceGateway().getTrialSessionById,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(
+        Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REMOTE);
+
     const result = await updateCaseContextInteractor(applicationContext, {
       associatedJudge: 'Judge Rachael',
       caseStatus: CASE_STATUS_TYPES.cav,
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: MOCK_CASE_WITH_TRIAL_SESSION.docketNumber,
     });
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.cav);

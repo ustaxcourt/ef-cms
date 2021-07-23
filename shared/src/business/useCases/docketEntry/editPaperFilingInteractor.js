@@ -18,13 +18,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.generateCoversheet true if coversheet must be generated
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
 exports.editPaperFilingInteractor = async (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -49,6 +55,21 @@ exports.editPaperFilingInteractor = async (
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: primaryDocumentFileId,
   });
+
+  if (!isSavingForLater) {
+    if (currentDocketEntry.isPendingService) {
+      throw new Error('Docket entry is already being served');
+    } else {
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId: currentDocketEntry.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          status: true,
+        });
+    }
+  }
 
   const editableFields = {
     addToCoversheet: documentMetadata.addToCoversheet,
@@ -132,6 +153,15 @@ exports.editPaperFilingInteractor = async (
       const servedParties = aggregatePartiesForService(caseEntity);
       docketEntryEntity.setAsServed(servedParties.all);
       docketEntryEntity.setAsProcessingStatusAsCompleted();
+
+      if (generateCoversheet) {
+        await applicationContext
+          .getUseCases()
+          .addCoversheetInteractor(applicationContext, {
+            docketEntryId: docketEntryEntity.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+          });
+      }
 
       caseEntity.updateDocketEntry(docketEntryEntity);
 
@@ -234,6 +264,17 @@ exports.editPaperFilingInteractor = async (
       applicationContext,
       caseToUpdate: caseEntity,
     });
+
+  if (!isSavingForLater) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: currentDocketEntry.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: false,
+      });
+  }
 
   return {
     caseDetail: new Case(result, { applicationContext })
