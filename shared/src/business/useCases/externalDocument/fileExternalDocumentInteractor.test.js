@@ -173,6 +173,10 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls
         .length,
     ).toBe(1);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock.calls
+        .length,
+    ).toBe(1);
   });
 
   it('should use original case caption to create case title when creating work item', async () => {
@@ -234,6 +238,10 @@ describe('fileExternalDocumentInteractor', () => {
     });
     expect(
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(4);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock.calls
         .length,
     ).toBe(4);
   });
@@ -475,7 +483,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).rejects.toThrow(new Error('bad!'));
 
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toBeCalled();
   });
 });
