@@ -357,4 +357,28 @@ describe('order search journey', () => {
 
     expect(searchResults.length).toEqual(3);
   });
+
+  // Keyword OR keyword in document title and contents
+
+  // Keyword OR keyword in document title only
+
+  // Keyword OR keyword in contents only
+
+  // “Exact match Keyword phrase” OR keyword in document title and contents
+
+  // “Exact match Keyword phrase” OR keyword in document title only
+
+  // “Exact match Keyword phrase” OR keyword in document contents only
+
+  // “Exact match Keyword phrase” OR “Exact match keyword phrase” in document title and contents
+
+  // “Exact match Keyword phrase” OR “Exact match keyword phrase” in document title only
+
+  // “Exact match Keyword phrase” OR “Exact match keyword phrase” in contents only
+
+  // Keyword phrase OR “Exact match keyword phrase” in document title and contents
+
+  // Keyword phrase OR “Exact match keyword phrase” in document title only
+
+  // Keyword phrase OR “Exact match keyword phrase” in contents only
 });
