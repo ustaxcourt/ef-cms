@@ -287,4 +287,26 @@ describe('order search journey', () => {
 
     expect(searchResults.length).toEqual(0);
   });
+
+  it('searches for an order with the boolean AND operator `"welcome" + "to flavortown"`', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
+        keyword: '"welcomes + to flavortown"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual([]);
+
+    expect(searchResults.length).toEqual(4);
+  });
 });
