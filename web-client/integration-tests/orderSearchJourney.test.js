@@ -295,7 +295,7 @@ describe('order search journey', () => {
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"welcomes + to flavortown"',
+        keyword: '"welcome" + "to flavortown"',
       },
     });
 
