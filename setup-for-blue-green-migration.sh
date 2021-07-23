@@ -31,7 +31,6 @@ fi
 
 # delete destination dynamodb table
 echo "deleting the efcms-${ENV}-${NEXT_VERSION} dynamo tables"
-sleep 60
 aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
 aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
 
