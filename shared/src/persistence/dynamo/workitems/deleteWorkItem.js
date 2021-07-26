@@ -4,7 +4,7 @@ exports.deleteWorkItem = ({ applicationContext, workItem }) => {
   return client.delete({
     applicationContext,
     key: {
-      pk: `work-item|${workItem.workItemId}`,
+      pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
     },
   });

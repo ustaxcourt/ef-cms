@@ -50,24 +50,19 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
 
     expect(putStub.mock.calls[0][0]).toMatchObject({
       Item: {
-        pk: 'work-item|123',
-        sk: 'work-item|123',
-      },
-    });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
-      Item: {
         pk: 'section-outbox|docket',
         workItemId: '123',
       },
     });
-    expect(putStub.mock.calls[2][0]).toMatchObject({
+    expect(putStub.mock.calls[1][0]).toMatchObject({
       Item: {
         pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
         workItemId: '123',
       },
     });
-    expect(putStub.mock.calls[3][0]).toMatchObject({
+    expect(putStub.mock.calls[2][0]).toMatchObject({
       Item: {
+        gsi1pk: 'work-item|123',
         pk: 'case|456-20',
         sk: 'work-item|123',
       },
