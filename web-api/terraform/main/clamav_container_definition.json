@@ -1,0 +1,28 @@
+[
+  {
+    "image": "${aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/clamav:${environment}",
+    "name": "clamav",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "${region}",
+        "awslogs-group": "/aws/ecs/clamav_fargate_${environment}",
+        "awslogs-stream-prefix": "project"
+      }
+    },
+    "environment": [
+      {
+        "name": "VIRUS_SCAN_QUEUE_URL",
+        "value": "https://sqs.us-east-1.amazonaws.com/${aws_account_id}/s3_clamav_event_${environment}"
+      },
+      {
+        "name": "QUARANTINE_BUCKET_NAME",
+        "value": "${dns_domain}-quarantine-${environment}-${region}"
+      },
+      {
+        "name": "DOCUMENTS_BUCKET_NAME",
+        "value": "${dns_domain}-documents-${environment}-${region}"
+      }
+    ]
+  }
+]

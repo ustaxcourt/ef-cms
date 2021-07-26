@@ -16,6 +16,7 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
     formattedJudgeName: applicationContext
       .getUtilities()
       .getJudgeLastName(opinion.judge || opinion.signedJudgeName),
+    numberOfPagesFormatted: opinion.numberOfPages ?? 'n/a',
   }));
 
   return { formattedCurrentDate, formattedOpinions };
