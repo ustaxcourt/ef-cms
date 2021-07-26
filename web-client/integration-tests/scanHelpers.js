@@ -1,80 +1,80 @@
 import { setBatchPages } from './helpers';
 
 export const addBatchesForScanning = (
-  test,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Adds a batch of scanned documents', async () => {
-    await test.runSequence('startScanSequence', {
+    await cerebralTest.runSequence('startScanSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
     expect(
-      test.getState(`scanner.batches.${selectedDocumentType}`).length,
+      cerebralTest.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);
-    expect(Object.keys(test.getState('scanner.batches'))).toEqual([
+    expect(Object.keys(cerebralTest.getState('scanner.batches'))).toEqual([
       selectedDocumentType,
     ]);
   });
 };
-export const createPDFFromScannedBatches = test => {
+export const createPDFFromScannedBatches = cerebralTest => {
   return it('Creates a PDF from added batches', async () => {
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
-    setBatchPages({ test });
+    setBatchPages({ cerebralTest });
 
-    await test.runSequence('generatePdfFromScanSessionSequence', {
+    await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
       documentType: selectedDocumentType,
       documentUploadMode: 'preview',
     });
 
-    expect(test.getState(`form.${selectedDocumentType}Size`)).toBeGreaterThan(
-      0,
-    );
-    expect(test.getState(`form.${selectedDocumentType}`)).toBeDefined();
+    expect(
+      cerebralTest.getState(`form.${selectedDocumentType}Size`),
+    ).toBeGreaterThan(0);
+    expect(cerebralTest.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };
 
 export const selectScannerSource = (
-  test,
+  cerebralTest,
   { scannerSourceIndex, scannerSourceName },
 ) => {
   return it('Selects a scanner', async () => {
-    await test.runSequence('openChangeScannerSourceModalSequence');
+    await cerebralTest.runSequence('openChangeScannerSourceModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
       'SelectScannerSourceModal',
     );
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'scanner',
       value: scannerSourceName,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'index',
       value: scannerSourceIndex,
     });
 
-    await test.runSequence('selectScannerSequence', {
+    await cerebralTest.runSequence('selectScannerSequence', {
       scannerSourceIndex,
       scannerSourceName,
     });
 
-    expect(test.getState('scanner.scannerSourceIndex')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceIndex')).toEqual(
       scannerSourceIndex,
     );
-    expect(test.getState('scanner.scannerSourceName')).toEqual(
+    expect(cerebralTest.getState('scanner.scannerSourceName')).toEqual(
       scannerSourceName,
     );
 
-    expect(test.getState('modal')).toMatchObject({});
+    expect(cerebralTest.getState('modal')).toMatchObject({});
   });
 };

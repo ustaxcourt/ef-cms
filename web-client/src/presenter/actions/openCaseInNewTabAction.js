@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {function} providers.get the cerebral store get method
  * @param {object} providers.props the cerebral props object
  */
-export const openCaseInNewTabAction = async ({ get, props }) => {
+export const openCaseInNewTabAction = ({ get, props }) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
 
   window.open(`/case-detail/${docketNumber}`, '_blank');

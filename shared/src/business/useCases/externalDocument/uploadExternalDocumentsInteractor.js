@@ -31,8 +31,6 @@ exports.uploadExternalDocumentsInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const docketEntryIdsAdded = [];
-
   /**
    * uploads a document and then immediately processes it to scan for viruses and validate the document
    *
@@ -50,7 +48,7 @@ exports.uploadExternalDocumentsInteractor = async (
 
     await applicationContext
       .getUseCases()
-      .virusScanPdfInteractor(applicationContext, {
+      .getStatusOfVirusScanInteractor(applicationContext, {
         key,
       });
     await applicationContext
@@ -64,21 +62,16 @@ exports.uploadExternalDocumentsInteractor = async (
 
   documentMetadata.primaryDocumentId =
     await uploadDocumentAndMakeSafeInteractor('primary');
-  docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
   if (documentFiles.secondary) {
     documentMetadata.secondaryDocument.docketEntryId =
       await uploadDocumentAndMakeSafeInteractor('secondary');
-    docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
 
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       documentMetadata.supportingDocuments[i].docketEntryId =
         await uploadDocumentAndMakeSafeInteractor(`primarySupporting${i}`);
-      docketEntryIdsAdded.push(
-        documentMetadata.supportingDocuments[i].docketEntryId,
-      );
     }
   }
 
@@ -90,9 +83,6 @@ exports.uploadExternalDocumentsInteractor = async (
     ) {
       documentMetadata.secondarySupportingDocuments[i].docketEntryId =
         await uploadDocumentAndMakeSafeInteractor(`secondarySupporting${i}`);
-      docketEntryIdsAdded.push(
-        documentMetadata.secondarySupportingDocuments[i].docketEntryId,
-      );
     }
   }
 
@@ -105,7 +95,6 @@ exports.uploadExternalDocumentsInteractor = async (
           documentMetadata,
           leadDocketNumber,
         }),
-      docketEntryIdsAdded,
     };
   } else {
     return {
@@ -114,7 +103,6 @@ exports.uploadExternalDocumentsInteractor = async (
         .fileExternalDocumentInteractor(applicationContext, {
           documentMetadata,
         }),
-      docketEntryIdsAdded,
     };
   }
 };
