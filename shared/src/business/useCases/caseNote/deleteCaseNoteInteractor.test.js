@@ -41,7 +41,7 @@ describe('deleteCaseNoteInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .updateCase.mockImplementation(async c => c.caseToUpdate);
+      .updateCase.mockImplementation(c => c.caseToUpdate);
     applicationContext.getUniqueId.mockReturnValue(
       '09c66c94-7480-4915-8f10-2f2e6e0bf4ad',
     );
