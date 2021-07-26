@@ -329,7 +329,7 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getWorkItemMappingsByDocketNumber.mockReturnValue([
+        .getWorkItemsByDocketNumber.mockReturnValue([
           { pk: 'abc|987', sk: 'workitem|123' },
         ]);
     });
