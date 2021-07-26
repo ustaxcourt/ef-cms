@@ -11,7 +11,7 @@ describe('NoticeOfTrialIssuedInPerson', () => {
   const trialInfo = {
     address1: '123 Candy Cane Lane',
     address2: '22222',
-    city: '33333',
+    city: 'troutville',
     formattedJudge: 'Judge Dredd',
     formattedStartDate: 'Monday, January 20, 2020',
     formattedStartTime: '10:00 am',
@@ -48,13 +48,11 @@ describe('NoticeOfTrialIssuedInPerson', () => {
 
     const trialInfoContent = wrapper.find('#trial-info').text();
 
-    expect(trialInfoContent).toContain(trialInfo.trialLocation);
-
-    const noticeBodyContent = wrapper.find('#notice-body').text();
-
-    expect(noticeBodyContent).toContain(trialInfo.meetingId);
-    expect(noticeBodyContent).toContain(trialInfo.password);
-    expect(noticeBodyContent).toContain(trialInfo.joinPhoneNumber);
+    expect(trialInfoContent).toContain(trialInfo.address1);
+    expect(trialInfoContent).toContain(trialInfo.address2);
+    expect(trialInfoContent).toContain(trialInfo.city);
+    expect(trialInfoContent).toContain(trialInfo.postalCode);
+    expect(trialInfoContent).toContain(trialInfo.state);
   });
 
   it('renders the formatted judge name', () => {

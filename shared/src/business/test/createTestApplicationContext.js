@@ -379,6 +379,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
+    noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
