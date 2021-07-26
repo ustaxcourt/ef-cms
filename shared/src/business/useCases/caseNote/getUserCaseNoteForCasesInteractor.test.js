@@ -8,6 +8,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 describe('getUserCaseNoteForCasesInteractor', () => {
   let mockCurrentUser;
@@ -68,5 +69,27 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     });
 
     expect(result).toMatchObject([MOCK_NOTE]);
+  });
+
+  it('uses the current user userId when there is no associated judge', async () => {
+    const userIdToExpect = 'f922e1fc-567f-4f7d-b1f5-c9eec1567643';
+    const mockUser = new User({
+      name: 'Judge Colvin',
+      role: ROLES.judge,
+      userId: userIdToExpect,
+    });
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getUseCases.mockReturnValue({
+      getJudgeForUserChambersInteractor: () => null,
+    });
+
+    await getUserCaseNoteForCasesInteractor(applicationContext, {
+      docketNumbers: [MOCK_NOTE.docketNumber],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getUserCaseNoteForCases.mock
+        .calls[0][0].userId,
+    ).toEqual(userIdToExpect);
   });
 });
