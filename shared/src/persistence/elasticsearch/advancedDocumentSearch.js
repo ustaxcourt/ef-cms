@@ -98,6 +98,7 @@ exports.advancedDocumentSearch = async ({
   }
 
   docketEntryQueryParams.push(caseQueryParams);
+  console.log('query!!!', docketEntryQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
