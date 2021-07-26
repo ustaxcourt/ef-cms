@@ -18,7 +18,7 @@ export const NoticeOfTrialIssuedInPerson = ({
       />
       <div>
         <div className="info-box info-box-trial" id="trial-info">
-          <div className="info-box-header">Trial At:</div>
+          <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
             {trialInfo.courthouseName && <div>{trialInfo.courthouseName}</div>}
             <div>{trialInfo.address1}</div>
@@ -30,19 +30,24 @@ export const NoticeOfTrialIssuedInPerson = ({
         </div>
 
         <div className="info-box info-box-judge" id="judge-info">
-          <div className="info-box-header">Judge:</div>
-          <div className="info-box-content">{trialInfo.judge}</div>
+          <div className="info-box-header">Judge</div>
+          <div className="info-box-content">{trialInfo.formattedJudge}</div>
         </div>
         <div className="clear" />
       </div>
-      <h3>NOTICE SETTING CASE FOR TRIAL</h3>
+
+      <h3>Notice Setting Case For Trial</h3>
 
       <div id="notice-body">
         <p>
-          This case is set for trial at the Trial Session beginning at
-          {trialInfo.startTime} on {trialInfo.startDate}. The calendar for that
-          Session will be called at that date and time, and the parties are
-          expected to be present and to be prepared to try the case.
+          The parties are hereby notified that this case is set for trial at the
+          Trial Session beginning at{' '}
+          <b>
+            {trialInfo.formattedStartTime} on {trialInfo.formattedStartDate}
+          </b>
+          . The calendar for that Session will be called at that date and time,
+          and the parties are expected to be present and to be prepared to try
+          the case.
           <b>
             Your failure to appear may result in dismissal of the case and entry
             of decision against you.
@@ -50,27 +55,20 @@ export const NoticeOfTrialIssuedInPerson = ({
         </p>
         <p>
           The Court will set the time for each trial at the end of the calendar
-          call. In setting trial times the Court attempts to accommodate the
-          parties, but the final determination of trial times rests in the
-          Court’s discretion.
+          call (unless the partiesrequest in advance a specific date and time
+          for trial and the Court grants the request). In setting trial times
+          the Court attempts to accommodate the parties, but the final
+          determination of trial times rests in the Court’s discretion.
         </p>
         <p>
-          Information about presenting a case in the Tax Court can be found at
-          <a href="www.ustaxcourt.gov" target="_blank">
-            {' '}
-            www.ustaxcourt.gov
-          </a>
-          .
+          Your attention is called to the requirements set out in the Standing
+          Pretrial Order that is served with this notice.
         </p>
-
         <p>
-          The parties should contact each other promptly and cooperate fully so
-          that the necessary steps can be taken to comply with these
-          requirements.{' '}
-          <b>
-            Your failure to cooperate may also result in dismissal of the case
-            and entry of decision against you.
-          </b>
+          <b>IMPORTANT:</b> Your case is currently set for an in-person
+          proceeding. In the event that the Court is unable to hold an in-person
+          proceeding and needs to proceed remotely, you will be notified and be
+          given detailed instructions for accessing your remote proceeding.
         </p>
 
         <p className="float-right width-third">
