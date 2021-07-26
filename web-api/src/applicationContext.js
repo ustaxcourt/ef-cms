@@ -337,9 +337,6 @@ const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
-  generateNoticeOfTrialIssuedTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
-const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -1716,12 +1713,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
-    },
-    getTemplateGenerators: () => {
-      return {
-        //fixe DOD remove this????
-        generateNoticeOfTrialIssuedTemplate,
-      };
     },
     getUniqueId,
     getUseCaseHelpers: () => {
