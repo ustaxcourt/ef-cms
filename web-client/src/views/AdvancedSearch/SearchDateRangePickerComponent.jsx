@@ -92,7 +92,7 @@ export const SearchDateRangePickerComponent = connect(
     }, [startDateInputRef, endDateInputRef]);
 
     return (
-      <div className="usa-date-range-picker grid-row grid-gap-lg">
+      <div className="usa-date-range-picker grid-row grid-gap-md">
         <FormGroup
           errorText={
             validationErrors.dateRangeRequired || validationErrors.startDate
