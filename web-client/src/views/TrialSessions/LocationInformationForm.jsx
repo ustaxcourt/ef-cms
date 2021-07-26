@@ -28,7 +28,7 @@ export const LocationInformationForm = connect(
       <>
         <h2 className="margin-top-4">Location Information</h2>
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.startTime}>
+          <FormGroup errorText={validationErrors.proceedingType}>
             <fieldset className="start-time usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="proceeding-type-legend">
                 Proceeding type
@@ -56,7 +56,7 @@ export const LocationInformationForm = connect(
                     />
                     <label
                       aria-label={value}
-                      className="usa-radio__label smaller-padding-right"
+                      className="usa-radio__label"
                       htmlFor={`${key}-proceeding`}
                       id={`${key}-proceeding-label`}
                     >
