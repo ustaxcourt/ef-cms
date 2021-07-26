@@ -929,6 +929,35 @@ describe('processStreamUtilities', () => {
 
       expect(mockGetMessage).not.toHaveBeenCalled();
     });
+
+    it('logs errors and throws an exception if bulk indexing fails', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .bulkIndexRecords.mockReturnValueOnce({
+          failedRecords: [{ id: 'failed record' }],
+        });
+      await expect(
+        processMessageEntries({
+          applicationContext,
+          messageRecords: [
+            {
+              dynamodb: {
+                Keys: {
+                  pk: { S: messageData.pk },
+                  sk: { S: messageData.sk },
+                },
+                NewImage: {
+                  ...messageDataMarshalled,
+                  isRepliedTo: { BOOL: true },
+                },
+              },
+              eventName: 'MODIFY',
+            },
+          ],
+        }),
+      ).rejects.toThrow('failed to index message records');
+      expect(applicationContext.logger.error).toHaveBeenCalled();
+    });
   });
 
   describe('processOtherEntries', () => {
