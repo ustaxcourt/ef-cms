@@ -435,6 +435,21 @@ describe('ExternalDocumentInformationFactory', () => {
         expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
       });
 
+      it('should not have filers errors if selectedCases match casesWithAPartySelected', () => {
+        baseDoc.casesParties = {
+          '101-19': { filers: ['s234234-dfsdlkj'] },
+          '102-19': { filers: ['s234234-abcdfef'] },
+        };
+        expect(errors().filers).toBeUndefined();
+      });
+
+      it("should not update casesWithAPartySelected if parties's values are undefined", () => {
+        baseDoc.casesParties = {
+          '102-19': { filers: undefined },
+        };
+        expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+      });
+
       describe('IRS Practitioner Selected', () => {
         beforeEach(() => {
           baseDoc.partyIrsPractitioner = true;
