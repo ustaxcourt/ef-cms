@@ -194,7 +194,7 @@ describe('order search journey with special characters', () => {
     },
   );
 
-  [('Coca-Cola', 'coca cola', '"Coca-Cola"')].forEach(term => {
+  ['Coca-Cola', 'coca cola', '"Coca-Cola"'].forEach(term => {
     it(`searches for ${term}`, async () => {
       await refreshElasticsearchIndex();
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
