@@ -87,6 +87,19 @@ exports.serveCourtIssuedDocumentInteractor = async (
     throw new Error('Docket entry has already been served');
   }
 
+  if (courtIssuedDocument.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  } else {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: courtIssuedDocument.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: true,
+      });
+  }
+
   courtIssuedDocument.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
@@ -210,6 +223,15 @@ exports.serveCourtIssuedDocumentInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: courtIssuedDocument.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      status: false,
+    });
 
   return await applicationContext
     .getUseCaseHelpers()

@@ -70,6 +70,19 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new Error('Docket entry has already been served');
   }
 
+  if (docketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  } else {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: true,
+      });
+  }
+
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -242,6 +255,15 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      status: false,
+    });
 
   return await applicationContext
     .getUseCaseHelpers()

@@ -39,7 +39,7 @@ describe('submitCourtIssuedOrderAction', () => {
     ).toBeCalled();
     expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toBeCalled();
   });
 

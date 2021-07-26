@@ -160,6 +160,7 @@ export const AdvancedSearch = connect(
                   disabled={!featureFlagHelper.isSearchEnabled}
                   value={searchTabs.ORDER}
                 >
+                  Order
                   {!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : ''}
                 </option>
                 <option disabled={true} value={searchTabs.OPINION}>
