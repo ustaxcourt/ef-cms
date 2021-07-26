@@ -103,7 +103,7 @@ export const AdvancedDocumentSearch = connect(
                   </BindedSelect>
                 </div>
               )}
-              <div className="judge-search-row margin-right-4 margin-top-4">
+              <div className="judge-search-row margin-right-3 margin-top-4">
                 <label className="usa-label" htmlFor="order-judge">
                   Judge
                 </label>
