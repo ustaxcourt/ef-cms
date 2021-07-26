@@ -16,6 +16,7 @@ export const NoticeOfTrialIssuedInPerson = ({
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
+      <h3>Notice Setting Case For Trial</h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
@@ -36,10 +37,8 @@ export const NoticeOfTrialIssuedInPerson = ({
         <div className="clear" />
       </div>
 
-      <h3>Notice Setting Case For Trial</h3>
-
       <div id="notice-body">
-        <p>
+        <p className="indent-paragraph">
           The parties are hereby notified that this case is set for trial at the
           Trial Session beginning at{' '}
           <b>
@@ -53,14 +52,14 @@ export const NoticeOfTrialIssuedInPerson = ({
             of decision against you.
           </b>
         </p>
-        <p>
+        <p className="indent-paragraph">
           The Court will set the time for each trial at the end of the calendar
           call (unless the partiesrequest in advance a specific date and time
           for trial and the Court grants the request). In setting trial times
           the Court attempts to accommodate the parties, but the final
           determination of trial times rests in the Court’s discretion.
         </p>
-        <p>
+        <p className="indent-paragraph">
           Your attention is called to the requirements set out in the Standing
           Pretrial Order that is served with this notice.
         </p>
