@@ -56,7 +56,7 @@ export const LocationInformationForm = connect(
                     />
                     <label
                       aria-label={value}
-                      className="usa-radio__label"
+                      className="smaller-padding-right usa-radio__label"
                       htmlFor={`${key}-proceeding`}
                       id={`${key}-proceeding-label`}
                     >
