@@ -55,12 +55,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       );
 
     applicationContext
-      .getTemplateGenerators()
-      .generateNoticeOfTrialIssuedTemplate.mockImplementation(
-        ({ content }) => `<html>${content.docketNumberWithSuffix}</html>`,
-      );
-
-    applicationContext
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });

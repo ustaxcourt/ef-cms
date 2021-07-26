@@ -392,15 +392,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
 
-  const getTemplateGeneratorsReturnMock = {
-    generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
-    generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
-    generateNoticeOfTrialIssuedTemplate: jest.fn(),
-    generatePrintableDocketRecordTemplate: jest
-      .fn()
-      .mockResolvedValue('<div></div>'),
-  };
-
   const mockGetChromiumBrowserReturnValue = {
     close: jest.fn(),
     newPage: jest.fn().mockReturnValue({
@@ -591,9 +582,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getSearchClient: appContextProxy(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getTemplateGenerators: jest
-      .fn()
-      .mockReturnValue(getTemplateGeneratorsReturnMock),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
