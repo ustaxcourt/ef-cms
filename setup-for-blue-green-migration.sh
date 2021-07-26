@@ -31,21 +31,21 @@ fi
 
 aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
 CODE=$?
-if [[ "${CODE}" != "0" ]]; then
+if [[ "${CODE}" == "0" ]]; then
   echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-east-1 before running migration"
   exit 1
 fi
 
 aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
 CODE=$?
-if [[ "${CODE}" != "0" ]]; then
+if [[ "${CODE}" == "0" ]]; then
   echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-west-1 before running migration"
   exit 1
 fi
 
 aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1
 CODE=$?
-if [[ "${CODE}" != "0" ]]; then
+if [[ "${CODE}" == "0" ]]; then
   echo "error: expected the efcms-search-${ENV}-${NEXT_VERSION} elasticsearch cluster to have been deleted from us-east-1 before running migration"
   exit 1
 fi
