@@ -4,7 +4,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsStipulatedDecisionDocketEntryFromOrder = (
-  test,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   const { STIPULATED_DECISION_EVENT_CODE } = applicationContext.getConstants();
@@ -15,11 +15,11 @@ export const docketClerkAddsStipulatedDecisionDocketEntryFromOrder = (
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,
@@ -27,57 +27,75 @@ export const docketClerkAddsStipulatedDecisionDocketEntryFromOrder = (
 
     expect(draftOrderDocument).toBeTruthy();
 
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: STIPULATED_DECISION_EVENT_CODE,
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Stipulated Decision',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Stipulated Decision Entered, [Judge Name] [Anything]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type B',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: STIPULATED_DECISION_EVENT_CODE,
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Stipulated Decision',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'Stipulated Decision Entered, [Judge Name] [Anything]',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type B',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'judge',
-      value: 'Ashford',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'Anything',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'judge',
+        value: 'Ashford',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'Anything',
+      },
+    );
 
-    expect(test.getState('form.generatedDocumentTitle')).toContain(
+    expect(cerebralTest.getState('form.generatedDocumentTitle')).toContain(
       'Judge Ashford Anything',
     );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     caseDetailFormatted = await runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 

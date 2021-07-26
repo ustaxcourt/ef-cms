@@ -247,6 +247,7 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
+    expect(result.numberOfResults).toEqual(2);
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
@@ -420,6 +421,33 @@ describe('advancedDocumentSearchHelper', () => {
       });
 
       expect(result.formattedSignedJudgeName).toEqual('Scott');
+    });
+
+    it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+      const result = formatDocumentSearchResultRecord(
+        {
+          numberOfPages: undefined,
+        },
+        '',
+        {
+          applicationContext,
+        },
+      );
+      expect(result.numberOfPagesFormatted).toEqual('n/a');
+    });
+
+    it('sets numberOfPagesFormatted to 0 if numberOfPages is 0', () => {
+      const result = formatDocumentSearchResultRecord(
+        {
+          numberOfPages: 0,
+        },
+        '',
+        {
+          applicationContext,
+        },
+      );
+
+      expect(result.numberOfPagesFormatted).toEqual(0);
     });
   });
 });

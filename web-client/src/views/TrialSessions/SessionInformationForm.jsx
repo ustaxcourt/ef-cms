@@ -103,7 +103,7 @@ export const SessionInformationForm = connect(
                         />
                         <label
                           aria-label={option.toUpperCase()}
-                          className="usa-radio__label smaller-padding-right"
+                          className="smaller-padding-right usa-radio__label"
                           htmlFor={`startTimeExtension-${option}`}
                         >
                           {option}
@@ -134,7 +134,7 @@ export const SessionInformationForm = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label inline-block"
+                    className="usa-checkbox__label"
                     htmlFor="swing-session"
                   >
                     This is part of a Swing session

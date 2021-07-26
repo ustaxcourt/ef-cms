@@ -40,10 +40,7 @@ export const Inclusions = connect(
                 validateDocketEntrySequence();
               }}
             />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="attachments"
-            >
+            <label className="usa-checkbox__label" htmlFor="attachments">
               Attachment(s)
             </label>
           </div>
@@ -63,7 +60,7 @@ export const Inclusions = connect(
               }}
             />
             <label
-              className="usa-checkbox__label inline-block"
+              className="usa-checkbox__label"
               htmlFor="certificate-of-service"
             >
               Certificate of Service

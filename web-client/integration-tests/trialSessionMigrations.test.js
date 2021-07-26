@@ -9,7 +9,7 @@ import {
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 let caseDetail;
 
@@ -27,16 +27,16 @@ describe('Trial session migration journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  it('should use migrated trial session from seed data', async () => {
+  it('should use migrated trial session from seed data', () => {
     // from web-api/storage/fixtures/seed/integration-test-data/migrated-trial-session.json
-    test.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195fb';
+    cerebralTest.trialSessionId = '959c4338-0fac-42eb-b0eb-d53b8d0195fb';
   });
 
   it('should create a new case and calendar it', async () => {
-    caseDetail = await uploadPetition(test, {
+    caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -50,25 +50,27 @@ describe('Trial session migration journey', () => {
       preferredTrialCity: 'Memphis, Tennessee',
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.createdCases = [test.docketNumber];
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases = [cerebralTest.docketNumber];
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkSubmitsCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(test, 0);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkManuallyAddsCaseToCalendaredTrialSession(cerebralTest, 0);
 
   it('Docketclerk views migrated, calendared case with migrated trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDetail.docketNumber,
     });
-    caseDetail = test.getState('caseDetail');
-    expect(test.getState('caseDetail.trialSessionId')).toBeDefined();
-    expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
+    caseDetail = cerebralTest.getState('caseDetail');
+    expect(cerebralTest.getState('caseDetail.trialSessionId')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.trialLocation')).toEqual(
+      trialLocation,
+    );
   });
 });

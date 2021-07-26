@@ -31,7 +31,7 @@ describe.skip(`Create and serve a case with an order with exact keyword (${docum
     });
 
     afterAll(() => {
-      test.closeSocket();
+      testPublic.closeSocket();
     });
 
     loginAs(testClient, 'petitioner@example.com');

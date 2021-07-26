@@ -5,7 +5,7 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const admissionsClerkSearchesForPractitionersByName = test => {
+export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
   const practitionerResultsContainDuplicates = searchResults => {
     const barNumberOccurrences = {};
     searchResults.forEach(practitioner => {
@@ -19,104 +19,118 @@ export const admissionsClerkSearchesForPractitionersByName = test => {
   };
 
   return it('admissions clerk searches for practitioners by name', async () => {
-    await test.runSequence('gotoAdvancedSearchSequence');
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
 
     await refreshElasticsearchIndex();
 
-    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.PRACTITIONER);
+    cerebralTest.setState(
+      'advancedSearchTab',
+      ADVANCED_SEARCH_TABS.PRACTITIONER,
+    );
 
-    await test.runSequence('advancedSearchTabChangeSequence');
+    await cerebralTest.runSequence('advancedSearchTabChangeSequence');
 
     expect(
-      test.getState('advancedSearchForm.practitionerSearchByName'),
+      cerebralTest.getState('advancedSearchForm.practitionerSearchByName'),
     ).toEqual({});
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`),
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+      ),
     ).toBeUndefined();
 
-    await test.runSequence('submitPractitionerNameSearchSequence');
-    expect(test.getState('validationErrors.practitionerName')).toBeDefined();
+    await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
+    expect(
+      cerebralTest.getState('validationErrors.practitionerName'),
+    ).toBeDefined();
 
     // non-exact matches
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
       value: 'test',
     });
 
-    await test.runSequence('submitPractitionerNameSearchSequence');
-    expect(test.getState('validationErrors.practitionerName')).toBeUndefined();
+    await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
+    expect(
+      cerebralTest.getState('validationErrors.practitionerName'),
+    ).toBeUndefined();
 
-    const searchResults = test.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
     );
     expect(practitionerResultsContainDuplicates(searchResults)).toBeFalsy();
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
-        .length,
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+      ).length,
     ).toBeGreaterThan(0);
     let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.formattedSearchResults.length).toEqual(
-      test.getState('constants.CASE_SEARCH_PAGE_SIZE'),
+      cerebralTest.getState('constants.CASE_SEARCH_PAGE_SIZE'),
     );
     expect(helper.showLoadMore).toBeTruthy();
 
-    await test.runSequence('clearAdvancedSearchFormSequence', {
+    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'practitionerSearchByName',
     });
 
     expect(
-      test.getState('advancedSearchForm.practitionerSearchByName'),
+      cerebralTest.getState('advancedSearchForm.practitionerSearchByName'),
     ).toEqual({});
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`),
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+      ),
     ).toBeUndefined();
 
     // exact match
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
-      value: `Joe ${test.currentTimestamp} Exotic Tiger King`,
+      value: `Joe ${cerebralTest.currentTimestamp} Exotic Tiger King`,
     });
 
-    await test.runSequence('submitPractitionerNameSearchSequence');
+    await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
-        .length,
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+      ).length,
     ).toBeGreaterThan(0);
     expect(
-      test.getState(
+      cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
       ),
-    ).toEqual(`joe ${test.currentTimestamp} exotic tiger king`);
+    ).toEqual(`joe ${cerebralTest.currentTimestamp} exotic tiger king`);
     const currentTwoDigitYear = formatNow('YY');
     expect(
-      test.getState(
+      cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.barNumber`,
       ),
     ).toContain(`EJ${currentTwoDigitYear}`);
 
     // no matches
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
       value: 'not a real name',
     });
 
-    await test.runSequence('submitPractitionerNameSearchSequence');
+    await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`)
-        .length,
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
+      ).length,
     ).toEqual(0);
 
     helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMore).toBeFalsy();

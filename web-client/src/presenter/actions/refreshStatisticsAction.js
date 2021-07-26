@@ -10,11 +10,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 
-export const refreshStatisticsAction = async ({
-  applicationContext,
-  get,
-  store,
-}) => {
+export const refreshStatisticsAction = ({ applicationContext, get, store }) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   let { caseType, hasVerifiedIrsNotice, statistics } = get(state.form);
 

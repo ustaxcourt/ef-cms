@@ -11,7 +11,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 describe('Trial Session Eligible Cases Journey (judge)', () => {
@@ -20,7 +20,7 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
@@ -32,10 +32,10 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
   };
   const createdDocketNumbers = [];
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsNewTrialSession(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
   const caseOverrides = {
     ...overrides,
@@ -45,26 +45,26 @@ describe('Trial Session Eligible Cases Journey (judge)', () => {
     receivedAtMonth: '01',
     receivedAtYear: '2019',
   };
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test, caseOverrides);
+    const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
     createdDocketNumbers.push(caseDetail.docketNumber);
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkSubmitsCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => createdDocketNumbers);
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(cerebralTest, () => createdDocketNumbers);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(test, 'judgeCohen@example.com');
-  judgeViewsTrialSessionWorkingCopy(test);
-  judgeAddsNotesFromWorkingCopyCaseList(test);
-  judgeViewsNotesFromCaseDetail(test);
+  loginAs(cerebralTest, 'judgeCohen@example.com');
+  judgeViewsTrialSessionWorkingCopy(cerebralTest);
+  judgeAddsNotesFromWorkingCopyCaseList(cerebralTest);
+  judgeViewsNotesFromCaseDetail(cerebralTest);
 });

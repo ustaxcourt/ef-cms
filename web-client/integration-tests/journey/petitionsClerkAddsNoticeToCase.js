@@ -4,59 +4,59 @@ import { first } from 'lodash';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export const petitionsClerkAddsNoticeToCase = test => {
+export const petitionsClerkAddsNoticeToCase = cerebralTest => {
   return it('Petitions clerk adds Notice to case', async () => {
-    await test.runSequence('openCreateOrderChooseTypeModalSequence');
+    await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: 'NOT',
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'documentTitle',
       value: 'Notice to Need a Nap',
     });
 
-    expect(test.getState('modal.documentType')).toEqual('Notice');
+    expect(cerebralTest.getState('modal.documentType')).toEqual('Notice');
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test notice.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
     // skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const { draftDocuments } = applicationContext
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
-        caseDetail: test.getState('caseDetail'),
+        caseDetail: cerebralTest.getState('caseDetail'),
       });
 
     const firstDraftDocument = first(draftDocuments);
-    test.docketEntryId = firstDraftDocument
+    cerebralTest.docketEntryId = firstDraftDocument
       ? firstDraftDocument.docketEntryId
       : undefined;
 
@@ -64,6 +64,6 @@ export const petitionsClerkAddsNoticeToCase = test => {
       expect(firstDraftDocument.signedAt).toBeTruthy(); // Notice should be implicitly signed.
     }
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };

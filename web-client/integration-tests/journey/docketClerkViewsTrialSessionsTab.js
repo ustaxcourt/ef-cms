@@ -7,22 +7,25 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export const docketClerkViewsTrialSessionsTab = (test, overrides = {}) => {
+export const docketClerkViewsTrialSessionsTab = (
+  cerebralTest,
+  overrides = {},
+) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
-    await test.runSequence('gotoTrialSessionsSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionsSequence', {
       query: {
         status,
       },
     });
 
-    expect(test.getState('currentPage')).toEqual('TrialSessions');
-    expect(test.getState('screenMetadata.trialSessionFilters.status')).toEqual(
-      status,
-    );
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
+    expect(
+      cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
+    ).toEqual(status);
 
     const formatted = runCompute(formattedTrialSessions, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const trialSessionsHelper = withAppContextDecorator(
@@ -30,7 +33,7 @@ export const docketClerkViewsTrialSessionsTab = (test, overrides = {}) => {
     );
 
     const helper = runCompute(trialSessionsHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const legacyJudge = helper.trialSessionJudges.find(
@@ -48,7 +51,7 @@ export const docketClerkViewsTrialSessionsTab = (test, overrides = {}) => {
     let foundSession;
     filteredSessions.some(trialSession => {
       trialSession.sessions.some(session => {
-        if (session.trialSessionId === test.trialSessionId) {
+        if (session.trialSessionId === cerebralTest.trialSessionId) {
           foundSession = session;
           return true;
         }

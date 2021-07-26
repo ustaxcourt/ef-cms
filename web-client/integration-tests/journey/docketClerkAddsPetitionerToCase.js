@@ -4,66 +4,71 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
-export const docketClerkAddsPetitionerToCase = (test, overrides = {}) => {
+export const docketClerkAddsPetitionerToCase = (
+  cerebralTest,
+  overrides = {},
+) => {
   return it('docket clerk adds new petitioner to case', async () => {
-    const petitionersBeforeAdding = test.getState(
+    const petitionersBeforeAdding = cerebralTest.getState(
       'caseDetail.petitioners',
     ).length;
 
-    await test.runSequence('gotoAddPetitionerToCaseSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoAddPetitionerToCaseSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.contactType',
       value: overrides.contactType || CONTACT_TYPES.otherPetitioner,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.name',
       value: overrides.name || 'A New Petitioner',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.additionalName',
       value: 'A Petitioner Additional Name',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.phone',
       value: '6126788888',
     });
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await test.runSequence('setSelectedAddressOnFormSequence', {
+    await cerebralTest.runSequence('setSelectedAddressOnFormSequence', {
       contactId: contactPrimary.contactId,
     });
 
     const mockUpdatedCaption = 'Something Else';
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.caseCaption',
       value: mockUpdatedCaption,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
-    await test.runSequence('submitAddPetitionerSequence');
+    await cerebralTest.runSequence('submitAddPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.petitioners').length).toEqual(
+    expect(cerebralTest.getState('caseDetail.petitioners').length).toEqual(
       petitionersBeforeAdding + 1,
     );
 
-    expect(test.getState('caseDetail.caseCaption')).toEqual(mockUpdatedCaption);
+    expect(cerebralTest.getState('caseDetail.caseCaption')).toEqual(
+      mockUpdatedCaption,
+    );
 
     if (overrides.contactType === 'intervenor') {
-      test.intervenorContactId = test
+      cerebralTest.intervenorContactId = cerebralTest
         .getState('caseDetail.petitioners')
         .find(p => p.contactType === CONTACT_TYPES.intervenor).contactId;
     }

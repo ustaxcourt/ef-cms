@@ -1,8 +1,8 @@
 const createApplicationContext = require('../applicationContext');
 
 exports.ipLimiter = key => async (req, res, next) => {
-  const MAX_COUNT = 15;
-  const WINDOW_TIME = 60 * 1000;
+  const MAX_COUNT = parseInt(process.env.IP_LIMITER_THRESHOLD ?? '15');
+  const WINDOW_TIME = parseInt(process.env.IP_LIMITER_WINDOW ?? `${60 * 1000}`);
   const applicationContext = createApplicationContext(null);
   const { sourceIp } = req.apiGateway.event.requestContext.identity;
   const KEY = `ip-limiter-${key}|${sourceIp}`;
