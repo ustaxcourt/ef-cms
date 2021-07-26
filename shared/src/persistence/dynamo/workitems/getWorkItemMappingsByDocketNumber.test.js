@@ -22,7 +22,9 @@ describe('getWorkItemMappingsByDocketNumber', () => {
     expect(client.query.mock.calls[0][0]).toMatchObject({
       ExpressionAttributeValues: {
         ':pk': `case|${mockDocketNumber}`,
+        ':prefix': 'work-item',
       },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     });
   });
 });
