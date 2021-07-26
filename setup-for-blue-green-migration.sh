@@ -29,13 +29,23 @@ else
   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
 fi
 
-# delete destination dynamodb table
-# TODO: this steps should occur after the switch color is ran
-# echo "deleting the efcms-${ENV}-${NEXT_VERSION} dynamo tables"
-# aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
-# aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
+aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
+CODE=$?
+if [[ "${CODE}" != "0" ]]; then
+  echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-east-1 before running migration"
+  exit 1
+fi
 
-# # delete elasticsearch cluster
-# echo "clearing the elasticsearch domain ${ELASTICSEARCH_ENDPOINT}"
-# ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 | jq -r .DomainStatus.Endpoint)
-# ELASTICSEARCH_ENDPOINT=$ELASTICSEARCH_ENDPOINT ./web-api/clear-elasticsearch-index.sh
+aws dynamodb describe-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
+CODE=$?
+if [[ "${CODE}" != "0" ]]; then
+  echo "error: expected the efcms-${ENV}-${NEXT_VERSION} table to have been deleted from us-west-1 before running migration"
+  exit 1
+fi
+
+aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1
+CODE=$?
+if [[ "${CODE}" != "0" ]]; then
+  echo "error: expected the efcms-search-${ENV}-${NEXT_VERSION} elasticsearch cluster to have been deleted from us-east-1 before running migration"
+  exit 1
+fi
