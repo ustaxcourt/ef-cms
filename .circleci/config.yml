@@ -368,6 +368,17 @@ jobs:
           name: Setup ES Volume Size
           command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
+          name: Setup Blue Green Migration If Needed
+          command: |
+            docker run \
+              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+              -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "ENV=${ENV}" \
+              --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
