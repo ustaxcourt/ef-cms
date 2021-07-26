@@ -755,6 +755,9 @@ const {
   noticeOfTrialIssued,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssued');
 const {
+  noticeOfTrialIssuedInPerson,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson');
+const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
 const {
@@ -1576,6 +1579,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,
+      noticeOfTrialIssuedInPerson,
       order,
       pendingReport,
       practitionerCaseList,
@@ -1715,6 +1719,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getTemplateGenerators: () => {
       return {
+        //fixe DOD remove this????
         generateNoticeOfTrialIssuedTemplate,
       };
     },
