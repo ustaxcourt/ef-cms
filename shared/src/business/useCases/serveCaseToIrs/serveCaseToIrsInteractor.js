@@ -311,14 +311,6 @@ exports.serveCaseToIrsInteractor = async (
     caseEntity,
   });
 
-  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    await applicationContext.getUtilities().serveCaseDocument({
-      applicationContext,
-      caseEntity,
-      initialDocumentTypeKey,
-    });
-  }
-
   addDocketEntryForPaymentStatus({
     applicationContext,
     caseEntity,
@@ -329,6 +321,14 @@ exports.serveCaseToIrsInteractor = async (
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
+
+  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
+    await applicationContext.getUtilities().serveCaseDocument({
+      applicationContext,
+      caseEntity,
+      initialDocumentTypeKey,
+    });
+  }
 
   await createPetitionWorkItems({
     applicationContext,

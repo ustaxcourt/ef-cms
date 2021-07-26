@@ -6,6 +6,9 @@ const {
   migrateItems: bugMigration0035,
 } = require('./migrations/bug-0035-private-practitioner-representing');
 const {
+  migrateItems: bugMigration0036,
+} = require('./migrations/bug-0036-public-served-parties-code');
+const {
   migrateItems: migration0036,
 } = require('./migrations/0036-phone-number-format');
 const {
@@ -30,12 +33,25 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
 // eslint-disable-next-line no-unused-vars
-const migrateRecords = async ({ documentClient, items }) => {
-  applicationContext.logger.info('about to run bug migration 0035');
-  items = await bugMigration0035(items, documentClient);
+const migrateRecords = async ({
+  documentClient,
+  items,
+  ranMigrations = {},
+}) => {
+  if (!ranMigrations['bug-0035-private-practitioner-representing.js']) {
+    applicationContext.logger.info('about to run bug migration 0035');
+    items = await bugMigration0035(items, documentClient);
+  }
 
-  applicationContext.logger.debug('about to run migration 0036');
-  items = await migration0036(items);
+  if (!ranMigrations['bug-0036-public-served-parties-code.js']) {
+    applicationContext.logger.info('about to run bug migration 0036');
+    items = await bugMigration0036(items);
+  }
+
+  if (!ranMigrations['0036-phone-number-format.js']) {
+    applicationContext.logger.debug('about to run migration 0036');
+    items = await migration0036(items);
+  }
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
@@ -45,9 +61,9 @@ const migrateRecords = async ({ documentClient, items }) => {
 
 exports.migrateRecords = migrateRecords;
 
-const processItems = async ({ documentClient, items }) => {
+const processItems = async ({ documentClient, items, ranMigrations }) => {
   try {
-    items = await migrateRecords({ documentClient, items });
+    items = await migrateRecords({ documentClient, items, ranMigrations });
   } catch (err) {
     applicationContext.logger.error('Error migrating records', err);
     throw err;
@@ -85,7 +101,7 @@ const processItems = async ({ documentClient, items }) => {
 
 exports.processItems = processItems;
 
-const scanTableSegment = async (segment, totalSegments) => {
+const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   let hasMoreResults = true;
   let lastKey = null;
   while (hasMoreResults) {
@@ -108,9 +124,23 @@ const scanTableSegment = async (segment, totalSegments) => {
         await processItems({
           documentClient: dynamoDbDocumentClient,
           items: results.Items,
+          ranMigrations,
         });
       });
   }
+};
+
+const hasMigrationRan = async key => {
+  const { Item } = await dynamoDbDocumentClient
+    .get({
+      Key: {
+        pk: `migration|${key}`,
+        sk: `migration|${key}`,
+      },
+      TableName: `efcms-deploy-${process.env.ENVIRONMENT}`,
+    })
+    .promise();
+  return { [key]: !!Item };
 };
 
 exports.handler = async event => {
@@ -122,7 +152,13 @@ exports.handler = async event => {
     `about to process ${segment} of ${totalSegments}`,
   );
 
-  await scanTableSegment(segment, totalSegments);
+  const ranMigrations = {
+    ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
+    ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
+    ...(await hasMigrationRan('0036-phone-number-format.js')),
+  };
+
+  await scanTableSegment(segment, totalSegments, ranMigrations);
   applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);
   await sqs
     .deleteMessage({

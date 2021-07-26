@@ -38,6 +38,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   );
 
   return {
+    numberOfResults: searchResults?.length,
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
