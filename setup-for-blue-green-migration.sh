@@ -30,11 +30,12 @@ else
 fi
 
 # delete destination dynamodb table
-echo "deleting the efcms-${ENV}-${NEXT_VERSION} dynamo tables"
-aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
-aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
+# TODO: this steps should occur after the switch color is ran
+# echo "deleting the efcms-${ENV}-${NEXT_VERSION} dynamo tables"
+# aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-east-1
+# aws dynamodb delete-table --table-name "efcms-${ENV}-${NEXT_VERSION}" --region us-west-1
 
-# delete elasticsearch cluster
-echo "clearing the elasticsearch domain ${ELASTICSEARCH_ENDPOINT}"
-ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 | jq -r .DomainStatus.Endpoint)
-ELASTICSEARCH_ENDPOINT=$ELASTICSEARCH_ENDPOINT ./web-api/clear-elasticsearch-index.sh
+# # delete elasticsearch cluster
+# echo "clearing the elasticsearch domain ${ELASTICSEARCH_ENDPOINT}"
+# ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${NEXT_VERSION}" --region us-east-1 | jq -r .DomainStatus.Endpoint)
+# ELASTICSEARCH_ENDPOINT=$ELASTICSEARCH_ENDPOINT ./web-api/clear-elasticsearch-index.sh
