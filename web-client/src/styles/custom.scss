@@ -1525,12 +1525,20 @@ button.change-scanner-button {
     .advanced-search__form-container {
       height: 375px;
     }
+
+    .nowrap-large-screens {
+      flex-wrap: nowrap;
+    }
   }
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1) {
     input#petitioner-name,
     select {
       margin-bottom: 20px;
+    }
+
+    .bottom-gray-border {
+      border-bottom: 1px solid color($theme-color-base-light);
     }
   }
 }
@@ -1797,4 +1805,8 @@ button.change-scanner-button {
   svg {
     color: color($theme-color-warning);
   }
+}
+
+#document-advanced .advanced-search-full-width {
+  max-width: 100%;
 }
