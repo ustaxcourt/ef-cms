@@ -5,7 +5,7 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('docket clerk edits a petition payment fee', () => {
   beforeEach(() => {
@@ -13,44 +13,48 @@ describe('docket clerk edits a petition payment fee', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a taxpayer and create a case', async () => {
-    caseDetail = await uploadPetition(test);
+    caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   it('login as the docketclerk and edit the case petition payment fee', async () => {
-    await test.runSequence('gotoEditCaseDetailsSequence', {
+    await cerebralTest.runSequence('gotoEditCaseDetailsSequence', {
       docketNumber: caseDetail.docketNumber,
     });
 
-    expect(test.getState('caseDetail.petitionPaymentDate')).toBeUndefined();
-    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
+    expect(
+      cerebralTest.getState('caseDetail.petitionPaymentDate'),
+    ).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail.petitionPaymentStatus')).toEqual(
       PAYMENT_STATUS.UNPAID,
     );
-    expect(test.getState('caseDetail.docketEntries')).not.toContainEqual({
+    expect(
+      cerebralTest.getState('caseDetail.docketEntries'),
+    ).not.toContainEqual({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
       filingDate: '2001-01-01T05:00:00.000Z',
       index: 3,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
     });
 
-    await test.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       hasVerifiedIrsNotice:
         CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
       petitionPaymentDate: CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
@@ -58,41 +62,41 @@ describe('docket clerk edits a petition payment fee', () => {
         CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateDay',
       value: '01',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateMonth',
       value: '01',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'paymentDateYear',
       value: '2001',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
 
-    await test.runSequence('updateCaseDetailsSequence');
+    await cerebralTest.runSequence('updateCaseDetailsSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('caseDetail.petitionPaymentStatus')).toEqual(
+    expect(cerebralTest.getState('caseDetail.petitionPaymentStatus')).toEqual(
       PAYMENT_STATUS.PAID,
     );
-    expect(test.getState('caseDetail.petitionPaymentDate')).toEqual(
+    expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
       '2001-01-01T05:00:00.000Z',
     );
 
     expect(
-      test
+      cerebralTest
         .getState('caseDetail.docketEntries')
         .find(
           r => r.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,

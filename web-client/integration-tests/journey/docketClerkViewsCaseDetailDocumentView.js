@@ -11,44 +11,50 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkViewsCaseDetailDocumentView = test => {
+export const docketClerkViewsCaseDetailDocumentView = cerebralTest => {
   return it('Docketclerk views case detail document view', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
 
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: caseDetail.docketNumber,
-      test,
     });
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
     await refreshElasticsearchIndex();
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(caseDetail.associatedJudge).toBeDefined();
     expect(caseDetail.status).toBeDefined();
     expect(contactPrimary.contactId).toBeDefined();
 
-    await test.runSequence('changeTabAndSetViewerDocumentToDisplaySequence', {
-      docketRecordTab: 'documentView',
-      viewerDocumentToDisplay: {
-        docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+    await cerebralTest.runSequence(
+      'changeTabAndSetViewerDocumentToDisplaySequence',
+      {
+        docketRecordTab: 'documentView',
+        viewerDocumentToDisplay: {
+          docketEntryId: formatted.pendingItemsDocketEntries[0].docketEntryId,
+        },
       },
-    });
+    );
 
-    test.docketEntryId = formatted.pendingItemsDocketEntries[0].docketEntryId;
+    cerebralTest.docketEntryId =
+      formatted.pendingItemsDocketEntries[0].docketEntryId;
 
-    expect(test.getState('docketEntryId')).toEqual(test.docketEntryId);
+    expect(cerebralTest.getState('docketEntryId')).toEqual(
+      cerebralTest.docketEntryId,
+    );
 
     expect(
-      test.getState('currentViewMetadata.caseDetail.docketRecordTab'),
+      cerebralTest.getState('currentViewMetadata.caseDetail.docketRecordTab'),
     ).toEqual('documentView');
   });
 };

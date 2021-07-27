@@ -3,83 +3,83 @@ import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseIn
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
-  test,
+  cerebralTest,
   fakeFile,
 ) => {
   return it('Petitions clerk verifies petition payment fee options and required fields', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
 
-    expect(test.getState('form.petitionPaymentStatus')).toBeUndefined();
+    expect(cerebralTest.getState('form.petitionPaymentStatus')).toBeUndefined();
 
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.PAID,
     });
 
-    expect(test.getState('form.orderForFilingFee')).toEqual(false);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(false);
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       petitionPaymentDate: Case.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
       petitionPaymentMethod:
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
     });
 
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateDay',
       value: '01',
     });
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateMonth',
       value: '01',
     });
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateYear',
       value: '2001',
     });
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      test.getState('validationErrors.petitionPaymentDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentDate'),
     ).toBeUndefined();
     expect(
-      test.getState('validationErrors.petitionPaymentMethod'),
+      cerebralTest.getState('validationErrors.petitionPaymentMethod'),
     ).toBeUndefined();
 
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.UNPAID,
     });
 
-    expect(test.getState('form.orderForFilingFee')).toEqual(true);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(true);
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      test.getState('validationErrors.petitionPaymentDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentDate'),
     ).toBeUndefined();
     expect(
-      test.getState('validationErrors.petitionPaymentMethod'),
+      cerebralTest.getState('validationErrors.petitionPaymentMethod'),
     ).toBeUndefined();
 
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
       value: PAYMENT_STATUS.WAIVED,
     });
 
-    expect(test.getState('form.orderForFilingFee')).toEqual(false);
+    expect(cerebralTest.getState('form.orderForFilingFee')).toEqual(false);
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
-    expect(test.getState('validationErrors')).toMatchObject({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
         CaseInternal.VALIDATION_ERROR_MESSAGES
           .applicationForWaiverOfFilingFeeFile,
@@ -87,31 +87,31 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
         Case.VALIDATION_ERROR_MESSAGES.petitionPaymentWaivedDate,
     });
 
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateWaivedDay',
       value: '02',
     });
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateWaivedMonth',
       value: '02',
     });
-    await test.runSequence('updatePetitionPaymentFormValueSequence', {
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'paymentDateWaivedYear',
       value: '2002',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFileSize',
       value: 1,
     });
 
-    await test.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(
-      test.getState('validationErrors.petitionPaymentWaivedDate'),
+      cerebralTest.getState('validationErrors.petitionPaymentWaivedDate'),
     ).toBeUndefined();
   });
 };

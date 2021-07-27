@@ -1,11 +1,11 @@
-export const docketClerkSearchesForCaseToConsolidateWith = test => {
+export const docketClerkSearchesForCaseToConsolidateWith = cerebralTest => {
   return it('Docket clerk searches for case to consolidate with', async () => {
-    test.setState('modal.searchTerm', test.leadDocketNumber);
-    await test.runSequence('submitCaseSearchForConsolidationSequence', {
-      docketNumber: test.leadDocketNumber,
+    cerebralTest.setState('modal.searchTerm', cerebralTest.leadDocketNumber);
+    await cerebralTest.runSequence('submitCaseSearchForConsolidationSequence', {
+      docketNumber: cerebralTest.leadDocketNumber,
     });
-    expect(test.getState('modal.caseDetail.docketNumber')).toEqual(
-      test.leadDocketNumber,
+    expect(cerebralTest.getState('modal.caseDetail.docketNumber')).toEqual(
+      cerebralTest.leadDocketNumber,
     );
   });
 };

@@ -23,7 +23,7 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
     lodged: false,
   };
 
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -31,7 +31,7 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
     presenter.sequences = {
       gotoEditCourtIssuedDocketEntrySequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
@@ -54,12 +54,12 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
   });
 
   it('should set up state for editing court issued docket entry', async () => {
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: mockDocketEntryId,
       docketNumber: mockDocketNumber,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
       form: {
         ...mockDocketEntry,

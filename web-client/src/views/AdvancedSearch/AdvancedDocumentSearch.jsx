@@ -1,11 +1,10 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
-import { DateRangePickerComponent } from '../CaseDeadlines/DateRangePickerComponent';
 import React from 'react';
 
 export const AdvancedDocumentSearch = connect(

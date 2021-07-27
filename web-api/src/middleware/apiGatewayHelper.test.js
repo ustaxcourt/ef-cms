@@ -27,7 +27,7 @@ console.info = () => null;
 
 describe('handle', () => {
   it('should handle a response with pdf data', async () => {
-    const response = await handle({}, async () => '%PDF-'); // contains pdf header
+    const response = await handle({}, () => '%PDF-'); // contains pdf header
     expect(response).toEqual({
       body: '%PDF-',
       headers: {
@@ -47,7 +47,7 @@ describe('handle', () => {
           fields: 'docketEntryId,docketNumber',
         },
       },
-      async () => ({
+      () => ({
         docketEntryId: '1',
         docketNumber: 'b',
         gg: undefined,
@@ -71,7 +71,7 @@ describe('handle', () => {
           fields: 'docketEntryId,docketNumber',
         },
       },
-      async () => [
+      () => [
         {
           docketEntryId: '1',
           docketNumber: 'b',
@@ -105,7 +105,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 200 status back if the callback function executes successfully', async () => {
-    const response = await handle({}, async () => 'success');
+    const response = await handle({}, () => 'success');
     expect(response).toEqual({
       body: JSON.stringify('success'),
       headers: EXPECTED_HEADERS,
@@ -114,7 +114,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing 500 status if the function returns an unsanitized entity (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, async () => ({
+    const response = await handle({}, () => ({
       pk: 'this is bad!',
     }));
     expect(response).toEqual({
@@ -125,7 +125,7 @@ describe('handle', () => {
   });
 
   it('should return 200 status if response is undefined', async () => {
-    const response = await handle({}, async () => undefined);
+    const response = await handle({}, () => undefined);
     expect(response).toEqual({
       body: undefined,
       headers: EXPECTED_HEADERS,
@@ -134,7 +134,7 @@ describe('handle', () => {
   });
 
   it('should return 200 status if response is an array with an undefined value', async () => {
-    const response = await handle({}, async () => [undefined]);
+    const response = await handle({}, () => [undefined]);
     expect(response).toEqual({
       body: JSON.stringify([undefined]),
       headers: EXPECTED_HEADERS,
@@ -143,7 +143,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing 500 status if the function returns an unsanitized entity as an array (response contains private data as defined in app context)', async () => {
-    const response = await handle({}, async () => [
+    const response = await handle({}, () => [
       {
         pk: 'this is bad!',
       },
@@ -156,7 +156,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 404 status if the function returns a NotFoundError', async () => {
-    const response = await handle({}, async () => {
+    const response = await handle({}, () => {
       throw new NotFoundError('not-found error');
     });
     expect(response).toEqual({
@@ -167,7 +167,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 403 status if the function returns an UnauthorizedError', async () => {
-    const response = await handle({}, async () => {
+    const response = await handle({}, () => {
       throw new UnauthorizedError('unauthorized error');
     });
     expect(response).toEqual({
@@ -178,7 +178,7 @@ describe('handle', () => {
   });
 
   it('should return an object representing an 400 status if the function returns an Error', async () => {
-    const response = await handle({}, async () => {
+    const response = await handle({}, () => {
       throw new Error('other error');
     });
     expect(response).toEqual({
@@ -370,7 +370,7 @@ describe('getUserFromAuthHeader', () => {
 
 describe('redirect', () => {
   it('should return a redirect status in the header', async () => {
-    const response = await redirect({}, async () => ({ url: 'example.com' }));
+    const response = await redirect({}, () => ({ url: 'example.com' }));
     expect(response).toEqual({
       headers: {
         Location: 'example.com',
@@ -380,7 +380,7 @@ describe('redirect', () => {
   });
 
   it('should return error object on errors', async () => {
-    const response = await redirect({}, async () => {
+    const response = await redirect({}, () => {
       throw new Error('an error');
     });
     expect(response).toEqual({

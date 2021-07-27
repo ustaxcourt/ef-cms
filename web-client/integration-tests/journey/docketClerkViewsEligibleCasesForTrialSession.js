@@ -1,12 +1,14 @@
-export const docketClerkViewsEligibleCasesForTrialSession = test => {
+export const docketClerkViewsEligibleCasesForTrialSession = cerebralTest => {
   return it('Docket clerk views eligible cases for a trial session', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.eligibleCases').length).toEqual(1);
-    expect(test.getState('trialSession.eligibleCases.0.docketNumber')).toEqual(
-      test.docketNumber,
+    expect(cerebralTest.getState('trialSession.eligibleCases').length).toEqual(
+      1,
     );
+    expect(
+      cerebralTest.getState('trialSession.eligibleCases.0.docketNumber'),
+    ).toEqual(cerebralTest.docketNumber);
   });
 };

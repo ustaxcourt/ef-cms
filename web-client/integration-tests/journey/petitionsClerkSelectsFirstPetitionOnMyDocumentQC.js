@@ -1,13 +1,15 @@
-export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC = test => {
-  return it('Petitions clerk selects first petition on My Document QC', async () => {
-    const workItem = test
-      .getState('workQueue')
-      .find(
-        workItemInQueue => workItemInQueue.docketNumber === test.docketNumber,
-      );
+export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC =
+  cerebralTest => {
+    return it('Petitions clerk selects first petition on My Document QC', () => {
+      const workItem = cerebralTest
+        .getState('workQueue')
+        .find(
+          workItemInQueue =>
+            workItemInQueue.docketNumber === cerebralTest.docketNumber,
+        );
 
-    const { docketEntryId } = workItem.docketEntry;
+      const { docketEntryId } = workItem.docketEntry;
 
-    test.docketEntryId = docketEntryId;
-  });
-};
+      cerebralTest.docketEntryId = docketEntryId;
+    });
+  };

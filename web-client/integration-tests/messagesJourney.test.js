@@ -32,7 +32,7 @@ import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
@@ -41,96 +41,101 @@ describe('messages journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.documentId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.documentId = caseDetail.docketEntries[0].docketEntryId;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewMessageOnCase(test);
-  petitionsClerkViewsSentMessagesBox(test);
-  petitionsClerk1VerifiesCaseStatusOnMessage(test, STATUS_TYPES.new);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(cerebralTest);
+  createNewMessageOnCase(cerebralTest);
+  petitionsClerkViewsSentMessagesBox(cerebralTest);
+  petitionsClerk1VerifiesCaseStatusOnMessage(cerebralTest, STATUS_TYPES.new);
 
-  loginAs(test, 'docketclerk1@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(test);
+  loginAs(cerebralTest, 'docketclerk1@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(cerebralTest);
   petitionsClerk1VerifiesCaseStatusOnMessage(
-    test,
+    cerebralTest,
     STATUS_TYPES.generalDocketReadyForTrial,
   );
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1RepliesToMessage(test);
+  petitionsClerk1ViewsMessageDetail(cerebralTest);
+  petitionsClerk1RepliesToMessage(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsReplyInInbox(test);
-  petitionsClerkCreatesOrderFromMessage(test);
-  petitionsClerkForwardsMessageToDocketClerk(test);
-  petitionsClerkViewsInProgressMessagesOnCaseDetail(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsReplyInInbox(cerebralTest);
+  petitionsClerkCreatesOrderFromMessage(cerebralTest);
+  petitionsClerkForwardsMessageToDocketClerk(cerebralTest);
+  petitionsClerkViewsInProgressMessagesOnCaseDetail(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsForwardedMessageInInbox(test);
-  docketClerkEditsOrderFromMessage(test);
-  docketClerkAppliesSignatureFromMessage(test);
-  docketClerkRemovesSignatureFromMessage(test);
-  docketClerkAppliesSignatureFromMessage(test);
-  docketClerkAddsDocketEntryFromMessage(test);
-  docketClerkCompletesMessageThread(test);
-  docketClerkViewsCompletedMessagesOnCaseDetail(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsForwardedMessageInInbox(cerebralTest);
+  docketClerkEditsOrderFromMessage(cerebralTest);
+  docketClerkAppliesSignatureFromMessage(cerebralTest);
+  docketClerkRemovesSignatureFromMessage(cerebralTest);
+  docketClerkAppliesSignatureFromMessage(cerebralTest);
+  docketClerkAddsDocketEntryFromMessage(cerebralTest);
+  docketClerkCompletesMessageThread(cerebralTest);
+  docketClerkViewsCompletedMessagesOnCaseDetail(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(test);
-  createNewMessageOnCase(test);
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1CreatesNoticeFromMessageDetail(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments(cerebralTest);
+  createNewMessageOnCase(cerebralTest);
+  petitionsClerk1ViewsMessageInbox(cerebralTest);
+  petitionsClerk1ViewsMessageDetail(cerebralTest);
+  petitionsClerk1CreatesNoticeFromMessageDetail(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkCreatesNewMessageOnCaseWithNoAttachments(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkForwardsMessageWithAttachment(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkForwardsMessageWithAttachment(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  createNewMessageOnCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  createNewMessageOnCase(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkViewsRepliesAndCompletesMessageInInbox(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkViewsRepliesAndCompletesMessageInInbox(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('wait for ES index', async () => {
     await refreshElasticsearchIndex();
   });
-  petitionsClerkVerifiesCompletedMessageNotInInbox(test);
-  petitionsClerkVerifiesCompletedMessageNotInSection(test);
+  petitionsClerkVerifiesCompletedMessageNotInInbox(cerebralTest);
+  petitionsClerkVerifiesCompletedMessageNotInSection(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('attaches a document to a message with a very long title, which is truncated in the subject', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openCreateMessageModalSequence');
+    await cerebralTest.runSequence('openCreateMessageModalSequence');
 
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: PETITIONS_SECTION,
-    });
+    await cerebralTest.runSequence(
+      'updateSectionInCreateMessageModalSequence',
+      {
+        key: 'toSection',
+        value: PETITIONS_SECTION,
+      },
+    );
 
-    await test.runSequence('updateModalFormValueSequence', {
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
       value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
     });
 
-    const currentDocketEntries = test.getState('caseDetail.docketEntries');
+    const currentDocketEntries = cerebralTest.getState(
+      'caseDetail.docketEntries',
+    );
     const longDocumentTitle = getTextByCount(255);
 
     const docketEntryWithLongTitle = {
@@ -159,20 +164,20 @@ describe('messages journey', () => {
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 
-    test.setState('caseDetail.docketEntries', [
+    cerebralTest.setState('caseDetail.docketEntries', [
       ...currentDocketEntries,
       docketEntryWithLongTitle,
     ]);
 
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
+    await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
       documentId: docketEntryWithLongTitle.docketEntryId,
     });
 
-    expect(test.getState('modal.form.subject').length).toEqual(250);
-    expect(test.getState('modal.form.subject')).toEqual(
+    expect(cerebralTest.getState('modal.form.subject').length).toEqual(250);
+    expect(cerebralTest.getState('modal.form.subject')).toEqual(
       longDocumentTitle.slice(0, 250),
     );
 
-    await test.runSequence('clearModalFormSequence');
+    await cerebralTest.runSequence('clearModalFormSequence');
   });
 });

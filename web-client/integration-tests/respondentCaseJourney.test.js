@@ -11,7 +11,7 @@ import { respondentViewsCaseDetailOfAssociatedCase } from './journey/respondentV
 import { respondentViewsCaseDetailOfUnassociatedCase } from './journey/respondentViewsCaseDetailOfUnassociatedCase';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Respondent requests access to a case', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -21,12 +21,12 @@ describe('Respondent requests access to a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -39,23 +39,23 @@ describe('Respondent requests access to a case', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentSearchesForNonexistentCase(test);
-  respondentViewsDashboard(test);
-  respondentSearchesForCase(test);
-  respondentViewsCaseDetail(test, false);
-  respondentFilesFirstIRSDocumentOnCase(test, fakeFile);
-  respondentViewsDashboard(test);
-  respondentViewsCaseDetailOfAssociatedCase(test);
-  respondentFilesDocumentForAssociatedCase(test, fakeFile);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentSearchesForNonexistentCase(cerebralTest);
+  respondentViewsDashboard(cerebralTest);
+  respondentSearchesForCase(cerebralTest);
+  respondentViewsCaseDetail(cerebralTest, false);
+  respondentFilesFirstIRSDocumentOnCase(cerebralTest, fakeFile);
+  respondentViewsDashboard(cerebralTest);
+  respondentViewsCaseDetailOfAssociatedCase(cerebralTest);
+  respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'irsPractitioner1@example.com');
-  respondentSearchesForCase(test);
-  respondentViewsCaseDetailOfUnassociatedCase(test);
-  respondentRequestsAccessToCase(test, fakeFile);
-  respondent1ViewsCaseDetailOfAssociatedCase(test);
-  respondentFilesDocumentForAssociatedCase(test, fakeFile);
+  loginAs(cerebralTest, 'irsPractitioner1@example.com');
+  respondentSearchesForCase(cerebralTest);
+  respondentViewsCaseDetailOfUnassociatedCase(cerebralTest);
+  respondentRequestsAccessToCase(cerebralTest, fakeFile);
+  respondent1ViewsCaseDetailOfAssociatedCase(cerebralTest);
+  respondentFilesDocumentForAssociatedCase(cerebralTest, fakeFile);
 });

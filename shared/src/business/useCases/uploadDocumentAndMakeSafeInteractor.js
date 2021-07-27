@@ -20,7 +20,7 @@ exports.uploadDocumentAndMakeSafeInteractor = async (
 
   await applicationContext
     .getUseCases()
-    .virusScanPdfInteractor(applicationContext, {
+    .getStatusOfVirusScanInteractor(applicationContext, {
       key: uploadedKey,
     });
   await applicationContext

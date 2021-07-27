@@ -6,42 +6,42 @@ import { unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument } from '
 
 describe('External user views legacy sealed documents', () => {
   const seededDocketNumber = '69312-87';
-  const test = setupTest();
+  const cerebralTest = setupTest();
 
   beforeAll(() => {
     console.error = () => {};
     jest.setTimeout(30000);
 
-    test.docketNumber = seededDocketNumber;
-    test.docketEntryId = 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0';
+    cerebralTest.docketNumber = seededDocketNumber;
+    cerebralTest.docketEntryId = 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0';
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner2@example.com');
-  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'petitioner2@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'petitioner3@example.com');
-  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'petitioner3@example.com');
+  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  unassociatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(test, true);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
-  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 });

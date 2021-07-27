@@ -40,7 +40,7 @@ exports.filePetitionInteractor = async (
 
     await applicationContext
       .getUseCases()
-      .virusScanPdfInteractor(applicationContext, {
+      .getStatusOfVirusScanInteractor(applicationContext, {
         key,
       });
     await applicationContext

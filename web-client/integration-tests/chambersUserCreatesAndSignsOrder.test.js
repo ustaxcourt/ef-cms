@@ -11,8 +11,8 @@ import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProce
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Chambers dashboard', () => {
   beforeAll(() => {
@@ -20,22 +20,22 @@ describe('Chambers dashboard', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(test, 'colvinsChambers@example.com');
-  chambersUserViewsCaseDetail(test, 2);
-  chambersUserViewsDraftDocuments(test);
-  chambersUserAddsOrderToCase(test);
-  chambersUserViewsCaseDetailAfterAddingOrder(test, 3);
-  chambersUserViewsDraftDocuments(test, 1);
-  chambersUserViewsSignDraftDocument(test);
-  chambersUserAppliesSignatureToDraftDocument(test);
-  chambersUserSavesSignatureForDraftDocument(test);
+  loginAs(cerebralTest, 'colvinsChambers@example.com');
+  chambersUserViewsCaseDetail(cerebralTest, 2);
+  chambersUserViewsDraftDocuments(cerebralTest);
+  chambersUserAddsOrderToCase(cerebralTest);
+  chambersUserViewsCaseDetailAfterAddingOrder(cerebralTest, 3);
+  chambersUserViewsDraftDocuments(cerebralTest, 1);
+  chambersUserViewsSignDraftDocument(cerebralTest);
+  chambersUserAppliesSignatureToDraftDocument(cerebralTest);
+  chambersUserSavesSignatureForDraftDocument(cerebralTest);
 });

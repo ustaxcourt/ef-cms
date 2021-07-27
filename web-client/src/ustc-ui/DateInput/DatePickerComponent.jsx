@@ -1,4 +1,4 @@
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { FormGroup } from '../FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
