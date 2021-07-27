@@ -169,7 +169,14 @@ const processDocketEntries = async ({
             documentContentsId: fullDocketEntry.documentContentsId,
           });
           const { documentContents } = JSON.parse(buffer.toString());
-          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber}`;
+
+          const caseMetadataWithCounsel =
+            await utils.getCaseMetadataWithCounsel({
+              applicationContext,
+              docketNumber: fullDocketEntry.docketNumber,
+            });
+
+          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber} ${caseMetadataWithCounsel?.caseCaption}`;
         } catch (err) {
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
