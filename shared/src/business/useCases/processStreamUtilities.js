@@ -176,7 +176,7 @@ const processDocketEntries = async ({
               docketNumber: fullDocketEntry.docketNumber,
             });
 
-          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber} ${caseMetadataWithCounsel?.caseCaption}`;
+          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber} ${caseMetadataWithCounsel.caseCaption}`;
         } catch (err) {
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
