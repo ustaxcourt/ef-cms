@@ -1,23 +1,23 @@
-export const petitionsClerkEditsDeficiencyStatistic = test => {
+export const petitionsClerkEditsDeficiencyStatistic = cerebralTest => {
   return it('petitions clerk edits deficiency statistic on case', async () => {
-    const statistics = test.getState('caseDetail.statistics');
+    const statistics = cerebralTest.getState('caseDetail.statistics');
 
     const { statisticId } = statistics[0];
 
-    await test.runSequence('gotoEditDeficiencyStatisticSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditDeficiencyStatisticSequence', {
+      docketNumber: cerebralTest.docketNumber,
       statisticId,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'irsDeficiencyAmount',
       value: 1000,
     });
 
-    await test.runSequence('submitEditDeficiencyStatisticSequence');
+    await cerebralTest.runSequence('submitEditDeficiencyStatisticSequence');
 
     expect(
-      test.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
+      cerebralTest.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
     ).toEqual(1000);
   });
 };

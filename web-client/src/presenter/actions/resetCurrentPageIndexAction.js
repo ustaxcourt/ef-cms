@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
-export const resetCurrentPageIndexAction = async ({ store }) => {
+export const resetCurrentPageIndexAction = ({ store }) => {
   store.set(state.scanner.currentPageIndex, 0);
 };

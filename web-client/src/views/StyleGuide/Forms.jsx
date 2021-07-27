@@ -195,7 +195,7 @@ export const Forms = () => (
               type="checkbox"
               value="truth"
             />
-            <label className="usa-checkbox__label inline-block" htmlFor="truth">
+            <label className="usa-checkbox__label" htmlFor="truth">
               Sojourner Truth
             </label>
           </div>
@@ -207,10 +207,7 @@ export const Forms = () => (
               type="checkbox"
               value="douglass"
             />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="douglass"
-            >
+            <label className="usa-checkbox__label" htmlFor="douglass">
               Frederick Douglass
             </label>
           </div>
@@ -222,10 +219,7 @@ export const Forms = () => (
               type="checkbox"
               value="washington"
             />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="washington"
-            >
+            <label className="usa-checkbox__label" htmlFor="washington">
               Booker T. Washington
             </label>
           </div>
@@ -237,10 +231,7 @@ export const Forms = () => (
               name="historical-figures-1"
               type="checkbox"
             />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="carver"
-            >
+            <label className="usa-checkbox__label" htmlFor="carver">
               George Washington Carver
             </label>
           </div>
@@ -334,6 +325,11 @@ export const Forms = () => (
           id="date_of_birth"
           label="Date of birth"
           names={{
+            day: 'date_of_birth_1',
+            month: 'date_of_birth_2',
+            year: 'date_of_birth_3',
+          }}
+          values={{
             day: 'date_of_birth_1',
             month: 'date_of_birth_2',
             year: 'date_of_birth_3',

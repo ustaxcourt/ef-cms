@@ -15,7 +15,7 @@ describe('validateChangeLoginAndServiceEmailAction', () => {
     };
   });
 
-  it('should return the error path if update user email form is invalid', async () => {
+  it('should return the error path if update user email form is invalid', () => {
     applicationContext
       .getUseCases()
       .validateUpdateUserEmailInteractor.mockReturnValue(
@@ -34,7 +34,7 @@ describe('validateChangeLoginAndServiceEmailAction', () => {
     });
   });
 
-  it('should return the success path if update user email form is valid', async () => {
+  it('should return the success path if update user email form is valid', () => {
     applicationContext
       .getUseCases()
       .validateUpdateUserEmailInteractor.mockReturnValue(undefined);

@@ -4,47 +4,51 @@ const {
 } = require('../helpers');
 
 export const docketClerkSealsContactInformation = (
-  test,
+  cerebralTest,
   contactType,
   docketNumber,
 ) => {
   return it(`Docket clerk seals ${contactType} information`, async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: docketNumber || test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: docketNumber || cerebralTest.docketNumber,
     });
 
     let contactToSeal;
 
     if (contactType === 'contactPrimary') {
-      contactToSeal = contactPrimaryFromState(test);
+      contactToSeal = contactPrimaryFromState(cerebralTest);
     } else if (contactType === 'contactSecondary') {
-      contactToSeal = contactSecondaryFromState(test);
+      contactToSeal = contactSecondaryFromState(cerebralTest);
     } else {
-      contactToSeal = test
+      contactToSeal = cerebralTest
         .getState(`caseDetail.${contactType}`)
         .find(contact => contact.isAddressSealed === false);
     }
 
     expect(contactToSeal.isAddressSealed).toBe(false);
 
-    await test.runSequence('openSealAddressModalSequence', { contactToSeal });
+    await cerebralTest.runSequence('openSealAddressModalSequence', {
+      contactToSeal,
+    });
 
-    expect(test.getState('contactToSeal')).toEqual(contactToSeal);
-    expect(test.getState('modal.showModal')).toEqual('SealAddressModal');
+    expect(cerebralTest.getState('contactToSeal')).toEqual(contactToSeal);
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'SealAddressModal',
+    );
 
-    await test.runSequence('sealAddressSequence');
+    await cerebralTest.runSequence('sealAddressSequence');
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('alertSuccess.message')).toEqual(
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
       `Address sealed for ${contactToSeal.name}.`,
     );
 
     if (contactType === 'contactPrimary') {
-      contactToSeal = contactPrimaryFromState(test);
+      contactToSeal = contactPrimaryFromState(cerebralTest);
     } else if (contactType === 'contactSecondary') {
-      contactToSeal = contactSecondaryFromState(test);
+      contactToSeal = contactSecondaryFromState(cerebralTest);
     } else {
-      contactToSeal = test
+      contactToSeal = cerebralTest
         .getState(`caseDetail.${contactType}`)
         .find(c => c.contactId === contactToSeal.contactId);
     }

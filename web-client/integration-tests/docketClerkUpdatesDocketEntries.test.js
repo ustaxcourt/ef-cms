@@ -11,8 +11,8 @@ import { docketClerkEditsDocketEntryNonstandardH } from './journey/docketClerkEd
 import { docketClerkEditsDocketEntryStandard } from './journey/docketClerkEditsDocketEntryStandard';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('docket clerk updates docket entries', () => {
@@ -21,12 +21,12 @@ describe('docket clerk updates docket entries', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -39,18 +39,18 @@ describe('docket clerk updates docket entries', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsDocketEntryWithoutFile(test);
-  docketClerkEditsDocketEntryStandard(test);
-  docketClerkEditsDocketEntryNonstandardA(test);
-  docketClerkEditsDocketEntryNonstandardB(test);
-  docketClerkEditsDocketEntryNonstandardC(test);
-  docketClerkEditsDocketEntryNonstandardD(test);
-  docketClerkEditsDocketEntryNonstandardE(test);
-  docketClerkEditsDocketEntryNonstandardF(test);
-  docketClerkEditsDocketEntryNonstandardG(test);
-  docketClerkEditsDocketEntryNonstandardH(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsDocketEntryWithoutFile(cerebralTest);
+  docketClerkEditsDocketEntryStandard(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardA(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardB(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardC(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardD(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardE(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardF(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardG(cerebralTest);
+  docketClerkEditsDocketEntryNonstandardH(cerebralTest);
 });

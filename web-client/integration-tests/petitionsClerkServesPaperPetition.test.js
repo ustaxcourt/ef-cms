@@ -6,8 +6,8 @@ import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1Views
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
@@ -15,25 +15,25 @@ describe('Petitions Clerk Serves Paper Petition From Message Detail & Document V
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  createNewMessageOnCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  createNewMessageOnCase(cerebralTest);
 
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerk1ViewsMessageInbox(test);
-  petitionsClerk1ViewsMessageDetail(test);
-  petitionsClerk1ServesPetitionFromMessageDetail(test);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerk1ViewsMessageInbox(cerebralTest);
+  petitionsClerk1ViewsMessageDetail(cerebralTest);
+  petitionsClerk1ServesPetitionFromMessageDetail(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 });

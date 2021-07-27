@@ -1,13 +1,17 @@
-export const petitionsClerkClearsSignatureFromDraftDocument = test => {
+export const petitionsClerkClearsSignatureFromDraftDocument = cerebralTest => {
   return it('petitions clerk clears signature on a draft document', async () => {
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await cerebralTest.runSequence('setPDFSignatureDataSequence', {
       isPdfAlreadySigned: false,
       signatureApplied: false,
       signatureData: null,
     });
 
-    expect(test.getState('pdfForSigning.signatureData')).toEqual(null);
-    expect(test.getState('pdfForSigning.signatureApplied')).toEqual(false);
-    expect(test.getState('pdfForSigning.isPdfAlreadySigned')).toEqual(false);
+    expect(cerebralTest.getState('pdfForSigning.signatureData')).toEqual(null);
+    expect(cerebralTest.getState('pdfForSigning.signatureApplied')).toEqual(
+      false,
+    );
+    expect(cerebralTest.getState('pdfForSigning.isPdfAlreadySigned')).toEqual(
+      false,
+    );
   });
 };

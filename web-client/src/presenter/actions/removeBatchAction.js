@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 
-export const removeBatchAction = async ({ get, store }) => {
+export const removeBatchAction = ({ get, store }) => {
   const batchIndexToDelete = get(state.scanner.batchIndexToDelete);
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,

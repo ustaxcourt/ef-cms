@@ -8,7 +8,7 @@ describe('verifyUserPendingEmailAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to verifyUserPendingEmailInteractor', async () => {
+  it('should make a call to verifyUserPendingEmailInteractor', () => {
     applicationContext
       .getUseCases()
       .verifyUserPendingEmailInteractor.mockReturnValue();

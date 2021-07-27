@@ -84,7 +84,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:s3:::${var.dns_domain}-documents-*",
-                "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
+                "arn:aws:s3:::${var.dns_domain}-temp-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-quarantine-*"
             ],
             "Effect": "Allow"
         },

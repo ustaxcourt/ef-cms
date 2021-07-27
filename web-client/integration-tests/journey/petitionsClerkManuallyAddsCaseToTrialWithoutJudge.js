@@ -7,47 +7,50 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
 );
 
-export const petitionsClerkManuallyAddsCaseToTrialWithoutJudge = test => {
-  return it('Petitions clerk manually adds a case to an uncalendared trial session without a judge', async () => {
-    const caseToAdd =
-      test.casesReadyForTrial[test.casesReadyForTrial.length - 1];
+export const petitionsClerkManuallyAddsCaseToTrialWithoutJudge =
+  cerebralTest => {
+    return it('Petitions clerk manually adds a case to an uncalendared trial session without a judge', async () => {
+      const caseToAdd =
+        cerebralTest.casesReadyForTrial[
+          cerebralTest.casesReadyForTrial.length - 1
+        ];
 
-    test.manuallyAddedTrialCaseDocketNumber = caseToAdd.docketNumber;
+      cerebralTest.manuallyAddedTrialCaseDocketNumber = caseToAdd.docketNumber;
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: caseToAdd.docketNumber,
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: caseToAdd.docketNumber,
+      });
+
+      await cerebralTest.runSequence('openAddToTrialModalSequence');
+
+      let modalHelper = await runCompute(addToTrialSessionModalHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(modalHelper.showSessionNotSetAlert).toEqual(false);
+
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'showAllLocations',
+        value: true,
+      });
+
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'trialSessionId',
+        value: cerebralTest.trialSessionId,
+      });
+
+      // Because the selected trial session is not yet calendared, we should show
+      // the alert in the UI stating so.
+      modalHelper = await runCompute(addToTrialSessionModalHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(modalHelper.showSessionNotSetAlert).toEqual(true);
+
+      await cerebralTest.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000);
+
+      const trialSessionJudge = cerebralTest.getState('trialSessionJudge');
+      expect(trialSessionJudge).toEqual({ name: 'Unassigned' });
     });
-
-    await test.runSequence('openAddToTrialModalSequence');
-
-    let modalHelper = await runCompute(addToTrialSessionModalHelper, {
-      state: test.getState(),
-    });
-
-    expect(modalHelper.showSessionNotSetAlert).toEqual(false);
-
-    await test.runSequence('updateModalValueSequence', {
-      key: 'showAllLocations',
-      value: true,
-    });
-
-    await test.runSequence('updateModalValueSequence', {
-      key: 'trialSessionId',
-      value: test.trialSessionId,
-    });
-
-    // Because the selected trial session is not yet calendared, we should show
-    // the alert in the UI stating so.
-    modalHelper = await runCompute(addToTrialSessionModalHelper, {
-      state: test.getState(),
-    });
-
-    expect(modalHelper.showSessionNotSetAlert).toEqual(true);
-
-    await test.runSequence('addCaseToTrialSessionSequence');
-    await wait(1000);
-
-    const trialSessionJudge = test.getState('trialSessionJudge');
-    expect(trialSessionJudge).toEqual({ name: 'Unassigned' });
-  });
-};
+  };

@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the next object in the path
  * @returns {Promise<object>} the next path based on if creation was successful or error
  */
-export const canSetTrialSessionToCalendarAction = async ({
+export const canSetTrialSessionToCalendarAction = ({
   applicationContext,
   get,
   path,

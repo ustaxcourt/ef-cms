@@ -4,52 +4,52 @@ import { first } from 'lodash';
 
 const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
 
-export const chambersUserAddsOrderToCase = test => {
+export const chambersUserAddsOrderToCase = cerebralTest => {
   return it('Chambers user adds order to case', async () => {
-    await test.runSequence('openCreateOrderChooseTypeModalSequence');
+    await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       documentTitle: errorMessages.documentTitle[0].message,
       documentType: errorMessages.documentType,
       eventCode: errorMessages.eventCode,
     });
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: 'ODD',
     });
 
-    expect(test.getState('modal.documentType')).toEqual(
+    expect(cerebralTest.getState('modal.documentType')).toEqual(
       'Order of Dismissal and Decision',
     );
 
-    await test.runSequence('submitCreateOrderModalSequence');
-    expect(test.getState('validationErrors')).toEqual({});
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: '<p>This is a test order.</p>',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
     //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const { draftDocuments } = applicationContext
       .getUtilities()
       .getFormattedCaseDetail({
         applicationContext,
-        caseDetail: test.getState('caseDetail'),
+        caseDetail: cerebralTest.getState('caseDetail'),
       });
 
-    test.docketEntryId = first(draftDocuments)
+    cerebralTest.docketEntryId = first(draftDocuments)
       ? first(draftDocuments).docketEntryId
       : undefined;
   });
