@@ -484,7 +484,7 @@ describe('processStreamUtilities', () => {
       sk: { S: 'docket-entry|123' },
     };
 
-    mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
+    mockGetDocument.mockReturnValue('{ "documentContents": "Test"}');
 
     const utils = {
       getDocument: mockGetDocument,
@@ -546,8 +546,10 @@ describe('processStreamUtilities', () => {
 
     it('fetches the document from persistence if the entry is an opinion and has a documentContentsId', async () => {
       docketEntryData.documentContentsId = '123';
+      docketEntryData.docketNumber = '555-111';
       docketEntryDataMarshalled.documentContentsId = { S: '123' };
       docketEntryDataMarshalled.eventCode = { S: 'TCOP' };
+      docketEntryDataMarshalled.docketNumber = { S: '555-111' };
 
       await processDocketEntries({
         applicationContext,
@@ -584,6 +586,7 @@ describe('processStreamUtilities', () => {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
               },
+              documentContents: { S: 'Test 555-111' },
             },
           },
           eventName: 'MODIFY',
