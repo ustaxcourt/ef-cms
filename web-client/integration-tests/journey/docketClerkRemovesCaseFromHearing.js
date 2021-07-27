@@ -6,30 +6,30 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkRemovesCaseFromHearing = test => {
+export const docketClerkRemovesCaseFromHearing = cerebralTest => {
   return it('Docket clerk removes case from hearing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openRemoveFromTrialSessionModalSequence', {
-      trialSessionId: test.createdTrialSessions[1],
+    await cerebralTest.runSequence('openRemoveFromTrialSessionModalSequence', {
+      trialSessionId: cerebralTest.createdTrialSessions[1],
     });
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeCaseFromTrialSequence');
+    await cerebralTest.runSequence('removeCaseFromTrialSequence');
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formattedCase.hearings).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          trialSessionId: test.createdTrialSessions[1],
+          trialSessionId: cerebralTest.createdTrialSessions[1],
         }),
       ]),
     );

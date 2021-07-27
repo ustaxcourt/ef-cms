@@ -6,16 +6,16 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const chambersUserViewsDraftDocuments = (test, count = 0) => {
+export const chambersUserViewsDraftDocuments = (cerebralTest, count = 0) => {
   return it('Chambers user views draft documents', async () => {
-    test.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const formatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formatted.draftDocuments.length).toEqual(count);

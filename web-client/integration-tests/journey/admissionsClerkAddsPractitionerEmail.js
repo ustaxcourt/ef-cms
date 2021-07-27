@@ -5,7 +5,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 import faker from 'faker';
 
-export const admissionsClerkAddsPractitionerEmail = test => {
+export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
   const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
@@ -13,36 +13,40 @@ export const admissionsClerkAddsPractitionerEmail = test => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
       value: mockAddress2,
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('practitionerDetail.contact.address2')).toBe(
+    expect(cerebralTest.getState('practitionerDetail.contact.address2')).toBe(
       mockAddress2,
     );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
@@ -50,7 +54,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     let practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -58,31 +62,31 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       mockAvailableEmail,
     );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
 
-    test.setState('practitionerDetail', {});
+    cerebralTest.setState('practitionerDetail', {});
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -97,13 +101,13 @@ export const admissionsClerkAddsPractitionerEmail = test => {
 
     await refreshElasticsearchIndex();
 
-    test.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    test.pendingEmail = mockAvailableEmail;
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    cerebralTest.pendingEmail = mockAvailableEmail;
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };

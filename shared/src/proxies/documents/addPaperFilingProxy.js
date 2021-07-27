@@ -6,21 +6,26 @@ const { post } = require('../requests');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
+ * @param {Boolean} providers.generateCoversheet true if coversheet must be generated
+ * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
- * @param {string} providers.secondaryDocumentFileId the id of the secondary document file (optional)
- * @param {string} providers.secondarySupportingDocumentFileId the id of the secondary supporting document file (optional)
- * @param {string} providers.supportingDocumentFileId the id of the supporting document file (optional)
  * @returns {Promise<*>} the promise of the api call
  */
 exports.addPaperFilingInteractor = (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    documentMetadata,
+    generateCoversheet,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const { docketNumber } = documentMetadata;
   return post({
     applicationContext,
     body: {
       documentMetadata,
+      generateCoversheet,
       isSavingForLater,
       primaryDocumentFileId,
     },

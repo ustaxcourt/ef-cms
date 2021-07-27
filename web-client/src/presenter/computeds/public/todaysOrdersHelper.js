@@ -36,6 +36,7 @@ export const todaysOrdersHelper = (get, applicationContext) => {
     formattedJudgeName: applicationContext
       .getUtilities()
       .getJudgeLastName(order.signedJudgeName),
+    numberOfPagesFormatted: order.numberOfPages ?? 'n/a',
   }));
 
   const hasResults = formattedOrders.length > 0;

@@ -3,23 +3,23 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkViewsATrialSessionsEligibleCases = (
-  test,
+  cerebralTest,
   expectedCount,
 ) => {
   return it('Petitions Clerk Views A Trial Sessions Eligible Cases', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('trialSession.eligibleCases').length).toEqual(
+    expect(cerebralTest.getState('trialSession.eligibleCases').length).toEqual(
       expectedCount,
     );
-    expect(test.getState('trialSession.isCalendared')).toEqual(false);
+    expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
 
     const trialSessionFormatted = runCompute(
       withAppContextDecorator(formattedTrialSessionDetails),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
     expect(trialSessionFormatted.computedStatus).toEqual('New');

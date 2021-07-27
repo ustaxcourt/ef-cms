@@ -1,10 +1,12 @@
-export const petitionsClerkCaseSearch = test => {
+export const petitionsClerkCaseSearch = cerebralTest => {
   return it('Petitions clerk searches for case', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('updateSearchTermSequence', {
-      searchTerm: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('updateSearchTermSequence', {
+      searchTerm: cerebralTest.docketNumber,
     });
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('caseDetail.docketNumber')).toEqual(test.docketNumber);
+    await cerebralTest.runSequence('submitCaseSearchSequence');
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
+    );
   });
 };

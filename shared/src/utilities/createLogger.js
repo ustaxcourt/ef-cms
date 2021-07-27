@@ -17,10 +17,10 @@ const redact = format(logEntry => {
   return copy;
 });
 
-exports.createLogger = opts => {
+exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
-    level: process.env.LOG_LEVEL || 'debug',
+    level: opts.logLevel || process.env.LOG_LEVEL || 'debug',
     levels: config.syslog.levels,
     transports: [new transports.Console()],
     ...opts,

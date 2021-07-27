@@ -1,21 +1,23 @@
-export const petitionsClerkRescansAddedBatch = test => {
+export const petitionsClerkRescansAddedBatch = cerebralTest => {
   return it('Petitions clerk rescans a pre-existing batch', async () => {
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
-    await test.runSequence('openConfirmRescanBatchModalSequence', {
+    await cerebralTest.runSequence('openConfirmRescanBatchModalSequence', {
       batchIndexToRescan: 0,
     });
 
-    expect(test.getState('modal.showModal')).toEqual('ConfirmRescanBatchModal');
-    expect(test.getState('scanner.batchIndexToRescan')).toEqual(0);
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmRescanBatchModal',
+    );
+    expect(cerebralTest.getState('scanner.batchIndexToRescan')).toEqual(0);
 
-    await test.runSequence('rescanBatchSequence');
+    await cerebralTest.runSequence('rescanBatchSequence');
 
-    expect(test.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('modal')).toEqual({});
     expect(
-      test.getState(`scanner.batches.${selectedDocumentType}`).length,
+      cerebralTest.getState(`scanner.batches.${selectedDocumentType}`).length,
     ).toBeGreaterThan(0);
   });
 };
