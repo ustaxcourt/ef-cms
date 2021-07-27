@@ -9,16 +9,6 @@ module.exports = {
       },
       type: 'join',
     },
-    'caseCaption.S': {
-      analyzer: 'ustc_analyzer',
-      fields: {
-        exact: {
-          analyzer: 'english_exact',
-          type: 'text',
-        },
-      },
-      type: 'text',
-    },
     'docketEntryId.S': {
       type: 'keyword',
     },
@@ -74,9 +64,6 @@ module.exports = {
     },
     'pending.BOOL': {
       type: 'boolean',
-    },
-    'petitioners.L.M.name.S': {
-      type: 'text',
     },
     'pk.S': {
       type: 'keyword',
