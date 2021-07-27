@@ -1,31 +1,31 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkManuallyAddsCaseToCalendaredTrialSession = (
-  test,
+  cerebralTest,
   createdCasesIndex,
 ) => {
   return it('Petitions clerk manually adds a case to a calendared trial session', async () => {
-    const caseToAdd = test.createdCases[createdCasesIndex];
+    const caseToAdd = cerebralTest.createdCases[createdCasesIndex];
 
-    await test.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseToAdd,
     });
 
-    await test.runSequence('openAddToTrialModalSequence');
+    await cerebralTest.runSequence('openAddToTrialModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: cerebralTest.trialSessionId,
     });
 
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await cerebralTest.runSequence('addCaseToTrialSessionSequence');
     await refreshElasticsearchIndex();
 
-    expect(test.getState('caseDetail.trialDate')).toBeDefined();
+    expect(cerebralTest.getState('caseDetail.trialDate')).toBeDefined();
   });
 };

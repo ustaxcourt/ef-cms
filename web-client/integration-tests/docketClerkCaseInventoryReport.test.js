@@ -12,7 +12,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('case inventory report journey', () => {
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe('case inventory report journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const initialCaseInventoryCounts = {};
@@ -28,16 +28,16 @@ describe('case inventory report journey', () => {
   // eslint-disable-next-line @miovision/disallow-date/no-static-date
   const trialLocation = `Indianapolis, Indiana, ${Date.now()}`;
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
-    await test.runSequence('openCaseInventoryReportModalSequence');
+    await cerebralTest.runSequence('openCaseInventoryReportModalSequence');
 
     const caseInventoryReportHelper = withAppContextDecorator(
       caseInventoryReportHelperComputed,
     );
 
     const helper = runCompute(caseInventoryReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const legacyJudge = helper.judges.find(
@@ -47,154 +47,154 @@ describe('case inventory report journey', () => {
     expect(legacyJudge).toBeFalsy();
 
     //New
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.new,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.new = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.new = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //New, Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.newColvin = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.newColvin = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Calendared, Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.calendaredColvin = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.calendaredColvin = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Calendared
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.calendared = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.calendared = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     //Judge Colvin
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    initialCaseInventoryCounts.colvin = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    initialCaseInventoryCounts.colvin = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
   });
 
   //Create a trial session and set as calendared
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, {
     judge: {
       name: 'Judge Colvin',
       userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     },
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(test);
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   for (let i = 0; i < 2; i++) {
     it(`create case ${i + 1}`, async () => {
-      const caseDetail = await uploadPetition(test);
+      const caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
   }
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   it('manually add first case to the trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: createdDocketNumbers[0],
     });
-    await test.runSequence('openAddToTrialModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('openAddToTrialModalSequence');
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: cerebralTest.trialSessionId,
     });
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await cerebralTest.runSequence('addCaseToTrialSessionSequence');
   });
 
   it('get the updated case inventory counts', async () => {
     await refreshElasticsearchIndex();
 
     //New (+1 from initial)
-    await test.runSequence('openCaseInventoryReportModalSequence');
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('openCaseInventoryReportModalSequence');
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.new,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    let updatedCaseInventoryCount = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    let updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.new + 1,
     );
     //New, Judge Colvin (same as initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.newColvin,
     );
     //Calendared, Judge Colvin (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendaredColvin + 1,
     );
     //Calendared (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendared + 1,
     );
     //Judge Colvin (+1 from initial)
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
-    await test.runSequence('updateScreenMetadataSequence', {
+    await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: '',
     });
-    await test.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = test.getState(
+    await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
+    updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
@@ -203,6 +203,6 @@ describe('case inventory report journey', () => {
   });
 
   it('view the printable report', async () => {
-    await test.runSequence('gotoPrintableCaseInventoryReportSequence');
+    await cerebralTest.runSequence('gotoPrintableCaseInventoryReportSequence');
   });
 });

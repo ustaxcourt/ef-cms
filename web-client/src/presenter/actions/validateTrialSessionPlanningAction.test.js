@@ -16,7 +16,7 @@ describe('validateTrialSessionPlanningAction', () => {
     };
   });
 
-  it('should return the error path if modal.term is null', async () => {
+  it('should return the error path if modal.term is null', () => {
     runAction(validateTrialSessionPlanningAction, {
       modules: {
         presenter,
@@ -31,7 +31,7 @@ describe('validateTrialSessionPlanningAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the error path if modal.year is null', async () => {
+  it('should return the error path if modal.year is null', () => {
     runAction(validateTrialSessionPlanningAction, {
       modules: {
         presenter,
@@ -46,7 +46,7 @@ describe('validateTrialSessionPlanningAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the error path if both modal.year and modal.term are null', async () => {
+  it('should return the error path if both modal.year and modal.term are null', () => {
     runAction(validateTrialSessionPlanningAction, {
       modules: {
         presenter,
@@ -61,7 +61,7 @@ describe('validateTrialSessionPlanningAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the success path if both modal.year and modal.term are defined', async () => {
+  it('should return the success path if both modal.year and modal.term are defined', () => {
     runAction(validateTrialSessionPlanningAction, {
       modules: {
         presenter,

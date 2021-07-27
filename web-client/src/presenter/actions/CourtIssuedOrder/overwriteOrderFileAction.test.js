@@ -38,7 +38,7 @@ describe('overwriteOrderFileAction', () => {
     ).toBeCalled();
   });
 
-  it('fails to overwrite the file for an order', async () => {
+  it('fails to overwrite the file for an order', () => {
     applicationContextForClient
       .getUseCases()
       .uploadOrderDocumentInteractor.mockImplementation(() => {

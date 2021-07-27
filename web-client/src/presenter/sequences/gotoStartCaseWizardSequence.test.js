@@ -8,14 +8,14 @@ import { gotoStartCaseWizardSequence } from '../sequences/gotoStartCaseWizardSeq
 import { presenter } from '../presenter-mock';
 
 describe('gotoStartCaseWizardSequence', () => {
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoStartCaseWizardSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should set up state for an internal user going to start case form', async () => {
@@ -23,9 +23,9 @@ describe('gotoStartCaseWizardSequence', () => {
       role: ROLES.petitionsClerk,
     });
 
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       currentPage: 'StartCaseInternal',
       currentViewMetadata: {
         documentSelectedForScan: 'petitionFile',
@@ -48,9 +48,9 @@ describe('gotoStartCaseWizardSequence', () => {
       role: ROLES.petitioner,
     });
 
-    await test.runSequence('gotoStartCaseWizardSequence');
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       currentPage: 'StartCaseWizard',
       form: {
         contactPrimary: {},

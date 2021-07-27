@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function used for getting petition
  * @param {object} providers.store the cerebral store object
  */
-export const setCaseTypeAction = async ({ applicationContext, get, store }) => {
+export const setCaseTypeAction = ({ applicationContext, get, store }) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const caseType = get(state.form.caseType);
 

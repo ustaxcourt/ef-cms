@@ -1,26 +1,26 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const irsSuperuserAdvancedSearchForCaseDocketNumber = test => {
+export const irsSuperuserAdvancedSearchForCaseDocketNumber = cerebralTest => {
   return it('irsSuperuser performs an advanced search for a case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoAdvancedSearchSequence');
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',
-      value: test.docketNumber,
+      value: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('submitCaseAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      test
+      cerebralTest
         .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
-        .find(result => result.docketNumber === test.docketNumber),
+        .find(result => result.docketNumber === cerebralTest.docketNumber),
     ).toBeDefined();
   });
 };

@@ -37,6 +37,9 @@ function MockEntity(raw, { filtered = false }) {
 }
 
 describe('genericHandler', () => {
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
   beforeEach(() => {
     logged = [];
 
