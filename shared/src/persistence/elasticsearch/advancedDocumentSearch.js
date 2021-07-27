@@ -58,7 +58,11 @@ exports.advancedDocumentSearch = async ({
     docketEntryQueryParams.push({
       simple_query_string: {
         default_operator: 'and',
-        fields: ['documentContents.S.exact', 'documentTitle.S.exact'],
+        fields: [
+          'documentContents.S',
+          'documentTitle.S',
+          'caseCaption.S.exact',
+        ],
         query: removeAdvancedSyntaxSymbols(keyword),
       },
     });
@@ -98,7 +102,6 @@ exports.advancedDocumentSearch = async ({
   }
 
   docketEntryQueryParams.push(caseQueryParams);
-  console.log('query!!!', docketEntryQueryParams);
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');

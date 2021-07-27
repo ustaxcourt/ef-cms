@@ -86,7 +86,7 @@ describe('advancedDocumentSearch', () => {
   const getKeywordQueryParams = keyword => ({
     simple_query_string: {
       default_operator: 'and',
-      fields: ['documentContents.S.exact', 'documentTitle.S.exact'],
+      fields: ['documentContents.S', 'documentTitle.S', 'caseCaption.S.exact'],
       query: keyword,
     },
   });

@@ -678,6 +678,9 @@ describe('processStreamUtilities', () => {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
               },
+              documentContents: {
+                S: 'Test 555-111',
+              },
             },
           },
           eventName: 'MODIFY',

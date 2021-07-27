@@ -10,6 +10,13 @@ module.exports = {
       type: 'join',
     },
     'caseCaption.S': {
+      analyzer: 'ustc_analyzer',
+      fields: {
+        exact: {
+          analyzer: 'english_exact',
+          type: 'text',
+        },
+      },
       type: 'text',
     },
     'docketEntryId.S': {
@@ -25,23 +32,11 @@ module.exports = {
       type: 'keyword',
     },
     'documentContents.S': {
-      analyzer: 'ustc_analyzer',
-      fields: {
-        exact: {
-          analyzer: 'english_exact',
-          type: 'text',
-        },
-      },
+      analyzer: 'english_exact',
       type: 'text',
     },
     'documentTitle.S': {
-      analyzer: 'ustc_analyzer',
-      fields: {
-        exact: {
-          analyzer: 'english_exact',
-          type: 'text',
-        },
-      },
+      analyzer: 'english_exact',
       type: 'text',
     },
     'documentType.S': {
