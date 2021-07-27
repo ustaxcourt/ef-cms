@@ -58,11 +58,7 @@ exports.advancedDocumentSearch = async ({
     docketEntryQueryParams.push({
       simple_query_string: {
         default_operator: 'and',
-        fields: [
-          'documentContents.S',
-          'documentTitle.S',
-          'caseCaption.S.exact',
-        ],
+        fields: ['documentContents.S', 'documentTitle.S'],
         query: removeAdvancedSyntaxSymbols(keyword),
       },
     });
