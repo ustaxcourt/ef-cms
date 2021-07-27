@@ -169,7 +169,7 @@ const processDocketEntries = async ({
             documentContentsId: fullDocketEntry.documentContentsId,
           });
           const { documentContents } = JSON.parse(buffer.toString());
-          fullDocketEntry.documentContents = documentContents;
+          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber}`;
         } catch (err) {
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
