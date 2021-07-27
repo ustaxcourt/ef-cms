@@ -6,7 +6,7 @@ import { irsSuperuserSearchForUnservedCase } from './journey/irsSuperuserSearchF
 import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('irsSuperuser case search', () => {
   beforeAll(() => {
@@ -14,20 +14,20 @@ describe('irsSuperuser case search', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'irsSuperuser@example.com');
-  irsSuperuserSearchForCase(test);
-  irsSuperuserAdvancedSearchForCase(test);
-  irsSuperuserAdvancedSearchForCaseDocketNumber(test);
+  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  irsSuperuserSearchForCase(cerebralTest);
+  irsSuperuserAdvancedSearchForCase(cerebralTest);
+  irsSuperuserAdvancedSearchForCaseDocketNumber(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'irsSuperuser@example.com');
-  irsSuperuserSearchForUnservedCase(test);
+  loginAs(cerebralTest, 'irsSuperuser@example.com');
+  irsSuperuserSearchForUnservedCase(cerebralTest);
 });

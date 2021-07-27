@@ -11,42 +11,42 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkAppliesSignatureFromMessage = test => {
+export const docketClerkAppliesSignatureFromMessage = cerebralTest => {
   return it('docket clerk applies signature to an order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('gotoSignOrderSequence', {
+    await cerebralTest.runSequence('gotoSignOrderSequence', {
       docketEntryId: orderDocument.documentId,
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    expect(test.getState('currentPage')).toEqual('SignOrder');
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('SignOrder');
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await cerebralTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await cerebralTest.runSequence('saveDocumentSigningSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     const caseOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
       d => d.docketEntryId === orderDocument.documentId,

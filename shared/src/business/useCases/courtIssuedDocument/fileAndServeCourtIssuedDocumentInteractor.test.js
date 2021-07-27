@@ -553,4 +553,92 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
   });
+
+  it('should throw an error if the document is already pending service', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = true;
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        documentMeta: {
+          docketEntryId: docketEntry.docketEntryId,
+          docketNumber: caseRecord.docketNumber,
+        },
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        ...docketEntry,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        documentMeta: {
+          ...docketEntry,
+        },
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
 });

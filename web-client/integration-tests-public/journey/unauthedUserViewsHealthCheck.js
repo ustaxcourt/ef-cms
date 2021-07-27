@@ -1,8 +1,8 @@
-export const unauthedUserViewsHealthCheck = test => {
+export const unauthedUserViewsHealthCheck = cerebralTest => {
   return it('should view health check', async () => {
-    await test.runSequence('gotoHealthCheckSequence', {});
+    await cerebralTest.runSequence('gotoHealthCheckSequence', {});
 
-    expect(test.getState('health')).toEqual(
+    expect(cerebralTest.getState('health')).toEqual(
       expect.objectContaining({
         cognito: expect.anything(),
         dynamo: expect.objectContaining({
@@ -16,10 +16,12 @@ export const unauthedUserViewsHealthCheck = test => {
           app: expect.anything(),
           appFailover: expect.anything(),
           eastDocuments: expect.anything(),
+          eastQuarantine: expect.anything(),
           eastTempDocuments: expect.anything(),
           public: expect.anything(),
           publicFailover: expect.anything(),
           westDocuments: expect.anything(),
+          westQuarantine: expect.anything(),
           westTempDocuments: expect.anything(),
         }),
       }),

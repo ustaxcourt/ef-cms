@@ -1,9 +1,9 @@
-export const irsPractitionerViewsOpenAndClosedCases = test => {
+export const irsPractitionerViewsOpenAndClosedCases = cerebralTest => {
   return it('irs practitoner views open and closed cases', async () => {
-    await test.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardRespondent');
-    expect(test.getState('openCases').length).toBeGreaterThan(0);
-    expect(test.getState('closedCases').length).toBeGreaterThan(0);
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardRespondent');
+    expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
+    expect(cerebralTest.getState('closedCases').length).toBeGreaterThan(0);
   });
 };

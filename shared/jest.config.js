@@ -14,6 +14,8 @@ module.exports = {
     '!src/tools/**/*.js',
     '!src/test/**/*.js',
     '!src/**/*_.js',
+    '!src/persistence/sqs/deleteMessage.js',
+    '!src/persistence/sqs/getMessages.js',
   ],
   coverageThreshold: {
     global: {

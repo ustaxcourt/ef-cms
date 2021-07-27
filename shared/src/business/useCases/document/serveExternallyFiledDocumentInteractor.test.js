@@ -28,9 +28,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       pdfData: testPdfDoc,
     });
 
-    applicationContext.getPug.mockImplementation(() => ({
-      compile: () => () => '',
-    }));
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: async () => ({
         Body: testPdfDoc,
@@ -275,5 +272,86 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
       ).workItem;
     expect(updatedWorkItem.completedAt).toBeDefined();
+  });
+
+  it('should throw an error if the document is already pending service', async () => {
+    caseRecord.docketEntries[0].isPendingService = true;
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
   });
 });

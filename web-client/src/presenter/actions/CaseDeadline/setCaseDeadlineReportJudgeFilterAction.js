@@ -7,9 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCaseDeadlineReportJudgeFilterAction = async ({
-  props,
-  store,
-}) => {
+export const setCaseDeadlineReportJudgeFilterAction = ({ props, store }) => {
   store.set(state.caseDeadlineReport.judgeFilter, props.judge);
 };
