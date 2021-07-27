@@ -156,9 +156,6 @@ const {
   updateUserRecords,
 } = require('../../persistence/dynamo/users/updateUserRecords');
 const {
-  updateWorkItem,
-} = require('../../persistence/dynamo/workitems/updateWorkItem');
-const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -458,7 +455,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
-    getWorkItemMappingsByDocketNumber: jest.fn().mockReturnValue([]),
+    getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
@@ -475,7 +472,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(updateCaseCorrespondence),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
-    updateWorkItem: jest.fn().mockImplementation(updateWorkItem),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
