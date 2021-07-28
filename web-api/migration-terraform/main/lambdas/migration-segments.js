@@ -137,9 +137,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
-    ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
-    ...(await hasMigrationRan('0036-phone-number-format.js')),
+    ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
