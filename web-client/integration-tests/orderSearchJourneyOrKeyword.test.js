@@ -80,7 +80,7 @@ describe('order search journey', () => {
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: embedWithLegalIpsumText('nasty weather'),
-    documentTitle: 'welcome to something flavortown',
+    documentTitle: 'welcome to something flavortown today',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
@@ -123,15 +123,15 @@ describe('order search journey', () => {
   docketClerkServesDocument(cerebralTest, 6);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('searches for an order by keyword `"welcome to flavortown"`', async () => {
+  it('searches for an order by exact keyword `"nasty | wait"`', async () => {
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"welcome to flavortown"',
+        docketNumber: cerebralTest.docketNumber,
+        keyword: '"nasty" | "wait"',
       },
     });
 
@@ -144,93 +144,27 @@ describe('order search journey', () => {
     expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
-          docketNumber: cerebralTest.docketNumber,
-          documentTitle: 'welcome to flavortown',
-        }),
-        expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
-          docketNumber: cerebralTest.docketNumber,
-        }),
-        expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
           docketNumber: cerebralTest.docketNumber,
-          documentTitle: 'welcome to flavortown',
         }),
         expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[6].docketEntryId,
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
           docketNumber: cerebralTest.docketNumber,
         }),
       ]),
     );
 
-    expect(searchResults.length).toEqual(4);
+    expect(searchResults.length).toEqual(2);
   });
 
-  it('searches for an order by keyword `"welcome from flavortown"`', async () => {
+  it('searches for an order by keyword `nasty | wait`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"welcome from flavortown"',
-      },
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    const searchResults = cerebralTest.getState(
-      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
-    );
-
-    expect(searchResults).toEqual([
-      expect.objectContaining({
-        docketEntryId: cerebralTest.draftOrders[4].docketEntryId,
         docketNumber: cerebralTest.docketNumber,
-        documentTitle: 'welcome from flavortown',
-      }),
-    ]);
-
-    expect(searchResults.length).toEqual(1);
-  });
-
-  it('searches for an order by keyword `"welcome to flavor-town"`', async () => {
-    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
-
-    cerebralTest.setState('advancedSearchForm', {
-      orderSearch: {
-        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"welcome to flavor-town"',
-      },
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    const searchResults = cerebralTest.getState(
-      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
-    );
-
-    expect(searchResults).toEqual([
-      expect.objectContaining({
-        docketEntryId: cerebralTest.draftOrders[5].docketEntryId,
-        docketNumber: cerebralTest.docketNumber,
-        documentTitle: 'welcome to flavor-town',
-      }),
-    ]);
-
-    expect(searchResults.length).toEqual(1);
-  });
-
-  it('searches for an order by keyword `"Welcome to Flavortown"`', async () => {
-    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
-
-    cerebralTest.setState('advancedSearchForm', {
-      orderSearch: {
-        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"Welcome to Flavortown"',
+        keyword: 'nasty | wait',
       },
     });
 
@@ -243,37 +177,27 @@ describe('order search journey', () => {
     expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
-          docketNumber: cerebralTest.docketNumber,
-          documentTitle: 'welcome to flavortown',
-        }),
-        expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
-          docketNumber: cerebralTest.docketNumber,
-        }),
-        expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
           docketNumber: cerebralTest.docketNumber,
-          documentTitle: 'welcome to flavortown',
         }),
         expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[6].docketEntryId,
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
           docketNumber: cerebralTest.docketNumber,
         }),
       ]),
     );
 
-    expect(searchResults.length).toEqual(4);
+    expect(searchResults.length).toEqual(2);
   });
 
-  it('searches for an order by keyword `"welcomes to flavortown"`', async () => {
+  it('searches for an order by exact match keyword `"nasty" | "flavor-town" | partys`', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        docketNumber: cerebralTest.docketNumber, // we need this because we generate orders with the same title with every re-run
-        keyword: '"welcomes to flavortown"',
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'nasty | "flavor-town" | partys',
       },
     });
 
@@ -283,8 +207,188 @@ describe('order search journey', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
     );
 
-    expect(searchResults).toEqual([]);
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[5].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
 
-    expect(searchResults.length).toEqual(0);
+    expect(searchResults.length).toEqual(3);
+  });
+
+  it('searches for an order by keyword `"hold" | "something"` present in the documentTitle only', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'hold | something',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+
+    expect(searchResults.length).toEqual(2);
+  });
+
+  it('searches for an order by keyword `hold | "something"` present in the documentTitle only', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'hold | "something"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+
+    expect(searchResults.length).toEqual(2);
+  });
+
+  it('searches for an order by keyword `"partys" | "nasty"` present in the documentContents only', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'partys | nasty',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+
+    expect(searchResults.length).toEqual(2);
+  });
+
+  it('searches for an order by keyword `partys | "nasty"` present in the documentContents only', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'partys | "nasty"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+
+    expect(searchResults.length).toEqual(2);
+  });
+
+  it('searches for an order by keyword `nasty | "flavor-town"`', async () => {
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: cerebralTest.docketNumber,
+        keyword: 'nasty | "flavor-town"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[5].docketEntryId,
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+
+    expect(searchResults.length).toEqual(2);
   });
 });

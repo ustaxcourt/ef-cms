@@ -337,9 +337,6 @@ const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
-  generateNoticeOfTrialIssuedTemplate,
-} = require('../../shared/src/business/utilities/generateHTMLTemplateForPDF/');
-const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -722,8 +719,8 @@ const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
-  getWorkItemMappingsByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
+  getWorkItemsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByDocketNumber');
 const {
   getWorkItemsByWorkItemId,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
@@ -754,6 +751,9 @@ const {
 const {
   noticeOfTrialIssued,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssued');
+const {
+  noticeOfTrialIssuedInPerson,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson');
 const {
   onConnectInteractor,
 } = require('../../shared/src/business/useCases/notifications/onConnectInteractor');
@@ -1117,9 +1117,6 @@ const {
   updateUserRecords,
 } = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
 const {
-  updateWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
-const {
   updateWorkItemAssociatedJudge,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
 const {
@@ -1131,9 +1128,6 @@ const {
 const {
   updateWorkItemDocketNumberSuffix,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemDocketNumberSuffix');
-const {
-  updateWorkItemInCase,
-} = require('../../shared/src/persistence/dynamo/cases/updateWorkItemInCase');
 const {
   updateWorkItemTrialDate,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemTrialDate');
@@ -1372,8 +1366,6 @@ const gatewayMethods = {
     updateUser,
     updateUserCaseNote,
     updateUserEmail,
-    updateWorkItem,
-    updateWorkItemInCase,
   }),
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
@@ -1452,7 +1444,7 @@ const gatewayMethods = {
   getUsersInSection,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  getWorkItemMappingsByDocketNumber,
+  getWorkItemsByDocketNumber,
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
@@ -1576,6 +1568,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,
+      noticeOfTrialIssuedInPerson,
       order,
       pendingReport,
       practitionerCaseList,
@@ -1712,11 +1705,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
-    },
-    getTemplateGenerators: () => {
-      return {
-        generateNoticeOfTrialIssuedTemplate,
-      };
     },
     getUniqueId,
     getUseCaseHelpers: () => {

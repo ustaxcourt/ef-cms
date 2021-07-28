@@ -58,12 +58,11 @@ exports.advancedDocumentSearch = async ({
     docketEntryQueryParams.push({
       simple_query_string: {
         default_operator: 'and',
-        fields: ['documentContents.S.exact', 'documentTitle.S.exact'],
+        fields: ['documentContents.S', 'documentTitle.S'],
         query: removeAdvancedSyntaxSymbols(keyword),
       },
     });
   }
-
   if (omitSealed) {
     caseMustNot.push({
       term: { 'isSealed.BOOL': true },

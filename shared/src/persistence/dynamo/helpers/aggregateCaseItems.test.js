@@ -9,6 +9,7 @@ const {
   isHearingItem,
   isIrsPractitionerItem,
   isPrivatePractitionerItem,
+  isWorkItemItem,
 } = require('./aggregateCaseItems');
 
 describe('aggregateCaseItems', () => {
@@ -25,9 +26,20 @@ describe('aggregateCaseItems', () => {
 
   const docketEntryRecord = {
     archived: false,
+    docketEntryId: '234',
     entityName: 'DocketEntry',
     pk: `case|${caseDocketNumber}`,
     sk: 'docket-entry|234',
+  };
+
+  const workItemRecord = {
+    archived: false,
+    docketEntry: {
+      docketEntryId: docketEntryRecord.docketEntryId,
+    },
+    entityName: 'WorkItem',
+    pk: `case|${caseDocketNumber}`,
+    sk: 'work-item|098',
   };
 
   const archivedDocketEntryRecord = {
@@ -79,6 +91,7 @@ describe('aggregateCaseItems', () => {
       caseRecord,
       correspondenceRecord,
       docketEntryRecord,
+      workItemRecord,
       archivedDocketEntryRecord,
       hearingRecord,
       irsPractitionerRecord,
@@ -94,7 +107,7 @@ describe('aggregateCaseItems', () => {
       archivedDocketEntries: [archivedDocketEntryRecord],
       associatedJudge: judgeRecord.name,
       correspondence: [correspondenceRecord],
-      docketEntries: [docketEntryRecord],
+      docketEntries: [{ ...docketEntryRecord, workItem: workItemRecord }],
       hearings: [hearingRecord],
       irsPractitioners: [irsPractitionerRecord],
       privatePractitioners: [privatePractitionerRecord],
@@ -175,6 +188,7 @@ describe('aggregateCaseItems', () => {
       expect(isArchivedCorrespondenceItem(irsPractitionerRecord)).toEqual(
         false,
       );
+      expect(isArchivedCorrespondenceItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -201,6 +215,7 @@ describe('aggregateCaseItems', () => {
       expect(isArchivedDocketEntryItem(archivedCorrespondenceRecord)).toEqual(
         false,
       );
+      expect(isArchivedDocketEntryItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -217,6 +232,7 @@ describe('aggregateCaseItems', () => {
       expect(isCaseItem(privatePractitionerRecord)).toEqual(false);
       expect(isCaseItem(irsPractitionerRecord)).toEqual(false);
       expect(isCaseItem(archivedCorrespondenceRecord)).toEqual(false);
+      expect(isCaseItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -237,6 +253,7 @@ describe('aggregateCaseItems', () => {
       expect(isCorrespondenceItem(privatePractitionerRecord)).toEqual(false);
       expect(isCorrespondenceItem(irsPractitionerRecord)).toEqual(false);
       expect(isCorrespondenceItem(archivedCorrespondenceRecord)).toEqual(false);
+      expect(isCorrespondenceItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -257,6 +274,24 @@ describe('aggregateCaseItems', () => {
       expect(isDocketEntryItem(irsPractitionerRecord)).toEqual(false);
       expect(isDocketEntryItem(correspondenceRecord)).toEqual(false);
       expect(isDocketEntryItem(archivedCorrespondenceRecord)).toEqual(false);
+      expect(isDocketEntryItem(workItemRecord)).toEqual(false);
+    });
+  });
+
+  describe('isWorkItemItem', () => {
+    it('returns true if the item is a workitem item', () => {
+      expect(isWorkItemItem(workItemRecord)).toEqual(true);
+    });
+
+    it('returns false if the item is NOT a workitem item', () => {
+      expect(isWorkItemItem(docketEntryRecord)).toEqual(false);
+      expect(isWorkItemItem(caseRecord)).toEqual(false);
+      expect(isWorkItemItem(hearingRecord)).toEqual(false);
+      expect(isWorkItemItem(judgeRecord)).toEqual(false);
+      expect(isWorkItemItem(privatePractitionerRecord)).toEqual(false);
+      expect(isWorkItemItem(irsPractitionerRecord)).toEqual(false);
+      expect(isWorkItemItem(correspondenceRecord)).toEqual(false);
+      expect(isWorkItemItem(archivedCorrespondenceRecord)).toEqual(false);
     });
   });
 
@@ -273,6 +308,7 @@ describe('aggregateCaseItems', () => {
       expect(isHearingItem(irsPractitionerRecord)).toEqual(false);
       expect(isHearingItem(correspondenceRecord)).toEqual(false);
       expect(isHearingItem(archivedCorrespondenceRecord)).toEqual(false);
+      expect(isHearingItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -291,6 +327,7 @@ describe('aggregateCaseItems', () => {
       expect(isIrsPractitionerItem(archivedCorrespondenceRecord)).toEqual(
         false,
       );
+      expect(isIrsPractitionerItem(workItemRecord)).toEqual(false);
     });
   });
 
@@ -311,6 +348,7 @@ describe('aggregateCaseItems', () => {
       expect(isPrivatePractitionerItem(archivedCorrespondenceRecord)).toEqual(
         false,
       );
+      expect(isPrivatePractitionerItem(workItemRecord)).toEqual(false);
     });
   });
 });
