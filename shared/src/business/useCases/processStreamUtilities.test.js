@@ -468,6 +468,7 @@ describe('processStreamUtilities', () => {
   });
 
   describe('processDocketEntries', () => {
+    const mockGetCaseMetadataWithCounsel = jest.fn();
     const mockGetDocument = jest.fn();
 
     const docketEntryData = {
@@ -484,9 +485,10 @@ describe('processStreamUtilities', () => {
       sk: { S: 'docket-entry|123' },
     };
 
-    mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
+    mockGetDocument.mockReturnValue('{ "documentContents": "Test"}');
 
     const utils = {
+      getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
       getDocument: mockGetDocument,
     };
 
@@ -546,8 +548,32 @@ describe('processStreamUtilities', () => {
 
     it('fetches the document from persistence if the entry is an opinion and has a documentContentsId', async () => {
       docketEntryData.documentContentsId = '123';
+      docketEntryData.docketNumber = '555-111';
       docketEntryDataMarshalled.documentContentsId = { S: '123' };
       docketEntryDataMarshalled.eventCode = { S: 'TCOP' };
+      docketEntryDataMarshalled.docketNumber = { S: '555-111' };
+
+      const caseData = {
+        caseCaption: 'A Caption, Petitioner',
+        docketNumber: '123-45',
+        entityName: 'Case',
+        irsPractitioners: [
+          {
+            name: 'bob',
+          },
+        ],
+        pk: 'case|123-45',
+        privatePractitioners: [
+          {
+            name: 'jane',
+          },
+        ],
+        sk: 'case|123-45',
+      };
+
+      mockGetCaseMetadataWithCounsel.mockReturnValue({
+        ...caseData,
+      });
 
       await processDocketEntries({
         applicationContext,
@@ -584,6 +610,7 @@ describe('processStreamUtilities', () => {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
               },
+              documentContents: { S: 'Test 555-111 A Caption, Petitioner' },
             },
           },
           eventName: 'MODIFY',
@@ -674,6 +701,9 @@ describe('processStreamUtilities', () => {
               case_relations: {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
+              },
+              documentContents: {
+                S: 'Test 555-111 A Caption, Petitioner',
               },
             },
           },

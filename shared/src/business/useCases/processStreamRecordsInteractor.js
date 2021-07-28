@@ -8,12 +8,6 @@ const {
   processWorkItemEntries,
 } = require('./processStreamUtilities');
 
-const getCase = ({ applicationContext: appContext, docketNumber }) =>
-  appContext.getPersistenceGateway().getCaseByDocketNumber({
-    applicationContext: appContext,
-    docketNumber,
-  });
-
 const getDocument = ({ applicationContext: appContext, documentContentsId }) =>
   appContext.getPersistenceGateway().getDocument({
     applicationContext: appContext,
@@ -62,7 +56,6 @@ exports.processStreamRecordsInteractor = async (
   } = partitionRecords(recordsToProcess);
 
   const utils = {
-    getCase,
     getCaseMetadataWithCounsel,
     getDocument,
     getMessage,
