@@ -157,9 +157,9 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: docketEntryEntity.workItem.validate().toRawObject(),
+    workItem: docketEntryEntity.workItem.validate().toRawObject(),
   });
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({

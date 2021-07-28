@@ -2,11 +2,9 @@ const client = require('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const {
-  getWorkItemMappingsByDocketNumber,
-} = require('./getWorkItemMappingsByDocketNumber');
+const { getWorkItemsByDocketNumber } = require('./getWorkItemsByDocketNumber');
 
-describe('getWorkItemMappingsByDocketNumber', () => {
+describe('getWorkItemsByDocketNumber', () => {
   beforeEach(() => {
     client.query = jest.fn();
   });
@@ -14,7 +12,7 @@ describe('getWorkItemMappingsByDocketNumber', () => {
   it('should call client.query with pk of case|{docketNumber}', async () => {
     const mockDocketNumber = '101-21';
 
-    await getWorkItemMappingsByDocketNumber({
+    await getWorkItemsByDocketNumber({
       applicationContext,
       docketNumber: mockDocketNumber,
     });
