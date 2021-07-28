@@ -142,3 +142,7 @@ exports.chambersUser = {
   section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
   userId: '555',
 };
+exports.adcUser = {
+  role: ROLES.adc,
+  userId: '6498a6ff-fa05-4382-abc7-29a61347cfe1',
+};
