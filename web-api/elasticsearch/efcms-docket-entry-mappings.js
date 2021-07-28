@@ -9,6 +9,9 @@ module.exports = {
       },
       type: 'join',
     },
+    'caseCaption.S': {
+      type: 'text',
+    },
     'docketEntryId.S': {
       type: 'keyword',
     },
@@ -64,6 +67,9 @@ module.exports = {
     },
     'pending.BOOL': {
       type: 'boolean',
+    },
+    'petitioners.L.M.name.S': {
+      type: 'text',
     },
     'pk.S': {
       type: 'keyword',
