@@ -172,102 +172,74 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showNotServed', () => {
-    it('should be true if the document type is servable and does not have a servedAt', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Order',
-                eventCode: 'O',
-              },
-            ],
-          },
+    const showNotServedTests = [
+      {
+        description:
+          'should be true if the document type is servable and does not have a servedAt',
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Order',
+          eventCode: 'O',
         },
-      });
-
-      expect(result.showNotServed).toEqual(true);
-    });
-
-    it('should be false if the document type is unservable', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Corrected Transcript',
-                eventCode: 'CTRA',
-              },
-            ],
-          },
+        expect: true,
+      },
+      {
+        description: 'should be false if the document type is unservable',
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Corrected Transcript',
+          eventCode: 'CTRA',
         },
-      });
-
-      expect(result.showNotServed).toEqual(false);
-    });
-
-    it('should be false if the document type is servable and has servedAt', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Order',
-                eventCode: 'O',
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
-          },
+        expect: false,
+      },
+      {
+        description:
+          'should be false if the document type is servable and has servedAt',
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Order',
+          eventCode: 'O',
+          servedAt: '2019-03-01T21:40:46.415Z',
         },
-      });
-
-      expect(result.showNotServed).toEqual(false);
-    });
-
-    it('should be false when the document is a legacy served document', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Order',
-                eventCode: 'O',
-                isLegacyServed: true,
-              },
-            ],
-          },
+        expect: false,
+      },
+      {
+        description:
+          'should be false when the document is a legacy served document',
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Order',
+          eventCode: 'O',
+          isLegacyServed: true,
         },
-      });
-
-      expect(result.showNotServed).toEqual(false);
-    });
-
-    it('should be true when the document is not a legacy served document and has no servedAt date', () => {
-      const result = runCompute(documentViewerHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                documentType: 'Order',
-                eventCode: 'O',
-                isLegacyServed: false,
-              },
-            ],
-          },
+        expect: false,
+      },
+      {
+        description:
+          'should be true when the document is not a legacy served document and has no servedAt date',
+        docketEntry: {
+          ...baseDocketEntry,
+          documentType: 'Order',
+          eventCode: 'O',
+          isLegacyServed: false,
         },
-      });
+        expect: true,
+      },
+    ];
 
-      expect(result.showNotServed).toEqual(true);
+    showNotServedTests.map(({ description, docketEntry, expect }) => {
+      it(`${description}`, () => {
+        const { showNotServed } = runCompute(documentViewerHelper, {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              docketEntries: [docketEntry],
+            },
+          },
+        });
+
+        expect(showNotServed).toEqual(expect);
+      });
     });
   });
 
