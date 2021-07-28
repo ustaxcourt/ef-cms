@@ -86,16 +86,12 @@ describe('advancedDocumentSearch', () => {
   const getKeywordQueryParams = keyword => ({
     simple_query_string: {
       default_operator: 'and',
-      fields: ['documentContents.S', 'documentTitle.S', 'caseCaption.S.exact'],
+      fields: ['documentContents.S', 'documentTitle.S'],
       query: keyword,
     },
   });
 
-  const getCaseMappingQueryParams = (
-    caseTitleOrPetitioner,
-    judge,
-    docketNumber,
-  ) => {
+  const getCaseMappingQueryParams = (caseTitleOrPetitioner, docketNumber) => {
     let query = {
       bool: {
         must_not: [],
@@ -210,7 +206,7 @@ describe('advancedDocumentSearch', () => {
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD), // match all parents
+      getCaseMappingQueryParams(null), // match all parents
       {
         bool: {
           should: {
@@ -289,7 +285,7 @@ describe('advancedDocumentSearch', () => {
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
       ...opinionQueryParams,
-      getCaseMappingQueryParams(null, 'judge'), // match all parents
+      getCaseMappingQueryParams(null), // match all parents
       {
         bool: {
           should: {
@@ -314,7 +310,7 @@ describe('advancedDocumentSearch', () => {
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
       ...orderQueryParams,
-      getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD, '101-20'), // match all parents
+      getCaseMappingQueryParams(null, '101-20'), // match all parents
     ]);
   });
 
@@ -489,7 +485,7 @@ describe('advancedDocumentSearch', () => {
         search.mock.calls[0][0].searchParameters.body.query.bool.must,
       ).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(null, 'judge'), // match all parents
+        getCaseMappingQueryParams(null), // match all parents
         {
           bool: {
             should: {
@@ -514,7 +510,7 @@ describe('advancedDocumentSearch', () => {
         search.mock.calls[0][0].searchParameters.body.query.bool.must,
       ).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(null, ORDER_JUDGE_FIELD), // match all parents
+        getCaseMappingQueryParams(null), // match all parents
         {
           bool: {
             should: {
@@ -542,7 +538,7 @@ describe('advancedDocumentSearch', () => {
         search.mock.calls[0][0].searchParameters.body.query.bool.must,
       ).toEqual([
         ...opinionQueryParams,
-        getCaseMappingQueryParams(null, 'judge'), // match all parents
+        getCaseMappingQueryParams(null), // match all parents
         {
           bool: {
             should: {
