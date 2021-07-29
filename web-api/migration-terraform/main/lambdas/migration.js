@@ -32,7 +32,7 @@ const processItems = async ({ documentClient, items, migrateRecords }) => {
 
 const getFilteredGlobalEvents = event => {
   const { Records } = event;
-  return Records.map(item =>
+  return Records.filter(item => item.eventName !== 'REMOVE').map(item =>
     AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage),
   );
 };
