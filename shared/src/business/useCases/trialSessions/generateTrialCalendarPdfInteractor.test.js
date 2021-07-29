@@ -10,12 +10,19 @@ const { US_STATES } = require('../../entities/EntityConstants');
 
 describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };
+  const mockIrsPractitioner = { barNumber: '123', name: 'IRS Format Me' };
+  const mockPrivatePractitioner = {
+    barNumber: '123',
+    name: 'Private Format Me',
+  };
   // deliberately *not* automatically sorted by docket number for test purposes
   const mockCases = [
     {
       ...MOCK_CASE,
       docketNumber: '102-19',
       docketNumberWithSuffix: '102-19W',
+      irsPractitioners: [mockIrsPractitioner],
+      privatePractitioners: [mockPrivatePractitioner],
     },
     {
       ...MOCK_CASE,
@@ -121,6 +128,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       expect(mockCases.find(m => m.removedFromTrial)).toBeTruthy(); // there is a case in the mocks which is removed from trial
       expect(result.find(m => m.docketNumber === '123-20')).toBeFalsy();
     });
+
     it('should sort cases by ascending docket number', () => {
       const result = formatCases({
         applicationContext,
@@ -128,6 +136,16 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
       expect(result[0].docketNumber).toBe('101-18');
       expect(result[1].docketNumber).toBe('102-19');
+    });
+
+    it('should format practitioner name + barNumber', () => {
+      const result = formatCases({
+        applicationContext,
+        calendaredCases: mockCases,
+      });
+
+      expect(result[1].petitionerCounsel[0]).toBe('Private Format Me (123)');
+      expect(result[1].respondentCounsel[0]).toBe('IRS Format Me (123)');
     });
   });
 

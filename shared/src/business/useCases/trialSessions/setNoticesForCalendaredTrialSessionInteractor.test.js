@@ -3,12 +3,13 @@ const {
   fakeData,
 } = require('../../test/createTestApplicationContext');
 const {
-  setNoticesForCalendaredTrialSessionInteractor,
-} = require('./setNoticesForCalendaredTrialSessionInteractor');
-const {
+  SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
@@ -503,5 +504,18 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       findStandingPretrialDocument(calendaredCases[1]).servedParties.length,
     ).toBeGreaterThan(0);
+  });
+
+  it('should append the PaperServiceAddressPage to the pdf when the case has a party with paper service', async () => {
+    calendaredCases[0].petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalled();
   });
 });
