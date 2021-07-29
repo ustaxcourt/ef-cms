@@ -220,7 +220,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showNotServedTests.map(({ description, docketEntry, expectation }) => {
+    showNotServedTests.forEach(({ description, docketEntry, expectation }) => {
       it(`${description}`, () => {
         const { showNotServed } = runCompute(documentViewerHelper, {
           state: {
@@ -303,7 +303,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showServeCourtIssuedDocumentButtonTests.map(
+    showServeCourtIssuedDocumentButtonTests.forEach(
       ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServeCourtIssuedDocumentButton } = runCompute(
@@ -392,7 +392,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showServePaperFiledDocumentButtonTests.map(
+    showServePaperFiledDocumentButtonTests.forEach(
       ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServePaperFiledDocumentButton } = runCompute(
@@ -439,7 +439,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showServePetitionButtonTests.map(
+    showServePetitionButtonTests.forEach(
       ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServePetitionButton } = runCompute(documentViewerHelper, {
@@ -548,7 +548,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showSignStipulatedDecisionButtonTests.map(
+    showSignStipulatedDecisionButtonTests.forEach(
       ({ description, docketEntries, expectation }) => {
         it(`${description}`, () => {
           const { showSignStipulatedDecisionButton } = runCompute(
@@ -620,7 +620,7 @@ describe('documentViewerHelper', () => {
       },
     ];
 
-    showCompleteQcButtonTests.map(
+    showCompleteQcButtonTests.forEach(
       ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showCompleteQcButton } = runCompute(documentViewerHelper, {
