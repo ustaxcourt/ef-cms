@@ -47,11 +47,10 @@ const migrateItems = async items => {
             useTempBucket: false,
           });
       } catch (e) {
-        console.log(e);
-        // applicationContext.logger.error(
-        //   `Failed to parse PDF for docket entry ${item.docketEntryId}`,
-        //   e,
-        // );
+        applicationContext.logger.error(
+          `Failed to parse PDF for docket entry ${item.docketEntryId}`,
+          e,
+        );
       }
 
       itemsAfter.push(item);
