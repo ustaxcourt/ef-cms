@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const setShowAllLocationsFalseAction = async ({ store }) => {
+export const setShowAllLocationsFalseAction = ({ store }) => {
   store.set(state.modal.showAllLocations, false);
 };

@@ -4,6 +4,9 @@ const { transports } = require('winston');
 
 describe('logger', () => {
   let req, res, NODE_ENV;
+  beforeAll(() => {
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+  });
 
   beforeEach(() => {
     ({ NODE_ENV } = process.env);
@@ -24,7 +27,7 @@ describe('logger', () => {
     process.env.NODE_ENV = NODE_ENV;
   });
 
-  const subject = async (request, response) =>
+  const subject = (request, response) =>
     new Promise(resolve => {
       const middleware = logger(
         new transports.Stream({
@@ -40,10 +43,10 @@ describe('logger', () => {
     expect(req.locals.logger).toBeDefined();
   });
 
-  it('defaults to using a console logger if not specified', async () => {
+  it('defaults to using a console logger if not specified', () => {
     const middleware = logger();
 
-    jest.spyOn(console, 'log');
+    jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
       req.locals.logger.info('test', () => {
         expect(console.log).toHaveBeenCalled();
@@ -68,6 +71,40 @@ describe('logger', () => {
         }),
       }),
     );
+  });
+
+  it('sets logger.defaultMeta.environment color stage to from the environment variables', async () => {
+    process.env.NODE_ENV = 'production';
+    process.env.CURRENT_COLOR = 'blue';
+    process.env.STAGE = 'someEnv';
+
+    await subject(req, res);
+    const instance = req.locals.logger;
+
+    instance.info = jest.fn();
+
+    res.end();
+    expect(instance.defaultMeta.environment).toEqual({
+      color: 'blue',
+      stage: 'someEnv',
+    });
+  });
+
+  it('sets logger.defaultMeta.environment color to green and stage to local when those environment variables are undefined', async () => {
+    delete process.env.CURRENT_COLOR;
+    delete process.env.STAGE;
+    process.env.NODE_ENV = 'production';
+
+    await subject(req, res);
+    const instance = req.locals.logger;
+
+    instance.info = jest.fn();
+
+    res.end();
+    expect(instance.defaultMeta.environment).toEqual({
+      color: 'green',
+      stage: 'local',
+    });
   });
 
   it('passes request IDs to event if set in production', async () => {

@@ -9,7 +9,7 @@ import { petitionsClerkSelectsFirstPetitionOnMyDocumentQC } from './journey/peti
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
 import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Entry of Statistics in Petition QC', () => {
   beforeAll(() => {
@@ -17,19 +17,19 @@ describe('Entry of Statistics in Petition QC', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsSectionDocumentQC(test);
-  petitionsClerkAssignsWorkItemToSelf(test);
-  petitionsClerkViewsMyDocumentQC(test);
-  petitionsClerkSelectsFirstPetitionOnMyDocumentQC(test);
-  petitionsClerkEditsPetitionInQCIRSNotice(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(cerebralTest);
+  petitionsClerkAssignsWorkItemToSelf(cerebralTest);
+  petitionsClerkViewsMyDocumentQC(cerebralTest);
+  petitionsClerkSelectsFirstPetitionOnMyDocumentQC(cerebralTest);
+  petitionsClerkEditsPetitionInQCIRSNotice(cerebralTest);
 });

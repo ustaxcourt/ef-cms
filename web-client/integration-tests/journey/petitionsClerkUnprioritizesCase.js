@@ -1,16 +1,18 @@
-export const petitionsClerkUnprioritizesCase = test => {
+export const petitionsClerkUnprioritizesCase = cerebralTest => {
   return it('Petitions clerk unprioritizes the case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
-    expect(test.getState('caseDetail').highPriority).toBeTruthy();
+    expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
 
-    await test.runSequence('unprioritizeCaseSequence');
+    await cerebralTest.runSequence('unprioritizeCaseSequence');
 
-    expect(test.getState('alertSuccess').message).toEqual(
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'High priority removed. Case is eligible for next available trial session.',
     );
-    expect(test.getState('caseDetail').highPriority).toBeFalsy();
-    expect(test.getState('caseDetail').highPriorityReason).toBeUndefined();
+    expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
+    expect(
+      cerebralTest.getState('caseDetail').highPriorityReason,
+    ).toBeUndefined();
   });
 };

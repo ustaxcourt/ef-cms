@@ -10,7 +10,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Docket Clerk Views Trial Session Tabs', () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const caseCount = 2;
@@ -28,7 +28,7 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
     trialLocation,
   };
 
-  test.casesReadyForTrial = [];
+  cerebralTest.casesReadyForTrial = [];
 
   const createdDocketNumbers = [];
 
@@ -41,44 +41,44 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
       testSession.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkSetsCaseReadyForTrial(test);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkSetsCaseReadyForTrial(cerebralTest);
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
   // Trial Session should exist in New tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'New' });
+  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'New' });
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
-    makeCaseReadyForTrial(test, id, overrides);
+    makeCaseReadyForTrial(cerebralTest, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsATrialSessionsEligibleCases(test, caseCount);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, caseCount);
 
-  petitionsClerkManuallyAddsCaseToTrial(test);
+  petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
   // only mark cases 0 and 1 as QCed
-  markAllCasesAsQCed(test, () => {
+  markAllCasesAsQCed(cerebralTest, () => {
     return [createdDocketNumbers[1]];
   });
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   // Trial Session should exist in Open tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'Open' });
+  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'Open' });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkManuallyRemovesCaseFromTrial(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkManuallyRemovesCaseFromTrial(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
   // Trial Session should exist in Closed tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'Closed' });
+  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'Closed' });
   // Trial Session should exist in All tab
-  docketClerkViewsTrialSessionsTab(test, { tab: 'All' });
+  docketClerkViewsTrialSessionsTab(cerebralTest, { tab: 'All' });
 });

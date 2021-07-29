@@ -2,24 +2,24 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
-export const petitionerChoosesCaseType = test => {
+export const petitionerChoosesCaseType = cerebralTest => {
   it('petitioner chooses the case type', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasIrsNotice',
       value: true,
     });
-    expect(test.getState('form.hasIrsNotice')).toEqual(true);
+    expect(cerebralTest.getState('form.hasIrsNotice')).toEqual(true);
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.cdp,
     });
-    expect(test.getState('form.caseType')).toEqual(CASE_TYPES_MAP.cdp);
+    expect(cerebralTest.getState('form.caseType')).toEqual(CASE_TYPES_MAP.cdp);
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'filingType',
       value: 'Myself',
     });
-    expect(test.getState('form.filingType')).toEqual('Myself');
+    expect(cerebralTest.getState('form.filingType')).toEqual('Myself');
   });
 };

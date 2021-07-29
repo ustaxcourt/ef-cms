@@ -25,6 +25,7 @@ import {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
@@ -44,6 +45,7 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -184,6 +186,7 @@ import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/docu
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
+import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
@@ -297,7 +300,6 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
-import { virusScanPdfInteractor } from '../../shared/src/proxies/documents/virusScanPdfProxy';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
@@ -413,6 +415,10 @@ const allUseCases = {
   getPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
+  getStatusOfVirusScanInteractor: (applicationContext, args) =>
+    process.env.SKIP_VIRUS_SCAN
+      ? null
+      : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsInteractor,
@@ -521,10 +527,6 @@ const allUseCases = {
   validateUserContactInteractor,
   verifyPendingCaseForUserInteractor,
   verifyUserPendingEmailInteractor,
-  virusScanPdfInteractor: (applicationContext, args) =>
-    process.env.SKIP_VIRUS_SCAN
-      ? null
-      : virusScanPdfInteractor(applicationContext, args),
 };
 tryCatchDecorator(allUseCases);
 
@@ -568,9 +570,7 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);
   },
@@ -702,6 +702,9 @@ const applicationContext = {
       sortDocketEntries,
       validateDateAndCreateISO,
     };
+  },
+  isFeatureEnabled: featureName => {
+    return getIsFeatureEnabled(featureName, user, getEnvironment().stage);
   },
   setCurrentUser,
   setCurrentUserToken,

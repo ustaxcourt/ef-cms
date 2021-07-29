@@ -135,23 +135,20 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  if (startDate) {
-    docketEntryQueryParams.push({
-      range: {
-        'filingDate.S': {
-          format: 'strict_date_time', // ISO-8601 time stamp
-          gte: startDate,
-        },
-      },
-    });
-  }
-
   if (endDate && startDate) {
     docketEntryQueryParams.push({
       range: {
         'filingDate.S': {
-          format: 'strict_date_time', // ISO-8601 time stamp
-          lte: endDate,
+          gte: `${startDate}||/h`,
+          lte: `${endDate}||/h`,
+        },
+      },
+    });
+  } else if (startDate) {
+    docketEntryQueryParams.push({
+      range: {
+        'filingDate.S': {
+          gte: `${startDate}||/h`,
         },
       },
     });

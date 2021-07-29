@@ -4,69 +4,59 @@ const tmp = require('tmp');
 /**
  * virusScanPdfInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.key the key of the document to virus scan
- * @returns {object} errors (null if no errors)
+ * @param {object} providers.key the S3 document ID
+ * @param {object} providers.scanCompleteCallback to execute after scanning completes
+ * @returns {Promise} resolves when complete
  */
-exports.virusScanPdfInteractor = async (applicationContext, { key }) => {
+exports.virusScanPdfInteractor = async (
+  applicationContext,
+  { key, scanCompleteCallback },
+) => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
+      Bucket: applicationContext.environment.quarantineBucketName,
       Key: key,
     })
     .promise();
 
-  const inputPdf = tmp.fileSync();
+  const inputPdf = tmp.fileSync({
+    mode: 0o644,
+    tmpdir: process.env.TMP_PATH,
+  });
   fs.writeSync(inputPdf.fd, Buffer.from(pdfData));
   fs.closeSync(inputPdf.fd);
 
   try {
     await applicationContext.runVirusScan({ filePath: inputPdf.name });
-    applicationContext.getStorageClient().putObjectTagging({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: key,
-      Tagging: {
-        TagSet: [
-          {
-            Key: 'virus-scan',
-            Value: 'clean',
-          },
-        ],
-      },
-    });
-    return 'clean';
+
+    await applicationContext
+      .getStorageClient()
+      .putObject({
+        Body: pdfData,
+        Bucket: applicationContext.environment.documentsBucketName,
+        ContentType: 'application/pdf',
+        Key: key,
+      })
+      .promise();
+
+    await applicationContext
+      .getStorageClient()
+      .deleteObject({
+        Bucket: applicationContext.environment.quarantineBucketName,
+        Key: key,
+      })
+      .promise();
+
+    await scanCompleteCallback();
   } catch (e) {
-    applicationContext.logger.error(e);
     if (e.code === 1) {
-      applicationContext.getStorageClient().putObjectTagging({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: key,
-        Tagging: {
-          TagSet: [
-            {
-              Key: 'virus-scan',
-              Value: 'infected',
-            },
-          ],
-        },
-      });
-      throw new Error('infected');
+      await scanCompleteCallback();
+      applicationContext.logger.info('File was infected', e);
     } else {
-      applicationContext.getStorageClient().putObjectTagging({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: key,
-        Tagging: {
-          TagSet: [
-            {
-              Key: 'virus-scan',
-              Value: 'error',
-            },
-          ],
-        },
-      });
-      throw new Error('error scanning PDF');
+      applicationContext.logger.error('Failed to scan', e);
     }
   }
 };
