@@ -70,7 +70,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     };
 
     const case1 = {
-      // should get 4e3 service
+      // should get paper service
       ...MOCK_CASE,
       contactPrimary: {
         ...MOCK_CASE.contactPrimary,

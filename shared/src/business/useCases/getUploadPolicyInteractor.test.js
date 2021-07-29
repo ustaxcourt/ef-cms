@@ -44,7 +44,7 @@ describe('getUploadPolicyInteractor', () => {
       .getPersistenceGateway()
       .getUploadPolicy.mockReturnValue('policy');
 
-    getUploadPolicyInteractor(applicationContext, {});
+    await getUploadPolicyInteractor(applicationContext, {});
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
     ).not.toBeCalled();
