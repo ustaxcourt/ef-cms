@@ -174,7 +174,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Order',
           eventCode: 'O',
         },
-        expect: true,
+        expectation: true,
       },
       {
         description: 'should be false if the document type is unservable',
@@ -183,7 +183,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Corrected Transcript',
           eventCode: 'CTRA',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -194,7 +194,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -205,7 +205,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           isLegacyServed: true,
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -216,11 +216,11 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           isLegacyServed: false,
         },
-        expect: true,
+        expectation: true,
       },
     ];
 
-    showNotServedTests.map(({ description, docketEntry, expect }) => {
+    showNotServedTests.map(({ description, docketEntry, expectation }) => {
       it(`${description}`, () => {
         const { showNotServed } = runCompute(documentViewerHelper, {
           state: {
@@ -231,7 +231,7 @@ describe('documentViewerHelper', () => {
           },
         });
 
-        expect(showNotServed).toEqual(expect);
+        expect(showNotServed).toEqual(expectation);
       });
     });
   });
@@ -246,7 +246,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Order',
           eventCode: 'O',
         },
-        expect: true,
+        expectation: true,
       },
       {
         description:
@@ -255,7 +255,7 @@ describe('documentViewerHelper', () => {
           ...baseDocketEntry,
           documentType: 'Miscellaneous',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -266,7 +266,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -276,7 +276,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Order',
           eventCode: 'O',
         },
-        expect: false,
+        expectation: false,
         user: adcUser,
       },
       {
@@ -288,7 +288,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           isLegacyServed: true,
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -299,12 +299,12 @@ describe('documentViewerHelper', () => {
           eventCode: 'O',
           isLegacyServed: false,
         },
-        expect: true,
+        expectation: true,
       },
     ];
 
     showServeCourtIssuedDocumentButtonTests.map(
-      ({ description, docketEntry, expect, user }) => {
+      ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServeCourtIssuedDocumentButton } = runCompute(
             documentViewerHelper,
@@ -318,7 +318,7 @@ describe('documentViewerHelper', () => {
             },
           );
 
-          expect(showServeCourtIssuedDocumentButton).toEqual(expect);
+          expect(showServeCourtIssuedDocumentButton).toEqual(expectation);
         });
       },
     );
@@ -334,7 +334,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Answer',
           eventCode: 'A',
         },
-        expect: true,
+        expectation: true,
       },
       {
         description:
@@ -344,7 +344,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Order',
           eventCode: 'O',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -355,7 +355,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'A',
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -365,7 +365,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Answer',
           eventCode: 'A',
         },
-        expect: false,
+        expectation: false,
         user: adcUser,
       },
       {
@@ -377,7 +377,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'EA',
           isLegacyServed: true,
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
@@ -388,12 +388,12 @@ describe('documentViewerHelper', () => {
           eventCode: 'EA',
           isLegacyServed: false,
         },
-        expect: true,
+        expectation: true,
       },
     ];
 
     showServePaperFiledDocumentButtonTests.map(
-      ({ description, docketEntry, expect, user }) => {
+      ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServePaperFiledDocumentButton } = runCompute(
             documentViewerHelper,
@@ -407,7 +407,7 @@ describe('documentViewerHelper', () => {
             },
           );
 
-          expect(showServePaperFiledDocumentButton).toEqual(expect);
+          expect(showServePaperFiledDocumentButton).toEqual(expectation);
         });
       },
     );
@@ -422,25 +422,25 @@ describe('documentViewerHelper', () => {
           ...baseDocketEntry,
           servedAt: '2019-03-01T21:40:46.415Z',
         },
-        expect: false,
+        expectation: false,
       },
       {
         description:
           'should be false if the document is a not-served Petition document and the user does not have SERVE_PETITION permission',
         docketEntry: baseDocketEntry,
-        expect: false,
+        expectation: false,
         user: docketClerkUser,
       },
       {
         description:
           'should be true if the document is a not-served Petition document and the user has SERVE_PETITION permission',
         docketEntry: baseDocketEntry,
-        expect: true,
+        expectation: true,
       },
     ];
 
     showServePetitionButtonTests.map(
-      ({ description, docketEntry, expect, user }) => {
+      ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showServePetitionButton } = runCompute(documentViewerHelper, {
             state: {
@@ -451,7 +451,7 @@ describe('documentViewerHelper', () => {
             },
           });
 
-          expect(showServePetitionButton).toEqual(expect);
+          expect(showServePetitionButton).toEqual(expectation);
         });
       },
     );
@@ -470,7 +470,7 @@ describe('documentViewerHelper', () => {
             servedAt: '2019-08-25T05:00:00.000Z',
           },
         ],
-        expect: true,
+        expectation: true,
       },
       {
         description:
@@ -483,11 +483,11 @@ describe('documentViewerHelper', () => {
             isLegacyServed: true,
           },
         ],
-        expect: true,
+        expectation: true,
       },
       {
         description:
-          'should be undefined if the eventCode is PSDE and the PSDE is not served',
+          'should be false if the eventCode is PSDE and the PSDE is not served',
         docketEntries: [
           {
             ...baseDocketEntry,
@@ -496,7 +496,7 @@ describe('documentViewerHelper', () => {
             isLegacyServed: false,
           },
         ],
-        expect: undefined,
+        expectation: false,
       },
       {
         description:
@@ -515,7 +515,7 @@ describe('documentViewerHelper', () => {
             eventCode: 'SDEC',
           },
         ],
-        expect: true,
+        expectation: true,
       },
       {
         description:
@@ -533,7 +533,7 @@ describe('documentViewerHelper', () => {
             eventCode: 'SDEC',
           },
         ],
-        expect: false,
+        expectation: false,
       },
       {
         description: 'should be false if the eventCode is not PSDE',
@@ -544,12 +544,12 @@ describe('documentViewerHelper', () => {
             eventCode: 'A',
           },
         ],
-        expect: false,
+        expectation: false,
       },
     ];
 
     showSignStipulatedDecisionButtonTests.map(
-      ({ description, docketEntries, expect }) => {
+      ({ description, docketEntries, expectation }) => {
         it(`${description}`, () => {
           const { showSignStipulatedDecisionButton } = runCompute(
             documentViewerHelper,
@@ -561,7 +561,7 @@ describe('documentViewerHelper', () => {
             },
           );
 
-          expect(showSignStipulatedDecisionButton).toEqual(expect);
+          expect(showSignStipulatedDecisionButton).toEqual(expectation);
         });
       },
     );
@@ -579,7 +579,7 @@ describe('documentViewerHelper', () => {
           servedAt: '2019-08-25T05:00:00.000Z',
           workItem: {},
         },
-        expect: true,
+        expectation: true,
       },
       {
         description:
@@ -591,19 +591,19 @@ describe('documentViewerHelper', () => {
           servedAt: '2019-08-25T05:00:00.000Z',
           workItem: {},
         },
-        expect: false,
+        expectation: false,
         user: adcUser,
       },
       {
         description:
-          'should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
+          'should be undefined if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
         docketEntry: {
           ...baseDocketEntry,
           documentType: 'Proposed Stipulated Decision',
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
         },
-        expect: false,
+        expectation: undefined,
       },
       {
         description:
@@ -616,12 +616,12 @@ describe('documentViewerHelper', () => {
           servedAt: '2019-08-25T05:00:00.000Z',
           workItem: {},
         },
-        expect: false,
+        expectation: false,
       },
     ];
 
     showCompleteQcButtonTests.map(
-      ({ description, docketEntry, expect, user }) => {
+      ({ description, docketEntry, expectation, user }) => {
         it(`${description}`, () => {
           const { showCompleteQcButton } = runCompute(documentViewerHelper, {
             state: {
@@ -630,7 +630,7 @@ describe('documentViewerHelper', () => {
             },
           });
 
-          expect(showCompleteQcButton).toEqual(expect);
+          expect(showCompleteQcButton).toEqual(expectation);
         });
       },
     );
