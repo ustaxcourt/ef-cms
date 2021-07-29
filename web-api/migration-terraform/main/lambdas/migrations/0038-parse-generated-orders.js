@@ -2,9 +2,6 @@ const createApplicationContext = require('../../../../src/applicationContext');
 const {
   ORDER_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const {
-  parseAndScrapePdfContents,
-} = require('../../../../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
 const { applicationContext } = createApplicationContext({});
 
 const migrateItems = async items => {
@@ -29,10 +26,12 @@ const migrateItems = async items => {
             useTempBucket: false,
           });
 
-        pdfContents = await parseAndScrapePdfContents({
-          applicationContext,
-          pdfBuffer,
-        });
+        pdfContents = await applicationContext
+          .getUseCaseHelpers()
+          .parseAndScrapePdfContents({
+            applicationContext,
+            pdfBuffer,
+          });
 
         const contentToStore = {
           documentContents: pdfContents,
