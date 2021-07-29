@@ -34,7 +34,7 @@ export const TrialSessions = connect(
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button
                 link
-                className="margin-top-2"
+                className="margin-top-1"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >
