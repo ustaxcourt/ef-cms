@@ -151,6 +151,36 @@ describe('updatePetitionerInformationInteractor', () => {
     ).rejects.not.toThrow('Unauthorized for editing petition details');
   });
 
+  it('should NOT throw an error when the user is representingCounsel', async () => {
+    mockUser = {
+      ...mockUser,
+      role: ROLES.privatePractitioner,
+      userId: SECONDARY_CONTACT_ID,
+    };
+
+    mockCase = {
+      ...mockCase,
+      petitioners: [mockPetitioners[0]],
+      privatePractitioners: [
+        {
+          ...basePractitioner,
+          representing: [SECONDARY_CONTACT_ID],
+          userId: SECONDARY_CONTACT_ID,
+        },
+      ],
+    };
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          contactId: SECONDARY_CONTACT_ID,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).rejects.not.toThrow('Unauthorized for editing petition details');
+  });
+
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
     const mockNotFoundContactId = 'cd37d820-cbde-4591-8b5a-dc74da12f2a2'; // this contactId is not on the case
 
