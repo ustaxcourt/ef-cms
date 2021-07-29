@@ -7,11 +7,7 @@ const {
 } = require('../../../../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
 const { applicationContext } = createApplicationContext({});
 
-const migrateItems = async (items, documentClient) => {
-  // item is a docket entry, event code matches an order, and is not legacy?, has documentContentsId
-  // parse the pdf
-  // documentContents to include case caption and docket number??!!!
-
+const migrateItems = async items => {
   const itemsAfter = [];
 
   for (const item of items) {
@@ -22,15 +18,42 @@ const migrateItems = async (items, documentClient) => {
       item.isLegacy !== true &&
       item.documentContentsId
     ) {
-      // get pdfContents from s3 first to pass into below
       let pdfContents;
-      // do things
-      // const buffer = await utils.getDocument({
-      //   applicationContext,
-      //   documentContentsId: fullDocketEntry.documentContentsId,
-      // });
-      parseAndScrapePdfContents({ applicationContext, pdfContents });
-      // update s3 file that contains content, ref is documentContentsId
+      try {
+        const pdfBuffer = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            key: item.docketEntryId,
+            protocol: 'S3',
+            useTempBucket: false,
+          });
+
+        pdfContents = await parseAndScrapePdfContents({
+          applicationContext,
+          pdfBuffer,
+        });
+
+        const contentToStore = {
+          documentContents: pdfContents,
+        };
+
+        await applicationContext
+          .getPersistenceGateway()
+          .saveDocumentFromLambda({
+            applicationContext,
+            contentType: 'application/json',
+            document: Buffer.from(JSON.stringify(contentToStore)),
+            key: item.documentContentsId,
+            useTempBucket: false,
+          });
+      } catch (e) {
+        applicationContext.logger.error(
+          `Failed to parse PDF for docket entry ${item.docketEntryId}`,
+          e,
+        );
+      }
+
       itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
