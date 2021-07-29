@@ -1,64 +1,36 @@
 const createApplicationContext = require('../../../../src/applicationContext');
 const {
-  WorkItem,
-} = require('../../../../../shared/src/business/entities/WorkItem');
-const applicationContext = createApplicationContext({});
+  ORDER_EVENT_CODES,
+} = require('../../../../../shared/src/business/entities/EntityConstants');
+const {
+  parseAndScrapePdfContents,
+} = require('../../../../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents');
+const { applicationContext } = createApplicationContext({});
 
 const migrateItems = async (items, documentClient) => {
-  // item is a docket entry, event code matches an order, and is not legacy?
+  // item is a docket entry, event code matches an order, and is not legacy?, has documentContentsId
+  // parse the pdf
+  // documentContents to include case caption and docket number??!!!
 
   const itemsAfter = [];
 
   for (const item of items) {
     if (
       item.pk.startsWith('case|') &&
-      item.sk.startsWith('work-item|') &&
-      !item.workItemId
+      item.sk.startsWith('docket-entry|') &&
+      ORDER_EVENT_CODES.includes(item.eventCode) &&
+      item.isLegacy !== true &&
+      item.documentContentsId
     ) {
-      const workItemId = item.sk.split('|')[1];
-
-      const fullWorkItemRecord = await documentClient
-        .get({
-          Key: {
-            pk: `work-item|${workItemId}`,
-            sk: `work-item|${workItemId}`,
-          },
-          TableName: process.env.SOURCE_TABLE,
-        })
-        .promise()
-        .then(res => {
-          return res.Item;
-        });
-
-      if (fullWorkItemRecord) {
-        new WorkItem(
-          { ...item, ...fullWorkItemRecord },
-          {
-            applicationContext,
-          },
-        ).validateForMigration();
-
-        itemsAfter.push({
-          ...fullWorkItemRecord,
-          ...item,
-          gsi1pk: `work-item|${workItemId}`,
-        });
-      } else {
-        applicationContext.logger.error(
-          `full work item record could not be found for workItemId ${workItemId}`,
-        );
-      }
-    } else if (
-      item.pk.startsWith('work-item|') &&
-      item.sk.startsWith('work-item|')
-    ) {
-      //do nothing - gets deleted
-    } else if (
-      item.pk.startsWith('case|') &&
-      item.sk.startsWith('docket-entry|')
-    ) {
-      delete item.workItem;
-
+      // get pdfContents from s3 first to pass into below
+      let pdfContents;
+      // do things
+      // const buffer = await utils.getDocument({
+      //   applicationContext,
+      //   documentContentsId: fullDocketEntry.documentContentsId,
+      // });
+      parseAndScrapePdfContents({ applicationContext, pdfContents });
+      // update s3 file that contains content, ref is documentContentsId
       itemsAfter.push(item);
     } else {
       itemsAfter.push(item);
