@@ -2,7 +2,7 @@ const createApplicationContext = require('../../../../src/applicationContext');
 const {
   ORDER_EVENT_CODES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { applicationContext } = createApplicationContext({});
+const applicationContext = createApplicationContext({});
 
 const migrateItems = async items => {
   const itemsAfter = [];
@@ -47,10 +47,11 @@ const migrateItems = async items => {
             useTempBucket: false,
           });
       } catch (e) {
-        applicationContext.logger.error(
-          `Failed to parse PDF for docket entry ${item.docketEntryId}`,
-          e,
-        );
+        console.log(e);
+        // applicationContext.logger.error(
+        //   `Failed to parse PDF for docket entry ${item.docketEntryId}`,
+        //   e,
+        // );
       }
 
       itemsAfter.push(item);
