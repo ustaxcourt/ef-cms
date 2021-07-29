@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_NUMBER_SUFFIXES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('./generateNoticeOfTrialIssuedInteractor');
-const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   const TEST_JUDGE = {
@@ -20,6 +23,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         judge: { name: 'Test Judge' },
         meetingId: '1111',
         password: '2222',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
         trialLocation: 'Boise, Idaho',
@@ -48,12 +52,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(
         ({ contentHtml }) => contentHtml,
-      );
-
-    applicationContext
-      .getTemplateGenerators()
-      .generateNoticeOfTrialIssuedTemplate.mockImplementation(
-        ({ content }) => `<html>${content.docketNumberWithSuffix}</html>`,
       );
 
     applicationContext
@@ -127,6 +125,37 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
         .calls[0][0],
+    ).toMatchObject({
+      data: {
+        docketNumberWithSuffix: '234-56S',
+      },
+    });
+  });
+
+  it('should create notice of trial issued for an in-person session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockImplementation(() => ({
+        address1: '1111',
+        address2: '2222',
+        city: 'troutville',
+        judge: { name: 'Test Judge' },
+        postalCode: 'Boise, Idaho',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        startDate: '2019-08-25T05:00:00.000Z',
+        startTime: '10:00',
+        state: '33333',
+        trialLocation: 'Boise, Idaho',
+      }));
+
+    await generateNoticeOfTrialIssuedInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfTrialIssuedInPerson
+        .mock.calls[0][0],
     ).toMatchObject({
       data: {
         docketNumberWithSuffix: '234-56S',
