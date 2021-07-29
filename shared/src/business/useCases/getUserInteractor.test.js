@@ -38,6 +38,24 @@ describe('getUserInteractor', () => {
     });
   });
 
+  it('should throw an error if the user is not found', async () => {
+    const mockPetitionsClerk = {
+      name: 'Test Petitionsclerk',
+      role: ROLES.petitionsClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    };
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User(mockPetitionsClerk),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(null);
+
+    await expect(getUserInteractor(applicationContext)).rejects.toThrow(
+      `User id "${mockPetitionsClerk.userId}" not found in persistence.`,
+    );
+  });
+
   it('should call the persistence method to get the user when the user is a judge', async () => {
     const mockJudge = {
       judgeFullName: 'Test Judge',

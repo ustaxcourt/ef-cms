@@ -292,6 +292,13 @@ describe('createCaseFromPaperInteractor', () => {
       },
     );
 
+    const reqForPlaceOfTrialDocketEntry = caseFromPaper.docketEntries.find(
+      d =>
+        d.eventCode === INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+    );
+
+    expect(reqForPlaceOfTrialDocketEntry).toBeDefined();
+
     expect(caseFromPaper).toBeDefined();
   });
 

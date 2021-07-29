@@ -3,14 +3,8 @@ const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 
 const {
-  migrateItems: bugMigration0035,
-} = require('./migrations/bug-0035-private-practitioner-representing');
-const {
-  migrateItems: bugMigration0036,
-} = require('./migrations/bug-0036-public-served-parties-code');
-const {
-  migrateItems: migration0036,
-} = require('./migrations/0036-phone-number-format');
+  migrateItems: devexMigration0037,
+} = require('./migrations/devex-0037-combine-work-items');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
@@ -38,19 +32,9 @@ const migrateRecords = async ({
   items,
   ranMigrations = {},
 }) => {
-  if (!ranMigrations['bug-0035-private-practitioner-representing.js']) {
-    applicationContext.logger.info('about to run bug migration 0035');
-    items = await bugMigration0035(items, documentClient);
-  }
-
-  if (!ranMigrations['bug-0036-public-served-parties-code.js']) {
-    applicationContext.logger.info('about to run bug migration 0036');
-    items = await bugMigration0036(items);
-  }
-
-  if (!ranMigrations['0036-phone-number-format.js']) {
-    applicationContext.logger.debug('about to run migration 0036');
-    items = await migration0036(items);
+  if (!ranMigrations['devex-0037-combine-work-items.js']) {
+    applicationContext.logger.debug('about to run devex migration 0037');
+    items = await devexMigration0037(items, documentClient);
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -153,9 +137,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
-    ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
-    ...(await hasMigrationRan('0036-phone-number-format.js')),
+    ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);

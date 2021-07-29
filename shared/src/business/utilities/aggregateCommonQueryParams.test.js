@@ -15,7 +15,7 @@ describe('aggregateCommonQueryParams', () => {
     it('removes symbols used for advanced syntax searches', () => {
       const unsanitized = ' ({[+allow  :-no?special.=>!symbols*<]}) ';
       expect(removeAdvancedSyntaxSymbols(unsanitized)).toEqual(
-        'allow no special symbols',
+        'allow no special. symbols',
       );
     });
 

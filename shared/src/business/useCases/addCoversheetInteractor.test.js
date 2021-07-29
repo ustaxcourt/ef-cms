@@ -856,5 +856,20 @@ describe('addCoversheetInteractor', () => {
 
       expect(result.dateReceived).toBe('02/15/19');
     });
+
+    it('throws an error when unable to get the pdfData from s3', async () => {
+      applicationContext.getStorageClient().getObject.mockReturnValue({
+        promise: () => Promise.reject(new Error('error')),
+      });
+      const params = {
+        docketEntryId: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        docketNumber: '101-19',
+        replaceCoversheet: true,
+      };
+
+      await expect(
+        addCoversheetInteractor(applicationContext, params),
+      ).rejects.toThrow('error');
+    });
   });
 });
