@@ -117,109 +117,85 @@ describe('getFormattedCaseDetail', () => {
     });
 
     describe('createdAtFormatted', () => {
-      it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: getDateISO(),
-              docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-              documentType: 'Petition',
-              filingDate: getDateISO(),
-              index: '1',
-              isOnDocketRecord: true,
-            },
-          ],
-        });
-
-        expect(result).toHaveProperty('formattedDocketEntries');
-        expect(
-          result.formattedDocketEntries[0].createdAtFormatted,
-        ).toBeDefined();
-      });
-
-      it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              ...MOCK_CASE.docketEntries[0],
-              documentTitle: 'Order [Judge Name] [Anything]',
-              documentType: 'Order that case is assigned',
-              eventCode: 'OAJ',
-              filingDate: getDateISO(),
-            },
-          ],
-        });
-
-        expect(result).toHaveProperty('formattedDocketEntries');
-        expect(
-          result.formattedDocketEntries[0].createdAtFormatted,
-        ).toBeUndefined();
-      });
-
-      it('should be a formatted date string using the filingDate if the document is on the docket record and is served', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: '2019-06-19T17:29:13.120Z',
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: '04/19/19',
+      const createdAtFormattedTests = [
+        {
+          description:
+            'should format docket entries and set createdAtFormatted to the formatted filingDate if document is not a court-issued document',
+          docketEntry: {
+            createdAt: '2019-03-11T17:29:13.120Z',
+            docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+            documentType: 'Petition',
+            filingDate: '2019-04-19T17:29:13.120Z',
+            index: '1',
+            isOnDocketRecord: true,
           },
-        ]);
-      });
-
-      it('should be a formatted date string using the filingDate if the document is on the docket record and is an unserved external document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: undefined,
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: '04/19/19',
+          expectation: '04/19/19',
+        },
+        {
+          description:
+            'should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document',
+          docketEntry: {
+            ...MOCK_CASE.docketEntries[0],
+            documentTitle: 'Order [Judge Name] [Anything]',
+            documentType: 'Order that case is assigned',
+            eventCode: 'OAJ',
+            filingDate: getDateISO(),
           },
-        ]);
-      });
-
-      it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              documentTitle: 'Order',
-              documentType: 'Order',
-              eventCode: 'O',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: undefined,
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: undefined,
+          expectation: undefined,
+        },
+        {
+          description:
+            'should be a formatted date string using the filingDate if the document is on the docket record and is served',
+          docketEntry: {
+            createdAt: '2019-03-11T17:29:13.120Z',
+            filingDate: '2019-04-19T17:29:13.120Z',
+            isOnDocketRecord: true,
+            servedAt: '2019-06-19T17:29:13.120Z',
           },
-        ]);
-      });
+          expectation: '04/19/19',
+        },
+        {
+          description:
+            'should be a formatted date string using the filingDate if the document is on the docket record and is an unserved external document',
+          docketEntry: {
+            createdAt: '2019-03-11T17:29:13.120Z',
+            filingDate: '2019-04-19T17:29:13.120Z',
+            isOnDocketRecord: true,
+            servedAt: undefined,
+          },
+          expectation: '04/19/19',
+        },
+        {
+          description:
+            'should be undefined if the document is on the docket record and is an unserved court-issued document',
+          docketEntry: {
+            createdAt: '2019-03-11T17:29:13.120Z',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'O',
+            filingDate: '2019-04-19T17:29:13.120Z',
+            isOnDocketRecord: true,
+            servedAt: undefined,
+          },
+          expectation: undefined,
+        },
+      ];
+
+      createdAtFormattedTests.forEach(
+        ({ description, docketEntry, expectation }) => {
+          it(`${description}`, () => {
+            const result = formatCase(applicationContext, {
+              ...MOCK_CASE,
+              docketEntries: [docketEntry],
+            });
+
+            expect(result).toHaveProperty('formattedDocketEntries');
+            expect(result.formattedDocketEntries[0].createdAtFormatted).toEqual(
+              expectation,
+            );
+          });
+        },
+      );
     });
 
     it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
