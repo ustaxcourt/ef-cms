@@ -9,6 +9,7 @@ describe('migrateItems', () => {
   let mockDocketEntry;
 
   beforeEach(() => {
+    applicationContext.environment.documentsBucketName = 'test-test';
     applicationContext.getPersistenceGateway = () => ({
       getDocument: jest.fn(),
       saveDocumentFromLambda: jest.fn(),
@@ -19,12 +20,6 @@ describe('migrateItems', () => {
     applicationContext.logger = () => ({
       error: jest.fn(),
     });
-    applicationContext.getStorageClient = () => ({
-      S3: () => ({
-        getObject: jest.fn(),
-      }),
-    });
-    applicationContext.getDocumentsBucketName = () => 'boo';
 
     mockDocketEntry = {
       ...MOCK_DOCUMENTS[0],
