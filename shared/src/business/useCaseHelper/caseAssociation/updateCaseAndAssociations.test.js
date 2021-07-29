@@ -425,6 +425,35 @@ describe('updateCaseAndAssociations', () => {
         workItemId: '123',
       });
     });
+
+    it('the trial date has been removed', async () => {
+      const oldCase = {
+        ...validMockCase,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        trialSessionId: faker.datatype.uuid(),
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(oldCase);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...validMockCase,
+          trialDate: undefined,
+          trialSessionId: undefined,
+        },
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
+      ).toBeCalledWith({
+        applicationContext,
+        trialDate: null,
+        workItemId: '123',
+      });
+    });
   });
 
   describe('correspondences', () => {
