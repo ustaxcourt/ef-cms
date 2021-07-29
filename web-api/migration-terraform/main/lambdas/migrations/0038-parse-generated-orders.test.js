@@ -1,12 +1,24 @@
+const createApplicationContext = require('../../../../src/applicationContext');
 const {
   MOCK_DOCUMENTS,
 } = require('../../../../../shared/src/test/mockDocuments');
 const { migrateItems } = require('./0038-parse-generated-orders');
+const applicationContext = createApplicationContext({});
 
 describe('migrateItems', () => {
   let mockDocketEntry;
 
   beforeEach(() => {
+    applicationContext.getPersistenceGateway = () => ({
+      getDocument: jest.fn(),
+      saveDocumentFromLambda: jest.fn(),
+    });
+    applicationContext.getUseCaseHelpers = () => ({
+      parseAndScrapePdfContents: jest.fn(),
+    });
+    applicationContext.logger = () => ({
+      error: jest.fn(),
+    });
     mockDocketEntry = {
       ...MOCK_DOCUMENTS[0],
       documentContentsId: '555fa90a-f96f-44ec-9b75-459bc1feeb07',
@@ -39,6 +51,15 @@ describe('migrateItems', () => {
         sk: 'case|101-21',
       },
     ]);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 
   it('should return and not modify records that are docket entries that are not orders', async () => {
@@ -47,6 +68,15 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 
   it('should return and not modify records that are legacy order docket entries', async () => {
@@ -61,9 +91,18 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 
-  it.skip('should return and not modify records that are not legacy order docket entries without a documentContentsId', async () => {
+  it('should return and not modify records that are not legacy order docket entries without a documentContentsId', async () => {
     const items = [
       {
         ...mockDocketEntry,
@@ -74,11 +113,19 @@ describe('migrateItems', () => {
     ];
 
     const results = await migrateItems(items);
-    expect().not.toBeCalled();
     expect(results).toEqual(items);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 
-  it.skip('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
+  it.only('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
     const items = [
       {
         ...mockDocketEntry,
@@ -90,6 +137,15 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
   });
 
   it.skip('should log an error when parsing pdf fails', async () => {
