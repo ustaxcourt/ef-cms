@@ -1697,7 +1697,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       if (environment.stage === 'local') {
         return {
           getObject: () => ({
-            promise: () => Promise.resolve({ Body: '' }),
+            promise: () => Promise.resolve({ Body: 'cool' }),
           }),
         };
       } else {

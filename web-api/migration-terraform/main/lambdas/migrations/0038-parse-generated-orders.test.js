@@ -127,7 +127,7 @@ describe('migrateItems', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it.only('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
+  it.skip('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
     const items = [
       {
         ...mockDocketEntry,
