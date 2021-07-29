@@ -19,6 +19,13 @@ describe('migrateItems', () => {
     applicationContext.logger = () => ({
       error: jest.fn(),
     });
+    applicationContext.getStorageClient = () => ({
+      S3: () => ({
+        getObject: jest.fn(),
+      }),
+    });
+    applicationContext.getDocumentsBucketName = () => 'boo';
+
     mockDocketEntry = {
       ...MOCK_DOCUMENTS[0],
       documentContentsId: '555fa90a-f96f-44ec-9b75-459bc1feeb07',
