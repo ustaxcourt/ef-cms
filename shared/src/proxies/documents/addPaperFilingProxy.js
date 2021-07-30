@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * editPaperFilingProxy
+ * addPaperFilingProxy
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
