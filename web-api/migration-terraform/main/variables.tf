@@ -21,3 +21,7 @@ variable "source_table" {
 variable "dns_domain" {
   type = string
 }
+
+variable "documents_bucket_name" {
+  type = string
+}
