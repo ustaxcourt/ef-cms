@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.associateUserWithCase = async ({
+exports.associateUserWithCase = ({
   applicationContext,
   docketNumber,
   userCase,

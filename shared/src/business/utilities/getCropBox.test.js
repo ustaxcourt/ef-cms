@@ -25,7 +25,7 @@ describe('getCropBox', () => {
     });
   });
 
-  it('should default x and y to 0 when they are undefined on the page cropBox', async () => {
+  it('should default x and y to 0 when they are undefined on the page cropBox', () => {
     mockCropBoxValue = {
       pageHeight: 20,
       pageWidth: 20,
