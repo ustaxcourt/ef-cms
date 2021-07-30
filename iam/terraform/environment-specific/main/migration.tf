@@ -148,13 +148,13 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
         {
             "Action": [
                 "s3:GetObject",
-                "s3:PutObject",
+                "s3:PutObject"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.efcms_domain}-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-documents-*"
             ],
             "Effect": "Allow"
-        },
+        }
     ]
 }
 EOF
