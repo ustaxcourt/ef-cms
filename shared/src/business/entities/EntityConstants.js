@@ -8,22 +8,17 @@ const { formatNow } = require('../utilities/DateHandler');
 
 const ENABLE_8684 = false;
 
-const feature8684FlagFilter = document =>
-  document.eventCode !== 'MOTR' || ENABLE_8684;
+const filter8684CategoryMap = (categoryMap, showMOTR) => {
+  Object.keys(categoryMap).forEach(category => {
+    categoryMap[category] = categoryMap[category].filter(
+      document => document.eventCode !== 'MOTR' || showMOTR,
+    );
+  });
+};
 
 // feature flag filter for 8684
-Object.keys(DOCUMENT_EXTERNAL_CATEGORIES_MAP).forEach(category => {
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP[category] = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
-    category
-  ].filter(feature8684FlagFilter);
-});
-
-// feature flag filter for 8684
-Object.keys(DOCUMENT_INTERNAL_CATEGORIES_MAP).forEach(category => {
-  DOCUMENT_INTERNAL_CATEGORIES_MAP[category] = DOCUMENT_INTERNAL_CATEGORIES_MAP[
-    category
-  ].filter(feature8684FlagFilter);
-});
+filter8684CategoryMap(DOCUMENT_EXTERNAL_CATEGORIES_MAP, ENABLE_8684);
+filter8684CategoryMap(DOCUMENT_INTERNAL_CATEGORIES_MAP, ENABLE_8684);
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
@@ -1165,4 +1160,5 @@ module.exports = deepFreeze({
   LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
+  filter8684CategoryMap,
 });
