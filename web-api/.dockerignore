@@ -1,9 +1,9 @@
-node_modules
-coverage
-.serverless
-.nyc_output
+.cache
 .dynamodb
+.nyc_output
+.serverless
+coverage
+dist
+node_modules
 terraform/main/.terraform
 terraform/template/.terraform
-.cache
-dist
