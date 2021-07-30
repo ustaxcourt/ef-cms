@@ -4,6 +4,7 @@ const {
   formatNow,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -60,6 +61,10 @@ exports.generateStandingPretrialOrderInteractor = async (
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
+  const formattedChambersPhoneNumber = formatPhoneNumber(
+    trialSession.chambersPhoneNumber,
+  );
+
   const pdfData = await applicationContext
     .getDocumentGenerators()
     .standingPretrialOrder({
@@ -70,6 +75,7 @@ exports.generateStandingPretrialOrderInteractor = async (
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         trialInfo: {
           ...trialSession,
+          chambersPhoneNumber: formattedChambersPhoneNumber,
           formattedJudgeName,
           formattedServedDate,
           formattedStartDate,
