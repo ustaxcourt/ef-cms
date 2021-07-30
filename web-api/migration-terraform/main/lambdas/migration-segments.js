@@ -145,6 +145,7 @@ exports.handler = async event => {
 
   const ranMigrations = {
     ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
+    ...(await hasMigrationRan('0038-parse-generated-orders.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
