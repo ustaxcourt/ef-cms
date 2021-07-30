@@ -162,6 +162,7 @@ describe('saveCalendarNotes', () => {
           trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
         },
       ],
+      trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
     };
 
     await saveCalendarNoteInteractor(applicationContext, {
@@ -176,5 +177,41 @@ describe('saveCalendarNotes', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCaseHearing,
     ).toHaveBeenCalled();
+  });
+
+  it('does not update the case hearing record if that hearing is not on the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      hearings: [
+        {
+          ...MOCK_TRIAL,
+          caseOrder: [
+            {
+              calendarNotes: 'just a hearing note',
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+            {
+              calendarNotes: 'another hearing note',
+              docketNumber: '123-21',
+            },
+          ],
+          trialSessionId: '1115309b-18d0-43ec-bafb-654e83405412',
+        },
+      ],
+      trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
+    };
+
+    await saveCalendarNoteInteractor(applicationContext, {
+      calendarNote: 'just updating the hearing note',
+      docketNumber: mockCase.docketNumber,
+      trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseHearing,
+    ).not.toHaveBeenCalled();
   });
 });

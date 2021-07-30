@@ -446,10 +446,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
-      workItemToUpdate: { completedAt: expect.anything() },
+      workItem: { completedAt: expect.anything() },
     });
   });
 
@@ -552,5 +551,54 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
+  });
+
+  it('should throw an error if the document is already pending service', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = true;
+
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        documentMeta: {
+          docketEntryId: docketEntry.docketEntryId,
+          docketNumber: caseRecord.docketNumber,
+        },
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        ...docketEntry,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
   });
 });

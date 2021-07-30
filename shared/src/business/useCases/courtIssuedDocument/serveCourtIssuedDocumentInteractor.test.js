@@ -299,7 +299,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
@@ -348,7 +348,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
@@ -464,6 +464,51 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway()
           .deleteCaseTrialSortMappingRecords,
       ).toHaveBeenCalled();
+    });
+  });
+
+  it('should throw an error if the document is already pending service', async () => {
+    mockCases[0].docketEntries[0].isPendingService = true;
+
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+        docketNumber: mockCases[0].docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const docketEntry = mockCases[0].docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: false,
     });
   });
 });

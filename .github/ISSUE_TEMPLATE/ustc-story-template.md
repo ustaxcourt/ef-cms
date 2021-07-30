@@ -31,13 +31,14 @@ Do these changes impact the IRS API?
 ## Definition of Done (Updated 4-14-21)
 **Product Owner**
  - [ ]  Acceptance criteria have been met and validated on the Court's migration environment
+ - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
+
 
 **UX**
  - [ ] Business test scenarios to meet all acceptance criteria have been written
  - [ ] Usability has been validated
  - [ ] Wiki has been updated (if applicable) 
  - [ ] Story has been tested on a mobile device (for external users only)
- - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
 
 **Engineering**
  - [ ] Automated test scripts have been written

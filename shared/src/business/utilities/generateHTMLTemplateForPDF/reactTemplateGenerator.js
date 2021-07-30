@@ -39,6 +39,9 @@ const {
   NoticeOfTrialIssued,
 } = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssued.jsx');
 const {
+  NoticeOfTrialIssuedInPerson,
+} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson.jsx');
+const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
 const {
@@ -94,6 +97,7 @@ const components = {
   NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,
+  NoticeOfTrialIssuedInPerson,
   Order,
   PageMetaHeaderDocket,
   PendingReport,

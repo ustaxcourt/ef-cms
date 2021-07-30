@@ -1,10 +1,9 @@
 const AWS = require('aws-sdk');
-const { compact, flattenDeep, partition } = require('lodash');
-
 const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const { compact, flattenDeep, partition } = require('lodash');
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -170,7 +169,14 @@ const processDocketEntries = async ({
             documentContentsId: fullDocketEntry.documentContentsId,
           });
           const { documentContents } = JSON.parse(buffer.toString());
-          fullDocketEntry.documentContents = documentContents;
+
+          const caseMetadataWithCounsel =
+            await utils.getCaseMetadataWithCounsel({
+              applicationContext,
+              docketNumber: fullDocketEntry.docketNumber,
+            });
+
+          fullDocketEntry.documentContents = `${documentContents} ${fullDocketEntry.docketNumber} ${caseMetadataWithCounsel.caseCaption}`;
         } catch (err) {
           applicationContext.logger.error(
             `the s3 document of ${fullDocketEntry.documentContentsId} was not found in s3`,
@@ -309,7 +315,7 @@ const processMessageEntries = async ({
     applicationContext.logger.error('the records that failed to index', {
       failedRecords,
     });
-    throw new Error('failed to index records');
+    throw new Error('failed to index message records');
   }
 };
 

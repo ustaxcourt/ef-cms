@@ -175,7 +175,7 @@ describe('aggregatePartiesForService', () => {
     };
   });
 
-  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', async () => {
+  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', () => {
     mockCase.petitioners = [
       { ...mockCase.petitioners[0], email: null },
       mockCase.petitioners[1],
@@ -225,7 +225,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', async () => {
+  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', () => {
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
@@ -270,7 +270,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', async () => {
+  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', () => {
     mockCase.privatePractitioners[0].representing = [PRIMARY_CONTACT_ID];
     const result = aggregatePartiesForService(mockCase);
 
@@ -314,7 +314,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should serve all practitioners with an email address electronically', async () => {
+  it('should serve all practitioners with an email address electronically', () => {
     const result = aggregatePartiesForService(mockCase);
 
     const foundPrivatePractitionerWithPaper = result.electronic.find(
@@ -330,7 +330,7 @@ describe('aggregatePartiesForService', () => {
     expect(foundIrsPractitionerWithPaper).toBeFalsy();
   });
 
-  it('should serve all practitioners without an email address by paper', async () => {
+  it('should serve all practitioners without an email address by paper', () => {
     const result = aggregatePartiesForService(mockCase);
 
     const foundPrivatePractitionerWithPaper = result.paper.find(
