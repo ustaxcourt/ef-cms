@@ -152,7 +152,6 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
             ],
             "Resource": [
                 "arn:aws:s3:::${var.efcms_domain}-documents-*",
-                "arn:aws:s3:::${var.efcms_domain}-temp-documents-*",
             ],
             "Effect": "Allow"
         },
