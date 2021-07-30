@@ -1,10 +1,16 @@
 const React = require('react');
+import { DocketHeader } from '../components/DocketHeader';
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
-export const StandingPretrialOrder = ({ trialInfo }) => {
+export const StandingPretrialOrder = ({ options, trialInfo }) => {
   return (
     <>
       <PrimaryHeader />
+      <DocketHeader
+        caseCaptionExtension={options.caseCaptionExtension}
+        caseTitle={options.caseTitle}
+        docketNumberWithSuffix={options.docketNumberWithSuffix}
+      />
 
       <div
         className="text-center standing-pretrial-card"
@@ -27,7 +33,7 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
         </p>
       </div>
 
-      <h3 className="text-bold margin-top-0">STANDING PRETRIAL ORDER</h3>
+      <h3 className="text-bold margin-top-0">Standing Pretrial Order</h3>
 
       <p className="text-bold">
         This Order sets out the Court’s standing procedures for the trial
@@ -157,7 +163,8 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
           </p>
         </li>
         <li>
-          <p>
+          <br />
+          <div>
             <span className="text-bold">
               No later than{' '}
               <span className="text-underline">
@@ -191,7 +198,7 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
                 </span>
               </li>
             </ol>
-          </p>
+          </div>
         </li>
         <li>
           <p>
