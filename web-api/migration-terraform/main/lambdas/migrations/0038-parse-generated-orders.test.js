@@ -12,6 +12,7 @@ jest.mock('../../../../src/applicationContext', () => () => ({
   getUseCaseHelpers: () => mockGetUseCaseHelpers,
   logger: mockLogger,
 }));
+
 const {
   MOCK_DOCUMENTS,
 } = require('../../../../../shared/src/test/mockDocuments');
@@ -145,8 +146,11 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    mockPersistenceGateway.getDocument.mockRejectedValueOnce(
+      new Error('bad!!!'),
+    );
 
-    expect(results).toEqual(items);
+    await migrateItems(items);
+    expect(mockLogger.error).toHaveBeenCalled();
   });
 });
