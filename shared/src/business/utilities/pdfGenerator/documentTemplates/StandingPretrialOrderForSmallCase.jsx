@@ -34,7 +34,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
       </div>
 
       <h3 className="text-bold margin-top-0">
-        Standing Pretrial Order for Small Tax Case
+        Standing Pretrial Order for Small Tax Cases
       </h3>
 
       <p>
@@ -45,11 +45,26 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           this is your first time appearing before the U.S. Tax Court,{' '}
           <span className="text-underline">
             please pay special attention to the attached “Petitioner’s
-            (Taxpayer’s) Getting Ready for Trial Checklist”.
+            (Taxpayer’s) Getting Ready for Trial Checklist”
           </span>
         </b>
+        .
       </p>
-      <ol>
+
+      <p>
+        <b>
+          &emsp;The parties are ORDERED to (1) participate in pre-trial matters,
+          including conference calls and pretrial conferences scheduled by the
+          Judge, and (2) attend the trial. If you do not follow this Order, the
+          Judge may dismiss your case and enter a Decision against you.
+        </b>
+      </p>
+
+      <p>
+        <b>Important information you need to pay attention to:</b>
+      </p>
+
+      <ol className="inline-ol">
         <li>
           <span className="bu">About the Court</span>. The U.S. Tax Court hears
           disputes between taxpayers (petitioners) and the IRS (respondent). The
@@ -151,7 +166,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
               31 days before the first day of the trial session
             </span>
             :{' '}
-            <ol className="text-bold" type="i">
+            <ol type="i">
               <li>
                 <p>
                   <span className="bu"> Motion for Continuance</span>
@@ -190,7 +205,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
             : The parties should file one of the following: a Proposed
             Stipulated Decision, a Pretrial Memorandum, a Motion to Dismiss for
             Lack of Prosecution, or a Status Report.
-            <ol className="text-bold" type="i">
+            <ol type="i">
               <li>
                 <p>
                   <span className="bu"> Settlement</span>
@@ -253,7 +268,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
               14 days before the first day of the trial session
             </span>
             :{' '}
-            <ol className="text-bold" type="i">
+            <ol type="i">
               <li>
                 <p>
                   <span className="bu"> Stipulation of Facts and Exhibits</span>
