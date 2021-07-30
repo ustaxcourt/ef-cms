@@ -1694,22 +1694,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return searchClientCache;
     },
     getStorageClient: () => {
-      if (environment.stage === 'local') {
-        return {
-          getObject: () => ({
-            promise: () => Promise.resolve({ Body: 'cool' }),
-          }),
-        };
-      } else {
-        if (!s3Cache) {
-          s3Cache = new S3({
-            endpoint: environment.s3Endpoint,
-            region: 'us-east-1',
-            s3ForcePathStyle: true,
-          });
-        }
-        return s3Cache;
+      if (!s3Cache) {
+        s3Cache = new S3({
+          endpoint: environment.s3Endpoint,
+          region: 'us-east-1',
+          s3ForcePathStyle: true,
+        });
       }
+      return s3Cache;
     },
     getTempDocumentsBucketName: () => {
       return environment.tempDocumentsBucketName;
