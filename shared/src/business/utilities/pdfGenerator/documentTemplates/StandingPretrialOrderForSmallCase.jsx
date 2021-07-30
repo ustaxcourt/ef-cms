@@ -18,7 +18,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
       >
         <p>
           This case is set for trial at the {trialInfo.trialLocation} trial
-          session beginning at&nbsp;
+          session beginning at <br />
           <span className="text-bold">
             {trialInfo.formattedStartTime}
           </span> on{' '}
