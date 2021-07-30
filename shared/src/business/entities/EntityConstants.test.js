@@ -11,7 +11,7 @@ describe('EntityConstants', () => {
 });
 
 describe('filter8684CategoryMap', () => {
-  it('should hide any MOTR documents if the flag is set', () => {
+  it('should hide MOTR documents if the feature flag is false', () => {
     const categoryMap = {
       motions: [
         {
@@ -26,7 +26,7 @@ describe('filter8684CategoryMap', () => {
     });
   });
 
-  it('should hide any MOTR documents if the flag is set', () => {
+  it('should show MOTR documents if the feature flag is true', () => {
     const categoryMap = {
       motions: [
         {
