@@ -11,7 +11,7 @@ describe('updateWorkItemCaseTitle', () => {
 
   it('should call client.update with passed in case title and work item pk and sk', async () => {
     const mockCaseTitle = 'An Updated Title';
-    const mockPk = 'work-item|pk';
+    const mockPk = 'case|pk';
     const mockSk = 'work-item|sk';
 
     await updateWorkItemCaseTitle({
