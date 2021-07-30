@@ -50,7 +50,7 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
         your phone number, email, or mailing address changes, inform the Court
         right away by filing a Notice of Change of Address form, available on
         the Court&apos;s website,{' '}
-        <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
+        <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
       </p>
 
       <p>
@@ -171,12 +171,11 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
                   {' '}
                   Motion for Continuance
                 </span>
-                .
                 <span className="text-normal">
-                  The parties may file any Motions for Continuance (postponement
-                  of trial), which the Judge will grant only in exceptional
-                  circumstances. See Rule 133. Even joint Motions for
-                  Continuance are not automatically granted.
+                  . The parties may file any Motions for Continuance
+                  (postponement of trial), which the Judge will grant only in
+                  exceptional circumstances. See Rule 133. Even joint Motions
+                  for Continuance are not automatically granted.
                 </span>
               </li>
               <li>
@@ -184,9 +183,8 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
                   {' '}
                   Motion to Proceed Remotely
                 </span>
-                .
                 <span className="text-normal">
-                  The parties may file a Motion to Proceed Remotely. If the
+                  . The parties may file a Motion to Proceed Remotely. If the
                   Judge grants the motion, you will be provided with detailed
                   instructions, including the date, time, and Zoomgov
                   information for the remote proceeding.
@@ -359,7 +357,7 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
               any unagreed Proposed Trial Exhibits. The Court may refuse to
               receive in evidence any document or material that is not filed as
               a Proposed Trial Exhibit no later than 7 days before the first day
-              of the trial session. See the Court&apos;s website, ({' '}
+              of the trial session. See the Court&apos;s website ({' '}
               <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>) for
               instructions on identifying documents and page numbering.
             </span>
@@ -388,7 +386,8 @@ export const StandingPretrialOrder = ({ trialInfo }) => {
               . If a remote proceeding is scheduled in your case, the parties
               must appear before the Judge as instructed in the Notice Setting
               Case for Trial. Information on how to use Zoomgov, including tips,
-              can be found on the Court’s website, www.ustaxcourt.gov. A
+              can be found on the Court&apos;s website{' '}
+              <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>. A
               personal Zoom account is not required, and there is no cost to the
               parties. The parties are responsible for ensuring, to the best of
               their abilities, that they and their witnesses have adequate

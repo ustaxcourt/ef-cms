@@ -86,10 +86,9 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
           <input id="exhibits" type="checkbox" />
           <label className="pl-1" htmlFor="exhibits">
             If the IRS will not agree (stipulate) to your documents, submit them
-            to the Court as proposed trial exhibits no later than{' '}
-            <span className="text-underline">7</span> days before trial. Read
-            the instructions on the Court’s website on to how to label each
-            exhibit and remember to include page numbers.
+            to the Court as proposed trial exhibits no later than 7 days before
+            trial. Read the instructions on the Court’s website on to how to
+            label each exhibit and remember to include page numbers.
           </label>
         </li>
 
