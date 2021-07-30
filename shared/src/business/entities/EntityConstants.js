@@ -6,6 +6,25 @@ const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEven
 const { flatten, sortBy, union, without } = require('lodash');
 const { formatNow } = require('../utilities/DateHandler');
 
+const ENABLE_8684 = false;
+
+const feature8684FlagFilter = document =>
+  document.eventCode !== 'MOTR' || ENABLE_8684;
+
+// feature flag filter for 8684
+Object.keys(DOCUMENT_EXTERNAL_CATEGORIES_MAP).forEach(category => {
+  DOCUMENT_EXTERNAL_CATEGORIES_MAP[category] = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
+    category
+  ].filter(feature8684FlagFilter);
+});
+
+// feature flag filter for 8684
+Object.keys(DOCUMENT_INTERNAL_CATEGORIES_MAP).forEach(category => {
+  DOCUMENT_INTERNAL_CATEGORIES_MAP[category] = DOCUMENT_INTERNAL_CATEGORIES_MAP[
+    category
+  ].filter(feature8684FlagFilter);
+});
+
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
