@@ -10,11 +10,12 @@ describe('updateWorkItem', () => {
     });
   });
 
-  it('invokes the persistence layer with pk of {workItemId}, sk of {workItemId} and other expected params', async () => {
+  it('invokes the persistence layer with pk of case|{docketNumber}, sk of work-item|{workItemId} and other expected params', async () => {
     await updateWorkItem({
       applicationContext,
       workItemToUpdate: {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+        docketNumber: '101-21',
         workItemId: '123',
       },
     });
@@ -24,7 +25,9 @@ describe('updateWorkItem', () => {
     ).toMatchObject({
       Item: {
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-        pk: 'work-item|123',
+        docketNumber: '101-21',
+        gsi1pk: 'work-item|123',
+        pk: 'case|101-21',
         sk: 'work-item|123',
         workItemId: '123',
       },

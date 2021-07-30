@@ -14,7 +14,7 @@ describe('updateWorkItemCaseStatus', () => {
 
   it('should call client.update with passed in case status and work item pk and sk', async () => {
     const mockCaseStatus = CASE_STATUS_TYPES.generalDocket;
-    const mockPk = 'work-item|pk';
+    const mockPk = 'case|pk';
     const mockSk = 'work-item|sk';
 
     await updateWorkItemCaseStatus({
