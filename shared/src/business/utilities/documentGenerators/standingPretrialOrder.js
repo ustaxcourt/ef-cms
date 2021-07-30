@@ -46,8 +46,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       overwriteHeader: true,
     });
 
-  const pretrialMemorandumTemplate = reactTemplateGenerator({
-    componentName: 'PretrialMemorandum',
+  const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
+    componentName: 'GettingReadyForTrialChecklist',
     data: {
       options: {
         caseCaptionExtension,
@@ -60,7 +60,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
     applicationContext,
-    content: pretrialMemorandumTemplate,
+    content: reactGettingReadyForTrialChecklistTemplate,
   });
 
   const pdfWithoutHeader = await applicationContext
@@ -72,10 +72,42 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       overwriteHeader: false,
     });
 
-  return await combineTwoPdfs({
+  const orderAndChecklist = await combineTwoPdfs({
     applicationContext,
     firstPdf: pdfWithHeader,
     secondPdf: pdfWithoutHeader,
+  });
+
+  const pretrialMemorandumTemplate = reactTemplateGenerator({
+    componentName: 'PretrialMemorandum',
+    data: {
+      options: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+      },
+      trialInfo,
+    },
+  });
+
+  const memorandumHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: pretrialMemorandumTemplate,
+  });
+
+  const memorandumPdfWithoutHeader = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor(applicationContext, {
+      contentHtml: memorandumHtmlWithoutHeader,
+      displayHeaderFooter: false,
+      docketNumber: docketNumberWithSuffix,
+      overwriteHeader: false,
+    });
+
+  return await combineTwoPdfs({
+    applicationContext,
+    firstPdf: orderAndChecklist,
+    secondPdf: memorandumPdfWithoutHeader,
   });
 };
 

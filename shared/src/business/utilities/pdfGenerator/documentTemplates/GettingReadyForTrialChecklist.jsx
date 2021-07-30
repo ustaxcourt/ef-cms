@@ -17,9 +17,19 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
 
       <ul className="check-list">
         <li>
+          <input id="register" type="checkbox" />
+          <label className="pl-1" htmlFor="register">
+            If possible, register for DAWSON, the Court’s electronic filing and
+            case management system. Registering allows you to submit documents
+            electronically and to view documents submitted by the IRS or issued
+            by the Court as soon as they are filed.
+          </label>
+        </li>
+
+        <li>
           <input id="materials" type="checkbox" />
           <label className="pl-1" htmlFor="materials">
-            Review all of the materials that the Court has sent you.
+            Review all the materials the Court has sent you.
           </label>
         </li>
 
@@ -44,6 +54,7 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
             Organize any documents you have to support your case.
           </label>
         </li>
+
         <li>
           <input id="contact-irs" type="checkbox" />
           <label className="pl-1" htmlFor="contact-irs">
@@ -51,12 +62,13 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
             get this notice.
           </label>
         </li>
+
         <li>
           <input id="irs-documents" type="checkbox" />
           <label className="pl-1" htmlFor="irs-documents">
             Provide copies of documents to the IRS as soon as possible. The
             parties are required to exchange copies of any documents they want
-            to use at trial, and to submit them to the Court before trial.
+            to use at trial.
           </label>
         </li>
 
@@ -66,7 +78,18 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
             Agree (stipulate) in writing to facts and documents that are not in
             dispute. All minor issues should be settled so that the Judge can
             focus on the remaining issue(s). The Stipulation of Facts needs to
-            be filed with the Judge no later than 14 days before trial.
+            be filed with the Court no later than 14 days before trial.
+          </label>
+        </li>
+
+        <li>
+          <input id="exhibits" type="checkbox" />
+          <label className="pl-1" htmlFor="exhibits">
+            If the IRS will not agree (stipulate) to your documents, submit them
+            to the Court as proposed trial exhibits no later than{' '}
+            <span className="text-underline">7</span> days before trial. Read
+            the instructions on the Court’s website on to how to label each
+            exhibit and remember to include page numbers.
           </label>
         </li>
 
@@ -83,22 +106,31 @@ export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
         <li>
           <input id="contact-judge" type="checkbox" />
           <label className="pl-1" htmlFor="contact-judge">
-            Participate in contacts from the Judge by telephone or video.
+            Respond to communications and meeting requests from the Judge.
           </label>
         </li>
+
         <li>
           <input id="prepare-for-trial" type="checkbox" />
           <label className="pl-1" htmlFor="prepare-for-trial">
-            Be ready when your case is called for trial. That means you should
-            log on and test your connection at least 30 minutes before your
-            scheduled time.
+            Be at your trial session early so you are ready when your case is
+            called. You may wish to be there an hour before the starting time to
+            have the opportunity to meet with clinical and calendar call
+            attorneys.
+          </label>
+        </li>
+
+        <li>
+          <input id="be-ready" type="checkbox" />
+          <label className="pl-1" htmlFor="be-ready">
+            Be ready when your case is called for trial.
           </label>
         </li>
 
         <li>
           <input id="learn-more" type="checkbox" />
           <label className="pl-1" htmlFor="learn-more">
-            Learn more about the Tax Court at{' '}
+            Learn more about the U.S. Tax Court at{' '}
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
           </label>
         </li>
