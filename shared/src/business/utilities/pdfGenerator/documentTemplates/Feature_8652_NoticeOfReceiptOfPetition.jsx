@@ -15,7 +15,7 @@ export const Feature_8652_NoticeOfReceiptOfPetition = ({
   servedDate,
 }) => {
   return (
-    <>
+    <div id="document-notice-of-receipt">
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={caseCaptionExtension}
@@ -73,7 +73,7 @@ export const Feature_8652_NoticeOfReceiptOfPetition = ({
         </div>
       </div>
 
-      <div className="info-box">
+      <div className="info-box margin-bottom-0">
         <div className="info-box-header">Change of Address:</div>
         <div className="info-box-content">
           You must notify the Clerk of the Court if you change your address. See
@@ -130,6 +130,6 @@ export const Feature_8652_NoticeOfReceiptOfPetition = ({
           title={address.title}
         />
       </div>
-    </>
+    </div>
   );
 };
