@@ -1,26 +1,26 @@
-const createApplicationContext = require('../../../../src/applicationContext');
+let mockPersistenceGateway = {
+  getDocument: jest.fn(),
+  saveDocumentFromLambda: jest.fn(),
+};
+let mockGetUseCaseHelpers = {
+  parseAndScrapePdfContents: jest.fn(),
+};
+let mockLogger = { error: jest.fn() };
+
+jest.mock('../../../../src/applicationContext', () => () => ({
+  getPersistenceGateway: () => mockPersistenceGateway,
+  getUseCaseHelpers: () => mockGetUseCaseHelpers,
+  logger: mockLogger,
+}));
 const {
   MOCK_DOCUMENTS,
 } = require('../../../../../shared/src/test/mockDocuments');
 const { migrateItems } = require('./0038-parse-generated-orders');
-const applicationContext = createApplicationContext({});
 
 describe('migrateItems', () => {
   let mockDocketEntry;
 
   beforeEach(() => {
-    applicationContext.environment.documentsBucketName = 'test-test';
-    applicationContext.getPersistenceGateway = () => ({
-      getDocument: jest.fn(),
-      saveDocumentFromLambda: jest.fn(),
-    });
-    applicationContext.getUseCaseHelpers = () => ({
-      parseAndScrapePdfContents: jest.fn(),
-    });
-    applicationContext.logger = () => ({
-      error: jest.fn(),
-    });
-
     mockDocketEntry = {
       ...MOCK_DOCUMENTS[0],
       documentContentsId: '555fa90a-f96f-44ec-9b75-459bc1feeb07',
@@ -53,14 +53,12 @@ describe('migrateItems', () => {
         sk: 'case|101-21',
       },
     ]);
+    expect(mockPersistenceGateway.getDocument).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getDocument,
+      mockGetUseCaseHelpers.parseAndScrapePdfContents,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      mockPersistenceGateway.saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
 
@@ -70,14 +68,12 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
+    expect(mockPersistenceGateway.getDocument).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getDocument,
+      mockGetUseCaseHelpers.parseAndScrapePdfContents,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      mockPersistenceGateway.saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
 
@@ -93,14 +89,12 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
+    expect(mockPersistenceGateway.getDocument).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getDocument,
+      mockGetUseCaseHelpers.parseAndScrapePdfContents,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      mockPersistenceGateway.saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
 
@@ -116,18 +110,16 @@ describe('migrateItems', () => {
 
     const results = await migrateItems(items);
     expect(results).toEqual(items);
+    expect(mockPersistenceGateway.getDocument).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getDocument,
+      mockGetUseCaseHelpers.parseAndScrapePdfContents,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      mockPersistenceGateway.saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
   });
 
-  it.skip('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
+  it('should return and modify records that are not legacy order docket entries with a documentContentsId', async () => {
     const items = [
       {
         ...mockDocketEntry,
@@ -139,18 +131,12 @@ describe('migrateItems', () => {
     const results = await migrateItems(items);
 
     expect(results).toEqual(items);
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().parseAndScrapePdfContents,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
+    expect(mockPersistenceGateway.getDocument).toHaveBeenCalled();
+    expect(mockGetUseCaseHelpers.parseAndScrapePdfContents).toHaveBeenCalled();
+    expect(mockPersistenceGateway.saveDocumentFromLambda).toHaveBeenCalled();
   });
 
-  it.skip('should log an error when parsing pdf fails', async () => {
+  it('should log an error when parsing pdf fails', async () => {
     const items = [
       {
         ...mockDocketEntry,
