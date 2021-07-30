@@ -38,6 +38,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   );
 
   return {
+    numberOfResults: searchResults?.length,
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
@@ -60,6 +61,8 @@ export const formatDocumentSearchResultRecord = (
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
+  result.numberOfPagesFormatted = result.numberOfPages ?? 'n/a';
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {

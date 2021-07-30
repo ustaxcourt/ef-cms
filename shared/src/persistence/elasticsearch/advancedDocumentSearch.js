@@ -63,7 +63,6 @@ exports.advancedDocumentSearch = async ({
       },
     });
   }
-
   if (omitSealed) {
     caseMustNot.push({
       term: { 'isSealed.BOOL': true },

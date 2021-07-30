@@ -4,7 +4,13 @@ const {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
+  TRIAL_CLERKS_SECTION,
 } = require('../business/entities/EntityConstants');
+const {
+  getJudgesChambers,
+} = require('../persistence/dynamo/chambers/getJudgesChambers');
+
+const JUDGES_CHAMBERS = getJudgesChambers();
 
 const docketClerkUser = {
   name: 'Docketclerk',
@@ -125,4 +131,18 @@ exports.judgeUser = {
 exports.petitionerUser = {
   role: ROLES.petitioner,
   userId: '6844385f-b3de-444b-b76a-64fedfbb0229',
+};
+exports.trialClerkUser = {
+  role: ROLES.trialClerk,
+  section: TRIAL_CLERKS_SECTION,
+  userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
+};
+exports.chambersUser = {
+  role: ROLES.chambers,
+  section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+  userId: '555',
+};
+exports.adcUser = {
+  role: ROLES.adc,
+  userId: '6498a6ff-fa05-4382-abc7-29a61347cfe1',
 };

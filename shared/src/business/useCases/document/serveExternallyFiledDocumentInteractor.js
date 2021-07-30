@@ -44,6 +44,19 @@ exports.serveExternallyFiledDocumentInteractor = async (
     docketEntryId,
   });
 
+  if (currentDocketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  } else {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: currentDocketEntry.docketEntryId,
+        docketNumber: caseToUpdate.docketNumber,
+        status: true,
+      });
+  }
+
   const servedParties = aggregatePartiesForService(caseEntity);
   currentDocketEntry.setAsServed(servedParties.all);
   currentDocketEntry.setAsProcessingStatusAsCompleted();
@@ -100,6 +113,15 @@ exports.serveExternallyFiledDocumentInteractor = async (
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: currentDocketEntry.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      status: false,
+    });
 
   return await applicationContext
     .getUseCaseHelpers()

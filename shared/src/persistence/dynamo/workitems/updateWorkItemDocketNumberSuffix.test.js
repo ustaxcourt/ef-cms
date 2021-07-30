@@ -13,7 +13,7 @@ describe('updateWorkItemDocketNumberSuffix', () => {
 
   it('should call client.update with passed in docket number suffix and work item pk and sk', async () => {
     const mockDocketNumberSuffix = 'S';
-    const mockPk = 'work-item|pk';
+    const mockPk = 'case|pk';
     const mockSk = 'work-item|sk';
 
     await updateWorkItemDocketNumberSuffix({
