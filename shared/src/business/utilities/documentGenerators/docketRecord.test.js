@@ -11,6 +11,7 @@ const {
   SERVED_PARTIES_CODES,
 } = require('../../entities/EntityConstants');
 const { docketRecord } = require('./docketRecord');
+const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -28,6 +29,10 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
+
+      applicationContext.getChromiumBrowser.mockImplementation(
+        getChromiumBrowser,
+      );
 
       applicationContext
         .getUseCases()
