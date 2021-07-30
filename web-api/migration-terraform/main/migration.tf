@@ -25,8 +25,6 @@ resource "aws_lambda_function" "migration_lambda" {
       SOURCE_TABLE          = var.source_table
       DOCUMENTS_BUCKET_NAME = "${var.dns_domain}-documents-${var.environment}-${var.aws_region}"
       S3_ENDPOINT           = "s3.us-east-1.amazonaws.com"
-      AWS_ACCESS_KEY_ID     = var.aws_access_key_id
-      AWS_SECRET_ACCESS_KEY = var.aws_secret_access_key
     }
   }
 }
