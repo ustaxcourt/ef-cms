@@ -542,6 +542,7 @@ jobs:
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -557,6 +558,7 @@ jobs:
                -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
+               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -584,6 +586,7 @@ jobs:
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "STREAM_ARN=${STREAM_ARN}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
+               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
             fi
       - run:
