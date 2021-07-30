@@ -144,7 +144,18 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
             "Effect": "Allow"
-        }
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject",
+            ],
+            "Resource": [
+                "arn:aws:s3:::${var.efcms_domain}-documents-*",
+                "arn:aws:s3:::${var.efcms_domain}-temp-documents-*",
+            ],
+            "Effect": "Allow"
+        },
     ]
 }
 EOF
