@@ -18,7 +18,7 @@ variable "source_table" {
   type = string
 }
 
-variable "efcms_domain" {
+variable "dns_domain" {
   type = string
 }
 
