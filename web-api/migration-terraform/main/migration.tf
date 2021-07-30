@@ -18,11 +18,15 @@ resource "aws_lambda_function" "migration_lambda" {
 
   environment {
     variables = {
-      ACCOUNT_ID        = data.aws_caller_identity.current.account_id
-      DESTINATION_TABLE = var.destination_table
-      ENVIRONMENT       = var.environment
-      NODE_ENV          = "production"
-      SOURCE_TABLE      = var.source_table
+      ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+      DESTINATION_TABLE     = var.destination_table
+      ENVIRONMENT           = var.environment
+      NODE_ENV              = "production"
+      SOURCE_TABLE          = var.source_table
+      DOCUMENTS_BUCKET_NAME = "${var.dns_domain}-documents-${var.environment}-${var.aws_region}"
+      S3_ENDPOINT           = var.s3_endpoint
+      AWS_ACCESS_KEY_ID     = var.aws_access_key_id
+      AWS_SECRET_ACCESS_KEY = var.aws_secret_access_key
     }
   }
 }
