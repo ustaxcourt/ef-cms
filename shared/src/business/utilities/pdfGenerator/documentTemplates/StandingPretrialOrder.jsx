@@ -107,7 +107,7 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <p>
           <span className="text-underline text-bold">Sanctions</span>. The Court
           may impose appropriate sanctions, including dismissal, for any
-          unexcused failure to comply with this or other Court Orders. See Rule
+          unexcused failure to comply with this or other Court orders. See Rule
           131(b), Tax Court Rules of Practice and Procedure (available at{' '}
           <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>).{' '}
           <span className="text-bold">
