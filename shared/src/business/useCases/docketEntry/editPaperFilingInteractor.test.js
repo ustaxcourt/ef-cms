@@ -424,4 +424,75 @@ describe('editPaperFilingInteractor', () => {
         .updateDocketEntryPendingServiceStatus,
     ).not.toHaveBeenCalled();
   });
+
+  it('should call the persistence method to unset the pending service status on the document if its ready for service and an error occurs while serving', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = false;
+    docketEntry.workItem = workItem;
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      editPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          ...docketEntry,
+          isFileAttached: true,
+        },
+        isSavingForLater: false,
+        primaryDocumentFileId: docketEntry.docketEntryId,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should not call the persistence method to unset the pending service status on the document if its not ready for service and an error occurs while serving', async () => {
+    const docketEntry = caseRecord.docketEntries[0];
+    docketEntry.isPendingService = false;
+    docketEntry.workItem = workItem;
+
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      editPaperFilingInteractor(applicationContext, {
+        documentMetadata: {
+          ...docketEntry,
+          isFileAttached: true,
+        },
+        isSavingForLater: true,
+        primaryDocumentFileId: docketEntry.docketEntryId,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).not.toHaveBeenCalled();
+  });
 });

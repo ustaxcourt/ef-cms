@@ -9,6 +9,9 @@ const {
   migrateItems: bugMigration0036,
 } = require('./migrations/bug-0036-public-served-parties-code');
 const {
+  migrateItems: devexMigration0037,
+} = require('./migrations/devex-0037-combine-work-items');
+const {
   migrateItems: migration0036,
 } = require('./migrations/0036-phone-number-format');
 const {
@@ -51,6 +54,11 @@ const migrateRecords = async ({
   if (!ranMigrations['0036-phone-number-format.js']) {
     applicationContext.logger.debug('about to run migration 0036');
     items = await migration0036(items);
+  }
+
+  if (!ranMigrations['devex-0037-combine-work-items.js']) {
+    applicationContext.logger.debug('about to run devex migration 0037');
+    items = await devexMigration0037(items, documentClient);
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -156,6 +164,7 @@ exports.handler = async event => {
     ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
     ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
     ...(await hasMigrationRan('0036-phone-number-format.js')),
+    ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
