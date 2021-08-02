@@ -317,4 +317,41 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       status: false,
     });
   });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
 });

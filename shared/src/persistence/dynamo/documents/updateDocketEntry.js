@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { omit } = require('lodash');
 
 exports.updateDocketEntry = async ({
   applicationContext,
@@ -10,7 +11,7 @@ exports.updateDocketEntry = async ({
     Item: {
       pk: `case|${docketNumber}`,
       sk: `docket-entry|${docketEntryId}`,
-      ...document,
+      ...omit(document, 'workItem'),
     },
     applicationContext,
   });
