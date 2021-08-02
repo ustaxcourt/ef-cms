@@ -45,7 +45,7 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_stream_arn=$STREAM_ARN
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_destination_table=$DESTINATION_TABLE
-export TF_VAR_efcms_domain=$EFCMS_DOMAIN
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
