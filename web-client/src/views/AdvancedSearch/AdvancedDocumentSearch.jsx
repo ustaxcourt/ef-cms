@@ -26,12 +26,12 @@ export const AdvancedDocumentSearch = connect(
     const narrowYourSearch = () => {
       return (
         <>
-          <FormGroup
-            className="margin-bottom-0 right-gray-border advanced-search-full-width padding-top-4 padding-right-9 padding-left-2"
-            errorText={validationErrors.chooseOneValue}
-          >
-            <div className="grid-row nowrap-large-screens grid-gap-3">
-              <div className="margin-bottom-3 desktop:margin-bottom-0">
+          <div className="grid-col-5 right-gray-border">
+            <FormGroup
+              className="advanced-search-panel full-width"
+              errorText={validationErrors.chooseOneValue}
+            >
+              <div className="margin-bottom-3 desktop:margin-bottom-0 margin-top-4">
                 <label className="usa-label" htmlFor="docket-number">
                   Docket number
                 </label>
@@ -50,10 +50,11 @@ export const AdvancedDocumentSearch = connect(
                   }}
                 />
               </div>
-              <div className="desktop:text-center desktop:padding-top-6 width-full desktop:width-auto margin-bottom-2">
+
+              <div className="desktop:text-center desktop:padding-top-6 width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2 desktop:margin-top-4">
                 or
               </div>
-              <div className="margin-bottom-6 desktop:margin-bottom-0">
+              <div className="margin-bottom-6 desktop:margin-bottom-0 margin-top-4">
                 <label className="usa-label" htmlFor="title-or-name">
                   Case title / Petitioner’s name
                 </label>
@@ -74,10 +75,11 @@ export const AdvancedDocumentSearch = connect(
                   }}
                 />
               </div>
-            </div>
-          </FormGroup>
-          <FormGroup className="advanced-search-full-width margin-bottom-0 desktop:padding-left-9">
-            <div className="grid-row nowrap-large-screens grid-gap-6">
+            </FormGroup>
+          </div>
+
+          <div className="grid-col-7">
+            <FormGroup className="advanced-search-panel full-width desktop:padding-left-4 tablet:padding-left-4">
               {formType === 'opinionSearch' && (
                 <div className="opinion-type-search-row">
                   <label
@@ -101,11 +103,8 @@ export const AdvancedDocumentSearch = connect(
                   </BindedSelect>
                 </div>
               )}
-              <div className="judge-search-row">
-                <label
-                  className="usa-label padding-top-4"
-                  htmlFor="order-judge"
-                >
+              <div className="judge-search-row margin-right-3 margin-top-4">
+                <label className="usa-label" htmlFor="order-judge">
                   Judge
                 </label>
                 <BindedSelect
@@ -134,8 +133,8 @@ export const AdvancedDocumentSearch = connect(
                   />
                 </div>
               </div>
-            </div>
-          </FormGroup>
+            </FormGroup>
+          </div>
         </>
       );
     };
