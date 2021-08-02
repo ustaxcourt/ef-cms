@@ -88,7 +88,7 @@ SectionWorkQueueTable.Row = React.memo(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label padding-top-05"
+                  className="padding-top-05 usa-checkbox__label"
                   htmlFor={item.workItemId}
                   id={`label-${item.workItemId}`}
                 />
