@@ -308,7 +308,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
             Stipulation of Facts with any agreed Proposed Trial Exhibits or any
             unagreed Proposed Trial Exhibits. See the Court’s website{' '}
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a> for
-            instructions on identifying documents and page numbering.
+            instructions on identifying documents and numbering pages.
           </li>
         </ol>
 
