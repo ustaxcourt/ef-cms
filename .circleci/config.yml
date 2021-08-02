@@ -560,7 +560,6 @@ jobs:
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
                -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:

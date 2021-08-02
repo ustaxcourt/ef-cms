@@ -2,11 +2,8 @@
 data "archive_file" "migration_segments_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/migration-segments.js.zip"
-  source_file = "${path.module}/lambdas/dist/migration-segments.js"
-}
-
-data "aws_lambda_layer_version" "puppeteer_layer" {
-  layer_name = "puppeteer-${var.environment}-${var.deploying_color}"
+  source_dir  = "${path.module}/lambdas/dist/"
+  excludes = ["${path.module}/lambdas/dist/migration.js"]
 }
 
 resource "aws_lambda_function" "migration_segments_lambda" {
@@ -19,10 +16,6 @@ resource "aws_lambda_function" "migration_segments_lambda" {
   runtime     = "nodejs14.x"
   timeout     = "900"
   memory_size = "768"
-
-  layers = [
-    data.aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 
   environment {
     variables = {
