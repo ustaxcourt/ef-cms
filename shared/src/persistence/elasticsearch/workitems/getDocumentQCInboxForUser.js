@@ -12,7 +12,7 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
               },
             },
             {
-              prefix: { 'pk.S': 'work-item|' },
+              prefix: { 'pk.S': 'case|' },
             },
             {
               prefix: { 'sk.S': 'work-item|' },
@@ -35,7 +35,7 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
           ],
         },
       },
-      size: 1000,
+      size: 5000,
     },
     index: 'efcms-work-item',
   };
