@@ -411,6 +411,16 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion to Proceed Remotely",
+      "documentType": "Motion to Proceed Remotely",
+      "category": "Motion",
+      "eventCode": "MOTR",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Dismiss for Lack of Prosecution",
       "documentType": "Motion to Dismiss for Lack of Prosecution",
       "category": "Motion",
