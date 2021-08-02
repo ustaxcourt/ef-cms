@@ -27,6 +27,12 @@ describe('updateDocketEntryPendingServiceStatus', () => {
       status: true,
     });
     expect(client.update.mock.calls[0][0]).toMatchObject({
+      ExpressionAttributeNames: {
+        '#isPendingService': 'isPendingService',
+      },
+      ExpressionAttributeValues: {
+        ':status': true,
+      },
       Key: { pk: 'case|123-20', sk: 'docket-entry|3' },
       UpdateExpression: 'SET #isPendingService = :status',
     });
