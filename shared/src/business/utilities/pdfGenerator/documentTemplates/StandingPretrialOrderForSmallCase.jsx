@@ -148,7 +148,8 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
               60 days before the first day of the trial session
             </span>
             : If a party wants to ask the Judge to decide all or part of the
-            case without trial, the party may file a Motion forSummary Judgment.
+            case without trial, the party may file a Motion for Summary
+            Judgment.
           </li>
 
           <li>
@@ -187,7 +188,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                   <span className="text-normal">
                     . If either party wants to proceed remotely (using Zoomgov)
                     instead of having an in-person trial, that party may file a
-                    Motion toProceed Remotely. If the Judge grants the motion,
+                    Motion to Proceed Remotely. If the Judge grants the motion,
                     you will be provided with detailed instructions, including
                     the date, time, and Zoomgov information for the remote
                     proceeding.
