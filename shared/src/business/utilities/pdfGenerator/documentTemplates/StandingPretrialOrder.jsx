@@ -177,28 +177,32 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
               </span>
               <ol className="text-bold" type="A">
                 <li>
-                  <span className="text-underline text-bold">
-                    {' '}
-                    Motion for Continuance
-                  </span>
-                  <span className="text-normal">
-                    . The parties may file any Motions for Continuance
-                    (postponement of trial), which the Judge will grant only in
-                    exceptional circumstances. See Rule 133. Even joint Motions
-                    for Continuance are not automatically granted.
-                  </span>
+                  <p>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Motion for Continuance
+                    </span>
+                    <span className="text-normal">
+                      . The parties may file any Motions for Continuance
+                      (postponement of trial), which the Judge will grant only
+                      in exceptional circumstances. See Rule 133. Even joint
+                      Motions for Continuance are not automatically granted.
+                    </span>
+                  </p>
                 </li>
                 <li>
-                  <span className="text-underline text-bold">
-                    {' '}
-                    Motion to Proceed Remotely
-                  </span>
-                  <span className="text-normal">
-                    . The parties may file a Motion to Proceed Remotely. If the
-                    Judge grants the motion, you will be provided with detailed
-                    instructions, including the date, time, and Zoomgov
-                    information for the remote proceeding.
-                  </span>
+                  <p>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Motion to Proceed Remotely
+                    </span>
+                    <span className="text-normal">
+                      . The parties may file a Motion to Proceed Remotely. If
+                      the Judge grants the motion, you will be provided with
+                      detailed instructions, including the date, time, and
+                      Zoomgov information for the remote proceeding.
+                    </span>
+                  </p>
                 </li>
               </ol>
             </div>
@@ -373,9 +377,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
                 any unagreed Proposed Trial Exhibits. The Court may refuse to
                 receive in evidence any document or material that is not filed
                 as a Proposed Trial Exhibit no later than 7 days before the
-                first day of the trial session. See the Court&apos;s website ({' '}
+                first day of the trial session. See the Court&apos;s website (
                 <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>) for
-                instructions on identifying documents and page numbering.
+                instructions on identifying documents and numbering pages.
               </span>
             </p>
           </li>
