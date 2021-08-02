@@ -4,11 +4,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  feature_8652_noticeOfReceiptOfPetition,
+} = require('./feature_8652_noticeOfReceiptOfPetition');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const {
-  noticeOfTrialIssuedInPerson,
-} = require('./noticeOfTrialIssuedInPerson');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
@@ -40,36 +40,32 @@ describe('documentGenerators', () => {
     }
   });
 
-  describe('noticeOfTrialIssuedInPerson', () => {
-    it('generates a Notice of Trial Issued document', async () => {
-      const pdf = await noticeOfTrialIssuedInPerson({
+  describe('feature_8652_noticeOfReceiptOfPetition', () => {
+    it('generates a Notice of Receipt of Petition document', async () => {
+      const pdf = await feature_8652_noticeOfReceiptOfPetition({
         applicationContext,
         data: {
-          caseCaptionExtension: 'Petitioner(s)',
-          caseTitle:
-            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
-          docketNumberWithSuffix: '123-45S',
-          trialInfo: {
-            address1: '123 Candy Cane Lane',
-            address2: '22222',
-            city: 'troutville',
-            formattedJudge: 'Chief Special Trial Judge Carluzzo',
-            formattedStartDate: '01/01/2001',
-            formattedStartTime: '12:00 am',
-            postalCode: 'Boise, Idaho',
-            state: '33333',
-            trialLocation: 'Birmingham, Alabama',
+          address: {
+            address1: '123 Some St.',
+            city: 'Somecity',
+            countryName: '',
+            name: 'Test Petitioner',
+            postalCode: '80008',
+            state: 'ZZ',
           },
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          preferredTrialCity: 'Birmingham, Alabama',
+          receivedAtFormatted: 'December 1, 2019',
+          servedDate: 'June 3, 2020',
         },
       });
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Trial_Issued_In_Person', pdf);
+        writePdfFile('Feature_8652_Notice_Receipt_Petition', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-        const { PDFDocument } = await applicationContext.getPdfLib();
-        const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(1);
       }
 
       expect(
