@@ -234,7 +234,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for an order by keyword `"Guy Fieri"`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -274,7 +273,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for an order by keyword `"magic"` and case caption `"welcome to flavortown"`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -315,7 +313,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for an order by keyword `welcome to flavortown`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -359,7 +356,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for an order by keyword `Guy Fieri`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -407,7 +403,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for "Welcome to flavortown" inside the case title and a non-real keyword `whatever`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -428,7 +423,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for "magic" and case title of `Guy Fieri`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -477,7 +471,6 @@ describe('order search journey for case caption', () => {
   });
 
   it('searches for "welcome to flavortown" and case title of `Guy Fieri`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
