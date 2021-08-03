@@ -2,7 +2,8 @@
 data "archive_file" "migration_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/migration.js.zip"
-  source_file = "${path.module}/lambdas/dist/migration.js"
+  source_dir  = "${path.module}/lambdas/dist/"
+  excludes = ["${path.module}/lambdas/dist/migration-segments.js"]
 }
 
 resource "aws_lambda_function" "migration_lambda" {
@@ -18,11 +19,13 @@ resource "aws_lambda_function" "migration_lambda" {
 
   environment {
     variables = {
-      ACCOUNT_ID        = data.aws_caller_identity.current.account_id
-      DESTINATION_TABLE = var.destination_table
-      ENVIRONMENT       = var.environment
-      NODE_ENV          = "production"
-      SOURCE_TABLE      = var.source_table
+      DESTINATION_TABLE     = var.destination_table
+      ENVIRONMENT           = var.environment
+      NODE_ENV              = "production"
+      SOURCE_TABLE          = var.source_table
+      ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+      DOCUMENTS_BUCKET_NAME = var.documents_bucket_name
+      S3_ENDPOINT           = "s3.us-east-1.amazonaws.com"
     }
   }
 }
