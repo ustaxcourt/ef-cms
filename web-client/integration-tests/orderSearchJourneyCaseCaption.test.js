@@ -341,10 +341,6 @@ describe('order search journey for case caption', () => {
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
           docketNumber: cerebralTest.createdCases[2],
         }),
-        expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
-          docketNumber: cerebralTest.createdCases[3],
-        }),
       ]),
     );
 
@@ -353,6 +349,58 @@ describe('order search journey for case caption', () => {
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
           docketNumber: cerebralTest.createdCases[1],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.createdCases[3],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword `Guy Fieri`', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: 'Guy Fieri',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.createdCases[3],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[4].docketEntryId,
+          docketNumber: cerebralTest.createdCases[4],
         }),
       ]),
     );
