@@ -1,5 +1,6 @@
 import {
   ADVANCED_SEARCH_TABS,
+  CASE_TYPES_MAP,
   COUNTRY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
@@ -15,6 +16,7 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { updateACaseCaption } from './journey/updateACaseCaption';
+import { updateACaseType } from './journey/updateACaseType';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -57,23 +59,6 @@ describe('order search journey for case caption', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  //   Order 1
-
-  // Welcome to flavortown - old case caption
-  // Guy Fieri - new case caption
-  // Order content does not contain Welcome to flavortown
-  // Order title does not contain Welcome to flavortown
-  // Order contents contains word - “magic”
-  // Old docket number on order - 111-20
-  // New docket number on case - 111-20W
-  // Order 2
-
-  // Guy Fieri - old case caption
-  // Welcome to flavortown - new case caption
-  // Order content does not contain Welcome to flavortown
-  // Order title does not contain Welcome to flavortown
-  // Order contents contains word - “magic”
-  // Old docket number on order - 111-20W
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentContents: embedWithLegalIpsumText('“magic”'),
@@ -85,7 +70,20 @@ describe('order search journey for case caption', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
-  updateACaseCaption(cerebralTest, 'Welcome to flavortown');
+  updateACaseCaption(cerebralTest, 'Guy Fieri');
+  updateACaseType(cerebralTest, CASE_TYPES_MAP.whistleblower);
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: embedWithLegalIpsumText('“magic”'),
+    documentTitle: 'some other title',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkServesDocument(cerebralTest, 1);
+  updateACaseCaption(cerebralTest, 'welcome to flavortown');
 
   // docketClerkCreatesAnOrder(cerebralTest, {
   //   documentContents: embedWithLegalIpsumText('welcome to flavortown'),
@@ -155,12 +153,6 @@ describe('order search journey for case caption', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('searches for an order by keyword `"welcome to flavortown"`', async () => {
-    console.log(cerebralTest.docketNumber);
-    console.log(cerebralTest.docketNumber);
-    console.log(cerebralTest.docketNumber);
-    console.log(cerebralTest.docketNumber);
-    console.log(cerebralTest.docketNumber);
-    console.log(cerebralTest.docketNumber);
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
@@ -183,7 +175,6 @@ describe('order search journey for case caption', () => {
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
           docketNumber: cerebralTest.docketNumber,
-          documentTitle: 'welcome to flavortown',
         }),
       ]),
     );
