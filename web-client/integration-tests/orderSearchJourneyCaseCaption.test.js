@@ -192,72 +192,6 @@ describe('order search journey for case caption', () => {
   docketClerkServesDocument(cerebralTest, 4);
   updateACaseCaption(cerebralTest, 'Sam Fieri');
 
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('welcome to flavortown'),
-  //   documentTitle: 'hold on',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 1);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
-  // docketClerkServesDocument(cerebralTest, 1);
-
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('wait till the partys over'),
-  //   documentTitle: 'welcome to flavortown',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 2);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
-  // docketClerkServesDocument(cerebralTest, 2);
-
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('nasty weather'),
-  //   documentTitle: 'welcome to something flavortown today',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 3);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 3);
-  // docketClerkServesDocument(cerebralTest, 3);
-
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('welcome from flavortown'),
-  //   documentTitle: 'welcome from flavortown',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 4);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 4);
-  // docketClerkServesDocument(cerebralTest, 4);
-
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('welcome to flavor-town'),
-  //   documentTitle: 'welcome to flavor-town',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 5);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 5);
-  // docketClerkServesDocument(cerebralTest, 5);
-
-  // docketClerkCreatesAnOrder(cerebralTest, {
-  //   documentContents: embedWithLegalIpsumText('welcome to flavortown.'),
-  //   documentTitle: 'burning down the house',
-  //   eventCode: 'O',
-  //   expectedDocumentType: 'Order',
-  //   signedAtFormatted: '01/02/2020',
-  // });
-  // docketClerkSignsOrder(cerebralTest, 6);
-  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 6);
-  // docketClerkServesDocument(cerebralTest, 6);
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('searches for an order by keyword `"welcome to flavortown"`', async () => {
     await refreshElasticsearchIndex();
@@ -266,7 +200,6 @@ describe('order search journey for case caption', () => {
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        // docketNumber: cerebralTest.docketNumber,
         keyword: '"welcome to flavortown"',
       },
     });
@@ -286,6 +219,140 @@ describe('order search journey for case caption', () => {
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
           docketNumber: cerebralTest.createdCases[2],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword `"Guy Fieri"`', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: '"Guy Fieri"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword `"magic"` and case caption `"welcome to flavortown"`', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        caseTitleOrPetitioner: '"welcome to flavortown"',
+        keyword: '"magic"',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword `welcome to flavortown`', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: 'welcome to flavortown',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[3].docketEntryId,
+          docketNumber: cerebralTest.createdCases[3],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
         }),
       ]),
     );
