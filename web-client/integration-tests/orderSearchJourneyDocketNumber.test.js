@@ -21,7 +21,7 @@ const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
 cerebralTest.createdCases = [];
 
-describe('order search journey for case caption', () => {
+describe('order search journey for docket number', () => {
   beforeEach(() => {
     jest.setTimeout(30000);
     global.window = {
@@ -71,7 +71,7 @@ describe('order search journey for case caption', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
-  updateACaseType(CASE_TYPES_MAP.whistleblower);
+  updateACaseType(cerebralTest, CASE_TYPES_MAP.whistleblower);
 
   it('Creates the second case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
@@ -102,7 +102,7 @@ describe('order search journey for case caption', () => {
   docketClerkSignsOrder(cerebralTest, 1);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 1);
-  updateACaseType(CASE_TYPES_MAP.cdp);
+  updateACaseType(cerebralTest, CASE_TYPES_MAP.cdp);
 
   it('Creates the third case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
@@ -130,10 +130,10 @@ describe('order search journey for case caption', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 1);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
-  docketClerkServesDocument(cerebralTest, 1);
-  updateACaseType(CASE_TYPES_MAP.cdp);
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocument(cerebralTest, 2);
+  updateACaseType(cerebralTest, CASE_TYPES_MAP.cdp);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
