@@ -137,7 +137,7 @@ describe('order search journey for docket number', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  it(`searches for an order by keyword "${cerebralTest.createdCases[0]}"`, async () => {
+  it('searches for an order by keyword for first created docket number', async () => {
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
@@ -168,6 +168,70 @@ describe('order search journey for docket number', () => {
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
           docketNumber: cerebralTest.createdCases[1],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword for second created docket number', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        keyword: `"${cerebralTest.createdCases[1]}"`,
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
+          docketNumber: cerebralTest.createdCases[1],
+        }),
+      ]),
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+      ]),
+    );
+  });
+
+  it('searches for an order by keyword for documentContent and old docket number', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        docketNumber: `"${cerebralTest.createdCases[2]}"`,
+        keyword: 'magic',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
         }),
       ]),
     );
