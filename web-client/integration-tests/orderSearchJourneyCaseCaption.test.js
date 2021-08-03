@@ -405,4 +405,25 @@ describe('order search journey for case caption', () => {
       ]),
     );
   });
+
+  it('searches for "Welcome to flavortown" inside the case title and a non-real keyword `whatever`', async () => {
+    await refreshElasticsearchIndex();
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.setState('advancedSearchForm', {
+      orderSearch: {
+        caseTitleOrPetitioner: 'Welcome to flavortown',
+        keyword: 'whatever',
+      },
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+    );
+
+    expect(searchResults.length).toEqual(0);
+  });
 });
