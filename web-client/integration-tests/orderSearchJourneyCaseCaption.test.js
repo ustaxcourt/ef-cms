@@ -1,6 +1,5 @@
 import {
   ADVANCED_SEARCH_TABS,
-  CASE_TYPES_MAP,
   COUNTRY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
@@ -16,7 +15,6 @@ import {
 } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { updateACaseCaption } from './journey/updateACaseCaption';
-import { updateACaseType } from './journey/updateACaseType';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -39,7 +37,9 @@ describe('order search journey for case caption', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
 
-  it('Creates case', async () => {
+  cerebralTest.createdCases = [];
+
+  it('Creates the first case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactPrimary: {
         address1: '734 Cowley Parkway',
@@ -54,6 +54,7 @@ describe('order search journey for case caption', () => {
 
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -61,7 +62,7 @@ describe('order search journey for case caption', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: embedWithLegalIpsumText('“magic”'),
+    documentContents: embedWithLegalIpsumText('magic'),
     documentTitle: 'some title',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -71,10 +72,27 @@ describe('order search journey for case caption', () => {
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   updateACaseCaption(cerebralTest, 'Guy Fieri');
-  updateACaseType(cerebralTest, CASE_TYPES_MAP.whistleblower);
+
+  it('Creates the second case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Guy Fieri',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
+  });
 
   docketClerkCreatesAnOrder(cerebralTest, {
-    documentContents: embedWithLegalIpsumText('“magic”'),
+    documentContents: embedWithLegalIpsumText('magic'),
     documentTitle: 'some other title',
     eventCode: 'O',
     expectedDocumentType: 'Order',
@@ -84,6 +102,66 @@ describe('order search journey for case caption', () => {
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 1);
   updateACaseCaption(cerebralTest, 'welcome to flavortown');
+
+  it('Creates the third case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Guy Fieri',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: embedWithLegalIpsumText('Welcome to flavortown magic'),
+    documentTitle: 'some other title',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocument(cerebralTest, 2);
+  updateACaseCaption(cerebralTest, 'Johnny Boy');
+
+  it('Creates the fourth case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'flavortown',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: embedWithLegalIpsumText('magic'),
+    documentTitle: 'some other title',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocument(cerebralTest, 2);
+  updateACaseCaption(cerebralTest, 'Guy Fieri');
 
   // docketClerkCreatesAnOrder(cerebralTest, {
   //   documentContents: embedWithLegalIpsumText('welcome to flavortown'),
