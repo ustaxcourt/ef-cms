@@ -40,8 +40,8 @@ describe('addDeficiencyStatisticInteractor', () => {
     };
 
     const result = await addDeficiencyStatisticInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
       ...statistic,
+      docketNumber: MOCK_CASE.docketNumber,
     });
     expect(result).toMatchObject({
       statistics: [statistic],

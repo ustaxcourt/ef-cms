@@ -81,6 +81,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
   const pdf = await applicationContext.getDocumentGenerators().receiptOfFiling({
+    ...filingReceiptDocumentParams,
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -90,7 +91,6 @@ exports.generatePrintableFilingReceiptInteractor = async (
         .getUtilities()
         .formatDateString(primaryDocument.filingDate, 'DATE_TIME_TZ'),
       filedBy: primaryDocument.filedBy,
-      ...filingReceiptDocumentParams,
     },
   });
 
