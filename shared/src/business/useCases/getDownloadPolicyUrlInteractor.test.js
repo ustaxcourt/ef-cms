@@ -575,7 +575,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('should not throw an error if the user is associated with the case and the document is a transcript > 90 days old', async () => {
+    it('should not throw an error if the user is associated with the case and the document meets age requirements', async () => {
       mockCase.docketEntries.push({
         ...baseDocketEntry,
         date: '2000-01-21T20:49:28.192Z',
@@ -594,28 +594,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should not throw an error if the user is associated with the case and the document is a legacy transcript > 90 days old', async () => {
-      mockCase.docketEntries.push({
-        ...baseDocketEntry,
-        date: undefined,
-        docketEntryId: mockDocketEntryId,
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        filingDate: '2000-01-21T20:49:28.192Z',
-        isFileAttached: true,
-        isLegacy: true,
-      });
-
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        key: mockDocketEntryId,
-      });
-
-      expect(url).toEqual('localhost');
-    });
-
-    it('should throw an error if the user is associated with the case and the document is a transcript < 90 days old', async () => {
+    it('should throw an error if the user is associated with the case and the document does not meet age requirements', async () => {
       mockCase.docketEntries.push({
         ...baseDocketEntry,
         date: aShortTimeAgo,
@@ -624,27 +603,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
         isFileAttached: true,
-      });
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          key: mockDocketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time.');
-    });
-
-    it('should throw an error if the user is associated with the case and the document is a legacy transcript < 90 days old', async () => {
-      mockCase.docketEntries.push({
-        ...baseDocketEntry,
-        date: undefined,
-        docketEntryId: mockDocketEntryId,
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        filingDate: aShortTimeAgo,
-        isFileAttached: true,
-        isLegacy: true,
       });
 
       await expect(
