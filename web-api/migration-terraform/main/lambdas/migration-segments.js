@@ -6,6 +6,9 @@ const {
   migrateItems: devexMigration0037,
 } = require('./migrations/devex-0037-combine-work-items');
 const {
+  migrateItems: migration0038,
+} = require('./migrations/0038-parse-generated-orders');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -35,6 +38,10 @@ const migrateRecords = async ({
   if (!ranMigrations['devex-0037-combine-work-items.js']) {
     applicationContext.logger.debug('about to run devex migration 0037');
     items = await devexMigration0037(items, documentClient);
+  }
+  if (!ranMigrations['0038-parse-generated-orders.js']) {
+    applicationContext.logger.debug('about to run migration 0038');
+    items = await migration0038(items);
   }
 
   if (!ranMigrations['devex-0037-combine-work-items.js']) {
@@ -146,6 +153,7 @@ exports.handler = async event => {
     ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
     ...(await hasMigrationRan('0036-phone-number-format.js')),
     ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
+    ...(await hasMigrationRan('0038-parse-generated-orders.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
