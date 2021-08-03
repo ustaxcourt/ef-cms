@@ -36,7 +36,8 @@ export const SessionAssignmentsForm = connect(
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
-                  value: judges.find(judge => judge.userId === e.target.value),
+                  value:
+                    judges.find(judge => judge.userId === e.target.value) || '',
                 });
               }}
             >
