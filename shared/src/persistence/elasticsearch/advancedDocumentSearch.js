@@ -83,7 +83,6 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (docketNumber) {
-    console.log('docketNumber', docketNumber);
     caseQueryParams.has_parent.query.bool.must = {
       term: { 'docketNumber.S': docketNumber },
     };
