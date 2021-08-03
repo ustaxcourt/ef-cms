@@ -15,7 +15,6 @@ const migrateItems = async items => {
       item.isLegacy !== true &&
       item.documentContentsId
     ) {
-      let pdfContents;
       try {
         const pdfBuffer = await applicationContext
           .getPersistenceGateway()
@@ -26,7 +25,7 @@ const migrateItems = async items => {
             useTempBucket: false,
           });
 
-        pdfContents = await applicationContext
+        const pdfContents = await applicationContext
           .getUseCaseHelpers()
           .parseAndScrapePdfContents({
             applicationContext,
