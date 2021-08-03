@@ -25,6 +25,8 @@ const isCorrespondenceItem = item =>
 const isDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && !item.archived;
 
+const isWorkItemItem = item => item.sk.startsWith('work-item|');
+
 const isHearingItem = item => item.sk.startsWith('hearing|');
 
 const isIrsPractitionerItem = item => item.sk.startsWith('irsPractitioner|');
@@ -45,6 +47,12 @@ exports.aggregateCaseItems = caseAndCaseItems => {
   caseAndCaseItems.forEach(item => {
     if (isDocketEntryItem(item)) {
       // Docket Entries
+      const workItem = caseAndCaseItems.find(
+        caseItem =>
+          isWorkItemItem(caseItem) &&
+          caseItem.docketEntry.docketEntryId === item.docketEntryId,
+      );
+      item.workItem = workItem;
       docketEntries.push(item);
     } else if (isArchivedDocketEntryItem(item)) {
       // Archived Docket Entries
@@ -107,3 +115,4 @@ exports.isDocketEntryItem = isDocketEntryItem;
 exports.isHearingItem = isHearingItem;
 exports.isIrsPractitionerItem = isIrsPractitionerItem;
 exports.isPrivatePractitionerItem = isPrivatePractitionerItem;
+exports.isWorkItemItem = isWorkItemItem;

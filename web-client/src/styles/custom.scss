@@ -1516,6 +1516,16 @@ button.change-scanner-button {
 }
 
 .advanced-search {
+  .advanced-search-panel {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .judge-search-row {
+    width: 180px;
+  }
+
   /* big screens */
   @media only screen and (min-width: $medium-screen) {
     .right-gray-border {
