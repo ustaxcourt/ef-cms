@@ -21,20 +21,47 @@ describe('completeDocumentSigningAction', () => {
       signedDocketEntryId: mockDocketEntryId,
     });
 
+  let mockState;
+  let mockPdfjsObj;
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+
+    mockState = {
+      caseDetail: {
+        docketEntries: [
+          {
+            docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            workItem: {
+              messages: [
+                {
+                  messageId: '123',
+                },
+              ],
+            },
+          },
+        ],
+        docketNumber,
+      },
+      currentViewMetadata: {
+        messageId: '123',
+      },
+      pdfForSigning: {
+        docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        pageNumber: 3,
+        signatureData: {
+          scale: 1,
+          x: 300,
+          y: 400,
+        },
+      },
+    };
 
     applicationContext.getCurrentUser.mockReturnValue({
       userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
     });
 
-    global.window = {
-      pdfjsObj: {
-        getData: jest.fn().mockResolvedValue(true),
-      },
-    };
-
-    global.window.pdfjsObj = {
+    mockPdfjsObj = {
       getData: jest.fn().mockResolvedValue(true),
     };
 
@@ -53,41 +80,16 @@ describe('completeDocumentSigningAction', () => {
     ]);
   });
 
+  beforeEach(() => {
+    global.window.pdfjsObj = mockPdfjsObj;
+  });
+
   it('should sign a document via executing various use cases', async () => {
     const result = await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItem: {
-                messages: [
-                  {
-                    messageId: '123',
-                  },
-                ],
-              },
-            },
-          ],
-          docketNumber,
-        },
-        currentViewMetadata: {
-          messageId: '123',
-        },
-        pdfForSigning: {
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          pageNumber: 3,
-          pdfjsLib: {},
-          signatureData: {
-            scale: 1,
-            x: 300,
-            y: 400,
-          },
-        },
-      },
+      state: mockState,
     });
 
     expect(uploadDocumentFromClient.mock.calls.length).toBe(1);
@@ -109,24 +111,7 @@ describe('completeDocumentSigningAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItem: {
-                messages: [
-                  {
-                    messageId: '123',
-                  },
-                ],
-              },
-            },
-          ],
-          docketNumber,
-        },
-        currentViewMetadata: {
-          messageId: '123',
-        },
+        ...mockState,
         pdfForSigning: {
           docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
           pageNumber: 3,
@@ -155,35 +140,8 @@ describe('completeDocumentSigningAction', () => {
         presenter,
       },
       state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItem: {
-                messages: [
-                  {
-                    messageId: '123',
-                  },
-                ],
-              },
-            },
-          ],
-          docketNumber,
-        },
-        currentViewMetadata: {
-          messageId: '123',
-        },
+        ...mockState,
         parentMessageId,
-        pdfForSigning: {
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          pageNumber: 3,
-          pdfjsLib: {},
-          signatureData: {
-            scale: 1,
-            x: 300,
-            y: 400,
-          },
-        },
       },
     });
 
@@ -197,36 +155,7 @@ describe('completeDocumentSigningAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItem: {
-                messages: [
-                  {
-                    messageId: '123',
-                  },
-                ],
-              },
-            },
-          ],
-          docketNumber,
-        },
-        currentViewMetadata: {
-          messageId: '123',
-        },
-        pdfForSigning: {
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          pageNumber: 3,
-          pdfjsLib: {},
-          signatureData: {
-            scale: 1,
-            x: 300,
-            y: 400,
-          },
-        },
-      },
+      state: mockState,
     });
 
     expect(result.output).toMatchObject({
@@ -239,38 +168,27 @@ describe('completeDocumentSigningAction', () => {
       modules: {
         presenter,
       },
+      state: mockState,
+    });
+
+    expect(output.docketEntryId).toBeDefined();
+  });
+
+  it('accesses pdfjsObj from state if not available on window', async () => {
+    delete global.window.pdfjsObj;
+    await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
       state: {
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              workItem: {
-                messages: [
-                  {
-                    messageId: '123',
-                  },
-                ],
-              },
-            },
-          ],
-          docketNumber,
-        },
-        currentViewMetadata: {
-          messageId: '123',
-        },
+        ...mockState,
         pdfForSigning: {
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          pageNumber: 3,
-          pdfjsLib: {},
-          signatureData: {
-            scale: 1,
-            x: 300,
-            y: 400,
-          },
+          ...mockState.pdfForSigning,
+          pdfjsObj: () => mockPdfjsObj,
         },
       },
     });
 
-    expect(output.docketEntryId).toBeDefined();
+    expect(mockPdfjsObj.getData).toHaveBeenCalled();
   });
 });
