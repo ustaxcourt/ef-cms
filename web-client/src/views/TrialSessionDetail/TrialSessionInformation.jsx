@@ -220,7 +220,9 @@ export const TrialSessionInformation = connect(
                             {formattedTrialSessionDetails.formattedJudge}
                           </p>
                           <p>
-                            {formattedTrialSessionDetails.chambersPhoneNumber}
+                            {formattedTrialSessionDetails.chambersPhoneNumber
+                              ? formattedTrialSessionDetails.chambersPhoneNumber
+                              : 'No phone number'}
                           </p>
                         </div>
                         <div className="grid-col-6">
