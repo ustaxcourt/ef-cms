@@ -46,7 +46,7 @@ export const NoticeOfTrialIssuedInPerson = ({
           </b>
           . The calendar for that Session will be called at that date and time,
           and the parties are expected to be present and to be prepared to try
-          the case.
+          the case.{' '}
           <b>
             Your failure to appear may result in dismissal of the case and entry
             of decision against you.
@@ -54,7 +54,7 @@ export const NoticeOfTrialIssuedInPerson = ({
         </p>
         <p className="indent-paragraph">
           The Court will set the time for each trial at the end of the calendar
-          call (unless the partiesrequest in advance a specific date and time
+          call (unless the parties request in advance a specific date and time
           for trial and the Court grants the request). In setting trial times
           the Court attempts to accommodate the parties, but the final
           determination of trial times rests in the Court’s discretion.
