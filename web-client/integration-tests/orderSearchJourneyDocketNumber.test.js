@@ -174,7 +174,6 @@ describe('order search journey for docket number', () => {
   });
 
   it('searches for an order by keyword for second created docket number', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
@@ -209,15 +208,13 @@ describe('order search journey for docket number', () => {
     );
   });
 
-  // TODO: ask kristen about this test case
-  it.skip('searches for an order by keyword for documentContent and old docket number', async () => {
-    await refreshElasticsearchIndex();
+  it('searches for an order by keyword for documentContent and old docket number', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        docketNumber: `"${cerebralTest.createdCases[2]}"`,
+        docketNumber: `"${cerebralTest.createdCases[2]}W"`,
         keyword: 'magic',
       },
     });
@@ -228,7 +225,7 @@ describe('order search journey for docket number', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
     );
 
-    expect(searchResults).not.toEqual(
+    expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
@@ -239,7 +236,6 @@ describe('order search journey for docket number', () => {
   });
 
   it('searches for an order by keyword for documentContent and new docket number', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
