@@ -16,6 +16,12 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.showOnlyClosedCases =
       formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.closed;
 
+    if (formattedTrialSession.chambersPhoneNumber) {
+      formattedTrialSession.chambersPhoneNumber = applicationContext
+        .getUtilities()
+        .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
+    }
+
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
         .getUtilities()
