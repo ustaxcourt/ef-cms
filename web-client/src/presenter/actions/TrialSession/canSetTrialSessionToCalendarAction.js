@@ -57,8 +57,6 @@ export const canSetTrialSessionToCalendarAction = ({
   let formatFieldsForWarningMessage =
     missingFieldsForWarningMessage.join(' and ');
 
-  // proper grammar
-  // formats ['an address', 'a judge', 'a chambers phone number'] to 'an address, a judge, and a chambers phone number'
   if (missingFieldsForWarningMessage.length > 2) {
     formatFieldsForWarningMessage = `${missingFieldsForWarningMessage
       .slice(0, missingFieldsForWarningMessage.length - 1)
