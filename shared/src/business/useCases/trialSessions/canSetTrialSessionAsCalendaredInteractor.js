@@ -29,6 +29,7 @@ exports.canSetTrialSessionAsCalendaredInteractor = (
 
   const canSetAsCalendared = trialSessionEntity.canSetAsCalendared();
   const emptyFields = trialSessionEntity.getEmptyFields();
+  const isRemote = trialSessionEntity.isRemote();
 
-  return { canSetAsCalendared, emptyFields };
+  return { canSetAsCalendared, emptyFields, isRemote };
 };

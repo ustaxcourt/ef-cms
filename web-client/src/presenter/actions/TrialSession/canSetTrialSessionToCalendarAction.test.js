@@ -7,6 +7,8 @@ describe('canSetTrialSessionToCalendarAction', () => {
   let pathNoStub;
   let pathYesStub;
 
+  const { TRIAL_SESSION_PROCEEDING_TYPES } = applicationContext.getConstants();
+
   const VALID_TRIAL_SESSION = {
     maxCases: 100,
     sessionType: 'Regular',
@@ -138,6 +140,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
           'meetingId',
           'password',
         ],
+        isRemote: true,
       });
 
     await runAction(canSetTrialSessionToCalendarAction, {
@@ -151,6 +154,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
           city: 'Flavortown',
           judge: {},
           postalCode: '12345',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
           state: 'TN',
         },
       },
@@ -163,6 +167,49 @@ describe('canSetTrialSessionToCalendarAction', () => {
       alertWarning: {
         message:
           'Provide remote proceeding information to set this trial session.',
+      },
+    });
+  });
+
+  it('should format the error message correctly is remote proceeding info AND judge is missing', async () => {
+    applicationContext
+      .getUseCases()
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: [
+          'chambersPhoneNumber',
+          'joinPhoneNumber',
+          'meetingId',
+          'password',
+          'judge',
+        ],
+        isRemote: true,
+      });
+
+    await runAction(canSetTrialSessionToCalendarAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          state: 'TN',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
+    ).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledWith({
+      alertWarning: {
+        message:
+          'Provide remote proceeding information and a judge to set this trial session.',
       },
     });
   });
@@ -188,5 +235,38 @@ describe('canSetTrialSessionToCalendarAction', () => {
       applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
     ).toHaveBeenCalled();
     expect(pathYesStub).toHaveBeenCalled();
+  });
+
+  it('should return the no path when the trial session address is not valid, a judge has not been selected, and a chambers phone number has not been entered', async () => {
+    applicationContext
+      .getUseCases()
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: ['address1', 'judge', 'chambersPhoneNumber'],
+      });
+
+    await runAction(canSetTrialSessionToCalendarAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          postalCode: '12345',
+          state: 'TN',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
+    ).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledWith({
+      alertWarning: {
+        message:
+          'Provide an address, a judge, and a chambers phone number to set this trial session.',
+      },
+    });
   });
 });
