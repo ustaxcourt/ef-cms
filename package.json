@@ -232,7 +232,7 @@
     "start:public:ci": "npm run clean:public && CI=true npm run start:public",
     "start:public": "npm run clean:public && USTC_ENV=dev webpack serve --config webpack.config.client.public.dev.js",
     "start:s3rver": "s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9000 --configure-bucket $DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml",
-    "switch-colors": "./scripts/switch-colors.sh",
+    "switch-colors": "./web-client/switch-colors.sh",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
     "test:_client:parallel": "NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --maxWorkers=50% --config web-client/jest-unit.config.js",
     "test:_client": "NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --runInBand --config web-client/jest.config.js",
