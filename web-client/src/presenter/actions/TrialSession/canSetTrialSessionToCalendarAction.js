@@ -50,7 +50,6 @@ export const canSetTrialSessionToCalendarAction = ({
     missingFieldsForWarningMessage.push('a judge');
   }
 
-  // 8707 here
   if (!isRemote && emptyFields.includes('chambersPhoneNumber')) {
     missingFieldsForWarningMessage.push('a chambers phone number');
   }

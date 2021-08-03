@@ -140,6 +140,7 @@ describe('canSetTrialSessionToCalendarAction', () => {
           'meetingId',
           'password',
         ],
+        isRemote: true,
       });
 
     await runAction(canSetTrialSessionToCalendarAction, {
@@ -159,8 +160,6 @@ describe('canSetTrialSessionToCalendarAction', () => {
       },
     });
 
-    // 8707 here
-
     expect(
       applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
     ).toHaveBeenCalled();
@@ -168,6 +167,49 @@ describe('canSetTrialSessionToCalendarAction', () => {
       alertWarning: {
         message:
           'Provide remote proceeding information to set this trial session.',
+      },
+    });
+  });
+
+  it('should format the error message correctly is remote proceeding info AND judge is missing', async () => {
+    applicationContext
+      .getUseCases()
+      .canSetTrialSessionAsCalendaredInteractor.mockReturnValue({
+        canSetAsCalendared: false,
+        emptyFields: [
+          'chambersPhoneNumber',
+          'joinPhoneNumber',
+          'meetingId',
+          'password',
+          'judge',
+        ],
+        isRemote: true,
+      });
+
+    await runAction(canSetTrialSessionToCalendarAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        trialSession: {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          state: 'TN',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().canSetTrialSessionAsCalendaredInteractor,
+    ).toHaveBeenCalled();
+    expect(pathNoStub).toHaveBeenCalledWith({
+      alertWarning: {
+        message:
+          'Provide remote proceeding information and a judge to set this trial session.',
       },
     });
   });
