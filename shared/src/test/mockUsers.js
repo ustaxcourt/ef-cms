@@ -132,6 +132,18 @@ exports.petitionerUser = {
   role: ROLES.petitioner,
   userId: '6844385f-b3de-444b-b76a-64fedfbb0229',
 };
+exports.privatePractitionerUser = {
+  role: ROLES.privatePractitioner,
+  userId: 'bc8219c5-e950-4cb2-9e3e-d7d645005364',
+};
+exports.irsPractitionerUser = {
+  role: ROLES.irsPractitioner,
+  userId: 'ed17963c-3c33-421f-882c-306b5bdb3913',
+};
+exports.irsSuperuserUser = {
+  role: ROLES.irsSuperuser,
+  userId: '5a5c771d-ab63-4d78-a298-1de657dde621',
+};
 exports.trialClerkUser = {
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
