@@ -74,6 +74,11 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'chambersPhoneNumber',
+      value: '1234567890',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
