@@ -18,6 +18,7 @@ import { updateACaseCaption } from './journey/updateACaseCaption';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
+cerebralTest.createdCases = [];
 
 describe('order search journey for case caption', () => {
   beforeEach(() => {
@@ -36,8 +37,6 @@ describe('order search journey for case caption', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-
-  cerebralTest.createdCases = [];
 
   it('Creates the first case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
@@ -158,10 +157,40 @@ describe('order search journey for case caption', () => {
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(cerebralTest, 2);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
-  docketClerkServesDocument(cerebralTest, 2);
+  docketClerkSignsOrder(cerebralTest, 3);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 3);
+  docketClerkServesDocument(cerebralTest, 3);
   updateACaseCaption(cerebralTest, 'Guy Fieri');
+
+  it('Creates the fifth case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'flavortown',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: embedWithLegalIpsumText('magic'),
+    documentTitle: 'some other title',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(cerebralTest, 4);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 4);
+  docketClerkServesDocument(cerebralTest, 4);
+  updateACaseCaption(cerebralTest, 'Sam Fieri');
 
   // docketClerkCreatesAnOrder(cerebralTest, {
   //   documentContents: embedWithLegalIpsumText('welcome to flavortown'),
@@ -237,7 +266,7 @@ describe('order search journey for case caption', () => {
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
-        docketNumber: cerebralTest.docketNumber,
+        // docketNumber: cerebralTest.docketNumber,
         keyword: '"welcome to flavortown"',
       },
     });
@@ -252,11 +281,13 @@ describe('order search journey for case caption', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
-          docketNumber: cerebralTest.docketNumber,
+          docketNumber: cerebralTest.createdCases[0],
+        }),
+        expect.objectContaining({
+          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
+          docketNumber: cerebralTest.createdCases[2],
         }),
       ]),
     );
-
-    expect(searchResults.length).toEqual(1);
   });
 });
