@@ -74,6 +74,9 @@ const {
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
+  formatPhoneNumber,
+} = require('../../../src/business/utilities/formatPhoneNumber');
+const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -269,6 +272,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     formattedTrialSessionDetails: jest
       .fn()
       .mockImplementation(formattedTrialSessionDetails),

@@ -216,7 +216,9 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Judge</p>
-                          <p>{formattedTrialSessionDetails.formattedJudge}</p>
+                          <p className="margin-bottom-0">
+                            {formattedTrialSessionDetails.formattedJudge}
+                          </p>
                           <p>
                             {formattedTrialSessionDetails.chambersPhoneNumber}
                           </p>
