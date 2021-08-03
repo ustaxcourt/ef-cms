@@ -48,5 +48,5 @@ set -eo pipefail
 export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 
-terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform apply -auto-approve
