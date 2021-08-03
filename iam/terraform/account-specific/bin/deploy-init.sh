@@ -42,8 +42,8 @@ export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_zone_name="${ZONE_NAME}"
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
-# if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then 
-#   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}" 
+# if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then
+#   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 # fi
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"

@@ -46,8 +46,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       overwriteHeader: true,
     });
 
-  const pretrialMemorandumTemplate = reactTemplateGenerator({
-    componentName: 'PretrialMemorandum',
+  const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
+    componentName: 'GettingReadyForTrialChecklist',
     data: {
       options: {
         caseCaptionExtension,
@@ -60,7 +60,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
     applicationContext,
-    content: pretrialMemorandumTemplate,
+    content: reactGettingReadyForTrialChecklistTemplate,
   });
 
   const pdfWithoutHeader = await applicationContext
