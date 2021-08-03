@@ -125,6 +125,46 @@ describe('getDefaultDocketViewerDocumentToDisplayAction', () => {
     });
   });
 
+  it('returns viewerDocumentToDisplay from state if already defined and there are no docket entries with a document', async () => {
+    const result = await runAction(
+      getDefaultDocketViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketEntries: [
+              {
+                index: 1,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
+              },
+              {
+                docketEntryId: '123',
+                index: 2,
+                isFileAttached: true,
+                isMinuteEntry: false,
+                isOnDocketRecord: true,
+              },
+              {
+                index: 3,
+                isFileAttached: false,
+                isMinuteEntry: true,
+                isOnDocketRecord: true,
+              },
+            ],
+          },
+          viewerDocumentToDisplay: '887',
+        },
+      },
+    );
+    expect(result.output).toEqual({
+      viewerDocumentToDisplay: '887',
+    });
+  });
+
   it('returns the correct docket record entry if state.docketEntryId is set', async () => {
     const result = await runAction(
       getDefaultDocketViewerDocumentToDisplayAction,

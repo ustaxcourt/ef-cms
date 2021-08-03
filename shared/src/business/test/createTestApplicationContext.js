@@ -316,7 +316,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getStampBoxCoordinates),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
-    isInternalUser: User.isInternalUser,
+    isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
