@@ -208,33 +208,6 @@ describe('order search journey for docket number', () => {
     );
   });
 
-  it('searches for an order by keyword for documentContent and old docket number', async () => {
-    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
-
-    cerebralTest.setState('advancedSearchForm', {
-      orderSearch: {
-        docketNumber: `"${cerebralTest.createdCases[2]}W"`,
-        keyword: 'magic',
-      },
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    const searchResults = cerebralTest.getState(
-      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
-    );
-
-    expect(searchResults).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
-          docketNumber: cerebralTest.createdCases[2],
-        }),
-      ]),
-    );
-  });
-
   it('searches for an order by keyword for documentContent and new docket number', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
