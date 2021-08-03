@@ -105,7 +105,7 @@ describe('migrateItems', () => {
         ...mockDocketEntry,
         documentContentsId: undefined,
         eventCode: 'O',
-        isLegacy: true,
+        isLegacy: false,
       },
     ];
 
