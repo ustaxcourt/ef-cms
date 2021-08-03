@@ -41,7 +41,7 @@ const migrateRecords = async ({
   }
   if (!ranMigrations['0038-parse-generated-orders.js']) {
     applicationContext.logger.debug('about to run migration 0038');
-    items = await migration0038(items, documentClient);
+    items = await migration0038(items);
   }
 
   if (!ranMigrations['devex-0037-combine-work-items.js']) {
