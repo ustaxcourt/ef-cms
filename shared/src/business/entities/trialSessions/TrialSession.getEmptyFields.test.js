@@ -11,6 +11,7 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
+          chambersPhoneNumber: undefined,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         },
         {
@@ -26,6 +27,7 @@ describe('TrialSession entity', () => {
         'state',
         'postalCode',
         'judge',
+        'chambersPhoneNumber',
       ]);
     });
 
@@ -53,6 +55,7 @@ describe('TrialSession entity', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
+          chambersPhoneNumber: undefined,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
         {
