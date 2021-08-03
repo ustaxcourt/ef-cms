@@ -50,9 +50,9 @@ describe('updateDeficiencyStatisticInteractor', () => {
     const result = await updateDeficiencyStatisticInteractor(
       applicationContext,
       {
-        ...statisticToUpdate,
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
+        ...statisticToUpdate,
       },
     );
     expect(result).toMatchObject({
@@ -70,9 +70,9 @@ describe('updateDeficiencyStatisticInteractor', () => {
     const result = await updateDeficiencyStatisticInteractor(
       applicationContext,
       {
-        ...statisticToUpdate,
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
+        ...statisticToUpdate,
       },
     );
     expect(result).toMatchObject({
