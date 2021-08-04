@@ -14,7 +14,7 @@ describe('getCognitoUserIdByEmail', () => {
 
   it('returns the cognito user id when there is a corresponding user with the provided email found in cognito', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () => mockFoundUser,
+      promise: () => Promise.resolve(mockFoundUser),
     });
 
     await expect(
@@ -29,10 +29,11 @@ describe('getCognitoUserIdByEmail', () => {
     const customMockUserId = '84cf1080-559f-4ba4-913b-27398b475bd7';
 
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () => ({
-        ...mockFoundUser,
-        UserAttributes: [{ Name: 'custom:userId', Value: customMockUserId }],
-      }),
+      promise: () =>
+        Promise.resolve({
+          ...mockFoundUser,
+          UserAttributes: [{ Name: 'custom:userId', Value: customMockUserId }],
+        }),
     });
 
     await expect(
