@@ -355,7 +355,14 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         <p style={{ float: 'left', width: '40%' }}>
           Dated: {trialInfo.formattedServedDate}
         </p>
-        <p style={{ float: 'right', textAlign: 'right', width: '59%' }}>
+        <p
+          style={{
+            float: 'right',
+            lineHeight: '18px',
+            textAlign: 'right',
+            width: '59%',
+          }}
+        >
           <b>(Signed) {trialInfo.formattedJudgeName}</b>
           <br />
           {trialInfo.chambersPhoneNumber}
