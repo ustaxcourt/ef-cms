@@ -69,30 +69,6 @@ exports.fileCourtIssuedOrderInteractor = async (
   }
 
   if (documentMetadata.documentContents) {
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
-    console.log(
-      'caseEntity.docketNumberWithSuffix',
-      caseEntity.docketNumberWithSuffix,
-    );
     documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
     const documentContentsId = applicationContext.getUniqueId();
