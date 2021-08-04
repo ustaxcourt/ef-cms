@@ -19,7 +19,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.deficiency,
+    caseType: CASE_TYPES_MAP.whistleblower,
     createdAt: '',
     docketEntries: [
       {
@@ -48,6 +48,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
     ],
     docketNumber: '45678-18',
+    docketNumberWithSuffix: '45678-18W',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     petitioners: [
@@ -255,7 +256,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
   });
 
-  it('should append docket number and case caption to document contents before storing', async () => {
+  it('should append docket number with suffix and case caption to document contents before storing', async () => {
     await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
@@ -275,7 +276,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
     ).documentContents;
 
-    expect(savedDocumentContents).toContain(caseRecord.docketNumber);
+    expect(savedDocumentContents).toContain(caseRecord.docketNumberWithSuffix);
     expect(savedDocumentContents).toContain(caseRecord.caseCaption);
   });
 
