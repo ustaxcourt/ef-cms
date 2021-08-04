@@ -69,7 +69,31 @@ exports.fileCourtIssuedOrderInteractor = async (
   }
 
   if (documentMetadata.documentContents) {
-    documentMetadata.documentContents += ` ${caseEntity.docketNumber} ${caseEntity.caseCaption}`;
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    console.log(
+      'caseEntity.docketNumberWithSuffix',
+      caseEntity.docketNumberWithSuffix,
+    );
+    documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
     const documentContentsId = applicationContext.getUniqueId();
 
