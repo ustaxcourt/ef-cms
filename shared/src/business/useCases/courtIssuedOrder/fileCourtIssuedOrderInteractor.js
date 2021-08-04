@@ -69,7 +69,7 @@ exports.fileCourtIssuedOrderInteractor = async (
   }
 
   if (documentMetadata.documentContents) {
-    documentMetadata.documentContents += ` ${caseEntity.docketNumber} ${caseEntity.caseCaption}`;
+    documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
 
     const documentContentsId = applicationContext.getUniqueId();
 
