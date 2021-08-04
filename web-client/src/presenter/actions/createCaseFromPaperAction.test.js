@@ -34,7 +34,7 @@ describe('createCaseFromPaperAction', () => {
         presenter,
       },
       props: {
-        computedDate: '2019-11-05',
+        receivedAt: '2019-11-05',
       },
       state: {
         form: {

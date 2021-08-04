@@ -15,7 +15,6 @@ describe('chooseWorkQueueAction', () => {
     await expect(
       runAction(chooseWorkQueueAction, {
         props: {
-          box: 'wooden',
           queue: 'de Lancie',
         },
         providers,
