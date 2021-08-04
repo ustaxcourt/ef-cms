@@ -9,7 +9,7 @@ const {
   petitionerUser,
   petitionsClerkUser,
   privatePractitionerUser,
-} = require('../../test/mockusers');
+} = require('../../test/mockUsers');
 const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
