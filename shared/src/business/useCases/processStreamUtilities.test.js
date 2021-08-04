@@ -548,13 +548,11 @@ describe('processStreamUtilities', () => {
 
     it('fetches the document from persistence if the entry is an opinion and has a documentContentsId', async () => {
       docketEntryData.documentContentsId = '123';
-      docketEntryData.docketNumber = '555-111';
       docketEntryDataMarshalled.documentContentsId = { S: '123' };
       docketEntryDataMarshalled.eventCode = { S: 'TCOP' };
       docketEntryDataMarshalled.docketNumber = { S: '555-111' };
 
       const caseData = {
-        caseCaption: 'A Caption, Petitioner',
         docketNumber: '123-45',
         entityName: 'Case',
         irsPractitioners: [
@@ -610,7 +608,7 @@ describe('processStreamUtilities', () => {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
               },
-              documentContents: { S: 'Test 555-111 A Caption, Petitioner' },
+              documentContents: { S: 'Test' },
             },
           },
           eventName: 'MODIFY',
@@ -703,7 +701,7 @@ describe('processStreamUtilities', () => {
                 parent: 'case|123_case|123|mapping',
               },
               documentContents: {
-                S: 'Test 555-111 A Caption, Petitioner',
+                S: 'Test',
               },
             },
           },
