@@ -52,8 +52,8 @@ describe('order search journey for docket number', () => {
       },
     });
 
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    expect(caseDetail.docketNumberWithSuffix).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumberWithSuffix;
     cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
@@ -87,8 +87,8 @@ describe('order search journey for docket number', () => {
       },
     });
 
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    expect(caseDetail.docketNumberWithSuffix).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumberWithSuffix;
     cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
@@ -118,8 +118,8 @@ describe('order search journey for docket number', () => {
       },
     });
 
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    expect(caseDetail.docketNumberWithSuffix).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumberWithSuffix;
     cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
@@ -158,7 +158,7 @@ describe('order search journey for docket number', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
-          docketNumber: cerebralTest.createdCases[0],
+          docketNumberWithSuffix: cerebralTest.createdCases[0],
         }),
       ]),
     );
@@ -167,7 +167,7 @@ describe('order search journey for docket number', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
-          docketNumber: cerebralTest.createdCases[1],
+          docketNumberWithSuffix: cerebralTest.createdCases[1],
         }),
       ]),
     );
@@ -193,7 +193,7 @@ describe('order search journey for docket number', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[1].docketEntryId,
-          docketNumber: cerebralTest.createdCases[1],
+          docketNumberWithSuffix: cerebralTest.createdCases[1],
         }),
       ]),
     );
@@ -202,7 +202,7 @@ describe('order search journey for docket number', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
-          docketNumber: cerebralTest.createdCases[0],
+          docketNumberWithSuffix: cerebralTest.createdCases[0],
         }),
       ]),
     );
@@ -229,7 +229,7 @@ describe('order search journey for docket number', () => {
       expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
-          docketNumber: cerebralTest.createdCases[2],
+          docketNumberWithSuffix: cerebralTest.createdCases[2],
         }),
       ]),
     );
