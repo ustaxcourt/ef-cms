@@ -29,8 +29,8 @@ describe('migration', () => {
   });
 
   describe('getFilteredGlobalEvents', () => {
-    it('should return everything', async () => {
-      const items = await getFilteredGlobalEvents({
+    it('should return everything', () => {
+      const items = getFilteredGlobalEvents({
         Records: [
           {
             dynamodb: {
@@ -49,6 +49,100 @@ describe('migration', () => {
         ],
       });
       expect(items.length).toBe(1);
+    });
+
+    it('should not attempt to process REMOVE events', () => {
+      const items = getFilteredGlobalEvents({
+        Records: [
+          {
+            awsRegion: 'us-east-1',
+            dynamodb: {
+              Keys: {
+                Id: {
+                  N: '101',
+                },
+              },
+              NewImage: {
+                Id: {
+                  N: '101',
+                },
+                Message: {
+                  S: 'New item!',
+                },
+              },
+              SequenceNumber: '111',
+              SizeBytes: 26,
+              StreamViewType: 'NEW_AND_OLD_IMAGES',
+            },
+            eventID: '1',
+            eventName: 'INSERT',
+            eventSource: 'aws:dynamodb',
+            eventSourceARN: 'stream-ARN',
+            eventVersion: '1.0',
+          },
+          {
+            awsRegion: 'us-east-1',
+            dynamodb: {
+              Keys: {
+                Id: {
+                  N: '101',
+                },
+              },
+              NewImage: {
+                Id: {
+                  N: '101',
+                },
+                Message: {
+                  S: 'This item has changed',
+                },
+              },
+              OldImage: {
+                Id: {
+                  N: '101',
+                },
+                Message: {
+                  S: 'New item!',
+                },
+              },
+              SequenceNumber: '222',
+              SizeBytes: 59,
+              StreamViewType: 'NEW_AND_OLD_IMAGES',
+            },
+            eventID: '2',
+            eventName: 'MODIFY',
+            eventSource: 'aws:dynamodb',
+            eventSourceARN: 'stream-ARN',
+            eventVersion: '1.0',
+          },
+          {
+            awsRegion: 'us-east-1',
+            dynamodb: {
+              Keys: {
+                Id: {
+                  N: '101',
+                },
+              },
+              OldImage: {
+                Id: {
+                  N: '101',
+                },
+                Message: {
+                  S: 'This item has changed',
+                },
+              },
+              SequenceNumber: '333',
+              SizeBytes: 38,
+              StreamViewType: 'NEW_AND_OLD_IMAGES',
+            },
+            eventID: '3',
+            eventName: 'REMOVE',
+            eventSource: 'aws:dynamodb',
+            eventSourceARN: 'stream-ARN',
+            eventVersion: '1.0',
+          },
+        ],
+      });
+      expect(items.length).toEqual(2);
     });
   });
 });
