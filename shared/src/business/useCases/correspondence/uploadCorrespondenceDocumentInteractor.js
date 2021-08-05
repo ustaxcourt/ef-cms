@@ -20,7 +20,6 @@ exports.uploadCorrespondenceDocumentInteractor = async (
       applicationContext,
       document: documentFile,
       key: keyToOverwrite,
-      onUploadProgress: () => {},
     });
 
   return correspondenceDocumentId;

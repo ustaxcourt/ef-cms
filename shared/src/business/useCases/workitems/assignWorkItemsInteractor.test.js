@@ -39,7 +39,7 @@ describe('assignWorkItemsInteractor', () => {
     workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
   };
 
-  it('unauthorized user tries to assign a work item', async () => {
+  it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       userId: 'baduser',
     });
@@ -49,7 +49,7 @@ describe('assignWorkItemsInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('fail on validation if the work items provided are invalid', async () => {
+  it('should throw an error when the work item is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
       .getWorkItemById.mockReturnValue(omit(MOCK_WORK_ITEM, 'docketNumber'));
@@ -60,4 +60,6 @@ describe('assignWorkItemsInteractor', () => {
       }),
     ).rejects.toThrow();
   });
+
+  // it('', async () => {});
 });
