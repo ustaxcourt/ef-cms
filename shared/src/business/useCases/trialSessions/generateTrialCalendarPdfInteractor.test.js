@@ -140,7 +140,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       expect(result[1].docketNumber).toBe('102-19');
     });
 
-    it('should set casse title to an empty string when caseCaption is undefined', () => {
+    it('should set case title to an empty string when caseCaption is undefined', () => {
       const result = formatCases({
         applicationContext,
         calendaredCases: [{ ...mockCases[0], caseCaption: undefined }],
