@@ -169,6 +169,10 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
     expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toBe(1);
   });
 
   it('should use original case caption to create case title when creating work item', async () => {

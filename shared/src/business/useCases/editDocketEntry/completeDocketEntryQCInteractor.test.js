@@ -263,9 +263,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Answer 123 abc',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
@@ -289,9 +286,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Answer additional info (C/S 08/06/19) additional info 2',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
@@ -315,9 +309,6 @@ describe('completeDocketEntryQCInteractor', () => {
         'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
@@ -344,9 +335,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Answer',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
@@ -373,9 +361,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Something Different',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
@@ -423,9 +408,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Answer additional info additional info 221',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is NOT changed and addToCoversheet is true', async () => {
@@ -454,9 +436,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Answer additional info additional info',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
@@ -516,9 +495,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toBeCalled();
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
