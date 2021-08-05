@@ -4,6 +4,7 @@ const {
   formatNow,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -51,6 +52,10 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async (
     judgeUserName: trialSession.judge.name,
   });
 
+  const formattedChambersPhoneNumber = formatPhoneNumber(
+    trialSession.chambersPhoneNumber,
+  );
+
   const formattedStartDate = formatDateString(
     trialSession.startDate,
     FORMATS.MONTH_DAY_YEAR,
@@ -71,6 +76,7 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async (
         docketNumberWithSuffix,
         trialInfo: {
           ...trialSession,
+          chambersPhoneNumber: formattedChambersPhoneNumber,
           formattedJudgeName,
           formattedServedDate,
           formattedStartDate,

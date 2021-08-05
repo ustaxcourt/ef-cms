@@ -200,7 +200,6 @@ digraph {
 	node [style = rounded, shape = box]
 
 	Code -> GitHub -> CircleCI
-	CircleCI -> SonarCloud
 	CircleCI -> AWS [label = "via Terraform"]
 }
 ```

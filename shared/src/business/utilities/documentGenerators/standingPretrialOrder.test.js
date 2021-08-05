@@ -9,6 +9,7 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
 const { combineTwoPdfs } = require('./combineTwoPdfs');
+const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { standingPretrialOrder } = require('./standingPretrialOrder');
 
 describe('documentGenerators', () => {
@@ -27,6 +28,10 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
+
+      applicationContext.getChromiumBrowser.mockImplementation(
+        getChromiumBrowser,
+      );
 
       applicationContext
         .getUseCases()

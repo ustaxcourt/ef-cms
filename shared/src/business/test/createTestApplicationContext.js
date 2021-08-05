@@ -74,6 +74,9 @@ const {
   getJudgeLastName,
 } = require('../../../src/business/utilities/getFormattedJudgeName');
 const {
+  formatPhoneNumber,
+} = require('../../../src/business/utilities/formatPhoneNumber');
+const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -191,6 +194,8 @@ const appContextProxy = (initial = {}, makeMock = true) => {
 };
 
 const createTestApplicationContext = ({ user } = {}) => {
+  const emptyAppContextProxy = appContextProxy();
+
   const mockGetPdfJsReturnValue = {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
@@ -269,6 +274,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     formatDollars: jest.fn().mockImplementation(formatDollars),
     formatJudgeName: jest.fn().mockImplementation(formatJudgeName),
     formatNow: jest.fn().mockImplementation(DateHandler.formatNow),
+    formatPhoneNumber: jest.fn().mockImplementation(formatPhoneNumber),
     formattedTrialSessionDetails: jest
       .fn()
       .mockImplementation(formattedTrialSessionDetails),
@@ -314,7 +320,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(getStampBoxCoordinates),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
-    isInternalUser: User.isInternalUser,
+    isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStringISOFormatted: jest
@@ -565,7 +571,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
-    getNotificationGateway: appContextProxy(),
+    getNotificationGateway: emptyAppContextProxy,
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
@@ -574,12 +580,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
-    getSearchClient: appContextProxy(),
+    getSearchClient: emptyAppContextProxy,
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
-    getUseCases: appContextProxy(),
+    getUseCases: emptyAppContextProxy,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
     logger: {

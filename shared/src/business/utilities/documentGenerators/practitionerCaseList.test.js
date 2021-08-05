@@ -7,6 +7,7 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { practitionerCaseList } = require('./practitionerCaseList');
 
 describe('documentGenerators', () => {
@@ -25,6 +26,10 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
+
+      applicationContext.getChromiumBrowser.mockImplementation(
+        getChromiumBrowser,
+      );
 
       applicationContext
         .getUseCases()

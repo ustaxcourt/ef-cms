@@ -4,6 +4,10 @@ const {
   formatNow,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -60,6 +64,16 @@ exports.generateStandingPretrialOrderInteractor = async (
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 
+  const formattedChambersPhoneNumber = formatPhoneNumber(
+    trialSession.chambersPhoneNumber,
+  );
+
+  let formattedTrialLocation = trialSession.trialLocation;
+
+  if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote) {
+    formattedTrialLocation += ' - Remote Proceedings';
+  }
+
   const pdfData = await applicationContext
     .getDocumentGenerators()
     .standingPretrialOrder({
@@ -70,11 +84,13 @@ exports.generateStandingPretrialOrderInteractor = async (
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         trialInfo: {
           ...trialSession,
+          chambersPhoneNumber: formattedChambersPhoneNumber,
           formattedJudgeName,
           formattedServedDate,
           formattedStartDate,
           formattedStartDateWithDayOfWeek,
           formattedStartTime,
+          formattedTrialLocation,
         },
       },
     });

@@ -41,7 +41,12 @@ const migrateRecords = async ({
   }
   if (!ranMigrations['0038-parse-generated-orders.js']) {
     applicationContext.logger.debug('about to run migration 0038');
-    items = await migration0038(items, documentClient);
+    items = await migration0038(items);
+  }
+
+  if (!ranMigrations['devex-0037-combine-work-items.js']) {
+    applicationContext.logger.debug('about to run devex migration 0037');
+    items = await devexMigration0037(items, documentClient);
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -144,6 +149,9 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
+    ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
+    ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
+    ...(await hasMigrationRan('0036-phone-number-format.js')),
     ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
     ...(await hasMigrationRan('0038-parse-generated-orders.js')),
   };

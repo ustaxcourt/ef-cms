@@ -181,6 +181,8 @@ Use plain language for error messages, alerts, and instructions so users can cle
 - Time displayed as 3:45 pm ET
 - Error messages should be clear directions/verb phrases of what the user needs to do e.g., "Enter state" or "Select trial city" without periods at the end
 
+## System-Generated PDFs
+* for content, use one space after a period punctuation 
 
 ### Success and error messages
 

@@ -1669,6 +1669,17 @@
       "ordinalField": ""
     },
     {
+      "documentTitle": "Motion to Proceed Remotely",
+      "documentType": "Motion to Proceed Remotely",
+      "category": "Motion",
+      "eventCode": "MOTR",
+      "scenario": "Standard",
+      "labelPreviousDocument": "",
+      "labelFreeText": "",
+      "labelFreeText2": "",
+      "ordinalField": ""
+    },
+    {
       "documentTitle": "Motion to Quash or Modify Subpoena",
       "documentType": "Motion to Quash or Modify Subpoena",
       "category": "Motion",

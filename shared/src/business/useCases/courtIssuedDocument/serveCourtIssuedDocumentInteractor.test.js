@@ -511,4 +511,42 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       status: false,
     });
   });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const docketEntry = mockCases[0].docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: mockCases[0].docketNumber,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: false,
+    });
+  });
 });

@@ -41,8 +41,8 @@
 # # Note: 10.0.0.0 and 10.0.2.0 are private IPs
 # # Required via https://stackoverflow.com/a/66802973/1002357
 # # """
-# # > Launch tasks in a private subnet that has a VPC routing table configured to route outbound 
-# # > traffic via a NAT gateway in a public subnet. This way the NAT gateway can open a connection 
+# # > Launch tasks in a private subnet that has a VPC routing table configured to route outbound
+# # > traffic via a NAT gateway in a public subnet. This way the NAT gateway can open a connection
 # # > to ECR on behalf of the task.
 # # """
 # # If this networking configuration isn't here, this error happens in the ECS Task's "Stopped reason":
