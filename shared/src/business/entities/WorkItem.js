@@ -50,6 +50,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
     'servedAt',
     'userId',
   ]);
+
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
