@@ -26,5 +26,7 @@ exports.generateCourtIssuedDocumentTitleInteractor = ({ documentMetadata }) => {
     documentTitle: resetDocumentTitle,
   });
 
-  return courtIssuedDocument.getDocumentTitle();
+  if (courtIssuedDocument) {
+    return courtIssuedDocument.getDocumentTitle();
+  }
 };
