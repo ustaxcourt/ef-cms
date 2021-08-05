@@ -8,7 +8,7 @@ const {
 describe('SupportingDocumentInformationFactory', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = SupportingDocumentInformationFactory.get({
+      const documentInstance = SupportingDocumentInformationFactory({
         certificateOfService: false,
         supportingDocument: 'Brief in Support',
         supportingDocumentFile: {},
@@ -19,7 +19,7 @@ describe('SupportingDocumentInformationFactory', () => {
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = SupportingDocumentInformationFactory.get(
+      const extDoc = SupportingDocumentInformationFactory(
         {},
         VALIDATION_ERROR_MESSAGES,
       );
@@ -29,8 +29,24 @@ describe('SupportingDocumentInformationFactory', () => {
       });
     });
 
+    it('should have an supportingDocumentFreeText error message if the supportingDocument is in supportingDocumentFreeTextCategories', () => {
+      const extDoc = SupportingDocumentInformationFactory(
+        {
+          attachments: true,
+          certificateOfService: false,
+          supportingDocument: 'Affidavit in Support',
+          supportingDocumentFile: {},
+        },
+        VALIDATION_ERROR_MESSAGES,
+      );
+      expect(extDoc.getFormattedValidationErrors()).toEqual({
+        supportingDocumentFreeText:
+          VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
+      });
+    });
+
     it('should be valid when all fields are present', () => {
-      const extDoc = SupportingDocumentInformationFactory.get(
+      const extDoc = SupportingDocumentInformationFactory(
         {
           attachments: true,
           certificateOfService: false,
@@ -44,7 +60,7 @@ describe('SupportingDocumentInformationFactory', () => {
 
     describe('Has Certificate of Service', () => {
       it('should require certificate of service date be entered', () => {
-        const extDoc = SupportingDocumentInformationFactory.get(
+        const extDoc = SupportingDocumentInformationFactory(
           {
             attachments: true,
             certificateOfService: true,

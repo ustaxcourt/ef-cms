@@ -14,7 +14,7 @@ exports.validateAddPrivatePractitionerInteractor = (
   applicationContext,
   { counsel },
 ) => {
-  const errors = AddPrivatePractitionerFactory.get(counsel, {
+  const errors = AddPrivatePractitionerFactory(counsel, {
     applicationContext,
   }).getFormattedValidationErrors();
 

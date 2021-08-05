@@ -8,7 +8,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeE', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
@@ -21,7 +21,7 @@ describe('CourtIssuedDocumentTypeE', () => {
   });
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type E',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
@@ -36,7 +36,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         howMuch: -5,
         unit: 'days',
       });
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date,
         documentTitle:
@@ -51,7 +51,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
@@ -65,7 +65,7 @@ describe('CourtIssuedDocumentTypeE', () => {
 
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           date: '2025-04-10T04:00:00.000Z',
 
@@ -80,7 +80,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       });
 
       it('should be valid when filingDate is defined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           date: '2025-04-10T04:00:00.000Z',
 
@@ -97,7 +97,7 @@ describe('CourtIssuedDocumentTypeE', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:

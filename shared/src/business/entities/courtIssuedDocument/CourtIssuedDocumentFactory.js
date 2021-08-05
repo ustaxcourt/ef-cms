@@ -9,17 +9,12 @@ const { CourtIssuedDocumentTypeG } = require('./CourtIssuedDocumentTypeG');
 const { CourtIssuedDocumentTypeH } = require('./CourtIssuedDocumentTypeH');
 
 /**
- *
- * @constructor
- */
-function CourtIssuedDocumentFactory() {}
-
-/**
+ * Court Issued Document Factory entity
  *
  * @param {object} documentMetadata the document metadata
- * @returns {object} the correct entity based on the document scenario
+ * @constructor
  */
-CourtIssuedDocumentFactory.get = documentMetadata => {
+function CourtIssuedDocumentFactory(documentMetadata) {
   if (documentMetadata && documentMetadata.scenario) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
     switch (scenario) {
@@ -43,6 +38,6 @@ CourtIssuedDocumentFactory.get = documentMetadata => {
   }
 
   return new CourtIssuedDocumentDefault(documentMetadata);
-};
+}
 
 module.exports = { CourtIssuedDocumentFactory };

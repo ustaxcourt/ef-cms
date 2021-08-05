@@ -7,7 +7,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeB', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         freeText: 'Some free text',
@@ -20,7 +20,7 @@ describe('CourtIssuedDocumentTypeB', () => {
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type B',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
@@ -30,7 +30,7 @@ describe('CourtIssuedDocumentTypeB', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -42,7 +42,7 @@ describe('CourtIssuedDocumentTypeB', () => {
     });
 
     it('should be invalid when freeText is longer than 1000 characters', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -57,7 +57,7 @@ describe('CourtIssuedDocumentTypeB', () => {
 
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -71,7 +71,7 @@ describe('CourtIssuedDocumentTypeB', () => {
       });
 
       it('should be valid when filingDate is defined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -87,7 +87,7 @@ describe('CourtIssuedDocumentTypeB', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -102,7 +102,7 @@ describe('CourtIssuedDocumentTypeB', () => {
     });
 
     it('should generate a title without the judge title if not available', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -116,7 +116,7 @@ describe('CourtIssuedDocumentTypeB', () => {
     });
 
     it('should generate valid title without optional freeText', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
