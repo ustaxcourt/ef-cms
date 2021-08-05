@@ -4,6 +4,7 @@ const {
 const {
   formatCases,
   generateTrialCalendarPdfInteractor,
+  getPractitionerName,
 } = require('./generateTrialCalendarPdfInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { US_STATES } = require('../../entities/EntityConstants');
@@ -53,6 +54,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
         address2: 'Suite B',
         caseOrder: [
           { calendarNotes: 'Calendar notes.', docketNumber: '123-20' },
+          { calendarNotes: undefined, docketNumber: '101-18' },
         ],
         city: US_STATES.NY,
         courtReporter: 'Lois Lane',
@@ -138,6 +140,14 @@ describe('generateTrialCalendarPdfInteractor', () => {
       expect(result[1].docketNumber).toBe('102-19');
     });
 
+    it('should set casse title to an empty string when caseCaption is undefined', () => {
+      const result = formatCases({
+        applicationContext,
+        calendaredCases: [{ ...mockCases[0], caseCaption: undefined }],
+      });
+      expect(result[0].caseTitle).toBe('');
+    });
+
     it('should format practitioner name + barNumber', () => {
       const result = formatCases({
         applicationContext,
@@ -201,5 +211,23 @@ describe('generateTrialCalendarPdfInteractor', () => {
         c => c.docketNumber === '102-19',
       );
     expect(caseWithCalendarNotes.calendarNotes).toBe('this is a test');
+  });
+
+  describe('getPractitionerName', () => {
+    it('should return the name and bar number of the practitioner as one string', () => {
+      const result = getPractitionerName({
+        barNumber: '123',
+        name: 'Prac',
+      });
+      expect(result).toEqual('Prac (123)');
+    });
+
+    it('should return the name of the practitioner when bar number is undefined', () => {
+      const result = getPractitionerName({
+        barNumber: undefined,
+        name: 'Prac',
+      });
+      expect(result).toEqual('Prac');
+    });
   });
 });
