@@ -10,7 +10,6 @@ const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
 const {
@@ -184,48 +183,33 @@ exports.completeDocketEntryQCInteractor = async (
 
   const workItemToUpdate = updatedDocketEntry.workItem;
 
-  if (workItemToUpdate) {
-    Object.assign(workItemToUpdate, {
-      caseIsInProgress: caseEntity.inProgress,
-      caseStatus: caseToUpdate.status,
-      docketEntry: {
-        ...updatedDocketEntry.toRawObject(),
-        createdAt: updatedDocketEntry.createdAt,
-      },
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+  Object.assign(workItemToUpdate, {
+    docketEntry: {
+      ...updatedDocketEntry.toRawObject(),
+      createdAt: updatedDocketEntry.createdAt,
+    },
+  });
+
+  workItemToUpdate.setAsCompleted({
+    message: 'completed',
+    user,
+  });
+
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .saveWorkItemForDocketClerkFilingExternalDocument({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
     });
-
-    if (!workItemToUpdate.completedAt) {
-      Object.assign(workItemToUpdate, {
-        assigneeId: null,
-        assigneeName: null,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
-
-      workItemToUpdate.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-
-      workItemToUpdate.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-    }
-
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketClerkFilingExternalDocument({
-        applicationContext,
-        workItem: workItemToUpdate.validate().toRawObject(),
-      });
-  }
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;

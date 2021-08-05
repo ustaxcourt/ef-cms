@@ -80,6 +80,8 @@ describe('Create a work item', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
+    await refreshElasticsearchIndex();
+
     const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
       cerebralTest,
     );
