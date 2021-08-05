@@ -5,13 +5,15 @@ const {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
+  ROLES,
 } = require('../../entities/EntityConstants');
 const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
 const { omit } = require('lodash');
 
 describe('assignWorkItemsInteractor', () => {
+  const mockUserId = 'ebb34e3f-8ac1-4ac2-bc22-265b80a2acb2';
   const MOCK_WORK_ITEM = {
-    assigneeId: null,
+    assigneeId: '03b74100-10ac-45f1-865d-b063978cac9c',
     assigneeName: 'bob',
     caseStatus: CASE_STATUS_TYPES.generalDocket,
     createdAt: '2018-12-27T18:06:02.971Z',
@@ -49,17 +51,46 @@ describe('assignWorkItemsInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should throw an error when the work item is invalid', async () => {
+  // it('should throw an error when the work item is invalid', async () => {
+  //   applicationContext.getPersistenceGateway().getWorkItemById.mockReturnValue({
+  //     ...MOCK_WORK_ITEM,
+  //     docketNumber: undefined,
+  //   });
+
+  //   await expect(
+  //     assignWorkItemsInteractor(applicationContext, {
+  //       userId: 'docketclerk',
+  //     }),
+  //   ).rejects.toThrow();
+  // });
+
+  it('assigns a work item to the current user', async () => {
+    const mockDocketClerkUser = {
+      name: 'Alex Docketclerk',
+      role: ROLES.docketClerk,
+      section: 'docket',
+      userId: mockUserId,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(mockDocketClerkUser);
+
     applicationContext
       .getPersistenceGateway()
-      .getWorkItemById.mockReturnValue(omit(MOCK_WORK_ITEM, 'docketNumber'));
+      .getUserById.mockReturnValue(mockDocketClerkUser);
 
-    await expect(
-      assignWorkItemsInteractor(applicationContext, {
-        userId: 'docketclerk',
-      }),
-    ).rejects.toThrow();
+    await assignWorkItemsInteractor(applicationContext, {
+      assigneeId: mockUserId,
+      assigneeName: 'Ted Docket',
+      userId: mockUserId,
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getWorkItemById.mockReturnValue(MOCK_WORK_ITEM);
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toEqual({});
   });
-
-  // it('', async () => {});
 });
