@@ -14,18 +14,20 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
 
   beforeEach(() => {
     putStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        section: DOCKET_SECTION,
-        userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    });
-    getStub = jest.fn().mockReturnValue({
-      promise: async () => ({
-        Item: {
+      promise: () =>
+        Promise.resolve({
           section: DOCKET_SECTION,
           userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      }),
+        }),
+    });
+    getStub = jest.fn().mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            section: DOCKET_SECTION,
+            userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+        }),
     });
   });
 
