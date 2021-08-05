@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemCaseTitle = async ({
+exports.updateWorkItemCaseTitle = ({
   applicationContext,
   caseTitle,
   workItem,

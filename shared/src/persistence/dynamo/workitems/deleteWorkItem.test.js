@@ -6,7 +6,7 @@ const { deleteWorkItem } = require('./deleteWorkItem');
 describe('deleteWorkItem', () => {
   beforeAll(() => {
     applicationContext.getDocumentClient().delete.mockReturnValue({
-      promise: async () => true,
+      promise: () => Promise.resolve(true),
     });
   });
 

@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.removeIrsPractitionerOnCase = async ({
+exports.removeIrsPractitionerOnCase = ({
   applicationContext,
   docketNumber,
   userId,
@@ -13,7 +13,7 @@ exports.removeIrsPractitionerOnCase = async ({
     },
   });
 
-exports.removePrivatePractitionerOnCase = async ({
+exports.removePrivatePractitionerOnCase = ({
   applicationContext,
   docketNumber,
   userId,
