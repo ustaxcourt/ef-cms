@@ -22,7 +22,7 @@ exports.generateDocumentTitleInteractor = (
       });
   }
 
-  const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
+  const externalDocument = ExternalDocumentFactory(documentMetadata, {
     applicationContext,
   });
 

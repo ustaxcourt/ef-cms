@@ -12,9 +12,7 @@ describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;
 
   const errors = () =>
-    ExternalDocumentInformationFactory.get(
-      baseDoc,
-    ).getFormattedValidationErrors();
+    ExternalDocumentInformationFactory(baseDoc).getFormattedValidationErrors();
 
   describe('Standard Document', () => {
     beforeEach(() => {
