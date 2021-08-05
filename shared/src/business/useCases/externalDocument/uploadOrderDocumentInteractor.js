@@ -28,7 +28,6 @@ exports.uploadOrderDocumentInteractor = async (
       applicationContext,
       document: documentFile,
       key: docketEntryIdToOverwrite,
-      onUploadProgress: () => {},
     });
 
   return orderDocketEntryId;
