@@ -14,7 +14,7 @@ exports.validateCourtIssuedDocketEntryInteractor = (
   applicationContext,
   { entryMetadata },
 ) => {
-  const courtIssuedDocument = CourtIssuedDocumentFactory.get(entryMetadata, {
+  const courtIssuedDocument = CourtIssuedDocumentFactory(entryMetadata, {
     applicationContext,
   });
 

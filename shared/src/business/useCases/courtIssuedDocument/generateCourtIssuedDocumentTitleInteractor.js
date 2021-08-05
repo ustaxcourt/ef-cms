@@ -21,7 +21,7 @@ exports.generateCourtIssuedDocumentTitleInteractor = ({ documentMetadata }) => {
     (filingEvent && filingEvent.documentTitle) ||
     documentMetadata.documentTitle;
 
-  const courtIssuedDocument = CourtIssuedDocumentFactory.get({
+  const courtIssuedDocument = CourtIssuedDocumentFactory({
     ...documentMetadata,
     documentTitle: resetDocumentTitle,
   });

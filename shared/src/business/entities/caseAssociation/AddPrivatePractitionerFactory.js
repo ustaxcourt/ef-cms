@@ -11,7 +11,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 /**
  * Add Private Practitioner Factory entity
  *
- * @param {object} rawProps the raw case association request data
+ * @param {object} rawProps the raw private practitioner data
  * @constructor
  */
 function AddPrivatePractitionerFactory(rawProps) {

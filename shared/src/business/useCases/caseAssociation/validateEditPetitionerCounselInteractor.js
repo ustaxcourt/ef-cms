@@ -14,7 +14,7 @@ exports.validateEditPetitionerCounselInteractor = (
   applicationContext,
   { practitioner },
 ) => {
-  const errors = EditPetitionerCounselFactory.get(practitioner, {
+  const errors = EditPetitionerCounselFactory(practitioner, {
     applicationContext,
   }).getFormattedValidationErrors();
 
