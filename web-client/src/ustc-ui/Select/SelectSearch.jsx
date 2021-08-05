@@ -1,4 +1,4 @@
-import { getSortedOptions } from '../../ustc-ui/utils/selectSearchHelper';
+import { getSortedOptions } from '../../ustc-ui/Utils/selectSearchHelper';
 import React from 'react';
 import Select from 'react-select';
 import classNames from 'classnames';
