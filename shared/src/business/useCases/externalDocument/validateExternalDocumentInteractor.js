@@ -14,7 +14,7 @@ exports.validateExternalDocumentInteractor = (
   applicationContext,
   { documentMetadata },
 ) => {
-  const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
+  const externalDocument = ExternalDocumentFactory(documentMetadata, {
     applicationContext,
   });
 

@@ -9,7 +9,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardF', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard F',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -21,7 +21,7 @@ describe('ExternalDocumentNonStandardF', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
@@ -33,7 +33,7 @@ describe('ExternalDocumentNonStandardF', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: over3000Characters,
         documentType: 'Amended',
@@ -49,7 +49,7 @@ describe('ExternalDocumentNonStandardF', () => {
 
   describe('title generation', () => {
     it('should generate valid title with previousDocument documentType', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
@@ -61,7 +61,7 @@ describe('ExternalDocumentNonStandardF', () => {
     });
 
     it('should generate valid title with previousDocument documentTitle', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
@@ -78,7 +78,7 @@ describe('ExternalDocumentNonStandardF', () => {
     });
 
     it('should generate title without previousDocument', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amended [Document Name]',
         documentType: 'Amended',
