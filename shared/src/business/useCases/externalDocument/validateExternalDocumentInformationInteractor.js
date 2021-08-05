@@ -5,14 +5,19 @@ const {
 /**
  * validateExternalDocumentInformationInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.documentMetadata the document metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateExternalDocumentInformationInteractor = ({
-  documentMetadata,
-}) => {
-  const externalDocument = ExternalDocumentInformationFactory(documentMetadata);
+exports.validateExternalDocumentInformationInteractor = (
+  applicationContext,
+  { documentMetadata },
+) => {
+  const externalDocument = ExternalDocumentInformationFactory(
+    documentMetadata,
+    { applicationContext },
+  );
 
   return externalDocument.getFormattedValidationErrors();
 };
