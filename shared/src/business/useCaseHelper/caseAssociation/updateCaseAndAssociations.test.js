@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 jest.mock('../../entities/Message');
 jest.mock('../../entities/CaseDeadline');
 const faker = require('faker');
