@@ -15,7 +15,6 @@ const documentViewerHelper = withAppContextDecorator(
 );
 
 describe('documentViewerHelper', () => {
-  const DOCKET_NUMBER = '101-20';
   const DOCKET_ENTRY_ID = 'b8947b11-19b3-4c96-b7a1-fa6a5654e2d5';
 
   const baseDocketEntry = {
@@ -670,69 +669,5 @@ describe('documentViewerHelper', () => {
     });
 
     expect(result.showStricken).toEqual(true);
-  });
-
-  it('should return documentViewerLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.documentViewerLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/document-view?docketEntryId=${DOCKET_ENTRY_ID}`,
-    );
-  });
-
-  it('should return completeQcLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.completeQcLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/edit`,
-    );
-  });
-
-  it('should return reviewAndServePetitionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.reviewAndServePetitionLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/petition-qc/document-view/${DOCKET_ENTRY_ID}`,
-    );
-  });
-
-  it('should return signStipulatedDecisionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.signStipulatedDecisionLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
-    );
   });
 });

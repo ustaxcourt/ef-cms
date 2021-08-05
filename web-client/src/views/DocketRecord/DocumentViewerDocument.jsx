@@ -10,6 +10,7 @@ export const DocumentViewerDocument = connect(
   {
     caseDetail: state.caseDetail,
     documentViewerHelper: state.documentViewerHelper,
+    documentViewerLinksHelper: state.documentViewerLinksHelper,
     iframeSrc: state.iframeSrc,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
@@ -26,6 +27,7 @@ export const DocumentViewerDocument = connect(
   function DocumentViewerDocument({
     caseDetail,
     documentViewerHelper,
+    documentViewerLinksHelper,
     iframeSrc,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
@@ -105,7 +107,7 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     openConfirmServePaperFiledDocumentSequence({
                       docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                      redirectUrl: documentViewerHelper.documentViewerLink,
+                      redirectUrl: documentViewerLinksHelper.documentViewerLink,
                     });
                   }}
                 >
@@ -116,7 +118,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePetitionButton && (
                 <Button
                   link
-                  href={documentViewerHelper.reviewAndServePetitionLink}
+                  href={documentViewerLinksHelper.reviewAndServePetitionLink}
                   icon="paper-plane"
                   iconColor="white"
                 >
@@ -127,7 +129,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showSignStipulatedDecisionButton && (
                 <Button
                   link
-                  href={documentViewerHelper.signStipulatedDecisionLink}
+                  href={documentViewerLinksHelper.signStipulatedDecisionLink}
                   icon="pencil-alt"
                 >
                   Sign Stipulated Decision
@@ -137,7 +139,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showCompleteQcButton && (
                 <Button
                   link
-                  href={documentViewerHelper.completeQcLink}
+                  href={documentViewerLinksHelper.completeQcLink}
                   icon="star"
                 >
                   Complete QC
