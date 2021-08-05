@@ -31,8 +31,6 @@ exports.removeCounselFromRemovedPetitioner = async ({
     caseEntity.getPractitionersRepresenting(petitionerContactId);
 
   for (const practitioner of practitioners) {
-    if (!practitioner.isRepresenting(petitionerContactId)) continue;
-
     if (practitioner.representing.length === 1) {
       caseEntity.removePrivatePractitioner(practitioner);
 
