@@ -116,7 +116,7 @@ module.exports = {
     ],
     'max-lines': [
       'error',
-      { max: 850, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+      { max: 700, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
@@ -182,7 +182,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
-    'require-await': 'warn',
+    'require-await': 'off',
     'security/detect-child-process': 'off',
     'security/detect-non-literal-fs-filename': 'off',
     'security/detect-object-injection': 'off',
