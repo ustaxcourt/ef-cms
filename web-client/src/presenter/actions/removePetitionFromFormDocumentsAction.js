@@ -12,8 +12,8 @@ import { state } from 'cerebral';
 export const removePetitionFromFormDocumentsAction = ({ get, store }) => {
   const documents = get(state.form.docketEntries);
 
-  documents.some((document, idx) => {
-    if (document.documentType === 'Petition') {
+  documents.some(({ documentType }, idx) => {
+    if (documentType === 'Petition') {
       documents.splice(idx, 1);
       return true;
     }

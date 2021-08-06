@@ -27,6 +27,6 @@ export const serveCourtIssuedDocumentAction = async ({
     alertSuccess: {
       message: 'Document served. ',
     },
-    pdfUrl: result ? result.pdfUrl : undefined,
+    pdfUrl: result?.pdfUrl,
   };
 };
