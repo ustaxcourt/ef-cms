@@ -15,7 +15,7 @@ describe('submitPaperFilingAction', () => {
     };
   });
 
-  it('should file a new docket entry with an uploaded file', async () => {
+  it('file a new docket entry with an uploaded file', async () => {
     applicationContext
       .getUseCases()
       .addPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -37,9 +37,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addPaperFilingInteractor.mock.calls[0][1]
-        .generateCoversheet,
-    ).toEqual(true);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
@@ -57,7 +56,7 @@ describe('submitPaperFilingAction', () => {
     });
   });
 
-  it('should file a new docket entry with an uploaded file and return a paper service pdf url', async () => {
+  it('file a new docket entry with an uploaded file and return a paper service pdf url', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext.getUseCases().addPaperFilingInteractor.mockReturnValue({
       caseDetail,
@@ -83,7 +82,7 @@ describe('submitPaperFilingAction', () => {
     expect(result.output.pdfUrl).toEqual(mockPdfUrl);
   });
 
-  it('should file a new docket entry with an uploaded file, but does not set generateCoversheet to true when saved for later', async () => {
+  it('file a new docket entry with an uploaded file, but does not generate a coversheet when saved for later', async () => {
     applicationContext
       .getUseCases()
       .addPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -106,9 +105,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addPaperFilingInteractor.mock.calls[0][1]
-        .generateCoversheet,
-    ).toBeFalsy();
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
@@ -126,7 +124,7 @@ describe('submitPaperFilingAction', () => {
     });
   });
 
-  it('should file a new docket entry without an uploaded file', async () => {
+  it('file a new docket entry without an uploaded file', async () => {
     applicationContext
       .getUseCases()
       .addPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -146,9 +144,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().addPaperFilingInteractor.mock.calls[0][1]
-        .generateCoversheet,
-    ).toBeFalsy();
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
@@ -166,7 +163,7 @@ describe('submitPaperFilingAction', () => {
     });
   });
 
-  it('should save an existing docket entry with an uploaded file', async () => {
+  it('saves an existing docket entry with an uploaded file', async () => {
     applicationContext
       .getUseCases()
       .editPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -190,9 +187,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().editPaperFilingInteractor.mock
-        .calls[0][1].generateCoversheet,
-    ).toBeFalsy();
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
@@ -210,7 +206,7 @@ describe('submitPaperFilingAction', () => {
     });
   });
 
-  it('should save an existing docket entry without uploading a file', async () => {
+  it('saves an existing docket entry without uploading a file', async () => {
     applicationContext
       .getUseCases()
       .editPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -232,9 +228,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().editPaperFilingInteractor.mock
-        .calls[0][1].generateCoversheet,
-    ).toBeFalsy();
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
@@ -252,7 +247,7 @@ describe('submitPaperFilingAction', () => {
     });
   });
 
-  it('should save and serve an existing docket entry without uploading a file, but sets generateCoversheet to true', async () => {
+  it('saves and serves an existing docket entry without uploading a file, but adds a coversheet', async () => {
     applicationContext
       .getUseCases()
       .editPaperFilingInteractor.mockReturnValue({ caseDetail });
@@ -281,9 +276,8 @@ describe('submitPaperFilingAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().editPaperFilingInteractor.mock
-        .calls[0][1].generateCoversheet,
-    ).toEqual(true);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().editPaperFilingInteractor,
     ).toHaveBeenCalled();
