@@ -387,6 +387,95 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should not add documents if docketEntryId is undefined', async () => {
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: undefined,
+        secondaryDocument: {
+          documentTitle: 'Redacted',
+          documentType: 'Redacted',
+          eventCode: 'REDC',
+          filedBy: 'Test Petitioner',
+        },
+      },
+      leadDocketNumber: docketNumber0,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).not.toBeCalled();
+  });
+
+  it('should set work item as completed if isPaper is true', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Guy Fieri',
+      role: ROLES.admin,
+      section: 'docket',
+      userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isPaper: true,
+        primaryDocumentId: docketEntryId0,
+        secondaryDocument: {
+          docketEntryId: docketEntryId1,
+          documentTitle: 'Redacted',
+          documentType: 'Redacted',
+          eventCode: 'REDC',
+          filedBy: 'Test Petitioner',
+        },
+      },
+      leadDocketNumber: docketNumber0,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({
+      completedMessage: 'completed',
+    });
+  });
+
+  it('should not set as served when is NOT isAutoServed', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      name: 'Guy Fieri',
+      role: ROLES.admin,
+      section: 'docket',
+      userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+    });
+
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Simultaneous Answer',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filedBy: 'Test Petitioner',
+        isPaper: true,
+        primaryDocumentId: docketEntryId0,
+      },
+      leadDocketNumber: docketNumber0,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should not send the service email if an error occurs while adding a coversheet', async () => {
     applicationContext
       .getUseCases()
