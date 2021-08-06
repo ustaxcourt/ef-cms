@@ -42,6 +42,15 @@ module.exports = {
         'jest/expect-expect': 'off',
       },
     },
+    {
+      files: ['**/*.test.js'],
+      rules: {
+        'max-lines': [
+          'error',
+          { max: 650, skipBlankLines: true, skipComments: true },
+        ],
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
