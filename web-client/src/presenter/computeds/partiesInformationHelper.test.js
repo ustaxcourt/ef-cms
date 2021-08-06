@@ -5,7 +5,10 @@ import {
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
+import {
+  docketClerkUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from 'cerebral/test';
@@ -21,10 +24,6 @@ describe('partiesInformationHelper', () => {
   const mockParticipant = {
     contactId: '25d51a3b-969e-4bb4-a932-cc9645ba888c',
     contactType: CONTACT_TYPES.participant,
-  };
-  const mockPetitionsClerk = {
-    role: ROLES.petitionsClerk,
-    userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
   };
   let mockPetitioner;
   let mockPrivatePractitioner;
@@ -181,17 +180,13 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
+      expect(
+        result.formattedPetitioners[0].representingPractitioners,
+      ).toMatchObject([
         {
-          ...mockPetitioner,
-          hasCounsel: true,
-          representingPractitioners: [
-            {
-              ...mockPrivatePractitioner,
-              formattedEmail: mockEmail,
-              representing: [mockPetitioner.contactId],
-            },
-          ],
+          ...mockPrivatePractitioner,
+          formattedEmail: mockEmail,
+          representing: [mockPetitioner.contactId],
         },
       ]);
     });
@@ -209,19 +204,10 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
-        {
-          ...mockPetitioner,
-          hasCounsel: true,
-          representingPractitioners: [
-            {
-              ...mockPrivatePractitioner,
-              email: undefined,
-              formattedEmail: 'No email provided',
-            },
-          ],
-        },
-      ]);
+      expect(
+        result.formattedPetitioners[0].representingPractitioners[0]
+          .formattedEmail,
+      ).toEqual('No email provided');
     });
 
     it('should set hasCounsel to false for a petitioner that is not represented', () => {
@@ -237,13 +223,7 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
-        {
-          ...mockPetitioner,
-          hasCounsel: false,
-          representingPractitioners: [],
-        },
-      ]);
+      expect(result.formattedPetitioners[0].hasCounsel).toEqual(false);
     });
 
     it('should set formattedEmail for a petitioner that has a verified email', () => {
@@ -509,7 +489,7 @@ describe('partiesInformationHelper', () => {
     it('is false when the user is an internal user without permission to edit petitioner info', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
-          ...getBaseState(mockPetitionsClerk),
+          ...getBaseState(petitionsClerkUser),
           caseDetail: {
             docketEntries: [
               {
