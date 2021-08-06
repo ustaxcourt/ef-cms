@@ -47,7 +47,7 @@ module.exports = {
       rules: {
         'max-lines': [
           'error',
-          { max: 650, skipBlankLines: true, skipComments: true },
+          { max: 650, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
         ],
       },
     },
@@ -125,7 +125,7 @@ module.exports = {
     ],
     'max-lines': [
       'error',
-      { max: 700, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+      { max: 700, skipBlankLines: true, skipComments: true },
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
