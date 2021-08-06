@@ -486,4 +486,25 @@ describe('fileExternalDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toBeCalled();
   });
+
+  it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
+    await fileExternalDocumentInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'XYZ',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: undefined,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).not.toBeCalled();
+  });
 });

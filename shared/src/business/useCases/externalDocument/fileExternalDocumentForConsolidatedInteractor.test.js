@@ -399,7 +399,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
         ...mockDocumentMetadataMemorandum,
-
         isPaper: true,
         secondaryDocument: {
           docketEntryId: docketEntryId1,
@@ -456,7 +455,6 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
         docketNumbersForFiling: ['101-19', '102-19'],
         documentMetadata: {
           ...mockDocumentMetadataMemorandum,
-
           secondaryDocument: {
             docketEntryId: docketEntryId1,
             documentTitle: 'Redacted',
