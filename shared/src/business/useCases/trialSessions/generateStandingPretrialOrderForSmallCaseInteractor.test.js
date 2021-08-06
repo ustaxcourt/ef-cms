@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_NUMBER_SUFFIXES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('./generateStandingPretrialOrderForSmallCaseInteractor');
-const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   const TEST_JUDGE = {
@@ -129,5 +132,37 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().addServedStampToDocument,
     ).toHaveBeenCalled();
+  });
+
+  it('should send formattedTrialLocation with Remote Proceedings text if proceedingType is remote', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        joinPhoneNumber: '3333',
+        judge: { name: 'Test Judge' },
+        meetingId: '1111',
+        password: '2222',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        startDate: '2019-08-25T05:00:00.000Z',
+        startTime: '10:00',
+        trialLocation: 'Boise, Idaho',
+      });
+
+    await generateStandingPretrialOrderForSmallCaseInteractor(
+      applicationContext,
+      {
+        docketNumber: '234-56',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators()
+        .standingPretrialOrderForSmallCase.mock.calls[0][0].data,
+    ).toMatchObject({
+      trialInfo: {
+        formattedTrialLocation: 'Boise, Idaho - Remote Proceedings',
+      },
+    });
   });
 });
