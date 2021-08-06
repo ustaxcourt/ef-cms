@@ -10,24 +10,16 @@ const { includes } = require('lodash');
 const { makeRequiredHelper } = require('./externalDocumentHelpers');
 
 /**
- *
- * @constructor
- */
-function SecondaryDocumentInformationFactory() {}
-
-/**
+ * Secondary Document Information Factory entity
  *
  * @param {object} documentMetadata the document metadata
  * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
- * @returns {object} the created document
+ * @constructor
  */
-SecondaryDocumentInformationFactory.get = (
+function SecondaryDocumentInformationFactory(
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
-) => {
-  /**
-   *
-   */
+) {
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
@@ -82,6 +74,6 @@ SecondaryDocumentInformationFactory.get = (
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new (validEntityDecorator(entityConstructor))(documentMetadata);
-};
+}
 
 module.exports = { SecondaryDocumentInformationFactory };
