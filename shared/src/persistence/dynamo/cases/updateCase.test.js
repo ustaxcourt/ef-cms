@@ -27,11 +27,11 @@ describe('updateCase', () => {
     };
 
     applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: async () => null,
+      promise: () => Promise.resolve(null),
     });
 
     applicationContext.getDocumentClient().delete.mockReturnValue({
-      promise: async () => null,
+      promise: () => Promise.resolve(null),
     });
 
     applicationContext.getDocumentClient().query.mockReturnValue([

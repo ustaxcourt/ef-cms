@@ -13,7 +13,7 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
-import { validateAddIrsPractitionerAction } from '../../actions/caseAssociation/validateAddIrsPractitionerAction';
+import { validateAddIrsPractitionerAction } from '../../actions/CaseAssociation/validateAddIrsPractitionerAction';
 
 export const associateIrsPractitionerWithCaseSequence =
   showProgressSequenceDecorator([

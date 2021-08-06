@@ -14,7 +14,7 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
-import { validateAddPrivatePractitionerAction } from '../../actions/caseAssociation/validateAddPrivatePractitionerAction';
+import { validateAddPrivatePractitionerAction } from '../../actions/CaseAssociation/validateAddPrivatePractitionerAction';
 
 export const associatePrivatePractitionerWithCaseSequence =
   showProgressSequenceDecorator([

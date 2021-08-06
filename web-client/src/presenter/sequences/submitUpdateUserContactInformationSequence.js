@@ -5,7 +5,7 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';

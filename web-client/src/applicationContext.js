@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import ImageBlobReduce from 'image-blob-reduce';
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),

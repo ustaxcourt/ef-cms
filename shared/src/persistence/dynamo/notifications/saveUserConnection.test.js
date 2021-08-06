@@ -6,7 +6,7 @@ const { saveUserConnection } = require('./saveUserConnection');
 describe('saveUserConnection', () => {
   beforeAll(() => {
     applicationContext.getDocumentClient().put.mockReturnValue({
-      promise: async () => Promise.resolve(null),
+      promise: () => Promise.resolve(null),
     });
   });
 
