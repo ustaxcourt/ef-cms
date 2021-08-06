@@ -24,6 +24,14 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   const docketEntryId2 = 'd2d2d2d2-b37b-479d-9201-067ec6e335bb';
   const docketEntryId3 = 'd3d3d3d3-b37b-479d-9201-067ec6e335bb';
 
+  const mockDocumentMetadataMemorandum = {
+    documentTitle: 'Memorandum in Support',
+    documentType: 'Memorandum in Support',
+    eventCode: 'MISP',
+    filedBy: 'Test Petitioner',
+    primaryDocumentId: docketEntryId0,
+  };
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -150,13 +158,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       applicationContext,
       {
         docketNumbersForFiling: ['101-19', '102-19'],
-        documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: docketEntryId0,
-        },
+        documentMetadata: mockDocumentMetadataMemorandum,
         leadDocketNumber: docketNumber0,
       },
     );
@@ -189,13 +191,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       applicationContext,
       {
         docketNumbersForFiling: ['101-19', '102-19'],
-        documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: docketEntryId0,
-        },
+        documentMetadata: mockDocumentMetadataMemorandum,
         leadDocketNumber: docketNumber0,
       },
     );
@@ -216,11 +212,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: docketEntryId0,
+        ...mockDocumentMetadataMemorandum,
         secondaryDocument: {
           docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
@@ -246,11 +238,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         docketNumbersForFiling: ['101-19', '102-19'],
         documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: docketEntryId0,
+          ...mockDocumentMetadataMemorandum,
           secondaryDocument: {
             docketEntryId: docketEntryId1,
             documentTitle: 'Redacted',
@@ -280,11 +268,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         docketNumbersForFiling: ['101-19', '102-19'],
         documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: docketEntryId0,
+          ...mockDocumentMetadataMemorandum,
           secondaryDocument: {
             docketEntryId: docketEntryId1,
             documentTitle: 'Redacted',
@@ -327,11 +311,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: docketEntryId0,
+        ...mockDocumentMetadataMemorandum,
         secondaryDocument: {
           docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
@@ -359,11 +339,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
-        primaryDocumentId: docketEntryId0,
+        ...mockDocumentMetadataMemorandum,
         secondaryDocument: {
           docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
@@ -391,10 +367,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
+        ...mockDocumentMetadataMemorandum,
         primaryDocumentId: undefined,
         secondaryDocument: {
           documentTitle: 'Redacted',
@@ -425,12 +398,9 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
       docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
-        documentTitle: 'Memorandum in Support',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Test Petitioner',
+        ...mockDocumentMetadataMemorandum,
+
         isPaper: true,
-        primaryDocumentId: docketEntryId0,
         secondaryDocument: {
           docketEntryId: docketEntryId1,
           documentTitle: 'Redacted',
@@ -485,11 +455,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       fileExternalDocumentForConsolidatedInteractor(applicationContext, {
         docketNumbersForFiling: ['101-19', '102-19'],
         documentMetadata: {
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: docketEntryId0,
+          ...mockDocumentMetadataMemorandum,
+
           secondaryDocument: {
             docketEntryId: docketEntryId1,
             documentTitle: 'Redacted',
