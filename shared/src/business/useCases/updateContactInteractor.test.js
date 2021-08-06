@@ -355,6 +355,12 @@ describe('updates the contact on a case', () => {
   });
 
   it('should NOT update the case when the contact information has not changed', async () => {
+    applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue(null);
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(null);
+
     await updateContactInteractor(applicationContext, {
       contactInfo: {
         ...mockCaseContactPrimary,
@@ -363,7 +369,7 @@ describe('updates the contact on a case', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
   });
 });
