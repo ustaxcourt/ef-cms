@@ -38,4 +38,17 @@ describe('generateDocumentTitleInteractor', () => {
     ).toHaveBeenCalled();
     expect(title).toBe('abc Title Cool');
   });
+
+  it('should NOT generate a document title for the previousDocument when one does not exist on the document', async () => {
+    await generateDocumentTitleInteractor(applicationContext, {
+      documentMetadata: {
+        documentTitle: 'abc [pizza]',
+        scenario: 'nonstandard a',
+      },
+    });
+
+    expect(
+      applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
+    ).not.toHaveBeenCalled();
+  });
 });
