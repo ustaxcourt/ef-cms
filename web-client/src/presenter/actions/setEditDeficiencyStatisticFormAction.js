@@ -15,7 +15,7 @@ export const setEditDeficiencyStatisticFormAction = ({
   props,
   store,
 }) => {
-  const { statistics } = get(state.caseDetail);
+  const statistics = get(state.caseDetail.statistics);
   const { statisticId } = props;
 
   const statisticToEdit = statistics.find(

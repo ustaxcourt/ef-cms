@@ -24,4 +24,29 @@ describe('removePetitionFromFormDocumentsAction', () => {
       },
     ]);
   });
+  it('state form docket entries remains unchanged if Petition not found in form.docketEntries array', async () => {
+    const { state } = await runAction(removePetitionFromFormDocumentsAction, {
+      props: {},
+      state: {
+        form: {
+          docketEntries: [
+            {
+              documentType: 'Entry of Appearance',
+            },
+            {
+              documentType: 'Statement of Taxpayer Identification',
+            },
+          ],
+        },
+      },
+    });
+    expect(state.form.docketEntries).toEqual([
+      {
+        documentType: 'Entry of Appearance',
+      },
+      {
+        documentType: 'Statement of Taxpayer Identification',
+      },
+    ]);
+  });
 });
