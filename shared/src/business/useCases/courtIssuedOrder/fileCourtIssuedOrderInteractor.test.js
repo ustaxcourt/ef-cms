@@ -280,6 +280,36 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(savedDocumentContents).toContain(caseRecord.caseCaption);
   });
 
+  it.only('should set documentMetadata documentContents if parseAndScrapePdfContents returns content', async () => {
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockImplementation(
+        () => 'bloop ee doop brnabowbow',
+      );
+
+    const savedDocumentContents = JSON.parse(
+      applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
+    ).documentContents;
+
+    expect(savedDocumentContents).toContain(caseRecord.docketNumberWithSuffix);
+    expect(savedDocumentContents).toContain(caseRecord.caseCaption);
+  });
+
   it('should parse and scrape pdf contents', async () => {
     await fileCourtIssuedOrderInteractor(applicationContext, {
       documentMetadata: {
