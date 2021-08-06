@@ -31,34 +31,35 @@ export const OrderSearch = connect(
           example, search “innocent spouse” for results containing that exact
           phrase.
         </p>
-        <div className="bg-primary-dark text-white padding-4">
-          <p className="margin-top-0 ">
-            <span className="text-semibold">Search orders </span>(required)
-          </p>
-          <input
-            aria-describedby="search-orders-header search-description"
-            className="usa-input maxw-tablet-lg"
-            id="order-search"
-            name="keyword"
-            placeholder="Enter keyword or phrase"
-            type="text"
-            value={advancedSearchForm.orderSearch.keyword || ''}
-            onBlur={() => validateOrderSearchSequence()}
-            onChange={e => {
-              updateAdvancedOrderSearchFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-        <div className="blue-container order-search-container">
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            submitAdvancedSearchSequence();
+          }}
+        >
+          {' '}
+          <div className="bg-primary-dark text-white padding-4">
+            <p className="margin-top-0 ">
+              <span className="text-semibold">Search orders </span>(required)
+            </p>
+            <input
+              aria-describedby="search-orders-header search-description"
+              className="usa-input maxw-tablet-lg"
+              id="order-search"
+              name="keyword"
+              placeholder="Enter keyword or phrase"
+              type="text"
+              value={advancedSearchForm.orderSearch.keyword || ''}
+              onBlur={() => validateOrderSearchSequence()}
+              onChange={e => {
+                updateAdvancedOrderSearchFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
+            />
+          </div>
+          <div className="blue-container order-search-container">
             <AdvancedDocumentSearch
               formType="orderSearch"
               judges={judges}
@@ -91,8 +92,8 @@ export const OrderSearch = connect(
                 </div>
               </NonMobile>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </>
     );
   },
