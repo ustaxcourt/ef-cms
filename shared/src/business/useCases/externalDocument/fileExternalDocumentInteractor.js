@@ -153,13 +153,6 @@ exports.fileExternalDocumentInteractor = async (
       workItems.push(workItem);
       caseEntity.addDocketEntry(docketEntryEntity);
 
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          caseEntity,
-          docketEntryId,
-        });
-
       const isAutoServed = docketEntryEntity.isAutoServed();
 
       if (isAutoServed) {
