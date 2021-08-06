@@ -3,8 +3,8 @@ import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
-} from '../utils/useCerebralState';
-import { map } from '../utils/ElementChildren';
+} from '../Utils/useCerebralState';
+import { map } from '../Utils/ElementChildren';
 import { pick, uniqueId } from 'lodash';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';

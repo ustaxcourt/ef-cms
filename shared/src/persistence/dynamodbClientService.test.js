@@ -21,7 +21,7 @@ describe('dynamodbClientService', function () {
 
   const mockDynamoClient = {
     describeTable: jest.fn().mockImplementation(() => {
-      return { promise: async () => null };
+      return { promise: () => Promise.resolve(null) };
     }),
   };
 

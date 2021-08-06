@@ -1,7 +1,7 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
-import { setCaseModalSearchAction } from '../actions/caseConsolidation/setCaseModalSearchAction';
-import { setDocketNumberFromModalSearchAction } from '../actions/caseConsolidation/setDocketNumberFromModalSearchAction';
-import { setNoCaseFoundModalSearchAction } from '../actions/caseConsolidation/setNoCaseFoundModalSearchAction';
+import { setCaseModalSearchAction } from '../actions/CaseConsolidation/setCaseModalSearchAction';
+import { setDocketNumberFromModalSearchAction } from '../actions/CaseConsolidation/setDocketNumberFromModalSearchAction';
+import { setNoCaseFoundModalSearchAction } from '../actions/CaseConsolidation/setNoCaseFoundModalSearchAction';
 
 export const submitCaseSearchForConsolidationSequence = [
   setDocketNumberFromModalSearchAction,

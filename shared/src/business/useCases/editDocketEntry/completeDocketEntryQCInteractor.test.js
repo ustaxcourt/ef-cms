@@ -3,43 +3,31 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_TYPES_MAP,
-  CONTACT_TYPES,
-  COUNTRY_TYPES,
-  DOCKET_SECTION,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  PARTY_TYPES,
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   completeDocketEntryQCInteractor,
   getNeedsNewCoversheet,
 } = require('./completeDocketEntryQCInteractor');
+const {
+  DOCKET_SECTION,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
+const { docketClerkUser } = require('../../../test/mockUsers');
+const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
 
-  const mockUser = {
-    name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
-    userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  };
-
-  const mockPrimaryId = '7815b188-3b5f-4bbb-9689-18d234f774fa';
+  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
+  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
   beforeEach(() => {
-    const PDF_MOCK_BUFFER = 'Hello World';
-
     const workItem = {
       docketEntry: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: '45678-18',
+        docketEntryId: mockDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
         documentType: 'Answer',
         eventCode: 'A',
-        filedBy: 'Test Petitioner',
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       },
       docketNumber: '45678-18',
       section: DOCKET_SECTION,
@@ -50,87 +38,36 @@ describe('completeDocketEntryQCInteractor', () => {
     };
 
     caseRecord = {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      createdAt: '',
+      ...MOCK_CASE,
       docketEntries: [
         {
+          ...MOCK_CASE.docketEntries[0],
           addToCoversheet: false,
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info 2',
           certificateOfService: true,
           certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
-          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: '45678-18',
           documentTitle: 'Answer',
           documentType: 'Answer',
           eventCode: 'A',
-          filedBy: 'Petr. Guy Fieri',
-          index: 42,
           isOnDocketRecord: true,
           receivedAt: '2019-08-25T05:00:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItem,
-        },
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335b2',
-          docketNumber: '45678-18',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          receivedAt: '2019-08-27T05:00:00.000Z',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          workItem,
-        },
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: '45678-18',
-          documentType: 'Answer',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          receivedAt: '2019-08-29T05:00:00.000Z',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           workItem,
         },
       ],
-      docketNumber: '45678-18',
-      filingType: 'Myself',
-      partyType: PARTY_TYPES.petitioner,
-      petitioners: [
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactId: mockPrimaryId,
-          contactType: CONTACT_TYPES.primary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
-      ],
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
+      .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
-
-    applicationContext.getUniqueId.mockReturnValue(
-      'b6f835aa-bf95-4996-b858-c8e94566db47',
-    );
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
@@ -145,7 +82,7 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
       pdf: () => {
-        return PDF_MOCK_BUFFER;
+        return 'Hello World';
       },
       setContent: () => {},
     });
@@ -174,15 +111,7 @@ describe('completeDocketEntryQCInteractor', () => {
   it('adds documents and workitems', async () => {
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: {
-          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Document Title',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Resp.',
-          filers: [mockPrimaryId],
-        },
+        entryMetadata: caseRecord.docketEntries[0],
       }),
     ).resolves.not.toThrow();
 
@@ -197,32 +126,8 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
-    caseRecord.petitioners = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: mockPrimaryId,
-        contactType: CONTACT_TYPES.primary,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'test@example.com',
-        name: 'Test Petitioner',
-        phone: 'n/a',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        state: 'AK',
-      },
-    ];
-
     const result = await completeDocketEntryQCInteractor(applicationContext, {
-      entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Something Else',
-        documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
-      },
+      entryMetadata: caseRecord.docketEntries[0],
     });
 
     expect(
@@ -240,16 +145,11 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should generate a notice of docket change with a new coversheet when additional info fields are added and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: '123',
         additionalInfo2: 'abc',
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
+        certificateOfService: false,
       },
     });
 
@@ -268,14 +168,37 @@ describe('completeDocketEntryQCInteractor', () => {
     ).toBeCalled();
   });
 
+  it('should save the notice of docket change on the case', async () => {
+    await completeDocketEntryQCInteractor(applicationContext, {
+      entryMetadata: {
+        ...caseRecord.docketEntries[0],
+        addToCoversheet: true,
+        additionalInfo: '123',
+        additionalInfo2: 'abc',
+        certificateOfService: false,
+      },
+    });
+
+    const updatedCaseDocketEntries =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.docketEntries;
+    const noticeOfDocketChangeDocketEntry = updatedCaseDocketEntries.find(
+      d =>
+        d.eventCode ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode,
+    );
+
+    expect(noticeOfDocketChangeDocketEntry.documentTitle).toEqual(
+      'Notice of Docket Change for Docket Entry No. 1',
+    );
+  });
+
   it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         certificateOfService: true,
         certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
-        filedBy: 'Petr. Guy Fieri',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -299,8 +222,6 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         attachments: true,
-        filedBy: 'Petr. Guy Fieri',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -323,14 +244,11 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: true,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
+        additionalInfo: undefined,
+        additionalInfo2: undefined,
+        certificateOfService: false,
       },
     });
 
@@ -352,14 +270,12 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should generate a notice of docket change with a new coversheet when documentTitle has changed and addToCoversheeet is false', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: false,
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        additionalInfo: undefined,
+        additionalInfo2: undefined,
+        certificateOfService: false,
         documentTitle: 'Something Different',
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -383,9 +299,6 @@ describe('completeDocketEntryQCInteractor', () => {
       entryMetadata: {
         ...caseRecord.docketEntries[0],
         addToCoversheet: false,
-        additionalInfo: 'additional info',
-        additionalInfo2: 'additional info 2',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -400,16 +313,11 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info 221',
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
+        certificateOfService: false,
       },
     });
 
@@ -431,16 +339,11 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should generate a new coversheet when additionalInfo is NOT changed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
+        ...caseRecord.docketEntries[0],
         addToCoversheet: true,
         additionalInfo: 'additional info',
         additionalInfo2: 'additional info',
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
-        documentTitle: caseRecord.docketEntries[0].documentTitle,
-        documentType: caseRecord.docketEntries[0].documentType,
-        eventCode: caseRecord.docketEntries[0].eventCode,
-        filedBy: 'Resp.',
-        filers: [mockPrimaryId],
+        certificateOfService: false,
       },
     });
 
@@ -467,16 +370,10 @@ describe('completeDocketEntryQCInteractor', () => {
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata: {
+          ...caseRecord.docketEntries[0],
           addToCoversheet: true,
           additionalInfo: 'additional info',
           additionalInfo2: 'additional info',
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: caseRecord.docketEntries[0].documentTitle,
-          documentType: caseRecord.docketEntries[0].documentType,
-          eventCode: caseRecord.docketEntries[0].eventCode,
-          filedBy: 'Resp.',
-          filers: [mockPrimaryId],
         },
       }),
     ).rejects.toThrow(new Error('bad!'));
@@ -487,22 +384,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
-    caseRecord.petitioners = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: mockPrimaryId,
-        contactType: CONTACT_TYPES.primary,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Petitioner',
-        phone: 'n/a',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'AK',
-      },
-    ];
-    caseRecord.isPaper = true;
-    caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      });
 
     const mockNumberOfPages = 999;
     applicationContext
@@ -513,13 +407,9 @@ describe('completeDocketEntryQCInteractor', () => {
 
     const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
+        ...caseRecord.docketEntries[0],
         documentTitle: 'Something Else',
         documentType: 'Memorandum in Support',
-        eventCode: 'MISP',
-        filedBy: 'Resp',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -553,31 +443,25 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
-    caseRecord.petitioners = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: mockPrimaryId,
-        contactType: CONTACT_TYPES.primary,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Petitioner',
-        phone: 'n/a',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'AK',
-      },
-    ];
-    caseRecord.isPaper = true;
-    caseRecord.mailingDate = '2019-03-01T21:40:46.415Z';
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      });
 
     const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
+        ...caseRecord.docketEntries[0],
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
-        eventCode: 'MISP',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -594,30 +478,11 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('does not generate a document for paper service if the document is a Notice of Change of Address and the case has no paper service parties', async () => {
-    caseRecord.petitioners = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: mockPrimaryId,
-        contactType: CONTACT_TYPES.primary,
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'test@example.com',
-        name: 'Test Petitioner',
-        phone: 'n/a',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        state: 'AK',
-      },
-    ];
-
     const result = await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
+        ...caseRecord.docketEntries[0],
         documentTitle: 'Notice of Change of Address',
         documentType: 'Notice of Change of Address',
-        eventCode: 'NCA',
-        filers: [mockPrimaryId],
       },
     });
 
@@ -636,8 +501,7 @@ describe('completeDocketEntryQCInteractor', () => {
   it('should update only allowed editable fields on a docket entry document', async () => {
     await completeDocketEntryQCInteractor(applicationContext, {
       entryMetadata: {
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: caseRecord.docketNumber,
+        ...caseRecord.docketEntries[0],
         documentTitle: 'My Edited Document',
         documentType: 'Notice of Change of Address',
         eventCode: 'NCA',
@@ -663,24 +527,14 @@ describe('completeDocketEntryQCInteractor', () => {
     });
   });
 
-  it('updates automaticBlocked on a case and all associated case trial sort mappings', async () => {
+  it('updates automaticBlocked on a case and all associated case trial sort mappings if pending is true', async () => {
     expect(caseRecord.automaticBlocked).toBeFalsy();
 
     const { caseDetail } = await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
-          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Edited Document',
-          documentType: 'Notice of Change of Address',
-          eventCode: 'NCA',
-          filedBy: 'Resp.',
-          filers: [mockPrimaryId],
-          freeText: 'Some text about this document',
-          hasOtherFilingParty: true,
-          isPaper: true,
-          otherFilingParty: 'Bert Brooks',
+          ...caseRecord.docketEntries[0],
           pending: true,
         },
       },
@@ -697,44 +551,11 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('normalizes receivedAt dates to ISO string format', async () => {
-    caseRecord.docketEntries = [
-      {
-        addToCoversheet: false,
-        additionalInfo: 'additional info',
-        additionalInfo2: 'additional info 2',
-        certificateOfService: true,
-        certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
-        docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-        docketNumber: '45678-18',
-        documentTitle: 'Answer',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filedBy: 'Petr. Guy Fieri',
-        index: 42,
-        isOnDocketRecord: true,
-        receivedAt: '2021-01-01', // date only
-        servedAt: '2019-08-25T05:00:00.000Z',
-        servedParties: [{ name: 'Bernard Lowe' }],
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
-    ];
-
     const { caseDetail } = await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
-          docketEntryId: 'fffba5a9-b37b-479d-9201-067ec6e335bb',
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'My Edited Document',
-          documentType: 'Notice of Change of Address',
-          eventCode: 'NCA',
-          filedBy: 'Resp.',
-          filers: [mockPrimaryId],
-          freeText: 'Some text about this document',
-          hasOtherFilingParty: true,
-          isPaper: true,
-          otherFilingParty: 'Bert Brooks',
-          pending: true,
+          ...caseRecord.docketEntries[0],
           receivedAt: '2021-01-01', // date only
         },
       },

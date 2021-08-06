@@ -3,8 +3,8 @@ import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
-} from '../utils/useCerebralState';
-import { getDefaultAttribute, map } from '../utils/ElementChildren';
+} from '../Utils/useCerebralState';
+import { getDefaultAttribute, map } from '../Utils/ElementChildren';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
