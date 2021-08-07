@@ -163,76 +163,23 @@ describe('documentViewerHelper', () => {
     expect(result.servedLabel).toEqual('Served 11/21/18');
   });
 
-  describe('showNotServed', () => {
-    const showNotServedTests = [
-      {
-        description:
-          'should be true if the document type is servable and does not have a servedAt',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        expectation: true,
-      },
-      {
-        description: 'should be false if the document type is unservable',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Corrected Transcript',
-          eventCode: 'CTRA',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is servable and has servedAt',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false when the document is a legacy served document',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          isLegacyServed: true,
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be true when the document is not a legacy served document and has no servedAt date',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          isLegacyServed: false,
-        },
-        expectation: true,
-      },
-    ];
-
-    showNotServedTests.forEach(({ description, docketEntry, expectation }) => {
-      it(`${description}`, () => {
-        const { showNotServed } = runCompute(documentViewerHelper, {
-          state: {
-            ...getBaseState(docketClerkUser),
-            caseDetail: {
-              docketEntries: [docketEntry],
+  it('should return showNotServed true if the document type is servable and does not have a servedAt', () => {
+    const { showNotServed } = runCompute(documentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              documentType: 'Order',
+              eventCode: 'O',
             },
-          },
-        });
-
-        expect(showNotServed).toEqual(expectation);
-      });
+          ],
+        },
+      },
     });
+
+    expect(showNotServed).toEqual(true);
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
