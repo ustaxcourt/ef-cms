@@ -264,14 +264,6 @@ exports.completeDocketEntryQCInteractor = async (
       paperServicePdfUrl = url;
       paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
-    if (needsNewCoversheet) {
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
   } else if (needsNoticeOfDocketChange) {
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
@@ -330,15 +322,6 @@ exports.completeDocketEntryQCInteractor = async (
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
-    if (needsNewCoversheet) {
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
-
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
@@ -351,21 +334,21 @@ exports.completeDocketEntryQCInteractor = async (
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
       paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
     }
-  } else {
-    if (needsNewCoversheet) {
-      await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
   }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     caseToUpdate: caseEntity,
   });
+
+  if (needsNewCoversheet) {
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      });
+  }
 
   return {
     caseDetail: caseEntity.toRawObject(),

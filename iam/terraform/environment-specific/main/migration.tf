@@ -50,7 +50,8 @@ resource "aws_iam_role_policy" "migration_policy" {
                 "dynamodb:ListStreams",
                 "dynamodb:Query",
                 "dynamodb:PutItem",
-                "dynamodb:Scan"
+                "dynamodb:Scan",
+                "dynamodb:DeleteItem"
             ],
             "Resource": [
                 "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
