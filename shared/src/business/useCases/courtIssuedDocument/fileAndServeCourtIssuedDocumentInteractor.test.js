@@ -128,7 +128,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getCaseByDocketNumber.mockImplementation(() => caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });

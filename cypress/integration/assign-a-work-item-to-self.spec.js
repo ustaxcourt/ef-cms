@@ -10,16 +10,16 @@ describe('Assign a work item', () => {
   it('views the section inbox', () => {
     navigateToDashboard('petitionsclerk');
     viewDocumentQCSectionInbox();
-    getWorkItemRow('101-19W').should('exist');
+    getWorkItemRow('102-20S').should('exist');
   });
 
   it('assigns the work item to self', () => {
-    getWorkItemCheckboxLabel('2611344f-f7bf-4f47-8ba0-60c70cb25446').click();
+    getWorkItemCheckboxLabel('77d8449a-ffe1-48e5-b056-a6112a819a4b').click();
     selectAssignee('Test Petitionsclerk');
   });
 
   it('creates a section inbox message in this work item', () => {
-    getWorkItemRow('101-19W')
+    getWorkItemRow('102-20S')
       .contains('td.to', 'Test Petitionsclerk')
       .should('exist');
   });

@@ -3,6 +3,9 @@ const {
   formatDateString,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -56,19 +59,32 @@ exports.generateNoticeOfTrialIssuedInteractor = async (
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    joinPhoneNumber: trialSession.joinPhoneNumber,
-    meetingId: trialSession.meetingId,
-    password: trialSession.password,
-    trialLocation: trialSession.trialLocation,
+    ...trialSession,
   };
 
-  return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({
-    applicationContext,
-    data: {
-      caseCaptionExtension,
-      caseTitle,
-      docketNumberWithSuffix,
-      trialInfo,
-    },
-  });
+  if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson) {
+    return await applicationContext
+      .getDocumentGenerators()
+      .noticeOfTrialIssuedInPerson({
+        applicationContext,
+        data: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          trialInfo,
+        },
+      });
+  } else {
+    return await applicationContext
+      .getDocumentGenerators()
+      .noticeOfTrialIssued({
+        applicationContext,
+        data: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          trialInfo,
+        },
+      });
+  }
 };

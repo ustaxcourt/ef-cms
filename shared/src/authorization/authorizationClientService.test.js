@@ -119,7 +119,7 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
-  it('should contain NO falsy values in the AUTHORIZATION_MAP', async () => {
+  it('should contain NO falsy values in the AUTHORIZATION_MAP', () => {
     Object.keys(AUTHORIZATION_MAP).forEach(role => {
       AUTHORIZATION_MAP[role].forEach(permission => {
         expect(permission).toBeTruthy();

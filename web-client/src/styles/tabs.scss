@@ -6,7 +6,6 @@
     top: 0;
     right: 0;
     padding-left: 1em;
-    background-color: $color-white;
 
     .usa-button {
       &:last-child {
@@ -202,7 +201,6 @@
                   padding-bottom: 0;
                   border-bottom: 3px solid color($theme-color-primary-darker);
                 }
-
               }
 
               .button-text {

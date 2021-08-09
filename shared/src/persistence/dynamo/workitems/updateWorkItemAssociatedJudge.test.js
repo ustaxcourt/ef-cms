@@ -13,7 +13,7 @@ describe('updateWorkItemAssociatedJudge', () => {
 
   it('should call client.update with passed in associated judge and work item pk and sk', async () => {
     const mockAssociatedJudge = 'Judge Cat';
-    const mockPk = 'work-item|pk';
+    const mockPk = 'case|pk';
     const mockSk = 'work-item|sk';
 
     await updateWorkItemAssociatedJudge({

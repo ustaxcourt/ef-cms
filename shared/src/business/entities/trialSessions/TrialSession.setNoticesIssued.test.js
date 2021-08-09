@@ -6,7 +6,7 @@ const { VALID_TRIAL_SESSION } = require('./TrialSession.test');
 
 describe('TrialSession entity', () => {
   describe('setNoticesIssued', () => {
-    it('Should set the noticeIssuedDate on the trial session', async () => {
+    it('Should set the noticeIssuedDate on the trial session', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,

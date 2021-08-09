@@ -247,6 +247,7 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
+    expect(result.numberOfResults).toEqual(2);
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
