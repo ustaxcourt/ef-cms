@@ -120,9 +120,30 @@ exports.validUser = {
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
 };
 
+exports.adcUser = {
+  role: ROLES.adc,
+  userId: '6498a6ff-fa05-4382-abc7-29a61347cfe1',
+};
+exports.chambersUser = {
+  role: ROLES.chambers,
+  section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+  userId: '555',
+};
 exports.clerkOfCourtUser = {
   role: ROLES.clerkOfCourt,
   userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
+};
+exports.generalUser = {
+  role: ROLES.general,
+  userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
+};
+exports.irsPractitionerUser = {
+  role: ROLES.irsPractitioner,
+  userId: 'ed17963c-3c33-421f-882c-306b5bdb3913',
+};
+exports.irsSuperuserUser = {
+  role: ROLES.irsSuperuser,
+  userId: '5a5c771d-ab63-4d78-a298-1de657dde621',
 };
 exports.judgeUser = {
   role: ROLES.judge,
@@ -132,17 +153,12 @@ exports.petitionerUser = {
   role: ROLES.petitioner,
   userId: '6844385f-b3de-444b-b76a-64fedfbb0229',
 };
+exports.privatePractitionerUser = {
+  role: ROLES.privatePractitioner,
+  userId: 'bc8219c5-e950-4cb2-9e3e-d7d645005364',
+};
 exports.trialClerkUser = {
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
   userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
-};
-exports.chambersUser = {
-  role: ROLES.chambers,
-  section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
-  userId: '555',
-};
-exports.adcUser = {
-  role: ROLES.adc,
-  userId: '6498a6ff-fa05-4382-abc7-29a61347cfe1',
 };

@@ -9,7 +9,7 @@ const { delete: remove } = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionId trial session ID to remove from hearings association
  * @returns {Promise} the promise of the call to persistence
  */
-exports.removeCaseFromHearing = async ({
+exports.removeCaseFromHearing = ({
   applicationContext,
   docketNumber,
   trialSessionId,

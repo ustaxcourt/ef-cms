@@ -8,8 +8,8 @@ import { setCasePropFromStateAction } from '../actions/setCasePropFromStateActio
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { submitEditRespondentCounselAction } from '../actions/caseAssociation/submitEditRespondentCounselAction';
-import { validateEditRespondentCounselAction } from '../actions/caseAssociation/validateEditRespondentCounselAction';
+import { submitEditRespondentCounselAction } from '../actions/CaseAssociation/submitEditRespondentCounselAction';
+import { validateEditRespondentCounselAction } from '../actions/CaseAssociation/validateEditRespondentCounselAction';
 
 export const submitEditRespondentCounselSequence = [
   startShowValidationAction,

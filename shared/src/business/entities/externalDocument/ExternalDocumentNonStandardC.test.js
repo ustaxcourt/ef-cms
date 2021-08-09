@@ -12,7 +12,7 @@ const { VALIDATION_ERROR_MESSAGES } = ExternalDocumentNonStandardC;
 describe('ExternalDocumentNonStandardC', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard C',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -24,7 +24,7 @@ describe('ExternalDocumentNonStandardC', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
         documentType: 'Affidavit in Support',
@@ -36,7 +36,7 @@ describe('ExternalDocumentNonStandardC', () => {
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
         documentType: 'Affidavit in Support',
@@ -52,7 +52,7 @@ describe('ExternalDocumentNonStandardC', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: over3000Characters,
         documentType: 'Affidavit in Support',
@@ -68,7 +68,7 @@ describe('ExternalDocumentNonStandardC', () => {
 
   describe('title generation', () => {
     it('should generate valid title with previousDocument documentType', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
         documentType: 'Affidavit in Support',
@@ -82,7 +82,7 @@ describe('ExternalDocumentNonStandardC', () => {
     });
 
     it('should generate valid title with previousDocument documentTitle', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
         documentType: 'Affidavit in Support',
@@ -99,7 +99,7 @@ describe('ExternalDocumentNonStandardC', () => {
     });
 
     it('should generate title without previousDocument', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Affidavit Of [Name] in Support Of [Document Name]',
         documentType: 'Affidavit in Support',

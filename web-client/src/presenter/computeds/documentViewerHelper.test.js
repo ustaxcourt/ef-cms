@@ -15,7 +15,6 @@ const documentViewerHelper = withAppContextDecorator(
 );
 
 describe('documentViewerHelper', () => {
-  const DOCKET_NUMBER = '101-20';
   const DOCKET_ENTRY_ID = 'b8947b11-19b3-4c96-b7a1-fa6a5654e2d5';
 
   const baseDocketEntry = {
@@ -164,76 +163,23 @@ describe('documentViewerHelper', () => {
     expect(result.servedLabel).toEqual('Served 11/21/18');
   });
 
-  describe('showNotServed', () => {
-    const showNotServedTests = [
-      {
-        description:
-          'should be true if the document type is servable and does not have a servedAt',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        expectation: true,
-      },
-      {
-        description: 'should be false if the document type is unservable',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Corrected Transcript',
-          eventCode: 'CTRA',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is servable and has servedAt',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false when the document is a legacy served document',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          isLegacyServed: true,
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be true when the document is not a legacy served document and has no servedAt date',
-        docketEntry: {
-          ...baseDocketEntry,
-          documentType: 'Order',
-          eventCode: 'O',
-          isLegacyServed: false,
-        },
-        expectation: true,
-      },
-    ];
-
-    showNotServedTests.forEach(({ description, docketEntry, expectation }) => {
-      it(`${description}`, () => {
-        const { showNotServed } = runCompute(documentViewerHelper, {
-          state: {
-            ...getBaseState(docketClerkUser),
-            caseDetail: {
-              docketEntries: [docketEntry],
+  it('should return showNotServed true if the document type is servable and does not have a servedAt', () => {
+    const { showNotServed } = runCompute(documentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDocketEntry,
+              documentType: 'Order',
+              eventCode: 'O',
             },
-          },
-        });
-
-        expect(showNotServed).toEqual(expectation);
-      });
+          ],
+        },
+      },
     });
+
+    expect(showNotServed).toEqual(true);
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
@@ -670,69 +616,5 @@ describe('documentViewerHelper', () => {
     });
 
     expect(result.showStricken).toEqual(true);
-  });
-
-  it('should return documentViewerLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.documentViewerLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/document-view?docketEntryId=${DOCKET_ENTRY_ID}`,
-    );
-  });
-
-  it('should return completeQcLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.completeQcLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/edit`,
-    );
-  });
-
-  it('should return reviewAndServePetitionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.reviewAndServePetitionLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/petition-qc/document-view/${DOCKET_ENTRY_ID}`,
-    );
-  });
-
-  it('should return signStipulatedDecisionLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
-    const result = runCompute(documentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDocketEntry],
-          docketNumber: DOCKET_NUMBER,
-        },
-      },
-    });
-
-    expect(result.signStipulatedDecisionLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
-    );
   });
 });

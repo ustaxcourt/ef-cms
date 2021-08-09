@@ -66,7 +66,7 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
       ...errors,
       ...applicationContext
         .getUseCases()
-        .validateCourtIssuedDocketEntryInteractor(applicationContext, {
+        .validateCourtIssuedDocketEntryInteractor({
           entryMetadata: formMetadata,
         }),
     };

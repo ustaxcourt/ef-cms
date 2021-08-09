@@ -27,9 +27,10 @@ describe('updatePractitionerUser', () => {
       promise: () => Promise.reject(new Error('User not found')),
     });
     applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => ({
-        Item: updatedUser,
-      }),
+      promise: () =>
+        Promise.resolve({
+          Item: updatedUser,
+        }),
     });
 
     await expect(
@@ -43,9 +44,10 @@ describe('updatePractitionerUser', () => {
 
   it('should return updated practitioner data when the update was successful', async () => {
     applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => ({
-        Item: { ...updatedUser, userId },
-      }),
+      promise: () =>
+        Promise.resolve({
+          Item: { ...updatedUser, userId },
+        }),
     });
 
     const results = await updatePractitionerUser({
@@ -65,9 +67,10 @@ describe('updatePractitionerUser', () => {
 
   it("should not log an error when updating an existing practitioner user's Cognito attributes", async () => {
     applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => ({
-        Item: updatedUser,
-      }),
+      promise: () =>
+        Promise.resolve({
+          Item: updatedUser,
+        }),
     });
 
     await updatePractitionerUser({
