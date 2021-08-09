@@ -98,6 +98,23 @@ describe('orderAdvancedSearchInteractor', () => {
     ).toBe(false);
   });
 
+  it('logs raw search information and results size', async () => {
+    const result = await orderAdvancedSearchInteractor(applicationContext, {
+      keyword: 'candy',
+      startDate: '2001-01-01',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().logDocumentSearch.mock
+        .calls[0][1],
+    ).toMatchObject({
+      from: 0,
+      size: result.length,
+      timestamp: expect.anything(),
+      userRole: ROLES.petitionsClerk,
+    });
+  });
+
   it('returns no more than MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
