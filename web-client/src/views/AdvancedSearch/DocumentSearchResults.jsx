@@ -48,13 +48,13 @@ export const DocumentSearchResults = connect(
             <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
-                  <td aria-hidden="true" className="small-column"></td>
-                  <td aria-hidden="true" className="small-column"></td>
+                  <th aria-hidden="true" className="small-column"></th>
+                  <th aria-hidden="true" className="small-column"></th>
                   <th>Date</th>
-                  <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
-                  <th>Pages</th>
+                  <th>Case Title</th>
                   <th>Judge</th>
+                  <th>Pages</th>
                   <th aria-label="docket number">Docket No.</th>
                 </tr>
               </thead>
@@ -80,7 +80,6 @@ export const DocumentSearchResults = connect(
                           )}
                       </td>
                       <td>{result.formattedFiledDate}</td>
-                      <td>{result.caseTitle}</td>
                       <td>
                         <Button
                           link
@@ -96,11 +95,12 @@ export const DocumentSearchResults = connect(
                           {result.documentTitle}
                         </Button>
                       </td>
-                      <td>{result.numberOfPagesFormatted}</td>
+                      <td>{result.caseTitle}</td>
                       <td>
                         {result.formattedSignedJudgeName ||
                           result.formattedJudgeName}
                       </td>
+                      <td>{result.numberOfPagesFormatted}</td>
                       <td>
                         <CaseLink
                           formattedCase={result}
