@@ -7,7 +7,7 @@ exports.logDocumentSearch = async (applicationContext, search) => {
       ...{
         gsi1pk: 'document-search-log',
         pk: `logs|${search.timestamp}`,
-        sk: `logs|${search.timestamp}`,
+        sk: `logs|${search.userId}`,
       },
     },
     applicationContext,
