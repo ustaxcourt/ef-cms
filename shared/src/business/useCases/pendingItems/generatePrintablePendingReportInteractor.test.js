@@ -29,6 +29,12 @@ describe('generatePrintablePendingReportInteractor', () => {
       documentType: 'Test Document Type',
       receivedAt: '2020-02-02T12:00:00.000Z',
     },
+    {
+      associatedJudge: 'Judge Alvin',
+      docketNumber: '345-67',
+      documentTitle: 'Test Document Title',
+      receivedAt: '2020-03-03T12:00:00.000Z',
+    },
   ];
 
   beforeAll(() => {
@@ -119,6 +125,13 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
       },
+      {
+        associatedJudge: 'Judge Alvin',
+        caseTitle: '',
+        docketNumber: '345-67',
+        documentTitle: 'Test Document Title',
+        receivedAt: '2020-03-03T12:00:00.000Z',
+      },
     ]);
   });
 
@@ -192,5 +205,19 @@ describe('generatePrintablePendingReportInteractor', () => {
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toHaveBeenCalled();
     expect(results).toEqual('https://example.com');
+  });
+
+  it('fails and logs if the s3 upload fails', async () => {
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, callback) => callback('error'),
+    });
+
+    await expect(
+      generatePrintablePendingReportInteractor(applicationContext, {}),
+    ).rejects.toEqual('error');
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'error uploading to s3',
+    );
   });
 });

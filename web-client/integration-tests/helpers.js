@@ -748,3 +748,11 @@ export const getTextByCount = count => {
 
   return resultText.slice(0, count);
 };
+
+export const embedWithLegalIpsumText = (phrase = '') => {
+  return `While this license do not apply to, the licenses granted by such Contributor under Sections 2.1(b) and 2.2(b) are revoked effective as of the provisions set forth in the case of each Contributor, changes to the Recipient. The term of this Agreement, and b) allow the Commercial Contributor in writing by the Licensor accepting any such claim at its own expense. For example, a Contributor might include the Contribution, nor to (ii) Contributions of other Contributors.
+
+  Therefore, if a Contributor with respect to some or all of the Standard Version. ${phrase} You may Distribute your Modified Version complies with the preceding Paragraph, for commercial or non-commercial purposes, provided that you duplicate all of the General Public License applies to text developed by openSEAL (http://www.openseal.org/)." Alternately, this acknowledgment may appear in the form of the <ORGANIZATION> nor the names of the Agreement will not have their licenses terminated so long as the Derived Program to replace the Derived Program from a web site). Distribution of Modified Versions is governed by the Copyright Holder may not change the License at http://www.opensource.apple.com/apsl/ and read it before using this software for any purpose, but the Licensor except as expressly stated in Sections 2(a) and 2(b) above, Recipient receives no rights or otherwise.
+  
+  As a condition to exercising the rights set forth in the documentation and/or other rights consistent with the Work can be reasonably considered independent and separate works in conjunction with the library. If this is to make arrangements wholly outside of your status as Current Maintainer. If the Recipient shall meet all of the initial Contributor, the initial Contributor, the initial grant or subsequently acquired, any and all related documents be drafted in English.`;
+};

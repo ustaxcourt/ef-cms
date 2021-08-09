@@ -26,7 +26,7 @@ describe('getDocumentQCInboxForUser', () => {
                   },
                 },
                 {
-                  prefix: { 'pk.S': 'work-item|' },
+                  prefix: { 'pk.S': 'case|' },
                 },
                 {
                   prefix: { 'sk.S': 'work-item|' },
