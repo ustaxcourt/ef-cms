@@ -307,7 +307,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   describe('setupServiceIndicatorForUnrepresentedPetitioners', () => {
-    it("should set the petitioner's serviceIndicator to null when the peitioner is not represented", () => {
+    it("should set the petitioner's serviceIndicator to null when the petitioner is not represented", () => {
       const mockCase = {
         ...MOCK_CASE,
         associatedJudge: 'Buch',
