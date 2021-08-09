@@ -80,7 +80,11 @@ export const DocumentSearchResults = connect(
                           )}
                       </td>
                       <td>
-                        <CaseLink formattedCase={result} />
+                        <CaseLink
+                          formattedCase={result}
+                          rel="noreferrer"
+                          target="_blank"
+                        />
                       </td>
                       <td>{result.caseTitle}</td>
                       <td>
