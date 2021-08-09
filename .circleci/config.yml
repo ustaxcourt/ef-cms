@@ -379,6 +379,12 @@ jobs:
               -e "ENV=${ENV}" \
               --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
       - run:
+          name: Setup Migrate Flag
+          command: echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Setup Destination Table
+          command: echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
