@@ -160,7 +160,7 @@ describe('create user', () => {
     });
   });
 
-  it('should create a generic user nd delete the barNumber when it is defined and the user is not a pracititoner', async () => {
+  it('should create a generic user and delete the barNumber when it is defined and the user is not a pracititoner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Admin',
       role: ROLES.admin,
