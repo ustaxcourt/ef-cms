@@ -44,14 +44,17 @@ exports.advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const docketEntryQueryParams = [
+  const documentQueryFilter = [
+    { term: { 'entityName.S': 'DocketEntry' } },
     {
-      bool: {
-        must: [{ terms: { 'eventCode.S': documentEventCodes } }],
-        must_not: [{ term: { 'isStricken.BOOL': true } }],
+      exists: {
+        field: 'servedAt',
       },
     },
+    { terms: { 'eventCode.S': documentEventCodes } },
   ];
+
+  const docketEntryQueryParams = [];
   const caseMustNot = [];
 
   if (keyword) {
@@ -59,7 +62,8 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        query: removeAdvancedSyntaxSymbols(keyword),
+        flags: 'ESCAPE|PHRASE', // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
+        query: keyword,
       },
     });
   }
@@ -77,15 +81,15 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { bool: { must_not: caseMustNot } },
+      query: { bool: { filter: [], must_not: caseMustNot } },
       score: true,
     },
   };
 
   if (docketNumber) {
-    caseQueryParams.has_parent.query.bool.must = {
+    caseQueryParams.has_parent.query.bool.filter.push({
       term: { 'docketNumber.S': docketNumber },
-    };
+    });
   } else if (caseTitleOrPetitioner) {
     caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
@@ -129,13 +133,13 @@ exports.advancedDocumentSearch = async ({
   }
 
   if (opinionType) {
-    docketEntryQueryParams.push({
+    documentQueryFilter.push({
       term: { 'documentType.S': opinionType },
     });
   }
 
   if (endDate && startDate) {
-    docketEntryQueryParams.push({
+    documentQueryFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -144,7 +148,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   } else if (startDate) {
-    docketEntryQueryParams.push({
+    documentQueryFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -183,15 +187,9 @@ exports.advancedDocumentSearch = async ({
       from,
       query: {
         bool: {
-          must: [
-            { term: { 'entityName.S': 'DocketEntry' } },
-            {
-              exists: {
-                field: 'servedAt',
-              },
-            },
-            ...docketEntryQueryParams,
-          ],
+          filter: documentQueryFilter,
+          must: docketEntryQueryParams,
+          must_not: [{ term: { 'isStricken.BOOL': true } }],
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
