@@ -83,6 +83,7 @@ export const DocumentSearchResults = connect(
                       <td>
                         <Button
                           link
+                          className="padding-0"
                           onClick={() => {
                             openCaseDocumentDownloadUrlSequence({
                               docketEntryId: result.docketEntryId,
