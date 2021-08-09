@@ -69,7 +69,7 @@ describe('advancedDocumentSearch', () => {
     simple_query_string: {
       default_operator: 'and',
       fields: ['documentContents.S', 'documentTitle.S'],
-      flags: 'ESCAPE|PHRASE',
+      flags: 'OR|AND|ESCAPE|PHRASE',
       query: keyword,
     },
   });
