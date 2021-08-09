@@ -14,6 +14,7 @@ const {
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
+const { formatNow } = require('../../business/utilities/DateHandler');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -31,7 +32,15 @@ const { UnauthorizedError } = require('../../errors/errors');
  */
 exports.orderAdvancedSearchInteractor = async (
   applicationContext,
-  { caseTitleOrPetitioner, docketNumber, endDate, judge, keyword, startDate },
+  {
+    caseTitleOrPetitioner,
+    docketNumber,
+    endDate,
+    from,
+    judge,
+    keyword,
+    startDate,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -48,9 +57,11 @@ exports.orderAdvancedSearchInteractor = async (
     caseTitleOrPetitioner,
     docketNumber,
     endDate,
+    from,
     judge,
     keyword,
     startDate,
+    userRole: authorizedUser.role,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
@@ -63,6 +74,14 @@ exports.orderAdvancedSearchInteractor = async (
       judgeType: ORDER_JUDGE_FIELD,
       omitSealed,
       ...rawSearch,
+    });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .logDocumentSearch(applicationContext, {
+      ...rawSearch,
+      size: results.length,
+      timestamp: formatNow('YYYY/MM/DD h:mm a [ET]'),
     });
 
   const filteredResults = caseSearchFilter(results, authorizedUser).slice(
