@@ -3,6 +3,14 @@ const {
   createISODateString,
 } = require('../utilities/DateHandler');
 const {
+  docketClerkUser,
+  irsPractitionerUser,
+  irsSuperuserUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} = require('../../test/mockUsers');
+const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
 const {
@@ -17,26 +25,25 @@ const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
+  const mockDocketEntryId = '463ffb3a-bbec-4e58-8738-125a611c241b';
+  const baseDocketEntry = MOCK_CASE.docketEntries.filter(
+    d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  )[0];
+
+  const strickenDocketEntry = {
+    ...baseDocketEntry,
+    docketEntryId: 'e62ff4d7-c142-46c3-9ae6-f7adacf672f1',
+    documentTitle: 'Notice of Trial',
+    documentType: 'Notice of Trial',
+    eventCode: 'NTD',
+    index: 6,
+    isStricken: true,
+  };
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
 
-    mockCase.docketEntries.push({
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
-      docketNumber: '101-18',
-      documentTitle: 'Notice of Trial',
-      documentType: 'Notice of Trial',
-      eventCode: 'NTD',
-      filedBy: 'Test Petitioner',
-      index: 6,
-      isFileAttached: true,
-      isStricken: true,
-      processingStatus: 'pending',
-      servedAt: '2019-08-25T05:00:00.000Z',
-      servedParties: [],
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    mockCase.docketEntries.push(strickenDocketEntry);
 
     applicationContext
       .getPersistenceGateway()
@@ -49,7 +56,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
   it('throw unauthorized error on invalid role', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admin,
-      userId: 'petitioner',
+      userId: 'b5724655-1791-4a99-b0f6-f9bbe99c1db5',
     });
 
     await expect(
@@ -62,10 +69,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('petitioner not associated with case', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitioner,
-        userId: 'petitioner',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(false);
@@ -90,21 +94,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('returns the expected policy url for a petitioner who is NOT associated with the case and viewing a court issued document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Order that case is assigned',
-              eventCode: 'O',
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Order that case is assigned',
+          eventCode: 'O',
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -115,14 +112,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should throw an error when the user is a petitioner and is attempting to view a stricken document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: mockCase.docketNumber,
-          key: 'def81f4d-1e47-423a-8caf-6d2fdc3d3858',
+          key: strickenDocketEntry.docketEntryId,
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
@@ -130,10 +123,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('petitioner associated with case', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitioner,
-        userId: 'petitioner',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(true);
@@ -152,9 +142,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
         processingStatus: 'pending',
         userId: 'petitioner',
       });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -218,21 +205,14 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('throws an error for a petitioner who is associated with the case and viewing an unserved court issued document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Order that case is assigned',
-              eventCode: 'O',
-              servedAt: undefined,
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Order that case is assigned',
+          eventCode: 'O',
+          servedAt: undefined,
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -243,23 +223,16 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('throws an error for a petitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Order', // This is from courtIssuedEventCodes.json
-              eventCode: 'O',
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Order', // This is from courtIssuedEventCodes.json
+          eventCode: 'O',
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -270,22 +243,15 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('returns the expected policy url for a petitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Stipulated Decision',
-              eventCode: STIPULATED_DECISION_EVENT_CODE,
-              isOnDocketRecord: true,
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Stipulated Decision',
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+          isOnDocketRecord: true,
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -314,10 +280,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should throw an error when the user is a petitioner and is attempting to view the stin document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: mockCase.docketNumber,
@@ -329,30 +291,22 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('private practitioner not associated with case', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.privatePractitioner,
-        userId: 'privatePractitioner',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(
+        privatePractitionerUser,
+      );
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(false);
     });
 
     it('throws an error for a privatePractitioner who is not associated with the case and viewing an unserved court issued document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Order that case is assigned',
-              servedAt: undefined,
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Order that case is assigned',
+          servedAt: undefined,
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -363,22 +317,15 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('does NOT throw an error for a privatePractitioner who is not associated with the case and viewing a legacy served court issued document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Order that case is assigned',
-              eventCode: 'OAJ',
-              isLegacyServed: true,
-              servedAt: undefined,
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Order that case is assigned',
+          eventCode: 'OAJ',
+          isLegacyServed: true,
+          servedAt: undefined,
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -389,22 +336,15 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('throws an error for a privatePractitioner who is NOT associated with the case and viewing a served Stipulated Decision', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Stipulated Decision',
-              eventCode: STIPULATED_DECISION_EVENT_CODE,
-              isOnDocketRecord: true,
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Stipulated Decision',
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+          isOnDocketRecord: true,
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -417,34 +357,26 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('private practitioner associated with case', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.privatePractitioner,
-        userId: 'privatePractitioner',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(
+        privatePractitionerUser,
+      );
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(true);
     });
 
     it('throws an error for a privatePractitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType:
-                NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
-              eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType:
+            NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
+          eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+          isLegacySealed: true,
+          isOnDocketRecord: true,
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -455,22 +387,15 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('returns the expected policy url for a privatePractitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          docketEntries: [
-            {
-              ...mockCase.docketEntries.filter(
-                d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-              )[0],
-              documentType: 'Stipulated Decision',
-              eventCode: STIPULATED_DECISION_EVENT_CODE,
-              isOnDocketRecord: true,
-              servedAt: applicationContext.getUtilities().createISODateString(),
-            },
-          ],
-        });
+      mockCase.docketEntries = [
+        {
+          ...baseDocketEntry,
+          documentType: 'Stipulated Decision',
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+          isOnDocketRecord: true,
+          servedAt: applicationContext.getUtilities().createISODateString(),
+        },
+      ];
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -483,10 +408,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('petitions clerk', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.petitionsClerk,
-        userId: 'petitionsClerk',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(false);
@@ -502,10 +424,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should return the url when the user is a petitionsClerk, the case has not been served and is attempting to view the stin document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         key: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -522,9 +440,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
             .createISODateString();
         }
       });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -537,17 +452,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('docket clerk', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.docketClerk,
-        userId: 'docketClerk',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     });
 
     it('should throw an error when the user is a docketClerk and is attempting to view the stin document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: mockCase.docketNumber,
@@ -563,9 +471,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           correspondenceId: mockCorrespondenceId,
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -578,10 +483,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
   describe('irs superuser', () => {
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.irsSuperuser,
-        userId: 'irsSuperuser',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
     });
 
     it('throws an error if the user role is irsSuperuser and the petition document on the case is not served', async () => {
@@ -590,9 +492,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           documentType: 'Petition',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -613,9 +512,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -634,9 +530,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -656,9 +549,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           servedAt: '2019-03-01T21:40:46.415Z',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -672,34 +562,29 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   describe('irs practitioner associated with the case', () => {
+    const aShortTimeAgo = calculateISODate({
+      dateString: createISODateString(),
+      howMuch: -12,
+      units: 'hours',
+    });
+
     beforeAll(() => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.irsPractitioner,
-        userId: 'irsPractitioner',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(irsPractitionerUser);
       applicationContext
         .getPersistenceGateway()
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('should not throw an error if the user is associated with the case and the document is a transcript > 90 days old', async () => {
-      const mockDocketEntryId = applicationContext.getUniqueId();
-
+    it('should not throw an error if the user is associated with the case and the document meets age requirements', async () => {
       mockCase.docketEntries.push({
-        createdAt: '2018-01-21T20:49:28.192Z',
+        ...baseDocketEntry,
         date: '2000-01-21T20:49:28.192Z',
         docketEntryId: mockDocketEntryId,
-        docketNumber: '101-18',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
         isFileAttached: true,
-        processingStatus: 'pending',
-        userId: 'petitioner',
       });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
@@ -709,92 +594,16 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should not throw an error if the user is associated with the case and the document is a legacy transcript > 90 days old', async () => {
-      const mockDocketEntryId = applicationContext.getUniqueId();
-
+    it('should throw an error if the user is associated with the case and the document does not meet age requirements', async () => {
       mockCase.docketEntries.push({
-        createdAt: '2018-01-21T20:49:28.192Z',
-        date: undefined,
-        docketEntryId: mockDocketEntryId,
-        docketNumber: '101-18',
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        filingDate: '2000-01-21T20:49:28.192Z',
-        isFileAttached: true,
-        isLegacy: true,
-        processingStatus: 'pending',
-        userId: 'petitioner',
-      });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        key: mockDocketEntryId,
-      });
-
-      expect(url).toEqual('localhost');
-    });
-
-    it('should throw an error if the user is associated with the case and the document is a transcript < 90 days old', async () => {
-      const mockDocketEntryId = applicationContext.getUniqueId();
-      const aShortTimeAgo = calculateISODate({
-        dateString: createISODateString(),
-        howMuch: -12,
-        units: 'hours',
-      });
-
-      mockCase.docketEntries.push({
-        createdAt: '2018-01-21T20:49:28.192Z',
+        ...baseDocketEntry,
         date: aShortTimeAgo,
         docketEntryId: mockDocketEntryId,
-        docketNumber: '101-18',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
         isFileAttached: true,
-        processingStatus: 'pending',
-        userId: 'petitioner',
       });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: mockCase.docketNumber,
-          key: mockDocketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time.');
-    });
-
-    it('should throw an error if the user is associated with the case and the document is a legacy transcript < 90 days old', async () => {
-      const mockDocketEntryId = applicationContext.getUniqueId();
-      const aShortTimeAgo = calculateISODate({
-        dateString: createISODateString(),
-        howMuch: -12,
-        units: 'hours',
-      });
-
-      mockCase.docketEntries.push({
-        createdAt: '2018-01-21T20:49:28.192Z',
-        date: undefined,
-        docketEntryId: mockDocketEntryId,
-        docketNumber: '101-18',
-        documentTitle: 'Transcript of [anything] on [date]',
-        documentType: 'Transcript',
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        filingDate: aShortTimeAgo,
-        isFileAttached: true,
-        isLegacy: true,
-        processingStatus: 'pending',
-        userId: 'petitioner',
-      });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
 
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {

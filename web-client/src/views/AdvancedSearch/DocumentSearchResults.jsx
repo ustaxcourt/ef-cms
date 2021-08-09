@@ -61,7 +61,10 @@ export const DocumentSearchResults = connect(
               <tbody>
                 {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr className="search-result" key={result.docketEntryId}>
+                    <tr
+                      className="search-result"
+                      key={`${result.docketEntryId}-${result.docketNumber}`}
+                    >
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>

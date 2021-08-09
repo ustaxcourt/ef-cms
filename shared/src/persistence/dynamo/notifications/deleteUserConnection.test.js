@@ -6,9 +6,10 @@ const { deleteUserConnection } = require('./deleteUserConnection');
 describe('deleteUserConnection', () => {
   it('attempts to to delete the user connection', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () => ({
-        Items: [{ pk: 'connections-123', sk: 'abc' }],
-      }),
+      promise: () =>
+        Promise.resolve({
+          Items: [{ pk: 'connections-123', sk: 'abc' }],
+        }),
     });
 
     await deleteUserConnection({

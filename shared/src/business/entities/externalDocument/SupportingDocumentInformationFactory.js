@@ -11,21 +11,16 @@ const { makeRequiredHelper } = require('./externalDocumentHelpers');
 const { MAX_FILE_SIZE_BYTES } = require('../EntityConstants');
 
 /**
- *
- * @constructor
- */
-function SupportingDocumentInformationFactory() {}
-
-/**
+ * Supporting Document Information Factory entity
  *
  * @param {object} documentMetadata the document metadata
  * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
- * @returns {object} the created document
+ * @constructor
  */
-SupportingDocumentInformationFactory.get = (
+function SupportingDocumentInformationFactory(
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
-) => {
+) {
   /**
    *
    */
@@ -104,6 +99,6 @@ SupportingDocumentInformationFactory.get = (
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new (validEntityDecorator(entityConstructor))(documentMetadata);
-};
+}
 
 module.exports = { SupportingDocumentInformationFactory };

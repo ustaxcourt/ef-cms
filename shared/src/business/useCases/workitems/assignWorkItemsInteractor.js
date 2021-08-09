@@ -45,8 +45,8 @@ exports.assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: workItemEntity.validate().toRawObject(),
+    workItem: workItemEntity.validate().toRawObject(),
   });
 };

@@ -59,6 +59,40 @@ describe('setForHearingInteractor', () => {
     ).rejects.toThrow('That Hearing is already assigned to the Case');
   });
 
+  it('throws an error if the case has a hearing already associated with the trial session', async () => {
+    mockCase = {
+      ...MOCK_CASE_WITH_TRIAL_SESSION,
+      hearings: [
+        { trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId },
+      ],
+    };
+
+    await expect(
+      setForHearingInteractor(applicationContext, {
+        docketNumber: mockCase.docketNumber,
+        isHearing: true,
+        trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+      }),
+    ).rejects.toThrow('That Hearing is already assigned to the Case');
+  });
+
+  it('does not throw an error if the case has no trial sessions or hearings associated with it', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      hearings: [],
+    };
+
+    await setForHearingInteractor(applicationContext, {
+      docketNumber: mockCase.docketNumber,
+      isHearing: true,
+      trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().addCaseToHearing,
+    ).toHaveBeenCalled();
+  });
+
   it('successfully adds the trial session hearing', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,

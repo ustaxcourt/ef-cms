@@ -9,7 +9,7 @@ describe('updateCaseCorrespondence', () => {
 
   beforeAll(() => {
     putStub = jest.fn().mockReturnValue({
-      promise: async () => null,
+      promise: () => Promise.resolve(null),
     });
 
     applicationContext.getDocumentClient.mockReturnValue({

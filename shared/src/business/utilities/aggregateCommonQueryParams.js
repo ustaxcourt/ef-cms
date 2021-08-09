@@ -1,7 +1,7 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
 
 const removeAdvancedSyntaxSymbols = text => {
-  const nonWordCharacters = /[-+\s[\]{}:?!*.()<>=]+/gims;
+  const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
 };
 

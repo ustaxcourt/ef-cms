@@ -116,6 +116,44 @@ describe('getCaseAssociation', () => {
     });
   });
 
+  it('should return that internal user is associated', async () => {
+    applicationContext.getUtilities().isInternalUser.mockReturnValueOnce(true);
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'something internal',
+      userId: '987',
+    });
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+    });
+
+    expect(results.output).toEqual({
+      isAssociated: true,
+      pendingAssociation: false,
+    });
+  });
+
+  it('should return that other roles are NOT associated', async () => {
+    applicationContext.getUtilities().isInternalUser.mockReturnValueOnce(false);
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: 'something not internal',
+      userId: '987',
+    });
+
+    const results = await runAction(getCaseAssociationAction, {
+      modules: {
+        presenter,
+      },
+    });
+
+    expect(results.output).toEqual({
+      isAssociated: false,
+      pendingAssociation: false,
+    });
+  });
+
   it('should return that respondent is not associated', async () => {
     applicationContext
       .getUseCases()

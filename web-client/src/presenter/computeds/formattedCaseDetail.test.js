@@ -1,6 +1,13 @@
 import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  chambersUser,
+  docketClerkUser,
+  judgeUser,
+  petitionsClerkUser,
+  trialClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -46,8 +53,7 @@ export const mockPetitioners = [
 
 describe('formattedCaseDetail', () => {
   let globalUser;
-  const { STATUS_TYPES, TRIAL_CLERKS_SECTION, USER_ROLES } =
-    applicationContext.getConstants();
+  const { STATUS_TYPES } = applicationContext.getConstants();
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,
@@ -66,29 +72,6 @@ describe('formattedCaseDetail', () => {
     };
   };
 
-  const petitionsClerkUser = {
-    role: USER_ROLES.petitionsClerk,
-    userId: '111',
-  };
-  const docketClerkUser = {
-    role: USER_ROLES.docketClerk,
-    userId: '222',
-  };
-  const judgeUser = {
-    role: USER_ROLES.judge,
-    userId: '444',
-  };
-  const chambersUser = {
-    role: USER_ROLES.chambers,
-    section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
-    userId: '555',
-  };
-  const trialClerkUser = {
-    role: USER_ROLES.trialClerk,
-    section: TRIAL_CLERKS_SECTION,
-    userId: '777',
-  };
-
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedCaseDetail, {
       state: {
@@ -100,151 +83,6 @@ describe('formattedCaseDetail', () => {
       },
     });
     expect(result).toMatchObject({});
-  });
-
-  describe('case name mapping', () => {
-    it('should not error if caseCaption does not exist', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        caseCaption: undefined,
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseTitle).toEqual('');
-    });
-
-    it("should remove ', Petitioner' from caseCaption", () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        caseCaption: 'Sisqo, Petitioner',
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseTitle).toEqual('Sisqo');
-    });
-
-    it("should remove ', Petitioners' from caseCaption", () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        caseCaption: 'Sisqo and friends,  Petitioners ',
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseTitle).toEqual('Sisqo and friends');
-    });
-
-    it("should remove ', Petitioner(s)' from caseCaption", () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        caseCaption: "Sisqo's entourage,,    Petitioner(s)    ",
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.caseTitle).toEqual("Sisqo's entourage,");
-    });
-  });
-
-  describe('practitioner mapping', () => {
-    it('should add barNumber into formatted name if available', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        privatePractitioners: [
-          { barNumber: '9999', name: 'Jackie Chan', representing: [] },
-        ],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.privatePractitioners[0].formattedName).toEqual(
-        'Jackie Chan (9999)',
-      );
-    });
-
-    it('should not add barNumber into formatted name if not available', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        privatePractitioners: [{ name: 'Jackie Chan', representing: [] }],
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.privatePractitioners[0].formattedName).toEqual(
-        'Jackie Chan',
-      );
-    });
-  });
-
-  describe('trial detail mapping mapping', () => {
-    it('should format trial information if a trial session id exists', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        associatedJudge: 'Judge Judy',
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
-        trialTime: '20:30',
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedTrialCity).toEqual('England is my City');
-      expect(result.formattedTrialDate).toEqual('12/11/18 08:30 pm');
-      expect(result.formattedAssociatedJudge).toEqual('Judge Judy');
-    });
-
-    it('should not add time if no time stamp exists', () => {
-      const caseDetail = {
-        ...MOCK_CASE,
-        associatedJudge: 'Judge Judy',
-        status: STATUS_TYPES.calendared,
-        trialDate: '2018-12-11T05:00:00Z',
-        trialLocation: 'England is my City',
-        trialSessionId: '123',
-      };
-      const result = runCompute(formattedCaseDetail, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail,
-          validationErrors: {},
-        },
-      });
-      expect(result.formattedTrialCity).toEqual('England is my City');
-      expect(result.formattedTrialDate).toEqual('12/11/18');
-      expect(result.formattedAssociatedJudge).toEqual('Judge Judy');
-    });
   });
 
   describe('consolidatedCases', () => {
@@ -355,7 +193,7 @@ describe('formattedCaseDetail', () => {
             trialSessionId: mockTrialSessionId,
           },
           judgeUser: {
-            section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+            section: chambersUser.section,
             userId: judgeUser.userId,
           },
           ...getBaseState(chambersUser),
@@ -536,7 +374,7 @@ describe('formattedCaseDetail', () => {
               ],
             },
             judgeUser: {
-              section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+              section: chambersUser.section,
               userId: judgeUser.userId,
             },
             ...getBaseState(chambersUser),

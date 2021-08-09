@@ -4,7 +4,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeF', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
         judge: 'Judge Colvin',
@@ -17,7 +17,7 @@ describe('CourtIssuedDocumentTypeF', () => {
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type F',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
@@ -28,7 +28,7 @@ describe('CourtIssuedDocumentTypeF', () => {
     });
 
     it('should show a validation error when freeText exceeds 1000 characters', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         freeText: `...Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed leo ut urna pellentesque iaculis vel mattis lectus. Fusce ultrices ante quis nibh varius, eget blandit ipsum molestie. Aenean mi sem, laoreet a condimentum non, pharetra sed tortor. 
         Morbi varius, eros eget laoreet sagittis, nulla est tincidunt nibh, ut lobortis ante sapien vitae ex. Suspendisse et congue sem. Phasellus nec molestie tellus, sed consectetur justo. Proin eu sem suscipit, ullamcorper ante in, placerat arcu. Fusce suscipit auctor quam ac auctor. Mauris vel mi lobortis, 
         sollicitudin ante sit amet, finibus augue. Proin pellentesque sem eget ultricies gravida. 
@@ -43,7 +43,7 @@ describe('CourtIssuedDocumentTypeF', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
@@ -57,7 +57,7 @@ describe('CourtIssuedDocumentTypeF', () => {
 
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -72,7 +72,7 @@ describe('CourtIssuedDocumentTypeF', () => {
       });
 
       it('should be valid when filingDate is defined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -89,7 +89,7 @@ describe('CourtIssuedDocumentTypeF', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Further Trial before [Judge] at [Place]. [Anything]',
         documentType: 'FTRL - Further Trial before ...',
@@ -105,7 +105,7 @@ describe('CourtIssuedDocumentTypeF', () => {
     });
 
     it('should generate a title without the judge title if not available', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         documentTitle: 'Further Trial before [Judge] at [Place]',
         documentType: 'FTRL - Further Trial before ...',

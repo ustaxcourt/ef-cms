@@ -13,7 +13,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardD', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard D',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -26,7 +26,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
     it('should have error message for future date', () => {
       const serviceDate = calculateISODate({ howMuch: 1, unit: 'days' });
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
@@ -41,7 +41,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
     it('should be valid when all fields are present', () => {
       const serviceDate = createISODateString();
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
@@ -54,7 +54,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
     it('should be invalid when serviceDate is undefined-undefined-undefined', () => {
       const serviceDate = 'undefined-undefined-undefined';
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
@@ -69,7 +69,7 @@ describe('ExternalDocumentNonStandardD', () => {
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
       const serviceDate = createISODateString();
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: over3000Characters,
         documentType: 'Certificate of Service',
@@ -86,7 +86,7 @@ describe('ExternalDocumentNonStandardD', () => {
   describe('title generation', () => {
     const serviceDate = '2012-04-10T04:00:00.000Z';
     it('should generate valid title with previousDocument documentType', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
@@ -100,7 +100,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should generate valid title with previousDocument documentTitle', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',
@@ -117,7 +117,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should generate title without previousDocument', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',
         documentType: 'Certificate of Service',

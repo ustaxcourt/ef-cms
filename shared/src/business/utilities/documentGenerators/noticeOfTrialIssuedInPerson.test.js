@@ -9,6 +9,7 @@ const {
 const {
   noticeOfTrialIssuedInPerson,
 } = require('./noticeOfTrialIssuedInPerson');
+const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -26,6 +27,10 @@ describe('documentGenerators', () => {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
       });
+
+      applicationContext.getChromiumBrowser.mockImplementation(
+        getChromiumBrowser,
+      );
 
       applicationContext
         .getUseCases()
@@ -60,7 +65,7 @@ describe('documentGenerators', () => {
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Notice_Trial_Issued', pdf);
+        writePdfFile('Notice_Trial_Issued_In_Person', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
         const { PDFDocument } = await applicationContext.getPdfLib();
         const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));

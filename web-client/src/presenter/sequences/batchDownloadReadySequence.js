@@ -1,5 +1,5 @@
-import { displayDownloadLinkAction } from '../actions/batchDownload/displayDownloadLinkAction';
-import { stopWebSocketConnectionAction } from '../actions/webSocketConnection/stopWebSocketConnectionAction';
+import { displayDownloadLinkAction } from '../actions/BatchDownload/displayDownloadLinkAction';
+import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
 import { unsetBatchDownloadsAction } from '../actions/unsetBatchDownloadsAction';
 
 export const batchDownloadReadySequence = [
