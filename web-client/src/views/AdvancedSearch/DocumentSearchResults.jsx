@@ -50,12 +50,12 @@ export const DocumentSearchResults = connect(
                 <tr>
                   <td aria-hidden="true" className="small-column"></td>
                   <td aria-hidden="true" className="small-column"></td>
-                  <th aria-label="docket number">Docket No.</th>
+                  <th>Date</th>
                   <th>Case Title</th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Pages</th>
-                  <th>Date</th>
                   <th>Judge</th>
+                  <th aria-label="docket number">Docket No.</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,13 +79,7 @@ export const DocumentSearchResults = connect(
                             />
                           )}
                       </td>
-                      <td>
-                        <CaseLink
-                          formattedCase={result}
-                          rel="noreferrer"
-                          target="_blank"
-                        />
-                      </td>
+                      <td>{result.formattedFiledDate}</td>
                       <td>{result.caseTitle}</td>
                       <td>
                         <Button
@@ -103,10 +97,16 @@ export const DocumentSearchResults = connect(
                         </Button>
                       </td>
                       <td>{result.numberOfPagesFormatted}</td>
-                      <td>{result.formattedFiledDate}</td>
                       <td>
                         {result.formattedSignedJudgeName ||
                           result.formattedJudgeName}
+                      </td>
+                      <td>
+                        <CaseLink
+                          formattedCase={result}
+                          rel="noreferrer"
+                          target="_blank"
+                        />
                       </td>
                     </tr>
                   ),
