@@ -17,10 +17,13 @@ const {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  docketClerkUser,
+  petitionsClerkUser,
+} = require('../../../test/mockUsers');
 const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {
@@ -70,6 +73,8 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
       upload: (params, cb) => {
@@ -93,10 +98,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     await expect(
       serveCaseToIrsInteractor(applicationContext, {
@@ -111,13 +113,6 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: true,
       mailingDate: 'some day',
     };
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -134,13 +129,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should replace coversheet on the served petition if the case is not paper', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
     mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -158,13 +146,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should preserve original case caption and docket number on the coversheet if the case is not paper', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
     mockCase = { ...MOCK_CASE };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -207,14 +188,6 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -247,14 +220,6 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -271,13 +236,6 @@ describe('serveCaseToIrsInteractor', () => {
       ...MOCK_CASE,
       isPaper: false,
     };
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -294,13 +252,6 @@ describe('serveCaseToIrsInteractor', () => {
       ...MOCK_CASE,
       isPaper: false,
     };
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -316,13 +267,6 @@ describe('serveCaseToIrsInteractor', () => {
       ...MOCK_CASE,
       isPaper: false,
     };
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     const result = await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -337,13 +281,6 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: true,
       mailingDate: 'some day',
     };
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     const result = await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -358,14 +295,6 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: true,
       mailingDate: 'some day',
     };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -422,14 +351,6 @@ describe('serveCaseToIrsInteractor', () => {
         },
       ],
     };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
 
     applicationContext
       .getPersistenceGateway()
@@ -494,14 +415,6 @@ describe('serveCaseToIrsInteractor', () => {
       mailingDate: 'some day',
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -509,146 +422,6 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
-  });
-
-  it('should not call serveCaseDocument if an error occurs while adding a coversheet', async () => {
-    applicationContext
-      .getUseCases()
-      .addCoversheetInteractor.mockRejectedValueOnce(new Error('bad!'));
-
-    mockCase = {
-      ...MOCK_CASE,
-      docketEntries: [
-        ...MOCK_CASE.docketEntries,
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentTitle: 'Request for Place of Trial Flavortown, AR',
-          documentType: 'Request for Place of Trial',
-          eventCode: 'RPT',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-        },
-      ],
-      isPaper: true,
-      mailingDate: 'some day',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
-    await expect(
-      serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow(new Error('bad!'));
-
-    expect(
-      applicationContext.getUtilities().serveCaseDocument,
-    ).not.toBeCalled();
-  });
-
-  it('should not call serveCaseDocument if an error occurs while updating docket number record', async () => {
-    jest
-      .spyOn(Case.prototype, 'updateDocketNumberRecord')
-      .mockImplementation(() => {
-        throw new Error('bad!');
-      });
-
-    mockCase = {
-      ...MOCK_CASE,
-      docketEntries: [
-        ...MOCK_CASE.docketEntries,
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentTitle: 'Request for Place of Trial Flavortown, AR',
-          documentType: 'Request for Place of Trial',
-          eventCode: 'RPT',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-        },
-      ],
-      isPaper: true,
-      mailingDate: 'some day',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
-    await expect(
-      serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow(new Error('bad!'));
-
-    expect(
-      applicationContext.getUtilities().serveCaseDocument,
-    ).not.toBeCalled();
-
-    jest.restoreAllMocks();
-  });
-
-  it('should not call serveCaseDocument if an error occurs while updating case caption docket record', async () => {
-    jest
-      .spyOn(Case.prototype, 'updateCaseCaptionDocketRecord')
-      .mockImplementation(() => {
-        throw new Error('bad!');
-      });
-
-    mockCase = {
-      ...MOCK_CASE,
-      docketEntries: [
-        ...MOCK_CASE.docketEntries,
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
-          docketNumber: '101-18',
-          documentTitle: 'Request for Place of Trial Flavortown, AR',
-          documentType: 'Request for Place of Trial',
-          eventCode: 'RPT',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
-        },
-      ],
-      isPaper: true,
-      mailingDate: 'some day',
-    };
-
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: 'bob',
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
-
-    await expect(
-      serveCaseToIrsInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-      }),
-    ).rejects.toThrow(new Error('bad!'));
-
-    expect(
-      applicationContext.getUtilities().serveCaseDocument,
-    ).not.toBeCalled();
-
-    jest.restoreAllMocks();
   });
 });
 

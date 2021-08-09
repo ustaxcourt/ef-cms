@@ -192,7 +192,7 @@ exports.scan = async params => {
         ...params,
       })
       .promise()
-      .then(async results => {
+      .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         allItems.push(...results.Items);

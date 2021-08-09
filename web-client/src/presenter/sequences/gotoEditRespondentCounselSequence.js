@@ -2,7 +2,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setRespondentCounselFormAction } from '../actions/caseAssociation/setRespondentCounselFormAction';
+import { setRespondentCounselFormAction } from '../actions/CaseAssociation/setRespondentCounselFormAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditRespondentCounselSequence = [

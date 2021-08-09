@@ -32,13 +32,13 @@ describe('caseAdvancedSearch', () => {
 
   it('returns results from an non-exact-matches query when an exact query returns no results', async () => {
     search
-      .mockImplementation(async () => {
+      .mockImplementation(() => {
         // default behavior
-        return { results: ['other', 'matches'], total: 2 };
+        return Promise.resolve({ results: ['other', 'matches'], total: 2 });
       })
-      .mockImplementationOnce(async () => {
+      .mockImplementationOnce(() => {
         // first call
-        return { results: [], total: 0 };
+        return Promise.resolve({ results: [], total: 0 });
       });
 
     const results = await caseAdvancedSearch({

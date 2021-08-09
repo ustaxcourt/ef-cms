@@ -1,15 +1,13 @@
-import {
-  shouldGenerateCoversheetForDocketEntry,
-  updateDocketEntryMetaInteractor,
-} from './updateDocketEntryMetaInteractor';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const {
+  updateDocketEntryMetaInteractor,
+} = require('./updateDocketEntryMetaInteractor');
+const { docketClerkUser } = require('../../../test/mockUsers');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { NotFoundError } = require('../../../errors/errors');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 describe('updateDocketEntryMetaInteractor', () => {
@@ -137,10 +135,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       },
     ];
 
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-      userId: 'abcba5a9-b37b-479d-9201-067ec6e33abc',
-    });
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -268,7 +263,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.documentTitle).toEqual('Updated Description');
   });
 
-  it('should update the docket record and document filedBy', async () => {
+  it('should update the docket record filedBy', async () => {
     const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
@@ -281,11 +276,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    const updatedDocument = result.docketEntries.find(
-      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
     expect(updatedDocketEntry.filedBy).toEqual('Petr. Test Petitioner');
-    expect(updatedDocument.filedBy).toEqual('Petr. Test Petitioner');
   });
 
   it('should update the docket record filingDate', async () => {
@@ -303,7 +294,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     expect(updatedDocketEntry.filingDate).toEqual('2020-01-01T00:01:00.000Z');
   });
 
-  it('should update the document servedAt', async () => {
+  it('should update the docket record servedAt', async () => {
     const result = await updateDocketEntryMetaInteractor(applicationContext, {
       docketEntryMeta: {
         ...mockDocketEntries[0],
@@ -315,10 +306,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    const updatedDocument = result.docketEntries.find(
-      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
-    expect(updatedDocument.servedAt).toEqual('2020-01-01T00:01:00.000Z');
+    expect(updatedDocketEntry.servedAt).toEqual('2020-01-01T00:01:00.000Z');
   });
 
   it('should update the document hasOtherFilingParty and otherFilingParty values', async () => {
@@ -334,11 +322,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    const updatedDocument = result.docketEntries.find(
-      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
-    expect(updatedDocument.hasOtherFilingParty).toBe(true);
-    expect(updatedDocument.otherFilingParty).toBe('Brianna Noble');
+    expect(updatedDocketEntry.hasOtherFilingParty).toBe(true);
+    expect(updatedDocketEntry.otherFilingParty).toBe('Brianna Noble');
   });
 
   it('should update a non-required field to undefined if undefined value is passed in', async () => {
@@ -353,10 +338,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    const updatedDocument = result.docketEntries.find(
-      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
-    expect(updatedDocument.freeText).toBeUndefined();
+    expect(updatedDocketEntry.freeText).toBeUndefined();
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
@@ -586,10 +568,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    const updatedDocument = result.docketEntries.find(
-      doc => doc.docketEntryId === updatedDocketEntry.docketEntryId,
-    );
-    expect(updatedDocument.pending).toBeTruthy();
+    expect(updatedDocketEntry.pending).toBeTruthy();
   });
 
   it('should update the automatic blocked status of the case', async () => {
@@ -652,117 +631,5 @@ describe('updateDocketEntryMetaInteractor', () => {
         docketNumber: '101-20',
       }),
     ).rejects.toThrow('Docket entry with id not-a-guid not found.');
-  });
-
-  describe('shouldGenerateCoversheetForDocketEntry', () => {
-    let mockDocketEntry = new DocketEntry(
-      {
-        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
-        documentTitle: 'Summary Opinion',
-        documentType: 'Summary Opinion',
-        eventCode: 'SOP',
-        filingDate: '2011-02-22T00:01:00.000Z',
-        index: 7,
-        isMinuteEntry: false,
-        judge: 'Buch',
-        userId: mockUserId,
-      },
-      { applicationContext },
-    );
-
-    let entryRequiresCoverSheet = false;
-    let filingDateUpdated = false;
-    let originalDocketEntry = mockDocketEntry;
-    let servedAtUpdated = false;
-    let shouldAddNewCoverSheet = false;
-
-    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', () => {
-      mockDocketEntry.isMinuteEntry = false;
-      shouldAddNewCoverSheet = true;
-      entryRequiresCoverSheet = true;
-
-      const result = shouldGenerateCoversheetForDocketEntry({
-        entryRequiresCoverSheet,
-        filingDateUpdated,
-        originalDocketEntry,
-        servedAtUpdated,
-        shouldAddNewCoverSheet,
-      });
-
-      expect(result).toBe(true);
-    });
-
-    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', () => {
-      mockDocketEntry.isMinuteEntry = false;
-      shouldAddNewCoverSheet = true;
-      entryRequiresCoverSheet = true;
-
-      const result = shouldGenerateCoversheetForDocketEntry({
-        entryRequiresCoverSheet,
-        filingDateUpdated,
-        originalDocketEntry,
-        servedAtUpdated,
-        shouldAddNewCoverSheet,
-      });
-
-      expect(result).toBe(true);
-    });
-
-    it('should return true when the certificateOfService changes', () => {
-      mockDocketEntry.isMinuteEntry = false;
-      shouldAddNewCoverSheet = false;
-      entryRequiresCoverSheet = true;
-
-      const result = shouldGenerateCoversheetForDocketEntry({
-        certificateOfServiceUpdated: true,
-        entryRequiresCoverSheet,
-        filingDateUpdated,
-        originalDocketEntry,
-        servedAtUpdated,
-        shouldAddNewCoverSheet,
-      });
-
-      expect(result).toBe(true);
-    });
-
-    it('should return true when the documentTitle changes', () => {
-      mockDocketEntry.isMinuteEntry = false;
-      shouldAddNewCoverSheet = false;
-      entryRequiresCoverSheet = true;
-
-      const result = shouldGenerateCoversheetForDocketEntry({
-        certificateOfServiceUpdated: false,
-        documentTitleUpdated: true,
-        entryRequiresCoverSheet,
-        filingDateUpdated,
-        originalDocketEntry,
-        servedAtUpdated,
-        shouldAddNewCoverSheet,
-      });
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false if nothing related to the coversheet has changed on the metadata', () => {
-      mockDocketEntry.isMinuteEntry = false;
-      shouldAddNewCoverSheet = false;
-      entryRequiresCoverSheet = true;
-      servedAtUpdated = false;
-      filingDateUpdated = false;
-      servedAtUpdated = false;
-      shouldAddNewCoverSheet = false;
-
-      const result = shouldGenerateCoversheetForDocketEntry({
-        certificateOfServiceUpdated: false,
-        documentTitleUpdated: false,
-        entryRequiresCoverSheet,
-        filingDateUpdated,
-        originalDocketEntry,
-        servedAtUpdated,
-        shouldAddNewCoverSheet,
-      });
-
-      expect(result).toBe(false);
-    });
   });
 });

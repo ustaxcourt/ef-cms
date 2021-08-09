@@ -10,7 +10,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardJ', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard J',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -22,7 +22,7 @@ describe('ExternalDocumentNonStandardJ', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
         documentType: 'Stipulated Decision',
@@ -34,7 +34,7 @@ describe('ExternalDocumentNonStandardJ', () => {
     });
 
     it('should not be valid when freeText or freeText2 is over 1000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
         documentType: 'Stipulated Decision',
@@ -49,7 +49,7 @@ describe('ExternalDocumentNonStandardJ', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Decision',
         documentTitle: over3000Characters,
         documentType: 'Stipulated Decision',
@@ -65,7 +65,7 @@ describe('ExternalDocumentNonStandardJ', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
         documentType: 'Stipulated Decision',
