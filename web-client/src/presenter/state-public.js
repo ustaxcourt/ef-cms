@@ -2,12 +2,12 @@ import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advance
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
-import { publicAlertHelper } from './computeds/public/publicAlertHelper';
-import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
-import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
+import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
+import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
+import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
 import { templateHelper } from './computeds/templateHelper';
-import { todaysOpinionsHelper } from './computeds/public/todaysOpinionsHelper';
-import { todaysOrdersHelper } from './computeds/public/todaysOrdersHelper';
+import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
+import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
 
 const helpers = {
   advancedDocumentSearchHelper,

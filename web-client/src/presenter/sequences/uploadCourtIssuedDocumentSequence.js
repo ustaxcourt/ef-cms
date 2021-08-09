@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
-import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/uploadCourtIssuedDocument/getUploadCourtIssuedDocumentAlertSuccessAction';
+import { getUploadCourtIssuedDocumentAlertSuccessAction } from '../actions/UploadCourtIssuedDocument/getUploadCourtIssuedDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -13,13 +13,13 @@ import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupUploadMetadataAction } from '../actions/uploadCourtIssuedDocument/setupUploadMetadataAction';
+import { setupUploadMetadataAction } from '../actions/UploadCourtIssuedDocument/setupUploadMetadataAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedOrderAction } from '../actions/CourtIssuedOrder/submitCourtIssuedOrderAction';
 import { uploadOrderFileAction } from '../actions/FileDocument/uploadOrderFileAction';
-import { validateUploadCourtIssuedDocumentAction } from '../actions/uploadCourtIssuedDocument/validateUploadCourtIssuedDocumentAction';
+import { validateUploadCourtIssuedDocumentAction } from '../actions/UploadCourtIssuedDocument/validateUploadCourtIssuedDocumentAction';
 
 export const uploadCourtIssuedDocumentSequence = [
   startShowValidationAction,

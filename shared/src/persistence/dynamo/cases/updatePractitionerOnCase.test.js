@@ -10,7 +10,7 @@ describe('updatePractitionerOnCase', () => {
   let putStub;
   beforeEach(() => {
     putStub = jest.fn().mockReturnValue({
-      promise: async () => null,
+      promise: () => Promise.resolve(null),
     });
 
     applicationContext.getDocumentClient.mockReturnValue({

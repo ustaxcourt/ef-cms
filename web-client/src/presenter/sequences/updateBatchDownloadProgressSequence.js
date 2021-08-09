@@ -1,4 +1,4 @@
-import { updateBatchDownloadProgressAction } from '../actions/batchDownload/updateBatchDownloadProgressAction';
+import { updateBatchDownloadProgressAction } from '../actions/BatchDownload/updateBatchDownloadProgressAction';
 
 export const updateBatchDownloadProgressSequence = [
   updateBatchDownloadProgressAction,

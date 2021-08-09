@@ -10,10 +10,8 @@ import { state } from 'cerebral';
  */
 export const getEditedDocumentDetailParamsAction = ({ get, props }) => {
   const caseDetail = get(state.caseDetail);
-  const documentToEdit = get(state.documentToEdit);
-  const docketEntryId = documentToEdit
-    ? documentToEdit.docketEntryId
-    : get(props.primaryDocumentFileId);
+  const docketEntryId =
+    get(state.documentToEdit.docketEntryId) || get(props.primaryDocumentFileId);
 
   return {
     docketEntryId,

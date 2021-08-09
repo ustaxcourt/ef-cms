@@ -6,7 +6,7 @@ const { setMessageAsRead } = require('./setMessageAsRead');
 describe('setMessageAsRead', () => {
   beforeAll(() => {
     applicationContext.getDocumentClient().update.mockReturnValue({
-      promise: async () => true,
+      promise: () => Promise.resolve(true),
     });
   });
 

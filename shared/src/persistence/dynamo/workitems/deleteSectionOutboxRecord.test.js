@@ -11,7 +11,7 @@ describe('deleteSectionOutboxRecord', () => {
 
   beforeEach(() => {
     deleteStub = jest.fn().mockReturnValue({
-      promise: async () => true,
+      promise: () => Promise.resolve(true),
     });
   });
 

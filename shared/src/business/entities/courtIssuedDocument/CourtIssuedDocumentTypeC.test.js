@@ -7,7 +7,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeC', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         docketNumbers: '101-19',
         documentTitle:
           'Order that the letter "L" is added to Docket Number [Anything]',
@@ -20,7 +20,7 @@ describe('CourtIssuedDocumentTypeC', () => {
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type C',
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
@@ -30,7 +30,7 @@ describe('CourtIssuedDocumentTypeC', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         docketNumbers: '101-19',
         documentTitle:
@@ -42,7 +42,7 @@ describe('CourtIssuedDocumentTypeC', () => {
     });
 
     it('should be invalid when docketNumbers field is over 500 characters', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         docketNumbers: over1000Characters,
         documentTitle:
@@ -57,7 +57,7 @@ describe('CourtIssuedDocumentTypeC', () => {
 
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           docketNumbers: '101-19',
 
@@ -72,7 +72,7 @@ describe('CourtIssuedDocumentTypeC', () => {
       });
 
       it('should be valid when filingDate is defined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           docketNumbers: '101-19',
 
@@ -89,7 +89,7 @@ describe('CourtIssuedDocumentTypeC', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         docketNumbers: '101-19',
         documentTitle:

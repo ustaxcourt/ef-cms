@@ -9,7 +9,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardE', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard E',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -20,7 +20,7 @@ describe('ExternalDocumentNonStandardE', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle:
           'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
@@ -33,7 +33,7 @@ describe('ExternalDocumentNonStandardE', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle: over3000Characters,
         documentType:
@@ -49,7 +49,7 @@ describe('ExternalDocumentNonStandardE', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle:
           'Motion to Change Place of Submission of Declaratory Judgment Case to [Place]',
