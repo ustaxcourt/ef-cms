@@ -1,8 +1,7 @@
-import { connect } from '@cerebral/react';
 import React from 'react';
 import classNames from 'classnames';
 
-export const CaseLink = connect(function CaseLink(props) {
+export const CaseLink = props => {
   const {
     children,
     className,
@@ -34,4 +33,4 @@ export const CaseLink = connect(function CaseLink(props) {
       {children || docketNumberWithSuffixString || docketNumberString}
     </a>
   );
-});
+};
