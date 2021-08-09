@@ -38,15 +38,17 @@ describe('getDocumentQCServedForUser', () => {
     queryStub = jest
       .fn()
       .mockReturnValueOnce({
-        promise: async () => ({
-          Items: itemsToReturn,
-          LastEvaluatedKey: 'last-evaluated-key',
-        }),
+        promise: () =>
+          Promise.resolve({
+            Items: itemsToReturn,
+            LastEvaluatedKey: 'last-evaluated-key',
+          }),
       })
       .mockReturnValue({
-        promise: async () => ({
-          Items: itemsToReturn,
-        }),
+        promise: () =>
+          Promise.resolve({
+            Items: itemsToReturn,
+          }),
       });
   });
 

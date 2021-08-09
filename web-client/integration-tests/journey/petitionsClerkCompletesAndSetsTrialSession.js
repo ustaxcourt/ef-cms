@@ -14,7 +14,8 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await cerebralTest.runSequence('openSetCalendarModalSequence');
 
     expect(cerebralTest.getState('alertWarning')).toEqual({
-      message: 'Provide an address and a judge to set this trial session.',
+      message:
+        'Provide an address, a judge, and a chambers phone number to set this trial session.',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -35,6 +36,11 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'chambersPhoneNumber',
+      value: '1234567890',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {

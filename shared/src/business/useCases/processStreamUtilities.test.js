@@ -468,6 +468,7 @@ describe('processStreamUtilities', () => {
   });
 
   describe('processDocketEntries', () => {
+    const mockGetCaseMetadataWithCounsel = jest.fn();
     const mockGetDocument = jest.fn();
 
     const docketEntryData = {
@@ -484,9 +485,10 @@ describe('processStreamUtilities', () => {
       sk: { S: 'docket-entry|123' },
     };
 
-    mockGetDocument.mockReturnValue('[{ "documentContents": "Test"}]');
+    mockGetDocument.mockReturnValue('{ "documentContents": "Test"}');
 
     const utils = {
+      getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
       getDocument: mockGetDocument,
     };
 
@@ -548,6 +550,28 @@ describe('processStreamUtilities', () => {
       docketEntryData.documentContentsId = '123';
       docketEntryDataMarshalled.documentContentsId = { S: '123' };
       docketEntryDataMarshalled.eventCode = { S: 'TCOP' };
+      docketEntryDataMarshalled.docketNumber = { S: '555-111' };
+
+      const caseData = {
+        docketNumber: '123-45',
+        entityName: 'Case',
+        irsPractitioners: [
+          {
+            name: 'bob',
+          },
+        ],
+        pk: 'case|123-45',
+        privatePractitioners: [
+          {
+            name: 'jane',
+          },
+        ],
+        sk: 'case|123-45',
+      };
+
+      mockGetCaseMetadataWithCounsel.mockReturnValue({
+        ...caseData,
+      });
 
       await processDocketEntries({
         applicationContext,
@@ -584,6 +608,7 @@ describe('processStreamUtilities', () => {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
               },
+              documentContents: { S: 'Test' },
             },
           },
           eventName: 'MODIFY',
@@ -674,6 +699,9 @@ describe('processStreamUtilities', () => {
               case_relations: {
                 name: 'document',
                 parent: 'case|123_case|123|mapping',
+              },
+              documentContents: {
+                S: 'Test',
               },
             },
           },
@@ -928,6 +956,35 @@ describe('processStreamUtilities', () => {
       });
 
       expect(mockGetMessage).not.toHaveBeenCalled();
+    });
+
+    it('logs errors and throws an exception if bulk indexing fails', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .bulkIndexRecords.mockReturnValueOnce({
+          failedRecords: [{ id: 'failed record' }],
+        });
+      await expect(
+        processMessageEntries({
+          applicationContext,
+          messageRecords: [
+            {
+              dynamodb: {
+                Keys: {
+                  pk: { S: messageData.pk },
+                  sk: { S: messageData.sk },
+                },
+                NewImage: {
+                  ...messageDataMarshalled,
+                  isRepliedTo: { BOOL: true },
+                },
+              },
+              eventName: 'MODIFY',
+            },
+          ],
+        }),
+      ).rejects.toThrow('failed to index message records');
+      expect(applicationContext.logger.error).toHaveBeenCalled();
     });
   });
 

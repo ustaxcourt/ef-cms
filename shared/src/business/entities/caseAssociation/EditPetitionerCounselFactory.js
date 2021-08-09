@@ -11,29 +11,16 @@ const {
 } = require('../../../utilities/JoiValidationDecorator');
 
 /**
+ * Edit Petitioner Counsel Factory entity
  *
+ * @param {object} rawProps the raw counsel data
  * @constructor
  */
-function EditPetitionerCounselFactory() {}
-
-EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
-  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
-  representing: 'Select a representing party',
-};
-
-/**
- *
- * @param {object} metadata the metadata
- * @returns {object} the instance
- */
-EditPetitionerCounselFactory.get = metadata => {
-  /**
-   *
-   */
+function EditPetitionerCounselFactory(rawProps) {
   function entityConstructor() {}
-  entityConstructor.prototype.init = function init(rawProps) {
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     Object.assign(this, {
-      representing: rawProps.representing,
+      representing: rawPropsParam.representing,
     });
   };
 
@@ -50,7 +37,12 @@ EditPetitionerCounselFactory.get = metadata => {
     EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new (validEntityDecorator(entityConstructor))(metadata);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
+}
+
+EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
+  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+  representing: 'Select a representing party',
 };
 
 module.exports = { EditPetitionerCounselFactory };

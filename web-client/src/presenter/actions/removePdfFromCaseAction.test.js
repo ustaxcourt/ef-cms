@@ -38,6 +38,31 @@ describe('removePdfFromCaseAction', () => {
     ]);
   });
 
+  it('should return case detail docket entries unchanged if requested docketEntryId is not found within', async () => {
+    const docketEntries = [
+      {
+        docketEntryId: mockDocketEntryId,
+      },
+      {
+        docketEntryId: '123',
+      },
+    ];
+    const { output } = await runAction(removePdfFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        docketEntryId: 'some-other-id',
+        form: {
+          docketEntries,
+          docketNumber: '101-19',
+        },
+      },
+    });
+
+    expect(output.caseDetail.docketEntries).toEqual(docketEntries);
+  });
+
   it('should delete the pdf from the form when state.currentViewMetadata.documentSelectedForPreview is defined', async () => {
     const { state } = await runAction(removePdfFromCaseAction, {
       modules: {
@@ -64,6 +89,22 @@ describe('removePdfFromCaseAction', () => {
     });
 
     expect(state.form.applicationForWaiverOfFilingFeeFile).toBeUndefined();
+  });
+
+  it('should return caseDetail from form unchanged if form contains no docket entries', async () => {
+    const { output } = await runAction(removePdfFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        docketEntryId: mockDocketEntryId,
+        form: {
+          something: 'else',
+        },
+      },
+    });
+
+    expect(output.caseDetail).toEqual({ something: 'else' });
   });
 
   it('return the updated case detail', async () => {

@@ -31,8 +31,8 @@ exports.generateCoverSheetData = ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
-  filingDateUpdated,
-  useInitialData,
+  filingDateUpdated = false,
+  useInitialData = false,
 }) => {
   const isLodged = docketEntryEntity.lodged;
   const { certificateOfService, isPaper } = docketEntryEntity;
@@ -52,7 +52,7 @@ exports.generateCoverSheetData = ({
     ? formatDateString(docketEntryEntity.filingDate, 'MMDDYY')
     : '';
 
-  const caseCaptionToUse = useInitialData
+  const caseCaption = useInitialData
     ? caseEntity.initialCaption
     : caseEntity.caseCaption;
 
@@ -60,7 +60,6 @@ exports.generateCoverSheetData = ({
     ? caseEntity.initialDocketNumberSuffix.replace('_', '')
     : caseEntity.docketNumberSuffix;
 
-  const caseCaption = caseCaptionToUse || Case.getCaseCaption(caseEntity);
   let caseTitle = applicationContext.getCaseTitle(caseCaption);
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {
@@ -121,10 +120,10 @@ exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
-  filingDateUpdated = false,
+  filingDateUpdated,
   pdfData,
   replaceCoversheet = false,
-  useInitialData = false,
+  useInitialData,
 }) => {
   const coverSheetData = exports.generateCoverSheetData({
     applicationContext,
@@ -188,9 +187,9 @@ exports.addCoversheetInteractor = async (
     caseEntity = null,
     docketEntryId,
     docketNumber,
-    filingDateUpdated = false,
-    replaceCoversheet = false,
-    useInitialData = false,
+    filingDateUpdated,
+    replaceCoversheet,
+    useInitialData,
   },
 ) => {
   if (!caseEntity) {

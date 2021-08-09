@@ -4,6 +4,8 @@ import React from 'react';
 
 export const SessionAssignmentsForm = connect(
   {
+    TRIAL_SESSION_PROCEEDING_TYPES:
+      state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
     judges: state.judges,
     trialClerks: state.trialClerks,
@@ -13,6 +15,7 @@ export const SessionAssignmentsForm = connect(
   function SessionAssignmentsForm({
     form,
     judges,
+    TRIAL_SESSION_PROCEEDING_TYPES,
     trialClerks,
     updateTrialSessionFormDataSequence,
   }) {
@@ -33,7 +36,8 @@ export const SessionAssignmentsForm = connect(
               onChange={e => {
                 updateTrialSessionFormDataSequence({
                   key: e.target.name,
-                  value: judges.find(judge => judge.userId === e.target.value),
+                  value:
+                    judges.find(judge => judge.userId === e.target.value) || '',
                 });
               }}
             >
@@ -45,6 +49,28 @@ export const SessionAssignmentsForm = connect(
               ))}
             </select>
           </div>
+          {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
+            <div className="usa-form-group">
+              <label className="usa-label" htmlFor="chambers-phone-number">
+                Chambers phone number{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                id="chambers-phone-number"
+                name="chambersPhoneNumber"
+                type="text"
+                value={form.chambersPhoneNumber || ''}
+                onChange={e => {
+                  updateTrialSessionFormDataSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </div>
+          )}
 
           <div className="usa-form-group">
             <label

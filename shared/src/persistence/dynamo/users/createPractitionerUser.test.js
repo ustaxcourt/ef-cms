@@ -53,21 +53,21 @@ describe('createPractitionerUser', () => {
 
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           Username: 'f7bea269-fa95-424d-aed8-2cb988df2073',
         }),
     });
 
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           User: { Username: '123' },
         }),
     });
 
     applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: async () => Promise.resolve(),
+      promise: () => Promise.resolve(),
     });
 
     applicationContext.getDocumentClient().put.mockReturnValue({
@@ -197,7 +197,7 @@ describe('createPractitionerUser', () => {
 
   it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () => Promise.resolve({}),
+      promise: () => Promise.resolve({}),
     });
 
     await createPractitionerUser({
@@ -214,9 +214,7 @@ describe('createPractitionerUser', () => {
 
   it('should call cognito adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () => {
-        throw new Error('bad!');
-      },
+      promise: () => Promise.reject(new Error('bad!')),
     });
 
     await createPractitionerUser({
