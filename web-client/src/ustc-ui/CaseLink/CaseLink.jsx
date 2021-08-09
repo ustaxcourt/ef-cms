@@ -9,16 +9,8 @@ export const CaseLink = connect(function CaseLink(props) {
     docketNumber,
     formattedCase,
     onlyText,
-    openInNewTab,
+    ...remainingProps
   } = props;
-
-  let relVal = '';
-  let targetVal = '';
-
-  if (openInNewTab) {
-    relVal = 'noreferrer';
-    targetVal = '_blank';
-  }
 
   const docketNumberString =
     docketNumber || (formattedCase && formattedCase.docketNumber);
@@ -37,8 +29,7 @@ export const CaseLink = connect(function CaseLink(props) {
     <a
       className={classNames('no-wrap', className)}
       href={`/case-detail/${docketNumberString}`}
-      rel={relVal}
-      target={targetVal}
+      {...remainingProps}
     >
       {children || docketNumberWithSuffixString || docketNumberString}
     </a>
