@@ -48,14 +48,14 @@ export const DocumentSearchResults = connect(
             <table className="usa-table search-results ustc-table responsive-table">
               <thead>
                 <tr>
-                  <td aria-hidden="true" className="small-column"></td>
-                  <td aria-hidden="true" className="small-column"></td>
-                  <th aria-label="docket number">Docket No.</th>
-                  <th>Case Title</th>
-                  <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
-                  <th>Pages</th>
+                  <th aria-hidden="true" className="small-column"></th>
+                  <th aria-hidden="true" className="small-column"></th>
                   <th>Date</th>
+                  <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
+                  <th>Case Title</th>
                   <th>Judge</th>
+                  <th>Pages</th>
+                  <th aria-label="docket number">Docket No.</th>
                 </tr>
               </thead>
               <tbody>
@@ -79,14 +79,7 @@ export const DocumentSearchResults = connect(
                             />
                           )}
                       </td>
-                      <td>
-                        <CaseLink
-                          formattedCase={result}
-                          rel="noreferrer"
-                          target="_blank"
-                        />
-                      </td>
-                      <td>{result.caseTitle}</td>
+                      <td>{result.formattedFiledDate}</td>
                       <td>
                         <Button
                           link
@@ -102,11 +95,18 @@ export const DocumentSearchResults = connect(
                           {result.documentTitle}
                         </Button>
                       </td>
-                      <td>{result.numberOfPagesFormatted}</td>
-                      <td>{result.formattedFiledDate}</td>
+                      <td>{result.caseTitle}</td>
                       <td>
                         {result.formattedSignedJudgeName ||
                           result.formattedJudgeName}
+                      </td>
+                      <td>{result.numberOfPagesFormatted}</td>
+                      <td>
+                        <CaseLink
+                          formattedCase={result}
+                          rel="noreferrer"
+                          target="_blank"
+                        />
                       </td>
                     </tr>
                   ),
