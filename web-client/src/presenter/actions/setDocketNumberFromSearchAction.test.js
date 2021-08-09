@@ -177,4 +177,16 @@ describe('setDocketNumberFromSearchAction', () => {
     });
     expect(output.docketNumber).toEqual('101-18');
   });
+
+  it('returns an empty string if searchTerm is not defined', async () => {
+    const { output } = await runAction(setDocketNumberFromSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        header: {},
+      },
+    });
+    expect(output.docketNumber).toEqual('');
+  });
 });

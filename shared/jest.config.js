@@ -16,6 +16,7 @@ module.exports = {
     '!src/**/*_.js',
     '!src/persistence/sqs/deleteMessage.js',
     '!src/persistence/sqs/getMessages.js',
+    '!src/persistence/dynamo/**/*.js',
   ],
   coverageThreshold: {
     global: {

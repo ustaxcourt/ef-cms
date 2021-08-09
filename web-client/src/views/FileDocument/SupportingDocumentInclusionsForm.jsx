@@ -92,7 +92,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block supporting-document-certificate-of-service"
+                className="inline-block supporting-document-certificate-of-service usa-checkbox__label"
                 htmlFor={`${type}-certificateOfService`}
               >
                 Certificate Of Service

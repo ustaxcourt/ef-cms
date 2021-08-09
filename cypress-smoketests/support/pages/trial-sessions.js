@@ -39,6 +39,7 @@ exports.createTrialSession = testData => {
 
   // session assignments
   cy.get('#judgeId').select(testData.judgeName || 'Foley');
+  cy.get('#chambers-phone-number').type(faker.phone.phoneNumber());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
   cy.get('#court-reporter').type(faker.name.findName());
   cy.get('#irs-calendar-administrator').type(faker.name.findName());

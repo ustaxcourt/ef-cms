@@ -12,9 +12,7 @@ describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;
 
   const errors = () =>
-    ExternalDocumentInformationFactory.get(
-      baseDoc,
-    ).getFormattedValidationErrors();
+    ExternalDocumentInformationFactory(baseDoc).getFormattedValidationErrors();
 
   describe('Standard Document', () => {
     beforeEach(() => {
@@ -432,6 +430,21 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require a party per case or partyIrsPractitioner to be selected', () => {
+        expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
+      });
+
+      it('should not have filers errors if selectedCases match casesWithAPartySelected', () => {
+        baseDoc.casesParties = {
+          '101-19': { filers: ['s234234-dfsdlkj'] },
+          '102-19': { filers: ['s234234-abcdfef'] },
+        };
+        expect(errors().filers).toBeUndefined();
+      });
+
+      it("should not update casesWithAPartySelected if parties's values are undefined", () => {
+        baseDoc.casesParties = {
+          '102-19': { filers: undefined },
+        };
         expect(errors().filers).toEqual(VALIDATION_ERROR_MESSAGES.filers);
       });
 

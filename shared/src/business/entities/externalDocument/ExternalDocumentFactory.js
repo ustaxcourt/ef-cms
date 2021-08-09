@@ -31,17 +31,12 @@ const {
 const { ExternalDocumentStandard } = require('./ExternalDocumentStandard');
 
 /**
- *
- * @constructor
- */
-function ExternalDocumentFactory() {}
-
-/**
+ * External Document Factory entity
  *
  * @param {object} documentMetadata the document metadata
- * @returns {object} the correct entity based on the document scenario
+ * @constructor
  */
-ExternalDocumentFactory.get = documentMetadata => {
+function ExternalDocumentFactory(documentMetadata) {
   if (documentMetadata && documentMetadata.scenario) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
     switch (scenario) {
@@ -73,6 +68,6 @@ ExternalDocumentFactory.get = documentMetadata => {
 
   // standard - default
   return new ExternalDocumentStandard(documentMetadata);
-};
+}
 
 module.exports = { ExternalDocumentFactory };

@@ -109,9 +109,9 @@ const createPetitionWorkItems = async ({
     workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: initializeCaseWorkItem.validate().toRawObject(),
+    workItem: initializeCaseWorkItem.validate().toRawObject(),
   });
 };
 
@@ -306,10 +306,13 @@ exports.serveCaseToIrsInteractor = async (
     addDocketEntries({ caseEntity });
   }
 
-  await createCoversheetsForServedEntries({
-    applicationContext,
-    caseEntity,
-  });
+  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
+    await applicationContext.getUtilities().serveCaseDocument({
+      applicationContext,
+      caseEntity,
+      initialDocumentTypeKey,
+    });
+  }
 
   addDocketEntryForPaymentStatus({
     applicationContext,
@@ -322,18 +325,15 @@ exports.serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
-    await applicationContext.getUtilities().serveCaseDocument({
-      applicationContext,
-      caseEntity,
-      initialDocumentTypeKey,
-    });
-  }
-
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
     user,
+  });
+
+  await createCoversheetsForServedEntries({
+    applicationContext,
+    caseEntity,
   });
 
   const urlToReturn = await generateNoticeOfReceipt({

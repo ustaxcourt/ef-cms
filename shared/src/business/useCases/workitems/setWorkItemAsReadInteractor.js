@@ -58,8 +58,8 @@ exports.setWorkItemAsReadInteractor = async (
     document: docketEntryEntity.validate().toRawObject(),
   });
 
-  return await applicationContext.getPersistenceGateway().updateWorkItem({
+  return await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: docketEntryEntity.workItem.validate().toRawObject(),
+    workItem: docketEntryEntity.workItem.validate().toRawObject(),
   });
 };
