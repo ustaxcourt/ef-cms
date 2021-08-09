@@ -80,7 +80,7 @@ export const DocumentSearchResults = connect(
                           )}
                       </td>
                       <td>
-                        <CaseLink formattedCase={result} />
+                        <CaseLink formattedCase={result} openInNewTab={true} />
                       </td>
                       <td>{result.caseTitle}</td>
                       <td>
