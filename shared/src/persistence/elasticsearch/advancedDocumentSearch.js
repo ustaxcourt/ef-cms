@@ -62,7 +62,7 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        flags: 'ESCAPE|PHRASE', // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
+        flags: 'OR|AND|ESCAPE|PHRASE', // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
         query: keyword,
       },
     });
@@ -94,7 +94,6 @@ exports.advancedDocumentSearch = async ({
     caseQueryParams.has_parent.query.bool.must = {
       simple_query_string: {
         default_operator: 'and',
-
         fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
         query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
       },
