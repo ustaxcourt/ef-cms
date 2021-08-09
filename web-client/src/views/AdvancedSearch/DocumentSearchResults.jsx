@@ -4,6 +4,7 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
+
 import React from 'react';
 
 export const DocumentSearchResults = connect(
@@ -80,7 +81,7 @@ export const DocumentSearchResults = connect(
                           )}
                       </td>
                       <td>
-                        <CaseLink formattedCase={result} openInNewTab={true} />
+                        <CaseLink formattedCase={result} rel="noreferrer" target="_blank" />
                       </td>
                       <td>{result.caseTitle}</td>
                       <td>
