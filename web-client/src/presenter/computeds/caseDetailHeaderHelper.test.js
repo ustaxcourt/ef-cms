@@ -35,32 +35,6 @@ const getBaseState = user => {
 };
 
 describe('caseDetailHeaderHelper', () => {
-  it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [],
-          status: CASE_STATUS_TYPES.new,
-        },
-      },
-    });
-    expect(result.showEditCaseButton).toEqual(true);
-  });
-
-  it('should set showEditCaseButton to false if the user does not have UPDATE_CASE_CONTENT permission', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          status: CASE_STATUS_TYPES.new,
-        },
-      },
-    });
-    expect(result.showEditCaseButton).toEqual(false);
-  });
-
   it('should set showExternalButtons false if user is an internal user', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
@@ -75,9 +49,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [{ documentType: 'Petition' }],
-        },
+        caseDetail: { docketEntries: [] },
       },
     });
     expect(result.showExternalButtons).toEqual(false);
