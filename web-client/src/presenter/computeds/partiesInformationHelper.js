@@ -21,8 +21,32 @@ export const formatCounsel = ({ counsel, screenMetadata }) => {
   return counsel;
 };
 
+export const getCanEditPetitioner = ({
+  applicationContext,
+  permissions,
+  petitioner,
+  petitionIsServed,
+  user,
+  userAssociatedWithCase,
+}) => {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  let canEditPetitioner = false;
+  if (user.role === USER_ROLES.petitioner) {
+    canEditPetitioner = petitioner.contactId === user.userId;
+  } else if (user.role === USER_ROLES.privatePractitioner) {
+    canEditPetitioner = userAssociatedWithCase;
+  } else if (permissions.EDIT_PETITIONER_INFO) {
+    canEditPetitioner = true;
+  }
+
+  canEditPetitioner = petitionIsServed && canEditPetitioner;
+
+  return canEditPetitioner;
+};
+
 export const partiesInformationHelper = (get, applicationContext) => {
-  const { CONTACT_TYPES, USER_ROLES } = applicationContext.getConstants();
+  const { CONTACT_TYPES } = applicationContext.getConstants();
   const otherContactTypes = [
     CONTACT_TYPES.intervenor,
     CONTACT_TYPES.participant,
@@ -87,16 +111,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
       .getUtilities()
       .getPetitionDocketEntry(caseDetail)?.servedAt;
 
-    let canEditPetitioner = false;
-    if (user.role === USER_ROLES.petitioner) {
-      canEditPetitioner = petitioner.contactId === user.userId;
-    } else if (user.role === USER_ROLES.privatePractitioner) {
-      canEditPetitioner = userAssociatedWithCase;
-    } else if (permissions.EDIT_PETITIONER_INFO) {
-      canEditPetitioner = true;
-    }
-
-    canEditPetitioner = petitionIsServed && canEditPetitioner;
+    const canEditPetitioner = getCanEditPetitioner({
+      applicationContext,
+      permissions,
+      petitionIsServed,
+      petitioner,
+      user,
+      userAssociatedWithCase,
+    });
 
     const editPetitionerLink = isExternalUser
       ? `/case-detail/${caseDetail.docketNumber}/contacts/${petitioner.contactId}/edit`
@@ -104,7 +126,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
     return {
       ...petitioner,
-      canEditPetitioner: canEditPetitioner && !!editPetitionerLink,
+      canEditPetitioner,
       editPetitionerLink,
       hasCounsel: representingPractitioners.length > 0,
       representingPractitioners,
