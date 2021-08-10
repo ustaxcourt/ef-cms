@@ -38,6 +38,34 @@ describe('Document Search entity', () => {
     );
   });
 
+  it('should pass validation when "from" value is provided', () => {
+    const documentSearch = new DocumentSearch({
+      from: 2,
+      judge: '',
+      keyword: 'sunglasses',
+      startDate: '2002-10-01',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.from).toBe(2);
+    expect(validationErrors).toBeNull();
+  });
+
+  it('should validate when a user role is provided', () => {
+    const documentSearch = new DocumentSearch({
+      judge: '',
+      keyword: 'sunglasses',
+      startDate: '2002-10-01',
+      userRole: 'docketClerk',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.userRole).toBe('docketClerk');
+    expect(validationErrors).toBeNull();
+  });
+
   it('should pass validation when judge provided is empty', () => {
     const documentSearch = new DocumentSearch({
       judge: '',
