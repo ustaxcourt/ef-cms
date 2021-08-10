@@ -67,6 +67,7 @@ describe('updateTrialSessionInteractor', () => {
       [MOCK_TRIAL_ID_5]: {
         ...MOCK_TRIAL,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
+        trialClerk: { userId: '267c3601-0296-47dd-bb5a-91d34fe166b3' },
         trialSessionId: MOCK_TRIAL_ID_5,
       },
       [MOCK_TRIAL_ID_6]: {
