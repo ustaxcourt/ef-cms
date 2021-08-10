@@ -34,7 +34,7 @@ describe('removeCoversheet', () => {
     jest.setTimeout(15000);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
@@ -68,7 +68,7 @@ describe('removeCoversheet', () => {
 
   it('throws an exception if the requested document cannot be found in S3', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => {
+      promise: () => {
         throw new Error('oh no');
       },
     });

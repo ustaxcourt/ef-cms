@@ -51,7 +51,7 @@ describe('setServiceIndicatorsForCases', () => {
     };
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner without an email (contactPrimary) with no representing counsel filing by paper`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner without an email (contactPrimary) with no representing counsel filing by paper`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -65,7 +65,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactPrimary) with no representing counsel filing electronically`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactPrimary) with no representing counsel filing electronically`, () => {
     const caseDetail = { ...baseCaseDetail };
 
     const result = setServiceIndicatorsForCase(caseDetail);
@@ -75,7 +75,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -96,7 +96,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel on a paper case`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_ELECTRONIC} for a Petitioner (contactSecondary) with an email and no representing counsel on a paper case`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -118,7 +118,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with ${SERVICE_INDICATOR_TYPES.SI_NONE} already set as an override`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with ${SERVICE_INDICATOR_TYPES.SI_NONE} already set as an override`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -138,7 +138,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing by paper`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing by paper`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -154,7 +154,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing electronically`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactPrimary) with representing counsel filing electronically`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: false,
@@ -170,7 +170,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactSecondary) with no representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactSecondary) with no representing counsel`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -190,7 +190,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel and no email`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a Petitioner (contactPrimary) with no representing counsel and no email`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -211,7 +211,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with a serviceIndicator already set as an override`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -232,7 +232,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for a Petitioner (contactSecondary) with representing counsel`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
@@ -255,7 +255,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it('should not modify the serviceIndicator on the Practitioner', async () => {
+  it('should not modify the serviceIndicator on the Practitioner', () => {
     const caseDetail = {
       ...baseCaseDetail,
       isPaper: true,
@@ -269,7 +269,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it('should not modify the serviceIndicator on the Respondent', async () => {
+  it('should not modify the serviceIndicator on the Respondent', () => {
     const caseDetail = {
       ...baseCaseDetail,
       irsPractitioners: [{ ...baseRespondent }],
@@ -281,7 +281,7 @@ describe('setServiceIndicatorsForCases', () => {
     );
   });
 
-  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for an other petitioner with representing counsel`, async () => {
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_NONE} for an other petitioner with representing counsel`, () => {
     const caseDetail = {
       ...baseCaseDetail,
       petitioners: [
