@@ -147,4 +147,21 @@ describe('addCaseToTrialSessionInteractor', () => {
       trialDate: '2025-12-01T00:00:00.000Z',
     });
   });
+
+  it('does not set work items to high priority if the trial session is not calendared', async () => {
+    mockTrialSession = {
+      ...MOCK_TRIAL_REMOTE,
+      caseOrder: [{ docketNumber: '123-45' }],
+      isCalendared: false,
+    };
+
+    await addCaseToTrialSessionInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
+    ).not.toBeCalled();
+  });
 });
