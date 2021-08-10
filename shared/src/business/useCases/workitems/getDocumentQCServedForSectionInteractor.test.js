@@ -19,7 +19,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
-      async () => [
+      () => [
         {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
