@@ -676,7 +676,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     let servedAtUpdated = false;
     let shouldAddNewCoverSheet = false;
 
-    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+    it('should return true when shouldAddNewCoverSheet and entryRequiresCoverSheet are true for a non-minute entry', () => {
       mockDocketEntry.isMinuteEntry = false;
       shouldAddNewCoverSheet = true;
       entryRequiresCoverSheet = true;
@@ -692,7 +692,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', async () => {
+    it('should return true when servedAtUpdated and entryRequiresCoverSheet are true for a non-minute entry', () => {
       mockDocketEntry.isMinuteEntry = false;
       shouldAddNewCoverSheet = true;
       entryRequiresCoverSheet = true;
@@ -708,7 +708,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when the certificateOfService changes', async () => {
+    it('should return true when the certificateOfService changes', () => {
       mockDocketEntry.isMinuteEntry = false;
       shouldAddNewCoverSheet = false;
       entryRequiresCoverSheet = true;
@@ -725,7 +725,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       expect(result).toBe(true);
     });
 
-    it('should return true when the documentTitle changes', async () => {
+    it('should return true when the documentTitle changes', () => {
       mockDocketEntry.isMinuteEntry = false;
       shouldAddNewCoverSheet = false;
       entryRequiresCoverSheet = true;
@@ -743,7 +743,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       expect(result).toBe(true);
     });
 
-    it('should return false if nothing related to the coversheet has changed on the metadata', async () => {
+    it('should return false if nothing related to the coversheet has changed on the metadata', () => {
       mockDocketEntry.isMinuteEntry = false;
       shouldAddNewCoverSheet = false;
       entryRequiresCoverSheet = true;

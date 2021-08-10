@@ -33,25 +33,25 @@ describe('createUser', () => {
 
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           Username: '562d6260-aa9b-4010-af99-536d3872c752',
         }),
     });
 
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           User: { Username: '562d6260-aa9b-4010-af99-536d3872c752' },
         }),
     });
 
     applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: async () => Promise.resolve(),
+      promise: () => Promise.resolve(),
     });
 
     applicationContext.getCognito().adminDisableUser.mockReturnValue({
-      promise: async () => Promise.resolve(),
+      promise: () => Promise.resolve(),
     });
 
     applicationContext.getDocumentClient().put.mockReturnValue({
@@ -137,7 +137,7 @@ describe('createUser', () => {
 
   it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () => {
+      promise: () => {
         throw new Error('bad!');
       },
     });

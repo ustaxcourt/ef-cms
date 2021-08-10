@@ -1,11 +1,17 @@
 const client = require('../../dynamodbClientService');
 
-exports.getWorkItemById = ({ applicationContext, workItemId }) => {
-  return client.get({
-    Key: {
-      pk: `work-item|${workItemId}`,
-      sk: `work-item|${workItemId}`,
+exports.getWorkItemById = async ({ applicationContext, workItemId }) => {
+  const results = await client.query({
+    ExpressionAttributeNames: {
+      '#gsi1pk': 'gsi1pk',
     },
+    ExpressionAttributeValues: {
+      ':gsi1pk': `work-item|${workItemId}`,
+    },
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
+
+  return results.find(result => result.pk.startsWith('case|'));
 };

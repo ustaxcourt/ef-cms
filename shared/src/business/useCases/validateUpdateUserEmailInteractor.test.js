@@ -4,7 +4,7 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateUpdateUserEmailInteractor', () => {
-  it('runs validation on update user email form data with no invalid properties', async () => {
+  it('runs validation on update user email form data with no invalid properties', () => {
     const errors = validateUpdateUserEmailInteractor(applicationContext, {
       updateUserEmail: {
         confirmEmail: 'test@example.com',
@@ -15,7 +15,7 @@ describe('validateUpdateUserEmailInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('runs validation on update user email form data with missing data', async () => {
+  it('runs validation on update user email form data with missing data', () => {
     const errors = validateUpdateUserEmailInteractor(applicationContext, {
       updateUserEmail: {},
     });

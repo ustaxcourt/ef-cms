@@ -12,11 +12,7 @@ const {
 
 describe('change the case caption via the petition qc page', () => {
   before(() => {
-    navigateToPetitionQc(
-      'petitionsclerk',
-      '101-19',
-      '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-    );
+    navigateToPetitionQc('petitionsclerk', '102-20');
     getCaseInfoTab().click();
     getCaseTitleTextArea().clear().type('hello world');
     getIrsNoticeTab().click();
@@ -26,7 +22,7 @@ describe('change the case caption via the petition qc page', () => {
   });
 
   it('updates the case title header', () => {
-    navigateToCase('petitionsclerk', '101-19');
+    navigateToCase('petitionsclerk', '102-20');
     getCaseTitleContaining(
       'hello world v. Commissioner of Internal Revenue, Respondent',
     ).should('exist');

@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateIrsPractitionerOnCase = async ({
+exports.updateIrsPractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,
@@ -15,7 +15,7 @@ exports.updateIrsPractitionerOnCase = async ({
     applicationContext,
   });
 
-exports.updatePrivatePractitionerOnCase = async ({
+exports.updatePrivatePractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,

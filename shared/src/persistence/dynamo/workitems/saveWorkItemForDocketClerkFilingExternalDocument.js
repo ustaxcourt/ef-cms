@@ -12,16 +12,6 @@ exports.saveWorkItemForDocketClerkFilingExternalDocument = async ({
   applicationContext,
   workItem,
 }) => {
-  await put({
-    Item: {
-      gsi1pk: `work-item|${workItem.workItemId}`,
-      pk: `work-item|${workItem.workItemId}`,
-      sk: `work-item|${workItem.workItemId}`,
-      ...workItem,
-    },
-    applicationContext,
-  });
-
   await createSectionOutboxRecord({
     applicationContext,
     section: workItem.section,
@@ -36,8 +26,10 @@ exports.saveWorkItemForDocketClerkFilingExternalDocument = async ({
 
   await put({
     Item: {
+      gsi1pk: `work-item|${workItem.workItemId}`,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
+      ...workItem,
     },
     applicationContext,
   });

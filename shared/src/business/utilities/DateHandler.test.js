@@ -411,11 +411,11 @@ describe('DateHandler', () => {
   });
 
   describe('checkDate', () => {
-    it('should return -1 when the date is invalid', async () => {
+    it('should return -1 when the date is invalid', () => {
       expect(DateHandler.checkDate('xx-01-01')).toEqual('-1');
     });
 
-    it('should return null when date does not include letters or numbers', async () => {
+    it('should return null when date does not include letters or numbers', () => {
       expect(DateHandler.checkDate('--')).toEqual(null);
     });
 

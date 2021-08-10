@@ -26,10 +26,22 @@ module.exports = {
     },
     'documentContents.S': {
       analyzer: 'ustc_analyzer',
+      fields: {
+        exact: {
+          analyzer: 'english_exact',
+          type: 'text',
+        },
+      },
       type: 'text',
     },
     'documentTitle.S': {
       analyzer: 'ustc_analyzer',
+      fields: {
+        exact: {
+          analyzer: 'english_exact',
+          type: 'text',
+        },
+      },
       type: 'text',
     },
     'documentType.S': {
