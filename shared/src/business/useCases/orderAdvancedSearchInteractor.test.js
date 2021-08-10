@@ -104,10 +104,7 @@ describe('orderAdvancedSearchInteractor', () => {
       startDate: '2001-01-01',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().logDocumentSearch.mock
-        .calls[0][1],
-    ).toMatchObject({
+    expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
       size: result.length,
       timestamp: expect.anything(),
