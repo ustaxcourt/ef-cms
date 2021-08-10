@@ -77,14 +77,12 @@ exports.orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow('YYYY/MM/DD HH:mm:ss.SSS [ET]');
-  await applicationContext
-    .getPersistenceGateway()
-    .logDocumentSearch(applicationContext, {
-      ...omit(rawSearch, 'entityName'),
-      size: results.length,
-      timestamp,
-      userId: authorizedUser.userId,
-    });
+  await applicationContext.logger.info('advanced order search', {
+    ...omit(rawSearch, 'entityName'),
+    size: results.length,
+    timestamp,
+    userId: authorizedUser.userId,
+  });
 
   const filteredResults = caseSearchFilter(results, authorizedUser).slice(
     0,

@@ -740,9 +740,6 @@ const {
   isFileExists,
 } = require('../../shared/src/persistence/s3/isFileExists');
 const {
-  logDocumentSearch,
-} = require('../../shared/src/persistence/logPersistence');
-const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
@@ -1451,7 +1448,6 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
-  logDocumentSearch,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
