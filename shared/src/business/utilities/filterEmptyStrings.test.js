@@ -54,4 +54,12 @@ describe('filterEmptyStrings', () => {
       guy: 'fieri',
     });
   });
+
+  it('does not filter if nothing is passed in', () => {
+    const objectToFilter = null;
+
+    const result = filterEmptyStrings(objectToFilter);
+
+    expect(result).toEqual(objectToFilter);
+  });
 });
