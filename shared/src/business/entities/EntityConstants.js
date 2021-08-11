@@ -6,7 +6,7 @@ const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEven
 const { flatten, sortBy, union, without } = require('lodash');
 const { formatNow } = require('../utilities/DateHandler');
 
-const ENABLE_8684 = true;
+const ENABLE_8684 = false;
 
 const filter8684CategoryMap = (categoryMap, showMOTR) => {
   Object.keys(categoryMap).forEach(category => {
