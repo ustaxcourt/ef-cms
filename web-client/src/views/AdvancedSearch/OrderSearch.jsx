@@ -1,6 +1,8 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -109,6 +111,48 @@ export const OrderSearch = connect(
                   </div>
                 </FormGroup>
               </div>
+            </div>
+            <div className="grid-row grid-gap-6">
+              <div className="judge-search-row margin-right-3 margin-top-4">
+                <label className="usa-label" htmlFor="order-date-range">
+                  Judge
+                </label>
+                <BindedSelect
+                  bind={'advancedSearchForm.orderSearch.judge'}
+                  className="usa-input"
+                  id="order-judge"
+                  name="judge"
+                >
+                  <option value="">All Judges</option>
+                  {judges.map(judge => (
+                    <option
+                      key={judge.judgeFullName}
+                      value={judge.judgeFullName}
+                    >
+                      {judge.name}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+              <label className="usa-label" htmlFor="order-date-range">
+                Date range
+              </label>
+              <div>
+                <BindedSelect
+                  bind={'advancedSearchForm.orderSearch.dateRange'}
+                  className="usa-input"
+                  id="order-date-range"
+                  name="date-range"
+                >
+                  <option value="">All dates</option>
+                  <option value="">Custom dates</option>
+                </BindedSelect>
+              </div>
+              <SearchDateRangePickerComponent
+                formType="orderSearch"
+                updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                validateSequence={validateOrderSearchSequence}
+              />
             </div>
           </div>
 
