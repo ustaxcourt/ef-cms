@@ -137,9 +137,9 @@ DocumentSearch.schema = joi
     judge: JoiValidationConstants.STRING.optional().description(
       'The name of the judge to filter the search results by',
     ),
-    keyword: JoiValidationConstants.STRING.optional().description(
-      'The keyword to search by',
-    ),
+    keyword: JoiValidationConstants.STRING.optional()
+      .allow('')
+      .description('The keyword to search by'),
     opinionType: JoiValidationConstants.STRING.optional().description(
       'The opinion document type to filter the search results by',
     ),
