@@ -43,11 +43,9 @@ export const internalTypesHelper = (get, applicationContext) => {
   // 8640
   const docketEntries = get(state.caseDetail.docketEntries);
   const docketEntryId = get(state.form.docketEntryId);
-  let selectedEventCode = docketEntries.find(
-    entry => entry.docketEntryId === docketEntryId,
-  );
-  selectedEventCode = selectedEventCode
-    ? selectedEventCode.eventCode
+  const selectedEventCode = docketEntryId
+    ? docketEntries.find(entry => entry.docketEntryId === docketEntryId)
+        .eventCode
     : undefined;
 
   // this should be a constant ['NCA', 'NCP', 'NCAP']
