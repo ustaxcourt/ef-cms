@@ -113,7 +113,7 @@ export const OrderSearch = connect(
               </div>
             </div>
             <div className="grid-row grid-gap-6">
-              <div className="judge-search-row margin-right-3 margin-top-4">
+              <div className="judge-search-row margin-top-4">
                 <label className="usa-label" htmlFor="order-date-range">
                   Judge
                 </label>
@@ -123,7 +123,7 @@ export const OrderSearch = connect(
                   id="order-judge"
                   name="judge"
                 >
-                  <option value="">All Judges</option>
+                  <option value="">All judges</option>
                   {judges.map(judge => (
                     <option
                       key={judge.judgeFullName}
@@ -134,10 +134,10 @@ export const OrderSearch = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <label className="usa-label" htmlFor="order-date-range">
-                Date range
-              </label>
-              <div>
+              <div className="margin-top-4">
+                <label className="usa-label" htmlFor="order-date-range">
+                  Date range
+                </label>
                 <BindedSelect
                   bind={'advancedSearchForm.orderSearch.dateRange'}
                   className="usa-input"
@@ -148,11 +148,13 @@ export const OrderSearch = connect(
                   <option value="">Custom dates</option>
                 </BindedSelect>
               </div>
-              <SearchDateRangePickerComponent
-                formType="orderSearch"
-                updateSequence={updateAdvancedOrderSearchFormValueSequence}
-                validateSequence={validateOrderSearchSequence}
-              />
+              <div className="margin-top-4">
+                <SearchDateRangePickerComponent
+                  formType="orderSearch"
+                  updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                  validateSequence={validateOrderSearchSequence}
+                />
+              </div>
             </div>
           </div>
 

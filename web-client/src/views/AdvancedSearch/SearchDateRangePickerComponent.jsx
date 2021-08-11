@@ -100,15 +100,15 @@ export const SearchDateRangePickerComponent = connect(
           formGroupRef={startDatePickerRef}
         >
           <label
-            className="usa-label margin-bottom-0"
+            className="usa-label"
             htmlFor="startDate-date-start"
             id="startDate-date-start-label"
           >
-            Start date
+            Start date{' '}
+            <span className="usa-hint" id="startDate-date-start-hint">
+              (MM/DD/YYYY)
+            </span>
           </label>
-          <div className="usa-hint" id="startDate-date-start-hint">
-            MM/DD/YYYY
-          </div>
           <div className="usa-date-picker">
             <input
               aria-describedby="startDate-date-start-label startDate-date-start-hint"
@@ -120,7 +120,6 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-
         <FormGroup
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
@@ -128,15 +127,16 @@ export const SearchDateRangePickerComponent = connect(
           formGroupRef={endDatePickerRef}
         >
           <label
-            className="usa-label margin-bottom-0"
+            className="usa-label"
             htmlFor="endDate-date-end"
             id="endDate-date-end-label"
           >
-            End date
+            End date{' '}
+            <span className="usa-hint" id="endDate-date-end-hint">
+              (MM/DD/YYYY)
+            </span>
           </label>
-          <div className="usa-hint" id="endDate-date-end-hint">
-            MM/DD/YYYY
-          </div>
+
           <div className="usa-date-picker">
             <input
               aria-describedby="endDate-date-end-label endDate-date-end-hint"
