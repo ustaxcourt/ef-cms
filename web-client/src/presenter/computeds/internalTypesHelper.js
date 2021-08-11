@@ -40,9 +40,21 @@ export const internalTypesHelper = (get, applicationContext) => {
     applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
+  // 8640
+  const docketEntries = get(state.caseDetail.docketEntries);
+  const docketEntryId = get(state.form.docketEntryId);
+  const selectedEventCode = docketEntries.find(
+    entry => entry.docketEntryId === docketEntryId,
+  ).eventCode;
+
+  // this should be a constant ['NCA', 'NCP', 'NCAP']
+  const forbiddenDocumentEventCodes = ['NCA', 'NCP', 'NCAP'].filter(
+    docTypeCode => selectedEventCode !== docTypeCode,
+  );
+
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     INTERNAL_CATEGORY_MAP,
-  );
+  ).filter(docType => !forbiddenDocumentEventCodes.includes(docType.eventCode));
 
   const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect
     .sort(getSortFunction(searchText))
