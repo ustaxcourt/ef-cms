@@ -61,12 +61,13 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      showDateRangePicker: false,
       showPractitionerSearch: undefined,
       showStateSelect: false,
     });
   });
 
-  it('returns only showStateSelect and showPractitionerSearch when searchResults is undefined', () => {
+  it('returns only showStateSelect, showPractitionerSearch, and showDateRangePicker when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -74,6 +75,7 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      showDateRangePicker: false,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -107,7 +109,7 @@ describe('advancedSearchHelper', () => {
         },
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: true,
     });
@@ -124,7 +126,7 @@ describe('advancedSearchHelper', () => {
         },
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -457,20 +459,27 @@ describe('advancedSearchHelper', () => {
     });
   });
 
-  describe.only('showDateRangePicker', () => {
+  describe('showDateRangePicker', () => {
     it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {
       const result = runCompute(advancedSearchHelper, {
         state: {
           ...getBaseState(globalUser),
           advancedSearchForm: { orderSearch: { dateRange: 'allDates' } },
-          advancedSearchTab: 'practitioner',
-          searchResults: {
-            practitioner: [{ barNumber: '1111' }, { barNumber: '2222' }],
-          },
         },
       });
 
       expect(result.showDateRangePicker).toBeFalsy();
+    });
+
+    it('should be true when state.advancedSearchForm.orderSearch.dateRange is customDates', () => {
+      const result = runCompute(advancedSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: { orderSearch: { dateRange: 'customDates' } },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeTruthy();
     });
   });
 });

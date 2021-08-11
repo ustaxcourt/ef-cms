@@ -136,7 +136,7 @@ export const OrderSearch = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <div className="margin-top-4">
+              <div className="margin-top-4 padding-bottom-5">
                 <label className="usa-label" htmlFor="order-date-range">
                   Date range
                 </label>
