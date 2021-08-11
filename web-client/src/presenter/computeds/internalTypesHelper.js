@@ -43,9 +43,12 @@ export const internalTypesHelper = (get, applicationContext) => {
   // 8640
   const docketEntries = get(state.caseDetail.docketEntries);
   const docketEntryId = get(state.form.docketEntryId);
-  const selectedEventCode = docketEntries.find(
+  let selectedEventCode = docketEntries.find(
     entry => entry.docketEntryId === docketEntryId,
-  ).eventCode;
+  );
+  selectedEventCode = selectedEventCode
+    ? selectedEventCode.eventCode
+    : undefined;
 
   // this should be a constant ['NCA', 'NCP', 'NCAP']
   const forbiddenDocumentEventCodes = ['NCA', 'NCP', 'NCAP'].filter(
