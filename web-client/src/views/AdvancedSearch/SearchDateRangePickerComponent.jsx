@@ -120,6 +120,9 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
+        <div className="desktop:text-center desktop:padding-top-6 width-full desktop:width-auto desktop:margin-bottom-2 padding-right-2">
+          to
+        </div>
         <FormGroup
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
