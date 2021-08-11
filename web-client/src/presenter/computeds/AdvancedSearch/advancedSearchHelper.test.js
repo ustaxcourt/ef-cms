@@ -456,4 +456,21 @@ describe('advancedSearchHelper', () => {
       expect(result).toEqual({});
     });
   });
+
+  describe.only('showDateRangePicker', () => {
+    it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {
+      const result = runCompute(advancedSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: { orderSearch: { dateRange: 'allDates' } },
+          advancedSearchTab: 'practitioner',
+          searchResults: {
+            practitioner: [{ barNumber: '1111' }, { barNumber: '2222' }],
+          },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeFalsy();
+    });
+  });
 });

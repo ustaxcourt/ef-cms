@@ -10,6 +10,7 @@ import React from 'react';
 export const OrderSearch = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
+    advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
@@ -19,6 +20,7 @@ export const OrderSearch = connect(
   },
   function OrderSearch({
     advancedSearchForm,
+    advancedSearchHelper,
     clearAdvancedSearchFormSequence,
     judges,
     submitAdvancedSearchSequence,
@@ -144,17 +146,19 @@ export const OrderSearch = connect(
                   id="order-date-range"
                   name="date-range"
                 >
-                  <option value="">All dates</option>
-                  <option value="">Custom dates</option>
+                  <option value="allDates">All dates</option>
+                  <option value="customDates">Custom dates</option>
                 </BindedSelect>
               </div>
-              <div className="margin-top-4">
-                <SearchDateRangePickerComponent
-                  formType="orderSearch"
-                  updateSequence={updateAdvancedOrderSearchFormValueSequence}
-                  validateSequence={validateOrderSearchSequence}
-                />
-              </div>
+              {advancedSearchHelper.showDateRangePicker && (
+                <div className="margin-top-4">
+                  <SearchDateRangePickerComponent
+                    formType="orderSearch"
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
