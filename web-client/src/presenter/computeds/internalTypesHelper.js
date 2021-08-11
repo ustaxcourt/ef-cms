@@ -36,8 +36,11 @@ export const getSortFunction = searchText => {
 };
 
 export const internalTypesHelper = (get, applicationContext) => {
-  const { INTERNAL_CATEGORY_MAP, LODGED_EVENT_CODE } =
-    applicationContext.getConstants();
+  const {
+    INTERNAL_CATEGORY_MAP,
+    LODGED_EVENT_CODE,
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
   // 8640
@@ -48,10 +51,10 @@ export const internalTypesHelper = (get, applicationContext) => {
         .eventCode
     : undefined;
 
-  // this should be a constant ['NCA', 'NCP', 'NCAP']
-  const forbiddenDocumentEventCodes = ['NCA', 'NCP', 'NCAP'].filter(
-    docTypeCode => selectedEventCode !== docTypeCode,
-  );
+  const forbiddenDocumentEventCodes =
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.filter(
+      docTypeCode => selectedEventCode !== docTypeCode,
+    );
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     INTERNAL_CATEGORY_MAP,
