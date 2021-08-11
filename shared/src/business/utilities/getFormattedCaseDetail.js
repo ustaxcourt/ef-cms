@@ -512,4 +512,5 @@ module.exports = {
   getFilingsAndProceedings,
   getFormattedCaseDetail,
   sortDocketEntries,
+  sortUndefined,
 };
