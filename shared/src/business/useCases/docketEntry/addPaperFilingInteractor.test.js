@@ -154,6 +154,34 @@ describe('addPaperFilingInteractor', () => {
     ).toBeCalled();
   });
 
+  it('add documents and workItem to inbox if saving for later if a document is NOT attached', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: false,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument,
+    ).not.toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toBeCalled();
+    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).not.toBeCalled();
+  });
+
   it('add documents and workItem to inbox when NOT saving for later if a document is attached', async () => {
     await addPaperFilingInteractor(applicationContext, {
       documentMetadata: {

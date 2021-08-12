@@ -15,15 +15,13 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
     expect(errors).toBeNull();
   });
 
-  it('returns an error when a search term is not provided', () => {
+  it('does not return an error when a search term is not provided', () => {
     const errors = validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch: {
         keyword: '',
       },
     });
 
-    expect(errors).toMatchObject({
-      keyword: 'Enter a keyword or phrase',
-    });
+    expect(errors).toBeNull();
   });
 });
