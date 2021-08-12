@@ -92,23 +92,24 @@ export const SearchDateRangePickerComponent = connect(
     }, [startDateInputRef, endDateInputRef]);
 
     return (
-      <div className="usa-date-range-picker grid-row grid-gap-md">
+      <>
         <FormGroup
+          className="width-card-lg"
           errorText={
             validationErrors.dateRangeRequired || validationErrors.startDate
           }
           formGroupRef={startDatePickerRef}
         >
           <label
-            className="usa-label margin-bottom-0"
+            className="usa-label"
             htmlFor="startDate-date-start"
             id="startDate-date-start-label"
           >
-            Start date
+            Start date{' '}
+            <span className="usa-hint" id="startDate-date-start-hint">
+              (MM/DD/YYYY)
+            </span>
           </label>
-          <div className="usa-hint" id="startDate-date-start-hint">
-            MM/DD/YYYY
-          </div>
           <div className="usa-date-picker">
             <input
               aria-describedby="startDate-date-start-label startDate-date-start-hint"
@@ -120,23 +121,27 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-
+        <div className="desktop:text-center tablet:padding-top-6 width-full tablet:width-auto desktop:margin-bottom-2 padding-right-2 tiny-to">
+          to
+        </div>
         <FormGroup
+          className="width-card-lg tablet:padding-top-0 padding-top-5"
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
           }
           formGroupRef={endDatePickerRef}
         >
           <label
-            className="usa-label margin-bottom-0"
+            className="usa-label"
             htmlFor="endDate-date-end"
             id="endDate-date-end-label"
           >
-            End date
+            End date{' '}
+            <span className="usa-hint" id="endDate-date-end-hint">
+              (MM/DD/YYYY)
+            </span>
           </label>
-          <div className="usa-hint" id="endDate-date-end-hint">
-            MM/DD/YYYY
-          </div>
+
           <div className="usa-date-picker">
             <input
               aria-describedby="endDate-date-end-label endDate-date-end-hint"
@@ -148,7 +153,7 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-      </div>
+      </>
     );
   },
 );

@@ -42,6 +42,9 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
     this.opinionType = rawProps.opinionType;
   }
 
+  this.from = rawProps.from ?? 0;
+  this.userRole = rawProps.userRole;
+
   this.keyword = rawProps.keyword;
 
   if (!isEmpty(rawProps.docketNumber)) {
@@ -85,7 +88,6 @@ DocumentSearch.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a valid end date',
   ],
-  keyword: 'Enter a keyword or phrase',
   startDate: [
     {
       contains: 'must be less than or equal to "now"',
@@ -124,12 +126,20 @@ DocumentSearch.schema = joi
           'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
         ),
     }),
+    from: joi
+      .number()
+      .integer()
+      .min(0)
+      .required()
+      .description(
+        'The zero-based index representing which page of results we are requesting',
+      ),
     judge: JoiValidationConstants.STRING.optional().description(
       'The name of the judge to filter the search results by',
     ),
-    keyword: JoiValidationConstants.STRING.required().description(
-      'The only required field to filter the search by',
-    ),
+    keyword: JoiValidationConstants.STRING.optional()
+      .allow('')
+      .description('The keyword to search by'),
     opinionType: JoiValidationConstants.STRING.optional().description(
       'The opinion document type to filter the search results by',
     ),
@@ -156,6 +166,9 @@ DocumentSearch.schema = joi
       .description(
         'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
       ),
+    userRole: JoiValidationConstants.STRING.optional().description(
+      'The role of the user performing the search',
+    ),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
