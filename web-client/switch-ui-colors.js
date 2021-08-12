@@ -7,13 +7,8 @@ const check = (value, message) => {
   }
 };
 
-const {
-  CURRENT_COLOR,
-  DEPLOYING_COLOR,
-  EFCMS_DOMAIN,
-  ENV,
-  ZONE_NAME,
-} = process.env;
+const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ENV, ZONE_NAME } =
+  process.env;
 
 check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
