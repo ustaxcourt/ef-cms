@@ -790,6 +790,7 @@ workflows:
       - e2e-pa11y
       - e2e-pa11y-public
       - e2e-cypress
+      - e2e-cypress-smoketests-local
       - e2e-cypress-public
       - deploy:
           requires:
@@ -797,6 +798,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
       - migrate:
           requires:
@@ -824,6 +826,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
       - deploy:
@@ -832,6 +836,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
           filters:
             branches:
@@ -900,6 +905,8 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress:
           <<: *build-and-deploy-without-smoketests-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-without-smoketests-defaults
       - deploy:
@@ -909,6 +916,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
       - migrate:
           <<: *build-and-deploy-without-smoketests-defaults
@@ -929,6 +937,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress:
           <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
       - deploy:
@@ -938,6 +948,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
       - migrate:
           <<: *build-and-deploy-with-context-defaults
