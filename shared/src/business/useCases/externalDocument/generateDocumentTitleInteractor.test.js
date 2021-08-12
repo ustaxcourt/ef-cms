@@ -20,10 +20,22 @@ describe('generateDocumentTitleInteractor', () => {
     expect(title).toEqual('abc');
   });
 
+  it('generates a document title if previous document is undefined', async () => {
+    const title = await generateDocumentTitleInteractor(applicationContext, {
+      documentMetadata: {
+        documentTitle: 'abc',
+        previousDocument: undefined,
+        scenario: 'nonstandard a',
+      },
+    });
+
+    expect(title).toEqual('abc');
+  });
+
   it('generate the full document title for the previousDocument when documentMetadata.previousDocument exists', async () => {
     const title = await generateDocumentTitleInteractor(applicationContext, {
       documentMetadata: {
-        documentTitle: 'abc [pizza]',
+        documentTitle: 'abc [Document Name]',
         previousDocument: {
           addToCoversheet: true,
           additionalInfo: 'Cool',
@@ -42,7 +54,7 @@ describe('generateDocumentTitleInteractor', () => {
   it('should not overwrite the origrinal metadata previousDocument title passed as an argument', async () => {
     const metadata = {
       documentMetadata: {
-        documentTitle: 'abc [pizza]',
+        documentTitle: 'abc [Document Name]',
         previousDocument: {
           addToCoversheet: true,
           additionalInfo: 'Cool',
