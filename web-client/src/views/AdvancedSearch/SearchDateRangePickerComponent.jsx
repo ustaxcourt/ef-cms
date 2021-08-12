@@ -92,8 +92,9 @@ export const SearchDateRangePickerComponent = connect(
     }, [startDateInputRef, endDateInputRef]);
 
     return (
-      <div className="usa-date-range-picker grid-row grid-gap-md">
+      <>
         <FormGroup
+          className="width-card-lg"
           errorText={
             validationErrors.dateRangeRequired || validationErrors.startDate
           }
@@ -120,10 +121,11 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-        <div className="desktop:text-center desktop:padding-top-6 width-full desktop:width-auto desktop:margin-bottom-2 padding-right-2">
+        <div className="desktop:text-center tablet:padding-top-6 width-full tablet:width-auto desktop:margin-bottom-2 padding-right-2 tiny-to">
           to
         </div>
         <FormGroup
+          className="width-card-lg tablet:padding-top-0 padding-top-5"
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
           }
@@ -151,7 +153,7 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-      </div>
+      </>
     );
   },
 );

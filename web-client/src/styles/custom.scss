@@ -1526,8 +1526,16 @@ button.change-scanner-button {
     width: 180px;
   }
 
+  .tiny-to {
+    padding-right: 0px;
+    padding-left: 0px;
+    @media only screen and (min-width: $medium-screen) {
+      margin-left: -10px;
+    }
+  }
+
   /* big screens */
-  @media only screen and (min-width: $medium-screen) {
+  @media only screen and (min-width: $large-screen) {
     .right-gray-border {
       border-right: 1px solid color($theme-color-base-light);
     }
