@@ -39,26 +39,28 @@ export const OrderSearchForm = connect(
           >
             <div className="blue-container">
               <div className="grid-row">
-                <p>
-                  <span className="text-semibold">
-                    Search by keyword and phrase
-                  </span>
-                </p>
-                <input
-                  aria-describedby="search-orders-header search-description"
-                  className="usa-input maxw-tablet-lg"
-                  id="order-search"
-                  name="keyword"
-                  type="text"
-                  value={advancedSearchForm.orderSearch.keyword || ''}
-                  onBlur={() => validateOrderSearchSequence()}
-                  onChange={e => {
-                    updateAdvancedOrderSearchFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                />
+                <div className="border-bottom-1px border-base-light padding-bottom-3">
+                  <p>
+                    <span className="text-semibold">
+                      Search by keyword and phrase
+                    </span>
+                  </p>
+                  <input
+                    aria-describedby="search-orders-header search-description"
+                    className="usa-input maxw-tablet-lg"
+                    id="order-search"
+                    name="keyword"
+                    type="text"
+                    value={advancedSearchForm.orderSearch.keyword || ''}
+                    onBlur={() => validateOrderSearchSequence()}
+                    onChange={e => {
+                      updateAdvancedOrderSearchFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
 
                 <div className="grid-col-5">
                   <FormGroup
@@ -87,7 +89,7 @@ export const OrderSearchForm = connect(
                       />
                     </div>
 
-                    <div className="width-full margin-bottom-3 padding-left-2 padding-right-2">
+                    <div className="width-full margin-bottom-3 padding-right-2">
                       or
                     </div>
                     <div>
