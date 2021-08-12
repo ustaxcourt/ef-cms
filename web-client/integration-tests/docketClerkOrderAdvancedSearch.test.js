@@ -1,5 +1,4 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { DocumentSearch } from '../../shared/src/business/entities/documents/DocumentSearch';
 import {
   FORMATS,
   calculateISODate,
@@ -123,9 +122,7 @@ describe('docket clerk order advanced search', () => {
 
       await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-      expect(cerebralTest.getState('validationErrors')).toEqual({
-        keyword: DocumentSearch.VALIDATION_ERROR_MESSAGES.keyword,
-      });
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
     });
 
     it('clears search fields', async () => {
@@ -258,6 +255,19 @@ describe('docket clerk order advanced search', () => {
   });
 
   describe('search for things that should be found', () => {
+    it('searches for orders without a keyword', async () => {
+      cerebralTest.setState('advancedSearchForm', {
+        orderSearch: {},
+      });
+
+      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`)
+          .length,
+      ).toBeGreaterThan(cerebralTest.draftOrders.length);
+    });
+
     it('search for a keyword that is present in served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
