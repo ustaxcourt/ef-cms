@@ -1529,6 +1529,9 @@ button.change-scanner-button {
   .tiny-to {
     padding-right: 0px;
     padding-left: 0px;
+    @media only screen and (min-width: $medium-screen) {
+      margin-left: -10px;
+    }
   }
 
   /* big screens */
