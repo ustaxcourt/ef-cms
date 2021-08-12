@@ -139,6 +139,8 @@ export const OrderSearchForm = connect(
                     ))}
                   </BindedSelect>
                 </div>
+              </div>
+              <div className="grid-row grid-gap-6">
                 <div className="margin-top-4 desktop:padding-bottom-5">
                   <label className="usa-label" htmlFor="order-date-range">
                     Date range
@@ -277,8 +279,8 @@ export const OrderSearchForm = connect(
                   </FormGroup>
                 </div>
               </div>
-              <div className="grid-row grid-gap-6">
-                <div className="width-card margin-top-4 desktop:grid-col-4 grid-col-12">
+              <div className="grid-row grid-gap-6 margin-top-4">
+                <div className="width-card-lg desktop:grid-col-3 grid-col-12">
                   <label className="usa-label" htmlFor="order-date-range">
                     Judge
                   </label>
@@ -299,23 +301,23 @@ export const OrderSearchForm = connect(
                     ))}
                   </BindedSelect>
                 </div>
-                <div className="desktop:grid-col-8 grid-col-12">
-                  <div className="width-card margin-top-4 desktop:padding-bottom-5">
-                    <label className="usa-label" htmlFor="order-date-range">
-                      Date range
-                    </label>
-                    <BindedSelect
-                      bind={'advancedSearchForm.orderSearch.dateRange'}
-                      className="usa-input"
-                      id="order-date-range"
-                      name="date-range"
-                    >
-                      <option value="allDates">All dates</option>
-                      <option value="customDates">Custom dates</option>
-                    </BindedSelect>
-                  </div>
-                  {advancedSearchHelper.showDateRangePicker && (
-                    <div className="margin-top-4">
+                <div className="desktop:grid-col-9 grid-col-12">
+                  <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
+                    <div className="width-card-lg desktop:padding-bottom-5">
+                      <label className="usa-label" htmlFor="order-date-range">
+                        Date range
+                      </label>
+                      <BindedSelect
+                        bind={'advancedSearchForm.orderSearch.dateRange'}
+                        className="usa-input"
+                        id="order-date-range"
+                        name="date-range"
+                      >
+                        <option value="allDates">All dates</option>
+                        <option value="customDates">Custom dates</option>
+                      </BindedSelect>
+                    </div>
+                    {advancedSearchHelper.showDateRangePicker && (
                       <SearchDateRangePickerComponent
                         formType="orderSearch"
                         updateSequence={
@@ -323,8 +325,8 @@ export const OrderSearchForm = connect(
                         }
                         validateSequence={validateOrderSearchSequence}
                       />
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
