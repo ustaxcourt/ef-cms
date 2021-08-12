@@ -1526,6 +1526,11 @@ button.change-scanner-button {
     width: 180px;
   }
 
+  .tiny-to {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+
   /* big screens */
   @media only screen and (min-width: $large-screen) {
     .right-gray-border {
