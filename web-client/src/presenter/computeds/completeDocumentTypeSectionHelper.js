@@ -15,13 +15,19 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const { CATEGORY_MAP } = applicationContext.getConstants();
+  const { CATEGORY_MAP, NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES } =
+    applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
 
-  returnData.documentTypesForSelectSorted = documentTypesForSelect.sort(
-    getSortFunction(searchText),
-  );
+  returnData.documentTypesForSelectSorted = documentTypesForSelect
+    .sort(getSortFunction(searchText))
+    .filter(
+      docType =>
+        !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
+          docType.eventCode,
+        ),
+    );
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
       entry => entry.scenario !== 'Nonstandard H',
