@@ -199,7 +199,7 @@ export const OrderSearchForm = connect(
           >
             <div className="blue-container order-search-container">
               <div className="grid-row grid-gap-6">
-                <div className="grid-col-7 right-gray-border">
+                <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
                   <p className="margin-top-0">
                     <span className="text-semibold">
                       Search by keyword and phrase
@@ -222,7 +222,7 @@ export const OrderSearchForm = connect(
                   />
                 </div>
 
-                <div className="grid-col-5">
+                <div className="desktop:grid-col-5 grid-col-12">
                   <FormGroup
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
