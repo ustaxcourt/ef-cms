@@ -125,7 +125,7 @@ export const SearchDateRangePickerComponent = connect(
           to
         </div>
         <FormGroup
-          className="width-card-lg"
+          className="width-card-lg tablet:padding-top-0 padding-top-5"
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
           }
