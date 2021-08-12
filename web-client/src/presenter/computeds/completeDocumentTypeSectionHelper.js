@@ -28,7 +28,6 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
           docType.eventCode,
         ),
     );
-
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
       entry => entry.scenario !== 'Nonstandard H',
