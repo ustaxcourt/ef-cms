@@ -1527,7 +1527,7 @@ button.change-scanner-button {
   }
 
   /* big screens */
-  @media only screen and (min-width: $medium-screen) {
+  @media only screen and (min-width: $large-screen) {
     .right-gray-border {
       border-right: 1px solid color($theme-color-base-light);
     }
