@@ -8,6 +8,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 
 let mockCases;
+const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
 
 describe('removeConsolidatedCasesInteractor', () => {
   beforeEach(() => {
@@ -155,6 +156,42 @@ describe('removeConsolidatedCasesInteractor', () => {
     ).toMatchObject({
       docketNumber: '101-19',
       leadDocketNumber: undefined,
+    });
+  });
+
+  it('Should update all cases to remove consolidation if new consolidated cases length is 0', async () => {
+    const docketNumbersToRemove = allDocketNumbers;
+    await removeConsolidatedCasesInteractor(applicationContext, {
+      docketNumber: '101-19',
+      docketNumbersToRemove,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(docketNumbersToRemove.length);
+  });
+
+  it('Should update ALL cases to remove consolidation if new consolidated cases length is 1', async () => {
+    const docketNumbersToRemove = [
+      // 101-19 is the lead case but not in the list to be removed
+      '102-19',
+      '103-19',
+      '104-19',
+      '105-19',
+    ];
+    await removeConsolidatedCasesInteractor(applicationContext, {
+      docketNumber: '101-19',
+      docketNumbersToRemove,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(allDocketNumbers.length);
+
+    allDocketNumbers.forEach((docketNumber, callIndex) => {
+      expect(
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[callIndex][0].caseToUpdate.docketNumber,
+      ).toBe(docketNumber);
     });
   });
 
