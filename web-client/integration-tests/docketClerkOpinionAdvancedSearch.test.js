@@ -181,13 +181,15 @@ describe('docket clerk opinion advanced search', () => {
 
   it('clears validation errors when switching tabs', async () => {
     cerebralTest.setState('advancedSearchForm', {
-      opinionSearch: {},
+      opinionSearch: {
+        startDate: '2995-08-03',
+      },
     });
 
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(cerebralTest.getState('alertError')).toEqual({
-      messages: ['Enter a keyword or phrase'],
+      messages: ['Start date cannot be in the future. Enter valid start date.'],
       title: 'Please correct the following errors:',
     });
 
