@@ -265,7 +265,7 @@ describe('docket clerk order advanced search', () => {
       expect(
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`)
           .length,
-      ).toBeGreaterThan(cerebralTest.draftOrders.length);
+      ).toBeGreaterThanOrEqual(cerebralTest.draftOrders.length);
     });
 
     it('search for a keyword that is present in served orders', async () => {
@@ -395,7 +395,6 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           endDate: `${endDateYear}-${endDateMonth}-${endDateDay}`,
-          keyword: 'dismissal',
           startDate: `${startDateYear}-${startDateMonth}-${startDateDay}`,
         },
       });
@@ -428,7 +427,6 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           judge: signedByJudge,
-          keyword: 'dismissal',
           startDate: '1000-01-01',
         },
       });
