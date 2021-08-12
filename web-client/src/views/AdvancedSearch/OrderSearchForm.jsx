@@ -227,7 +227,7 @@ export const OrderSearchForm = connect(
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
                   >
-                    <div className="margin-bottom-3 desktop:margin-bottom-0">
+                    <div className="margin-bottom-3 margin-bottom-0">
                       <label className="usa-label" htmlFor="docket-number">
                         Docket number
                       </label>
@@ -249,10 +249,10 @@ export const OrderSearchForm = connect(
                       />
                     </div>
 
-                    <div className="desktop:text-center desktop:padding-top-6 width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
+                    <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                       or
                     </div>
-                    <div className="margin-bottom-6 desktop:margin-bottom-0">
+                    <div className="margin-bottom-6 margin-bottom-0">
                       <label className="usa-label" htmlFor="title-or-name">
                         Case title / Petitioner’s name
                       </label>
@@ -278,7 +278,7 @@ export const OrderSearchForm = connect(
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
-                <div className="judge-search-row margin-top-4">
+                <div className="width-card margin-top-4 desktop:grid-col-4 grid-col-12">
                   <label className="usa-label" htmlFor="order-date-range">
                     Judge
                   </label>
@@ -299,31 +299,33 @@ export const OrderSearchForm = connect(
                     ))}
                   </BindedSelect>
                 </div>
-                <div className="margin-top-4 desktop:padding-bottom-5">
-                  <label className="usa-label" htmlFor="order-date-range">
-                    Date range
-                  </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.dateRange'}
-                    className="usa-input"
-                    id="order-date-range"
-                    name="date-range"
-                  >
-                    <option value="allDates">All dates</option>
-                    <option value="customDates">Custom dates</option>
-                  </BindedSelect>
-                </div>
-                {advancedSearchHelper.showDateRangePicker && (
-                  <div className="margin-top-4">
-                    <SearchDateRangePickerComponent
-                      formType="orderSearch"
-                      updateSequence={
-                        updateAdvancedOrderSearchFormValueSequence
-                      }
-                      validateSequence={validateOrderSearchSequence}
-                    />
+                <div className="desktop:grid-col-8 grid-col-12">
+                  <div className="width-card margin-top-4 desktop:padding-bottom-5">
+                    <label className="usa-label" htmlFor="order-date-range">
+                      Date range
+                    </label>
+                    <BindedSelect
+                      bind={'advancedSearchForm.orderSearch.dateRange'}
+                      className="usa-input"
+                      id="order-date-range"
+                      name="date-range"
+                    >
+                      <option value="allDates">All dates</option>
+                      <option value="customDates">Custom dates</option>
+                    </BindedSelect>
                   </div>
-                )}
+                  {advancedSearchHelper.showDateRangePicker && (
+                    <div className="margin-top-4">
+                      <SearchDateRangePickerComponent
+                        formType="orderSearch"
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
