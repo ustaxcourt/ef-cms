@@ -9,6 +9,7 @@ import React from 'react';
 
 export const OrderSearchForm = connect(
   {
+    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -22,6 +23,7 @@ export const OrderSearchForm = connect(
     advancedSearchForm,
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
+    DATE_RANGE_SEARCH_OPTIONS,
     judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
@@ -145,15 +147,26 @@ export const OrderSearchForm = connect(
                   <label className="usa-label" htmlFor="order-date-range">
                     Date range
                   </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.dateRange'}
-                    className="usa-input"
+                  <select
+                    className="usa-select"
                     id="order-date-range"
-                    name="date-range"
+                    name="dateRange"
+                    value={advancedSearchForm.orderSearch.dateRange}
+                    onChange={e => {
+                      updateAdvancedOrderSearchFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateOrderSearchSequence();
+                    }}
                   >
-                    <option value="allDates">All dates</option>
-                    <option value="customDates">Custom dates</option>
-                  </BindedSelect>
+                    <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
+                      All dates
+                    </option>
+                    <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+                      Custom dates
+                    </option>
+                  </select>
                 </div>
                 {advancedSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
@@ -307,15 +320,26 @@ export const OrderSearchForm = connect(
                       <label className="usa-label" htmlFor="order-date-range">
                         Date range
                       </label>
-                      <BindedSelect
-                        bind={'advancedSearchForm.orderSearch.dateRange'}
-                        className="usa-input"
+                      <select
+                        className="usa-select"
                         id="order-date-range"
-                        name="date-range"
+                        name="dateRange"
+                        value={advancedSearchForm.orderSearch.dateRange}
+                        onChange={e => {
+                          updateAdvancedOrderSearchFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                          validateOrderSearchSequence();
+                        }}
                       >
-                        <option value="allDates">All dates</option>
-                        <option value="customDates">Custom dates</option>
-                      </BindedSelect>
+                        <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
+                          All dates
+                        </option>
+                        <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+                          Custom dates
+                        </option>
+                      </select>
                     </div>
                     {advancedSearchHelper.showDateRangePicker && (
                       <SearchDateRangePickerComponent
