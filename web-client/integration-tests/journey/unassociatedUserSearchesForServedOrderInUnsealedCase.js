@@ -1,4 +1,7 @@
-import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  DATE_RANGE_SEARCH_OPTIONS,
+} from '../../../shared/src/business/entities/EntityConstants';
 
 export const unassociatedUserSearchesForServedOrderInUnsealedCase = (
   cerebralTest,
@@ -9,6 +12,7 @@ export const unassociatedUserSearchesForServedOrderInUnsealedCase = (
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: options.keyword,
         startDate: '1000-01-01',
       },
