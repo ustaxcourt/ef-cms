@@ -59,7 +59,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeFalsy();
     });
 
-    it('should return false when the user is a petitioner attempting to modify another petitioner', async () => {
+    it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
       const isUserAuthorized = getIsUserAuthorized({
         oldCase: mockCase,
         updatedPetitionerData: {},
