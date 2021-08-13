@@ -5,12 +5,8 @@
  * @param {string} pdfData the pdfData
  */
 
-const uploadToS3 = async ({
-  applicationContext,
-  caseConfirmationPdfName,
-  pdfData,
-}) => {
-  await new Promise((resolve, reject) => {
+const uploadToS3 = ({ applicationContext, caseConfirmationPdfName, pdfData }) =>
+  new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
@@ -33,7 +29,6 @@ const uploadToS3 = async ({
       resolve();
     });
   });
-};
 
 module.exports = {
   uploadToS3,

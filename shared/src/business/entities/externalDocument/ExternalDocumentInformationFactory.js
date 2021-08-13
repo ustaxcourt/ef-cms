@@ -126,6 +126,9 @@ const VALIDATION_ERROR_MESSAGES = {
  * @constructor
  */
 function ExternalDocumentInformationFactory(documentMetadata) {
+  /**
+   *
+   */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
