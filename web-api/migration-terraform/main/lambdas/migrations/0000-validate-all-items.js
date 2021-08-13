@@ -8,12 +8,10 @@ const migrateItems = items => {
     );
 
     if (entityConstructor) {
-      new entityConstructor(item, {
-        applicationContext,
-      }).validateForMigration();
+      new entityConstructor(item, { applicationContext }).validate();
     }
   }
-  throw new Error('gg');
+  throw new Error('fake an error for all entities');
 };
 
 exports.migrateItems = migrateItems;
