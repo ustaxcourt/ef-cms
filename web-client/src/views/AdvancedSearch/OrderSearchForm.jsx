@@ -9,6 +9,7 @@ import React from 'react';
 
 export const OrderSearchForm = connect(
   {
+    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -22,6 +23,7 @@ export const OrderSearchForm = connect(
     advancedSearchForm,
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
+    DATE_RANGE_SEARCH_OPTIONS,
     judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
@@ -151,8 +153,12 @@ export const OrderSearchForm = connect(
                     id="order-date-range"
                     name="date-range"
                   >
-                    <option value="allDates">All dates</option>
-                    <option value="customDates">Custom dates</option>
+                    <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
+                      All dates
+                    </option>
+                    <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+                      Custom dates
+                    </option>
                   </BindedSelect>
                 </div>
                 {advancedSearchHelper.showDateRangePicker && (
@@ -313,8 +319,12 @@ export const OrderSearchForm = connect(
                         id="order-date-range"
                         name="date-range"
                       >
-                        <option value="allDates">All dates</option>
-                        <option value="customDates">Custom dates</option>
+                        <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
+                          All dates
+                        </option>
+                        <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+                          Custom dates
+                        </option>
                       </BindedSelect>
                     </div>
                     {advancedSearchHelper.showDateRangePicker && (
