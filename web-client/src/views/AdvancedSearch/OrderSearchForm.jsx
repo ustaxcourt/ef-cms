@@ -55,7 +55,7 @@ export const OrderSearchForm = connect(
 
     const DocketNumberField = () => (
       <>
-        <label className="usa-label" htmlFor="docket-number">
+        <label className="usa-label text-no-wrap" htmlFor="docket-number">
           Docket number
         </label>
         <input
@@ -78,7 +78,7 @@ export const OrderSearchForm = connect(
     const CaseTitleOrNameField = () => (
       <>
         <div>
-          <label className="usa-label" htmlFor="title-or-name">
+          <label className="usa-label text-no-wrap" htmlFor="title-or-name">
             Case title / Petitioner’s name
           </label>
           <input
