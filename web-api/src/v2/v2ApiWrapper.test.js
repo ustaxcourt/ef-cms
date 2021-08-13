@@ -38,7 +38,7 @@ describe('v2ApiWrapper', () => {
   );
 
   [405, 429, 503].forEach(statusCode =>
-    it(`errors with a status code ${statusCode} not indicated by the v1 spec are 500s`, () =>
+    it(`errors with a status code ${statusCode} not indicated by the v2 spec are 500s`, () =>
       expect(() => v2ApiWrapper(throwWithStatus(statusCode))).rejects.toThrow(
         expect.objectContaining({ statusCode: 500 }),
       )),
