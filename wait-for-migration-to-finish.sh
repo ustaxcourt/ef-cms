@@ -34,7 +34,7 @@ fail_on_dlq () {
 }
 
 fail_on_segments_error_count () {
-  # check the past 5 minutes of cloudwatch metrics for invocation and error count and calculate a percentage
+  # check the past 15 minutes of cloudwatch metrics for invocation and error count and calculate a percentage
   # anything greater than 50% should probably be considered a failed migration
   start=$(node -e 'var d = new Date(); d.setTime(d.getTime() - (60 * 15000)); console.log(d.toISOString())')
   end=$(node -e 'var d = new Date(); d.setTime(d.getTime()); console.log(d.toISOString())')
