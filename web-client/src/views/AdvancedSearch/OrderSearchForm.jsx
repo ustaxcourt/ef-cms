@@ -55,25 +55,23 @@ export const OrderSearchForm = connect(
 
     const DocketNumberField = () => (
       <>
-        <div className="margin-bottom-3 margin-top-3">
-          <label className="usa-label" htmlFor="docket-number">
-            Docket number
-          </label>
-          <input
-            className="usa-input"
-            id="docket-number"
-            name="docketNumber"
-            type="text"
-            value={advancedSearchForm.orderSearch.docketNumber || ''}
-            onBlur={() => validateOrderSearchSequence()}
-            onChange={e => {
-              updateAdvancedOrderSearchFormValueSequence({
-                key: e.target.name,
-                value: e.target.value.toUpperCase(),
-              });
-            }}
-          />
-        </div>
+        <label className="usa-label" htmlFor="docket-number">
+          Docket number
+        </label>
+        <input
+          className="usa-input"
+          id="docket-number"
+          name="docketNumber"
+          type="text"
+          value={advancedSearchForm.orderSearch.docketNumber || ''}
+          onBlur={() => validateOrderSearchSequence()}
+          onChange={e => {
+            updateAdvancedOrderSearchFormValueSequence({
+              key: e.target.name,
+              value: e.target.value.toUpperCase(),
+            });
+          }}
+        />
       </>
     );
 
@@ -103,24 +101,22 @@ export const OrderSearchForm = connect(
 
     const JudgeSelect = () => (
       <>
-        <div className="judge-search-row margin-top-4">
-          <label className="usa-label" htmlFor="order-date-range">
-            Judge
-          </label>
-          <BindedSelect
-            bind={'advancedSearchForm.orderSearch.judge'}
-            className="usa-input"
-            id="order-judge"
-            name="judge"
-          >
-            <option value="">All judges</option>
-            {judges.map(judge => (
-              <option key={judge.judgeFullName} value={judge.judgeFullName}>
-                {judge.name}
-              </option>
-            ))}
-          </BindedSelect>
-        </div>
+        <label className="usa-label" htmlFor="order-date-range">
+          Judge
+        </label>
+        <BindedSelect
+          bind={'advancedSearchForm.orderSearch.judge'}
+          className="usa-input"
+          id="order-judge"
+          name="judge"
+        >
+          <option value="">All judges</option>
+          {judges.map(judge => (
+            <option key={judge.judgeFullName} value={judge.judgeFullName}>
+              {judge.name}
+            </option>
+          ))}
+        </BindedSelect>
       </>
     );
 
@@ -174,11 +170,12 @@ export const OrderSearchForm = connect(
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
                   >
+                    <div className="margin-bottom-3 margin-top-3">
+                      <DocketNumberField />
+                    </div>
                     <div className="width-full margin-bottom-3 padding-right-2">
                       or
                     </div>
-
-                    <DocketNumberField />
 
                     <CaseTitleOrNameField />
                   </FormGroup>
@@ -214,77 +211,21 @@ export const OrderSearchForm = connect(
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
                   >
-                    <div className="margin-bottom-3 margin-bottom-0">
-                      <label className="usa-label" htmlFor="docket-number">
-                        Docket number
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="docket-number"
-                        name="docketNumber"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch.docketNumber || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value.toUpperCase(),
-                          });
-                        }}
-                      />
+                    <div className="margin-bottom-0">
+                      <DocketNumberField />
                     </div>
 
                     <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                       or
                     </div>
-                    <div className="margin-bottom-6 margin-bottom-0">
-                      <label className="usa-label" htmlFor="title-or-name">
-                        Case title / Petitioner’s name
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="title-or-name"
-                        name="caseTitleOrPetitioner"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch
-                            .caseTitleOrPetitioner || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
+
+                    <CaseTitleOrNameField />
                   </FormGroup>
                 </div>
               </div>
               <div className="grid-row grid-gap-6 margin-top-4">
                 <div className="width-card-lg desktop:grid-col-3 grid-col-12">
-                  <label className="usa-label" htmlFor="order-date-range">
-                    Judge
-                  </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.judge'}
-                    className="usa-input"
-                    id="order-judge"
-                    name="judge"
-                  >
-                    <option value="">All judges</option>
-                    {judges.map(judge => (
-                      <option
-                        key={judge.judgeFullName}
-                        value={judge.judgeFullName}
-                      >
-                        {judge.name}
-                      </option>
-                    ))}
-                  </BindedSelect>
+                  <JudgeSelect />
                 </div>
                 <div className="desktop:grid-col-9 grid-col-12">
                   <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
