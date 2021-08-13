@@ -3,18 +3,6 @@ const { DocumentSearch } = require('./DocumentSearch');
 const errorMessages = DocumentSearch.VALIDATION_ERROR_MESSAGES;
 
 describe('Document Search entity', () => {
-  it('needs only an opinionType and startDate to be valid', () => {
-    const opinionSearch = new DocumentSearch({
-      opinionType: 'a Type',
-      startDate: '2002-10-01',
-    });
-    expect(opinionSearch).toMatchObject({
-      opinionType: 'a Type',
-    });
-    const validationErrors = opinionSearch.getFormattedValidationErrors();
-    expect(validationErrors).toEqual(null);
-  });
-
   it('passes validation without a keyword', () => {
     const orderSearch = new DocumentSearch();
     const validationErrors = orderSearch.getFormattedValidationErrors();
@@ -39,7 +27,6 @@ describe('Document Search entity', () => {
     const documentSearch = new DocumentSearch({
       from: 2,
       judge: '',
-      startDate: '2002-10-01',
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -51,7 +38,6 @@ describe('Document Search entity', () => {
   it('should validate when a user role is provided', () => {
     const documentSearch = new DocumentSearch({
       judge: '',
-      startDate: '2002-10-01',
       userRole: 'docketClerk',
     });
 
@@ -64,19 +50,17 @@ describe('Document Search entity', () => {
   it('should pass validation when judge provided is empty', () => {
     const documentSearch = new DocumentSearch({
       judge: '',
-      startDate: '2002-10-01',
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
 
-    expect(documentSearch.judge).toBeUndefined();
+    expect(documentSearch.judge).toEqual('');
     expect(validationErrors).toBeNull();
   });
 
   it('should pass validation when judge is provided', () => {
     const documentSearch = new DocumentSearch({
       judge: 'Guy Fieri',
-      startDate: '2002-10-01',
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -88,6 +72,7 @@ describe('Document Search entity', () => {
   describe('date search validation', () => {
     it('should not validate end date date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         startDate: '2002-10-01',
       });
 
@@ -98,6 +83,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date is greater than the end date', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         endDate: '2002-10-01',
         startDate: '2003-10-01',
       });
@@ -109,6 +95,7 @@ describe('Document Search entity', () => {
 
     it('should pass validation when a start date is provided without an end date', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         startDate: '2003-10-01',
       });
 
@@ -119,6 +106,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when an end date is provided without a start date', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         endDate: '2003-10-01',
       });
 
@@ -129,6 +117,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date year is not provided', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         startDate: '10/10',
       });
 
@@ -139,6 +128,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date is in the future', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         startDate: '10/10/3000',
       });
 
@@ -151,6 +141,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the end date is in the future', () => {
       const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
         endDate: '2030-10-10',
         startDate: '2009-10-10',
       });
@@ -162,7 +153,7 @@ describe('Document Search entity', () => {
       );
     });
 
-    it.only('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
+    it('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
       const documentSearch = new DocumentSearch({
         dateRange: 'customDates',
         startDate: undefined,
