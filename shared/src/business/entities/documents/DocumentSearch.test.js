@@ -162,7 +162,7 @@ describe('Document Search entity', () => {
       );
     });
 
-    it('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
+    it.only('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
       const documentSearch = new DocumentSearch({
         dateRange: 'customDates',
         startDate: undefined,
@@ -170,7 +170,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual('');
+      expect(validationErrors.startDate).toEqual('Enter a valid start date');
     });
   });
 });
