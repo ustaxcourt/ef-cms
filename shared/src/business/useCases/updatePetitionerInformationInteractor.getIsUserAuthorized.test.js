@@ -87,7 +87,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeTruthy();
     });
 
-    it('should return true when the user is representingCounsel', async () => {
+    it('should return true when the user is representingCounsel', () => {
       const isUserAuthorized = getIsUserAuthorized({
         oldCase: {
           ...mockCase,
