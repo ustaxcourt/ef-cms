@@ -11,7 +11,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { isEmpty } = require('lodash');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -34,22 +33,16 @@ function DocumentSearch() {
 }
 
 DocumentSearch.prototype.init = function init(rawProps = {}) {
-  if (!isEmpty(rawProps.judge)) {
-    this.judge = rawProps.judge;
-  }
+  this.judge = rawProps.judge;
 
-  if (!isEmpty(rawProps.opinionType)) {
-    this.opinionType = rawProps.opinionType;
-  }
+  this.opinionType = rawProps.opinionType;
 
   this.from = rawProps.from ?? 0;
   this.userRole = rawProps.userRole;
 
   this.keyword = rawProps.keyword;
 
-  if (!isEmpty(rawProps.docketNumber)) {
-    this.docketNumber = rawProps.docketNumber;
-  }
+  this.docketNumber = rawProps.docketNumber;
 
   if (rawProps.startDate) {
     const [month, day, year] = rawProps.startDate.split('/');
@@ -75,9 +68,7 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
 
   this.dateRange = rawProps.dateRange;
 
-  if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
-    this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
-  }
+  this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
 };
 
 DocumentSearch.VALIDATION_ERROR_MESSAGES = {
@@ -102,11 +93,11 @@ DocumentSearch.VALIDATION_ERROR_MESSAGES = {
 DocumentSearch.schema = joi
   .object()
   .keys({
-    caseTitleOrPetitioner: JoiValidationConstants.STRING.description(
+    caseTitleOrPetitioner: JoiValidationConstants.STRING.allow('').description(
       'The case title or petitioner name to filter the search results by',
     ),
-    dateRange: joi.string().optional(),
-    docketNumber: JoiValidationConstants.STRING.description(
+    dateRange: JoiValidationConstants.STRING.allow('').optional(),
+    docketNumber: JoiValidationConstants.STRING.allow('').description(
       'The docket number to filter the search results by',
     ),
     endDate: joi.alternatives().conditional('startDate', {
@@ -137,47 +128,37 @@ DocumentSearch.schema = joi
       .description(
         'The zero-based index representing which page of results we are requesting',
       ),
-    judge: JoiValidationConstants.STRING.optional().description(
-      'The name of the judge to filter the search results by',
-    ),
+    judge: JoiValidationConstants.STRING.allow('')
+      .optional()
+      .description('The name of the judge to filter the search results by'),
     keyword: JoiValidationConstants.STRING.optional()
       .allow('')
       .description('The keyword to search by'),
-    opinionType: JoiValidationConstants.STRING.optional().description(
-      'The opinion document type to filter the search results by',
-    ),
+    opinionType: JoiValidationConstants.STRING.allow('')
+      .optional()
+      .description('The opinion document type to filter the search results by'),
     // if custom dates, then all endDate validation
     // otherwise, optional
     startDate: joi.alternatives().conditional('dateRange', {
       is: 'customDates',
-      // otherwise:
-      then: joi.alternatives().conditional('endDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.ISO_DATE.format(
-          DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-        )
-          .max('now')
-          .description(
-            'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-          ),
-        then: JoiValidationConstants.ISO_DATE.format(
-          DocumentSearch.VALID_DATE_SEARCH_FORMATS,
-        )
-          .max('now')
-          .required()
-          .description(
-            'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-          ),
-      }),
+      otherwise: joi.forbidden(),
+      then: JoiValidationConstants.ISO_DATE.format(
+        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+      )
+        .max('now')
+        .required()
+        .description(
+          'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        ),
     }),
     tomorrow: joi
       .optional()
       .description(
         'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
       ),
-    userRole: JoiValidationConstants.STRING.optional().description(
-      'The role of the user performing the search',
-    ),
+    userRole: JoiValidationConstants.STRING.allow('')
+      .optional()
+      .description('The role of the user performing the search'),
   })
   .oxor('caseTitleOrPetitioner', 'docketNumber');
 
