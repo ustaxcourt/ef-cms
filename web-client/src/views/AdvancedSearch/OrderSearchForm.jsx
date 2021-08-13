@@ -122,31 +122,27 @@ export const OrderSearchForm = connect(
 
     const DateRangeSelect = () => (
       <>
-        <div className="margin-top-4 desktop:padding-bottom-5">
-          <label className="usa-label" htmlFor="order-date-range">
-            Date range
-          </label>
-          <select
-            className="usa-select"
-            id="order-date-range"
-            name="dateRange"
-            value={advancedSearchForm.orderSearch.dateRange}
-            onChange={e => {
-              updateAdvancedOrderSearchFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-              validateOrderSearchSequence();
-            }}
-          >
-            <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
-              All dates
-            </option>
-            <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
-              Custom dates
-            </option>
-          </select>
-        </div>
+        <label className="usa-label" htmlFor="order-date-range">
+          Date range
+        </label>
+        <select
+          className="usa-select"
+          id="order-date-range"
+          name="dateRange"
+          value={advancedSearchForm.orderSearch.dateRange}
+          onChange={e => {
+            updateAdvancedOrderSearchFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+            validateOrderSearchSequence();
+          }}
+        >
+          <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>All dates</option>
+          <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+            Custom dates
+          </option>
+        </select>
       </>
     );
 
@@ -182,10 +178,14 @@ export const OrderSearchForm = connect(
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
-                <JudgeSelect />
+                <div className="judge-search-row margin-top-4">
+                  <JudgeSelect />
+                </div>
               </div>
               <div className="grid-row grid-gap-6">
-                <DateRangeSelect />
+                <div className="margin-top-4 desktop:padding-bottom-5">
+                  <DateRangeSelect />
+                </div>
 
                 {advancedSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
@@ -230,29 +230,7 @@ export const OrderSearchForm = connect(
                 <div className="desktop:grid-col-9 grid-col-12">
                   <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
                     <div className="width-card-lg desktop:padding-bottom-5">
-                      <label className="usa-label" htmlFor="order-date-range">
-                        Date range
-                      </label>
-                      <select
-                        className="usa-select"
-                        id="order-date-range"
-                        name="dateRange"
-                        value={advancedSearchForm.orderSearch.dateRange}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                          validateOrderSearchSequence();
-                        }}
-                      >
-                        <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
-                          All dates
-                        </option>
-                        <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
-                          Custom dates
-                        </option>
-                      </select>
+                      <DateRangeSelect />
                     </div>
                     {advancedSearchHelper.showDateRangePicker && (
                       <SearchDateRangePickerComponent
