@@ -138,8 +138,6 @@ DocumentSearch.schema = joi
     opinionType: JoiValidationConstants.STRING.allow('')
       .optional()
       .description('The opinion document type to filter the search results by'),
-    // if custom dates, then all endDate validation
-    // otherwise, optional
     startDate: joi.alternatives().conditional('dateRange', {
       is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       otherwise: joi.forbidden(),
