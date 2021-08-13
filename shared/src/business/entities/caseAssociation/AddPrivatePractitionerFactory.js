@@ -15,6 +15,9 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
  * @constructor
  */
 function AddPrivatePractitionerFactory(rawProps) {
+  /**
+   *
+   */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawPropsParam) {
     Object.assign(this, {
