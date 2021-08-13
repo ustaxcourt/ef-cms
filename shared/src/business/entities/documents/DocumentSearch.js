@@ -11,6 +11,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
+const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -140,7 +141,7 @@ DocumentSearch.schema = joi
     // if custom dates, then all endDate validation
     // otherwise, optional
     startDate: joi.alternatives().conditional('dateRange', {
-      is: 'customDates',
+      is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       otherwise: joi.forbidden(),
       then: JoiValidationConstants.ISO_DATE.format(
         DocumentSearch.VALID_DATE_SEARCH_FORMATS,

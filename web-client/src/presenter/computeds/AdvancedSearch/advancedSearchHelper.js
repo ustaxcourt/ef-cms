@@ -32,7 +32,8 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
-  const showDateRangePicker = dateRangeType === 'customDates';
+  const showDateRangePicker =
+    dateRangeType === applicationContext.getConstants().CUSTOM_DATES;
   const result = {
     showDateRangePicker,
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,

@@ -1,3 +1,4 @@
+const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
 const { DocumentSearch } = require('./DocumentSearch');
 
 const errorMessages = DocumentSearch.VALIDATION_ERROR_MESSAGES;
@@ -72,7 +73,7 @@ describe('Document Search entity', () => {
   describe('date search validation', () => {
     it('should not validate end date date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         startDate: '2002-10-01',
       });
 
@@ -83,7 +84,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date is greater than the end date', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         endDate: '2002-10-01',
         startDate: '2003-10-01',
       });
@@ -95,7 +96,7 @@ describe('Document Search entity', () => {
 
     it('should pass validation when a start date is provided without an end date', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         startDate: '2003-10-01',
       });
 
@@ -106,7 +107,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when an end date is provided without a start date', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         endDate: '2003-10-01',
       });
 
@@ -117,7 +118,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date year is not provided', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         startDate: '10/10',
       });
 
@@ -128,7 +129,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date is in the future', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         startDate: '10/10/3000',
       });
 
@@ -141,7 +142,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the end date is in the future', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         endDate: '2030-10-10',
         startDate: '2009-10-10',
       });
@@ -155,7 +156,7 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
       const documentSearch = new DocumentSearch({
-        dateRange: 'customDates',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         startDate: undefined,
       });
 
