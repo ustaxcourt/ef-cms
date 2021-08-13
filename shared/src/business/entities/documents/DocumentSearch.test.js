@@ -161,5 +161,16 @@ describe('Document Search entity', () => {
         'End date cannot be in the future. Enter valid end date.',
       );
     });
+
+    it('should fail validation when the dateRange is customDates and a startDate is not provided', () => {
+      const documentSearch = new DocumentSearch({
+        dateRange: 'customDates',
+        startDate: undefined,
+      });
+
+      const validationErrors = documentSearch.getFormattedValidationErrors();
+
+      expect(validationErrors.startDate).toEqual('');
+    });
   });
 });
