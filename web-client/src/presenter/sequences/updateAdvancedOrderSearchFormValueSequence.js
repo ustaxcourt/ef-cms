@@ -2,6 +2,6 @@ import { resetAdvancedDocumentSearchDatesAction } from '../actions/AdvancedSearc
 import { updateAdvancedSearchFormAction } from '../actions/AdvancedSearch/updateAdvancedSearchFormAction';
 
 export const updateAdvancedOrderSearchFormValueSequence = [
-  resetAdvancedDocumentSearchDatesAction,
   updateAdvancedSearchFormAction('orderSearch'),
+  resetAdvancedDocumentSearchDatesAction,
 ];

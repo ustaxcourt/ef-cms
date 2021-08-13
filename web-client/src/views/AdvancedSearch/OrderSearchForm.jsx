@@ -147,11 +147,12 @@ export const OrderSearchForm = connect(
                   <label className="usa-label" htmlFor="order-date-range">
                     Date range
                   </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.dateRange'}
+                  <select
                     className="usa-input"
                     id="order-date-range"
-                    name="date-range"
+                    name="orderSearch.dateRange"
+                    value={advancedSearchForm.orderSearch.dateRange}
+                    onChange={updateAdvancedOrderSearchFormValueSequence}
                   >
                     <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>
                       All dates
@@ -159,7 +160,7 @@ export const OrderSearchForm = connect(
                     <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
                       Custom dates
                     </option>
-                  </BindedSelect>
+                  </select>
                 </div>
                 {advancedSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
