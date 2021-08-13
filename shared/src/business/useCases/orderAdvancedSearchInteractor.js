@@ -34,6 +34,7 @@ exports.orderAdvancedSearchInteractor = async (
   applicationContext,
   {
     caseTitleOrPetitioner,
+    dateRange,
     docketNumber,
     endDate,
     from,
@@ -55,6 +56,7 @@ exports.orderAdvancedSearchInteractor = async (
 
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
+    dateRange,
     docketNumber,
     endDate,
     from,
