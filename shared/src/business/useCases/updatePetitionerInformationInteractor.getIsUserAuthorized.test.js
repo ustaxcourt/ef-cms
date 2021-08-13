@@ -59,7 +59,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeFalsy();
     });
 
-    it('should return false when the user is a petitioner attempting to modify another petitioner', async () => {
+    it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
       const isUserAuthorized = getIsUserAuthorized({
         oldCase: mockCase,
         updatedPetitionerData: {},
@@ -73,7 +73,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeFalsy();
     });
 
-    it('should return true when the user is a petitioner its own contact information', async () => {
+    it('should return true when the user is a petitioner its own contact information', () => {
       const isUserAuthorized = getIsUserAuthorized({
         oldCase: mockCase,
         updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
@@ -87,7 +87,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
       expect(isUserAuthorized).toBeTruthy();
     });
 
-    it('should return true when the user is representingCounsel', async () => {
+    it('should return true when the user is representingCounsel', () => {
       const isUserAuthorized = getIsUserAuthorized({
         oldCase: {
           ...mockCase,
