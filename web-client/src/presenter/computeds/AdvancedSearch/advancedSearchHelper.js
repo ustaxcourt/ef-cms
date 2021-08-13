@@ -27,13 +27,16 @@ export const advancedSearchHelper = (get, applicationContext) => {
     state.advancedSearchForm.caseSearchByName.countryType,
   );
   const dateRangeType = get(state.advancedSearchForm.orderSearch.dateRange);
-  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
+  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES, DATE_RANGE_SEARCH_OPTIONS } =
     applicationContext.getConstants();
+
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
+
   const showDateRangePicker =
-    dateRangeType === applicationContext.getConstants().CUSTOM_DATES;
+    dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
+
   const result = {
     showDateRangePicker,
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
