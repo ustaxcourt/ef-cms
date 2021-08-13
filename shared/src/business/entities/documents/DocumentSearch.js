@@ -73,6 +73,8 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
     });
   }
 
+  this.dateRange = rawProps.dateRange;
+
   if (!isEmpty(rawProps.caseTitleOrPetitioner)) {
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
   }
@@ -103,6 +105,7 @@ DocumentSearch.schema = joi
     caseTitleOrPetitioner: JoiValidationConstants.STRING.description(
       'The case title or petitioner name to filter the search results by',
     ),
+    dateRange: joi.string().optional(),
     docketNumber: JoiValidationConstants.STRING.description(
       'The docket number to filter the search results by',
     ),
