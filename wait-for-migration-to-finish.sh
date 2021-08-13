@@ -36,7 +36,7 @@ fail_on_dlq () {
 fail_on_segments_error_count () {
   # check the past 5 minutes of cloudwatch metrics for invocation and error count and calculate a percentage
   # anything greater than 50% should probably be considered a failed migration
-  start=$(node -e 'var d = new Date(); d.setTime(d.getTime() - (60 * 5000)); console.log(d.toISOString())')
+  start=$(node -e 'var d = new Date(); d.setTime(d.getTime() - (60 * 15000)); console.log(d.toISOString())')
   end=$(node -e 'var d = new Date(); d.setTime(d.getTime()); console.log(d.toISOString())')
   errorResponse=$(aws cloudwatch get-metric-statistics --metric-name Errors --namespace AWS/Lambda --statistics Sum --start-time $start --end-time $end --period 60 --dimensions Name=FunctionName,Value=migration_segments_lambda_${ENV} --query "Datapoints[].Sum" --output=text)
   invocationsResponse=$(aws cloudwatch get-metric-statistics --metric-name Invocations --namespace AWS/Lambda --statistics Sum --start-time $start --end-time $end --period 60 --dimensions Name=FunctionName,Value=migration_segments_lambda_${ENV} --query "Datapoints[].Sum" --output=text)
@@ -56,10 +56,10 @@ fail_on_segments_error_count () {
     done
 
   if [[ "$errorTotal" -gt "0" ]] && [[ "$invocationTotal" -gt "0" ]]; then
-    echo "There were $errorTotal errors in the last 5 minutes"
-    echo "There were $invocationTotal invocations in the last 5 minutes"
+    echo "There were $errorTotal errors in the last 15 minutes"
+    echo "There were $invocationTotal invocations in the last 15 minutes"
     local failurePercentage=$(( $errorTotal * 100 / $invocationTotal ))
-    echo "There were $failurePercentage% errors in the last 5 minutes"
+    echo "There were $failurePercentage% errors in the last 15 minutes"
 
     if [ $failurePercentage -gt 50 ]; then
       exit 1
@@ -78,7 +78,7 @@ do
   then
     sleep 120 # wait two minutes and re-check for consistency
     fail_on_dlq
-  fail_on_segments_error_count
+    fail_on_segments_error_count
     recheck=$(get_total)
     if [ "${recheck}" == 0 ]
     then
