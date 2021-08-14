@@ -11,7 +11,7 @@ const migrateItems = items => {
       new entityConstructor(item, { applicationContext }).validate();
     }
   }
-  throw new Error('fake an error for all entities');
+  return items;
 };
 
 exports.migrateItems = migrateItems;
