@@ -160,7 +160,42 @@ describe('create user', () => {
     });
   });
 
-  it('creates a legacyJudge user', async () => {
+  it('should create a generic user and delete the barNumber when it is defined and the user is not a pracititoner', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Admin',
+      role: ROLES.admin,
+      userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
+    });
+    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
+      barNumber: '',
+      name: 'Test PrivatePractitioner',
+      role: ROLES.judh,
+      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+    });
+
+    const userToCreate = {
+      admissionsDate: '2020-03-14',
+      admissionsStatus: 'Active',
+      birthYear: '1993',
+      employer: 'Private',
+      firstName: 'Test',
+      lastName: 'PrivatePractitioner',
+      originalBarState: 'CA',
+      practitionerType: 'Attorney',
+      role: ROLES.privatePractitioner,
+    };
+
+    const user = await createUserInteractor(applicationContext, {
+      user: userToCreate,
+    });
+
+    expect(user).toMatchObject({
+      barNumber: 'CS20001',
+      role: ROLES.privatePractitioner,
+    });
+  });
+
+  it('creates a legacyJudge user and deletes bar number when it is defined', async () => {
     const mockUser = {
       name: 'Test Legacy Judge',
       role: ROLES.legacyJudge,
@@ -178,6 +213,42 @@ describe('create user', () => {
 
     const userToCreate = {
       barNumber: '',
+      name: 'Jesse Pinkman',
+      role: ROLES.legacyJudge,
+      userId: 'legacyJudge1@example.com',
+    };
+
+    const user = await createUserInteractor(applicationContext, {
+      user: userToCreate,
+    });
+
+    expect(user).not.toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().createUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        disableCognitoUser: true,
+      }),
+    );
+  });
+
+  it('creates a legacyJudge user and does not delete bar number when it is not defined', async () => {
+    const mockUser = {
+      name: 'Test Legacy Judge',
+      role: ROLES.legacyJudge,
+      userId: '845b7d39-8fae-4c2f-893c-3c829598bc71',
+    };
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Admin',
+      role: ROLES.admin,
+      userId: 'admin',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .createUser.mockReturnValue(mockUser);
+
+    const userToCreate = {
       name: 'Jesse Pinkman',
       role: ROLES.legacyJudge,
       userId: 'legacyJudge1@example.com',

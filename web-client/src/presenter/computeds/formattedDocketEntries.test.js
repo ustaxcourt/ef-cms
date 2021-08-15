@@ -689,7 +689,7 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -715,7 +715,7 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),

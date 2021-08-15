@@ -24,6 +24,7 @@ const getLogger = context => {
         authorizer: context.awsRequestId,
       },
     },
+    logLevel: context.logLevel,
     transports: [transport],
   });
 };

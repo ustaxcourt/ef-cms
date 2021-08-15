@@ -5,7 +5,7 @@ import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprior
 import { petitionsClerkVerifyEligibleCase } from './journey/petitionsClerkVerifyEligibleCase';
 import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVerifyNotEligibleCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Prioritize a Case', () => {
   beforeAll(() => {
@@ -13,13 +13,13 @@ describe('Prioritize a Case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, 'Lubbock, Texas');
-  petitionsClerkPrioritizesCase(test);
-  petitionsClerkVerifyEligibleCase(test);
-  petitionsClerkUnprioritizesCase(test);
-  petitionsClerkVerifyNotEligibleCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, 'Lubbock, Texas');
+  petitionsClerkPrioritizesCase(cerebralTest);
+  petitionsClerkVerifyEligibleCase(cerebralTest);
+  petitionsClerkUnprioritizesCase(cerebralTest);
+  petitionsClerkVerifyNotEligibleCase(cerebralTest);
 });

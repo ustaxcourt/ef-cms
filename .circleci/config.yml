@@ -43,6 +43,7 @@ jobs:
           name: Web Client - Integration Test
           command: |
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              SKIP_CACHE_INVALIDATION=true \
@@ -56,6 +57,7 @@ jobs:
              AWS_ACCESS_KEY_ID=S3RVER \
              AWS_SECRET_ACCESS_KEY=S3RVER \
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
@@ -110,6 +112,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -172,6 +175,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -232,6 +236,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -300,6 +305,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -361,6 +367,23 @@ jobs:
       - run:
           name: Setup ES Volume Size
           command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup Blue Green Migration If Needed
+          command: |
+            docker run \
+              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+              -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "ENV=${ENV}" \
+              --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
+      - run:
+          name: Setup Migrate Flag
+          command: echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Setup Destination Table
+          command: echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
@@ -582,6 +605,17 @@ jobs:
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
       - run:
+          name: Track successful migrations
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "ENV=${ENV}" \
+                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
+            fi
+      - run:
           name: Enable Destination Table Stream
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -653,6 +687,7 @@ jobs:
           command: |
             ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV

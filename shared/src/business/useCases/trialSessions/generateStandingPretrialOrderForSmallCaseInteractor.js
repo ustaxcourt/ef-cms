@@ -4,6 +4,9 @@ const {
   formatNow,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
@@ -61,6 +64,12 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async (
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
+  let formattedTrialLocation = trialSession.trialLocation;
+
+  if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote) {
+    formattedTrialLocation += ' - Remote Proceedings';
+  }
+
   const pdfData = await applicationContext
     .getDocumentGenerators()
     .standingPretrialOrderForSmallCase({
@@ -76,6 +85,7 @@ exports.generateStandingPretrialOrderForSmallCaseInteractor = async (
           formattedStartDate,
           formattedStartDateWithDayOfWeek,
           formattedStartTime,
+          formattedTrialLocation,
         },
       },
     });

@@ -3028,12 +3028,12 @@
           "type": "string"
         }
       ],
-      "post": {
+      "get": {
         "tags": [
           "documents"
         ],
-        "summary": "triggers the virus scan function",
-        "description": "Endpoint that triggers the virus scan function for the specified document.\n",
+        "summary": "gets the status of the virus scan for the document",
+        "description": "Endpoint that the status of the virus scan for the document.\n",
         "produces": [
           "application/json"
         ],
@@ -7982,6 +7982,10 @@
               "type": "boolean",
               "description": "the status of east temp documents bucket"
             },
+            "eastQuarantine": {
+              "type": "boolean",
+              "description": "the status of east quarantine bucket"
+            },
             "public": {
               "type": "boolean",
               "description": "the status of public ui bucket"
@@ -7996,7 +8000,11 @@
             },
             "westTempDocuments": {
               "type": "boolean",
-              "description": "the status of west temp documents"
+              "description": "the status of west temp documents bucket"
+            },
+            "westQuarantine": {
+              "type": "boolean",
+              "description": "the status of west quarantine bucket"
             }
           }
         }

@@ -145,7 +145,7 @@ export const CourtIssuedDocketEntry = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label inline-block"
+                        className="usa-checkbox__label"
                         htmlFor="attachments"
                       >
                         Attachment(s)

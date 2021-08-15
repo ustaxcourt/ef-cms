@@ -118,10 +118,6 @@ describe('completeDocketEntryQCInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    applicationContext.getPug.mockImplementation(() => ({
-      compile: () => () => '',
-    }));
-
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
 
     applicationContext
@@ -137,7 +133,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });

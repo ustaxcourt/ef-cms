@@ -93,6 +93,13 @@ describe('generateChangeOfAddress', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue({
+        eventCode: 'NCA',
+        title: 'Notice of Change of Address',
+      });
   });
 
   it('should run a change of address when address1 changes for a private practitioner', async () => {
@@ -568,6 +575,51 @@ describe('generateChangeOfAddress', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
+  });
+
+  it('should not create a docket entry or work item when a document type is not specified', async () => {
+    mockCase = {
+      ...mockCaseWithPrivatePractitioner,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactType: CONTACT_TYPES.secondary,
+          name: 'Test Secondary',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    };
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(undefined);
+
+    const cases = await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockPrivatePractitioner.contact,
+        address1: '234 Main St',
+      },
+      user: mockPrivatePractitioner,
+    });
+
+    const docketEntryForNoticeOfChangeOfAddress = cases[0].docketEntries.find(
+      entry => entry.documentTitle.includes('Notice of Change'),
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().changeOfAddress,
+    ).not.toHaveBeenCalled();
+    expect(docketEntryForNoticeOfChangeOfAddress).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).not.toHaveBeenCalled();
   });
 
   it('should update the practitioner serviceIndicator and email if the original practitioner did not have an email and a new one was added', async () => {

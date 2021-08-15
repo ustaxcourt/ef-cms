@@ -11,43 +11,49 @@ const formattedMessageDetail = withAppContextDecorator(
   formattedMessageDetailComputed,
 );
 
-export const docketClerkAddsDocketEntryFromMessage = test => {
+export const docketClerkAddsDocketEntryFromMessage = cerebralTest => {
   return it('docket clerk adds docket entry for order from a message', async () => {
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
-      parentMessageId: test.parentMessageId,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: cerebralTest.parentMessageId,
     });
 
     let messageDetailFormatted = runCompute(formattedMessageDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     const orderDocument = messageDetailFormatted.attachments[1];
     expect(orderDocument.documentTitle).toEqual('Order');
 
-    await test.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.documentId,
-      docketNumber: test.docketNumber,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+      docketNumber: cerebralTest.docketNumber,
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'something',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'something',
+      },
+    );
 
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'serviceStamp',
-      value: 'Served',
-    });
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'serviceStamp',
+        value: 'Served',
+      },
+    );
 
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     const caseDetailFormatted = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
     const caseOrderDocketEntry =
       caseDetailFormatted.formattedDocketEntries.find(

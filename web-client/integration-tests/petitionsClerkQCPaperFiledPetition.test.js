@@ -7,7 +7,7 @@ import { petitionsClerkReviewsPetitionAndSavesForLater } from './journey/petitio
 import { petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving } from './journey/petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving';
 import { petitionsClerkViewsSectionInProgress } from './journey/petitionsClerkViewsSectionInProgress';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk QCs Paper Filed Petition', () => {
   beforeAll(() => {
@@ -15,29 +15,34 @@ describe('Petitions Clerk QCs Paper Filed Petition', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(test, fakeFile);
-  petitionsClerkReviewsPetitionAndSavesForLater(test);
-  petitionsClerkViewsSectionInProgress(test);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkRemovesAndReaddsPetitionFile(test, fakeFile);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkRemovesAndReaddsPdfFromPetition(test, fakeFile);
-  petitionsClerkEditsSavedPetition(test);
-  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(test, fakeFile);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
+  petitionsClerkReviewsPetitionAndSavesForLater(cerebralTest);
+  petitionsClerkViewsSectionInProgress(cerebralTest);
+  petitionsClerkEditsSavedPetition(cerebralTest);
+  petitionsClerkRemovesAndReaddsPetitionFile(cerebralTest, fakeFile);
+  petitionsClerkEditsSavedPetition(cerebralTest);
+  petitionsClerkRemovesAndReaddsPdfFromPetition(cerebralTest, fakeFile);
+  petitionsClerkEditsSavedPetition(cerebralTest);
+  petitionsClerkUploadsAndRemovesPdfFromPetitionWithoutSaving(
+    cerebralTest,
+    fakeFile,
+  );
 
   it('should be able to serve the case', async () => {
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await test.runSequence('openConfirmServeToIrsModalSequence');
+    await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
 
-    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
 
-    await test.runSequence('completePrintPaperPetitionReceiptSequence');
+    await cerebralTest.runSequence('completePrintPaperPetitionReceiptSequence');
   });
 });

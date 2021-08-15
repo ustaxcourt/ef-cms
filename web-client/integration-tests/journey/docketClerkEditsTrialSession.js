@@ -6,27 +6,27 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export const docketClerkEditsTrialSession = (test, overrides = {}) => {
+export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
   return it('Docket clerk edits trial session', async () => {
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('EditTrialSession');
+    expect(cerebralTest.getState('currentPage')).toEqual('EditTrialSession');
 
     const mockNote = 'hello';
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: overrides.fieldToUpdate || 'notes',
       value: overrides.valueToUpdate || mockNote,
     });
 
-    await test.runSequence('updateTrialSessionSequence');
+    await cerebralTest.runSequence('updateTrialSessionSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const expectedUpdatedValue =

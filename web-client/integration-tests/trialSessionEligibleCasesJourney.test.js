@@ -8,7 +8,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const { CASE_TYPES_MAP, CHIEF_JUDGE, STATUS_TYPES } =
   applicationContext.getConstants();
 
@@ -18,7 +18,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
@@ -31,10 +31,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   const createdDocketNumbers = [];
 
   describe(`Create trial session with Small session type for '${trialLocation}' with max case count = 1`, () => {
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test);
-    docketClerkViewsNewTrialSession(test);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkCreatesATrialSession(cerebralTest, overrides);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsNewTrialSession(cerebralTest);
   });
 
   describe('Create cases', () => {
@@ -44,19 +44,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #1', async () => {
-        const caseDetail = await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(test, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(test);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case #2 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 1/2/2019`, () => {
@@ -65,19 +65,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #2', async () => {
-        const caseDetail = await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(test, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(test);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case #3 with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Regular procedure type with filed date 1/1/2019`, () => {
@@ -86,19 +86,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
       };
-      loginAs(test, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #3', async () => {
-        const caseDetail = await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(test, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(test);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case #4 'L' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 5/1/2019`, () => {
@@ -107,19 +107,19 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: CASE_TYPES_MAP.cdp,
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #4', async () => {
-        const caseDetail = await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(test, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(test);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
 
     describe(`Case #5 'P' type with status “General Docket - At Issue (Ready For Trial)” for '${trialLocation}' with Small procedure type with filed date 3/1/2019`, () => {
@@ -128,70 +128,72 @@ describe('Trial Session Eligible Cases Journey', () => {
         caseType: 'Passport',
         procedureType: 'Small',
       };
-      loginAs(test, 'petitioner@example.com');
+      loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #5', async () => {
-        const caseDetail = await uploadPetition(test, caseOverrides);
+        const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
         expect(caseDetail.docketNumber).toBeDefined();
         createdDocketNumbers.push(caseDetail.docketNumber);
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
       });
 
-      loginAs(test, 'petitionsclerk@example.com');
-      petitionsClerkSubmitsCaseToIrs(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      loginAs(test, 'docketclerk@example.com');
-      docketClerkSetsCaseReadyForTrial(test);
+      loginAs(cerebralTest, 'docketclerk@example.com');
+      docketClerkSetsCaseReadyForTrial(cerebralTest);
     });
   });
 
   describe(`Result: Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
-      expect(test.getState('trialSession.eligibleCases').length).toEqual(4);
-      const eligibleCases = test.getState('trialSession.eligibleCases');
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases').length,
+      ).toEqual(4);
+      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // cases with index 3 and 4 should be first because they are CDP/Passport cases
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
       expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
       expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
       expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
-      expect(test.getState('trialSession.isCalendared')).toEqual(false);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
 
   describe(`Mark case #2 as high priority for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #2 should show as first case eligible for '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
-      expect(test.getState('caseDetail').highPriority).toBeFalsy();
+      expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
 
-      await test.runSequence('updateModalValueSequence', {
+      await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'reason',
         value: 'just because',
       });
 
-      await test.runSequence('prioritizeCaseSequence');
-      expect(test.getState('caseDetail').highPriority).toBeTruthy();
-      expect(test.getState('caseDetail').highPriorityReason).toEqual(
+      await cerebralTest.runSequence('prioritizeCaseSequence');
+      expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
+      expect(cerebralTest.getState('caseDetail').highPriorityReason).toEqual(
         'just because',
       );
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const eligibleCases = test.getState('trialSession.eligibleCases');
+      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's high priority
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[1]);
@@ -200,31 +202,33 @@ describe('Trial Session Eligible Cases Journey', () => {
       // this case should be third because it's a Passport case
       expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[4]);
       expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[0]);
-      expect(test.getState('trialSession.isCalendared')).toEqual(false);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
 
   describe(`Remove high priority from case #2 for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #2 should show as last case eligible for '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
-      expect(test.getState('caseDetail').highPriority).toBeTruthy();
+      expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
 
-      await test.runSequence('unprioritizeCaseSequence');
-      expect(test.getState('caseDetail').highPriority).toBeFalsy();
-      expect(test.getState('caseDetail').highPriorityReason).toBeFalsy();
+      await cerebralTest.runSequence('unprioritizeCaseSequence');
+      expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
+      expect(
+        cerebralTest.getState('caseDetail').highPriorityReason,
+      ).toBeFalsy();
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const eligibleCases = test.getState('trialSession.eligibleCases');
+      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's a CDP case
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
@@ -232,13 +236,13 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
       expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
       expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
-      expect(test.getState('trialSession.isCalendared')).toEqual(false);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    markAllCasesAsQCed(test, () => [
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    markAllCasesAsQCed(cerebralTest, () => [
       createdDocketNumbers[0],
       createdDocketNumbers[1],
       createdDocketNumbers[3],
@@ -247,164 +251,182 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe(`Set calendar for '${trialLocation}' session`, () => {
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkSetsATrialSessionsSchedule(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   });
 
   describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
-    loginAs(test, 'petitionsclerk@example.com');
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
-      expect(test.getState('trialSession.calendaredCases').length).toEqual(3);
-      expect(test.getState('trialSession.isCalendared')).toEqual(true);
       expect(
-        test.getState('trialSession.calendaredCases.0.docketNumber'),
+        cerebralTest.getState('trialSession.calendaredCases').length,
+      ).toEqual(3);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(true);
+      expect(
+        cerebralTest.getState('trialSession.calendaredCases.0.docketNumber'),
       ).toEqual(createdDocketNumbers[3]);
       expect(
-        test.getState('trialSession.calendaredCases.1.docketNumber'),
+        cerebralTest.getState('trialSession.calendaredCases.1.docketNumber'),
       ).toEqual(createdDocketNumbers[4]);
       // this could be either case 0 or 1 depending on which was marked eligible first
       expect(
-        test.getState('trialSession.calendaredCases.2.docketNumber'),
+        cerebralTest.getState('trialSession.calendaredCases.2.docketNumber'),
       ).toEqual(createdDocketNumbers[0]);
     });
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
       //Case #1 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).toEqual(
         STATUS_TYPES.calendared,
       );
-      expect(test.getState('caseDetail.trialLocation')).toEqual(trialLocation);
-      expect(test.getState('caseDetail.trialDate')).toEqual(
+      expect(cerebralTest.getState('caseDetail.trialLocation')).toEqual(
+        trialLocation,
+      );
+      expect(cerebralTest.getState('caseDetail.trialDate')).toEqual(
         '2025-12-12T05:00:00.000Z',
       );
-      expect(test.getState('caseDetail.associatedJudge')).toEqual('Cohen');
+      expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
+        'Cohen',
+      );
 
       //Case #2 - not assigned
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[1],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
-      expect(test.getState('caseDetail.trialLocation')).toBeUndefined();
-      expect(test.getState('caseDetail.trialDate')).toBeUndefined();
-      expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
+      expect(cerebralTest.getState('caseDetail.trialLocation')).toBeUndefined();
+      expect(cerebralTest.getState('caseDetail.trialDate')).toBeUndefined();
+      expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
+        CHIEF_JUDGE,
+      );
 
       //Case #3 - not assigned
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[2],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
 
       //Case #4 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[3],
       });
-      expect(test.getState('caseDetail.status')).toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).toEqual(
         STATUS_TYPES.calendared,
       );
 
       //Case #5 - assigned
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[4],
       });
-      expect(test.getState('caseDetail.status')).toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).toEqual(
         STATUS_TYPES.calendared,
       );
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
 
-      await test.runSequence('removeCaseFromTrialSequence');
+      await cerebralTest.runSequence('removeCaseFromTrialSequence');
 
-      expect(test.getState('validationErrors')).toEqual({
+      expect(cerebralTest.getState('validationErrors')).toEqual({
         caseStatus: 'Enter a case status',
         disposition: 'Enter a disposition',
       });
 
-      await test.runSequence('openRemoveFromTrialSessionModalSequence', {
-        trialSessionId: test.trialSessionId,
-      });
+      await cerebralTest.runSequence(
+        'openRemoveFromTrialSessionModalSequence',
+        {
+          trialSessionId: cerebralTest.trialSessionId,
+        },
+      );
 
-      await test.runSequence('updateModalValueSequence', {
+      await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'disposition',
         value: 'testing',
       });
 
-      await test.runSequence('removeCaseFromTrialSequence');
+      await cerebralTest.runSequence('removeCaseFromTrialSequence');
 
-      expect(test.getState('validationErrors')).toEqual({});
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       expect(
-        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+        cerebralTest.getState(
+          'trialSession.calendaredCases.2.removedFromTrial',
+        ),
       ).toBeTruthy();
     });
 
     it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).not.toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
         STATUS_TYPES.calendared,
       );
 
-      await test.runSequence('openAddToTrialModalSequence');
-      await test.runSequence('addCaseToTrialSessionSequence');
+      await cerebralTest.runSequence('openAddToTrialModalSequence');
+      await cerebralTest.runSequence('addCaseToTrialSessionSequence');
       await wait(1000);
 
-      expect(test.getState('validationErrors')).toEqual({
+      expect(cerebralTest.getState('validationErrors')).toEqual({
         trialSessionId: 'Select a Trial Session',
       });
 
-      await test.runSequence('openAddToTrialModalSequence');
-      test.setState('modal.trialSessionId', test.trialSessionId);
+      await cerebralTest.runSequence('openAddToTrialModalSequence');
+      cerebralTest.setState(
+        'modal.trialSessionId',
+        cerebralTest.trialSessionId,
+      );
 
-      await test.runSequence('addCaseToTrialSessionSequence');
+      await cerebralTest.runSequence('addCaseToTrialSessionSequence');
       await wait(1000); // we need to wait for some reason
 
-      expect(test.getState('validationErrors')).toEqual({});
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      await test.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
-      expect(test.getState('caseDetail.status')).toEqual(
+      expect(cerebralTest.getState('caseDetail.status')).toEqual(
         STATUS_TYPES.calendared,
       );
 
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       expect(
-        test.getState('trialSession.calendaredCases.2.removedFromTrial'),
+        cerebralTest.getState(
+          'trialSession.calendaredCases.2.removedFromTrial',
+        ),
       ).toBeFalsy();
 
       expect(
-        test.getState('trialSession.calendaredCases.2.isManuallyAdded'),
+        cerebralTest.getState('trialSession.calendaredCases.2.isManuallyAdded'),
       ).toBeTruthy();
     });
   });

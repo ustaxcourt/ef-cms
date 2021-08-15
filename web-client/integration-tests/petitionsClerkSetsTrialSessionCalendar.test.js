@@ -14,7 +14,7 @@ import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkView
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('petitions clerk sets a trial session calendar', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
@@ -31,14 +31,14 @@ describe('petitions clerk sets a trial session calendar', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   describe(`Create trial session with Small session type for '${trialLocation}'`, () => {
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkCreatesATrialSession(test, overrides);
-    docketClerkViewsTrialSessionList(test);
-    docketClerkViewsNewTrialSession(test);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkCreatesATrialSession(cerebralTest, overrides);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsNewTrialSession(cerebralTest);
   });
 
   describe('Create cases', () => {
@@ -50,47 +50,49 @@ describe('petitions clerk sets a trial session calendar', () => {
       };
 
       for (let i = 0; i < 3; i++) {
-        loginAs(test, 'petitioner@example.com');
+        loginAs(cerebralTest, 'petitioner@example.com');
         it(`create case ${i} and set ready for trial`, async () => {
-          const caseDetail = await uploadPetition(test, caseOverrides);
+          const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
           expect(caseDetail.docketNumber).toBeDefined();
-          test.docketNumber = caseDetail.docketNumber;
+          cerebralTest.docketNumber = caseDetail.docketNumber;
         });
 
-        loginAs(test, 'petitionsclerk@example.com');
-        petitionsClerkSubmitsCaseToIrs(test);
+        loginAs(cerebralTest, 'petitionsclerk@example.com');
+        petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-        loginAs(test, 'docketclerk@example.com');
-        docketClerkSetsCaseReadyForTrial(test);
+        loginAs(cerebralTest, 'docketclerk@example.com');
+        docketClerkSetsCaseReadyForTrial(cerebralTest);
       }
     });
 
     describe('case #5 - manually added to session', () => {
-      loginAs(test, 'petitionsclerk@example.com');
-      test.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
-      petitionsClerkManuallyAddsCaseToTrial(test);
+      loginAs(cerebralTest, 'petitionsclerk@example.com');
+      cerebralTest.casesReadyForTrial = [];
+      petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+      petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
     });
   });
 
   describe('petitions clerk sets calendar for trial session', () => {
-    petitionsClerkViewsNewTrialSession(test);
-    markAllCasesAsQCed(test, () => [test.docketNumber]);
-    petitionsClerkSetsATrialSessionsSchedule(test);
+    petitionsClerkViewsNewTrialSession(cerebralTest);
+    markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
+    petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-    it('petitions clerk should be redirected to print paper service for the trial session', async () => {
-      expect(test.getState('currentPage')).toEqual('PrintPaperTrialNotices');
+    it('petitions clerk should be redirected to print paper service for the trial session', () => {
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'PrintPaperTrialNotices',
+      );
     });
 
     it('petitions clerk verifies that both cases were set on the trial session', async () => {
-      await test.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: test.trialSessionId,
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
       });
 
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
-          state: test.getState(),
+          state: cerebralTest.getState(),
         },
       );
 

@@ -5,64 +5,64 @@ import {
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkAdvancedSearchForCase = test => {
+export const petitionsClerkAdvancedSearchForCase = cerebralTest => {
   return it('petitions clerk performs an advanced search for a case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoAdvancedSearchSequence');
+    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
 
-    await test.runSequence('submitCaseAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       petitionerName: CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
     });
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'petitionerName',
       value: 'Stormborn',
     });
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'yearFiledMin',
       value: '1800',
     });
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'yearFiledMax',
       value: '2030',
     });
 
-    await test.runSequence('submitCaseAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       yearFiledMax: 'Enter a valid ending year',
       yearFiledMin: 'Enter a valid start year',
     });
 
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'yearFiledMin',
       value: '2001',
     });
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'yearFiledMax',
       value: '2001',
     });
-    await test.runSequence('updateAdvancedSearchFormValueSequence', {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
       key: 'countryType',
       value: COUNTRY_TYPES.INTERNATIONAL,
     });
 
-    await test.runSequence('submitCaseAdvancedSearchSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      test
+      cerebralTest
         .getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`)
-        .find(result => result.docketNumber === test.docketNumber),
+        .find(result => result.docketNumber === cerebralTest.docketNumber),
     ).toBeDefined();
   });
 };

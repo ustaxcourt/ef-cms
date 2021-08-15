@@ -14,6 +14,6 @@ export const setDocumentSelectedForScanAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
    */
-  async ({ store }) => {
+  ({ store }) => {
     store.set(state.currentViewMetadata.documentSelectedForScan, documentType);
   };
