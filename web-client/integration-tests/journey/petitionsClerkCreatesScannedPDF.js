@@ -1,21 +1,21 @@
 import { setBatchPages } from '../helpers';
 
-export const petitionsClerkCreatesScannedPDF = test => {
+export const petitionsClerkCreatesScannedPDF = cerebralTest => {
   return it('Petitions clerk creates a PDF from added batches', async () => {
-    const selectedDocumentType = test.getState(
+    const selectedDocumentType = cerebralTest.getState(
       'currentViewMetadata.documentSelectedForScan',
     );
 
-    setBatchPages({ test });
+    setBatchPages({ cerebralTest });
 
-    await test.runSequence('generatePdfFromScanSessionSequence', {
+    await cerebralTest.runSequence('generatePdfFromScanSessionSequence', {
       documentType: selectedDocumentType,
       documentUploadMode: 'preview',
     });
 
-    expect(test.getState(`form.${selectedDocumentType}Size`)).toBeGreaterThan(
-      0,
-    );
-    expect(test.getState(`form.${selectedDocumentType}`)).toBeDefined();
+    expect(
+      cerebralTest.getState(`form.${selectedDocumentType}Size`),
+    ).toBeGreaterThan(0);
+    expect(cerebralTest.getState(`form.${selectedDocumentType}`)).toBeDefined();
   });
 };

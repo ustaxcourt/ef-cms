@@ -8,7 +8,7 @@ import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAdd
 import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
 import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Modify Respondent Contact Information', () => {
   beforeAll(() => {
@@ -16,23 +16,23 @@ describe('Modify Respondent Contact Information', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
-  test.createdDocketNumbers = [];
+  cerebralTest.createdDocketNumbers = [];
 
   for (let i = 0; i < 3; i++) {
-    loginAs(test, 'petitioner@example.com');
+    loginAs(cerebralTest, 'petitioner@example.com');
 
     it(`create case #${i} and associate a respondent`, async () => {
-      caseDetail = await uploadPetition(test);
+      caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
-      test.createdDocketNumbers.push(caseDetail.docketNumber);
+      cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkAddsRespondentsToCase(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkAddsRespondentsToCase(cerebralTest);
   }
 
   it('wait for ES index', async () => {
@@ -40,8 +40,8 @@ describe('Modify Respondent Contact Information', () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentUpdatesAddress(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentUpdatesAddress(cerebralTest);
 
   it('wait for ES index', async () => {
     // waiting for the associated cases to be updated, and THEN an index
@@ -49,6 +49,6 @@ describe('Modify Respondent Contact Information', () => {
   });
 
   for (let i = 0; i < 3; i++) {
-    respondentViewsCaseDetailNoticeOfChangeOfAddress(test, i);
+    respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, i);
   }
 });

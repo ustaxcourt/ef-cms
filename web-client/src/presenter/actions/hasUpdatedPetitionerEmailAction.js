@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path function
  * @returns {object} continue path for the sequence
  */
-export const hasUpdatedPetitionerEmailAction = async ({ get, path }) => {
+export const hasUpdatedPetitionerEmailAction = ({ get, path }) => {
   const { contact: formContact } = get(state.form);
 
   if (formContact.updatedEmail) {

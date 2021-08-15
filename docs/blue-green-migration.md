@@ -8,20 +8,10 @@ For Production (`ENV` would be `prod`), this process is entirely manual. For the
 
 Here are the steps involved:
 
-1. Update the values in the `efcms-deploy-ENV` DynamoDB table:
-   - `migrate`: `true`
-   - `destination-table-version`: `beta` (or `alpha`; it's the alternative to the current value of `source-table-version`)
+1. Setup the destination environments.  Load up the `efcms-ENV-SUFFIX` dynamodb table and figure out the destination version.  If `source-table-version` is `beta`, you'd want to delete the `alpha` dynamodb table and cluster, and vice versa.
 
-     This is the suffix for the DynamoDB table (`efcms-ENV-SUFFIX`) that will contain all of the records after the deployment is complete. It should be empty. As should its accompanying Elasticsearch cluster.
-
-   - `source-table-version`: `alpha` (or `beta`; this value gets automatically updated upon the `switch-colors` step below. You should never have to change it)
-
-     This is the suffix for the DynamoDB table (`efcms-ENV-SUFFIX`) that contains the records for the application. Any writes to it during the migration, should be caught via the DynamoDB stream subscription and passed over to the destination table. We might be able to use other values if restoring from a backup.
-
-2. Setup the destination environments
     - delete the efcms-ENV-VERSION on east-1 and west-1
     - delete the efcms-search-ENV-VERSION elasticsearch cluster
-
 
 3. Run a circle deploy
 

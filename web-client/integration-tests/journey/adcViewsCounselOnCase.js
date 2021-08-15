@@ -1,14 +1,18 @@
-export const adcViewsCounselOnCase = test => {
+export const adcViewsCounselOnCase = cerebralTest => {
   return it('ADC views counsel on case', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('showViewPetitionerCounselModalSequence', {
-      privatePractitioner: test.privatePractitioner,
+    await cerebralTest.runSequence('showViewPetitionerCounselModalSequence', {
+      privatePractitioner: cerebralTest.privatePractitioner,
     });
 
-    expect(test.getState('modal.showModal')).toBe('ViewPetitionerCounselModal');
-    expect(test.getState('modal.contact')).toEqual(test.privatePractitioner);
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'ViewPetitionerCounselModal',
+    );
+    expect(cerebralTest.getState('modal.contact')).toEqual(
+      cerebralTest.privatePractitioner,
+    );
   });
 };

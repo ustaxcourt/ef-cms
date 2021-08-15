@@ -5,27 +5,27 @@ import { presenter } from '../presenter-mock';
 import { submitCaseSearchSequence } from '../sequences/submitCaseSearchSequence';
 
 describe('submitCaseSearchSequence', () => {
-  let test;
+  let cerebralTest;
   let routeStub;
   beforeAll(() => {
     presenter.providers.props = { docketNumber: () => '111-19' };
 
     presenter.providers.router = {
-      route: async route => routeStub(route),
+      route: route => routeStub(route),
     };
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       submitCaseSearchSequence,
     };
-    test = CerebralTest(presenter);
-    test.setState('searchTerm', '111-19');
+    cerebralTest = CerebralTest(presenter);
+    cerebralTest.setState('searchTerm', '111-19');
   });
   beforeAll(() => {
     routeStub = jest.fn().mockReturnValue({});
   });
 
   it('navigates to found case', async () => {
-    await test.runSequence('submitCaseSearchSequence', {
+    await cerebralTest.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
     expect(routeStub).toBeCalled();
@@ -41,7 +41,7 @@ describe('submitCaseSearchSequence', () => {
         );
       });
 
-    await test.runSequence('submitCaseSearchSequence', {
+    await cerebralTest.runSequence('submitCaseSearchSequence', {
       searchTerm: '111-19',
     });
     expect(routeStub).toBeCalled();

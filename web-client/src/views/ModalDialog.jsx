@@ -16,6 +16,7 @@ export const ModalDialog = ({
   confirmLabel,
   confirmSequence,
   confirmTarget = '_self',
+  disableSubmit = false,
   message,
   preventCancelOnBlur,
   preventScrolling,
@@ -134,6 +135,7 @@ export const ModalDialog = ({
               <div className="margin-top-5">
                 <Button
                   className="modal-button-confirm"
+                  disabled={disableSubmit}
                   href={confirmHref}
                   target={confirmTarget}
                   onClick={runConfirmSequence}

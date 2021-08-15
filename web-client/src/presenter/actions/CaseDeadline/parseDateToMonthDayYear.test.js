@@ -5,7 +5,7 @@ import moment from 'moment';
 describe('parseDateToMonthDayYear', () => {
   const USTC_TZ = 'America/New_York';
 
-  it('should return an empty object when the dateString can not be parsed', async () => {
+  it('should return an empty object when the dateString can not be parsed', () => {
     applicationContext
       .getUtilities()
       .prepareDateFromString.mockReturnValue(undefined);
@@ -18,7 +18,7 @@ describe('parseDateToMonthDayYear', () => {
     expect(result).toEqual({});
   });
 
-  it('should return an object that contains the day, month, and year as separate properties from the dateString provided', async () => {
+  it('should return an object that contains the day, month, and year as separate properties from the dateString provided', () => {
     applicationContext
       .getUtilities()
       .prepareDateFromString.mockReturnValue(

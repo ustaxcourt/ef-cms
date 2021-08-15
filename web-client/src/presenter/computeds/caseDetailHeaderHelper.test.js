@@ -326,7 +326,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
-  it('should show the consolidated case icon if the case is associated with a lead case', async () => {
+  it('should show the consolidated case icon if the case is associated with a lead case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
@@ -346,7 +346,7 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showConsolidatedCaseIcon).toEqual(true);
   });
 
-  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', async () => {
+  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),

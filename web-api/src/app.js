@@ -219,6 +219,9 @@ const {
   getReconciliationReportLambda: v2GetReconciliationReportLambda,
 } = require('./v2/getReconciliationReportLambda');
 const {
+  getStatusOfVirusScanLambda,
+} = require('./documents/getStatusOfVirusScanLambda');
+const {
   getTrialSessionDetailsLambda,
 } = require('./trialSessions/getTrialSessionDetailsLambda');
 const {
@@ -396,6 +399,7 @@ const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
+const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -404,7 +408,6 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -479,11 +482,13 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   app.get(
     '/case-documents/opinion-search',
     userIdLimiter('opinion-search'),
+    slowDownLimiter('document-search-limiter'),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
     userIdLimiter('order-search'),
+    slowDownLimiter('document-search-limiter'),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
@@ -747,9 +752,9 @@ const { virusScanPdfLambda } = require('./documents/virusScanPdfLambda');
   );
 }
 
-app.post(
-  '/clamav/documents/:key/virus-scan',
-  lambdaWrapper(virusScanPdfLambda),
+app.get(
+  '/documents/:key/virus-scan',
+  lambdaWrapper(getStatusOfVirusScanLambda),
 );
 
 /**

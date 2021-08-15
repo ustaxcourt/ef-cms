@@ -4,27 +4,27 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 
-export const petitionsClerkDeletesCaseDeadline = test => {
+export const petitionsClerkDeletesCaseDeadline = cerebralTest => {
   return it('Petitions clerk deletes a case deadline', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const helper = runCompute(caseDetailHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
-    await test.runSequence('openDeleteCaseDeadlineModalSequence', {
+    await cerebralTest.runSequence('openDeleteCaseDeadlineModalSequence', {
       caseDeadlineId: helper.caseDeadlines[0].caseDeadlineId,
     });
 
-    expect(test.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(test.getState('form.month')).toBeTruthy();
-    expect(test.getState('form.day')).toBeTruthy();
-    expect(test.getState('form.year')).toBeTruthy();
-    expect(test.getState('form.description')).toBeTruthy();
+    expect(cerebralTest.getState('form.caseDeadlineId')).toBeTruthy();
+    expect(cerebralTest.getState('form.month')).toBeTruthy();
+    expect(cerebralTest.getState('form.day')).toBeTruthy();
+    expect(cerebralTest.getState('form.year')).toBeTruthy();
+    expect(cerebralTest.getState('form.description')).toBeTruthy();
 
-    await test.runSequence('deleteCaseDeadlineSequence');
+    await cerebralTest.runSequence('deleteCaseDeadlineSequence');
   });
 };

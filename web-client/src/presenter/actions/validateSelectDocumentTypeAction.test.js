@@ -15,7 +15,7 @@ describe('validateSelectDocumentTypeAction', () => {
     };
   });
 
-  it('should return the error path if document is invalid', async () => {
+  it('should return the error path if document is invalid', () => {
     applicationContext
       .getUseCases()
       .validateExternalDocumentInteractor.mockReturnValue(
@@ -30,7 +30,7 @@ describe('validateSelectDocumentTypeAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the success path if document is valid', async () => {
+  it('should return the success path if document is valid', () => {
     applicationContext
       .getUseCases()
       .validateExternalDocumentInteractor.mockReturnValue(undefined);

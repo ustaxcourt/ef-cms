@@ -7,7 +7,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkEditsPetitionInQCPartyType } from './journey/petitionsClerkEditsPetitionInQCPartyType';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('petitions clerk removes petitioner during petition QC', () => {
   beforeAll(() => {
@@ -15,13 +15,13 @@ describe('petitions clerk removes petitioner during petition QC', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'privatePractitioner@example.com');
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('Create test case with a primary and secondary petitioner', async () => {
     const caseDetail = await uploadPetition(
-      test,
+      cerebralTest,
       {
         contactSecondary: {
           address1: '734 Cowley Parkway',
@@ -37,13 +37,13 @@ describe('petitions clerk removes petitioner during petition QC', () => {
       'privatePractitioner@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkEditsPetitionInQCPartyType(test);
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkEditsPetitionInQCPartyType(cerebralTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(test, 'adc@example.com');
-  adcViewsPractitionerOnCaseAfterPetitionerRemoved(test);
+  loginAs(cerebralTest, 'adc@example.com');
+  adcViewsPractitionerOnCaseAfterPetitionerRemoved(cerebralTest);
 });

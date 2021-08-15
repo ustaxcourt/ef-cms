@@ -245,7 +245,7 @@ describe('add to trial session modal helper', () => {
     ]);
   });
 
-  it('should show a "session not set" alert if the selected trial session has yet to be calendared', async () => {
+  it('should show a "session not set" alert if the selected trial session has yet to be calendared', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
         caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },

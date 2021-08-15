@@ -1,16 +1,18 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const privatePractitionerViewsOpenConsolidatedCases = test => {
+export const privatePractitionerViewsOpenConsolidatedCases = cerebralTest => {
   return it('private practitioner views open consolidated cases', async () => {
     await refreshElasticsearchIndex();
-    await test.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardPractitioner');
-    const openCases = test.getState('openCases');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'DashboardPractitioner',
+    );
+    const openCases = cerebralTest.getState('openCases');
     expect(openCases.length).toBeGreaterThan(0);
 
     const leadCase = openCases.find(
-      c => c.docketNumber === test.leadDocketNumber,
+      c => c.docketNumber === cerebralTest.leadDocketNumber,
     );
     expect(leadCase).toBeDefined();
     expect(leadCase).toHaveProperty('consolidatedCases');

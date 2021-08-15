@@ -9,7 +9,7 @@ import { petitionerNavigatesToEditContact } from './journey/petitionerNavigatesT
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, PARTY_TYPES } =
   applicationContext.getConstants();
 
@@ -19,14 +19,14 @@ describe('Modify Petitioner Contact Information', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   let caseDetail;
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a tax payer and create a case', async () => {
-    caseDetail = await uploadPetition(test, {
+    caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -41,21 +41,21 @@ describe('Modify Petitioner Contact Information', () => {
     });
     expect(caseDetail.docketNumber).toBeDefined();
     expect(caseDetail.privatePractitioners).toEqual([]);
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test, {
+  petitionerViewsDashboard(cerebralTest);
+  petitionerViewsCaseDetail(cerebralTest, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
   });
-  petitionerNavigatesToEditContact(test);
-  petitionerEditsCasePrimaryContactAddress(test);
-  petitionerNavigatesToEditContact(test);
-  petitionerEditsCasePrimaryContactPhone(test);
-  petitionerNavigatesToEditContact(test);
-  petitionerEditsCasePrimaryContactAddressAndPhone(test);
+  petitionerNavigatesToEditContact(cerebralTest);
+  petitionerEditsCasePrimaryContactAddress(cerebralTest);
+  petitionerNavigatesToEditContact(cerebralTest);
+  petitionerEditsCasePrimaryContactPhone(cerebralTest);
+  petitionerNavigatesToEditContact(cerebralTest);
+  petitionerEditsCasePrimaryContactAddressAndPhone(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsNoticeOfChangeOfAddress(test);
-  docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsNoticeOfChangeOfAddress(cerebralTest);
+  docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(cerebralTest);
 });

@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 
-export const resetScanSessionAction = async ({ get, store }) => {
+export const resetScanSessionAction = ({ get, store }) => {
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
   );

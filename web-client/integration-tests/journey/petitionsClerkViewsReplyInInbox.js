@@ -1,14 +1,14 @@
-export const petitionsClerkViewsReplyInInbox = test => {
+export const petitionsClerkViewsReplyInInbox = cerebralTest => {
   return it('petitions clerk views the reply they were sent in their inbox', async () => {
-    await test.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    const messages = test.getState('messages');
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.subject === test.testMessageSubject,
+      message => message.subject === cerebralTest.testMessageSubject,
     );
 
     expect(foundMessage).toBeDefined();

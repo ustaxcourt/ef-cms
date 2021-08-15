@@ -20,7 +20,7 @@ import { respondentAddsMotion } from './journey/respondentAddsMotion';
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Case journey', () => {
   beforeEach(() => {
@@ -35,35 +35,35 @@ describe('Case journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerCancelsCreateCase(test);
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCaseTestAllOptions(test, fakeFile);
-  petitionerViewsDashboard(test);
-  petitionerViewsCaseDetail(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerCancelsCreateCase(cerebralTest);
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCaseTestAllOptions(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
+  petitionerViewsCaseDetail(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCaseSearch(test);
-  petitionsClerkViewsWorkQueue(test);
-  petitionsClerkAssignsWorkItemToSelf(test);
-  petitionsClerkAssignsWorkItemToOther(test);
-  loginAs(test, 'petitionsclerk1@example.com');
-  petitionsClerkViewsWorkQueueAfterReassign(test);
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkUpdatesCaseDetail(test);
-  petitionsClerkSubmitsCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCaseSearch(cerebralTest);
+  petitionsClerkViewsWorkQueue(cerebralTest);
+  petitionsClerkAssignsWorkItemToSelf(cerebralTest);
+  petitionsClerkAssignsWorkItemToOther(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkViewsWorkQueueAfterReassign(cerebralTest);
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkUpdatesCaseDetail(cerebralTest);
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentViewsDashboard(test);
-  respondentAddsAnswer(test, fakeFile);
-  respondentAddsStipulatedDecision(test, fakeFile);
-  respondentAddsMotion(test, fakeFile);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentViewsDashboard(cerebralTest);
+  respondentAddsAnswer(cerebralTest, fakeFile);
+  respondentAddsStipulatedDecision(cerebralTest, fakeFile);
+  respondentAddsMotion(cerebralTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsCaseDetail(test);
-  docketClerkUpdatesCaseCaption(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsCaseDetail(cerebralTest);
+  docketClerkUpdatesCaseCaption(cerebralTest);
 });

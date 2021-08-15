@@ -2,7 +2,7 @@ import { userMap } from '../../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
-export const irsSuperuserGetsReconciliationReport = test => {
+export const irsSuperuserGetsReconciliationReport = cerebralTest => {
   return it('logs in as IRS superuser and retrieves reconciliation report data for today', async () => {
     const loginUsername = 'irsSuperuser@example.com';
     if (!userMap[loginUsername]) {
@@ -27,7 +27,7 @@ export const irsSuperuserGetsReconciliationReport = test => {
     expect(response).toMatchObject({
       docketEntries: expect.arrayContaining([
         expect.objectContaining({
-          docketEntryId: test.updatedDocketEntryId,
+          docketEntryId: cerebralTest.updatedDocketEntryId,
         }),
       ]),
       reconciliationDate: expect.anything(),

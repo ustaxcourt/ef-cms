@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../shar
 
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
+export const unauthedUserSearchesByMeta = (cerebralTest, overrides = {}) => {
   return it('Search for cases by meta data', async () => {
     const queryParams = {
       countryType: COUNTRY_TYPES.DOMESTIC,
@@ -12,22 +12,25 @@ export const unauthedUserSearchesByMeta = (test, overrides = {}) => {
       ...overrides,
     };
 
-    test.setState('advancedSearchForm.caseSearchByName', queryParams);
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
 
-    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
+    await cerebralTest.runSequence(
+      'submitPublicCaseAdvancedSearchSequence',
+      {},
+    );
 
-    const searchResults = test.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
     expect(searchResults.length).toBeGreaterThan(0);
 
-    await test.runSequence('clearAdvancedSearchFormSequence', {
+    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'caseSearchByName',
     });
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
     ).toBeUndefined();
-    expect(test.getState('advancedSearchForm')).toEqual({
+    expect(cerebralTest.getState('advancedSearchForm')).toEqual({
       caseSearchByName: { countryType: COUNTRY_TYPES.DOMESTIC },
       currentPage: 1,
     });

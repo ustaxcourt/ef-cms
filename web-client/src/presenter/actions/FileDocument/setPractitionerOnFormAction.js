@@ -8,10 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setPractitionerOnFormAction = async ({
-  applicationContext,
-  store,
-}) => {
+export const setPractitionerOnFormAction = ({ applicationContext, store }) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 

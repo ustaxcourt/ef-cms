@@ -17,8 +17,8 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -26,54 +26,54 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to Show Cause',
     eventCode: 'OSC',
     expectedDocumentType: 'Order to Show Cause',
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 6);
-  petitionsClerkViewsDraftOrder(test, 0);
-  petitionsClerkPrioritizesCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest, 6);
+  petitionsClerkViewsDraftOrder(cerebralTest, 0);
+  petitionsClerkPrioritizesCase(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(test, 1);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkServesDocument(test, 0);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 0);
-  docketClerkServesDocument(test, 1);
-  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(test, 1);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
+  docketClerkServesDocument(cerebralTest, 0);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 0);
+  docketClerkServesDocument(cerebralTest, 1);
+  docketClerkViewsCaseDetailAfterServingCourtIssuedDocument(cerebralTest, 1);
 
-  docketClerkViewsDraftOrder(test, 2);
-  docketClerkSignsOrder(test, 2);
-  docketClerkAddsDocketEntryFromOrder(test, 2);
-  docketClerkServesDocumentFromCaseDetailDocumentView(test);
-  docketClerkViewsCaseDetailDocumentView(test);
+  docketClerkViewsDraftOrder(cerebralTest, 2);
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2);
+  docketClerkServesDocumentFromCaseDetailDocumentView(cerebralTest);
+  docketClerkViewsCaseDetailDocumentView(cerebralTest);
 });

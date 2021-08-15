@@ -4,49 +4,57 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const docketClerkUpdatesCaseStatusToReadyForTrial = test => {
+export const docketClerkUpdatesCaseStatusToReadyForTrial = cerebralTest => {
   return it('Docket clerk updates case status to General Docket - At Issue (Ready for Trial)', async () => {
-    test.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumberDifferentPlaceOfTrial || test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber:
+        cerebralTest.docketNumberDifferentPlaceOfTrial ||
+        cerebralTest.docketNumber,
     });
 
-    const currentStatus = test.getState('caseDetail.status');
+    const currentStatus = cerebralTest.getState('caseDetail.status');
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
 
-    expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(cerebralTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocket,
     });
 
-    await test.runSequence('clearModalSequence');
+    await cerebralTest.runSequence('clearModalSequence');
 
-    expect(test.getState('caseDetail.status')).toEqual(currentStatus);
-    expect(test.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(currentStatus);
+    expect(cerebralTest.getState('modal')).toEqual({});
 
-    await test.runSequence('openUpdateCaseModalSequence');
+    await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
-    expect(test.getState('modal.showModal')).toEqual('UpdateCaseModalDialog');
-    expect(test.getState('modal.caseStatus')).toEqual(currentStatus);
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'UpdateCaseModalDialog',
+    );
+    expect(cerebralTest.getState('modal.caseStatus')).toEqual(currentStatus);
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'caseStatus',
       value: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    await test.runSequence('submitUpdateCaseModalSequence');
+    await cerebralTest.runSequence('submitUpdateCaseModalSequence');
 
-    expect(test.getState('caseDetail.status')).toEqual(
+    expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocketReadyForTrial,
     );
-    expect(test.getState('caseDetail.associatedJudge')).toEqual(CHIEF_JUDGE);
-    expect(test.getState('modal')).toEqual({});
+    expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
+      CHIEF_JUDGE,
+    );
+    expect(cerebralTest.getState('modal')).toEqual({});
 
     await refreshElasticsearchIndex();
   });

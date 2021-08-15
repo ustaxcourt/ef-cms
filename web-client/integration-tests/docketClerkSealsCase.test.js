@@ -14,8 +14,8 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserAdvancedSearchForSealedCase } from './journey/unassociatedUserAdvancedSearchForSealedCase';
 import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassociatedUserViewsCaseDetailForSealedCase';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('Docket Clerk seals a case', () => {
@@ -24,12 +24,12 @@ describe('Docket Clerk seals a case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Somewhere',
@@ -43,49 +43,49 @@ describe('Docket Clerk seals a case', () => {
     });
     console.log('new case docket#', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSealsCase(test);
-  docketClerkCreatesAnOrder(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSealsCase(cerebralTest);
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order for a sealed case',
     eventCode: 'O',
     expectedDocumentType: 'Order',
     signedAtFormatted: '01/02/2020',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesDocument(test, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesDocument(cerebralTest, 0);
 
   //verify that an internal user can still find this case via advanced search by name
-  loginAs(test, 'petitionsclerk@example.com');
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  associatedUserAdvancedSearchForSealedCase(cerebralTest);
 
   //associated users
-  loginAs(test, 'petitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
+  associatedUserAdvancedSearchForSealedCase(cerebralTest);
 
-  loginAs(test, 'irsPractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(test);
-  associatedUserAdvancedSearchForSealedCase(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
+  associatedUserAdvancedSearchForSealedCase(cerebralTest);
 
   //unassociated users
-  loginAs(test, 'privatePractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(test);
-  unassociatedUserAdvancedSearchForSealedCase(test);
-  externalUserSearchesForAnOrderOnSealedCase(test);
+  loginAs(cerebralTest, 'privatePractitioner3@example.com');
+  unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
+  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
+  externalUserSearchesForAnOrderOnSealedCase(cerebralTest);
 
-  loginAs(test, 'irsPractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(test);
-  unassociatedUserAdvancedSearchForSealedCase(test);
+  loginAs(cerebralTest, 'irsPractitioner3@example.com');
+  unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
+  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
 });

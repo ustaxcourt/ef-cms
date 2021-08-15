@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { sortTodaysOrdersSequence } from './sortTodaysOrdersSequence';
 
 describe('sortTodaysOrdersSequence', () => {
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -17,24 +17,24 @@ describe('sortTodaysOrdersSequence', () => {
       totalCount: 3,
     });
 
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should always unset page number before requesting search results', async () => {
-    test.setState('sessionMetadata.todaysOrdersSort', {
+    cerebralTest.setState('sessionMetadata.todaysOrdersSort', {
       todaysOrdersSort: 'filingDateDesc',
     });
-    test.setState('todaysOrders', {
+    cerebralTest.setState('todaysOrders', {
       page: 7,
       results: ['some', 'results'],
     });
 
-    await test.runSequence('sortTodaysOrdersSequence', {
+    await cerebralTest.runSequence('sortTodaysOrdersSequence', {
       key: 'todaysOrdersSort',
       value: 'filingDate',
     });
 
-    expect(test.getState('sessionMetadata.todaysOrdersSort')).toBe(
+    expect(cerebralTest.getState('sessionMetadata.todaysOrdersSort')).toBe(
       'filingDate',
     );
     expect(
@@ -46,7 +46,7 @@ describe('sortTodaysOrdersSequence', () => {
         todaysOrdersSort: 'filingDate',
       },
     );
-    expect(test.getState('todaysOrders')).toMatchObject({
+    expect(cerebralTest.getState('todaysOrders')).toMatchObject({
       page: 2,
       results: ['newly', 'sorted', 'results'],
     });

@@ -72,7 +72,7 @@ export const TodaysOpinions = connect(
                         {opinion.documentType}
                       </Button>
                     </td>
-                    <td>{opinion.numberOfPages}</td>
+                    <td>{opinion.numberOfPagesFormatted}</td>
                     <td>{opinion.formattedFilingDate}</td>
                     <td>{opinion.formattedJudgeName}</td>
                   </tr>

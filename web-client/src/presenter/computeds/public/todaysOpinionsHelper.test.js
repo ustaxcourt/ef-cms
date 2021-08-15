@@ -38,6 +38,25 @@ describe('todaysOpinionsHelper', () => {
     ]);
   });
 
+  it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+    const result = runCompute(todaysOpinionsHelper, { state });
+    expect(result.formattedOpinions).toMatchObject([
+      {
+        numberOfPagesFormatted: 'n/a',
+      },
+    ]);
+  });
+
+  it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+    state.todaysOpinions[0].numberOfPages = 0;
+    const result = runCompute(todaysOpinionsHelper, { state });
+    expect(result.formattedOpinions).toMatchObject([
+      {
+        numberOfPagesFormatted: 0,
+      },
+    ]);
+  });
+
   it('should return formattedCurrentDate', () => {
     const result = runCompute(todaysOpinionsHelper, { state });
 

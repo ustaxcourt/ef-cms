@@ -4,7 +4,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
   return (
     <div>
       <p style={{ marginBottom: '30px', textAlign: 'right' }}>
-        Trial Calendar: {trialInfo.trialLocation} - Remote Proceedings
+        Trial Calendar: {trialInfo.formattedTrialLocation}
         <br />
         <span>Date: {trialInfo.formattedStartDate}</span>
       </p>

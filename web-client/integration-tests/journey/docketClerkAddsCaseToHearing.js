@@ -7,44 +7,44 @@ const formattedCaseDetail = withAppContextDecorator(
 );
 
 export const docketClerkAddsCaseToHearing = (
-  test,
+  cerebralTest,
   notes = 'test note for hearing',
   index = 1,
 ) => {
   return it('docket clerk adds case to hearing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openSetForHearingModalSequence');
+    await cerebralTest.runSequence('openSetForHearingModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.createdTrialSessions[index],
+      value: cerebralTest.createdTrialSessions[index],
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'calendarNotes',
       value: notes,
     });
 
-    await test.runSequence('setForHearingSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('setForHearingSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formattedCase.hearings).toMatchObject([
       {
         addedToSessionAt: expect.anything(),
         calendarNotes: notes,
-        trialSessionId: test.createdTrialSessions[index],
+        trialSessionId: cerebralTest.createdTrialSessions[index],
       },
     ]);
   });

@@ -1,43 +1,43 @@
 import { wait } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
-  test,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
-    await test.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditTrialSession');
+    expect(cerebralTest.getState('currentPage')).toEqual('EditTrialSession');
 
-    await test.runSequence('openSetCalendarModalSequence');
+    await cerebralTest.runSequence('openSetCalendarModalSequence');
 
-    expect(test.getState('alertWarning')).toEqual({
+    expect(cerebralTest.getState('alertWarning')).toEqual({
       message: 'Provide an address and a judge to set this trial session.',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'city',
       value: 'Seattle',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'state',
       value: 'WA',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'postalCode',
       value: '98101',
     });
 
-    await test.runSequence('updateTrialSessionFormDataSequence', {
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
       value: overrides.judge || {
         name: 'Cohen',
@@ -45,23 +45,27 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       },
     });
 
-    await test.runSequence('updateTrialSessionSequence');
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('updateTrialSessionSequence');
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
-    expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
-    await test.runSequence('setTrialSessionCalendarSequence');
+    await cerebralTest.runSequence('setTrialSessionCalendarSequence');
     await wait(1000); // we need to wait for some reason
 
     if (overrides.hasPaper) {
-      expect(test.getState('currentPage')).toEqual('PrintPaperTrialNotices');
-      expect(test.getState('alertWarning')).toEqual({
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'PrintPaperTrialNotices',
+      );
+      expect(cerebralTest.getState('alertWarning')).toEqual({
         message: 'Print and mail all paper service documents now.',
       });
     } else {
-      expect(test.getState('currentPage')).toEqual('TrialSessionDetail');
-      expect(test.getState('alertSuccess')).toEqual({
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'TrialSessionDetail',
+      );
+      expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: 'Eligible cases set for trial.',
       });
     }

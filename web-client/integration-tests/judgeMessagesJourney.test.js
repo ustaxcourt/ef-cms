@@ -3,7 +3,7 @@ import { judgeViewsDashboardMessages } from './journey/judgeViewsDashboardMessag
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Judge messages journey', () => {
   beforeAll(() => {
@@ -11,26 +11,26 @@ describe('Judge messages journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   const message1Subject = `message 1 ${Date.now()}`;
   const message2Subject = `message 2 ${Date.now()}`;
 
-  loginAs(test, 'petitionsclerk@example.com');
-  userSendsMessageToJudge(test, message1Subject);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  userSendsMessageToJudge(cerebralTest, message1Subject);
 
-  loginAs(test, 'docketclerk@example.com');
-  userSendsMessageToJudge(test, message2Subject);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  userSendsMessageToJudge(cerebralTest, message2Subject);
 
-  loginAs(test, 'judgeColvin@example.com');
-  judgeViewsDashboardMessages(test, [message1Subject, message2Subject]);
-  judgeViewsCaseDetail(test);
+  loginAs(cerebralTest, 'judgeColvin@example.com');
+  judgeViewsDashboardMessages(cerebralTest, [message1Subject, message2Subject]);
+  judgeViewsCaseDetail(cerebralTest);
 });

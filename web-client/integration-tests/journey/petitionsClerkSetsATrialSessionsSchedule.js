@@ -1,15 +1,15 @@
 import { wait } from '../helpers';
 
-export const petitionsClerkSetsATrialSessionsSchedule = test => {
+export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {
-    await test.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: test.trialSessionId,
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    await test.runSequence('openSetCalendarModalSequence');
-    expect(test.getState('alertWarning.message')).toBeUndefined();
+    await cerebralTest.runSequence('openSetCalendarModalSequence');
+    expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
-    await test.runSequence('setTrialSessionCalendarSequence');
+    await cerebralTest.runSequence('setTrialSessionCalendarSequence');
     await wait(1000);
   });
 };

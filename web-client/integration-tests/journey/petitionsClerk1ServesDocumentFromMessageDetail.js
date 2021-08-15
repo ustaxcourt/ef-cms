@@ -1,28 +1,33 @@
-export const petitionsClerk1ServesDocumentFromMessageDetail = test => {
+export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
   return it('petitions clerk 1 serves document from message detail', async () => {
-    await test.runSequence('openConfirmServePaperFiledDocumentSequence', {
-      docketEntryId: test.docketEntryId,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
-    });
-
-    expect(test.getState('redirectUrl')).toBe(
-      `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+    await cerebralTest.runSequence(
+      'openConfirmServePaperFiledDocumentSequence',
+      {
+        docketEntryId: cerebralTest.docketEntryId,
+        redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+      },
     );
-    expect(test.getState('docketEntryId')).toBe(test.docketEntryId);
 
-    expect(test.getState('modal.showModal')).toBe(
+    expect(cerebralTest.getState('redirectUrl')).toBe(
+      `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
+    );
+    expect(cerebralTest.getState('docketEntryId')).toBe(
+      cerebralTest.docketEntryId,
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toBe(
       'ConfirmInitiatePaperDocumentServiceModal',
     );
 
-    await test.setState('iframeSrc', undefined);
+    await cerebralTest.setState('iframeSrc', undefined);
 
-    await test.runSequence('serveCourtIssuedDocumentSequence', {});
+    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence', {});
 
-    expect(test.getState('alertSuccess')).toEqual({
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
       message: 'Document served. ',
     });
-    expect(test.getState('currentPage')).toBe('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
 
-    expect(test.getState('iframeSrc')).not.toBeUndefined();
+    expect(cerebralTest.getState('iframeSrc')).not.toBeUndefined();
   });
 };

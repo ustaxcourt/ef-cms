@@ -197,7 +197,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   const mockGetPdfJsReturnValue = {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
-        getPage: async () => ({
+        getPage: () => ({
           cleanup: () => {},
           getViewport: () => ({
             height: 100,
@@ -379,6 +379,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
+    noticeOfTrialIssuedInPerson: jest.fn().mockImplementation(getFakeFile),
     order: jest.fn().mockImplementation(getFakeFile),
     pendingReport: jest.fn().mockImplementation(getFakeFile),
     practitionerCaseList: jest.fn().mockImplementation(getFakeFile),
@@ -391,15 +392,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
 
-  const getTemplateGeneratorsReturnMock = {
-    generateChangeOfAddressTemplate: jest.fn().mockResolvedValue('<div></div>'),
-    generateHTMLTemplateForPDF: jest.fn().mockReturnValue('<div></div>'),
-    generateNoticeOfTrialIssuedTemplate: jest.fn(),
-    generatePrintableDocketRecordTemplate: jest
-      .fn()
-      .mockResolvedValue('<div></div>'),
-  };
-
   const mockGetChromiumBrowserReturnValue = {
     close: jest.fn(),
     newPage: jest.fn().mockReturnValue({
@@ -409,9 +401,11 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetStorageClient = appContextProxy({
+    deleteObject: jest.fn().mockReturnValue({ promise: () => {} }),
     getObject: jest.fn().mockReturnValue({
       promise: jest.fn().mockResolvedValue({ Body: 's3-get-object-body' }),
     }),
+    putObject: jest.fn().mockReturnValue({ promise: () => {} }),
   });
 
   const mockGetPersistenceGateway = appContextProxy({
@@ -482,17 +476,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     updateWorkItem: jest.fn().mockImplementation(updateWorkItem),
-    updateWorkItemInCase: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
-  const nodeSassMockReturnValue = {
-    render: (data, cb) => cb(null, { css: '' }),
-  };
-
   const mockGetEmailClient = {
     sendBulkTemplatedEmail: jest.fn(),
+  };
+
+  const mockGetMessagingClient = {
+    deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -573,26 +566,21 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
     }),
-    getNodeSass: jest.fn().mockReturnValue(nodeSassMockReturnValue),
+    getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
+    getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: appContextProxy(),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn(() => ({
-      compile: () => {
-        return () => null;
-      },
-    })),
+    getPug: jest.fn().mockReturnValue(require('pug')),
+    getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: appContextProxy(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getTemplateGenerators: jest
-      .fn()
-      .mockReturnValue(getTemplateGeneratorsReturnMock),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: appContextProxy(),
@@ -604,6 +592,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       info: jest.fn(),
       warn: jest.fn(),
     },
+    runVirusScan: jest.fn(),
     setCurrentUser: jest.fn(),
     setCurrentUserToken: jest.fn(),
   };

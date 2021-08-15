@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sass = require('sass');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -12,7 +11,6 @@ const {
   SERVED_PARTIES_CODES,
 } = require('../../entities/EntityConstants');
 const { docketRecord } = require('./docketRecord');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -29,18 +27,6 @@ describe('documentGenerators', () => {
     if (process.env.PDF_OUTPUT) {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext.getNodeSass.mockImplementation(() => {
-        return sass;
-      });
-
-      applicationContext.getPug.mockImplementation(() => {
-        return require('pug');
       });
 
       applicationContext

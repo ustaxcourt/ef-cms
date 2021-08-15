@@ -108,7 +108,7 @@ export const TodaysOrders = connect(
                             {order.documentTitle}
                           </Button>
                         </td>
-                        <td>{order.numberOfPages}</td>
+                        <td>{order.numberOfPagesFormatted}</td>
                         <td>{order.formattedJudgeName}</td>
                       </tr>
                     ))}
@@ -156,7 +156,7 @@ export const TodaysOrders = connect(
                           </Button>
                         </td>
                         <td className="padding-5">
-                          Pages {order.numberOfPages}
+                          Pages {order.numberOfPagesFormatted}
                         </td>
                         <td className="padding-5 margin-bottom-2">
                           Judge {order.formattedJudgeName}

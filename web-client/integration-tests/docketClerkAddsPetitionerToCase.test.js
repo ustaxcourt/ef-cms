@@ -2,7 +2,7 @@ import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetiti
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('docket clerk adds petitioner to case', () => {
   beforeAll(() => {
@@ -10,19 +10,19 @@ describe('docket clerk adds petitioner to case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsPetitionerToCase(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsPetitionerToCase(cerebralTest);
 });

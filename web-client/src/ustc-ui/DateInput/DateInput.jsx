@@ -1,4 +1,4 @@
-import { DatePickerComponent } from '../../views/CaseDeadlines/DatePickerComponent';
+import { DatePickerComponent } from './DatePickerComponent';
 import React from 'react';
 
 export const DateInput = props => {

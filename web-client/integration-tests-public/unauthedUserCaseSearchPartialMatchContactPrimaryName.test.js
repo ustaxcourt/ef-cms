@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -60,7 +60,7 @@ function createCase(name) {
       });
 
       afterAll(() => {
-        test.closeSocket();
+        cerebralTest.closeSocket();
       });
 
       loginAs(testClient, 'petitioner@example.com');
@@ -69,7 +69,7 @@ function createCase(name) {
           contactPrimary: getContactPrimary(nameToSearchFor),
         });
         expect(caseDetail.docketNumber).toBeDefined();
-        test.docketNumber = caseDetail.docketNumber;
+        cerebralTest.docketNumber = caseDetail.docketNumber;
         testClient.docketNumber = caseDetail.docketNumber;
         createdDocketNumbers.push(caseDetail.docketNumber);
       });
@@ -83,7 +83,7 @@ function createCase(name) {
 }
 
 describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns search results we expect in the correct order', async () => {
     const queryParams = {
@@ -92,10 +92,13 @@ describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => 
       petitionerName: searchTerm,
     };
 
-    test.setState('advancedSearchForm.caseSearchByName', queryParams);
-    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
+      'submitPublicCaseAdvancedSearchSequence',
+      {},
+    );
 
-    const searchResults = test.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

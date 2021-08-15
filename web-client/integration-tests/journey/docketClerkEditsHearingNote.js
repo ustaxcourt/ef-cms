@@ -7,61 +7,63 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkEditsHearingNote = (test, updatedNote) => {
+export const docketClerkEditsHearingNote = (cerebralTest, updatedNote) => {
   return it('Docket Clerk updates the note on a hearing', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    let caseDetail = test.getState('caseDetail');
+    let caseDetail = cerebralTest.getState('caseDetail');
     caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     let hearing = caseDetail.hearings[caseDetail.hearings.length - 1];
 
-    await test.runSequence('openAddEditCalendarNoteModalSequence', {
+    await cerebralTest.runSequence('openAddEditCalendarNoteModalSequence', {
       docketNumber: caseDetail.docketNumber,
       note: hearing.calendarNotes,
       trialSessionId: hearing.trialSessionId,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: '',
     });
 
-    await test.runSequence('updateHearingNoteSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('updateHearingNoteSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       note: 'Add a note',
     });
 
     const textWithCountOverLimit = getTextByCount(201);
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: textWithCountOverLimit,
     });
 
-    await test.runSequence('updateHearingNoteSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence('updateHearingNoteSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       note: 'Limit is 200 characters. Enter 200 or fewer characters.',
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
       value: updatedNote,
     });
 
-    await test.runSequence('updateHearingNoteSequence');
+    await cerebralTest.runSequence('updateHearingNoteSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-    expect(test.getState('alertSuccess').message).toEqual('Note saved.');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertSuccess').message).toEqual(
+      'Note saved.',
+    );
 
     caseDetail = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const updatedHearing = caseDetail.hearings.find(

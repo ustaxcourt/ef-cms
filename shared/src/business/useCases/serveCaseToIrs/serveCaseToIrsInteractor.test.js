@@ -59,7 +59,7 @@ describe('serveCaseToIrsInteractor', () => {
   let mockCase;
   let getObjectMock = () => {
     return {
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     };

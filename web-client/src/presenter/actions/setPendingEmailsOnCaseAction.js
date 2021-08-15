@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} props.applicationContext the applicationContext
  * @param {function} props.get the cerebral get function
  */
-export const setPendingEmailsOnCaseAction = async ({ props, store }) => {
+export const setPendingEmailsOnCaseAction = ({ props, store }) => {
   const { pendingEmails } = props;
   store.set(state.screenMetadata.pendingEmails, pendingEmails);
 };

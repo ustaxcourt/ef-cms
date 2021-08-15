@@ -51,7 +51,7 @@ export const submitPaperFilingAction = async ({
   if (isFileAttachedNow) {
     await applicationContext
       .getUseCases()
-      .virusScanPdfInteractor(applicationContext, {
+      .getStatusOfVirusScanInteractor(applicationContext, {
         key: docketEntryId,
       });
 

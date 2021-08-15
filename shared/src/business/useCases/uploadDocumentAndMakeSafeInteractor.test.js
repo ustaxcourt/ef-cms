@@ -57,8 +57,8 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor.mock.calls[0][0]
-        .key,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor.mock
+        .calls[0][0].key,
     ).toEqual(mockDocument.key);
   });
 

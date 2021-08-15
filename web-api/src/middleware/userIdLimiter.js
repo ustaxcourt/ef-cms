@@ -4,8 +4,10 @@ const { getUserFromAuthHeader } = require('./apiGatewayHelper');
 exports.userIdLimiter = key => async (req, res, next) => {
   const user = getUserFromAuthHeader(req);
   if (!user) return res.status(401).json({ message: 'auth header required' });
-  const MAX_COUNT = 15;
-  const WINDOW_TIME = 60 * 1000;
+  const MAX_COUNT = parseInt(process.env.USER_LIMITER_THRESHOLD ?? '15');
+  const WINDOW_TIME = parseInt(
+    process.env.USER_LIMITER_WINDOW ?? `${60 * 1000}`,
+  );
   const applicationContext = createApplicationContext(user);
   const KEY = `user-limiter-${key}|${user.userId}`;
 

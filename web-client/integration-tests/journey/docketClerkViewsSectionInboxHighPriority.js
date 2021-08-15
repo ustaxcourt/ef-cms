@@ -1,15 +1,15 @@
-export const docketClerkViewsSectionInboxHighPriority = test => {
+export const docketClerkViewsSectionInboxHighPriority = cerebralTest => {
   return it('Docket clerk views section inbox with a high priority item', async () => {
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
 
-    const inboxQueue = test.getState('workQueue');
+    const inboxQueue = cerebralTest.getState('workQueue');
     const inProgressWorkItem = inboxQueue.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
     // the work item created is high priority and has a trial date
     expect(inProgressWorkItem.highPriority).toEqual(true);

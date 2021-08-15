@@ -50,6 +50,7 @@ web-api/terraform/template/lambdas/cognito-triggers.js.zip
 web-api/terraform/template/lambdas/cron.js.zip
 web-api/terraform/template/lambdas/log-forwarder.js.zip
 web-api/terraform/template/lambdas/streams.js.zip
+web-api/terraform/template/lambdas/virus-scan.js.zip
 web-api/terraform/template/lambdas/websockets.js.zip
 web-client/.cache/
 web-client/coverage-e2e

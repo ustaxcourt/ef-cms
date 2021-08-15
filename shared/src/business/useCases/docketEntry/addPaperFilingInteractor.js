@@ -65,6 +65,8 @@ exports.addPaperFilingInteractor = async (
     DOCUMENT_RELATIONSHIPS.PRIMARY,
   ];
 
+  const readyForService = metadata.isFileAttached && !isSavingForLater;
+
   if (!docketEntryId) {
     throw new Error('Did not receive a primaryDocumentFileId');
   }
@@ -73,7 +75,6 @@ exports.addPaperFilingInteractor = async (
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
-  const readyForService = metadata.isFileAttached && !isSavingForLater;
   const docketEntryEntity = new DocketEntry(
     {
       ...baseMetadata,

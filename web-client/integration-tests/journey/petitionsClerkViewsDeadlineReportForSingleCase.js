@@ -11,13 +11,13 @@ const caseDeadlineReportHelper = withAppContextDecorator(
 );
 
 export const petitionsClerkViewsDeadlineReportForSingleCase = (
-  test,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('Petitions clerk views deadline report for a single case', async () => {
-    await test.runSequence('gotoCaseDeadlineReportSequence');
-    expect(test.getState('currentPage')).toEqual('CaseDeadlines');
-    expect(test.getState('judges').length).toBeGreaterThan(0);
+    await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDeadlines');
+    expect(cerebralTest.getState('judges').length).toBeGreaterThan(0);
 
     let startDate, endDate;
     if (!overrides.day || !overrides.month || !overrides.year) {
@@ -29,19 +29,19 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
       endDate = computedDate;
     }
 
-    await test.runSequence('selectDateRangeFromCalendarSequence', {
+    await cerebralTest.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(endDate, FORMATS.MMDDYYYY),
       startDate: prepareDateFromString(startDate, FORMATS.MMDDYYYY),
     });
-    test.setState('screenMetadata.filterStartDateState', startDate);
-    test.setState('screenMetadata.filterEndDateState', endDate);
+    cerebralTest.setState('screenMetadata.filterStartDateState', startDate);
+    cerebralTest.setState('screenMetadata.filterEndDateState', endDate);
 
-    await test.runSequence('updateDateRangeForDeadlinesSequence');
+    await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     let deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === test.docketNumber,
+      d => d.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(deadlinesForThisCase.length).toEqual(1);
@@ -49,23 +49,23 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
     expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
 
     let helper = runCompute(caseDeadlineReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeTruthy();
 
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
 
-    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === test.docketNumber,
+      d => d.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(deadlinesForThisCase.length).toEqual(2);
 
     helper = runCompute(caseDeadlineReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeFalsy();

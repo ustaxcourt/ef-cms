@@ -5,6 +5,6 @@ import { state } from 'cerebral';
  *
  * @param {object} providers.store the cerebral store object
  */
-export const unsetCorrespondenceDocumentViewerIdAction = async ({ store }) => {
+export const unsetCorrespondenceDocumentViewerIdAction = ({ store }) => {
   store.unset(state.correspondenceId);
 };

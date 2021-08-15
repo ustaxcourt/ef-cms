@@ -1,35 +1,37 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const docketClerkEditsServiceIndicatorForRespondent = test => {
+export const docketClerkEditsServiceIndicatorForRespondent = cerebralTest => {
   return it('docket clerk edits service indicator for a respondent', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    const barNumber = test.getState('caseDetail.irsPractitioners.0.barNumber');
+    const barNumber = cerebralTest.getState(
+      'caseDetail.irsPractitioners.0.barNumber',
+    );
 
-    await test.runSequence('gotoEditRespondentCounselSequence', {
+    await cerebralTest.runSequence('gotoEditRespondentCounselSequence', {
       barNumber,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('form.serviceIndicator')).toEqual(
+    expect(cerebralTest.getState('form.serviceIndicator')).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     expect(
-      test.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
+      cerebralTest.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
-    await test.runSequence('submitEditRespondentCounselSequence');
+    await cerebralTest.runSequence('submitEditRespondentCounselSequence');
 
     expect(
-      test.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
+      cerebralTest.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 };

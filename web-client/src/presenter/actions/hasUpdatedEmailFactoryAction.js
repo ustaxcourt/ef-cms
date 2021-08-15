@@ -16,7 +16,7 @@ export const hasUpdatedEmailFactoryAction = formField => {
    * @param {object} providers.path the cerebral path function
    * @returns {object} continue path for the sequence
    */
-  const hasUpdatedEmailAction = async ({ get, path }) => {
+  const hasUpdatedEmailAction = ({ get, path }) => {
     const updatedEmail = get(state.form[formField]);
 
     return updatedEmail ? path.yes() : path.no();

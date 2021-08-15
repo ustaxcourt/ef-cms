@@ -1,21 +1,21 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
-export const externalUserSearchesForOrder = test => {
+export const externalUserSearchesForOrder = cerebralTest => {
   return it('external user searches for an order', async () => {
-    test.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'onomatopoeia',
       },
     });
 
-    await test.runSequence('submitOrderAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
     expect(
-      test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketEntryId: test.draftOrders[0].docketEntryId,
+          docketEntryId: cerebralTest.draftOrders[0].docketEntryId,
         }),
       ]),
     );

@@ -1,19 +1,19 @@
-export const docketClerkSignsOrder = (test, draftOrderIndex) => {
+export const docketClerkSignsOrder = (cerebralTest, draftOrderIndex) => {
   return it('Docket clerk signs order', async () => {
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
-    await test.runSequence('gotoSignOrderSequence', {
+    await cerebralTest.runSequence('gotoSignOrderSequence', {
       docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('setPDFSignatureDataSequence', {
+    await cerebralTest.runSequence('setPDFSignatureDataSequence', {
       signatureData: {
         scale: 1,
         x: 100,
         y: 100,
       },
     });
-    await test.runSequence('saveDocumentSigningSequence');
+    await cerebralTest.runSequence('saveDocumentSigningSequence');
   });
 };

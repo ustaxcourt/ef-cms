@@ -27,11 +27,11 @@ describe('formatPhoneNumber', () => {
     },
   ];
 
-  for (let test of originalStringTests) {
-    it(`should return the original string if ${test.description}`, () => {
-      const result = formatPhoneNumber(test.phone);
+  for (let stringTest of originalStringTests) {
+    it(`should return the original string if ${stringTest.description}`, () => {
+      const result = formatPhoneNumber(stringTest.phone);
 
-      expect(result).toEqual(test.phone);
+      expect(result).toEqual(stringTest.phone);
     });
   }
 

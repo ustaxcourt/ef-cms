@@ -13,7 +13,7 @@ import { setupTest } from './helpers';
 import { unauthedUserViewsTodaysOrders } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrders';
 import { unauthedUserViewsTodaysOrdersOnSealedCase } from '../integration-tests-public/journey/unauthedUserViewsTodaysOrdersOnSealedCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 
 testClient.draftOrders = [];
@@ -21,11 +21,11 @@ testClient.draftOrders = [];
 describe('Unauthed user views todays orders', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-    test.draftOrders = [];
+    cerebralTest.draftOrders = [];
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -37,7 +37,7 @@ describe('Unauthed user views todays orders', () => {
 
   loginAs(testClient, 'docketclerk@example.com');
   const uniqueDocumentTitle = 'Order to do something' + Date.now();
-  test.documentTitle1 = uniqueDocumentTitle;
+  cerebralTest.documentTitle1 = uniqueDocumentTitle;
 
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: uniqueDocumentTitle,
@@ -51,7 +51,7 @@ describe('Unauthed user views todays orders', () => {
 
   const uniqueDocumentTitle2 =
     'Order to do something a second time' + Date.now();
-  test.documentTitle2 = uniqueDocumentTitle2;
+  cerebralTest.documentTitle2 = uniqueDocumentTitle2;
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: uniqueDocumentTitle2,
     eventCode: 'O',
@@ -62,10 +62,10 @@ describe('Unauthed user views todays orders', () => {
   docketClerkAddsDocketEntryFromOrder(testClient, 1);
   docketClerkServesDocument(testClient, 1);
 
-  unauthedUserViewsTodaysOrders(test, testClient);
+  unauthedUserViewsTodaysOrders(cerebralTest, testClient);
 
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 
-  unauthedUserViewsTodaysOrdersOnSealedCase(test);
+  unauthedUserViewsTodaysOrdersOnSealedCase(cerebralTest);
 });

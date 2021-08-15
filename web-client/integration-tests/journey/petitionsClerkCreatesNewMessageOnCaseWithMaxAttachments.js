@@ -9,77 +9,84 @@ const { PETITIONS_SECTION } = applicationContext.getConstants();
 
 const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
 
-export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments = test => {
-  expect(test.getState('messagesSectionCount')).toBe(0);
-  expect(test.getState('messagesInboxCount')).toBe(0);
+export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
+  cerebralTest => {
+    expect(cerebralTest.getState('messagesSectionCount')).toBe(0);
+    expect(cerebralTest.getState('messagesInboxCount')).toBe(0);
 
-  const getHelper = () => {
-    return runCompute(messageModalHelper, {
-      state: test.getState(),
+    const getHelper = () => {
+      return runCompute(messageModalHelper, {
+        state: cerebralTest.getState(),
+      });
+    };
+
+    return it('petitions clerk creates new message on a case with the maximum allowed attachments', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      await cerebralTest.runSequence('openCreateMessageModalSequence');
+
+      await cerebralTest.runSequence(
+        'updateSectionInCreateMessageModalSequence',
+        {
+          key: 'toSection',
+          value: PETITIONS_SECTION,
+        },
+      );
+
+      await cerebralTest.runSequence('updateModalFormValueSequence', {
+        key: 'toUserId',
+        value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
+      });
+
+      const messageDocument = getHelper().documents[0];
+      cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
+
+      await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+        documentId: cerebralTest.testMessageDocumentId,
+      });
+
+      expect(cerebralTest.getState('modal.form.subject')).toEqual(
+        messageDocument.documentType,
+      );
+
+      // Add four more attachments to reach the maximum of five.
+      for (let i = 0; i < 4; i++) {
+        // currently doesn't matter if we add the same document over and over
+        await cerebralTest.runSequence(
+          'updateMessageModalAttachmentsSequence',
+          {
+            documentId: cerebralTest.testMessageDocumentId,
+          },
+        );
+      }
+
+      const helper = getHelper();
+      expect(helper.showAddDocumentForm).toEqual(false);
+      expect(helper.showAddMoreDocumentsButton).toEqual(false);
+      expect(helper.showMessageAttachments).toEqual(true);
+
+      await cerebralTest.runSequence('updateModalFormValueSequence', {
+        key: 'subject',
+        value: 'what kind of bear is best?',
+      });
+
+      await cerebralTest.runSequence('createMessageSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({
+        message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
+      });
+
+      await cerebralTest.runSequence('updateModalFormValueSequence', {
+        key: 'message',
+        value: 'bears, beets, battlestar galactica',
+      });
+
+      await cerebralTest.runSequence('createMessageSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      await refreshElasticsearchIndex();
     });
   };
-
-  return it('petitions clerk creates new message on a case with the maximum allowed attachments', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
-
-    await test.runSequence('openCreateMessageModalSequence');
-
-    await test.runSequence('updateSectionInCreateMessageModalSequence', {
-      key: 'toSection',
-      value: PETITIONS_SECTION,
-    });
-
-    await test.runSequence('updateModalFormValueSequence', {
-      key: 'toUserId',
-      value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
-    });
-
-    const messageDocument = getHelper().documents[0];
-    test.testMessageDocumentId = messageDocument.docketEntryId;
-
-    await test.runSequence('updateMessageModalAttachmentsSequence', {
-      documentId: test.testMessageDocumentId,
-    });
-
-    expect(test.getState('modal.form.subject')).toEqual(
-      messageDocument.documentType,
-    );
-
-    // Add four more attachments to reach the maximum of five.
-    for (let i = 0; i < 4; i++) {
-      // currently doesn't matter if we add the same document over and over
-      await test.runSequence('updateMessageModalAttachmentsSequence', {
-        documentId: test.testMessageDocumentId,
-      });
-    }
-
-    const helper = getHelper();
-    expect(helper.showAddDocumentForm).toEqual(false);
-    expect(helper.showAddMoreDocumentsButton).toEqual(false);
-    expect(helper.showMessageAttachments).toEqual(true);
-
-    await test.runSequence('updateModalFormValueSequence', {
-      key: 'subject',
-      value: 'what kind of bear is best?',
-    });
-
-    await test.runSequence('createMessageSequence');
-
-    expect(test.getState('validationErrors')).toEqual({
-      message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
-    });
-
-    await test.runSequence('updateModalFormValueSequence', {
-      key: 'message',
-      value: 'bears, beets, battlestar galactica',
-    });
-
-    await test.runSequence('createMessageSequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-
-    await refreshElasticsearchIndex();
-  });
-};

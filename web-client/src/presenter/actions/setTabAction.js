@@ -13,6 +13,6 @@ export const setTabAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
    */
-  async ({ store }) => {
+  ({ store }) => {
     store.set(state.currentViewMetadata.tab, tab);
   };

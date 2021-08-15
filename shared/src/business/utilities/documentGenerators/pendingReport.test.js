@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const sass = require('sass');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -8,7 +7,6 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
 const { CHIEF_JUDGE } = require('../../entities/EntityConstants');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { pendingReport } = require('./pendingReport');
 
 describe('documentGenerators', () => {
@@ -26,18 +24,6 @@ describe('documentGenerators', () => {
     if (process.env.PDF_OUTPUT) {
       fs.mkdirSync(testOutputPath, { recursive: true }, err => {
         if (err) throw err;
-      });
-
-      applicationContext.getChromiumBrowser.mockImplementation(
-        getChromiumBrowser,
-      );
-
-      applicationContext.getNodeSass.mockImplementation(() => {
-        return sass;
-      });
-
-      applicationContext.getPug.mockImplementation(() => {
-        return require('pug');
       });
 
       applicationContext

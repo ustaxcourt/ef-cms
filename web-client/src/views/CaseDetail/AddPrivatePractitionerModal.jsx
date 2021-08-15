@@ -148,7 +148,7 @@ export const AddPrivatePractitionerModal = connect(
                     }}
                   />
                   <label
-                    className="usa-checkbox__label  inline-block"
+                    className="usa-checkbox__label"
                     htmlFor={`representing-${petitioner.contactId}`}
                   >
                     {petitioner.displayName}

@@ -54,14 +54,14 @@ const practitionerWithoutEmail = {
   },
 };
 
-export const admissionsClerkMigratesPractitionerWithoutEmail = test => {
+export const admissionsClerkMigratesPractitionerWithoutEmail = cerebralTest => {
   return it('Admissions Clerk migrates practitioner without email', async () => {
     await axiosInstance.post(
       'http://localhost:4000/practitioners',
       practitionerWithoutEmail,
     );
 
-    test.barNumber = practitionerWithoutEmail.user.barNumber;
+    cerebralTest.barNumber = practitionerWithoutEmail.user.barNumber;
 
     await refreshElasticsearchIndex();
   });

@@ -1,41 +1,45 @@
 const faker = require('faker');
 const { refreshElasticsearchIndex } = require('../helpers');
 
-export const practitionerUpdatesAddress = test => {
+export const practitionerUpdatesAddress = cerebralTest => {
   return it('practitioner updates address', async () => {
-    await test.runSequence('gotoUserContactEditSequence');
+    await cerebralTest.runSequence('gotoUserContactEditSequence');
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
       value: '',
     });
 
-    await test.runSequence('submitUpdateUserContactInformationSequence');
-    expect(test.getState('validationErrors')).toEqual({
+    await cerebralTest.runSequence(
+      'submitUpdateUserContactInformationSequence',
+    );
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       contact: { address1: expect.anything() },
     });
 
-    test.updatedPractitionerAddress = faker.address.streetAddress(true);
+    cerebralTest.updatedPractitionerAddress = faker.address.streetAddress(true);
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
-      value: test.updatedPractitionerAddress,
+      value: cerebralTest.updatedPractitionerAddress,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'firmName',
       value: 'My Awesome Law Firm',
     });
 
-    await test.runSequence('submitUpdateUserContactInformationSequence');
+    await cerebralTest.runSequence(
+      'submitUpdateUserContactInformationSequence',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await test.runSequence('userContactUpdateCompleteSequence');
+    await cerebralTest.runSequence('userContactUpdateCompleteSequence');
 
     await refreshElasticsearchIndex(5000);
 
-    expect(test.getState('alertSuccess')).toMatchObject({
+    expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });
   });

@@ -2,58 +2,63 @@ import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCase
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkCreatesAnOrder = (test, data) => {
+export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
   return it('Docket Clerk creates an order', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openCreateOrderChooseTypeModalSequence', {});
+    await cerebralTest.runSequence(
+      'openCreateOrderChooseTypeModalSequence',
+      {},
+    );
 
-    expect(test.getState('modal.documentTitle')).toBeFalsy();
+    expect(cerebralTest.getState('modal.documentTitle')).toBeFalsy();
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: data.eventCode,
     });
 
     if (data.expectedDocumentType) {
-      expect(test.getState('modal.documentType')).toEqual(
+      expect(cerebralTest.getState('modal.documentType')).toEqual(
         data.expectedDocumentType,
       );
     } else {
-      expect(test.getState('modal.documentType').length).toBeGreaterThan(0);
+      expect(
+        cerebralTest.getState('modal.documentType').length,
+      ).toBeGreaterThan(0);
     }
 
-    await test.runSequence('updateCreateOrderModalFormValueSequence', {
+    await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'documentTitle',
       value: data.documentTitle,
     });
 
-    await test.runSequence('submitCreateOrderModalSequence');
+    await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
-    expect(test.getState('currentPage')).toBe('CreateOrder');
+    expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: 'Some order content',
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentContents',
       value: data.documentContents || 'Some order content',
     });
 
-    await test.runSequence('submitCourtIssuedOrderSequence');
+    await cerebralTest.runSequence('submitCourtIssuedOrderSequence');
 
     //skip signing and go back to caseDetail
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -62,12 +67,12 @@ export const docketClerkCreatesAnOrder = (test, data) => {
       prev.createdAt > current.createdAt ? prev : current,
     );
 
-    expect(test.getState('draftDocumentViewerDocketEntryId')).toBe(
+    expect(cerebralTest.getState('draftDocumentViewerDocketEntryId')).toBe(
       newDraftOrder.docketEntryId,
     );
 
     expect(newDraftOrder).toBeTruthy();
-    test.draftOrders.push(newDraftOrder);
-    test.docketEntryId = newDraftOrder.docketEntryId;
+    cerebralTest.draftOrders.push(newDraftOrder);
+    cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
   });
 };

@@ -6,37 +6,39 @@ const messageDocumentHelper = withAppContextDecorator(
   messageDocumentHelperComputed,
 );
 
-export const petitionsClerk1ServesPetitionFromMessageDetail = test => {
+export const petitionsClerk1ServesPetitionFromMessageDetail = cerebralTest => {
   return it('petitions clerk 1 serves paper-filed petition from message detail', async () => {
     let helper = runCompute(messageDocumentHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showServePetitionButton).toBeTruthy();
 
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
-      redirectUrl: `/messages/${test.docketNumber}/message-detail/${test.parentMessageId}`,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      redirectUrl: `/messages/${cerebralTest.docketNumber}/message-detail/${cerebralTest.parentMessageId}`,
     });
 
-    expect(test.getState('currentPage')).toEqual('PetitionQc');
+    expect(cerebralTest.getState('currentPage')).toEqual('PetitionQc');
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
-    await test.runSequence('openConfirmServeToIrsModalSequence');
+    await cerebralTest.runSequence('openConfirmServeToIrsModalSequence');
 
-    await test.runSequence('serveCaseToIrsSequence');
+    await cerebralTest.runSequence('serveCaseToIrsSequence');
 
-    expect(test.getState('currentPage')).toEqual('PrintPaperPetitionReceipt');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintPaperPetitionReceipt',
+    );
 
-    await test.runSequence('completePrintPaperPetitionReceiptSequence');
+    await cerebralTest.runSequence('completePrintPaperPetitionReceiptSequence');
 
-    expect(test.getState('currentPage')).toEqual('MessageDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
     helper = runCompute(messageDocumentHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showServePetitionButton).toBeFalsy();

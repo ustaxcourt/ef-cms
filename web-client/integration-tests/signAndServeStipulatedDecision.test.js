@@ -5,7 +5,7 @@ import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './jour
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
-const test = setupTest({
+const cerebralTest = setupTest({
   useCases: {
     loadPDFForSigningInteractor: () => {
       return new Promise(resolve => {
@@ -21,26 +21,26 @@ describe('a user signs and serves a stipulated decision', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'irsPractitioner@example.com');
-  respondentUploadsProposedStipulatedDecision(test);
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  respondentUploadsProposedStipulatedDecision(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAssignWorkItemToSelf(test);
-  docketClerkCompletesDocketEntryQcAndSendsMessage(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAssignWorkItemToSelf(cerebralTest);
+  docketClerkCompletesDocketEntryQcAndSendsMessage(cerebralTest);
 
-  loginAs(test, 'adc@example.com');
-  adcsSignsProposedStipulatedDecisionFromMessage(test);
+  loginAs(cerebralTest, 'adc@example.com');
+  adcsSignsProposedStipulatedDecisionFromMessage(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesDocketEntryForSignedStipulatedDecision(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesDocketEntryForSignedStipulatedDecision(cerebralTest);
 });

@@ -13,7 +13,7 @@ describe('hasUpdatedEmailFactoryAction', () => {
     };
   });
 
-  it('returns the yes path when updatedEmail is defined on state.form', async () => {
+  it('returns the yes path when updatedEmail is defined on state.form', () => {
     runAction(hasUpdatedEmailFactoryAction('updatedEmail'), {
       modules: { presenter },
       state: { form: { updatedEmail: 'blah@example.com' } },
@@ -22,7 +22,7 @@ describe('hasUpdatedEmailFactoryAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path when updatedEmail is not defined on state.form', async () => {
+  it('returns the no path when updatedEmail is not defined on state.form', () => {
     runAction(hasUpdatedEmailFactoryAction('updatedEmail'), {
       modules: { presenter },
       state: { form: {} },

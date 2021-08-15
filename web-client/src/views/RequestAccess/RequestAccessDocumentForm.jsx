@@ -112,7 +112,7 @@ export const RequestAccessDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor="primaryDocument-attachments"
                 >
                   Attachment(s)
@@ -134,7 +134,7 @@ export const RequestAccessDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor="primaryDocument-certificateOfService"
                 >
                   Certificate of Service

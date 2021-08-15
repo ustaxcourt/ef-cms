@@ -49,7 +49,7 @@ describe('overwriteCorrespondenceFileAction', () => {
     });
   });
 
-  it('returns the error path when the correspondence file failed to upload', async () => {
+  it('returns the error path when the correspondence file failed to upload', () => {
     applicationContext
       .getUseCases()
       .uploadCorrespondenceDocumentInteractor.mockImplementation(() => {

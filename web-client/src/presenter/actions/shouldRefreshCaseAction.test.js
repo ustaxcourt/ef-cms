@@ -16,7 +16,7 @@ describe('shouldRefreshCaseAction', () => {
     };
   });
 
-  it('returns the no path if no caseDetail already set', async () => {
+  it('returns the no path if no caseDetail already set', () => {
     runAction(shouldRefreshCaseAction, {
       modules: {
         presenter,
@@ -26,7 +26,7 @@ describe('shouldRefreshCaseAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('returns the yes path if caseDetail is set', async () => {
+  it('returns the yes path if caseDetail is set', () => {
     runAction(shouldRefreshCaseAction, {
       modules: {
         presenter,
@@ -40,7 +40,7 @@ describe('shouldRefreshCaseAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the yes path if caseDetail is set', async () => {
+  it('returns the yes path if caseDetail is set', () => {
     runAction(shouldRefreshCaseAction, {
       modules: {
         presenter,
