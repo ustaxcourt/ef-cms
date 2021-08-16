@@ -87,6 +87,7 @@ describe('advancedDocumentSearch', () => {
         simple_query_string: {
           default_operator: 'and',
           fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
+          flags: 'OR|AND|ESCAPE|PHRASE',
           query: caseTitleOrPetitioner,
         },
       };
