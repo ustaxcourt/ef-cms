@@ -1,3 +1,4 @@
+import { DATE_RANGE_SEARCH_OPTIONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedSearchHelper as advancedSearchHelperComputed,
   paginationHelper,
@@ -464,7 +465,9 @@ describe('advancedSearchHelper', () => {
       const result = runCompute(advancedSearchHelper, {
         state: {
           ...getBaseState(globalUser),
-          advancedSearchForm: { orderSearch: { dateRange: 'allDates' } },
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
+          },
         },
       });
 
@@ -475,7 +478,9 @@ describe('advancedSearchHelper', () => {
       const result = runCompute(advancedSearchHelper, {
         state: {
           ...getBaseState(globalUser),
-          advancedSearchForm: { orderSearch: { dateRange: 'customDates' } },
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES },
+          },
         },
       });
 
