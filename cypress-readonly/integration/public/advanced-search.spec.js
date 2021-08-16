@@ -6,7 +6,7 @@ const {
   searchForCaseByDocketNumber,
   searchForCaseByPetitionerInformation,
   searchResultsTable,
-} = require('../support/pages/public/advanced-search');
+} = require('../../support/pages/public/advanced-search');
 
 describe('Public UI Smoketests', () => {
   describe('case - by name', () => {
