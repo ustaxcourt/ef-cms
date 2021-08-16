@@ -1,11 +1,15 @@
 const {
   getEnvironmentSpecificFunctions,
 } = require('../support/pages/environment-specific-factory');
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const { isValidRequest } = require('../support/helpers');
 
-let token;
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Messages UI Smoketests', () => {
+  let token;
+
   const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
   before(async () => {
@@ -18,25 +22,27 @@ describe('Messages UI Smoketests', () => {
 
   describe('login and view the user messages', () => {
     it("should fetch the user's messages after log in", () => {
+      cy.intercept({
+        hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+        method: 'GET',
+        url: '/messages/inbox/*',
+      }).as('getMyMessages');
+
       login(token);
-      cy.intercept({ method: 'GET', url: '**/messages/my/inbox' }).as(
-        'getMyMessages',
-      );
-      cy.visit('/messages/my/inbox');
-      cy.wait('@getMyMessages').then(({ response }) => {
-        expect(response.statusCode).to.eq(200);
-      });
+
+      cy.wait('@getMyMessages').then(isValidRequest);
     });
 
     it('should fetch the section inbox messages after clicking the switch section button', () => {
       cy.intercept({
+        hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
         method: 'GET',
-        url: '**/messages/inbox/section/admissions',
+        url: '/messages/inbox/section/admissions',
       }).as('getSectionInbox');
+
       cy.get('a.button-switch-box').click();
-      cy.wait('@getSectionInbox').then(({ response }) => {
-        expect(response.statusCode).to.eq(200);
-      });
+
+      cy.wait('@getSectionInbox').then(isValidRequest);
     });
   });
 });
