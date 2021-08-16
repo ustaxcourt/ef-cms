@@ -10,14 +10,14 @@ describe('UI Smoketests', () => {
 
   before(async () => {
     let result = await getUserToken(
-      'admissionsClerk1@example.com',
+      'admissionsclerk1@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
   });
 
   describe('login and view the user messages', () => {
-    it('should fetch users messages after log in', () => {
+    it("should fetch the user's messages after log in", () => {
       login(token);
       cy.intercept({ method: 'GET', url: '**/messages/my/inbox' }).as(
         'getMyMessages',
