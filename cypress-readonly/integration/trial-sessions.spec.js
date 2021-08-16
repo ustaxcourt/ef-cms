@@ -5,7 +5,7 @@ const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token;
 
-describe('Messages UI Smoketests', () => {
+describe('Trial Sessions UI Smoketests', () => {
   const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
   before(async () => {
@@ -16,14 +16,14 @@ describe('Messages UI Smoketests', () => {
     token = result.AuthenticationResult.IdToken;
   });
 
-  describe('login and view the user messages', () => {
-    it("should fetch the user's messages after log in", () => {
+  describe('login and view the trial sessions page', () => {
+    it('should fetch the open trial sessions upon navigation', () => {
       login(token);
-      cy.intercept({ method: 'GET', url: '**/messages/my/inbox' }).as(
-        'getMyMessages',
+      cy.intercept({ method: 'GET', url: '**/trial-sessions' }).as(
+        'getOpenTrialSessions',
       );
-      cy.visit('/messages/my/inbox');
-      cy.wait('@getMyMessages').then(({ response }) => {
+      cy.visit('/trial-sessions');
+      cy.wait('@getOpenTrialSessions').then(({ response }) => {
         expect(response.statusCode).to.eq(200);
       });
     });
