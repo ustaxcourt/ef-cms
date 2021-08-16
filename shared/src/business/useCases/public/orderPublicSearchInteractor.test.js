@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } = require('../../entities/EntityConstants');
@@ -37,6 +38,7 @@ describe('orderPublicSearchInteractor', () => {
 
   it('should only search for order document types', async () => {
     const result = await orderPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -83,6 +85,7 @@ describe('orderPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
     const results = await orderPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -108,6 +111,7 @@ describe('orderPublicSearchInteractor', () => {
       });
     await expect(
       orderPublicSearchInteractor(applicationContext, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'fish',
         startDate: '2001-01-01',
       }),
@@ -118,10 +122,13 @@ describe('orderPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
+
     const results = await orderPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
+
     expect(results.length).toBe(0);
   });
 });
