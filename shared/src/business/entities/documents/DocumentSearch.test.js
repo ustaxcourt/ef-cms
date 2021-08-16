@@ -3,32 +3,29 @@ const { DocumentSearch } = require('./DocumentSearch');
 const errorMessages = DocumentSearch.VALIDATION_ERROR_MESSAGES;
 
 describe('Document Search entity', () => {
-  it('needs only a keyword, opinionType and startDate to be valid', () => {
+  it('needs only an opinionType and startDate to be valid', () => {
     const opinionSearch = new DocumentSearch({
-      keyword: 'Notice',
       opinionType: 'a Type',
       startDate: '2002-10-01',
     });
     expect(opinionSearch).toMatchObject({
-      keyword: 'Notice',
       opinionType: 'a Type',
     });
     const validationErrors = opinionSearch.getFormattedValidationErrors();
     expect(validationErrors).toEqual(null);
   });
 
-  it('fails validation without a keyword', () => {
+  it('passes validation without a keyword', () => {
     const orderSearch = new DocumentSearch();
     const validationErrors = orderSearch.getFormattedValidationErrors();
 
-    expect(validationErrors.keyword).toEqual(errorMessages.keyword);
+    expect(validationErrors).toEqual(null);
   });
 
   it('fails validation when both caseTitle and docketNumber are provided as search terms', () => {
     const documentSearch = new DocumentSearch({
       caseTitleOrPetitioner: 'Sam Jackson',
       docketNumber: '123-45',
-      keyword: 'sunglasses',
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -38,10 +35,35 @@ describe('Document Search entity', () => {
     );
   });
 
+  it('should pass validation when "from" value is provided', () => {
+    const documentSearch = new DocumentSearch({
+      from: 2,
+      judge: '',
+      startDate: '2002-10-01',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.from).toBe(2);
+    expect(validationErrors).toBeNull();
+  });
+
+  it('should validate when a user role is provided', () => {
+    const documentSearch = new DocumentSearch({
+      judge: '',
+      startDate: '2002-10-01',
+      userRole: 'docketClerk',
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.userRole).toBe('docketClerk');
+    expect(validationErrors).toBeNull();
+  });
+
   it('should pass validation when judge provided is empty', () => {
     const documentSearch = new DocumentSearch({
       judge: '',
-      keyword: 'sunglasses',
       startDate: '2002-10-01',
     });
 
@@ -54,7 +76,6 @@ describe('Document Search entity', () => {
   it('should pass validation when judge is provided', () => {
     const documentSearch = new DocumentSearch({
       judge: 'Guy Fieri',
-      keyword: 'sunglasses',
       startDate: '2002-10-01',
     });
 
@@ -67,7 +88,6 @@ describe('Document Search entity', () => {
   describe('date search validation', () => {
     it('should not validate end date date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({
-        keyword: 'sunglasses',
         startDate: '2002-10-01',
       });
 
@@ -79,7 +99,6 @@ describe('Document Search entity', () => {
     it('should fail validation when the start date is greater than the end date', () => {
       const documentSearch = new DocumentSearch({
         endDate: '2002-10-01',
-        keyword: 'sunglasses',
         startDate: '2003-10-01',
       });
 
@@ -90,7 +109,6 @@ describe('Document Search entity', () => {
 
     it('should pass validation when a start date is provided without an end date', () => {
       const documentSearch = new DocumentSearch({
-        keyword: 'sunglasses',
         startDate: '2003-10-01',
       });
 
@@ -102,7 +120,6 @@ describe('Document Search entity', () => {
     it('should fail validation when an end date is provided without a start date', () => {
       const documentSearch = new DocumentSearch({
         endDate: '2003-10-01',
-        keyword: 'sunglasses',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -112,7 +129,6 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date year is not provided', () => {
       const documentSearch = new DocumentSearch({
-        keyword: 'sunglasses',
         startDate: '10/10',
       });
 
@@ -123,7 +139,6 @@ describe('Document Search entity', () => {
 
     it('should fail validation when the start date is in the future', () => {
       const documentSearch = new DocumentSearch({
-        keyword: 'sunglasses',
         startDate: '10/10/3000',
       });
 
@@ -137,7 +152,6 @@ describe('Document Search entity', () => {
     it('should fail validation when the end date is in the future', () => {
       const documentSearch = new DocumentSearch({
         endDate: '2030-10-10',
-        keyword: 'sunglasses',
         startDate: '2009-10-10',
       });
 

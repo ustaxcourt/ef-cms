@@ -20,6 +20,9 @@ function SecondaryDocumentInformationFactory(
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
 ) {
+  /**
+   *
+   */
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
