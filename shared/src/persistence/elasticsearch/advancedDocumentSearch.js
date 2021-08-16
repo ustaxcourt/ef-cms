@@ -100,6 +100,8 @@ exports.advancedDocumentSearch = async ({
     };
   }
 
+  console.log('caseQueryParams', caseQueryParams.query);
+
   docketEntryQueryParams.push(caseQueryParams);
 
   if (judge) {
@@ -179,6 +181,8 @@ exports.advancedDocumentSearch = async ({
       sort = [{ 'filingDate.S': sortOrder }];
       break;
   }
+
+  console.log('docketEntryQueryParams', docketEntryQueryParams.query);
 
   const documentQuery = {
     body: {
