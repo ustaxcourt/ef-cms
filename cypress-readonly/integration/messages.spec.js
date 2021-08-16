@@ -27,5 +27,16 @@ describe('Messages UI Smoketests', () => {
         expect(response.statusCode).to.eq(200);
       });
     });
+
+    it('should fetch the section inbox messages after clicking the switch section button', () => {
+      cy.intercept({
+        method: 'GET',
+        url: '**/messages/inbox/section/admissions',
+      }).as('getSectionInbox');
+      cy.get('a.button-switch-box').click();
+      cy.wait('@getSectionInbox').then(({ response }) => {
+        expect(response.statusCode).to.eq(200);
+      });
+    });
   });
 });
