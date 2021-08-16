@@ -2,11 +2,13 @@ const {
   validateOpinionAdvancedSearchInteractor,
 } = require('./validateOpinionAdvancedSearchInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { DATE_RANGE_SEARCH_OPTIONS } = require('../entities/EntityConstants');
 
 describe('validateOpinionAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the opinionSearch', () => {
     const errors = validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch: {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'Joe Exotic',
         startDate: '2001-10-10',
       },
