@@ -727,6 +727,42 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-smoketests/videos/
 
+  smoketests-readonly:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large
+    steps:
+      - checkout
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: 'Cypress Readonly Smoke Tests'
+          command: npm run cypress:readonly
+      - run:
+          name: 'Cypress Public Readonly Smoke Tests'
+          command: npm run cypress:readonly-public
+      - store_artifacts:
+          path: /root/project/cypress-smoketests-readonly/videos/
+
   switch-colors:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -954,3 +990,7 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - smoketests-readonly:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - migrate
