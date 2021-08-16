@@ -165,6 +165,41 @@ describe('updateCourtIssuedOrderInteractor', () => {
     );
   });
 
+  it('should not update freeText on existing document within case if not an order type', async () => {
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Notice Title',
+        documentType: 'Notice',
+        eventCode: 'A',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries.length,
+    ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              documentType: 'Notice',
+              eventCode: 'A',
+              freeText: undefined,
+            }),
+          ]),
+        }),
+      }),
+    );
+  });
+
   it('stores documentContents in S3 if present', async () => {
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -204,7 +239,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentType: 'Order to Show Cause',
-        draftOrderState: {},
+        draftOrderState: undefined,
         eventCode: 'OSC',
         judge: 'Judge Judgy',
       },

@@ -8,13 +8,12 @@ const { getRecordsViaMapping } = require('../helpers/getRecordsViaMapping');
  * @param {string} providers.docketNumber the docket number of the case to get the case deadlines for
  * @returns {Promise} the promise of the persistence call to get the records
  */
-exports.getCaseDeadlinesByDocketNumber = async ({
+exports.getCaseDeadlinesByDocketNumber = ({
   applicationContext,
   docketNumber,
-}) => {
-  return await getRecordsViaMapping({
+}) =>
+  getRecordsViaMapping({
     applicationContext,
     pk: `case|${docketNumber}`,
     prefix: 'case-deadline',
   });
-};
