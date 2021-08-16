@@ -158,7 +158,7 @@ export const OrderSearchForm = connect(
             <Mobile>
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
-                  <KeywordField />
+                  {KeywordField()}
                 </div>
 
                 <div className="grid-col-5">
@@ -167,24 +167,24 @@ export const OrderSearchForm = connect(
                     errorText={validationErrors.chooseOneValue}
                   >
                     <div className="margin-bottom-3 margin-top-3">
-                      <DocketNumberField />
+                      {DocketNumberField()}
                     </div>
                     <div className="width-full margin-bottom-3 padding-right-2">
                       or
                     </div>
 
-                    <CaseTitleOrNameField />
+                    {CaseTitleOrNameField()}
                   </FormGroup>
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  <JudgeSelect />
+                  {JudgeSelect()}
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="margin-top-4 desktop:padding-bottom-5">
-                  <DateRangeSelect />
+                  {DateRangeSelect()}
                 </div>
 
                 {advancedSearchHelper.showDateRangePicker && (
@@ -203,7 +203,7 @@ export const OrderSearchForm = connect(
             <NonMobile>
               <div className="grid-row grid-gap-6">
                 <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
-                  <KeywordField />
+                  {KeywordField()}
                 </div>
 
                 <div className="desktop:grid-col-5 grid-col-12">
@@ -211,26 +211,24 @@ export const OrderSearchForm = connect(
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
                   >
-                    <div className="margin-bottom-0">
-                      <DocketNumberField />
-                    </div>
+                    <div className="margin-bottom-0">{DocketNumberField()}</div>
 
                     <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                       or
                     </div>
 
-                    <CaseTitleOrNameField />
+                    {CaseTitleOrNameField()}
                   </FormGroup>
                 </div>
               </div>
               <div className="grid-row grid-gap-6 margin-top-4">
                 <div className="width-card-lg desktop:grid-col-3 grid-col-12">
-                  <JudgeSelect />
+                  {JudgeSelect()}
                 </div>
                 <div className="desktop:grid-col-9 grid-col-12">
                   <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
                     <div className="width-card-lg desktop:padding-bottom-5">
-                      <DateRangeSelect />
+                      {DateRangeSelect()}
                     </div>
                     {advancedSearchHelper.showDateRangePicker && (
                       <SearchDateRangePickerComponent
