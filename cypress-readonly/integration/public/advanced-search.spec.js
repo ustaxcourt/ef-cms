@@ -8,6 +8,9 @@ const {
   searchResultsTable,
 } = require('../../support/pages/public/advanced-search');
 
+const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
+
 describe('Public UI Smoketests', () => {
   describe('case - by name', () => {
     it('should route to case detail when a match is found and the user clicks on the docket record link in the table', () => {
@@ -37,6 +40,7 @@ describe('Public UI Smoketests', () => {
         .then(href => {
           cy.request({
             followRedirect: true,
+            hostname: `public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
             method: 'GET',
             url: href,
           }).should(response => {

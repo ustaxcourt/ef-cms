@@ -1,11 +1,15 @@
 const {
   getEnvironmentSpecificFunctions,
 } = require('../support/pages/environment-specific-factory');
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const { isValidRequest } = require('../support/helpers');
 
-let token;
+const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Document QC UI Smoketests', () => {
+  let token;
+
   const { getUserToken, login } = getEnvironmentSpecificFunctions();
 
   before(async () => {
@@ -17,18 +21,18 @@ describe('Document QC UI Smoketests', () => {
   });
 
   describe('login and view the document QC page', () => {
-    before(() => {
-      login(token);
-    });
-
     it("should fetch the user's inbox upon navigation", () => {
-      cy.intercept({ method: 'GET', url: '**/document-qc/my/inbox' }).as(
-        'getMyInbox',
-      );
-      cy.visit('/document-qc/my/inbox');
-      cy.wait('@getMyInbox').then(({ response }) => {
-        expect(response.statusCode).to.eq(200);
-      });
+      login(token);
+
+      cy.intercept({
+        hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+        method: 'GET',
+        url: '/document-qc/section/inbox',
+      }).as('getSectionInbox');
+
+      cy.visit('/document-qc/section/inbox');
+
+      cy.wait('@getSectionInbox').then(isValidRequest);
     });
   });
 });
