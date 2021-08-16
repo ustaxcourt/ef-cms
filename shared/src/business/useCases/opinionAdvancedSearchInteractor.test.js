@@ -1,4 +1,5 @@
 const {
+  DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
@@ -52,6 +53,7 @@ describe('opinionAdvancedSearchInteractor', () => {
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await opinionAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -104,6 +106,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     const keyword = 'keyword';
 
     await opinionAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
       startDate: '2001-01-01',
     });
