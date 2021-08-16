@@ -3,9 +3,6 @@ const {
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
-const {
-  removeAdvancedSyntaxSymbols,
-} = require('../../business/utilities/aggregateCommonQueryParams');
 const { search } = require('./searchClient');
 
 exports.advancedDocumentSearch = async ({
@@ -56,13 +53,14 @@ exports.advancedDocumentSearch = async ({
 
   const docketEntryQueryParams = [];
   const caseMustNot = [];
+  const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
   if (keyword) {
     docketEntryQueryParams.push({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
-        flags: 'OR|AND|ESCAPE|PHRASE', // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
+        flags: simpleQueryFlags,
         query: keyword,
       },
     });
@@ -95,7 +93,8 @@ exports.advancedDocumentSearch = async ({
       simple_query_string: {
         default_operator: 'and',
         fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
-        query: removeAdvancedSyntaxSymbols(caseTitleOrPetitioner),
+        flags: simpleQueryFlags,
+        query: caseTitleOrPetitioner,
       },
     };
   }
