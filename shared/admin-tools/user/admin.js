@@ -35,7 +35,7 @@ const disableUser = async email => {
 /**
  * This activates the admin user in Cognito so we can perform actions
  */
-const activate = async () => {
+const activateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -154,12 +154,17 @@ const setPassword = async ({ Password, Permanent = false, Username }) => {
  * @param {String} providers.role The user's role
  * @param {String} providers.section The user's section at the Court
  */
-const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
+const createDawsonUser = async ({
+  setPermanentPassword = false,
+  urlOverride,
+  user,
+}) => {
   checkEnvVar(
     EFCMS_DOMAIN,
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
   );
   user.password = user.password || generatePassword(12);
+  console.log('here 0', { user });
   const authToken = await getAuthToken();
   const headers = {
     headers: {
@@ -167,10 +172,14 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
       'Content-type': 'application/json',
     },
   };
+  console.log('here 1');
 
-  const url = `https://api.${EFCMS_DOMAIN}/users`;
+  const url = urlOverride ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
+
+    console.log('here 2');
+
     if (setPermanentPassword) {
       await setPassword({
         Password: user.password,
@@ -179,6 +188,8 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
       });
     }
   } catch (err) {
+    console.log('here 3');
+
     console.log(err);
     throw err;
   }
@@ -196,7 +207,8 @@ const createAdminAccount = async () => {
       })
       .promise();
     if (result) {
-      throw `User already exists for ${USTC_ADMIN_USER}`;
+      console.log('Admin user already exists - not going to try to create it');
+      return;
     }
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
@@ -239,7 +251,7 @@ const createAdminAccount = async () => {
 
 exports.createAdminAccount = createAdminAccount;
 exports.getAuthToken = getAuthToken;
-exports.activate = activate;
+exports.activateAdminAccount = activateAdminAccount;
 exports.deactivate = deactivate;
 exports.createDawsonUser = createDawsonUser;
 exports.enableUser = enableUser;
