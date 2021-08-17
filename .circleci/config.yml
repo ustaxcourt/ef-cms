@@ -755,6 +755,8 @@ jobs:
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
             echo "export DEFAULT_ACCOUNT_PASS=$DEFAULT_ACCOUNT_PASS" >> $BASH_ENV
+            echo "export USTC_ADMIN_PASS=$USTC_ADMIN_PASS" >> $BASH_ENV
+            echo "export USTC_ADMIN_USER=$USTC_ADMIN_USER" >> $BASH_ENV
       - run:
           name: Create and Enable Test User
           command: node ./scripts/create-and-enable-smoketest-user.js
@@ -864,18 +866,18 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-smoketests-local:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
       - deploy:
           # requires:
           #   - build-client-integration
