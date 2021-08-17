@@ -25,6 +25,15 @@ table,
   p {
     margin-bottom: 4px;
   }
+
+  &.search-info {
+    td {
+      padding-top: 10px;
+      padding-bottom: 0px;
+      background-color: transparent;
+      vertical-align: top;
+    }
+  }
 }
 
 .batches-table-wrapper {

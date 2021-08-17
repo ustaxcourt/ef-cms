@@ -38,9 +38,22 @@
     }
 
     &.how-to-search {
-      padding-bottom: 5px;
+      padding: 20px 15px 5px 15px;
       background-color: color($theme-color-base-lightest);
       font-size: 14px;
+
+      hr {
+        width: 100%;
+        margin: 0;
+      }
+
+      td {
+        min-width: 20px;
+      }
+
+      p {
+        padding-bottom: 0;
+      }
     }
   }
 
