@@ -237,6 +237,10 @@ select[disabled] {
     float: right;
   }
 
+  &.padding-bottom-0 {
+    padding-bottom: 0;
+  }
+
   &.read-only-party-information {
     *:last-child {
       margin-bottom: 0;
@@ -1522,6 +1526,16 @@ button.change-scanner-button {
       flex-wrap: wrap;
     }
     margin-bottom: 10px;
+  }
+
+  .grid-row {
+    &.no-flex-wrap {
+      flex-wrap: nowrap;
+    }
+  }
+
+  .card {
+    margin-bottom: 0;
   }
 
   .judge-search-row {
