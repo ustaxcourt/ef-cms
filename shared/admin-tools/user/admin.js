@@ -10,6 +10,28 @@ const {
 
 let cachedAuthToken;
 
+const enableUser = async email => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  await cognito
+    .adminEnableUser({
+      UserPoolId,
+      Username: email,
+    })
+    .promise();
+};
+
+const disableUser = async email => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  await cognito
+    .adminDisableUser({
+      UserPoolId,
+      Username: email,
+    })
+    .promise();
+};
+
 /**
  * This activates the admin user in Cognito so we can perform actions
  */
@@ -220,3 +242,5 @@ exports.getAuthToken = getAuthToken;
 exports.activate = activate;
 exports.deactivate = deactivate;
 exports.createDawsonUser = createDawsonUser;
+exports.enableUser = enableUser;
+exports.disableUser = disableUser;
