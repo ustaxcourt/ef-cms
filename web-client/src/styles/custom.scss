@@ -1518,7 +1518,9 @@ button.change-scanner-button {
 .advanced-search {
   .advanced-search-panel {
     display: inline-flex;
-    flex-wrap: wrap;
+    @media only screen and (max-width: $medium-screen) {
+      flex-wrap: wrap;
+    }
     margin-bottom: 10px;
   }
 

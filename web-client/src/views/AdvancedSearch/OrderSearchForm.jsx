@@ -9,6 +9,7 @@ import React from 'react';
 
 export const OrderSearchForm = connect(
   {
+    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -22,44 +23,142 @@ export const OrderSearchForm = connect(
     advancedSearchForm,
     advancedSearchHelper,
     clearAdvancedSearchFormSequence,
+    DATE_RANGE_SEARCH_OPTIONS,
     judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
   }) {
+    const KeywordField = () => (
+      <>
+        <p className="margin-top-0">
+          <span className="text-semibold">Search by keyword and phrase</span>
+        </p>
+        <input
+          aria-describedby="search-orders-header search-description"
+          className="usa-input maxw-tablet-lg"
+          id="order-search"
+          name="keyword"
+          type="text"
+          value={advancedSearchForm.orderSearch.keyword || ''}
+          onBlur={() => validateOrderSearchSequence()}
+          onChange={e => {
+            updateAdvancedOrderSearchFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+          }}
+        />
+      </>
+    );
+
+    const DocketNumberField = () => (
+      <>
+        <label className="usa-label text-no-wrap" htmlFor="docket-number">
+          Docket number
+        </label>
+        <input
+          className="usa-input"
+          id="docket-number"
+          name="docketNumber"
+          type="text"
+          value={advancedSearchForm.orderSearch.docketNumber || ''}
+          onBlur={() => validateOrderSearchSequence()}
+          onChange={e => {
+            updateAdvancedOrderSearchFormValueSequence({
+              key: e.target.name,
+              value: e.target.value.toUpperCase(),
+            });
+          }}
+        />
+      </>
+    );
+
+    const CaseTitleOrNameField = () => (
+      <>
+        <div>
+          <label className="usa-label text-no-wrap" htmlFor="title-or-name">
+            Case title / Petitioner’s name
+          </label>
+          <input
+            className="usa-input"
+            id="title-or-name"
+            name="caseTitleOrPetitioner"
+            type="text"
+            value={advancedSearchForm.orderSearch.caseTitleOrPetitioner || ''}
+            onBlur={() => validateOrderSearchSequence()}
+            onChange={e => {
+              updateAdvancedOrderSearchFormValueSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
+            }}
+          />
+        </div>
+      </>
+    );
+
+    const JudgeSelect = () => (
+      <>
+        <label className="usa-label" htmlFor="order-date-range">
+          Judge
+        </label>
+        <BindedSelect
+          bind={'advancedSearchForm.orderSearch.judge'}
+          className="usa-input"
+          id="order-judge"
+          name="judge"
+        >
+          <option value="">All judges</option>
+          {judges.map(judge => (
+            <option key={judge.judgeFullName} value={judge.judgeFullName}>
+              {judge.name}
+            </option>
+          ))}
+        </BindedSelect>
+      </>
+    );
+
+    const DateRangeSelect = () => (
+      <>
+        <label className="usa-label" htmlFor="order-date-range">
+          Date range
+        </label>
+        <select
+          className="usa-select"
+          id="order-date-range"
+          name="dateRange"
+          value={advancedSearchForm.orderSearch.dateRange}
+          onChange={e => {
+            updateAdvancedOrderSearchFormValueSequence({
+              key: e.target.name,
+              value: e.target.value,
+            });
+            validateOrderSearchSequence();
+          }}
+        >
+          <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>All dates</option>
+          <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
+            Custom dates
+          </option>
+        </select>
+      </>
+    );
+
     return (
       <>
-        <Mobile>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
-            <div className="blue-container">
+        <form
+          onSubmit={e => {
+            e.preventDefault();
+            submitAdvancedSearchSequence();
+          }}
+        >
+          <div className="blue-container">
+            <Mobile>
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
-                  <p>
-                    <span className="text-semibold">
-                      Search by keyword and phrase
-                    </span>
-                  </p>
-                  <input
-                    aria-describedby="search-orders-header search-description"
-                    className="usa-input maxw-tablet-lg"
-                    id="order-search"
-                    name="keyword"
-                    type="text"
-                    value={advancedSearchForm.orderSearch.keyword || ''}
-                    onBlur={() => validateOrderSearchSequence()}
-                    onChange={e => {
-                      updateAdvancedOrderSearchFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
+                  {KeywordField()}
                 </div>
 
                 <div className="grid-col-5">
@@ -68,93 +167,26 @@ export const OrderSearchForm = connect(
                     errorText={validationErrors.chooseOneValue}
                   >
                     <div className="margin-bottom-3 margin-top-3">
-                      <label className="usa-label" htmlFor="docket-number">
-                        Docket number
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="docket-number"
-                        name="docketNumber"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch.docketNumber || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value.toUpperCase(),
-                          });
-                        }}
-                      />
+                      {DocketNumberField()}
                     </div>
-
                     <div className="width-full margin-bottom-3 padding-right-2">
                       or
                     </div>
-                    <div>
-                      <label className="usa-label" htmlFor="title-or-name">
-                        Case title / Petitioner’s name
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="title-or-name"
-                        name="caseTitleOrPetitioner"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch
-                            .caseTitleOrPetitioner || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
+
+                    {CaseTitleOrNameField()}
                   </FormGroup>
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  <label className="usa-label" htmlFor="order-date-range">
-                    Judge
-                  </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.judge'}
-                    className="usa-input"
-                    id="order-judge"
-                    name="judge"
-                  >
-                    <option value="">All judges</option>
-                    {judges.map(judge => (
-                      <option
-                        key={judge.judgeFullName}
-                        value={judge.judgeFullName}
-                      >
-                        {judge.name}
-                      </option>
-                    ))}
-                  </BindedSelect>
+                  {JudgeSelect()}
                 </div>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="margin-top-4 desktop:padding-bottom-5">
-                  <label className="usa-label" htmlFor="order-date-range">
-                    Date range
-                  </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.dateRange'}
-                    className="usa-input"
-                    id="order-date-range"
-                    name="date-range"
-                  >
-                    <option value="allDates">All dates</option>
-                    <option value="customDates">Custom dates</option>
-                  </BindedSelect>
+                  {DateRangeSelect()}
                 </div>
+
                 {advancedSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <SearchDateRangePickerComponent
@@ -167,61 +199,11 @@ export const OrderSearchForm = connect(
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="margin-top-4">
-              <Button
-                className="margin-bottom-0"
-                id="advanced-search-button"
-                type="submit"
-              >
-                Search
-              </Button>
-              <Button
-                link
-                className="padding-0 margin-top-2 text-center"
-                onClick={e => {
-                  e.preventDefault();
-                  clearAdvancedSearchFormSequence({
-                    formType: 'orderSearch',
-                  });
-                }}
-              >
-                Clear Search
-              </Button>
-            </div>
-          </form>
-        </Mobile>
-        <NonMobile>
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
-            <div className="blue-container order-search-container">
+            </Mobile>
+            <NonMobile>
               <div className="grid-row grid-gap-6">
                 <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
-                  <p className="margin-top-0">
-                    <span className="text-semibold">
-                      Search by keyword and phrase
-                    </span>
-                  </p>
-                  <input
-                    aria-describedby="search-orders-header search-description"
-                    className="usa-input maxw-tablet-lg"
-                    id="order-search"
-                    name="keyword"
-                    type="text"
-                    value={advancedSearchForm.orderSearch.keyword || ''}
-                    onBlur={() => validateOrderSearchSequence()}
-                    onChange={e => {
-                      updateAdvancedOrderSearchFormValueSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  />
+                  {KeywordField()}
                 </div>
 
                 <div className="desktop:grid-col-5 grid-col-12">
@@ -229,93 +211,24 @@ export const OrderSearchForm = connect(
                     className="advanced-search-panel full-width"
                     errorText={validationErrors.chooseOneValue}
                   >
-                    <div className="margin-bottom-3 margin-bottom-0">
-                      <label className="usa-label" htmlFor="docket-number">
-                        Docket number
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="docket-number"
-                        name="docketNumber"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch.docketNumber || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value.toUpperCase(),
-                          });
-                        }}
-                      />
-                    </div>
+                    <div className="margin-bottom-0">{DocketNumberField()}</div>
 
                     <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                       or
                     </div>
-                    <div className="margin-bottom-6 margin-bottom-0">
-                      <label className="usa-label" htmlFor="title-or-name">
-                        Case title / Petitioner’s name
-                      </label>
-                      <input
-                        className="usa-input"
-                        id="title-or-name"
-                        name="caseTitleOrPetitioner"
-                        type="text"
-                        value={
-                          advancedSearchForm.orderSearch
-                            .caseTitleOrPetitioner || ''
-                        }
-                        onBlur={() => validateOrderSearchSequence()}
-                        onChange={e => {
-                          updateAdvancedOrderSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
+
+                    {CaseTitleOrNameField()}
                   </FormGroup>
                 </div>
               </div>
               <div className="grid-row grid-gap-6 margin-top-4">
                 <div className="width-card-lg desktop:grid-col-3 grid-col-12">
-                  <label className="usa-label" htmlFor="order-date-range">
-                    Judge
-                  </label>
-                  <BindedSelect
-                    bind={'advancedSearchForm.orderSearch.judge'}
-                    className="usa-input"
-                    id="order-judge"
-                    name="judge"
-                  >
-                    <option value="">All judges</option>
-                    {judges.map(judge => (
-                      <option
-                        key={judge.judgeFullName}
-                        value={judge.judgeFullName}
-                      >
-                        {judge.name}
-                      </option>
-                    ))}
-                  </BindedSelect>
+                  {JudgeSelect()}
                 </div>
                 <div className="desktop:grid-col-9 grid-col-12">
                   <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
                     <div className="width-card-lg desktop:padding-bottom-5">
-                      <label className="usa-label" htmlFor="order-date-range">
-                        Date range
-                      </label>
-                      <BindedSelect
-                        bind={'advancedSearchForm.orderSearch.dateRange'}
-                        className="usa-input"
-                        id="order-date-range"
-                        name="date-range"
-                      >
-                        <option value="allDates">All dates</option>
-                        <option value="customDates">Custom dates</option>
-                      </BindedSelect>
+                      {DateRangeSelect()}
                     </div>
                     {advancedSearchHelper.showDateRangePicker && (
                       <SearchDateRangePickerComponent
@@ -329,33 +242,31 @@ export const OrderSearchForm = connect(
                   </div>
                 </div>
               </div>
-            </div>
+            </NonMobile>
+          </div>
 
-            <div className="margin-top-4" id="order-basic">
-              <div>
-                <Button
-                  className="margin-bottom-0"
-                  id="advanced-search-button"
-                  type="submit"
-                >
-                  Search
-                </Button>
-                <Button
-                  link
-                  className="padding-0 ustc-button--mobile-inline"
-                  onClick={e => {
-                    e.preventDefault();
-                    clearAdvancedSearchFormSequence({
-                      formType: 'orderSearch',
-                    });
-                  }}
-                >
-                  Clear Search
-                </Button>
-              </div>
-            </div>
-          </form>
-        </NonMobile>
+          <div className="margin-top-4">
+            <Button
+              className="margin-bottom-0"
+              id="advanced-search-button"
+              type="submit"
+            >
+              Search
+            </Button>
+            <Button
+              link
+              className="padding-0 margin-top-2 text-center"
+              onClick={e => {
+                e.preventDefault();
+                clearAdvancedSearchFormSequence({
+                  formType: 'orderSearch',
+                });
+              }}
+            >
+              Clear Search
+            </Button>
+          </div>
+        </form>
       </>
     );
   },
