@@ -9,6 +9,10 @@ exports.goToReviewCase = testData => {
     expect(response.body).to.have.property('docketNumber');
     if (testData) {
       testData.createdPaperDocketNumber = response.body.docketNumber;
+      console.log(
+        'testData.createdPaperDocketNumber',
+        testData.createdPaperDocketNumber,
+      );
     }
   });
 };
@@ -20,6 +24,7 @@ exports.saveCaseForLater = () => {
 exports.serveCaseToIrs = () => {
   cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
   cy.get('button#confirm').scrollIntoView().click();
+  cy.get('.progress-indicator').should('not.exist');
 };
 
 exports.closeScannerSetupDialog = () => {

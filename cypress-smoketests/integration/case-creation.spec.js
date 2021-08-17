@@ -32,12 +32,10 @@ const { goToMyDocumentQC } = require('../support/pages/document-qc');
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token = null;
+let testData = {};
 
-const {
-  closeScannerSetupDialog,
-  getUserToken,
-  login,
-} = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, getUserToken, login } =
+  getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {
@@ -146,7 +144,11 @@ describe('Petitions clerk', () => {
     goToMyDocumentQC();
     goToCreateCase();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase();
+    goToReviewCase(testData);
     serveCaseToIrs();
+    // TODO: docketNumber is undefined the first run of this test, consider moving
+    // these steps into another it block?
+    // goToCaseDetail(testData.createdPaperDocketNumber);
+    // viewPrintableDocketRecord();
   });
 });
