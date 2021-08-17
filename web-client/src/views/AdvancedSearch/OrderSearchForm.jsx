@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
@@ -154,8 +155,8 @@ export const OrderSearchForm = connect(
             submitAdvancedSearchSequence();
           }}
         >
-          <div className="blue-container">
-            <Mobile>
+          <Mobile>
+            <div className="blue-container">
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
                   {KeywordField()}
@@ -199,51 +200,88 @@ export const OrderSearchForm = connect(
                   </div>
                 )}
               </div>
-            </Mobile>
-            <NonMobile>
-              <div className="grid-row grid-gap-6">
-                <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
-                  {KeywordField()}
+            </div>
+          </Mobile>
+          <NonMobile>
+            <div className="grid-row no-flex-wrap">
+              <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
+                <div className="no-wrap grid-row grid-gap-6">
+                  <div className="desktop:grid-col-6 grid-col-12 right-gray-border padding-bottom-3">
+                    {KeywordField()}
+                  </div>
+
+                  <div className="desktop:grid-col-5 grid-col-12">
+                    <FormGroup
+                      className="advanced-search-panel full-width"
+                      errorText={validationErrors.chooseOneValue}
+                    >
+                      <div className="margin-bottom-0">
+                        {DocketNumberField()}
+                      </div>
+
+                      <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
+                        or
+                      </div>
+
+                      {CaseTitleOrNameField()}
+                    </FormGroup>
+                  </div>
                 </div>
-
-                <div className="desktop:grid-col-5 grid-col-12">
-                  <FormGroup
-                    className="advanced-search-panel full-width"
-                    errorText={validationErrors.chooseOneValue}
-                  >
-                    <div className="margin-bottom-0">{DocketNumberField()}</div>
-
-                    <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
-                      or
+                <div className="grid-row grid-gap-6 no-flex-wrap">
+                  <div className="width-card-lg desktop:grid-col-3 grid-col-12">
+                    {JudgeSelect()}
+                  </div>
+                  <div className="desktop:grid-col-9 grid-col-12">
+                    <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
+                      <div className="width-card-lg desktop:padding-bottom-5">
+                        {DateRangeSelect()}
+                      </div>
+                      {advancedSearchHelper.showDateRangePicker && (
+                        <SearchDateRangePickerComponent
+                          formType="orderSearch"
+                          updateSequence={
+                            updateAdvancedOrderSearchFormValueSequence
+                          }
+                          validateSequence={validateOrderSearchSequence}
+                        />
+                      )}
                     </div>
-
-                    {CaseTitleOrNameField()}
-                  </FormGroup>
-                </div>
-              </div>
-              <div className="grid-row grid-gap-6 margin-top-4">
-                <div className="width-card-lg desktop:grid-col-3 grid-col-12">
-                  {JudgeSelect()}
-                </div>
-                <div className="desktop:grid-col-9 grid-col-12">
-                  <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
-                    <div className="width-card-lg desktop:padding-bottom-5">
-                      {DateRangeSelect()}
-                    </div>
-                    {advancedSearchHelper.showDateRangePicker && (
-                      <SearchDateRangePickerComponent
-                        formType="orderSearch"
-                        updateSequence={
-                          updateAdvancedOrderSearchFormValueSequence
-                        }
-                        validateSequence={validateOrderSearchSequence}
-                      />
-                    )}
                   </div>
                 </div>
               </div>
-            </NonMobile>
-          </div>
+              <div className="card gray grid-col-3 margin-left-1">
+                <div className="content-wrapper how-to-search">
+                  <h3>How to Use Search</h3>
+                  <hr />
+                  <p>
+                    <b>&quot;&quot;</b>&ensp; Enter phrases in quotes for{' '}
+                    <b>exact matches</b> <br />
+                    <b>+ </b>&emsp; Use + for matches including <b>all</b>{' '}
+                    words/phrases <br />
+                    <b>|</b>&emsp;&nbsp; Use | for matches including <b>any</b>{' '}
+                    words/phrases <br />
+                    <br />
+                    <i>No other commands are supported at this time</i>
+                  </p>
+                  <p>
+                    <FontAwesomeIcon
+                      className="fa-icon-blue"
+                      icon="file-pdf"
+                      size="1x"
+                    />
+                    <a
+                      className="usa-link--external"
+                      href="https://ustaxcourt.gov"
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      Learn more about searching in DAWSON
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </NonMobile>
 
           <div className="margin-top-4">
             <Button
