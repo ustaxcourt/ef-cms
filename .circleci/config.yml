@@ -928,8 +928,8 @@ workflows:
       #           - experimental4
       #           - experimental5
       - smoketests-readonly:
-          requires:
-            - smoketests
+          # requires:
+          #   - smoketests
           filters:
             branches:
               only:
