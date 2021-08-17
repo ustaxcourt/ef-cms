@@ -35,7 +35,7 @@ const disableUser = async email => {
 /**
  * This activates the admin user in Cognito so we can perform actions
  */
-const activate = async () => {
+const activateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -203,6 +203,7 @@ const createAdminAccount = async () => {
       })
       .promise();
     if (result) {
+      console.log('Admin user already exists - not going to try to create it');
       return;
     }
   } catch (err) {
@@ -246,7 +247,7 @@ const createAdminAccount = async () => {
 
 exports.createAdminAccount = createAdminAccount;
 exports.getAuthToken = getAuthToken;
-exports.activate = activate;
+exports.activateAdminAccount = activateAdminAccount;
 exports.deactivate = deactivate;
 exports.createDawsonUser = createDawsonUser;
 exports.enableUser = enableUser;
