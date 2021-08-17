@@ -29,9 +29,11 @@ describe('Practitioner Search', () => {
 
     cy.get('button#tab-practitioner').click();
 
-    cy.intercept({ method: 'GET', url: '**/practitioners**' }).as(
-      'getPractitionerByName',
-    );
+    cy.intercept({
+      hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+      method: 'GET',
+      url: '/practitioners**',
+    }).as('getPractitionerByName');
 
     cy.get('input#practitioner-name').type('Smith');
 
@@ -46,7 +48,7 @@ describe('Practitioner Search', () => {
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
       method: 'GET',
-      url: '**/practitioners**',
+      url: '/practitioners/Smith',
     }).as('getPractitionerByBarNumber');
 
     cy.get('input#bar-number').type('Smith');
