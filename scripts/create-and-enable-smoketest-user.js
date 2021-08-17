@@ -32,6 +32,7 @@ const user = {
 
 (async () => {
   try {
+    console.log('About to create test user!');
     await createDawsonUser({ setPermanentPassword: true, user });
     console.log('Successfully created test user!');
     await enableUser(user.email);

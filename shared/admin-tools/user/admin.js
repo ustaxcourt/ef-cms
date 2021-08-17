@@ -167,10 +167,14 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
       'Content-type': 'application/json',
     },
   };
+  console.log('here 1');
 
   const url = `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
+
+    console.log('here 2');
+
     if (setPermanentPassword) {
       await setPassword({
         Password: user.password,
@@ -179,6 +183,8 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
       });
     }
   } catch (err) {
+    console.log('here 3');
+
     console.log(err);
     throw err;
   }
