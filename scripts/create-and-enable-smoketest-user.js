@@ -4,7 +4,7 @@ const {
   createDawsonUser,
   enableUser,
 } = require('../shared/admin-tools/user/admin');
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const baseUser = {
   birthYear: '1950',
@@ -41,7 +41,11 @@ const user = {
     console.log('About to activate admin user!');
     await activateAdminAccount();
     console.log('About to create test user!');
-    await createDawsonUser({ setPermanentPassword: true, user });
+    await createDawsonUser({
+      setPermanentPassword: true,
+      urlOverride: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+      user,
+    });
     console.log('Successfully created test user!');
     await enableUser(user.email);
     console.log('Successfully enabled test user!');

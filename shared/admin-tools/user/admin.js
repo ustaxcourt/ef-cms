@@ -154,7 +154,11 @@ const setPassword = async ({ Password, Permanent = false, Username }) => {
  * @param {String} providers.role The user's role
  * @param {String} providers.section The user's section at the Court
  */
-const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
+const createDawsonUser = async ({
+  setPermanentPassword = false,
+  urlOverride,
+  user,
+}) => {
   checkEnvVar(
     EFCMS_DOMAIN,
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
@@ -170,7 +174,7 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
   };
   console.log('here 1');
 
-  const url = `https://api.${EFCMS_DOMAIN}/users`;
+  const url = urlOverride ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
 
