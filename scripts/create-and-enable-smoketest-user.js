@@ -31,6 +31,13 @@ const user = {
 };
 
 (async () => {
-  await createDawsonUser({ setPermanentPassword: true, user });
-  await enableUser(user.email);
+  try {
+    await createDawsonUser({ setPermanentPassword: true, user });
+    console.log('Successfully created test user!');
+    await enableUser(user.email);
+    console.log('Successfully enabled test user!');
+  } catch (e) {
+    console.log('Unable to create and enable test user. Error was: ', e);
+    process.exit(1);
+  }
 })();
