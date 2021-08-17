@@ -1,8 +1,10 @@
 const {
+  activateAdminAccount,
+  createAdminAccount,
   createDawsonUser,
   enableUser,
 } = require('../shared/admin-tools/user/admin');
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const baseUser = {
   birthYear: '1950',
@@ -30,7 +32,25 @@ const user = {
   section: 'admissions',
 };
 
+// this requires an account specific deploy!
 (async () => {
-  await createDawsonUser({ setPermanentPassword: true, user });
-  await enableUser(user.email);
+  try {
+    // do we have to disable this account as well?
+    console.log('About to create admin user!');
+    await createAdminAccount();
+    console.log('About to activate admin user!');
+    await activateAdminAccount();
+    console.log('About to create test user!');
+    await createDawsonUser({
+      setPermanentPassword: true,
+      urlOverride: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+      user,
+    });
+    console.log('Successfully created test user!');
+    await enableUser(user.email);
+    console.log('Successfully enabled test user!');
+  } catch (e) {
+    console.log('Unable to create and enable test user. Error was: ', e);
+    process.exit(1);
+  }
 })();
