@@ -31,6 +31,7 @@ const user = {
   section: 'admissions',
 };
 
+// this requires an account specific deploy!
 (async () => {
   try {
     // do we have to disable this account as well?
