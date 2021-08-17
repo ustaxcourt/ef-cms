@@ -849,9 +849,12 @@ workflows:
       - smoketests:
           requires:
             - migrate
-      - switch-colors:
+      - smoketests-readonly:
           requires:
             - smoketests
+      - switch-colors:
+          requires:
+            - smoketests-readonly
     triggers:
       - schedule:
           cron: '0 13-22 * * 1-5'
@@ -922,9 +925,23 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
-      - switch-colors:
+      - smoketests-readonly:
           requires:
             - smoketests
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+      - switch-colors:
+          requires:
+            - smoketests-readonly
           filters:
             branches:
               only:

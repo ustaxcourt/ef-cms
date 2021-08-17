@@ -27,7 +27,7 @@ describe('Document QC UI Smoketests', () => {
       cy.intercept({
         hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
         method: 'GET',
-        url: '/document-qc/section/inbox',
+        url: '/sections/admissions/document-qc/inbox*',
       }).as('getSectionInbox');
 
       cy.visit('/document-qc/section/inbox');
