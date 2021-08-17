@@ -22,12 +22,15 @@ const {
   getEnvironmentSpecificFunctions,
 } = require('../support/pages/environment-specific-factory');
 const {
+  goToCaseDetail,
+  viewPrintableDocketRecord,
+} = require('../support/pages/case-detail');
+const {
   goToCreateCase,
   goToReviewCase,
   saveCaseForLater,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
-const { goToCaseDetail } = require('../support/pages/case-detail');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
@@ -149,6 +152,6 @@ describe('Petitions clerk', () => {
     goToReviewCase(testData);
     serveCaseToIrs();
     goToCaseDetail(testData.createdPaperDocketNumber);
-    // view printable docket record
+    viewPrintableDocketRecord();
   });
 });
