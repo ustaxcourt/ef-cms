@@ -206,11 +206,11 @@ export const OrderSearchForm = connect(
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
                 <div className="grid-row grid-gap-6">
-                  <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
+                  <div className="custom-col-7 desktop:grid-col-5 grid-col-12 right-gray-border padding-bottom-2">
                     {KeywordField()}
                   </div>
 
-                  <div className="desktop:grid-col-5 grid-col-12">
+                  <div className="custom-col-5 desktop:grid-col-7 grid-col-12">
                     <FormGroup
                       className="advanced-search-panel full-width"
                       errorText={validationErrors.chooseOneValue}
@@ -227,23 +227,26 @@ export const OrderSearchForm = connect(
                     </FormGroup>
                   </div>
                 </div>
-                <div className="grid-row grid-gap-6 no-flex-wrap">
-                  <div className="width-card-lg desktop:grid-col-3 grid-col-12">
-                    {JudgeSelect()}
+                <div className="grid-row grid-gap-3 margin-top-2">
+                  <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
+                    <div className="width-card-lg">{JudgeSelect()}</div>
+                    <div className="width-card-lg tablet:padding-bottom-5">
+                      {DateRangeSelect()}
+                    </div>
                   </div>
-                  <div className="desktop:grid-col-9 grid-col-12">
-                    <div className="grid-row grid-gap-6 desktop:margin-top-0 margin-top-4">
-                      <div className="width-card-lg desktop:padding-bottom-5">
-                        {DateRangeSelect()}
-                      </div>
+
+                  <div className="desktop:grid-col-7 grid-col-12">
+                    <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
                       {advancedSearchHelper.showDateRangePicker && (
-                        <SearchDateRangePickerComponent
-                          formType="orderSearch"
-                          updateSequence={
-                            updateAdvancedOrderSearchFormValueSequence
-                          }
-                          validateSequence={validateOrderSearchSequence}
-                        />
+                        <div className="grid-row no-flex-wrap">
+                          <SearchDateRangePickerComponent
+                            formType="orderSearch"
+                            updateSequence={
+                              updateAdvancedOrderSearchFormValueSequence
+                            }
+                            validateSequence={validateOrderSearchSequence}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
