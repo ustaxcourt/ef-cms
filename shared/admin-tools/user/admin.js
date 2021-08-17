@@ -160,6 +160,7 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
   );
   user.password = user.password || generatePassword(12);
+  console.log('here 0', { user });
   const authToken = await getAuthToken();
   const headers = {
     headers: {
