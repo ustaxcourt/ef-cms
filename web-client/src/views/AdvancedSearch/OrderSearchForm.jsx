@@ -60,7 +60,7 @@ export const OrderSearchForm = connect(
           Docket number
         </label>
         <input
-          className="usa-input"
+          className="usa-input maxw-15"
           id="docket-number"
           name="docketNumber"
           type="text"
@@ -205,8 +205,8 @@ export const OrderSearchForm = connect(
           <NonMobile>
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
-                <div className="no-wrap grid-row grid-gap-6">
-                  <div className="desktop:grid-col-6 grid-col-12 right-gray-border padding-bottom-3">
+                <div className="grid-row grid-gap-6">
+                  <div className="desktop:grid-col-7 grid-col-12 right-gray-border padding-bottom-3">
                     {KeywordField()}
                   </div>
 
@@ -253,14 +253,40 @@ export const OrderSearchForm = connect(
                 <div className="content-wrapper how-to-search">
                   <h3>How to Use Search</h3>
                   <hr />
-                  <p>
-                    <b>&quot;&quot;</b>&ensp; Enter phrases in quotes for{' '}
+
+                  <table className="margin-bottom-0 search-info">
+                    <tbody>
+                      <tr>
+                        <td>&quot;&quot;</td>
+                        <td>
+                          Enter phrases in quotes for <b>exact matches</b>{' '}
+                          <br />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>+</td>
+                        <td>
+                          Use + for matches including <b>all</b> words/phrases
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>|</td>
+                        <td>
+                          Use | for matches including <b>any</b> words/phrases
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {/* <b>&quot;&quot;</b>&ensp; Enter phrases in quotes for{' '}
                     <b>exact matches</b> <br />
                     <b>+ </b>&emsp; Use + for matches including <b>all</b>{' '}
                     words/phrases <br />
                     <b>|</b>&emsp;&nbsp; Use | for matches including <b>any</b>{' '}
                     words/phrases <br />
                     <br />
+                    <i>No other commands are supported at this time</i> */}
+
+                  <p>
                     <i>No other commands are supported at this time</i>
                   </p>
                   <p>
