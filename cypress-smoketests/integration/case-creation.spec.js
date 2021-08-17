@@ -27,17 +27,15 @@ const {
   saveCaseForLater,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
+const { goToCaseDetail } = require('../support/pages/case-detail');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token = null;
 
-const {
-  closeScannerSetupDialog,
-  getUserToken,
-  login,
-} = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, getUserToken, login } =
+  getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {
@@ -143,10 +141,14 @@ describe('Petitions clerk', () => {
   });
 
   it('should be able to create a case and serve to IRS', () => {
+    const testData = {};
+
     goToMyDocumentQC();
     goToCreateCase();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase();
+    goToReviewCase(testData);
     serveCaseToIrs();
+    goToCaseDetail(testData.createdPaperDocketNumber);
+    // view printable docket record
   });
 });
