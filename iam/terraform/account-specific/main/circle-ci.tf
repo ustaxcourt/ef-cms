@@ -66,8 +66,13 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Sid": "Cognito",
       "Effect": "Allow",
       "Action": [
-        "cognito-idp:UpdateUserPoolClient",
-        "cognito-idp:UpdateUserPool",
+        "cognito-idp:AdminCreateUser",
+        "cognito-idp:AdminDisableUser",
+        "cognito-idp:AdminEnableUser",
+        "cognito-idp:AdminGetUser",
+        "cognito-idp:AdminInitiateAuth",
+        "cognito-idp:AdminRespondToAuthChallenge",
+        "cognito-idp:AdminSetUserPassword",
         "cognito-idp:CreateUserPool",
         "cognito-idp:AdminRespondToAuthChallenge",
         "cognito-idp:DescribeUserPool",
@@ -84,8 +89,8 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "cognito-idp:DeleteUserPoolDomain",
         "cognito-idp:GetUserPoolMfaConfig",
         "cognito-idp:SetUserPoolMfaConfig",
-        "cognito-idp:AdminCreateUser",
-        "cognito-idp:AdminSetUserPassword"
+        "cognito-idp:UpdateUserPool",
+        "cognito-idp:UpdateUserPoolClient"
       ],
       "Resource": "*"
     },
