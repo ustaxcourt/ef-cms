@@ -203,7 +203,7 @@ const createAdminAccount = async () => {
       })
       .promise();
     if (result) {
-      throw `User already exists for ${USTC_ADMIN_USER}`;
+      return;
     }
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
