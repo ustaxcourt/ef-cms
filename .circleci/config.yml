@@ -756,11 +756,14 @@ jobs:
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
             echo "export DEFAULT_ACCOUNT_PASS=$DEFAULT_ACCOUNT_PASS" >> $BASH_ENV
       - run:
-          name: Create Test User
-          command:
+          name: Create and Enable Test User
+          command: node ./scripts/create-and-enable-smoketest-user.js
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: npm run cypress:readonly
+      - run:
+          name: Disable Test User
+          command: node ./scripts/disable-smoketest-user.js
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly-public

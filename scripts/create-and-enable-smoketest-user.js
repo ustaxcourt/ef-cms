@@ -1,4 +1,7 @@
-const createDawsonUser = require('../shared/admin-tools/user/admin');
+const {
+  createDawsonUser,
+  enableUser,
+} = require('../shared/admin-tools/user/admin');
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 
 const baseUser = {
@@ -29,4 +32,5 @@ const user = {
 
 (async () => {
   await createDawsonUser({ setPermanentPassword: true, user });
+  await enableUser(user.email);
 })();

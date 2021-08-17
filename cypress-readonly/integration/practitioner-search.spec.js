@@ -14,7 +14,7 @@ describe('Practitioner Search', () => {
 
   before(async () => {
     let result = await getUserToken(
-      'admissionsclerk1@example.com',
+      'testAdmissionsClerk@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = result.AuthenticationResult.IdToken;
