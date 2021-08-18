@@ -36,29 +36,13 @@ export const getSortFunction = searchText => {
 };
 
 export const internalTypesHelper = (get, applicationContext) => {
-  const {
-    INTERNAL_CATEGORY_MAP,
-    LODGED_EVENT_CODE,
-    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { INTERNAL_CATEGORY_MAP, LODGED_EVENT_CODE } =
+    applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
-
-  // 8640
-  const docketEntries = get(state.caseDetail.docketEntries);
-  const docketEntryId = get(state.form.docketEntryId);
-  const selectedEventCode = docketEntryId
-    ? docketEntries.find(entry => entry.docketEntryId === docketEntryId)
-        .eventCode
-    : undefined;
-
-  const forbiddenDocumentEventCodes =
-    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.filter(
-      docTypeCode => selectedEventCode !== docTypeCode,
-    );
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     INTERNAL_CATEGORY_MAP,
-  ).filter(docType => !forbiddenDocumentEventCodes.includes(docType.eventCode));
+  );
 
   const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect
     .sort(getSortFunction(searchText))
