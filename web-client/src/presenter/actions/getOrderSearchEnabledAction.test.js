@@ -18,6 +18,20 @@ describe('getOrderSearchEnabledAction', () => {
     };
   });
 
+  it('should set state.isOrderSearchEnabled to the value returned from the interactor', async () => {
+    applicationContext
+      .getUseCases()
+      .getOrderSearchEnabledInteractor.mockResolvedValue(true);
+
+    const result = await runAction(getOrderSearchEnabledAction, {
+      modules: {
+        presenter,
+      },
+    });
+
+    expect(result.state.isOrderSearchEnabled).toEqual(true);
+  });
+
   it('should return path.yes() if the interactor returns true', async () => {
     applicationContext
       .getUseCases()
@@ -32,7 +46,7 @@ describe('getOrderSearchEnabledAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('should return path.no() if the interactor returns false', async () => {
+  it('should return path.no() with alert warning if the interactor returns false', async () => {
     applicationContext
       .getUseCases()
       .getOrderSearchEnabledInteractor.mockResolvedValue(false);
@@ -44,5 +58,6 @@ describe('getOrderSearchEnabledAction', () => {
     });
 
     expect(pathNoStub).toHaveBeenCalled();
+    expect(pathNoStub.mock.calls[0][0].alertWarning).toBeDefined();
   });
 });
