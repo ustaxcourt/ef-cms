@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+const { get } = require('../requests');
 
 /**
  * getOrderSearchEnabledInteractor
