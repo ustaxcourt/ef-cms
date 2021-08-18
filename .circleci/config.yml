@@ -252,7 +252,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
-            npm run cypress
+            npm run cypress:integration
       - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
@@ -382,7 +382,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
-            npm run cypress:public
+            npm run cypress:integration:public
       - store_artifacts:
           path: /root/project/cypress/videos/
       - store_artifacts:
@@ -775,7 +775,7 @@ jobs:
           command: ./scripts/kill-circle-build.sh
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
-          command: npm run cypress:readonly-public
+          command: npm run cypress:readonly:public
       - store_artifacts:
           path: /root/project/cypress-smoketests-readonly/videos/
 
