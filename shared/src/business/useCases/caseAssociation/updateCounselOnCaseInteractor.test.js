@@ -28,6 +28,7 @@ describe('updateCounselOnCaseInteractor', () => {
     new PrivatePractitioner({
       barNumber: 'BN1234',
       name: 'Saul Goodman',
+      representing: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
       role: ROLES.privatePractitioner,
       userId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
     }),
@@ -233,6 +234,27 @@ describe('updateCounselOnCaseInteractor', () => {
     );
     expect(results.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+  });
+
+  it('does not change the service indicator if contacts are neither represented nor not being represented', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => ({
+        ...MOCK_CASE,
+        privatePractitioners: [mockPrivatePractitioners[1]],
+      }));
+
+    const results = await updateCounselOnCaseInteractor(applicationContext, {
+      docketNumber: '123-19',
+      userData: {
+        representing: ['9905d1ab-18d0-43ec-bafb-654e83405416'],
+      },
+      userId: 'e23e2d08-561b-4930-a2e0-1f342a481268',
+    });
+
+    expect(results.petitioners[0].serviceIndicator).toBe(
+      MOCK_CASE.petitioners[0].serviceIndicator,
     );
   });
 

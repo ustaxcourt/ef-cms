@@ -8,7 +8,9 @@ const {
 } = require('../../entities/EntityConstants');
 const {
   deleteCounselFromCaseInteractor,
+  setupServiceIndicatorForUnrepresentedPetitioners,
 } = require('./deleteCounselFromCaseInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('deleteCounselFromCaseInteractor', () => {
@@ -302,5 +304,58 @@ describe('deleteCounselFromCaseInteractor', () => {
     expect(updatedCase.petitioners[1].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
+  });
+
+  describe('setupServiceIndicatorForUnrepresentedPetitioners', () => {
+    it("should set the petitioner's serviceIndicator to null when the petitioner is not represented", () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        associatedJudge: 'Buch',
+        mailingDate: '04/16/2019',
+        partyType: 'Petitioner',
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: 'Test',
+          },
+        ],
+        privatePractitioners: [],
+      };
+
+      const result = setupServiceIndicatorForUnrepresentedPetitioners(
+        new Case(mockCase, { applicationContext }),
+      );
+
+      expect(result.petitioners[0].serviceIndicator).toEqual(null);
+    });
+
+    it("should set the petitioner's serviceIndicator to null when the peitioner is not represented", () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        associatedJudge: 'Buch',
+        mailingDate: '04/16/2019',
+        partyType: 'Petitioner',
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...mockPrivatePractitioners[0],
+            representing: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
+          },
+        ],
+      };
+
+      const result = setupServiceIndicatorForUnrepresentedPetitioners(
+        new Case(mockCase, { applicationContext }),
+      );
+
+      expect(result.petitioners[0].serviceIndicator).toEqual(
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      );
+    });
   });
 });

@@ -57,7 +57,7 @@ describe('Get case note', () => {
     ).rejects.toThrow('The UserCaseNote entity was invalid');
   });
 
-  it('correctly returns data from persistence', async () => {
+  it('correctly returns data from persistence if a judgeUser exists', async () => {
     applicationContext.getCurrentUser.mockReturnValue(mockJudge);
     applicationContext
       .getPersistenceGateway()
@@ -72,6 +72,23 @@ describe('Get case note', () => {
     });
 
     expect(result).toMatchObject(MOCK_NOTE);
+  });
+
+  it('correctly returns data from persistence for the current user if a judgeUser does not exist', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
+
+    applicationContext.getUseCases.mockReturnValue({
+      getJudgeForUserChambersInteractor: () => null,
+    });
+
+    const result = await getUserCaseNoteInteractor(applicationContext, {
+      docketNumber: MOCK_NOTE.docketNumber,
+    });
+
+    expect(result).toMatchObject({ ...MOCK_NOTE, userId: mockJudge.userId });
   });
 
   it('does not return anything if nothing is returned from persistence', async () => {

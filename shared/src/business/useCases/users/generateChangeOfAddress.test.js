@@ -125,6 +125,37 @@ describe('generateChangeOfAddress', () => {
     expect(cases).toMatchObject([
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
+    const changeOfAddressDocketEntry = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'NCA',
+      );
+    expect(changeOfAddressDocketEntry.partyIrsPractitioner).toEqual(true);
+  });
+
+  it('should not set partyIrsPractitioner if role is not irsPracititioner', async () => {
+    mockCase = mockCaseWithIrsPractitioner;
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue([
+        { docketNumber: mockCaseWithIrsPractitioner.docketNumber },
+      ]);
+
+    await generateChangeOfAddress({
+      applicationContext,
+      contactInfo: {
+        ...mockIrsPractitioner.contact,
+        address1: '23456 Main St',
+      },
+      user: { ...mockIrsPractitioner, role: ROLES.adc },
+    });
+
+    const changeOfAddressDocketEntry = applicationContext
+      .getPersistenceGateway()
+      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'NCA',
+      );
+    expect(changeOfAddressDocketEntry.partyIrsPractitioner).toBeUndefined();
   });
 
   it('should send a notification to the user initially and after each case is updated', async () => {

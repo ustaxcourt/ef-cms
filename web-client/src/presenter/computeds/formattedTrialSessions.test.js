@@ -1,13 +1,12 @@
 import { applicationContext } from '../../applicationContext';
 import {
-  filterFormattedSessionsByStatus,
-  formatSession,
-  formattedTrialSessions as formattedTrialSessionsComputed,
-} from './formattedTrialSessions';
-import {
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
+import {
+  formatSession,
+  formattedTrialSessions as formattedTrialSessionsComputed,
+} from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -50,6 +49,7 @@ describe('formattedTrialSessions', () => {
   beforeAll(() => {
     nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
   });
+
   beforeEach(() => {
     currentUser = testJudgeUser;
     TRIAL_SESSIONS_LIST = [
@@ -98,114 +98,6 @@ describe('formattedTrialSessions', () => {
         trialLocation: 'Jacksonville, FL',
       },
     ];
-  });
-
-  describe('filterFormattedSessionsByStatus', () => {
-    let trialTerms;
-
-    beforeEach(() => {
-      trialTerms = [
-        {
-          dateFormatted: 'October 1, 2022',
-          sessions: [...TRIAL_SESSIONS_LIST],
-        },
-        {
-          dateFormatted: 'November 1, 2022',
-          sessions: [...TRIAL_SESSIONS_LIST],
-        },
-        {
-          dateFormatted: 'December 1, 2022',
-          sessions: [...TRIAL_SESSIONS_LIST],
-        },
-      ];
-    });
-
-    it('filters closed cases when all trial session cases are inactive', () => {
-      const sessions = trialTerms[0].sessions.slice(0);
-      sessions[0] = {
-        ...sessions[0],
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-      };
-      trialTerms[0].sessions = sessions;
-
-      const results = filterFormattedSessionsByStatus(
-        trialTerms,
-        applicationContext,
-      );
-
-      expect(results.Closed.length).toEqual(1);
-      expect(results.Closed).toEqual([
-        {
-          ...trialTerms[0],
-          sessions: [sessions[0]],
-        },
-      ]);
-    });
-
-    it('filters open trial sessions', () => {
-      const sessions = trialTerms[0].sessions.slice(0);
-      sessions[0] = {
-        ...sessions[0],
-        isCalendared: true,
-      };
-      trialTerms[0].sessions = sessions;
-
-      const results = filterFormattedSessionsByStatus(
-        trialTerms,
-        applicationContext,
-      );
-
-      expect(results.Open.length).toEqual(1);
-      expect(results.Open).toEqual([
-        {
-          ...trialTerms[0],
-          sessions: [sessions[0]],
-        },
-      ]);
-    });
-
-    it('filters new trial sessions', () => {
-      TRIAL_SESSIONS_LIST.forEach(session => (session.isCalendared = true));
-      const sessions = trialTerms[0].sessions.slice(0);
-      sessions[0] = {
-        ...sessions[0],
-        isCalendared: false,
-      };
-      trialTerms[0].sessions = sessions;
-
-      const results = filterFormattedSessionsByStatus(
-        trialTerms,
-        applicationContext,
-      );
-
-      expect(results.New.length).toEqual(1);
-      expect(results.New).toEqual([
-        {
-          ...trialTerms[0],
-          sessions: [sessions[0]],
-        },
-      ]);
-    });
-
-    it('filters all trial sessions (returns everything) with the sessionStatus on the session', () => {
-      const results = filterFormattedSessionsByStatus(
-        trialTerms,
-        applicationContext,
-      );
-
-      const getSessionCount = trialTermsList => {
-        let count = 0;
-        trialTermsList.forEach(term => (count += term.sessions.length));
-        return count;
-      };
-
-      expect(results.All.length).toEqual(trialTerms.length);
-      expect(getSessionCount(results.All)).toEqual(getSessionCount(trialTerms));
-      expect(results.All[0].sessions[0]).toHaveProperty('sessionStatus');
-    });
   });
 
   it('does not error if user is undefined', () => {
