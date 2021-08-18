@@ -9,7 +9,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentStandard', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Standard',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -19,7 +19,7 @@ describe('ExternalDocumentStandard', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',
@@ -29,7 +29,7 @@ describe('ExternalDocumentStandard', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: over3000Characters,
         documentType: 'Application for Waiver of Filing Fee',
@@ -42,7 +42,7 @@ describe('ExternalDocumentStandard', () => {
 
     describe('Proposed Stipulated Decision', () => {
       it('should be allowed to have "Proposed Stipulated Decision"', () => {
-        const extDoc = ExternalDocumentFactory.get({
+        const extDoc = ExternalDocumentFactory({
           category: 'Decision',
           documentTitle: 'Proposed Stipulated Decision',
           documentType: 'Proposed Stipulated Decision',
@@ -53,7 +53,7 @@ describe('ExternalDocumentStandard', () => {
 
       describe('Consolidated Case filing to multiple cases', () => {
         it('should not be allowed to have "Proposed Stipulated Decision"', () => {
-          const extDoc = ExternalDocumentFactory.get({
+          const extDoc = ExternalDocumentFactory({
             category: 'Decision',
             documentTitle: 'Proposed Stipulated Decision',
             documentType: 'Proposed Stipulated Decision',
@@ -71,7 +71,7 @@ describe('ExternalDocumentStandard', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: 'Application for Waiver of Filing Fee',
         documentType: 'Application for Waiver of Filing Fee',

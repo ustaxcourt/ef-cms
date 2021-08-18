@@ -38,4 +38,21 @@ describe('clearCaseAssociationWizardDataAction', () => {
 
     expect(result.state.form.objections).toEqual(undefined);
   });
+  it('clears objections but preserves other form attributes if value is defined', async () => {
+    const result = await runAction(clearCaseAssociationWizardDataAction, {
+      props: {
+        key: 'documentType',
+        value: 'Doc Holliday',
+      },
+      state: {
+        form: {
+          documentTitleTemplate: 'huckleberry',
+          objections: OBJECTIONS_OPTIONS_MAP.YES,
+        },
+      },
+    });
+
+    expect(result.state.form.objections).toEqual(undefined);
+    expect(result.state.form.documentTitleTemplate).toEqual('huckleberry');
+  });
 });

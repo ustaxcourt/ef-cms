@@ -52,9 +52,9 @@ exports.completeWorkItemInteractor = async (
     },
   });
 
-  await applicationContext.getPersistenceGateway().updateWorkItem({
+  await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
-    workItemToUpdate: completedWorkItem,
+    workItem: completedWorkItem,
   });
 
   const caseObject = await applicationContext

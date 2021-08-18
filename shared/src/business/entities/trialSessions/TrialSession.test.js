@@ -8,6 +8,7 @@ const {
 const { TrialSession } = require('./TrialSession');
 
 const VALID_TRIAL_SESSION = {
+  chambersPhoneNumber: '1234567890',
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionType: 'Regular',

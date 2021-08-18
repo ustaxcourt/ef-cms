@@ -7,15 +7,15 @@ const { search } = require('./searchClient');
 
 describe('getPractitionersByName', () => {
   it('returns results from a single persistence query', async () => {
-    search.mockImplementation(async () => {
-      return {
+    search.mockImplementation(() =>
+      Promise.resolve({
         results: [
           { barNumber: '009', name: 'other' },
           { barNumber: '005', name: 'matches' },
         ],
         total: 2,
-      };
-    });
+      }),
+    );
 
     const results = await getPractitionersByName({
       applicationContext,

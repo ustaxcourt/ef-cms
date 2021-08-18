@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import {
   ADC_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
