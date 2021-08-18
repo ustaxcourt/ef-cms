@@ -36,8 +36,8 @@ RUN npm set progress=false && \
 
 COPY . /home/app
 
-RUN mkdir -p /home/app/web-client/cypress/screenshots && \
-  mkdir -p /home/app/web-client/cypress/videos && \
+RUN mkdir -p /home/app/web-client/cypress-integration/screenshots && \
+  mkdir -p /home/app/web-client/cypress-integration/videos && \
   mkdir -p /home/app/web-client/cypress-smoketests/videos
 
 CMD echo "🔥"
