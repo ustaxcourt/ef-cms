@@ -3,7 +3,7 @@ name: Node.js CI
 on: [pull_request]
 
 jobs:
-  Shared:
+  Scripts:
     runs-on: ubuntu-latest
 
     strategy:
