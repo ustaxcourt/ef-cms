@@ -30,7 +30,7 @@ describe('Document QC UI Smoketests', () => {
         url: '/sections/admissions/document-qc/inbox*',
       }).as('getSectionInbox');
 
-      cy.visit('/document-qc/section/inbox/thisisbroken');
+      cy.visit('/document-qc/section/inbox');
 
       cy.wait('@getSectionInbox').then(isValidRequest);
     });

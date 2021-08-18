@@ -885,27 +885,27 @@ workflows:
       #     <<: *build-and-deploy-defaults
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
-      # - deploy:
-      # requires:
-      #   - build-client-integration
-      #   - e2e-pa11y
-      #   - e2e-pa11y-public
-      #   - e2e-cypress
-      #   - e2e-cypress-smoketests-local
-      #   - e2e-cypress-public
-      # filters:
-      #   branches:
-      #     only:
-      #       - irs
-      #       - staging
-      #       - test
-      #       - master
-      #       - experimental1
-      #       - experimental2
-      #       - experimental3
-      #       - experimental4
-      #       - experimental5
-      #       - dawson
+      - deploy:
+        # requires:
+        #   - build-client-integration
+        #   - e2e-pa11y
+        #   - e2e-pa11y-public
+        #   - e2e-cypress
+        #   - e2e-cypress-smoketests-local
+        #   - e2e-cypress-public
+        filters:
+          branches:
+            only:
+              - irs
+              - staging
+              - test
+              - master
+              - experimental1
+              - experimental2
+              - experimental3
+              - experimental4
+              - experimental5
+              - dawson
       # - migrate:
       #     requires:
       #       - deploy
@@ -935,8 +935,8 @@ workflows:
       #           - experimental4
       #           - experimental5
       - smoketests-readonly:
-          # requires:
-          #   - smoketests
+          requires:
+            - deploy
           filters:
             branches:
               only:
