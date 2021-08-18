@@ -25,7 +25,7 @@ module.exports = {
   overrides: [
     {
       files: [
-        'cypress/**/*.js',
+        'cypress-integration/**/*.js',
         'cypress-smoketests/**/*.js',
         'cypress-readonly/**/*.js',
       ],
