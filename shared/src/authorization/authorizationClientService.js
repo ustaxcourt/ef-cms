@@ -225,6 +225,7 @@ const AUTHORIZATION_MAP = {
   reportersOffice: allInternalUserPermissions,
   trialclerk: [
     ...allInternalUserPermissions,
+    ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
     ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY,
   ],
 };
