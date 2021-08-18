@@ -1836,10 +1836,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
-        getOrderSearchEnabledInteractor: (applicationContext, args) =>
+        getOrderSearchEnabledInteractor: applicationContext =>
           environment.stage === 'local'
             ? null
-            : getOrderSearchEnabledInteractor(applicationContext, args),
+            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
