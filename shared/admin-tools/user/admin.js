@@ -164,7 +164,6 @@ const createDawsonUser = async ({
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
   );
   user.password = user.password || generatePassword(12);
-  console.log('here 0', { user });
   const authToken = await getAuthToken();
   const headers = {
     headers: {
@@ -172,13 +171,10 @@ const createDawsonUser = async ({
       'Content-type': 'application/json',
     },
   };
-  console.log('here 1');
 
   const url = urlOverride ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
-
-    console.log('here 2');
 
     if (setPermanentPassword) {
       await setPassword({
@@ -188,8 +184,6 @@ const createDawsonUser = async ({
       });
     }
   } catch (err) {
-    console.log('here 3');
-
     console.log(err);
     throw err;
   }

@@ -11,7 +11,7 @@ const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Case Search Public UI Smoketests', () => {
-  it('should return a list of matches when a case is searched for by petitioner name', () => {
+  it('should allow the user to search for a case by petitioner name', () => {
     navigateToDashboard();
     enterPetitionerName('Smith');
 

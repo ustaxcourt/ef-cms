@@ -9,10 +9,6 @@ exports.goToReviewCase = testData => {
     expect(response.body).to.have.property('docketNumber');
     if (testData) {
       testData.createdPaperDocketNumber = response.body.docketNumber;
-      console.log(
-        'testData.createdPaperDocketNumber',
-        testData.createdPaperDocketNumber,
-      );
     }
   });
 };
