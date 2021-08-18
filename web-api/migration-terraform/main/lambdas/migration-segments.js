@@ -44,8 +44,8 @@ const migrateRecords = async ({
   items,
   ranMigrations = {},
 }) => {
-  if (!ranMigrations['bugMigration0035.js']) {
-    applicationContext.logger.debug('about to run migration 0035');
+  if (!ranMigrations['bug-0035-private-practitioner-representing.js']) {
+    applicationContext.logger.info('about to run bug migration 0035');
     items = await bugMigration0035(items, documentClient);
   }
 
@@ -54,9 +54,9 @@ const migrateRecords = async ({
     items = await bugMigration0036(items);
   }
 
-  if (!ranMigrations['migration0036.js']) {
+  if (!ranMigrations['0036-phone-number-format.js']) {
     applicationContext.logger.debug('about to run migration 0036');
-    items = await migration0036(items, documentClient);
+    items = await migration0036(items);
   }
 
   if (!ranMigrations['devex-0037-combine-work-items.js']) {
