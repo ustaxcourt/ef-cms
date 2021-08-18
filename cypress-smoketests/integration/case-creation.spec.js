@@ -32,7 +32,7 @@ const { goToMyDocumentQC } = require('../support/pages/document-qc');
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token = null;
-let testData = {};
+let testData = { createdPaperDocketNumber: '' };
 
 const { closeScannerSetupDialog, getUserToken, login } =
   getEnvironmentSpecificFunctions();
