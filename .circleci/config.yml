@@ -762,10 +762,17 @@ jobs:
           command: node ./scripts/create-and-enable-smoketest-user.js
       - run:
           name: 'Cypress Readonly Smoke Tests'
-          command: npm run cypress:readonly
+          command: |
+            set +e
+            npm run cypress:readonly
+            echo "export READONLY_SMOKETESTS_RESULT=$?" >> $BASH_ENV
+            set -e
       - run:
           name: Disable Test User
           command: node ./scripts/disable-smoketest-user.js
+      - run:
+          name: Kill Build if Smoketests Failed
+          command: node ./scripts/kill-build-if-smoketests-failed.js
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly-public

@@ -20,5 +20,5 @@ exports.searchResultsTable = () => {
 };
 
 exports.docketRecordTable = () => {
-  return cy.get('table.ustc-table');
+  return cy.get('table#docket-record-table');
 };
