@@ -64,7 +64,7 @@ const activateAdminAccount = async () => {
 /**
  * This disables the admin in Cognito for security
  */
-const deactivate = async () => {
+const deactivateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -246,7 +246,7 @@ const createAdminAccount = async () => {
 exports.createAdminAccount = createAdminAccount;
 exports.getAuthToken = getAuthToken;
 exports.activateAdminAccount = activateAdminAccount;
-exports.deactivate = deactivate;
+exports.deactivateAdminAccount = deactivateAdminAccount;
 exports.createDawsonUser = createDawsonUser;
 exports.enableUser = enableUser;
 exports.disableUser = disableUser;
