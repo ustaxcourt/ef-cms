@@ -772,7 +772,7 @@ jobs:
           command: node ./scripts/disable-smoketest-user.js
       - run:
           name: Kill Build if Smoketests Failed
-          command: if [ "${READONLY_SMOKETESTS_RESULT}" -ne 0 ]; then exit 1 fi
+          command: ./scripts/kill-circle-build.sh
       - run:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly-public
