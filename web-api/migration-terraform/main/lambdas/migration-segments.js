@@ -56,7 +56,7 @@ const migrateRecords = async ({
 
   if (!ranMigrations['0036-phone-number-format.js']) {
     applicationContext.logger.debug('about to run migration 0036');
-    items = await migration0036(items);
+    items = migration0036(items);
   }
 
   if (!ranMigrations['devex-0037-combine-work-items.js']) {
