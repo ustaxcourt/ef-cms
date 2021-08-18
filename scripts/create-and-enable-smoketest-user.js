@@ -2,7 +2,7 @@ const {
   activateAdminAccount,
   createAdminAccount,
   createDawsonUser,
-  deactivate,
+  deactivateAdminAccount,
   enableUser,
 } = require('../shared/admin-tools/user/admin');
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
@@ -33,7 +33,7 @@ const user = {
   section: 'admissions',
 };
 
-const doStuff = async () => {
+const createAndEnableSmoketestUser = async () => {
   try {
     console.log('About to create admin user!');
     await createAdminAccount();
@@ -53,15 +53,15 @@ const doStuff = async () => {
     console.log('Successfully enabled test user!');
 
     console.log('About to deactivate admin user!');
-    await deactivate();
+    await deactivateAdminAccount();
   } catch (e) {
     console.log('Unable to create and enable test user. Error was: ', e);
     process.exit(1);
   }
 };
 
-doStuff();
+createAndEnableSmoketestUser();
 
 module.exports = {
-  doStuff,
+  createAndEnableSmoketestUser,
 };

@@ -1,7 +1,7 @@
 const {
   activateAdminAccount,
   createDawsonUser,
-  deactivate,
+  deactivateAdminAccount,
 } = require('./admin');
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
@@ -139,6 +139,6 @@ const setupPractitioners = async () => {
   console.log('== Creating Practitioners');
   await setupPractitioners();
   console.log('== Deactivating Admin Account');
-  await deactivate();
+  await deactivateAdminAccount();
   console.log('== Done!');
 })();
