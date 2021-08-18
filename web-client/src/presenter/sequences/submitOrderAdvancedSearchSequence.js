@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { getOrderSearchEnabled } from '../../../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled';
+import { getOrderSearchEnabledAction } from '../actions/getOrderSearchEnabledAction';
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
@@ -13,7 +13,7 @@ import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submi
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitOrderAdvancedSearchSequence = [
-  getOrderSearchEnabled,
+  getOrderSearchEnabledAction,
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [
