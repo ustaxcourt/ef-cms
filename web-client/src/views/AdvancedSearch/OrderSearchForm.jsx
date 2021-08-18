@@ -7,6 +7,7 @@ import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+import howToUseSearch from '../../pdfs/how-to-use-search.pdf';
 
 export const OrderSearchForm = connect(
   {
@@ -186,7 +187,7 @@ export const OrderSearchForm = connect(
               />
               <a
                 className="usa-link--external"
-                href="https://ustaxcourt.gov"
+                href={howToUseSearch}
                 rel="noopener noreferrer"
                 target="_blank"
               >
