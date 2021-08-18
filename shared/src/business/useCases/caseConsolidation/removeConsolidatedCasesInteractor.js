@@ -67,7 +67,8 @@ exports.removeConsolidatedCasesInteractor = async (
         }),
       );
     }
-  } else if (newConsolidatedCases.length <= 1) {
+  } else if (newConsolidatedCases.length == 1) {
+    // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
       applicationContext,
     });
