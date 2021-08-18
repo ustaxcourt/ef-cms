@@ -222,7 +222,35 @@ describe('batchDownloadTrialSessionInteractor', () => {
       trialSessionId: '123',
     });
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Error when batch downloading trial session with id 123 - Unauthorized',
+      expect.anything(),
+    );
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      message: {
+        action: 'batch_download_error',
+        error: expect.anything(),
+      },
+      userId: 'abc-123',
+    });
+  });
+
+  it('throws an unknown error if an error is thrown without a message', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
+
+    await batchDownloadTrialSessionInteractor(applicationContext, {
+      trialSessionId: '123',
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Error when batch downloading trial session with id 123 - unknown error',
+      expect.anything(),
+    );
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
