@@ -10,10 +10,32 @@ const {
 
 let cachedAuthToken;
 
+const enableUser = async email => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  await cognito
+    .adminEnableUser({
+      UserPoolId,
+      Username: email,
+    })
+    .promise();
+};
+
+const disableUser = async email => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
+  await cognito
+    .adminDisableUser({
+      UserPoolId,
+      Username: email,
+    })
+    .promise();
+};
+
 /**
  * This activates the admin user in Cognito so we can perform actions
  */
-const activate = async () => {
+const activateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -42,7 +64,7 @@ const activate = async () => {
 /**
  * This disables the admin in Cognito for security
  */
-const deactivate = async () => {
+const deactivateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -132,7 +154,11 @@ const setPassword = async ({ Password, Permanent = false, Username }) => {
  * @param {String} providers.role The user's role
  * @param {String} providers.section The user's section at the Court
  */
-const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
+const createDawsonUser = async ({
+  setPermanentPassword = false,
+  urlOverride,
+  user,
+}) => {
   checkEnvVar(
     EFCMS_DOMAIN,
     'Please Ensure EFCMS_DOMAIN is set in your local environment',
@@ -146,9 +172,10 @@ const createDawsonUser = async ({ setPermanentPassword = false, user }) => {
     },
   };
 
-  const url = `https://api.${EFCMS_DOMAIN}/users`;
+  const url = urlOverride ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
     await axios.post(url, user, headers);
+
     if (setPermanentPassword) {
       await setPassword({
         Password: user.password,
@@ -174,7 +201,8 @@ const createAdminAccount = async () => {
       })
       .promise();
     if (result) {
-      throw `User already exists for ${USTC_ADMIN_USER}`;
+      console.log('Admin user already exists - not going to try to create it');
+      return;
     }
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
@@ -217,6 +245,8 @@ const createAdminAccount = async () => {
 
 exports.createAdminAccount = createAdminAccount;
 exports.getAuthToken = getAuthToken;
-exports.activate = activate;
-exports.deactivate = deactivate;
+exports.activateAdminAccount = activateAdminAccount;
+exports.deactivateAdminAccount = deactivateAdminAccount;
 exports.createDawsonUser = createDawsonUser;
+exports.enableUser = enableUser;
+exports.disableUser = disableUser;
