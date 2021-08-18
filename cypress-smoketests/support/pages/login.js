@@ -16,17 +16,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   region: 'us-east-1',
 });
 
-exports.disableUser = async ({ userId }) => {
-  const userPoolId = await getUserPoolId();
-
-  await cognito
-    .adminDisableUser({
-      UserPoolId: userPoolId,
-      Username: userId,
-    })
-    .promise();
-};
-
 exports.confirmUser = async ({ email }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
