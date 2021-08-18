@@ -16,7 +16,7 @@ jest.mock('../shared/admin-tools/user/admin', () => ({
   enableUser: jest.fn(),
 }));
 
-describe('create and enable smoketest user', () => {
+describe('createAndEnableSmoketestUser', () => {
   it('should create, activate, and deactivate the admin user', async () => {
     await createAndEnableSmoketestUser();
 
