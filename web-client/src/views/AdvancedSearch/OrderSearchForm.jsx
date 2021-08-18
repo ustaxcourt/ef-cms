@@ -147,6 +147,57 @@ export const OrderSearchForm = connect(
       </>
     );
 
+    const HowToSearchCard = () => (
+      <>
+        <div className="card gray">
+          <div className="content-wrapper how-to-search">
+            <h3>How to Use Search</h3>
+            <hr />
+            <table className="margin-bottom-0 search-info">
+              <tbody>
+                <tr>
+                  <td>&quot;&quot;</td>
+                  <td>
+                    Enter phrases in quotes for <b>exact matches</b> <br />
+                  </td>
+                </tr>
+                <tr>
+                  <td>+</td>
+                  <td>
+                    Use + for matches including <b>all</b> words/phrases
+                  </td>
+                </tr>
+                <tr>
+                  <td>|</td>
+                  <td>
+                    Use | for matches including <b>any</b> words/phrases
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p>
+              <i>No other commands are supported at this time</i>
+            </p>
+            <p>
+              <FontAwesomeIcon
+                className="fa-icon-blue"
+                icon="file-pdf"
+                size="1x"
+              />
+              <a
+                className="usa-link--external"
+                href="https://ustaxcourt.gov"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Learn more about searching in DAWSON
+              </a>
+            </p>
+          </div>
+        </div>
+      </>
+    );
+
     return (
       <>
         <form
@@ -156,6 +207,7 @@ export const OrderSearchForm = connect(
           }}
         >
           <Mobile>
+            <div className="margin-bottom-3">{HowToSearchCard()}</div>
             <div className="blue-container">
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
@@ -252,62 +304,8 @@ export const OrderSearchForm = connect(
                   </div>
                 </div>
               </div>
-              <div className="card gray grid-col-3 margin-left-1">
-                <div className="content-wrapper how-to-search">
-                  <h3>How to Use Search</h3>
-                  <hr />
-
-                  <table className="margin-bottom-0 search-info">
-                    <tbody>
-                      <tr>
-                        <td>&quot;&quot;</td>
-                        <td>
-                          Enter phrases in quotes for <b>exact matches</b>{' '}
-                          <br />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>+</td>
-                        <td>
-                          Use + for matches including <b>all</b> words/phrases
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>|</td>
-                        <td>
-                          Use | for matches including <b>any</b> words/phrases
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  {/* <b>&quot;&quot;</b>&ensp; Enter phrases in quotes for{' '}
-                    <b>exact matches</b> <br />
-                    <b>+ </b>&emsp; Use + for matches including <b>all</b>{' '}
-                    words/phrases <br />
-                    <b>|</b>&emsp;&nbsp; Use | for matches including <b>any</b>{' '}
-                    words/phrases <br />
-                    <br />
-                    <i>No other commands are supported at this time</i> */}
-
-                  <p>
-                    <i>No other commands are supported at this time</i>
-                  </p>
-                  <p>
-                    <FontAwesomeIcon
-                      className="fa-icon-blue"
-                      icon="file-pdf"
-                      size="1x"
-                    />
-                    <a
-                      className="usa-link--external"
-                      href="https://ustaxcourt.gov"
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      Learn more about searching in DAWSON
-                    </a>
-                  </p>
-                </div>
+              <div className="grid-col-3 margin-left-1">
+                {HowToSearchCard()}
               </div>
             </div>
           </NonMobile>
