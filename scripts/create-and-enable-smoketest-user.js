@@ -33,7 +33,7 @@ const user = {
   section: 'admissions',
 };
 
-(async () => {
+const doStuff = async () => {
   try {
     console.log('About to create admin user!');
     await createAdminAccount();
@@ -58,4 +58,10 @@ const user = {
     console.log('Unable to create and enable test user. Error was: ', e);
     process.exit(1);
   }
-})();
+};
+
+doStuff();
+
+module.exports = {
+  doStuff,
+};

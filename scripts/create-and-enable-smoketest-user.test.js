@@ -1,3 +1,19 @@
+const {
+  activateAdminAccount,
+  createAdminAccount,
+  createDawsonUser,
+  deactivate,
+  enableUser,
+} = require('../shared/admin-tools/user/admin');
+const { doStuff } = require('./create-and-enable-smoketest-user');
+jest.mock('../shared/admin-tools/user/admin', () => ({
+  activateAdminAccount: jest.fn(),
+  createAdminAccount: jest.fn(),
+  createDawsonUser: jest.fn(),
+  deactivate: jest.fn(),
+  enableUser: jest.fn(),
+}));
+
 const mockBaseUser = {
   birthYear: '1950',
   contact: {
@@ -24,15 +40,28 @@ const user = {
   section: 'admissions',
 };
 
-let createDawsonUserMock = jest.fn();
-let enableUserMock = jest.fn();
-
 describe('create and enable smoketest user', () => {
-  it('should create the smoketest user', () => {
-    expect(createDawsonUserMock).toHaveBeenCalled();
+  it('should create, activate, and deactivate the admin user', async () => {
+    await doStuff();
+
+    expect(createAdminAccount).toHaveBeenCalled();
+    expect(activateAdminAccount).toHaveBeenCalled();
+    expect(deactivate).toHaveBeenCalled();
   });
 
-  it('should enable the smoketest user', () => {
-    expect(enableUserMock).toHaveBeenCalled();
+  it('should create the smoketest user', async () => {
+    await doStuff();
+
+    expect(createDawsonUser).toHaveBeenCalled();
+    expect(enableUser).toHaveBeenCalled();
+  });
+
+  it('should log and exit with an error code when anything fails', async () => {
+    createDawsonUser.mockRejectedValue(new Error('oh no!'));
+
+    await doStuff();
+
+    expect(createDawsonUser).toHaveBeenCalled();
+    expect(enableUser).toHaveBeenCalled();
   });
 });
