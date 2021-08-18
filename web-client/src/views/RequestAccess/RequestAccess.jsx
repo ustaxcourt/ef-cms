@@ -5,7 +5,7 @@ import { PartiesRepresenting } from './PartiesRepresenting';
 import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
-import { reactSelectValue } from '../../ustc-ui/utils/documentTypeSelectHelper';
+import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';

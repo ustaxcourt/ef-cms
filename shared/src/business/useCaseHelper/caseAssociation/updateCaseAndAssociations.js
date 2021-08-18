@@ -340,9 +340,9 @@ const updateCaseWorkItems = async ({
     return [];
   }
 
-  const workItemMappings = await applicationContext
+  const workItems = await applicationContext
     .getPersistenceGateway()
-    .getWorkItemMappingsByDocketNumber({
+    .getWorkItemsByDocketNumber({
       applicationContext,
       docketNumber: caseToUpdate.docketNumber,
     });
@@ -406,7 +406,7 @@ const updateCaseWorkItems = async ({
     return workItemRequestFunctions;
   };
 
-  const workItemIds = workItemMappings.map(mapping => mapping.sk.split('|')[1]);
+  const workItemIds = workItems.map(mapping => mapping.sk.split('|')[1]);
   const workItemUpdateFunctions = workItemIds
     .map(workItemId =>
       updateWorkItemRecordFunctions(caseToUpdate, oldCase, workItemId),

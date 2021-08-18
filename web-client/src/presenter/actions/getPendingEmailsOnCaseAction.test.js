@@ -45,6 +45,23 @@ describe('getPendingEmailsOnCaseAction', () => {
     ]);
   });
 
+  it('should NOT make calls to getUsersPendingEmailInteractor if no userIds are found in the case detail', async () => {
+    const result = await runAction(getPendingEmailsOnCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getUsersPendingEmailInteractor,
+    ).not.toHaveBeenCalled();
+
+    expect(result.output).toEqual({ pendingEmails: {} });
+  });
+
   it('should return pendingEmails as props', async () => {
     applicationContext
       .getUseCases()

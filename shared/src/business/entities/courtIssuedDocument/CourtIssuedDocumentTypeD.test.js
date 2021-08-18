@@ -11,7 +11,7 @@ const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 describe('CourtIssuedDocumentTypeD', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
@@ -26,7 +26,7 @@ describe('CourtIssuedDocumentTypeD', () => {
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type D',
       });
 
@@ -42,7 +42,7 @@ describe('CourtIssuedDocumentTypeD', () => {
         howMuch: -5,
         unit: 'days',
       });
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date,
         documentTitle:
@@ -58,7 +58,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const documentInstance = CourtIssuedDocumentFactory.get({
+      const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
@@ -72,7 +72,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
@@ -89,7 +89,7 @@ describe('CourtIssuedDocumentTypeD', () => {
 
     describe('requiring filing dates on unservable documents', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           date: '2025-04-10T04:00:00.000Z',
 
@@ -105,7 +105,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       it('should be valid when filingDate is defined on an unservable document', () => {
-        const documentInstance = CourtIssuedDocumentFactory.get({
+        const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
           date: '2025-04-10T04:00:00.000Z',
 
@@ -123,7 +123,7 @@ describe('CourtIssuedDocumentTypeD', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:
@@ -139,7 +139,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     });
 
     it('should generate valid title without optional freeText', () => {
-      const extDoc = CourtIssuedDocumentFactory.get({
+      const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date: '2025-04-10T04:00:00.000Z',
         documentTitle:

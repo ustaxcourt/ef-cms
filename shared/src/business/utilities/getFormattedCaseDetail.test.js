@@ -9,7 +9,6 @@ const {
   formatCase,
   getFormattedCaseDetail,
 } = require('./getFormattedCaseDetail');
-const { createISODateString } = require('./DateHandler');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 
@@ -58,49 +57,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toMatchObject({});
     });
 
-    it('should correctly format legacy served docket entries', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [{ isLegacyServed: true }],
-      });
-
-      expect(result.formattedDocketEntries[0].isNotServedDocument).toBeFalsy();
-      expect(result.formattedDocketEntries[0].isUnservable).toBeTruthy();
-    });
-
-    it('should compute isNotServedDocument', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: true,
-            isMinuteEntry: undefined,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: true,
-            servedAt: undefined,
-          },
-          {
-            isLegacyServed: undefined,
-            isMinuteEntry: undefined,
-            servedAt: createISODateString(),
-          },
-        ],
-      });
-
-      expect(result.formattedDocketEntries[0].isNotServedDocument).toBe(true);
-      expect(result.formattedDocketEntries[1].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[2].isNotServedDocument).toBe(false);
-      expect(result.formattedDocketEntries[3].isNotServedDocument).toBe(false);
-    });
-
     it('should format the filing date of all correspondence documents', () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
@@ -114,112 +70,6 @@ describe('getFormattedCaseDetail', () => {
       });
 
       expect(result.correspondence[0].formattedFilingDate).toEqual('05/21/20');
-    });
-
-    describe('createdAtFormatted', () => {
-      it('should format docket entries and set createdAtFormatted to the formatted createdAt date if document is not a court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: getDateISO(),
-              docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
-              documentType: 'Petition',
-              filingDate: getDateISO(),
-              index: '1',
-              isOnDocketRecord: true,
-            },
-          ],
-        });
-
-        expect(result).toHaveProperty('formattedDocketEntries');
-        expect(
-          result.formattedDocketEntries[0].createdAtFormatted,
-        ).toBeDefined();
-      });
-
-      it('should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              ...MOCK_CASE.docketEntries[0],
-              documentTitle: 'Order [Judge Name] [Anything]',
-              documentType: 'Order that case is assigned',
-              eventCode: 'OAJ',
-              filingDate: getDateISO(),
-            },
-          ],
-        });
-
-        expect(result).toHaveProperty('formattedDocketEntries');
-        expect(
-          result.formattedDocketEntries[0].createdAtFormatted,
-        ).toBeUndefined();
-      });
-
-      it('should be a formatted date string using the filingDate if the document is on the docket record and is served', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: '2019-06-19T17:29:13.120Z',
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: '04/19/19',
-          },
-        ]);
-      });
-
-      it('should be a formatted date string using the filingDate if the document is on the docket record and is an unserved external document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: undefined,
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: '04/19/19',
-          },
-        ]);
-      });
-
-      it('should be undefined if the document is on the docket record and is an unserved court-issued document', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2019-03-11T17:29:13.120Z',
-              documentTitle: 'Order',
-              documentType: 'Order',
-              eventCode: 'O',
-              filingDate: '2019-04-19T17:29:13.120Z',
-              isOnDocketRecord: true,
-              servedAt: undefined,
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries).toMatchObject([
-          {
-            createdAtFormatted: undefined,
-          },
-        ]);
-      });
     });
 
     it('should return docket entries with pending and served documents for pendingItemsDocketEntries', () => {
@@ -348,81 +198,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result.caseTitle).toEqual('Johnny Joe Jacobson');
       expect(result.formattedPreferredTrialCity).toEqual(
         'No location selected',
-      );
-    });
-
-    it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            addToCoversheet: true,
-            additionalInfo: 'additional information',
-            createdAt: getDateISO(),
-            docketEntryId: 'd-1-2-3',
-            documentTitle: 'desc',
-            documentType: 'Petition',
-            index: '1',
-            isOnDocketRecord: true,
-            servedAt: getDateISO(),
-          },
-        ],
-      });
-
-      expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
-        'desc additional information',
-      );
-      expect(
-        result.formattedDocketEntries[0].additionalInfoDisplay,
-      ).toBeUndefined();
-    });
-
-    it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            additionalInfo: 'additional information',
-            createdAt: getDateISO(),
-            docketEntryId: 'd-1-2-3',
-            documentTitle: 'desc',
-            documentType: 'Petition',
-            index: '1',
-            isOnDocketRecord: true,
-            servedAt: getDateISO(),
-          },
-        ],
-      });
-
-      expect(result.formattedDocketEntries[0].descriptionDisplay).toEqual(
-        'desc',
-      );
-      expect(result.formattedDocketEntries[0].additionalInfoDisplay).toEqual(
-        'additional information',
-      );
-    });
-
-    it('should format certificate of service date', () => {
-      const result = formatCase(applicationContext, {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            certificateOfServiceDate: getDateISO(),
-            createdAt: getDateISO(),
-            docketEntryId: 'd-1-2-3',
-            documentType: 'Petition',
-            index: '1',
-            servedAt: getDateISO(),
-          },
-        ],
-      });
-
-      expect(
-        result.formattedDocketEntries[0].certificateOfServiceDateFormatted,
-      ).toEqual(
-        applicationContext
-          .getUtilities()
-          .formatDateString(getDateISO(), 'MMDDYY'),
       );
     });
 
@@ -651,63 +426,6 @@ describe('getFormattedCaseDetail', () => {
 
       expect(result).toMatchObject(MOCK_CASE);
       expect(result).not.toHaveProperty('consolidatedCases');
-    });
-
-    describe('qcNeeded', () => {
-      it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              isFileAttached: true,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: getDateISO(),
-              workItem: {
-                completedAt: undefined,
-                isRead: false,
-              },
-            },
-          ],
-        });
-        expect(result.formattedDocketEntries[0].qcNeeded).toBeTruthy();
-      });
-
-      it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              isFileAttached: false,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: getDateISO(),
-              workItem: {
-                completedAt: undefined,
-                isRead: false,
-              },
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
-      });
-
-      it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
-        const result = formatCase(applicationContext, {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              isFileAttached: true,
-              isLegacySealed: true,
-              isOnDocketRecord: true,
-              servedAt: getDateISO(),
-            },
-          ],
-        });
-
-        expect(result.formattedDocketEntries[0].qcNeeded).toBeFalsy();
-      });
     });
   });
 

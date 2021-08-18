@@ -21,9 +21,7 @@ export const validateAddPrivatePractitionerAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddPrivatePractitionerInteractor(applicationContext, {
-      counsel,
-    });
+    .validateAddPrivatePractitionerInteractor({ counsel });
 
   if (!errors) {
     return path.success();
