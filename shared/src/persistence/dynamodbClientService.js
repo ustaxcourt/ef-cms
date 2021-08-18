@@ -46,10 +46,6 @@ const getTableName = ({ applicationContext }) =>
     applicationContext.getEnvironment().dynamoDbTableName);
 
 const getDeployTableName = ({ applicationContext }) => {
-  if (applicationContext?.environment?.stage === 'local') {
-    return getTableName({ applicationContext });
-  }
-
   return `efcms-deploy-${
     (applicationContext.environment || applicationContext.getEnvironment())
       .stage
