@@ -2,46 +2,32 @@ import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/E
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkEditsServiceIndicatorForPetitioner = (
-  test,
+  cerebralTest,
   expectedServiceIndicator = null,
 ) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    expect(test.getState('form.contactPrimary.serviceIndicator')).toEqual(
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
+
+    expect(cerebralTest.getState('form.contact.serviceIndicator')).toEqual(
       expectedServiceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
     );
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.serviceIndicator',
-      value: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-
-    if (!expectedServiceIndicator) {
-      await test.runSequence('updatePetitionerInformationFormSequence');
-      expect(test.getState('validationErrors')).toMatchObject({
-        contactPrimary: {
-          serviceIndicator: expect.anything(),
-        },
-      });
-
-      const contactPrimary = contactPrimaryFromState(test);
-
-      expect(contactPrimary.serviceIndicator).toEqual(
-        SERVICE_INDICATOR_TYPES.SI_NONE,
-      );
-    }
-
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.serviceIndicator',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,

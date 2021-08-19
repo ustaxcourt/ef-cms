@@ -19,7 +19,7 @@ describe('setDocumentToDisplayFromDocumentIdAction', () => {
 
     applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor.mockImplementation(async () => {
+      .getDocumentDownloadUrlInteractor.mockImplementation(() => {
         return { url };
       });
   });

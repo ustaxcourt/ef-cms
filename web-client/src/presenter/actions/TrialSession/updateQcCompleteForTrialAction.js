@@ -23,14 +23,18 @@ export const updateQcCompleteForTrialAction = async ({
   try {
     result = await applicationContext
       .getUseCases()
-      .updateQcCompleteForTrialInteractor({
-        applicationContext,
+      .updateQcCompleteForTrialInteractor(applicationContext, {
         docketNumber,
         qcCompleteForTrial,
         trialSessionId,
       });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Could not complete QC eligible case.',
+      },
+    });
   }
 
   return path.success({ updatedCase: result });

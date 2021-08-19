@@ -1,3 +1,4 @@
+import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -6,22 +7,22 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const practitionerViewsCaseDetailWithPaperService = test => {
+export const practitionerViewsCaseDetailWithPaperService = cerebralTest => {
   return it('Practitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(formattedCase.isPaper).toEqual(true);
-    expect(formattedCase.contactPrimary.serviceIndicator).toEqual(
-      test.getState('constants.SERVICE_INDICATOR_TYPES.SI_PAPER'),
+    expect(formattedCase.petitioners[0].serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
 };

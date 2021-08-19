@@ -18,11 +18,12 @@ export const deleteDeficiencyStatisticsAction = async ({
   const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 
   try {
-    await applicationContext.getUseCases().deleteDeficiencyStatisticInteractor({
-      applicationContext,
-      docketNumber,
-      statisticId,
-    });
+    await applicationContext
+      .getUseCases()
+      .deleteDeficiencyStatisticInteractor(applicationContext, {
+        docketNumber,
+        statisticId,
+      });
 
     let successMessageDate;
 
@@ -42,7 +43,8 @@ export const deleteDeficiencyStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
+        message: 'Please try again.',
+        title: 'Statistic could not be deleted.',
       },
     });
   }

@@ -1,37 +1,23 @@
-import { applicationContext } from '../../src/applicationContext';
-import { contactPrimaryFromState } from '../helpers';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-  applicationContext,
-);
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
 export const privatePractitionerSeesStrickenDocketEntry = (
-  test,
+  cerebralTest,
   docketRecordIndex,
 ) => {
   return it('private practitioner sees stricken docket entry on case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
     expect(contactPrimary.name).toBeDefined();
-
-    const { formattedDocketEntriesOnDocketRecord } = runCompute(
-      formattedCaseDetail,
-      {
-        state: test.getState(),
-      },
-    );
 
     const formattedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.index === docketRecordIndex,
     );
-    test.docketEntryId = formattedDocketEntry.docketEntryId;
+    cerebralTest.docketEntryId = formattedDocketEntry.docketEntryId;
 
     expect(formattedDocketEntry.isStricken).toEqual(true);
     expect(formattedDocketEntry.showDocumentDescriptionWithoutLink).toEqual(

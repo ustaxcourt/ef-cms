@@ -3,8 +3,9 @@
 
   &.ustc-ui-tabs--right-button-container {
     position: absolute;
-    top: 10px;
+    top: 0;
     right: 0;
+    padding-left: 1em;
 
     .usa-button {
       &:last-child {
@@ -200,7 +201,6 @@
                   padding-bottom: 0;
                   border-bottom: 3px solid color($theme-color-primary-darker);
                 }
-
               }
 
               .button-text {

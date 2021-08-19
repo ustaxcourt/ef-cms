@@ -54,4 +54,37 @@ describe('setEditDeficiencyStatisticFormAction', () => {
       statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
     });
   });
+
+  it('leaves the statistic unchanged if last date of period cannot be parsed as a date and is returned as undefined', async () => {
+    applicationContext
+      .getUtilities()
+      .deconstructDate.mockReturnValueOnce(undefined);
+    const result = await runAction(setEditDeficiencyStatisticFormAction, {
+      modules: { presenter },
+      props: { statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98' },
+      state: {
+        caseDetail: {
+          statistics: [
+            {
+              irsTotalPenalties: 1,
+              lastDateOfPeriod: 'definitely not a date',
+              lastDateOfPeriodDay: '7',
+              lastDateOfPeriodMonth: '7',
+              lastDateOfPeriodYear: '2017',
+              statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.form).toEqual({
+      irsTotalPenalties: 1,
+      lastDateOfPeriod: 'definitely not a date',
+      lastDateOfPeriodDay: '7',
+      lastDateOfPeriodMonth: '7',
+      lastDateOfPeriodYear: '2017',
+      statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
+    });
+  });
 });

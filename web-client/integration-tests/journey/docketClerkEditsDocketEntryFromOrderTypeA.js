@@ -1,69 +1,72 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeA = (
-  test,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type A`, async () => {
-    let caseDetailFormatted;
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
-
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     // Type A
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'WRIT',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'Writ of Habeas Corpus Ad Testificandum',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value: 'Writ of Habeas Corpus Ad Testificandum [anything]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type A',
-    });
-
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'Some free text',
-    });
-
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
       {
-        state: test.getState(),
+        key: 'eventCode',
+        value: 'WRIT',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'Writ of Habeas Corpus Ad Testificandum',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'Writ of Habeas Corpus Ad Testificandum [anything]',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type A',
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'Some free text',
+      },
+    );
+
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest));
+
+    const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -74,12 +77,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeA = (
       freeText: 'Some free text',
     });
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('form')).toMatchObject({
+    expect(cerebralTest.getState('form')).toMatchObject({
       documentTitle: 'Writ of Habeas Corpus Ad Testificandum Some free text',
       documentType: 'Writ of Habeas Corpus Ad Testificandum',
       eventCode: 'WRIT',

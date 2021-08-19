@@ -26,6 +26,7 @@ describe('AddressLabel', () => {
   it('renders optional address information if present', () => {
     const wrapper = shallow(
       <AddressLabel
+        additionalName="Test Additional Name"
         address1="123 Some Street"
         address2="address two"
         address3="address three"
@@ -45,5 +46,6 @@ describe('AddressLabel', () => {
     expect(wrapper.text()).toContain('Secondary');
     expect(wrapper.text()).toContain('The Title');
     expect(wrapper.text()).toContain('Care');
+    expect(wrapper.text()).toContain('Test Additional Name');
   });
 });

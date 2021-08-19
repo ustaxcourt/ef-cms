@@ -9,6 +9,6 @@
 export const getUserAction = async ({ applicationContext }) => {
   const user = await applicationContext
     .getUseCases()
-    .getUserInteractor({ applicationContext });
+    .getUserInteractor(applicationContext);
   return { user };
 };

@@ -129,7 +129,7 @@ exports.updateConsistent = params => {
       ...filteredParams,
     })
     .promise()
-    .then(data => data.Attributes.id);
+    .then(data => data.Attributes);
 };
 
 /**
@@ -192,7 +192,7 @@ exports.scan = async params => {
         ...params,
       })
       .promise()
-      .then(async results => {
+      .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         allItems.push(...results.Items);

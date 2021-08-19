@@ -11,8 +11,13 @@ const getCognitoLoginUrl = () => {
   }
 };
 
-const getPublicSiteUrl = () =>
-  process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
+const getEnvironment = () => ({
+  stage: process.env.STAGE || 'local',
+});
+
+const getPublicSiteUrl = () => {
+  return process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
+};
 
 const getUniqueId = () => {
   return uuidv4();
@@ -25,6 +30,7 @@ module.exports = {
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
 };

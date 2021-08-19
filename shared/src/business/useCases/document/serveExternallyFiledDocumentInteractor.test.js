@@ -4,6 +4,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PARTY_TYPES,
@@ -27,11 +28,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       pdfData: testPdfDoc,
     });
 
-    applicationContext.getPug.mockImplementation(() => ({
-      compile: () => () => '',
-    }));
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
@@ -56,20 +54,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
-      contactPrimary: {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        email: 'fieri@example.com',
-        name: 'Guy Fieri',
-        phone: '1234567890',
-        postalCode: '12345',
-        state: 'CA',
-      },
       createdAt: '',
       docketEntries: [
         {
           docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f806',
+          docketNumber: DOCKET_NUMBER,
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
@@ -79,6 +68,19 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketNumber: DOCKET_NUMBER,
       filingType: 'Myself',
       partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          state: 'CA',
+        },
+      ],
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Regular',
       role: ROLES.petitioner,
@@ -169,6 +171,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -177,6 +180,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
@@ -227,6 +231,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ...caseRecord.docketEntries,
       {
         docketEntryId: mockDocketEntryWithWorkItemId,
+        docketNumber: DOCKET_NUMBER,
         documentType: 'Administrative Record',
         eventCode: 'ADMR',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -235,6 +240,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
             documentType: 'Administrative Record',
             entityName: 'DocketEntry',
             eventCode: 'ADMR',
@@ -266,5 +272,86 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
       ).workItem;
     expect(updatedWorkItem.completedAt).toBeDefined();
+  });
+
+  it('should throw an error if the document is already pending service', async () => {
+    caseRecord.docketEntries[0].isPendingService = true;
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
   });
 });

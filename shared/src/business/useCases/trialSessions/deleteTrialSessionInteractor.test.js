@@ -5,31 +5,16 @@ const {
   deleteTrialSessionInteractor,
 } = require('./deleteTrialSessionInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('deleteTrialSessionInteractor', () => {
-  const MOCK_TRIAL = {
-    caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
-    isCalendared: false,
-    judge: {
-      name: 'Judge Yggdrasil',
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    },
-    maxCases: 100,
-    sessionType: 'Regular',
-    startDate: '2001-12-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-    trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  };
-
   let user;
   let mockTrialSession;
 
   beforeEach(() => {
-    mockTrialSession = MOCK_TRIAL;
+    mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
@@ -76,7 +61,7 @@ describe('deleteTrialSessionInteractor', () => {
     });
 
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REGULAR,
     };
 
     await expect(
@@ -94,7 +79,7 @@ describe('deleteTrialSessionInteractor', () => {
     });
 
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REGULAR,
       isCalendared: true,
       startDate: '2100-12-01T00:00:00.000Z',
     };
@@ -114,7 +99,7 @@ describe('deleteTrialSessionInteractor', () => {
     });
 
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REGULAR,
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
@@ -147,7 +132,7 @@ describe('deleteTrialSessionInteractor', () => {
     });
 
     mockTrialSession = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REGULAR,
       startDate: '2100-12-01T00:00:00.000Z',
     };
 

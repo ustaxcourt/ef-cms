@@ -1,46 +1,28 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkQCsDocketEntry = (test, data = {}) => {
+export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
   return it('Docket Clerk QCs docket entry', async () => {
-    let caseDetailFormatted;
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const lastIndex =
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord.length - 1;
+    const lastIndex = formattedDocketEntriesOnDocketRecord.length - 1;
     data.index = data.index || lastIndex;
 
-    const {
-      docketEntryId,
-    } = caseDetailFormatted.formattedDocketEntriesOnDocketRecord[data.index];
+    const { docketEntryId } = formattedDocketEntriesOnDocketRecord[data.index];
 
-    await test.runSequence('gotoEditDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId,
-      docketNumber: caseDetailFormatted.docketNumber,
+      docketNumber: formattedDocketEntriesOnDocketRecord.docketNumber,
     });
 
-    await test.runSequence('completeDocketEntryQCSequence');
+    await cerebralTest.runSequence('completeDocketEntryQCSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest));
 
-    const selectedDocument = caseDetailFormatted.formattedDocketEntriesOnDocketRecord.find(
+    const selectedDocument = formattedDocketEntriesOnDocketRecord.find(
       document => document.docketEntryId === docketEntryId,
     );
 

@@ -1,9 +1,11 @@
 const createApplicationContext = require('../applicationContext');
+const {
+  MOCK_CASE_WITH_TRIAL_SESSION,
+} = require('../../../shared/src/test/mockCase');
 const { getCaseLambda } = require('./getCaseLambda');
-const { MOCK_CASE } = require('../../../shared/src/test/mockCase');
 const { MOCK_USERS } = require('../../../shared/src/test/mockUsers');
 
-const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE, {
+const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
   pk: 'case|123-20',
   sk: 'case|23',
@@ -96,9 +98,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       expect.any(String),
     );
     expect(JSON.parse(response.body).assignedJudge).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.address1).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary.name).toBeDefined();
-    expect(JSON.parse(response.body).contactPrimary.state).toBeDefined();
+    expect(JSON.parse(response.body).contactPrimary).toBeUndefined();
     expect(JSON.parse(response.body).noticeOfTrialDate).toBeUndefined();
     expect(JSON.parse(response.body).status).toBeUndefined();
     expect(JSON.parse(response.body).trialLocation).toBeUndefined();
@@ -199,7 +199,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       preferredTrialCity: 'Washington, District of Columbia',
       respondents: [],
       sortableDocketNumber: 18000101,
-      status: 'New',
+      status: 'Calendared',
     });
   });
 });

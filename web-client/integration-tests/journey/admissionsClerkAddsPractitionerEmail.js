@@ -3,45 +3,50 @@ import { practitionerDetailHelper } from '../../src/presenter/computeds/practiti
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import faker from 'faker';
 
-export const admissionsClerkAddsPractitionerEmail = test => {
+export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
   const mockAddress2 = 'A Place';
-  const mockAvailableEmail = 'test+available@example.com';
+  const mockAvailableEmail = `${faker.internet.userName()}@example.com`;
 
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address2',
       value: mockAddress2,
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('practitionerDetail.contact.address2')).toBe(
+    expect(cerebralTest.getState('practitionerDetail.contact.address2')).toBe(
       mockAddress2,
     );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
@@ -49,7 +54,7 @@ export const admissionsClerkAddsPractitionerEmail = test => {
     let practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
@@ -57,58 +62,52 @@ export const admissionsClerkAddsPractitionerEmail = test => {
       mockAvailableEmail,
     );
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: mockAvailableEmail,
     });
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
 
-    test.setState('practitionerDetail', {});
+    cerebralTest.setState('practitionerDetail', {});
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
     await refreshElasticsearchIndex();
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(practitionerDetailHelperComputed.emailFormatted).toBe(
-      mockAvailableEmail,
+    expect(practitionerDetailHelperComputed.emailFormatted).toBeUndefined();
+
+    expect(practitionerDetailHelperComputed.pendingEmailFormatted).toBe(
+      `${mockAvailableEmail} (Pending)`,
     );
     expect(practitionerDetailHelperComputed.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
     await refreshElasticsearchIndex();
 
-    test.setState('caseDetail', {});
+    cerebralTest.setState('caseDetail', {});
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
-
-    const foundPractitioner = test
-      .getState('caseDetail.privatePractitioners')
-      .find(x => x.barNumber === test.barNumber);
-
-    expect(foundPractitioner.email).toBe(mockAvailableEmail);
-    expect(foundPractitioner.serviceIndicator).toBe(
-      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    );
+    cerebralTest.pendingEmail = mockAvailableEmail;
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
   });
 };

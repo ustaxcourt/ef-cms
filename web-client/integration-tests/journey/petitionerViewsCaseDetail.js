@@ -1,41 +1,42 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionerViewsCaseDetail = (test, overrides = {}) => {
+export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
   return it('petitioner views case detail', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
+
     const documentCount = overrides.documentCount || 2;
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(test.docketNumber);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(cerebralTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}${docketNumberSuffix}`,
+      `${cerebralTest.docketNumber}${docketNumberSuffix}`,
     );
     expect(caseDetail.docketEntries.length).toEqual(documentCount);
 
     //verify that event codes were added to initial documents/docket entries
-    expect(caseDetailFormatted.formattedDocketEntries).toEqual(
+    expect(formattedDocketEntriesOnDocketRecord).toEqual(
       expect.arrayContaining([expect.objectContaining({ eventCode: 'P' })]),
     );
 
-    const rqtDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const rqtDocument = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.eventCode === 'RQT',
     );
     expect(rqtDocument).toBeTruthy();

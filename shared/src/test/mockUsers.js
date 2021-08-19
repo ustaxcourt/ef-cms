@@ -4,7 +4,29 @@ const {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
+  TRIAL_CLERKS_SECTION,
 } = require('../business/entities/EntityConstants');
+const {
+  getJudgesChambers,
+} = require('../persistence/dynamo/chambers/getJudgesChambers');
+
+const JUDGES_CHAMBERS = getJudgesChambers();
+
+const docketClerkUser = {
+  name: 'Docketclerk',
+  role: ROLES.docketClerk,
+  section: DOCKET_SECTION,
+  userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+};
+exports.docketClerkUser = docketClerkUser;
+
+const petitionsClerkUser = {
+  name: 'Petitionsclerk',
+  role: ROLES.petitionsClerk,
+  section: PETITIONS_SECTION,
+  userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+};
+exports.petitionsClerkUser = petitionsClerkUser;
 
 exports.MOCK_USERS = {
   '2eee98ac-613f-46bc-afd5-2574d1b15664': {
@@ -20,24 +42,13 @@ exports.MOCK_USERS = {
     section: 'privatePractitioner',
     userId: '330d4b65-620a-489d-8414-6623653ebc4f',
   },
-  'a7d90c05-f6cd-442c-a168-202db587f16f': {
-    name: 'Docketclerk',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
-    userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-  },
+  'a7d90c05-f6cd-442c-a168-202db587f16f': docketClerkUser,
   'b7d90c05-f6cd-442c-a168-202db587f16f': {
+    ...docketClerkUser,
     name: 'Docketclerk1',
-    role: ROLES.docketClerk,
-    section: DOCKET_SECTION,
     userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
   },
-  'c7d90c05-f6cd-442c-a168-202db587f16f': {
-    name: 'Petitionsclerk',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
-    userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-  },
+  'c7d90c05-f6cd-442c-a168-202db587f16f': petitionsClerkUser,
   'd7d90c05-f6cd-442c-a168-202db587f16f': {
     name: 'Tax Payer',
     role: ROLES.petitioner,
@@ -45,9 +56,8 @@ exports.MOCK_USERS = {
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'e7d90c05-f6cd-442c-a168-202db587f16f': {
+    ...petitionsClerkUser,
     name: 'Petitionsclerk1',
-    role: ROLES.petitionsClerk,
-    section: PETITIONS_SECTION,
     userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
   },
   'f7d90c05-f6cd-442c-a168-202db587f16f': {
@@ -108,4 +118,47 @@ exports.validUser = {
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+exports.adcUser = {
+  role: ROLES.adc,
+  userId: '6498a6ff-fa05-4382-abc7-29a61347cfe1',
+};
+exports.chambersUser = {
+  role: ROLES.chambers,
+  section: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+  userId: '555',
+};
+exports.clerkOfCourtUser = {
+  role: ROLES.clerkOfCourt,
+  userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
+};
+exports.generalUser = {
+  role: ROLES.general,
+  userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
+};
+exports.irsPractitionerUser = {
+  role: ROLES.irsPractitioner,
+  userId: 'ed17963c-3c33-421f-882c-306b5bdb3913',
+};
+exports.irsSuperuserUser = {
+  role: ROLES.irsSuperuser,
+  userId: '5a5c771d-ab63-4d78-a298-1de657dde621',
+};
+exports.judgeUser = {
+  role: ROLES.judge,
+  userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+};
+exports.petitionerUser = {
+  role: ROLES.petitioner,
+  userId: '6844385f-b3de-444b-b76a-64fedfbb0229',
+};
+exports.privatePractitionerUser = {
+  role: ROLES.privatePractitioner,
+  userId: 'bc8219c5-e950-4cb2-9e3e-d7d645005364',
+};
+exports.trialClerkUser = {
+  role: ROLES.trialClerk,
+  section: TRIAL_CLERKS_SECTION,
+  userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
 };

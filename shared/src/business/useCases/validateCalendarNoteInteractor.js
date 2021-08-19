@@ -3,12 +3,12 @@ const { CalendarNote } = require('../entities/notes/CalendarNote');
 /**
  * validateCalendarNoteInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.note the note string
  * @returns {object} the errors or null
  */
-exports.validateCalendarNoteInteractor = ({ applicationContext, note }) => {
+exports.validateCalendarNoteInteractor = (applicationContext, { note }) => {
   const errors = new CalendarNote(
     { note },
     {

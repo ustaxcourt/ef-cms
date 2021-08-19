@@ -31,13 +31,14 @@ describe('updateTrialSessionWorkingCopyAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().updateTrialSessionWorkingCopyInteractor
         .mock.calls.length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().updateTrialSessionWorkingCopyInteractor
-        .mock.calls[0][0].trialSessionWorkingCopyToUpdate.trialSessionId,
+        .mock.calls[0][1].trialSessionWorkingCopyToUpdate.trialSessionId,
     ).toEqual('123');
   });
 });

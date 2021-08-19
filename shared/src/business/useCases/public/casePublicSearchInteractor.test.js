@@ -61,9 +61,11 @@ describe('casePublicSearchInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: false,
+        isStatusNew: false,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
           {
+            contactId: getContactPrimary(MOCK_CASE).contactId,
             contactType: CONTACT_TYPES.primary,
             entityName: 'PublicContact',
             name: getContactPrimary(MOCK_CASE).name,

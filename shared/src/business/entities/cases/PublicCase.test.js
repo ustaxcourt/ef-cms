@@ -2,25 +2,23 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
-const {
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-} = require('./Case');
-const { isPrivateDocument, PublicCase } = require('./PublicCase');
+const { getContactSecondary } = require('./Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
 const { MOCK_USERS } = require('../../../test/mockUsers');
-const { omit } = require('lodash');
+const { PublicCase } = require('./PublicCase');
 
+const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
+const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
 describe('PublicCase', () => {
   describe('validation', () => {
     it('should validate when all information is provided and case is not sealed', () => {
@@ -33,8 +31,14 @@ describe('PublicCase', () => {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
           irsPractitioners: [{ name: 'Bob' }],
           partyType: PARTY_TYPES.petitioner,
-          petitioners: [{ contactType: CONTACT_TYPES.primary }],
+          petitioners: [
+            {
+              contactId: mockContactId,
+              contactType: CONTACT_TYPES.primary,
+            },
+          ],
           receivedAt: '2020-01-05T03:30:45.007Z',
+          status: CASE_STATUS_TYPES.calendared,
         },
         { applicationContext },
       );
@@ -82,11 +86,18 @@ describe('PublicCase', () => {
         otherFilers: [],
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
-          { contactType: CONTACT_TYPES.primary },
-          { contactType: CONTACT_TYPES.secondary },
+          {
+            contactId: mockContactId,
+            contactType: CONTACT_TYPES.primary,
+          },
+          {
+            contactId: mockContactIdSecond,
+            contactType: CONTACT_TYPES.secondary,
+          },
         ],
         privatePractitioners: [],
         receivedAt: 'testing',
+        status: CASE_STATUS_TYPES.new,
       },
       { applicationContext },
     );
@@ -101,10 +112,16 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isPaper: true,
       isSealed: false,
+      isStatusNew: true,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
         {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+          entityName: 'PublicContact',
+        },
+        {
+          contactId: mockContactIdSecond,
           contactType: CONTACT_TYPES.secondary,
           entityName: 'PublicContact',
           name: undefined,
@@ -126,8 +143,14 @@ describe('PublicCase', () => {
         docketNumberSuffix: 'testing',
         irsPractitioners: [],
         partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
+        petitioners: [
+          {
+            contactId: mockContactId,
+            contactType: CONTACT_TYPES.primary,
+          },
+        ],
         receivedAt: 'testing',
+        status: CASE_STATUS_TYPES.calendared,
       },
       { applicationContext },
     );
@@ -141,9 +164,14 @@ describe('PublicCase', () => {
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
       isSealed: false,
+      isStatusNew: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
+        {
+          contactId: mockContactId,
+          contactType: CONTACT_TYPES.primary,
+          entityName: 'PublicContact',
+        },
       ],
       receivedAt: 'testing',
     });
@@ -152,8 +180,7 @@ describe('PublicCase', () => {
   it('should filter draft docketEntries out of the docketEntries array', () => {
     const entity = new PublicCase(
       {
-        caseCaption: 'testing',
-        createdAt: 'testing',
+        ...MOCK_CASE,
         docketEntries: [
           {
             docketEntryId: '123',
@@ -165,49 +192,29 @@ describe('PublicCase', () => {
           { docketEntryId: '345', documentType: 'Petition' },
           { docketEntryId: '987', eventCode: TRANSCRIPT_EVENT_CODE },
         ],
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
-        irsPractitioners: [],
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
-        receivedAt: 'testing',
       },
       { applicationContext },
     );
 
-    expect(entity.toRawObject()).toEqual({
-      caseCaption: 'testing',
-      docketEntries: [
-        {
-          additionalInfo: undefined,
-          additionalInfo2: undefined,
-          docketEntryId: '123',
-          documentTitle: undefined,
-          documentType: 'Order that case is assigned',
-          eventCode: undefined,
-          filedBy: undefined,
-          isMinuteEntry: false,
-          isOnDocketRecord: true,
-          isPaper: undefined,
-          isSealed: false,
-          processingStatus: undefined,
-          receivedAt: undefined,
-          servedAt: undefined,
-          servedParties: undefined,
-        },
-      ],
-      docketNumber: 'testing',
-      docketNumberSuffix: 'testing',
-      docketNumberWithSuffix: 'testingtesting',
-      entityName: 'PublicCase',
-      hasIrsPractitioner: false,
-      isSealed: false,
-      partyType: PARTY_TYPES.petitioner,
-      petitioners: [
-        { contactType: CONTACT_TYPES.primary, entityName: 'PublicContact' },
-      ],
-      receivedAt: 'testing',
-    });
+    expect(entity.toRawObject().docketEntries).toEqual([
+      {
+        additionalInfo: undefined,
+        additionalInfo2: undefined,
+        docketEntryId: '123',
+        documentTitle: undefined,
+        documentType: 'Order that case is assigned',
+        eventCode: undefined,
+        filedBy: undefined,
+        isMinuteEntry: false,
+        isOnDocketRecord: true,
+        isPaper: undefined,
+        isSealed: false,
+        processingStatus: undefined,
+        receivedAt: undefined,
+        servedAt: undefined,
+        servedParties: undefined,
+      },
+    ]);
   });
 
   it('should sort the docketEntries array by received date', () => {
@@ -231,130 +238,26 @@ describe('PublicCase', () => {
 
     const entity = new PublicCase(
       {
-        caseCaption: 'testing',
-        contactPrimary: undefined,
-        contactSecondary: undefined,
-        createdAt: 'testing',
+        ...MOCK_CASE,
         docketEntries: [docketEntry1, docketEntry2, docketEntry3],
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
-        irsPractitioners: [],
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
-        receivedAt: 'testing',
       },
       { applicationContext },
     );
 
-    expect(entity.docketEntries[0].documentTitle).toEqual(
-      docketEntry3.documentTitle,
-    );
-    expect(entity.docketEntries[1].documentTitle).toEqual(
-      docketEntry2.documentTitle,
-    );
-    expect(entity.docketEntries[2].documentTitle).toEqual(
-      docketEntry1.documentTitle,
-    );
-  });
-
-  describe('isPrivateDocument', () => {
-    it('should return true for a stipulated decision document that is not on the docket record', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentType: 'Stipulated Decision',
-          eventCode: STIPULATED_DECISION_EVENT_CODE,
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for a stipulated decision document that is on the docket record', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentType: 'Stipulated Decision',
-          eventCode: STIPULATED_DECISION_EVENT_CODE,
-          isOnDocketRecord: true,
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for a transcript document', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801',
-          eventCode: TRANSCRIPT_EVENT_CODE,
-        },
-        [{ docketEntryId: 'db3ed57e-cfca-4228-ad5c-547484b1a801' }],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for an order document that is not on the docket record', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentType: 'Order',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for a court-issued order document that is not on the docket record', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentType: 'Order',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return false for a court-issued order document that is on the docket record', () => {
-      const isPrivate = isPrivateDocument({
-        docketEntryId: '123',
-        documentType: 'Order',
-        isOnDocketRecord: true,
-      });
-      expect(isPrivate).toEqual(false);
-    });
-
-    it('should return true for an external document', () => {
-      const isPrivate = isPrivateDocument(
-        {
-          documentType: 'Petition',
-        },
-        [],
-      );
-      expect(isPrivate).toEqual(true);
-    });
-
-    it('should return true for a court-issued document that is stricken', () => {
-      const isPrivate = isPrivateDocument({
-        docketEntryId: '123',
-        documentType: 'Order',
-        isOnDocketRecord: true,
-        isStricken: true,
-      });
-      expect(isPrivate).toEqual(true);
-    });
+    expect(entity.docketEntries).toMatchObject([
+      { documentTitle: docketEntry3.documentTitle },
+      { documentTitle: docketEntry2.documentTitle },
+      { documentTitle: docketEntry1.documentTitle },
+    ]);
   });
 
   it('should compute docketNumberWithSuffix if it is not provided', () => {
     const entity = new PublicCase(
       {
-        caseCaption: 'testing',
-        contactPrimary: {},
-        contactSecondary: {},
-        createdAt: '2020-01-02T03:30:45.007Z',
-        docketEntries: [{}],
+        ...MOCK_CASE,
         docketNumber: '102-20',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
         docketNumberWithSuffix: null,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
-        receivedAt: '2020-01-05T03:30:45.007Z',
       },
       { applicationContext },
     );
@@ -364,16 +267,10 @@ describe('PublicCase', () => {
   it('should compute docketNumberWithSuffix with just docketNumber if there is no suffix', () => {
     const entity = new PublicCase(
       {
-        caseCaption: 'testing',
-        contactPrimary: {},
-        contactSecondary: {},
-        createdAt: '2020-01-02T03:30:45.007Z',
-        docketEntries: [{}],
+        ...MOCK_CASE,
         docketNumber: '102-20',
         docketNumberSuffix: null,
         docketNumberWithSuffix: null,
-        petitioners: [{ contactType: CONTACT_TYPES.primary }],
-        receivedAt: '2020-01-05T03:30:45.007Z',
       },
       { applicationContext },
     );
@@ -439,12 +336,11 @@ describe('PublicCase', () => {
       const mockOtherFiler = {
         address1: '42 Lamb Sauce Blvd',
         city: 'Nashville',
-        contactType: CONTACT_TYPES.otherFiler,
+        contactType: CONTACT_TYPES.participant,
         country: 'USA',
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
         name: 'Gordon Ramsay',
-        otherFilerType: null,
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',
@@ -458,7 +354,6 @@ describe('PublicCase', () => {
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'gordon@example.com',
         name: 'Gordon Ramsay',
-        otherFilerType: null,
         phone: '1234567890',
         postalCode: '05198',
         state: 'AK',
@@ -467,22 +362,12 @@ describe('PublicCase', () => {
 
       const entity = new PublicCase(
         {
-          caseCaption: 'testing',
-          contactPrimary: {},
-          contactSecondary: {},
-          createdAt: '2020-01-02T03:30:45.007Z',
-          docketEntries: [{}],
-          docketNumber: '102-20',
-          docketNumberSuffix: null,
-          docketNumberWithSuffix: null,
-          irsPractitioners: [],
-          partyType: PARTY_TYPES.petitioner,
+          ...MOCK_CASE,
           petitioners: [
             { contactType: CONTACT_TYPES.primary },
             mockOtherFiler,
             mockOtherPetitioner,
           ],
-          receivedAt: '2020-01-05T03:30:45.007Z',
         },
         { applicationContext },
       );
@@ -494,64 +379,6 @@ describe('PublicCase', () => {
         ]),
       );
       expect(entity.irsPractitioners).toBeTruthy();
-    });
-
-    it('anyone other than an irsPractitioner does not see otherPetitioners or otherFilers', () => {
-      applicationContext.getCurrentUser.mockReturnValue(
-        MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
-
-      const entity = new PublicCase(
-        {
-          caseCaption: 'testing',
-          contactPrimary: {},
-          contactSecondary: {},
-          createdAt: '2020-01-02T03:30:45.007Z',
-          docketEntries: [{}],
-          docketNumber: '102-20',
-          docketNumberSuffix: null,
-          docketNumberWithSuffix: null,
-          petitioners: [
-            { contactType: CONTACT_TYPES.primary },
-            {
-              address1: '42 Lamb Sauce Blvd',
-              city: 'Nashville',
-              contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
-              contactType: CONTACT_TYPES.otherFiler,
-              country: 'USA',
-              countryType: 'domestic',
-              email: 'testUser@example.com',
-              isAddressSealed: false,
-              name: 'Gordon Ramsay',
-              otherFilerType: 'Intervenor',
-              phone: '1234567890',
-              postalCode: '05198',
-              state: 'AK',
-              title: 'Intervenor',
-            },
-            {
-              additionalName: 'Guy Fieri',
-              address1: '453 Electric Ave',
-              city: 'Philadelphia',
-              contactType: CONTACT_TYPES.otherPetitioner,
-              countryType: 'domestic',
-              email: 'mayorofflavortown@example.com',
-              name: 'Guy Fieri',
-              phone: '1234567890',
-              postalCode: '99999',
-              serviceIndicator: 'None',
-              state: 'PA',
-              title: 'Petitioner',
-            },
-          ],
-          receivedAt: '2020-01-05T03:30:45.007Z',
-        },
-        { applicationContext },
-      );
-
-      expect(getOtherFilers(entity)).toEqual([]);
-      expect(getOtherPetitioners(entity)).toEqual([]);
-      expect(entity.irsPractitioners).toBeUndefined();
     });
 
     it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
@@ -577,22 +404,6 @@ describe('PublicCase', () => {
       };
       const rawCase = {
         caseCaption: 'testing',
-        contactSecondary: {
-          address1: '907 West Rocky Cowley Parkway',
-          address2: '104 West 120th Street',
-          address3: 'Nisi quisquam ea har',
-          city: 'Ut similique id erro',
-          contactId: '7115d1ab-18d0-43ec-bafb-654e83405416',
-          countryType: 'domestic',
-          email: 'petitioner@example.com',
-          isAddressSealed: false,
-          name: 'Barrett Carpenter',
-          phone: '+1 (241) 924-9153',
-          postalCode: '26371',
-          sealedAndUnavailable: false,
-          secondaryName: 'Leslie Bullock',
-          state: 'MD',
-        },
         docketEntries: [],
         docketNumber: 'testing',
         docketNumberSuffix: 'testing',
@@ -669,7 +480,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(rawCase, { applicationContext });
 
       expect(entity.toRawObject()).toMatchObject({
-        ...omit(rawCase, 'contactSecondary'),
         caseCaption: 'testing',
         docketEntries: [],
         docketNumber: 'testing',
@@ -678,17 +488,7 @@ describe('PublicCase', () => {
         hasIrsPractitioner: true,
         isSealed: false,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: expect.arrayContaining([
-          expect.objectContaining({
-            ...rawContactPrimary,
-          }),
-          expect.objectContaining({
-            contactType: CONTACT_TYPES.otherFiler,
-          }),
-          expect.objectContaining({
-            contactType: CONTACT_TYPES.secondary,
-          }),
-        ]),
+        petitioners: rawCase.petitioners,
         receivedAt: 'testing',
       });
     });
@@ -699,10 +499,7 @@ describe('PublicCase', () => {
       });
 
       const rawCase = {
-        caseCaption: 'testing',
-        docketEntries: [],
-        docketNumber: 'testing',
-        docketNumberSuffix: 'testing',
+        ...MOCK_CASE,
         irsPractitioners: [
           {
             userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -727,7 +524,6 @@ describe('PublicCase', () => {
             userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
           },
         ],
-        receivedAt: 'testing',
       };
       const entity = new PublicCase(rawCase, { applicationContext });
 

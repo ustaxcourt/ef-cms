@@ -1,9 +1,7 @@
 const joi = require('joi');
 const {
-  CHAMBERS_SECTIONS_WITH_LEGACY,
   COUNTRY_TYPES,
   ROLES,
-  SECTIONS,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -15,6 +13,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { formatPhoneNumber } = require('../utilities/formatPhoneNumber');
 
 /**
  * constructor
@@ -51,7 +50,7 @@ const userDecorator = (obj, rawObj, filtered = false) => {
       city: rawObj.contact.city,
       country: rawObj.contact.country,
       countryType: rawObj.contact.countryType,
-      phone: rawObj.contact.phone,
+      phone: formatPhoneNumber(rawObj.contact.phone),
       postalCode: rawObj.contact.postalCode,
       state: rawObj.contact.state,
     };
@@ -120,14 +119,9 @@ const userValidation = {
       'Whether the contact information for the user is being updated.',
     ),
   pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
-  pendingEmailVerificationToken: JoiValidationConstants.UUID.allow(
-    null,
-  ).optional(),
-  section: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS_WITH_LEGACY,
-    ...Object.values(ROLES),
-  ).optional(),
+  pendingEmailVerificationToken:
+    JoiValidationConstants.UUID.allow(null).optional(),
+  section: JoiValidationConstants.STRING.optional(),
   token: JoiValidationConstants.STRING.optional(),
   userId: JoiValidationConstants.UUID.required(),
 };

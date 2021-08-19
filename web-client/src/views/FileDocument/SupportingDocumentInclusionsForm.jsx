@@ -69,7 +69,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="usa-checkbox__label"
                 htmlFor={`${type}-attachments`}
               >
                 Attachment(s)
@@ -92,7 +92,7 @@ export const SupportingDocumentInclusionsForm = connect(
                 }}
               />
               <label
-                className="usa-checkbox__label inline-block"
+                className="inline-block supporting-document-certificate-of-service usa-checkbox__label"
                 htmlFor={`${type}-certificateOfService`}
               >
                 Certificate Of Service
@@ -102,6 +102,7 @@ export const SupportingDocumentInclusionsForm = connect(
         </div>
         {data.certificateOfService && (
           <DateInput
+            className="supporting-document-certificate-of-service-date"
             errorText={validationData?.certificateOfServiceDate}
             id={`${type}-service-date`}
             label="Service date"

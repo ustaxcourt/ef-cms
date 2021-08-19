@@ -16,6 +16,7 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     documentTitle: 'Order to do something',
     documentType: 'Order',
     eventCode: 'O',
+    filers: [],
     filingDate: '2019-06-22T17:29:13.120Z',
     freeText: 'to do something',
     index: 1,
@@ -23,7 +24,7 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     lodged: false,
   };
 
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -31,7 +32,7 @@ describe('gotoEditDocketEntryMetaSequence', () => {
     presenter.sequences = {
       gotoEditDocketEntryMetaSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getCaseInteractor.mockReturnValue({
       ...MOCK_CASE,
@@ -54,12 +55,12 @@ describe('gotoEditDocketEntryMetaSequence', () => {
   });
 
   it('should set up state for editing court issued docket entry', async () => {
-    await test.runSequence('gotoEditDocketEntryMetaSequence', {
+    await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {
       docketNumber: mockDocketNumber,
       docketRecordIndex: 1,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketRecordIndex: 1,
       form: {

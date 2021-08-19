@@ -3,7 +3,7 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);
@@ -16,7 +16,7 @@ exports.goToCaseOverview = docketNumber => {
   // not see it as a new page visit when routing to the same route again and the page
   // will not reload
   cy.goToRoute('/');
-  cy.get('.ustc-table').should('exist');
+  cy.get('.message-unread-column').should('exist');
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();
@@ -105,7 +105,7 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.get('#menu-button-upload-pdf').click();
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
-  cy.upload_file('w3-dummy.pdf', 'input#primary-document-file');
+  cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
 exports.clickSaveUploadedPdfButton = () => {

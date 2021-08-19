@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.path the cerebral path options
  * @returns {Promise} async action
  */
-export const validateOpinionAdvancedSearchAction = async ({
+export const validateOpinionAdvancedSearchAction = ({
   applicationContext,
   get,
   path,
@@ -18,8 +18,7 @@ export const validateOpinionAdvancedSearchAction = async ({
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
   const errors = applicationContext
     .getUseCases()
-    .validateOpinionAdvancedSearchInteractor({
-      applicationContext,
+    .validateOpinionAdvancedSearchInteractor(applicationContext, {
       opinionSearch,
     });
 

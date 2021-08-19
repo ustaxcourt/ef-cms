@@ -2,9 +2,12 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_NUMBER_SUFFIXES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   generateStandingPretrialOrderInteractor,
 } = require('./generateStandingPretrialOrderInteractor');
-const { DOCKET_NUMBER_SUFFIXES } = require('../../entities/EntityConstants');
 
 describe('generateStandingPretrialOrderInteractor', () => {
   const TEST_JUDGE = {
@@ -37,6 +40,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         judge: { name: 'Test Judge' },
         meetingId: '1111',
         password: '2222',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
         trialLocation: 'Boise, Idaho',
@@ -48,8 +52,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('get the case detail and trial session detail', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '123-45',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -63,8 +66,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
   });
 
   it('should call the Standing Pretrial Order document generator with correct data', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
@@ -79,22 +81,51 @@ describe('generateStandingPretrialOrderInteractor', () => {
         formattedStartDate: 'August 25, 2019',
         formattedStartDateWithDayOfWeek: 'Sunday, August 25, 2019',
         formattedStartTime: '10:00 AM',
+        formattedTrialLocation: 'Boise, Idaho',
         joinPhoneNumber: '3333',
         meetingId: '1111',
         password: '2222',
-        trialLocation: 'Boise, Idaho',
       },
     });
   });
 
   it('should add a served stamp to the document', async () => {
-    await generateStandingPretrialOrderInteractor({
-      applicationContext,
+    await generateStandingPretrialOrderInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
+
     expect(
       applicationContext.getUseCaseHelpers().addServedStampToDocument,
     ).toHaveBeenCalled();
+  });
+
+  it('should send formattedTrialLocation with Remote Proceedings text if proceedingType is remote', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        joinPhoneNumber: '3333',
+        judge: { name: 'Test Judge' },
+        meetingId: '1111',
+        password: '2222',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        startDate: '2019-08-25T05:00:00.000Z',
+        startTime: '10:00',
+        trialLocation: 'Boise, Idaho',
+      });
+
+    await generateStandingPretrialOrderInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().standingPretrialOrder.mock
+        .calls[0][0].data,
+    ).toMatchObject({
+      trialInfo: {
+        formattedTrialLocation: 'Boise, Idaho - Remote Proceedings',
+      },
+    });
   });
 });

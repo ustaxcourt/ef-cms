@@ -10,10 +10,10 @@ const {
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-exports.generateDocumentTitleInteractor = ({
+exports.generateDocumentTitleInteractor = (
   applicationContext,
-  documentMetadata,
-}) => {
+  { documentMetadata },
+) => {
   if (documentMetadata.previousDocument) {
     documentMetadata.previousDocument.documentTitle = applicationContext
       .getUtilities()
@@ -22,9 +22,7 @@ exports.generateDocumentTitleInteractor = ({
       });
   }
 
-  const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
-    applicationContext,
-  });
+  const externalDocument = ExternalDocumentFactory(documentMetadata);
 
   return externalDocument.getDocumentTitle();
 };

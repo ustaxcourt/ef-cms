@@ -6,9 +6,6 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 
 - [Amazon Web Services](https://portal.aws.amazon.com/gp/aws/developer/registration/) — hosting.
 - [CircleCI](https://circleci.com/signup/) — test running and code deployment.
-- [SonarCloud](https://sonarcloud.io/) — static code analysis.
-  - Create a [organization](https://sonarcloud.io/create-organization). Make note of the name chosen for CircleCI configuration later.
-  - There are three sub-projects to the EF-CMS — the front-end (the UI), the back-end (the API), and shared code. Make note of each project’s key and token for CircleCI configuration later.
 
 ## 2. Configure your local developer machine.
 
@@ -63,13 +60,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `AWS_ACCOUNT_ID` | AWS account ID without hyphens |
   | `AWS_ACCESS_KEY_ID` | AWS access key for the AWS CircleCI user |
   | `AWS_SECRET_ACCESS_KEY` | AWS secret access key for the AWS CircleCI user |
-  | `SONAR_ORG` | SonarCloud organization name |
-  | `SHARED_SONAR_KEY` | SonarCloud key for the shared project |
-  | `SHARED_SONAR_TOKEN` | SonarCloud token for the shared project |
-  | `API_SONAR_KEY` | SonarCloud key for the API project |
-  | `API_SONAR_TOKEN` | SonarCloud token for the API project |
-  | `UI_SONAR_KEY` | SonarCloud key for the UI project |
-  | `UI_SONAR_TOKEN` | SonarCloud token for the UI project |
   | `DYNAMSOFT_PRODUCT_KEYS_STG` | Dynamsoft Web TWAIN product key used for STG |
   | `DYNAMSOFT_PRODUCT_KEYS_TEST` | Dynamsoft Web TWAIN product key used for TEST |
   | `DYNAMSOFT_PRODUCT_KEYS_PROD` | Dynamsoft Web TWAIN product key used for PROD |

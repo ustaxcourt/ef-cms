@@ -1,3 +1,7 @@
+import './index.scss';
+
+import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
 import {
@@ -39,7 +43,7 @@ import ReactDOM from 'react-dom';
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
-  initialize: async (applicationContext, debugTools) => {
+  initialize: (applicationContext, debugTools) => {
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
     };

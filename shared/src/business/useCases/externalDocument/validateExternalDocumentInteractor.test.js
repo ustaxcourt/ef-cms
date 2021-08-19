@@ -1,7 +1,4 @@
 const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
   validateExternalDocumentInteractor,
 } = require('./validateExternalDocumentInteractor');
 const {
@@ -11,7 +8,6 @@ const {
 describe('validateExternalDocumentInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
     const errors = validateExternalDocumentInteractor({
-      applicationContext,
       documentMetadata: {},
     });
 
@@ -23,7 +19,6 @@ describe('validateExternalDocumentInteractor', () => {
 
   it('returns no errors when all fields are defined', () => {
     const errors = validateExternalDocumentInteractor({
-      applicationContext,
       documentMetadata: {
         category: 'Application',
         documentType: 'Application for Waiver of Filing Fee',

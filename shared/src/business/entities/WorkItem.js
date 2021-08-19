@@ -50,6 +50,7 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
     'servedAt',
     'userId',
   ]);
+
   this.docketNumber = rawWorkItem.docketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
@@ -118,6 +119,16 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   this.completedByUserId = user.userId;
   this.completedMessage = message;
   delete this.inProgress;
+  return this;
+};
+
+/**
+ * marks the work item as read
+ *
+ * @returns {WorkItem} the updated work item
+ */
+WorkItem.prototype.markAsRead = function () {
+  this.isRead = true;
   return this;
 };
 

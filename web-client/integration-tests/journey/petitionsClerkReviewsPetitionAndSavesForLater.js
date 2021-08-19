@@ -1,38 +1,45 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const petitionsClerkReviewsPetitionAndSavesForLater = test => {
+export const petitionsClerkReviewsPetitionAndSavesForLater = cerebralTest => {
   return it('Petitions Clerk reviews petition and saves for later', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoWorkQueueSequence');
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
-    await test.runSequence('chooseWorkQueueSequence', {
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inbox',
       queue: 'section',
     });
 
-    const workQueueToDisplay = test.getState('workQueueToDisplay');
+    const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
 
-    const inboxQueue = test.getState('workQueue');
+    const inboxQueue = cerebralTest.getState('workQueue');
     const inboxWorkItem = inboxQueue.find(
-      workItem => workItem.docketNumber === test.docketNumber,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(inboxWorkItem).toBeTruthy();
 
-    await test.runSequence('gotoPetitionQcSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoPetitionQcSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('saveSavedCaseForLaterSequence', {});
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: false,
+    });
 
-    expect(test.getState('currentPage')).toEqual('ReviewSavedPetition');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    await test.runSequence('leaveCaseForLaterServiceSequence', {});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('currentPage')).toEqual('WorkQueue');
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    await cerebralTest.runSequence('leaveCaseForLaterServiceSequence', {});
+
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
   });
 };

@@ -10,7 +10,6 @@ const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } = require('../../entities/EntityConstants');
 const {
@@ -73,11 +72,8 @@ exports.completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress,
-  } = entryMetadata;
+  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
+    entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -109,6 +105,8 @@ exports.completeDocketEntryQCInteractor = async (
     documentTitle: entryMetadata.documentTitle,
     documentType: entryMetadata.documentType,
     eventCode: entryMetadata.eventCode,
+    filedBy: entryMetadata.filedBy,
+    filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
     freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
@@ -119,8 +117,6 @@ exports.completeDocketEntryQCInteractor = async (
     ordinalValue: entryMetadata.ordinalValue,
     otherFilingParty: entryMetadata.otherFilingParty,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
-    partyPrimary: entryMetadata.partyPrimary,
-    partySecondary: entryMetadata.partySecondary,
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
@@ -130,16 +126,13 @@ exports.completeDocketEntryQCInteractor = async (
   const updatedDocketEntry = new DocketEntry(
     {
       ...currentDocketEntry,
-      filedBy: undefined, // allow constructor to re-generate
       ...editableFields,
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
 
@@ -190,48 +183,33 @@ exports.completeDocketEntryQCInteractor = async (
 
   const workItemToUpdate = updatedDocketEntry.workItem;
 
-  if (workItemToUpdate) {
-    Object.assign(workItemToUpdate, {
-      caseIsInProgress: caseEntity.inProgress,
-      caseStatus: caseToUpdate.status,
-      docketEntry: {
-        ...updatedDocketEntry.toRawObject(),
-        createdAt: updatedDocketEntry.createdAt,
-      },
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+  Object.assign(workItemToUpdate, {
+    docketEntry: {
+      ...updatedDocketEntry.toRawObject(),
+      createdAt: updatedDocketEntry.createdAt,
+    },
+  });
+
+  workItemToUpdate.setAsCompleted({
+    message: 'completed',
+    user,
+  });
+
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .saveWorkItemForDocketClerkFilingExternalDocument({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
     });
-
-    if (!workItemToUpdate.completedAt) {
-      Object.assign(workItemToUpdate, {
-        assigneeId: null,
-        assigneeName: null,
-        section: DOCKET_SECTION,
-        sentBy: user.userId,
-      });
-
-      workItemToUpdate.setAsCompleted({
-        message: 'completed',
-        user,
-      });
-
-      workItemToUpdate.assignToUser({
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-      });
-    }
-
-    await applicationContext
-      .getPersistenceGateway()
-      .saveWorkItemForDocketClerkFilingExternalDocument({
-        applicationContext,
-        workItem: workItemToUpdate.validate().toRawObject(),
-      });
-  }
 
   let servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
@@ -275,9 +253,7 @@ exports.completeDocketEntryQCInteractor = async (
         useTempBucket: true,
       });
 
-      const {
-        url,
-      } = await applicationContext
+      const { url } = await applicationContext
         .getPersistenceGateway()
         .getDownloadPolicyUrl({
           applicationContext,
@@ -307,7 +283,7 @@ exports.completeDocketEntryQCInteractor = async (
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         userId: user.userId,
       },
-      { applicationContext },
+      { applicationContext, petitioners: caseToUpdate.petitioners },
     );
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext

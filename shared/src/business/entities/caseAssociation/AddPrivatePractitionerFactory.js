@@ -6,53 +6,31 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const {
-  makeRequiredHelper,
-} = require('../externalDocument/externalDocumentHelpers');
 const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
 
 /**
+ * Add Private Practitioner Factory entity
  *
+ * @param {object} rawProps the raw private practitioner data
  * @constructor
  */
-function AddPrivatePractitionerFactory() {}
-
-AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
-  representingPrimary: 'Select a represented party',
-  representingSecondary: 'Select a represented party',
-  serviceIndicator: [
-    {
-      contains: 'must be one of',
-      message:
-        'No email found for electronic service. Select a valid service preference.',
-    },
-    'Select service type',
-  ],
-  user: 'Select a petitioner counsel',
-};
-
-/**
- *
- * @param {object} metadata the metadata
- * @returns {object} the instance
- */
-AddPrivatePractitionerFactory.get = metadata => {
-  /**
-   *
-   */
+function AddPrivatePractitionerFactory(rawProps) {
   function entityConstructor() {}
-  entityConstructor.prototype.init = function init(rawProps) {
+  entityConstructor.prototype.init = function init(rawPropsParam) {
     Object.assign(this, {
-      email: rawProps.user?.email,
-      representingPrimary: rawProps.representingPrimary,
-      representingSecondary: rawProps.representingSecondary,
-      serviceIndicator: rawProps.serviceIndicator,
-      user: rawProps.user,
+      email: rawPropsParam.user?.email,
+      representing: rawPropsParam.representing,
+      serviceIndicator: rawPropsParam.serviceIndicator,
+      user: rawPropsParam.user,
     });
   };
 
-  let schema = {
+  const schema = {
     email: JoiValidationConstants.STRING.optional(),
+    representing: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
@@ -68,33 +46,26 @@ AddPrivatePractitionerFactory.get = metadata => {
     user: joi.object().required(),
   };
 
-  let schemaOptionalItems = {
-    representingPrimary: joi.boolean().invalid(false),
-    representingSecondary: joi.boolean(),
-  };
-
-  const makeRequired = itemName => {
-    makeRequiredHelper({
-      itemName,
-      schema,
-      schemaOptionalItems,
-    });
-  };
-
-  if (
-    metadata.representingPrimary !== true &&
-    metadata.representingSecondary !== true
-  ) {
-    makeRequired('representingPrimary');
-  }
-
   joiValidationDecorator(
     entityConstructor,
     schema,
     AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
   );
 
-  return new (validEntityDecorator(entityConstructor))(metadata);
+  return new (validEntityDecorator(entityConstructor))(rawProps);
+}
+
+AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
+  representing: 'Select a represented party',
+  serviceIndicator: [
+    {
+      contains: 'must be one of',
+      message:
+        'No email found for electronic service. Select a valid service preference.',
+    },
+    'Select service type',
+  ],
+  user: 'Select a petitioner counsel',
 };
 
 module.exports = { AddPrivatePractitionerFactory };

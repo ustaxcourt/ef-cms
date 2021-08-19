@@ -1,56 +1,58 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 export const petitionsClerkRemovesAndReaddsPdfFromPetition = (
-  test,
+  cerebralTest,
   fakeFile,
 ) => {
   const documentToRemoveAndReAdd = 'applicationForWaiverOfFilingFeeFile';
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
 
   return it('Petitions Clerk removes and readds PDF from petition', async () => {
-    test.setState(
+    cerebralTest.setState(
       'currentViewMetadata.documentSelectedForPreview',
       documentToRemoveAndReAdd,
     );
-    await test.runSequence('setDocumentForPreviewSequence');
+    await cerebralTest.runSequence('setDocumentForPreviewSequence');
 
-    const docketEntryIdToDelete = test.getState('docketEntryId');
+    const docketEntryIdToDelete = cerebralTest.getState('docketEntryId');
     expect(docketEntryIdToDelete).toBeDefined();
-    expect(test.getState('pdfPreviewUrl')).toBeDefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
 
-    await test.runSequence('deleteUploadedPdfSequence');
+    await cerebralTest.runSequence('deleteUploadedPdfSequence');
 
-    const deletedDocument = test
+    const deletedDocument = cerebralTest
       .getState('form.docketEntries')
       .find(doc => doc.docketEntryId === docketEntryIdToDelete);
     expect(deletedDocument).toBeUndefined();
-    expect(test.getState('pdfPreviewUrl')).toBeUndefined();
+    expect(cerebralTest.getState('pdfPreviewUrl')).toBeUndefined();
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       applicationForWaiverOfFilingFeeFile:
         'Upload or scan an Application for Waiver of Filing Fee (APW)',
     });
 
-    expect(test.getState('form.docketEntries')).toEqual(
+    expect(cerebralTest.getState('form.docketEntries')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ documentType: 'Petition', eventCode: 'P' }),
       ]),
     );
 
-    await test.runSequence('setDocumentForUploadSequence', {
+    await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'applicationForWaiverOfFilingFeeFile',
       documentUploadMode: 'preview',
       file: fakeFile,
     });
 
-    expect(test.getState('form')[documentToRemoveAndReAdd]).toBeDefined();
+    expect(
+      cerebralTest.getState('form')[documentToRemoveAndReAdd],
+    ).toBeDefined();
 
-    await test.runSequence('saveSavedCaseForLaterSequence');
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const newApwFileDocketEntryId = test
+    const newApwFileDocketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
       .find(
         doc =>

@@ -96,12 +96,12 @@ exports.formattedTrialSessionDetails = ({
     .formatDateString(trialSession.startDate, 'MMMM DD, YYYY');
 
   let [hour, min] = trialSession.startTime.split(':');
-  let startTimeExtension = 'am';
+  let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
   if (+hour > 12) {
-    startTimeExtension = 'pm';
     hour = +hour - 12;
   }
+
   trialSession.formattedStartTime = `${hour}:${min} ${startTimeExtension}`;
   trialSession.formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
@@ -155,7 +155,7 @@ exports.getTrialSessionStatus = ({ applicationContext, session }) => {
     return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
     return SESSION_STATUS_GROUPS.open;
-  } else if (!session.isCalendared) {
+  } else {
     return SESSION_STATUS_GROUPS.new;
   }
 };

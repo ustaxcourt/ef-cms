@@ -1,42 +1,44 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
+const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
+  applicationContext.getConstants();
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
-  test,
+  cerebralTest,
   overrides = {},
 ) => {
   return it('petitioner views case detail after filing a document', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
     const docketNumberSuffix =
       overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER;
 
-    const caseDetail = test.getState('caseDetail');
+    const caseDetail = cerebralTest.getState('caseDetail');
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(caseDetail.docketNumber).toEqual(test.docketNumber);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
+
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(caseDetail.docketNumber).toEqual(cerebralTest.docketNumber);
     expect(caseDetail.docketNumberSuffix).toEqual(docketNumberSuffix);
     expect(caseDetailFormatted.docketNumberWithSuffix).toEqual(
-      `${test.docketNumber}${docketNumberSuffix}`,
+      `${cerebralTest.docketNumber}${docketNumberSuffix}`,
     );
 
     // verify that the user was given a link to their receipt
-    expect(test.getState('alertSuccess.linkUrl')).toBeDefined();
+    expect(cerebralTest.getState('alertSuccess.linkUrl')).toBeDefined();
 
     expect(caseDetail.docketEntries.length).toEqual(6);
 
@@ -66,14 +68,12 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
       ]),
     );
 
-    const statement = caseDetailFormatted.formattedDocketEntries.find(
+    const statement = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.documentType === 'Statement',
     );
 
     expect(statement.showLinkToDocument).toBeTruthy();
 
-    expect(
-      caseDetailFormatted.formattedDocketEntriesOnDocketRecord[1].eventCode,
-    ).toEqual('RQT');
+    expect(formattedDocketEntriesOnDocketRecord[1].eventCode).toEqual('RQT');
   });
 };

@@ -1,19 +1,19 @@
 const React = require('react');
 const {
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVED_PARTIES_CODES,
 } = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
+const { v4: uuidv4 } = require('uuid');
 
 describe('DocketRecord', () => {
   let caseDetail;
   let contactPrimary;
-  let contactSecondary;
   let entries;
   let options;
-  let privatePractitioner;
   let irsPractitioner;
 
   beforeEach(() => {
@@ -25,44 +25,22 @@ describe('DocketRecord', () => {
     };
 
     contactPrimary = {
+      additionalName: 'Additional name',
       address1: 'Address 1',
       address2: 'Address 2',
       address3: 'Address 3',
       city: 'City',
+      contactId: uuidv4(),
+      contactType: CONTACT_TYPES.primary,
+      counselDetails: [
+        { email: 'jeff@example.com', name: 'Jeff Yu', phone: '867.5309' },
+      ],
       country: 'USA',
       name: 'Test Petitioner',
       phone: '123-124-1234',
       postalCode: '12345',
       secondaryName: 'Secondary Name',
       state: 'AL',
-    };
-
-    contactSecondary = {
-      address1: 'Address 1',
-      address2: 'Address 2',
-      address3: 'Address 3',
-      city: 'City',
-      country: 'USA',
-      name: 'Test Petitioner 2',
-      phone: '123-124-5678',
-      postalCode: '12345',
-      state: 'AL',
-    };
-
-    privatePractitioner = {
-      barNumber: 'PT20001',
-      contact: {
-        address1: 'Address 1',
-        address2: 'Address 2',
-        address3: 'Address 3',
-        city: 'City',
-        country: 'USA',
-        phone: '234-123-4567',
-        postalCode: '12345',
-        state: 'AL',
-      },
-      formattedName: 'Test Private Practitioner (PT20001)',
-      name: 'Test Private Practitioner',
     };
 
     irsPractitioner = {
@@ -78,13 +56,14 @@ describe('DocketRecord', () => {
         state: 'AL',
       },
       name: 'Test IRS Practitioner',
+      userId: uuidv4(),
     };
 
     caseDetail = {
-      contactPrimary,
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
-      privatePractitioners: [],
+      petitioners: [contactPrimary],
+      privatePractitioners: [{ representingFormatted: [] }],
     };
 
     entries = [
@@ -116,15 +95,12 @@ describe('DocketRecord', () => {
     );
 
     const contacts = wrapper.find('#petitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      PARTY_TYPES.petitioner,
-    );
     expect(contacts.find('.party-details').length).toEqual(1);
 
     const contactPrimaryEl = contacts.find('.party-details').text();
 
     expect(contactPrimaryEl).toContain(contactPrimary.name);
-    expect(contactPrimaryEl).toContain(`c/o ${contactPrimary.secondaryName}`);
+    expect(contactPrimaryEl).toContain(contactPrimary.additionalName);
     expect(contactPrimaryEl).toContain(contactPrimary.address1);
     expect(contactPrimaryEl).toContain(contactPrimary.address2);
     expect(contactPrimaryEl).toContain(contactPrimary.address3);
@@ -136,7 +112,7 @@ describe('DocketRecord', () => {
     expect(contactPrimaryEl).not.toContain(contactPrimary.country);
   });
 
-  it('does not render the primary contact information when options.includePartyDetail is false', () => {
+  it('does not render petitioner contact information when options.includePartyDetail is false', () => {
     options.includePartyDetail = false;
 
     const wrapper = mount(
@@ -148,7 +124,7 @@ describe('DocketRecord', () => {
       />,
     );
 
-    const contacts = wrapper.find('#petitioner-contacts');
+    const contacts = wrapper.find('#petitioner-contacts .address-info');
     expect(contacts.length).toEqual(0);
   });
 
@@ -188,27 +164,8 @@ describe('DocketRecord', () => {
     expect(docketRecord.find('.stricken-docket-record').length).toEqual(2);
   });
 
-  it('renders party info in care of if present', () => {
-    contactPrimary.inCareOf = 'Test Care Of';
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const contactPrimaryEl = wrapper
-      .find('#petitioner-contacts')
-      .find('.party-details')
-      .at(0);
-
-    expect(contactPrimaryEl.text()).toContain(`c/o ${contactPrimary.inCareOf}`);
-  });
-
-  it('renders "Pro Se" when no private practitioner is given', () => {
-    caseDetail.privatePractitioners = []; // No private practitioners
+  it('renders "None" when no private practitioner is given', () => {
+    caseDetail.petitioners[0].counselDetails = [{ name: 'None' }]; // No private practitioners
 
     const wrapper = mount(
       <DocketRecord
@@ -219,15 +176,13 @@ describe('DocketRecord', () => {
       />,
     );
 
-    expect(wrapper.find('#private-practitioner-contacts').length).toEqual(1);
+    expect(wrapper.find('.practitioner-contact').length).toEqual(1);
 
-    const contacts = wrapper.find('#private-practitioner-contacts');
-    expect(contacts.find('.party-info-content').text()).toEqual('Pro Se');
+    const contacts = wrapper.find('.practitioner-contact');
+    expect(contacts.text()).toEqual('None');
   });
 
   it('renders private practitioner contact info when present', () => {
-    caseDetail.privatePractitioners = [privatePractitioner];
-
     const wrapper = mount(
       <DocketRecord
         caseDetail={caseDetail}
@@ -237,63 +192,9 @@ describe('DocketRecord', () => {
       />,
     );
 
-    const contacts = wrapper.find('#private-practitioner-contacts');
-    expect(contacts.length).toEqual(1);
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      'Petitioner Counsel',
-    );
-
-    const contactEl = contacts.find('.party-details').text();
-
-    expect(contactEl).toContain(privatePractitioner.formattedName);
-    expect(contactEl).toContain(privatePractitioner.contact.address1);
-    expect(contactEl).toContain(privatePractitioner.contact.address2);
-    expect(contactEl).toContain(privatePractitioner.contact.address3);
-    expect(contactEl).toContain(privatePractitioner.contact.city);
-    expect(contactEl).toContain(privatePractitioner.contact.state);
-    expect(contactEl).toContain(privatePractitioner.contact.postalCode);
-    expect(contactEl).toContain(privatePractitioner.contact.phone);
-
-    expect(contactEl).not.toContain('Representing');
-  });
-
-  it('displays represented parties with each practitioner', () => {
-    const privatePractitioner2 = {
-      ...privatePractitioner,
-      barNumber: 'PT20002',
-      representingSecondary: true,
-    };
-    privatePractitioner.representingPrimary = true;
-    caseDetail.privatePractitioners = [
-      privatePractitioner,
-      privatePractitioner2,
-    ];
-    caseDetail.contactSecondary = contactSecondary;
-
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const contacts = wrapper.find('#private-practitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      'Petitioner Counsel',
-    );
-
-    expect(contacts.find('.party-details').length).toEqual(2);
-
-    const practitioner1El = contacts.find('.party-details').at(0);
-    const practitioner2El = contacts.find('.party-details').at(1);
-
-    expect(practitioner1El.text()).toContain('Representing');
-    expect(practitioner1El.text()).toContain(contactPrimary.name);
-
-    expect(practitioner2El.text()).toContain('Representing');
-    expect(practitioner2El.text()).toContain(contactSecondary.name);
+    const counselDetails = wrapper.find('.practitioner-contact');
+    expect(counselDetails.length).toEqual(1);
+    expect(counselDetails.text()).toContain('Jeff Yu', 'jeff@example.com');
   });
 
   it('renders "None" when no IRS practitioner is given', () => {
@@ -311,7 +212,7 @@ describe('DocketRecord', () => {
     expect(wrapper.find('#irs-practitioner-contacts').length).toEqual(1);
 
     const contacts = wrapper.find('#irs-practitioner-contacts');
-    expect(contacts.find('.party-info-content').text()).toEqual('None');
+    expect(contacts.text()).toContain('None');
   });
 
   it('renders irs practitioner contact information when present', () => {
@@ -326,23 +227,10 @@ describe('DocketRecord', () => {
       />,
     );
 
+    expect(wrapper.find('#irs-practitioner-contacts').length).toEqual(1);
+
     const contacts = wrapper.find('#irs-practitioner-contacts');
-    expect(contacts.find('.party-info-header').text()).toEqual(
-      'Respondent Counsel',
-    );
-
-    const contactEl = contacts.find('.party-details').text();
-
-    expect(contactEl).toContain(irsPractitioner.name);
-    expect(contactEl).toContain(irsPractitioner.contact.address1);
-    expect(contactEl).toContain(irsPractitioner.contact.address2);
-    expect(contactEl).toContain(irsPractitioner.contact.address3);
-    expect(contactEl).toContain(irsPractitioner.contact.city);
-    expect(contactEl).toContain(irsPractitioner.contact.state);
-    expect(contactEl).toContain(irsPractitioner.contact.postalCode);
-    expect(contactEl).toContain(irsPractitioner.contact.phone);
-
-    expect(contactEl).not.toContain('Representing');
+    expect(contacts.text()).toContain(irsPractitioner.name);
   });
 
   it('renders a table with docket record data', () => {
@@ -360,7 +248,7 @@ describe('DocketRecord', () => {
 
     const rowEl = docketRecord.find('tbody tr').at(0).text();
 
-    expect(rowEl).toContain(entries[0].index);
+    expect(rowEl).toContain(`${entries[0].index}`);
     expect(rowEl).toContain(entries[0].createdAtFormatted);
     expect(rowEl).toContain(entries[0].eventCode);
     expect(rowEl).toContain(entries[0].descriptionDisplay);

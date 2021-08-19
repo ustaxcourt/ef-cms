@@ -24,7 +24,7 @@ describe('getCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][1]
         .docketNumber,
     ).toEqual(mockDocketNumber);
   });
@@ -39,7 +39,7 @@ describe('getCaseAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][0]
+      applicationContext.getUseCases().getCaseInteractor.mock.calls[0][1]
         .docketNumber,
     ).toEqual(mockDocketNumber);
   });

@@ -50,9 +50,8 @@ PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES = {
 };
 
 PublicDocumentSearchResult.schema = joi.object().keys({
-  caseCaption: JoiValidationConstants.STRING.description(
-    'The case caption',
-  ).required(),
+  caseCaption:
+    JoiValidationConstants.STRING.description('The case caption').required(),
   docketEntryId: JoiValidationConstants.UUID.description(
     'The UUID of the corresponding document in S3',
   ).required(),
@@ -70,7 +69,7 @@ PublicDocumentSearchResult.schema = joi.object().keys({
   isSealed: joi.boolean(),
   isStricken: joi.boolean().invalid(true),
   judge: JoiValidationConstants.STRING.optional(),
-  numberOfPages: joi.number().integer(),
+  numberOfPages: joi.number().integer().optional().allow(null),
   sealedDate: JoiValidationConstants.ISO_DATE,
   signedJudgeName: JoiValidationConstants.STRING.optional(),
 });

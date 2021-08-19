@@ -4,7 +4,7 @@ describe('processStreamRecordsLambda', () => {
   it('should throw an exception if the interactor throws an exception', async () => {
     let error;
     try {
-      await processStreamRecordsLambda({});
+      await processStreamRecordsLambda(null);
     } catch (err) {
       error = err;
     }

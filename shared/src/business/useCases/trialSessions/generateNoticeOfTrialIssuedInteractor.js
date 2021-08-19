@@ -3,23 +3,25 @@ const {
   formatDateString,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
  * generateNoticeOfTrialIssuedInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docketNumber for the case
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfTrialIssuedInteractor = async ({
+exports.generateNoticeOfTrialIssuedInteractor = async (
   applicationContext,
-  docketNumber,
-  trialSessionId,
-}) => {
+  { docketNumber, trialSessionId },
+) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -57,19 +59,32 @@ exports.generateNoticeOfTrialIssuedInteractor = async ({
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    joinPhoneNumber: trialSession.joinPhoneNumber,
-    meetingId: trialSession.meetingId,
-    password: trialSession.password,
-    trialLocation: trialSession.trialLocation,
+    ...trialSession,
   };
 
-  return await applicationContext.getDocumentGenerators().noticeOfTrialIssued({
-    applicationContext,
-    data: {
-      caseCaptionExtension,
-      caseTitle,
-      docketNumberWithSuffix,
-      trialInfo,
-    },
-  });
+  if (trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson) {
+    return await applicationContext
+      .getDocumentGenerators()
+      .noticeOfTrialIssuedInPerson({
+        applicationContext,
+        data: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          trialInfo,
+        },
+      });
+  } else {
+    return await applicationContext
+      .getDocumentGenerators()
+      .noticeOfTrialIssued({
+        applicationContext,
+        data: {
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          trialInfo,
+        },
+      });
+  }
 };

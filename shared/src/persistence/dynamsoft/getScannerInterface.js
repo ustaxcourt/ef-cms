@@ -2,9 +2,10 @@ let DWObject = null;
 let dynamsoftLoader = null;
 
 exports.getScannerInterface = () => {
-  const completeScanSession = async () => {
+  const completeScanSession = () => {
     DWObject.RemoveAllImages();
     DWObject.CloseSource();
+    return Promise.resolve(true);
   };
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;
@@ -124,7 +125,10 @@ exports.getScannerInterface = () => {
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
         const count = DWObject.HowManyImagesInBuffer;
-        if (count === 0) reject(new Error('no images in buffer'));
+        if (count === 0) {
+          reject(new Error('no images in buffer'));
+          return;
+        }
         const promises = [];
         const response = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
@@ -149,7 +153,6 @@ exports.getScannerInterface = () => {
               blobs.map(blob =>
                 applicationContext
                   .getReduceImageBlob()
-                  .default()
                   .toBlob(blob, { max: COVER_SHEET_WIDTH_IN_PX }),
               ),
             );

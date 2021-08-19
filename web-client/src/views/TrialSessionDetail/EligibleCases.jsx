@@ -91,14 +91,13 @@ export const EligibleCases = connect(
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
                             docketNumber: item.docketNumber,
-                            qcCompleteForTrial: !item.qcCompleteForTrial[
-                              trialSessionId
-                            ],
+                            qcCompleteForTrial:
+                              !item.qcCompleteForTrial[trialSessionId],
                           });
                         }}
                       />
                       <label
-                        className="usa-checkbox__label inline-block"
+                        className="usa-checkbox__label"
                         htmlFor={`${item.docketNumber}-complete`}
                       ></label>
                     </div>

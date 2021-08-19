@@ -7,8 +7,7 @@ const {
 
 describe('validateAddPractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
-    const errors = validateAddPractitionerInteractor({
-      applicationContext,
+    const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {},
     });
 
@@ -25,13 +24,13 @@ describe('validateAddPractitionerInteractor', () => {
     ]);
   });
 
-  it('returns null on no errors', () => {
-    const errors = validateAddPractitionerInteractor({
-      applicationContext,
+  it('should return null when the practitioner object is valid', () => {
+    const errors = validateAddPractitionerInteractor(applicationContext, {
       practitioner: {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         birthYear: '2009',
+        confirmEmail: 'test@example.com',
         email: 'test@example.com',
         employer: 'IRS',
         firstName: 'Test',

@@ -1,18 +1,48 @@
-export const docketClerkEditsPetitionerInformation = test => {
+import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { contactPrimaryFromState } from '../helpers';
+
+export const docketClerkEditsPetitionerInformation = cerebralTest => {
   return it('docket clerk edits petitioner information', async () => {
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.name',
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+
+    expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
+      CASE_STATUS_TYPES.new,
+    );
+
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.name',
       value: 'Bob',
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.additionalName',
+      value: 'Bob Additional Name',
+    });
+
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
+
+    expect(contactPrimaryFromState(cerebralTest).additionalName).toEqual(
+      'Bob Additional Name',
+    );
+
+    expect(contactPrimaryFromState(cerebralTest).name).toEqual('Bob');
 
     expect(
-      test.getState('currentViewMetadata.caseDetail.caseInformationTab'),
-    ).toEqual('petitioner');
+      cerebralTest.getState(
+        'currentViewMetadata.caseDetail.caseInformationTab',
+      ),
+    ).toEqual('parties');
   });
 };

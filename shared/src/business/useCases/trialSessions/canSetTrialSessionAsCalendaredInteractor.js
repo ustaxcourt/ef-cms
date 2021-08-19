@@ -8,15 +8,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
 /**
  * canSetTrialSessionAsCalendaredInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.trialSession trial session object
  * @returns {boolean} result of the entity method call depicting trial session calendaring eligibility
  */
-exports.canSetTrialSessionAsCalendaredInteractor = ({
+exports.canSetTrialSessionAsCalendaredInteractor = (
   applicationContext,
-  trialSession,
-}) => {
+  { trialSession },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -29,6 +29,7 @@ exports.canSetTrialSessionAsCalendaredInteractor = ({
 
   const canSetAsCalendared = trialSessionEntity.canSetAsCalendared();
   const emptyFields = trialSessionEntity.getEmptyFields();
+  const isRemote = trialSessionEntity.isRemote();
 
-  return { canSetAsCalendared, emptyFields };
+  return { canSetAsCalendared, emptyFields, isRemote };
 };

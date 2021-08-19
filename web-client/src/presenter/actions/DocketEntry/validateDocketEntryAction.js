@@ -16,12 +16,33 @@ export const validateDocketEntryAction = ({
 }) => {
   const entryMetadata = get(state.form);
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
-    .validateDocketEntryInteractor({
-      applicationContext,
+    .validateDocketEntryInteractor(applicationContext, {
       entryMetadata,
     });
+
+  if (
+    entryMetadata.dateReceivedYear &&
+    entryMetadata.dateReceivedYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.dateReceived = errors.dateReceived || 'Enter a four-digit year';
+  }
+
+  if (
+    entryMetadata.serviceDateYear &&
+    entryMetadata.serviceDateYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
+  }
 
   if (!errors) {
     return path.success();
@@ -39,8 +60,7 @@ export const validateDocketEntryAction = ({
       'ordinalValue',
       'certificateOfServiceDate',
       'objections',
-      'partyPrimary',
-      'partySecondary',
+      'filers',
       'partyIrsPractitioner',
       'otherFilingParty',
     ];

@@ -5,13 +5,14 @@ import { state } from 'cerebral';
  * @param {string} wizardStep the value of wizardStep to be set
  * @returns {Function} returns a callback function that sets wizardStep on state
  */
-export const setWizardStepAction = wizardStep =>
+export const setWizardStepAction =
+  wizardStep =>
   /**
    * sets the value of state.wizardStep entry to the value passed in
    *
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store object
    */
-  async ({ store }) => {
+  ({ store }) => {
     store.set(state.wizardStep, wizardStep);
   };

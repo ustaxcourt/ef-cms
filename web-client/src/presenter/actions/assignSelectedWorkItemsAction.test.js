@@ -6,6 +6,35 @@ import { runAction } from 'cerebral/test';
 presenter.providers.applicationContext = applicationContext;
 
 describe('assignSelectedWorkItemsAction', () => {
+  it('does not update section queue items which are not matches for selected work item id', async () => {
+    const result = await runAction(assignSelectedWorkItemsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        assigneeId: 'docketclerk',
+        assigneeName: 'Docket Clerk',
+        selectedWorkItems: [
+          {
+            workItemId: 'q',
+          },
+        ],
+        user: {
+          token: 'docketclerk',
+        },
+        workQueue: [
+          {
+            workItemId: 'zz',
+          },
+        ],
+      },
+    });
+    expect(result.state.workQueue).toEqual([
+      {
+        workItemId: 'zz',
+      },
+    ]);
+  });
   it('updates only the section queue items to have the new assignee information', async () => {
     const result = await runAction(assignSelectedWorkItemsAction, {
       modules: {

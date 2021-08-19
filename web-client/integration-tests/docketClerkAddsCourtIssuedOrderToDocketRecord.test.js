@@ -22,8 +22,8 @@ import { petitionsClerkViewsDocketEntry } from './journey/petitionsClerkViewsDoc
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   beforeAll(() => {
@@ -31,63 +31,63 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnOrder(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order of Dismissal',
     eventCode: 'OD',
     expectedDocumentType: 'Order of Dismissal',
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test, 5);
-  petitionsClerkViewsDraftOrder(test, 0);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest, 5);
+  petitionsClerkViewsDraftOrder(cerebralTest, 0);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(test, 0);
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeA(test, 0);
-  docketClerkConvertsAnOrderToAnOpinion(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeC(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeD(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeE(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeF(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeG(test, 0);
-  docketClerkEditsDocketEntryFromOrderTypeH(test, 0);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkCancelsAddDocketEntryFromOrder(test, 1);
-  docketClerkViewsDraftOrder(test, 1);
-  docketClerkSignsOrder(test, 1);
-  docketClerkAddsDocketEntryFromOrderOfDismissal(test, 1);
-  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(test, 1);
-  docketClerkCreatesAnOrder(test, {
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeA(cerebralTest, 0);
+  docketClerkConvertsAnOrderToAnOpinion(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeC(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeD(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeE(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeF(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeG(cerebralTest, 0);
+  docketClerkEditsDocketEntryFromOrderTypeH(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkCancelsAddDocketEntryFromOrder(cerebralTest, 1);
+  docketClerkViewsDraftOrder(cerebralTest, 1);
+  docketClerkSignsOrder(cerebralTest, 1);
+  docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
+  docketClerkViewsSavedCourtIssuedDocketEntryInProgress(cerebralTest, 1);
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 2);
-  docketClerkAddsDocketEntryFromOrderWithDate(test, 2);
+  docketClerkSignsOrder(cerebralTest, 2);
+  docketClerkAddsDocketEntryFromOrderWithDate(cerebralTest, 2);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsDocketEntry(test, 1);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsDocketEntry(cerebralTest, 1);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerViewsCaseDetail(test, {
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsCaseDetail(cerebralTest, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
     documentCount: 5,
   });

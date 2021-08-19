@@ -13,13 +13,21 @@ const { formatNow } = require('./DateHandler');
 describe('aggregateCommonQueryParams', () => {
   describe('removeAdvancedSyntaxSymbols', () => {
     it('removes symbols used for advanced syntax searches', () => {
-      const unsanitized = ' "({[+allow  :-no?special.=>!symbols*<]})" ';
+      const unsanitized = ' ({[+allow  :-no?special.=>!symbols*<]}) ';
       expect(removeAdvancedSyntaxSymbols(unsanitized)).toEqual(
-        'allow no special symbols',
+        'allow no special. symbols',
       );
     });
+
     it('preserves single-quotes in search terms', () => {
       const unchangedString = "d'Angelo's pizzeria";
+      expect(removeAdvancedSyntaxSymbols(unchangedString)).toEqual(
+        unchangedString,
+      );
+    });
+
+    it('preserves double-quotes in search terms', () => {
+      const unchangedString = '"this exact string"';
       expect(removeAdvancedSyntaxSymbols(unchangedString)).toEqual(
         unchangedString,
       );

@@ -1,33 +1,33 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 
 export const associatedUserSearchesForServedOrder = (
-  test,
+  cerebralTest,
   options,
   sealed = false,
 ) => {
   return it('associated user searches for served order', async () => {
-    test.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
-    test.setState('advancedSearchForm', {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+    cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: options.keyword,
         startDate: '1000-01-01',
       },
     });
 
-    await test.runSequence('submitOrderAdvancedSearchSequence');
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
     if (sealed) {
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
       ).toEqual([]);
     } else {
       expect(
-        test.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId:
-              test.draftOrders[options.draftOrderIndex].docketEntryId,
+              cerebralTest.draftOrders[options.draftOrderIndex].docketEntryId,
           }),
         ]),
       );

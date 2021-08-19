@@ -5,13 +5,13 @@ import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketC
 import { docketClerkQCsNCAForCaseWithPaperService } from './journey/docketClerkQCsNCAForCaseWithPaperService';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerEditsCasePrimaryContactAddress } from './journey/petitionerEditsCasePrimaryContactAddress';
-import { petitionerNavigatesToEditPrimaryContact } from './journey/petitionerNavigatesToEditPrimaryContact';
+import { petitionerNavigatesToEditContact } from './journey/petitionerNavigatesToEditContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerUpdatesAddress } from './journey/practitionerUpdatesAddress';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('noticeOfChangeOfAddressQCJourney', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -21,12 +21,12 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -40,30 +40,30 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
     });
     expect(caseDetail.docketNumber).toBeDefined();
     expect(caseDetail.privatePractitioners).toEqual([]);
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerNavigatesToEditPrimaryContact(test);
-  petitionerEditsCasePrimaryContactAddress(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerNavigatesToEditContact(cerebralTest);
+  petitionerEditsCasePrimaryContactAddress(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerUpdatesAddress(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerUpdatesAddress(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService(test);
-  docketClerkEditsServiceIndicatorForPetitioner(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService(cerebralTest);
+  docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
 
-  loginAs(test, 'privatePractitioner@example.com');
-  practitionerUpdatesAddress(test);
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerUpdatesAddress(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkQCsNCAForCaseWithPaperService(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkQCsNCAForCaseWithPaperService(cerebralTest);
 });

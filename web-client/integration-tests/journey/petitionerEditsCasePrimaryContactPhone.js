@@ -1,29 +1,25 @@
-import { contactPrimaryFromState } from '../helpers';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  contactPrimaryFromState,
+  getFormattedDocketEntriesForTest,
+} from '../helpers';
 
-export const petitionerEditsCasePrimaryContactPhone = test => {
+export const petitionerEditsCasePrimaryContactPhone = cerebralTest => {
   return it('petitioner updates primary contact phone', async () => {
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.phone',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.phone',
       value: '9999999999',
     });
 
-    await test.runSequence('submitEditPrimaryContactSequence');
+    await cerebralTest.runSequence('submitEditContactSequence');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    expect(contactPrimary.phone).toEqual('9999999999');
+    expect(contactPrimary.phone).toEqual('999-999-9999');
 
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const noticeDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const noticeDocument = formattedDocketEntriesOnDocketRecord.find(
       entry =>
         entry.descriptionDisplay ===
         'Notice of Change of Telephone Number for Mona Schultz',

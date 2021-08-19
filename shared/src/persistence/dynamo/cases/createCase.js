@@ -19,12 +19,12 @@ const fieldsToOmitBeforePersisting = [
  * @param {object} providers.caseToCreate the case data
  * @returns {object} the case data
  */
-exports.createCase = async ({ applicationContext, caseToCreate }) => {
+exports.createCase = ({ applicationContext, caseToCreate }) => {
   return client.put({
     Item: {
+      ...omit(caseToCreate, fieldsToOmitBeforePersisting),
       pk: `case|${caseToCreate.docketNumber}`,
       sk: `case|${caseToCreate.docketNumber}`,
-      ...omit(caseToCreate, fieldsToOmitBeforePersisting),
     },
     applicationContext,
   });

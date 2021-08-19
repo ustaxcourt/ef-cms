@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 const fs = require('fs');
 const path = require('path');
 const {
@@ -20,7 +23,7 @@ describe('zipDocuments', () => {
     applicationContext.getStorageClient.mockReturnValue(s3ClientMock);
   });
 
-  it('calls the s3 archive returning a promise', async () => {
+  it('calls the s3 archive returning a promise', () => {
     const zipProcess = zipDocuments({
       applicationContext,
       extraFileNames: ['Test File Non - S3'],

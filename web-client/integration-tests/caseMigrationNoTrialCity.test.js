@@ -1,13 +1,13 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
 );
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('migrated case that is missing a preferred trial city journey', () => {
   let seededDocketNumber;
@@ -17,37 +17,37 @@ describe('migrated case that is missing a preferred trial city journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'docketclerk@example.com');
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   it('verify the case is blocked because it has a deadline', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: seededDocketNumber,
     });
 
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: cerebralTest.getState(),
     });
 
-    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(headerHelper.showBlockedTag).toBeTruthy();
   });
 
   it('remove the deadline and verify the case is no longer blocked', async () => {
-    test.setState(
+    cerebralTest.setState(
       'form.caseDeadlineId',
       'ad1ddb24-f3c4-47b4-b10e-76d1d050b2ab',
     );
 
-    await test.runSequence('deleteCaseDeadlineSequence', {
+    await cerebralTest.runSequence('deleteCaseDeadlineSequence', {
       docketNumber: seededDocketNumber,
     });
 
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: cerebralTest.getState(),
     });
 
-    expect(formattedCase.showBlockedTag).toBeFalsy();
+    expect(headerHelper.showBlockedTag).toBeFalsy();
   });
 });

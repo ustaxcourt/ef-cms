@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoTrialSessionDetailSequence } from '../sequences/gotoTrialSessionDetailSequence';
 import { presenter } from '../presenter-mock';
@@ -7,29 +7,19 @@ import { presenter } from '../presenter-mock';
 describe('gotoTrialSessionDetailSequence', () => {
   const mockTrialSessionId = '2f731ada-0276-4eca-b518-cfedc4c496d9';
 
-  const mockTrialSession = {
-    maxCases: 100,
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    sessionType: 'Regular',
-    startDate: '2025-03-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-  };
-
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoTrialSessionDetailSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
   });
 
   it('should set up state for an uncalendared session with eligible cases and case order', async () => {
     const mockUncalendaredSession = {
-      ...mockTrialSession,
+      ...MOCK_TRIAL_INPERSON,
       caseOrder: [
         {
           calendarNotes: 'manually added case',
@@ -55,11 +45,11 @@ describe('gotoTrialSessionDetailSequence', () => {
       .getUseCases()
       .getEligibleCasesForTrialSessionInteractor.mockReturnValue(eligibleCases);
 
-    await test.runSequence('gotoTrialSessionDetailSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: mockTrialSessionId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       trialSession: {
         ...mockUncalendaredSession,
         eligibleCases: [
@@ -77,7 +67,7 @@ describe('gotoTrialSessionDetailSequence', () => {
 
   it('should set up state for a calendared session with calendared cases', async () => {
     const mockUncalendaredSession = {
-      ...mockTrialSession,
+      ...MOCK_TRIAL_INPERSON,
       caseOrder: [
         {
           calendarNotes: 'manually added case',
@@ -109,11 +99,11 @@ describe('gotoTrialSessionDetailSequence', () => {
         calendaredCases,
       );
 
-    await test.runSequence('gotoTrialSessionDetailSequence', {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: mockTrialSessionId,
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       trialSession: {
         ...mockUncalendaredSession,
         calendaredCases: [

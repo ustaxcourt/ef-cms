@@ -28,8 +28,8 @@ describe('getDocumentQCInboxForUserInteractor', () => {
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
-    applicationContext.getPersistenceGateway().getDocumentQCServedForSection = async () =>
-      mockWorkItem;
+    applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
+      () => mockWorkItem;
 
     let error;
     try {

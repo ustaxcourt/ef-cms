@@ -84,7 +84,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:s3:::${var.dns_domain}-documents-*",
-                "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
+                "arn:aws:s3:::${var.dns_domain}-temp-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-quarantine-*"
             ],
             "Effect": "Allow"
         },
@@ -166,17 +167,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "arn:aws:execute-api:us-west-1:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Effect": "Allow"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "sqs:DeleteMessage",
-                "sqs:GetQueueAttributes",
-                "sqs:ReceiveMessage",
-                "sqs:SendMessage"
-            ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migrate_legacy_documents_*"
-        } 
+        }
     ]
 }
 EOF

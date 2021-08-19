@@ -35,7 +35,7 @@ describe('getDocumentUrlForPreviewAction', () => {
 
     expect(
       applicationContext.getUseCases().getDocumentDownloadUrlInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
       key: mockDocketEntryId,

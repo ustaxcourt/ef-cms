@@ -269,6 +269,9 @@ components:
         email:
           type: string
           example: privatePractitioner1@example.com
+        firmName:
+          type: string
+          example: Some Firm
         name:
           type: string
           example: Test private practitioner1
@@ -300,7 +303,7 @@ components:
         totalDocketEntries:
           type: number
           example: 0
-        reconcilationDate:
+        reconciliationDate:
           type: string
           format: date
           example: '2020-03-19'

@@ -1,31 +1,31 @@
-export const petitionerCancelsCreateCase = test => {
+export const petitionerCancelsCreateCase = cerebralTest => {
   it('petitioner navigates to create case and cancels', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence', {
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence', {
       step: '1',
       wizardStep: 'StartCaseStep1',
     });
-    expect(test.getState('modal.showModal')).toBeFalsy();
-    expect(test.getState('form')).toEqual({
+    expect(cerebralTest.getState('modal.showModal')).toBeFalsy();
+    expect(cerebralTest.getState('form')).toEqual({
       contactPrimary: {},
       wizardStep: '1',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
       value: 'Seattle, Washington',
     });
-    expect(test.getState('form.preferredTrialCity')).toEqual(
+    expect(cerebralTest.getState('form.preferredTrialCity')).toEqual(
       'Seattle, Washington',
     );
 
-    await test.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
-    expect(test.getState('modal.showModal')).toBeTruthy();
-    await test.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
-    expect(test.getState('currentPage')).toEqual('StartCaseWizard');
+    await cerebralTest.runSequence('formCancelToggleCancelSequence'); // someone clicks cancel
+    expect(cerebralTest.getState('modal.showModal')).toBeTruthy();
+    await cerebralTest.runSequence('formCancelToggleCancelSequence'); // someone aborts cancellation
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseWizard');
 
-    await test.runSequence('formCancelToggleCancelSequence');
-    await test.runSequence('closeModalAndReturnToDashboardSequence');
-    expect(test.getState('modal.showModal')).toBeFalsy();
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
+    await cerebralTest.runSequence('formCancelToggleCancelSequence');
+    await cerebralTest.runSequence('closeModalAndReturnToDashboardSequence');
+    expect(cerebralTest.getState('modal.showModal')).toBeFalsy();
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
   });
 };

@@ -11,42 +11,48 @@ const caseDeadlineReportHelper = withAppContextDecorator(
   caseDeadlineReportHelperComputed,
 );
 
-export const petitionsClerkViewsDeadlineReport = (test, options = {}) => {
+export const petitionsClerkViewsDeadlineReport = (
+  cerebralTest,
+  options = {},
+) => {
   return it('Petitions clerk views deadline report', async () => {
-    await test.runSequence('gotoCaseDeadlineReportSequence');
-    expect(test.getState('currentPage')).toEqual('CaseDeadlines');
-    expect(test.getState('judges').length).toBeGreaterThan(0);
+    await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDeadlines');
+    expect(cerebralTest.getState('judges').length).toBeGreaterThan(0);
 
     const computedStartDate = `01/${options.day}/${options.year}`;
     const computedEndDate = `02/${options.day}/${options.year}`;
 
-    await test.runSequence('selectDateRangeFromCalendarSequence', {
+    await cerebralTest.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(computedEndDate, FORMATS.MMDDYYYY),
       startDate: prepareDateFromString(computedStartDate, FORMATS.MMDDYYYY),
     });
-    test.setState('screenMetadata.filterStartDateState', computedStartDate);
-    test.setState('screenMetadata.filterEndDateState', computedEndDate);
+    cerebralTest.setState(
+      'screenMetadata.filterStartDateState',
+      computedStartDate,
+    );
+    cerebralTest.setState('screenMetadata.filterEndDateState', computedEndDate);
 
-    await test.runSequence('updateDateRangeForDeadlinesSequence');
+    await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     expect(deadlines.length).toEqual(1); // the page size is overridden for integration tests to 1
 
     let helper = runCompute(caseDeadlineReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeTruthy();
 
     // 6 deadlines total, so click load more 5 times and then the load more button should be hidden
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
 
-    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     expect(deadlines.length).toEqual(6);
 
@@ -55,51 +61,51 @@ export const petitionsClerkViewsDeadlineReport = (test, options = {}) => {
       {
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[0],
+        docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[1],
+        docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[2],
+        docketNumber: cerebralTest.createdDocketNumbers[2],
       },
       {
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[0],
+        docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[1],
+        docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[2],
+        docketNumber: cerebralTest.createdDocketNumbers[2],
       },
     ]);
 
     helper = runCompute(caseDeadlineReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeFalsy();
 
-    await test.runSequence('filterCaseDeadlinesByJudgeSequence', {
+    await cerebralTest.runSequence('filterCaseDeadlinesByJudgeSequence', {
       judge: 'Buch',
     });
 
-    deadlines = test.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
 
     expect(deadlines.length).toEqual(1);
-    await test.runSequence('loadMoreCaseDeadlinesSequence');
+    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
     helper = runCompute(caseDeadlineReportHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     expect(helper.showLoadMoreButton).toBeFalsy();
@@ -109,12 +115,12 @@ export const petitionsClerkViewsDeadlineReport = (test, options = {}) => {
       {
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[0],
+        docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
-        docketNumber: test.createdDocketNumbers[0],
+        docketNumber: cerebralTest.createdDocketNumbers[0],
       },
     ]);
   });
