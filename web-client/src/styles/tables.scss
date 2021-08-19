@@ -25,6 +25,15 @@ table,
   p {
     margin-bottom: 4px;
   }
+
+  &.search-info {
+    td {
+      padding-top: 10px;
+      padding-bottom: 0;
+      background-color: transparent;
+      vertical-align: top;
+    }
+  }
 }
 
 .batches-table-wrapper {
@@ -595,7 +604,7 @@ table.case-list tbody tr:nth-child(even) td {
   }
 
   tbody tr:nth-child(2) td {
-    padding-top: 0px;
+    padding-top: 0;
     padding-bottom: 7px;
     font-size: 15px;
   }

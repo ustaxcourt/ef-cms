@@ -1,4 +1,8 @@
-const { activate, createDawsonUser, deactivate } = require('./admin');
+const {
+  activateAdminAccount,
+  createDawsonUser,
+  deactivateAdminAccount,
+} = require('./admin');
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;
 const baseUser = {
@@ -127,7 +131,7 @@ const setupPractitioners = async () => {
 (async () => {
   // check if we have what we need?
   console.log('== Activating Admin Account');
-  await activate();
+  await activateAdminAccount();
   console.log('== Creating Court Users');
   await setupCourtUsers();
   console.log('== Creating Petitioners');
@@ -135,6 +139,6 @@ const setupPractitioners = async () => {
   console.log('== Creating Practitioners');
   await setupPractitioners();
   console.log('== Deactivating Admin Account');
-  await deactivate();
+  await deactivateAdminAccount();
   console.log('== Done!');
 })();
