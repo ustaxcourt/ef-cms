@@ -172,6 +172,56 @@
         }
       }
     },
+    "/search/order-search-enabled": {
+      "get": {
+        "tags": [],
+        "summary": "get order search enabled flag value",
+        "description": "get order search enabled flag value.\n",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/reports/pending-items": {
       "get": {
         "tags": [],
@@ -3869,10 +3919,14 @@
         }
       ],
       "get": {
-        "tags": ["practitioners"],
+        "tags": [
+          "practitioners"
+        ],
         "summary": "generates a printable case list for the practitioner userId provided",
         "description": "Generates a printable case list for the practitioner userId provided.\n",
-        "produces": ["application/json"],
+        "produces": [
+          "application/json"
+        ],
         "responses": {
           "200": {
             "description": "200 response",
