@@ -148,7 +148,8 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 [User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1615995967668?sender=uac81c807303039588f330143&key=34845658-c81f-4cc4-82ac-73839e18b48a)
 
 [Order Search Findings March 2021](./OrderSearchFindings_March2021.pdf)
-[Order Search Recommendations July 2021](./Order Search Research - Recommendations July 2021.pdf)
+
+[Order Search Recommendations July 2021](./OrderSearchRecommendationsJuly2021.pdf)
 
 
 # UI Design System
