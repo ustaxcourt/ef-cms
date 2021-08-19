@@ -8,7 +8,7 @@ const client = require('../../dynamodbClientService');
  * @returns {Promise<string>} the value of the order-search-enabled flag on the dynamodb deploy table
  */
 exports.getOrderSearchEnabled = async ({ applicationContext }) => {
-  return await client.get({
+  const result = await client.get({
     Key: {
       pk: 'order-search-enabled',
       sk: 'order-search-enabled',
@@ -16,4 +16,6 @@ exports.getOrderSearchEnabled = async ({ applicationContext }) => {
     TableName: client.getDeployTableName({ applicationContext }),
     applicationContext,
   });
+
+  return result.current;
 };
