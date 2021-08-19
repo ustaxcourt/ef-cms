@@ -181,7 +181,6 @@ import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/ge
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getOpenConsolidatedCasesInteractor } from '../../shared/src/proxies/getOpenConsolidatedCasesProxy';
-import { getOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getOrderSearchEnabledProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
@@ -412,7 +411,6 @@ const allUseCases = {
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
   getOpenConsolidatedCasesInteractor,
-  getOrderSearchEnabledInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
