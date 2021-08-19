@@ -197,16 +197,6 @@ const getUserPoolId = async ({ cognito, env }) => {
   return userPoolId;
 };
 
-const disableUser = async ({ cognito, env, username }) => {
-  const userPoolId = await getUserPoolId({ cognito, env });
-  await cognito
-    .adminDisableUser({
-      UserPoolId: userPoolId,
-      Username: username,
-    })
-    .promise();
-};
-
 const enableUser = async ({ cognito, env, username }) => {
   const userPoolId = await getUserPoolId({ cognito, env });
   await cognito
@@ -240,7 +230,6 @@ module.exports = {
   addCaseToTrialSession,
   createCase,
   createTrialSession,
-  disableUser,
   enableUser,
   getClientId,
   getUserPoolId,
