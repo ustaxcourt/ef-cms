@@ -3,7 +3,7 @@
 # Deletes Elasticsearch indices, recreates them, and reindexes all DyanamoDB records
 
 # Usage
-#   ./reindex-elasticsearch.sh $ENV
+#   ./reindex-elasticsearch.sh $ENV $DYNAMO_SOURCE_TABLE $ES_ENDPOINT
 
 # Requirements
 #   - terraform must be installed on your machine

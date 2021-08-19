@@ -1,36 +1,21 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemAssociatedJudge = async ({
+exports.updateWorkItemAssociatedJudge = ({
   applicationContext,
   associatedJudge,
-  workItemId,
-}) => {
-  const workItems = await client.query({
+  workItem,
+}) =>
+  client.update({
     ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
+      '#associatedJudge': 'associatedJudge',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `work-item|${workItemId}`,
+      ':associatedJudge': associatedJudge,
     },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
+    Key: {
+      pk: workItem.pk,
+      sk: workItem.sk,
+    },
+    UpdateExpression: 'SET #associatedJudge = :associatedJudge',
     applicationContext,
   });
-
-  for (let workItem of workItems) {
-    await client.update({
-      ExpressionAttributeNames: {
-        '#associatedJudge': 'associatedJudge',
-      },
-      ExpressionAttributeValues: {
-        ':associatedJudge': associatedJudge,
-      },
-      Key: {
-        pk: workItem.pk,
-        sk: workItem.sk,
-      },
-      UpdateExpression: 'SET #associatedJudge = :associatedJudge',
-      applicationContext,
-    });
-  }
-};

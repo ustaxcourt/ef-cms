@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
-} from '../utils/useCerebralState';
+} from '../Utils/useCerebralState';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
@@ -14,14 +14,8 @@ export const BindedSelect = connect(
     value: state[props.bind],
   },
   function BindedSelect(componentProps) {
-    const {
-      bind,
-      children,
-      className,
-      onChange,
-      simpleSetter,
-      value,
-    } = componentProps;
+    const { bind, children, className, onChange, simpleSetter, value } =
+      componentProps;
     let activeOption, setSelect;
 
     if (bind) {

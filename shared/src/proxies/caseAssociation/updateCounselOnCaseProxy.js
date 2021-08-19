@@ -10,12 +10,10 @@ const { put } = require('../requests');
  * @param {string} providers.userId the id of the user to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCounselOnCaseInteractor = ({
+exports.updateCounselOnCaseInteractor = (
   applicationContext,
-  docketNumber,
-  userData,
-  userId,
-}) => {
+  { docketNumber, userData, userId },
+) => {
   return put({
     applicationContext,
     body: { ...userData },

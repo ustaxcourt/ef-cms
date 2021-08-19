@@ -10,9 +10,8 @@ export const updateCaseModalHelper = (get, applicationContext) => {
 
   const selectedStatus = get(state.modal.caseStatus);
 
-  const showAssociatedJudgeOptions = STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(
-    selectedStatus,
-  );
+  const showAssociatedJudgeOptions =
+    STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(selectedStatus);
 
   const isCalendared = caseDetail.status === STATUS_TYPES.calendared;
   const showCalendaredAlert = isCalendared;

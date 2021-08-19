@@ -1,81 +1,87 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkConvertsAnOrderToAnOpinion = (
-  test,
+  cerebralTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk edits a docket entry from the given order ${draftOrderIndex} with nonstandard type B`, async () => {
-    let caseDetailFormatted;
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    let { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
-
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     // Type B
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'TCOP',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentType',
-      value: 'T.C. Opinion',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'documentTitle',
-      value: 'T.C. Opinion [judge] [anything]',
-    });
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'scenario',
-      value: 'Type B',
-    });
-
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
-
-    expect(test.getState('validationErrors')).toEqual({
-      judge: VALIDATION_ERROR_MESSAGES.judge,
-    });
-
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'judge',
-      value: 'Judge Pugh',
-    });
-
-    await test.runSequence('updateCourtIssuedDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'freeeeee text',
-    });
-
-    await test.runSequence('submitCourtIssuedDocketEntrySequence');
-
-    expect(test.getState('validationErrors')).toEqual({});
-
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
       {
-        state: test.getState(),
+        key: 'eventCode',
+        value: 'TCOP',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentType',
+        value: 'T.C. Opinion',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'documentTitle',
+        value: 'T.C. Opinion [judge] [anything]',
+      },
+    );
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'scenario',
+        value: 'Type B',
       },
     );
 
-    const updatedOrderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      judge: VALIDATION_ERROR_MESSAGES.judge,
+    });
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'judge',
+        value: 'Judge Pugh',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'freeText',
+        value: 'freeeeee text',
+      },
+    );
+
+    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    ({ formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest));
+
+    const updatedOrderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
@@ -87,12 +93,12 @@ export const docketClerkConvertsAnOrderToAnOpinion = (
       judge: 'Judge Pugh',
     });
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('form')).toMatchObject({
+    expect(cerebralTest.getState('form')).toMatchObject({
       documentTitle: 'T.C. Opinion Judge Pugh freeeeee text',
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',

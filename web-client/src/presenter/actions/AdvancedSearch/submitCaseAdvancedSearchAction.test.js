@@ -3,9 +3,9 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCaseAdvancedSearchAction } from './submitCaseAdvancedSearchAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('submitCaseAdvancedSearchAction', () => {
+  presenter.providers.applicationContext = applicationContext;
+
   it('should call caseAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
     await runAction(submitCaseAdvancedSearchAction, {
       modules: {
@@ -30,7 +30,7 @@ describe('submitCaseAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().caseAdvancedSearchInteractor.mock
-        .calls[0][0].searchParams,
+        .calls[0][1].searchParams,
     ).toEqual({
       countryType: 'c',
       petitionerName: 'a',

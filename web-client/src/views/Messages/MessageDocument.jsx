@@ -10,6 +10,7 @@ export const MessageDocument = connect(
     caseDetail: state.caseDetail,
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
+    messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -24,12 +25,12 @@ export const MessageDocument = connect(
       sequences.serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDocument({
     caseDetail,
     iframeSrc,
     messageDocumentHelper,
+    messageViewerDocumentToDisplay,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -39,7 +40,6 @@ export const MessageDocument = connect(
     serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence,
     showModal,
-    viewerDocumentToDisplay,
   }) {
     const messageDocumentActions = () => (
       <div className="message-document-actions">
@@ -55,7 +55,7 @@ export const MessageDocument = connect(
             icon="edit"
             onClick={() =>
               openConfirmEditModalSequence({
-                docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
+                docketEntryIdToEdit: messageViewerDocumentToDisplay.documentId,
                 docketNumber: caseDetail.docketNumber,
                 parentMessageId,
                 redirectUrl: messageDocumentHelper.messageDetailLink,
@@ -92,7 +92,7 @@ export const MessageDocument = connect(
             icon="pencil-alt"
             onClick={() =>
               openConfirmRemoveSignatureModalSequence({
-                docketEntryIdToEdit: viewerDocumentToDisplay.documentId,
+                docketEntryIdToEdit: messageViewerDocumentToDisplay.documentId,
               })
             }
           >
@@ -117,7 +117,7 @@ export const MessageDocument = connect(
             iconColor="white"
             onClick={() => {
               openConfirmServeCourtIssuedDocumentSequence({
-                docketEntryId: viewerDocumentToDisplay.documentId,
+                docketEntryId: messageViewerDocumentToDisplay.documentId,
                 redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
@@ -133,7 +133,7 @@ export const MessageDocument = connect(
             iconColor="white"
             onClick={() => {
               openConfirmServePaperFiledDocumentSequence({
-                docketEntryId: viewerDocumentToDisplay.documentId,
+                docketEntryId: messageViewerDocumentToDisplay.documentId,
                 redirectUrl: messageDocumentHelper.messageDetailLink,
               });
             }}
@@ -169,7 +169,7 @@ export const MessageDocument = connect(
           iconColor="white"
           onClick={() =>
             openCaseDocumentDownloadUrlSequence({
-              docketEntryId: viewerDocumentToDisplay.documentId,
+              docketEntryId: messageViewerDocumentToDisplay.documentId,
               docketNumber: caseDetail.docketNumber,
             })
           }
@@ -182,46 +182,46 @@ export const MessageDocument = connect(
       <div
         className={classNames(
           'document-viewer--documents',
-          !viewerDocumentToDisplay && 'border border-base-lighter',
+          !messageViewerDocumentToDisplay && 'border border-base-lighter',
         )}
       >
-        {!viewerDocumentToDisplay && (
+        {!messageViewerDocumentToDisplay && (
           <div className="padding-2">There are no attachments to preview</div>
         )}
 
-        {viewerDocumentToDisplay &&
+        {messageViewerDocumentToDisplay &&
           messageDocumentHelper.showDocumentNotSignedAlert && (
             <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
               Signature required for this document.
             </div>
           )}
 
-        {viewerDocumentToDisplay && messageDocumentHelper.archived && (
+        {messageViewerDocumentToDisplay && messageDocumentHelper.archived && (
           <div className="archived-document-frame">
             This document was deleted.
           </div>
         )}
 
-        {viewerDocumentToDisplay && !messageDocumentHelper.archived && (
+        {messageViewerDocumentToDisplay && !messageDocumentHelper.archived && (
           <>
             {messageDocumentActions()}
 
             {!process.env.CI && (
               <iframe
                 src={iframeSrc}
-                title={viewerDocumentToDisplay.documentTitle}
+                title={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
             {showModal == 'ConfirmInitiateCourtIssuedDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={serveCourtIssuedDocumentSequence}
-                documentTitle={viewerDocumentToDisplay.documentTitle}
+                documentTitle={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
             {showModal == 'ConfirmInitiatePaperDocumentServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}
-                documentTitle={viewerDocumentToDisplay.documentTitle}
+                documentTitle={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
           </>

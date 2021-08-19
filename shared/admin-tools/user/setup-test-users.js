@@ -14,7 +14,7 @@ const baseUser = {
     state: 'IL',
   },
   employer: '',
-  lastName: 'Tester',
+  lastName: 'Test',
   password: DEFAULT_ACCOUNT_PASS,
   suffix: '',
 };

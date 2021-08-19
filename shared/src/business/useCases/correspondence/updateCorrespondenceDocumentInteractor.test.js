@@ -37,6 +37,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     docketEntries: [
       {
         docketEntryId: mockDocketEntryId,
+        docketNumber: '123-45',
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',

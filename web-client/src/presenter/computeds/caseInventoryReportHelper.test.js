@@ -5,12 +5,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 import { without } from 'lodash';
 
 describe('caseInventoryReportHelper', () => {
-  const {
-    CHIEF_JUDGE,
-    DOCKET_NUMBER_SUFFIXES,
-    STATUS_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, STATUS_TYPES, USER_ROLES } =
+    applicationContext.getConstants();
   const testCaseInventoryPageSize = 25;
   const constants = {
     ...applicationContext.getConstants(),

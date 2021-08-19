@@ -30,7 +30,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       createMessageAction,
       stopShowValidationAction,
       completeDocketEntryQCAction,
-      clearFormAction,
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
@@ -43,6 +42,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       setPdfPreviewUrlAction,
       setPaperServicePartiesAction,
       navigateToDocumentQCAction,
+      clearFormAction,
     ]),
   },
 ];

@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { CaseDetailSubnavTabs } from '../CaseDetail/CaseDetailSubnavTabs';
 import { CompleteMessageModalDialog } from './CompleteMessageModalDialog';
 import { ConfirmEditModal } from '../DraftDocuments/ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from './ConfirmRemoveSignatureModal';
@@ -69,6 +70,7 @@ export const MessageDetail = connect(
       sequences.cerebralBindSimpleSetStateSequence,
     formattedMessageDetail: state.formattedMessageDetail,
     isExpanded: state.isExpanded,
+    messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence:
       sequences.openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence:
@@ -78,23 +80,24 @@ export const MessageDetail = connect(
     setMessageDetailViewerDocumentToDisplaySequence:
       sequences.setMessageDetailViewerDocumentToDisplaySequence,
     showModal: state.modal.showModal,
-    viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function MessageDetail({
     cerebralBindSimpleSetStateSequence,
     formattedMessageDetail,
     isExpanded,
+    messageViewerDocumentToDisplay,
     openCompleteMessageModalSequence,
     openCreateOrderChooseTypeModalSequence,
     openForwardMessageModalSequence,
     openReplyToMessageModalSequence,
     setMessageDetailViewerDocumentToDisplaySequence,
     showModal,
-    viewerDocumentToDisplay,
   }) {
     return (
       <>
-        <CaseDetailHeader />
+        <CaseDetailHeader className="margin-bottom-0" />
+        <CaseDetailSubnavTabs />
+
         <section className="usa-section grid-container message-detail">
           <SuccessNotification />
           <ErrorNotification />
@@ -220,17 +223,17 @@ export const MessageDetail = connect(
                       <Button
                         className={classNames(
                           'usa-button--unstyled attachment-viewer-button',
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                             attachment.documentId && 'active',
                         )}
                         isActive={
-                          viewerDocumentToDisplay.documentId ===
+                          messageViewerDocumentToDisplay.documentId ===
                           attachment.documentId
                         }
                         key={`attachment-button-${attachment.documentId}`}
                         onClick={() => {
                           setMessageDetailViewerDocumentToDisplaySequence({
-                            viewerDocumentToDisplay: attachment,
+                            messageViewerDocumentToDisplay: attachment,
                           });
                         }}
                       >

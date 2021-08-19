@@ -26,7 +26,7 @@ describe('deleteCalendarNoteAction', () => {
 
     expect(
       applicationContext.getUseCases().saveCalendarNoteInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       calendarNote: null,
       docketNumber: DOCKET_NUMBER,

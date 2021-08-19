@@ -1,4 +1,3 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPendingEmailAction } from './getUserPendingEmailAction';
 import { presenter } from '../presenter-mock';
@@ -12,23 +11,17 @@ describe('getUserPendingEmailAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to getUserPendingEmailInteractor with caseDetail.contactPrimary.contactId', async () => {
+  it('should make a call to getUserPendingEmailInteractor with props.contactId', async () => {
     await runAction(getUserPendingEmailAction, {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: {
-          petitioners: [
-            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
-          ],
-        },
-      },
+      props: { contactId: mockUserId },
     });
 
     expect(
       applicationContext.getUseCases().getUserPendingEmailInteractor.mock
-        .calls[0][0].userId,
+        .calls[0][1].userId,
     ).toBe(mockUserId);
   });
 
@@ -41,13 +34,7 @@ describe('getUserPendingEmailAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: {
-          petitioners: [
-            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
-          ],
-        },
-      },
+      props: { contactId: mockUserId },
     });
 
     expect(output.userPendingEmail).toBe(mockEmail);
@@ -62,13 +49,7 @@ describe('getUserPendingEmailAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        caseDetail: {
-          petitioners: [
-            { contactId: mockUserId, contactType: CONTACT_TYPES.primary },
-          ],
-        },
-      },
+      props: { contactId: mockUserId },
     });
 
     expect(output.userPendingEmail).toBeUndefined();

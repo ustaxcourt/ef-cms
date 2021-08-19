@@ -28,7 +28,7 @@ describe('generateTitleForPaperFilingAction', () => {
 
     expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata,
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata,
     ).toMatchObject({
       documentTitle: '[First, Second, etc. ] Amended [Document Name]',
     });
@@ -51,7 +51,7 @@ describe('generateTitleForPaperFilingAction', () => {
 
     expect(generateDocumentTitleInteractor.mock.calls.length).toEqual(1);
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata,
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata,
     ).toMatchObject({
       documentTitle: 'Order to do something',
     });

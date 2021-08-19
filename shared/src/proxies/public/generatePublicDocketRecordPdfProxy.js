@@ -3,15 +3,15 @@ const { post } = require('../requests');
 /**
  * generatePublicDocketRecordPdfInteractor (proxy)
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the case docket number
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePublicDocketRecordPdfInteractor = ({
+exports.generatePublicDocketRecordPdfInteractor = (
   applicationContext,
-  docketNumber,
-}) => {
+  { docketNumber },
+) => {
   return post({
     applicationContext,
     body: {

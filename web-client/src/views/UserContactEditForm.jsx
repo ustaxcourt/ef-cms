@@ -55,13 +55,7 @@ export const UserContactEditForm = connect(
             onChange={onChangeSequenceName}
           />
         )}
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors.contact &&
-            validationErrors.contact.phone
-          }
-        >
+        <FormGroup errorText={validationErrors?.contact?.phone}>
           <label className="usa-label" htmlFor="phone">
             Phone number
           </label>

@@ -411,11 +411,11 @@ describe('DateHandler', () => {
   });
 
   describe('checkDate', () => {
-    it('should return -1 when the date is invalid', async () => {
+    it('should return -1 when the date is invalid', () => {
       expect(DateHandler.checkDate('xx-01-01')).toEqual('-1');
     });
 
-    it('should return null when date does not include letters or numbers', async () => {
+    it('should return null when date does not include letters or numbers', () => {
       expect(DateHandler.checkDate('--')).toEqual(null);
     });
 
@@ -498,6 +498,36 @@ describe('DateHandler', () => {
         month: expect.toBeWithinRange(1, 12),
         year: expect.toBeWithinRange(1900, 2500),
       });
+    });
+  });
+
+  describe('validateDateAndCreateISO)', () => {
+    it('should return undefined when year, month, or day is invalid', () => {
+      const result = DateHandler.validateDateAndCreateISO({
+        day: '33',
+        month: '10',
+        year: '2002',
+      });
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return undefined when year, month, or day is not provided', () => {
+      const result = DateHandler.validateDateAndCreateISO({
+        day: '4',
+        month: '10',
+      });
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return expected ISO date when date object is valid', () => {
+      const validDate = DateHandler.createISODateStringFromObject({
+        day: '1',
+        month: '1',
+        year: '2001',
+      });
+      expect(validDate).toEqual('2001-01-01T05:00:00.000Z');
     });
   });
 });

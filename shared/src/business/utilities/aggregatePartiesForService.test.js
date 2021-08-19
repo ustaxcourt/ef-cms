@@ -108,14 +108,14 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '9836050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.otherFiler,
+        contactType: CONTACT_TYPES.participant,
         countryType: 'domestic',
         email: 'petitioner@example.com',
         inCareOf: 'Myself',
         name: 'Test Petitioner3',
-        otherFilerType: 'Tax Matters Partner',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'TN',
         title: 'Tax Matters Partner',
       },
@@ -123,12 +123,11 @@ describe('aggregatePartiesForService', () => {
         address1: '123 Main St',
         city: 'Somewhere',
         contactId: '8746050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.otherFiler,
+        contactType: CONTACT_TYPES.intervenor,
         countryType: 'domestic',
         email: 'petitioner@example.com',
         inCareOf: 'Myself',
         name: 'Test Petitioner4',
-        otherFilerType: 'Intervener',
         phone: '1234567',
         postalCode: '12345',
         state: 'TN',
@@ -146,9 +145,9 @@ describe('aggregatePartiesForService', () => {
         email: 'petitioner5@example.com',
         inCareOf: 'Myself',
         name: 'Test Petitioner5',
-        otherFilerType: 'Tax Matters Partner',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'TN',
         title: 'Tax Matters Partner',
       },
@@ -161,9 +160,9 @@ describe('aggregatePartiesForService', () => {
         email: 'petitioner6@example.com',
         inCareOf: 'Myself',
         name: 'Test Petitioner6',
-        otherFilerType: 'Tax Matters Partner',
         phone: '1234567',
         postalCode: '12345',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
         state: 'TN',
         title: 'Tax Matters Partner',
       },
@@ -176,8 +175,12 @@ describe('aggregatePartiesForService', () => {
     };
   });
 
-  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', async () => {
-    mockCase.isPaper = true;
+  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', () => {
+    mockCase.petitioners = [
+      { ...mockCase.petitioners[0], email: null },
+      mockCase.petitioners[1],
+    ];
+
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
@@ -222,7 +225,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', async () => {
+  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', () => {
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
@@ -267,7 +270,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', async () => {
+  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', () => {
     mockCase.privatePractitioners[0].representing = [PRIMARY_CONTACT_ID];
     const result = aggregatePartiesForService(mockCase);
 
@@ -311,7 +314,7 @@ describe('aggregatePartiesForService', () => {
     });
   });
 
-  it('should serve all practitioners with an email address electronically', async () => {
+  it('should serve all practitioners with an email address electronically', () => {
     const result = aggregatePartiesForService(mockCase);
 
     const foundPrivatePractitionerWithPaper = result.electronic.find(
@@ -327,7 +330,7 @@ describe('aggregatePartiesForService', () => {
     expect(foundIrsPractitionerWithPaper).toBeFalsy();
   });
 
-  it('should serve all practitioners without an email address by paper', async () => {
+  it('should serve all practitioners without an email address by paper', () => {
     const result = aggregatePartiesForService(mockCase);
 
     const foundPrivatePractitionerWithPaper = result.paper.find(
@@ -343,7 +346,7 @@ describe('aggregatePartiesForService', () => {
     expect(foundIrsPractitionerWithPaper).toBeTruthy();
   });
 
-  it('should serve any otherFilers and otherPetitioners by paper if they exist', () => {
+  it('should serve any otherPetitioners by paper ONLY if their serviceIndicator is set to paper', () => {
     const result = aggregatePartiesForService({
       ...mockCase,
       petitioners: [
@@ -353,23 +356,50 @@ describe('aggregatePartiesForService', () => {
       ],
     });
 
-    const otherFiler1 = result.paper.find(
-      p => p.contactId === otherFilers[0].contactId,
-    );
-    const otherFiler2 = result.paper.find(
-      p => p.contactId === otherFilers[1].contactId,
-    );
-
     const otherPetitioner1 = result.paper.find(
       p => p.contactId === otherPetitioners[0].contactId,
     );
     const otherPetitioner2 = result.paper.find(
       p => p.contactId === otherPetitioners[1].contactId,
     );
-
-    expect(otherFiler1).toBeTruthy();
-    expect(otherFiler2).toBeTruthy();
     expect(otherPetitioner1).toBeTruthy();
-    expect(otherPetitioner2).toBeTruthy();
+    expect(otherPetitioner2).toBeFalsy();
+  });
+
+  it('should serve any otherFilers by paper if their serviceIndicator is set to paper', () => {
+    const result = aggregatePartiesForService({
+      ...mockCase,
+      petitioners: [
+        ...mockCase.petitioners,
+        ...otherFilers,
+        ...otherPetitioners,
+      ],
+    });
+
+    const otherFiler = result.paper.find(
+      p => p.contactId === otherFilers[0].contactId,
+    );
+
+    expect(otherFiler).toBeTruthy();
+  });
+
+  it('should not serve any otherFilers by paper if their serviceIndicator is set to none', () => {
+    const result = aggregatePartiesForService({
+      ...mockCase,
+      petitioners: [
+        ...mockCase.petitioners,
+        {
+          ...otherFilers[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+        ...otherPetitioners,
+      ],
+    });
+
+    const otherFiler = result.paper.find(
+      p => p.contactId === otherFilers[0].contactId,
+    );
+
+    expect(otherFiler).toBeFalsy();
   });
 });

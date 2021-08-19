@@ -5,7 +5,7 @@ import faker from 'faker';
 
 const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-faker.seed(faker.random.number());
+faker.seed(faker.datatype.number());
 
 const axiosInstance = axios.create({
   headers: {
@@ -17,8 +17,8 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-const mockUserId = faker.random.uuid();
-const mockBarNumber = `ZZ${faker.random.number({ max: 9999, min: 1000 })}`;
+const mockUserId = faker.datatype.uuid();
+const mockBarNumber = `ZZ${faker.datatype.number({ max: 9999, min: 1000 })}`;
 
 const practitionerWithoutEmail = {
   user: {
@@ -54,14 +54,14 @@ const practitionerWithoutEmail = {
   },
 };
 
-export const admissionsClerkMigratesPractitionerWithoutEmail = test => {
+export const admissionsClerkMigratesPractitionerWithoutEmail = cerebralTest => {
   return it('Admissions Clerk migrates practitioner without email', async () => {
     await axiosInstance.post(
       'http://localhost:4000/practitioners',
       practitionerWithoutEmail,
     );
 
-    test.barNumber = practitionerWithoutEmail.user.barNumber;
+    cerebralTest.barNumber = practitionerWithoutEmail.user.barNumber;
 
     await refreshElasticsearchIndex();
   });

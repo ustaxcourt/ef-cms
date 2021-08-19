@@ -1,18 +1,35 @@
-export const petitionsClerkRemovesPractitionerFromCase = test => {
+export const petitionsClerkRemovesPractitionerFromCase = cerebralTest => {
   return it('Petitions clerk removes a practitioner from a case', async () => {
-    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
+    expect(
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
+    ).toEqual(2);
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = cerebralTest.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.removeFromCase',
-      value: true,
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
 
-    expect(test.getState('validationErrors')).toEqual({});
+    await cerebralTest.runSequence('openRemovePetitionerCounselModalSequence');
 
-    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(1);
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await cerebralTest.runSequence('removePetitionerCounselFromCaseSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
+    ).toEqual(1);
   });
 };

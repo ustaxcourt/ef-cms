@@ -3,8 +3,8 @@ const { post } = require('../requests');
 /**
  * createMessageInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.message the message text
  * @param {string} providers.subject the message subject
@@ -12,15 +12,10 @@ const { post } = require('../requests');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createMessageInteractor = ({
+exports.createMessageInteractor = (
   applicationContext,
-  attachments,
-  docketNumber,
-  message,
-  subject,
-  toSection,
-  toUserId,
-}) => {
+  { attachments, docketNumber, message, subject, toSection, toUserId },
+) => {
   return post({
     applicationContext,
     body: {

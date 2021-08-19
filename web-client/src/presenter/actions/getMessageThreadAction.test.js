@@ -23,7 +23,7 @@ describe('getMessageThreadAction', () => {
     ).toBeCalled();
     expect(
       applicationContextForClient.getUseCases().getMessageThreadInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       parentMessageId: '0fbd6b64-6e13-4984-b46b-fd74906fd2c7',
     });

@@ -21,7 +21,6 @@ export const validateCaseAssociationRequestAction = ({
   const errors = applicationContext
     .getUseCases()
     .validateCaseAssociationRequestInteractor({
-      applicationContext,
       caseAssociationRequest,
     });
 
@@ -40,8 +39,7 @@ export const validateCaseAssociationRequestAction = ({
       'objections',
       'hasSupportingDocuments',
       'supportingDocuments',
-      'representingPrimary',
-      'representingSecondary',
+      'filers',
     ];
 
     const errorDisplayMap = {

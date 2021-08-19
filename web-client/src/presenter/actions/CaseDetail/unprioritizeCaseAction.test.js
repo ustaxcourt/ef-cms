@@ -23,7 +23,7 @@ describe('unprioritizeCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().unprioritizeCaseInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
     });

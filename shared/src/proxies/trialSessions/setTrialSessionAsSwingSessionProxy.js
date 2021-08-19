@@ -3,17 +3,16 @@ const { post } = require('../requests');
 /**
  * setTrialSessionAsSwingSessionInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.swingSessionId the id of the trial session to add as a swing session
  * @param {string} providers.trialSessionId the trial session to add the swing session to
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setTrialSessionAsSwingSessionInteractor = ({
+exports.setTrialSessionAsSwingSessionInteractor = (
   applicationContext,
-  swingSessionId,
-  trialSessionId,
-}) => {
+  { swingSessionId, trialSessionId },
+) => {
   return post({
     applicationContext,
     body: { swingSessionId },

@@ -1,5 +1,4 @@
 const AWS = require('aws-sdk');
-const { get } = require('lodash');
 const { migrateRecords: migrations } = require('./migration-segments');
 
 const dynamodb = new AWS.DynamoDB({
@@ -33,14 +32,16 @@ const processItems = async ({ documentClient, items, migrateRecords }) => {
 
 const getFilteredGlobalEvents = event => {
   const { Records } = event;
-  return Records.filter(record => {
-    // to prevent global tables writing extra data
-    const NEW_TIME_KEY = 'dynamodb.NewImage.aws:rep:updatetime.N';
-    const OLD_TIME_KEY = 'dynamodb.OldImage.aws:rep:updatetime.N';
-    const newTime = get(record, NEW_TIME_KEY);
-    const oldTime = get(record, OLD_TIME_KEY);
-    return newTime && newTime !== oldTime;
-  }).map(item => AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage));
+  return Records.filter(item => item.eventName !== 'REMOVE').map(item =>
+    AWS.DynamoDB.Converter.unmarshall(item.dynamodb.NewImage),
+  );
+};
+
+const getRemoveEvents = event => {
+  const { Records } = event;
+  return Records.filter(item => item.eventName === 'REMOVE').map(item =>
+    AWS.DynamoDB.Converter.unmarshall(item.dynamodb.OldImage),
+  );
 };
 
 exports.getFilteredGlobalEvents = getFilteredGlobalEvents;
@@ -52,4 +53,19 @@ exports.handler = async event => {
     items,
     migrateRecords: migrations,
   });
+
+  const removeEvents = getRemoveEvents(event);
+  await Promise.all(
+    removeEvents.map(item =>
+      docClient
+        .delete({
+          Key: {
+            pk: item.pk,
+            sk: item.sk,
+          },
+          TableName: process.env.DESTINATION_TABLE,
+        })
+        .promise(),
+    ),
+  );
 };

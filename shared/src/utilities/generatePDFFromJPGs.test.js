@@ -19,10 +19,9 @@ describe('generatePDFFromJPGs', () => {
   });
 
   it('creates a pdf document from the specified img data', async () => {
-    const newPdfData = await generatePDFFromJPGs(
-      [testImg, testImg],
-      applicationContext,
-    );
+    const newPdfData = await generatePDFFromJPGs(applicationContext, {
+      imgData: [testImg, testImg],
+    });
 
     fs.writeFileSync(testOutputPath + 'generatePDFFromJPGData.pdf', newPdfData);
 

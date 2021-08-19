@@ -47,10 +47,8 @@ export const formatWorkItem = ({
   workItem = {},
   isSelected,
 }) => {
-  const {
-    COURT_ISSUED_EVENT_CODES,
-    ORDER_TYPES_MAP,
-  } = applicationContext.getConstants();
+  const { COURT_ISSUED_EVENT_CODES, ORDER_TYPES_MAP } =
+    applicationContext.getConstants();
 
   const orderDocumentTypes = ORDER_TYPES_MAP.map(
     orderDoc => orderDoc.documentType,

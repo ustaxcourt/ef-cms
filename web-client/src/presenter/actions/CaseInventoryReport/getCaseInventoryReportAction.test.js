@@ -31,9 +31,9 @@ describe('getCaseInventoryReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCaseInventoryReportInteractor,
-    ).toBeCalledWith({
-      applicationContext: expect.anything(),
+      applicationContext.getUseCases().getCaseInventoryReportInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       status: STATUS_TYPES.new,
     });

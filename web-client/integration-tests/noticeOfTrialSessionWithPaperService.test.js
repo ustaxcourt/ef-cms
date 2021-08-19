@@ -12,7 +12,7 @@ import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsC
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Generate Notices of Trial Session with Paper Service', () => {
   beforeAll(() => {
@@ -20,7 +20,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const caseCount = 2;
@@ -42,7 +42,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     trialLocation,
   };
 
-  test.casesReadyForTrial = [];
+  cerebralTest.casesReadyForTrial = [];
 
   const createdDocketNumbers = [];
 
@@ -55,28 +55,31 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
       testSession.docketNumber = caseDetail.docketNumber;
     });
 
-    loginAs(test, 'petitionsclerk@example.com');
-    petitionsClerkSubmitsCaseToIrs(test);
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-    loginAs(test, 'docketclerk@example.com');
-    docketClerkSetsCaseReadyForTrial(test);
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkSetsCaseReadyForTrial(cerebralTest);
   };
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring(
+    cerebralTest,
+    overrides,
+  );
+  docketClerkViewsTrialSessionList(cerebralTest);
 
   for (let i = 0; i < caseCount; i++) {
     const id = i + 1;
-    makeCaseReadyForTrial(test, id, overrides);
+    makeCaseReadyForTrial(cerebralTest, id, overrides);
   }
 
-  loginAs(test, 'petitionsclerk@example.com');
-  markAllCasesAsQCed(test, () => {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  markAllCasesAsQCed(cerebralTest, () => {
     return [createdDocketNumbers[0], createdDocketNumbers[1]];
   });
-  petitionsClerkCompletesAndSetsTrialSession(test, overrides);
-  petitionsClerkViewsDocketRecordAfterSettingTrial(test, {
+  petitionsClerkCompletesAndSetsTrialSession(cerebralTest, overrides);
+  petitionsClerkViewsDocketRecordAfterSettingTrial(cerebralTest, {
     documentTitle:
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
         .documentTitle,

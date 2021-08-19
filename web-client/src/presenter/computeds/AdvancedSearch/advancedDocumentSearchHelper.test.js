@@ -34,11 +34,11 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+          ADVANCED_SEARCH_TABS:
+            applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
         isPublic: true,
       },
@@ -57,11 +57,11 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: {},
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         constants: {
-          ADVANCED_SEARCH_TABS: applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS,
+          ADVANCED_SEARCH_TABS:
+            applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
         isPublic: true,
       },
@@ -80,8 +80,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: { opinion: [], order: [] },
       },
     });
@@ -97,8 +97,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: { opinion: [], order: [] },
       },
     });
@@ -110,8 +110,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
         searchResults: { opinion: [], order: [] },
       },
@@ -124,8 +124,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
           order: [
             {
@@ -156,8 +156,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
           order: [
             {
@@ -215,8 +215,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.ORDER,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
         searchResults: {
           order: [
             {
@@ -247,6 +247,7 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
+    expect(result.numberOfResults).toEqual(2);
     expect(result.formattedSearchResults).toMatchObject([
       {
         caseTitle: 'Test Petitioner',
@@ -278,8 +279,8 @@ describe('advancedDocumentSearchHelper', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         searchResults: {
           opinion: [
             {
@@ -342,8 +343,8 @@ describe('advancedDocumentSearchHelper', () => {
   it('does not show sealed case icon for public opinion search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
-        advancedSearchTab: applicationContext.getConstants()
-          .ADVANCED_SEARCH_TABS.OPINION,
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
         searchResults: {
           opinion: [
@@ -420,6 +421,33 @@ describe('advancedDocumentSearchHelper', () => {
       });
 
       expect(result.formattedSignedJudgeName).toEqual('Scott');
+    });
+
+    it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
+      const result = formatDocumentSearchResultRecord(
+        {
+          numberOfPages: undefined,
+        },
+        '',
+        {
+          applicationContext,
+        },
+      );
+      expect(result.numberOfPagesFormatted).toEqual('n/a');
+    });
+
+    it('sets numberOfPagesFormatted to 0 if numberOfPages is 0', () => {
+      const result = formatDocumentSearchResultRecord(
+        {
+          numberOfPages: 0,
+        },
+        '',
+        {
+          applicationContext,
+        },
+      );
+
+      expect(result.numberOfPagesFormatted).toEqual(0);
     });
   });
 });

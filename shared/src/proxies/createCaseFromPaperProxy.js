@@ -12,15 +12,17 @@ const { post } = require('./requests');
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCaseFromPaperInteractor = ({
+exports.createCaseFromPaperInteractor = (
   applicationContext,
-  applicationForWaiverOfFilingFeeFileId,
-  ownershipDisclosureFileId,
-  petitionFileId,
-  petitionMetadata,
-  requestForPlaceOfTrialFileId,
-  stinFileId,
-}) => {
+  {
+    applicationForWaiverOfFilingFeeFileId,
+    ownershipDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  },
+) => {
   return post({
     applicationContext,
     body: {

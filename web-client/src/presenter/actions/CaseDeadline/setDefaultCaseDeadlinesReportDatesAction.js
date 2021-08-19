@@ -6,17 +6,12 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.store the store
- * @returns {object} the case deadlines
  */
-export const setDefaultCaseDeadlinesReportDatesAction = async ({
+export const setDefaultCaseDeadlinesReportDatesAction = ({
   applicationContext,
   store,
 }) => {
-  const {
-    day,
-    month,
-    year,
-  } = applicationContext
+  const { day, month, year } = applicationContext
     .getUtilities()
     .deconstructDate(applicationContext.getUtilities().createISODateString());
   const currentDateStart = applicationContext

@@ -8,11 +8,8 @@ describe('updatePartyTypeAction', () => {
 
   presenter.providers.applicationContext = applicationContext;
 
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES, USER_ROLES } =
+    applicationContext.getConstants();
 
   const getFixtures = (props, state = {}) => ({
     modules: {

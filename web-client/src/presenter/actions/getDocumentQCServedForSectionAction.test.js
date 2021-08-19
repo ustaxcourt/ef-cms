@@ -38,7 +38,7 @@ describe('getDocumentQCServedForSectionAction', () => {
 
     expect(
       applicationContext.getUseCases().getDocumentQCServedForSectionInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({ section: mockSection });
   });
 

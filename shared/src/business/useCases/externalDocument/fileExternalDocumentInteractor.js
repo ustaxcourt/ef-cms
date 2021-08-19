@@ -56,8 +56,7 @@ exports.fileExternalDocumentInteractor = async (
   } = documentMetadata;
 
   const baseMetadata = pick(primaryDocumentMetadata, [
-    'partyPrimary',
-    'partySecondary',
+    'filers',
     'partyIrsPractitioner',
     'practitioner',
     'docketNumber',
@@ -114,20 +113,13 @@ exports.fileExternalDocumentInteractor = async (
         {
           ...baseMetadata,
           ...metadata,
-          contactPrimary: caseEntity.getContactPrimary(),
-          contactSecondary: caseEntity.getContactSecondary(),
           docketEntryId,
           documentType: metadata.documentType,
           isOnDocketRecord: true,
-          partyPrimary:
-            baseMetadata.partyPrimary || documentMetadata.representingPrimary,
-          partySecondary:
-            baseMetadata.partySecondary ||
-            documentMetadata.representingSecondary,
           relationship,
           userId: user.userId,
         },
-        { applicationContext },
+        { applicationContext, petitioners: caseEntity.petitioners },
       ).validate();
 
       const highPriorityWorkItem =
@@ -140,7 +132,7 @@ exports.fileExternalDocumentInteractor = async (
           associatedJudge: caseToUpdate.associatedJudge,
           caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
-          caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseEntity)),
+          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,

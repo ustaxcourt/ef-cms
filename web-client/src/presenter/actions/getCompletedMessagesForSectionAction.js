@@ -9,8 +9,7 @@ export const getCompletedMessagesForSectionAction = async ({
 }) => {
   const messages = await applicationContext
     .getUseCases()
-    .getCompletedMessagesForSectionInteractor({
-      applicationContext,
+    .getCompletedMessagesForSectionInteractor(applicationContext, {
       section: applicationContext.getCurrentUser().section,
     });
 

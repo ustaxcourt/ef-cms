@@ -1,10 +1,11 @@
-import { admissionsClerVerifiesPractitionerServiceIndicator } from './journey/admissionsClerVerifiesPractitionerServiceIndicator';
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
 import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
 import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
 import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
 import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
+import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   loginAs,
@@ -15,31 +16,28 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const {
-    COUNTRY_TYPES,
-    PARTY_TYPES,
-    SERVICE_INDICATOR_TYPES,
-  } = applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsNewPractitioner(test);
-  admissionsClerkSearchesForPractitionersByName(test);
-  admissionsClerkSearchesForPractitionerByBarNumber(test);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsNewPractitioner(cerebralTest);
+  admissionsClerkSearchesForPractitionersByName(cerebralTest);
+  admissionsClerkSearchesForPractitionerByBarNumber(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -52,19 +50,19 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkEditsPractitionerInfo(test);
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkEditsPractitionerInfo(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -77,28 +75,41 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkMigratesPractitionerWithoutEmail(test);
-  admissionsClerVerifiesPractitionerServiceIndicator(
-    test,
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkMigratesPractitionerWithoutEmail(cerebralTest);
+  admissionsClerkVerifiesPractitionerServiceIndicator(
+    cerebralTest,
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
   it('wait for ES index', async () => {
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'admissionsclerk@example.com');
-  admissionsClerkAddsPractitionerEmail(test);
-  admissionsClerVerifiesPractitionerServiceIndicator(
-    test,
-    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  );
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkAddsPractitionerEmail(cerebralTest);
+
+  // show Practitioners only, and not case-users (bug ref: #8081)
+  it('searches for indexed Practitioners only and not CaseUser records', async () => {
+    await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
+      formType: 'practitionerSearchByName',
+      key: 'practitionerName',
+      value: 'Buch',
+    });
+
+    await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
+
+    expect(
+      cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
+      ),
+    ).toEqual('Ronald Buch Jr.');
+  });
 });

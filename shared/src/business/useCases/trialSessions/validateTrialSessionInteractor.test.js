@@ -15,8 +15,7 @@ const { omit } = require('lodash');
 
 describe('validateTrialSessionInteractor', () => {
   it('returns the expected errors object on an empty trial session', () => {
-    const errors = validateTrialSessionInteractor({
-      applicationContext,
+    const errors = validateTrialSessionInteractor(applicationContext, {
       trialSession: {},
     });
 
@@ -43,8 +42,7 @@ describe('validateTrialSessionInteractor', () => {
       trialLocation: 'Birmingham, Alabama',
     };
 
-    const errors = validateTrialSessionInteractor({
-      applicationContext,
+    const errors = validateTrialSessionInteractor(applicationContext, {
       trialSession: { ...MOCK_TRIAL },
     });
 

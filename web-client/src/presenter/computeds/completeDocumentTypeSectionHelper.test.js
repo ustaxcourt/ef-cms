@@ -25,9 +25,8 @@ describe('completeDocumentTypeSectionHelper', () => {
     const categoryKey = 'Application';
     const categoryIdx = 0;
 
-    const { category, documentType } = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
-      categoryKey
-    ][categoryIdx];
+    const { category, documentType } =
+      DOCUMENT_EXTERNAL_CATEGORIES_MAP[categoryKey][categoryIdx];
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {
@@ -47,11 +46,10 @@ describe('completeDocumentTypeSectionHelper', () => {
 
   it('returns document info with primary and secondaryDocument info', () => {
     const categoryKey = 'Motion';
-    const categoryIdx = 22;
 
     const { category, documentType } = DOCUMENT_EXTERNAL_CATEGORIES_MAP[
       categoryKey
-    ][categoryIdx];
+    ].find(document => document.documentType === 'Motion for Leave to File');
 
     const result = runCompute(completeDocumentTypeSectionHelper, {
       state: {

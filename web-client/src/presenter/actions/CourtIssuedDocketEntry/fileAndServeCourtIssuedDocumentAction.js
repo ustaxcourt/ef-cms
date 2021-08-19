@@ -24,8 +24,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   const result = await applicationContext
     .getUseCases()
-    .fileAndServeCourtIssuedDocumentInteractor({
-      applicationContext,
+    .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta,
     });
 

@@ -14,10 +14,11 @@ export const validateNoteAction = ({ applicationContext, get, path }) => {
     ...get(state.modal),
   };
 
-  const errors = applicationContext.getUseCases().validateNoteInteractor({
-    applicationContext,
-    note,
-  });
+  const errors = applicationContext
+    .getUseCases()
+    .validateNoteInteractor(applicationContext, {
+      note,
+    });
 
   if (!errors) {
     return path.success();

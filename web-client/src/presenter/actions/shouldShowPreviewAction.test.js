@@ -22,7 +22,7 @@ describe('shouldShowPreviewAction', () => {
     };
   });
 
-  it('returns the yes path if the given documentSelectedForScan is on state.form', async () => {
+  it('returns the yes path if the given documentSelectedForScan is on state.form', () => {
     runAction(shouldShowPreviewAction, {
       modules: {
         presenter,
@@ -39,7 +39,7 @@ describe('shouldShowPreviewAction', () => {
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('returns the no path if the given documentSelectedForScan is NOT on state.form', async () => {
+  it('returns the no path if the given documentSelectedForScan is NOT on state.form', () => {
     runAction(shouldShowPreviewAction, {
       modules: {
         presenter,

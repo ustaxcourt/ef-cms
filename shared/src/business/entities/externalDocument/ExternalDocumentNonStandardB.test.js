@@ -10,7 +10,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardB', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard B',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -21,7 +21,7 @@ describe('ExternalDocumentNonStandardB', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: 'Application to Take Deposition of [Name]',
         documentType: 'Application to Take Deposition',
@@ -32,7 +32,7 @@ describe('ExternalDocumentNonStandardB', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: over3000Characters,
         documentType: 'Application to Take Deposition',
@@ -46,7 +46,7 @@ describe('ExternalDocumentNonStandardB', () => {
   });
 
   it('should not validate when freeText is over 1000 characters', () => {
-    const extDoc = ExternalDocumentFactory.get({
+    const extDoc = ExternalDocumentFactory({
       category: 'Application',
       documentTitle: 'Application to Take Deposition of [Name]',
       documentType: 'Application to Take Deposition',
@@ -60,7 +60,7 @@ describe('ExternalDocumentNonStandardB', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: 'Application to Take Deposition of [Name]',
         documentType: 'Application to Take Deposition',

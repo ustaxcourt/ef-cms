@@ -13,7 +13,6 @@ export const StrikeDocketEntryModal = connect(
       <ModalDialog
         cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Strike Entry"
         confirmSequence={confirmSequence}
         message="This action cannot be undone."

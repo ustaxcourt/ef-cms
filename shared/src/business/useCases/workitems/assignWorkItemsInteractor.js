@@ -2,7 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { WorkItem } = require('../../entities/WorkItem');
 
@@ -28,22 +27,14 @@ exports.assignWorkItemsInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const fullWorkItem = await applicationContext
+  const workItemRecord = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({
       applicationContext,
       workItemId,
     });
 
-  const caseObject = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: fullWorkItem.docketNumber,
-    });
-
-  const caseToUpdate = new Case(caseObject, { applicationContext });
-  const workItemEntity = new WorkItem(fullWorkItem, { applicationContext });
+  const workItemEntity = new WorkItem(workItemRecord, { applicationContext });
 
   workItemEntity.assignToUser({
     assigneeId,
@@ -54,15 +45,8 @@ exports.assignWorkItemsInteractor = async (
     sentByUserId: user.userId,
   });
 
-  await Promise.all([
-    applicationContext.getPersistenceGateway().updateWorkItemInCase({
-      applicationContext,
-      caseToUpdate: caseToUpdate.validate().toRawObject(),
-      workItem: workItemEntity.validate().toRawObject(),
-    }),
-    applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
-    }),
-  ]);
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: workItemEntity.validate().toRawObject(),
+  });
 };

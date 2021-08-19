@@ -11,10 +11,7 @@ export const generatePrintablePendingReportAction = async ({
 }) => {
   const { docketNumberFilter, judgeFilter } = props;
 
-  const params = {
-    applicationContext,
-  };
-
+  const params = {};
   if (docketNumberFilter) {
     params.docketNumber = docketNumberFilter;
   } else if (judgeFilter) {
@@ -23,7 +20,7 @@ export const generatePrintablePendingReportAction = async ({
 
   const pdfUrl = await applicationContext
     .getUseCases()
-    .generatePrintablePendingReportInteractor(params);
+    .generatePrintablePendingReportInteractor(applicationContext, params);
 
   return { pdfUrl };
 };

@@ -1,36 +1,21 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemDocketNumberSuffix = async ({
+exports.updateWorkItemDocketNumberSuffix = ({
   applicationContext,
   docketNumberSuffix,
-  workItemId,
-}) => {
-  const workItems = await client.query({
+  workItem,
+}) =>
+  client.update({
     ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
+      '#docketNumberSuffix': 'docketNumberSuffix',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `work-item|${workItemId}`,
+      ':docketNumberSuffix': docketNumberSuffix,
     },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
+    Key: {
+      pk: workItem.pk,
+      sk: workItem.sk,
+    },
+    UpdateExpression: 'SET #docketNumberSuffix = :docketNumberSuffix',
     applicationContext,
   });
-
-  for (let workItem of workItems) {
-    await client.update({
-      ExpressionAttributeNames: {
-        '#docketNumberSuffix': 'docketNumberSuffix',
-      },
-      ExpressionAttributeValues: {
-        ':docketNumberSuffix': docketNumberSuffix,
-      },
-      Key: {
-        pk: workItem.pk,
-        sk: workItem.sk,
-      },
-      UpdateExpression: 'SET #docketNumberSuffix = :docketNumberSuffix',
-      applicationContext,
-    });
-  }
-};

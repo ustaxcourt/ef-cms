@@ -25,12 +25,12 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
       applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
     );
 
-    paginatedResults.formattedSearchResults = paginatedResults.searchResults.map(
-      searchResult =>
+    paginatedResults.formattedSearchResults =
+      paginatedResults.searchResults.map(searchResult =>
         formatDocumentSearchResultRecord(searchResult, advancedSearchTab, {
           applicationContext,
         }),
-    );
+      );
   }
 
   const showManyResultsMessage = !!(
@@ -38,6 +38,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   );
 
   return {
+    numberOfResults: searchResults?.length,
     ...paginatedResults,
     documentTypeVerbiage,
     isPublic,
@@ -52,16 +53,16 @@ export const formatDocumentSearchResultRecord = (
   advancedSearchTab,
   { applicationContext },
 ) => {
-  const {
-    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-    ORDER_EVENT_CODES,
-  } = applicationContext.getConstants();
+  const { OPINION_EVENT_CODES_WITH_BENCH_OPINION, ORDER_EVENT_CODES } =
+    applicationContext.getConstants();
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, 'MMDDYY');
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
+
+  result.numberOfPagesFormatted = result.numberOfPages ?? 'n/a';
 
   const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
   if (advancedSearchTab === searchTabs.OPINION) {

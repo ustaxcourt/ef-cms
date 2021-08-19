@@ -24,7 +24,7 @@ describe('updateUserCaseNoteAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().updateUserCaseNoteInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: '123-45',
       notes: 'welcome to flavortown',

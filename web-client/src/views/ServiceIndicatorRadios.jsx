@@ -37,7 +37,7 @@ export const ServiceIndicatorRadios = connect(
         errorText={
           getValidationError
             ? getValidationError()
-            : validationErrors && validationErrors.serviceIndicator
+            : validationErrors?.serviceIndicator
         }
       >
         <fieldset

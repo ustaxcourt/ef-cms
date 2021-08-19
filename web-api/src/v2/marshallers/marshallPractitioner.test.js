@@ -13,15 +13,16 @@ describe('marshallPractitioner', () => {
   const MOCK_CONTACT = getContactPrimary(MOCK_CASE);
 
   it('returns a practitioner object with the expected properties', () => {
-    expect(
-      Object.keys(marshallPractitioner(MOCK_PRACTITIONER)).sort(),
-    ).toEqual(['barNumber', 'contact', 'email', 'name', 'serviceIndicator']);
+    expect(Object.keys(marshallPractitioner(MOCK_PRACTITIONER)).sort()).toEqual(
+      ['barNumber', 'contact', 'email', 'firmName', 'name', 'serviceIndicator'],
+    );
   });
 
   it('marshalls from the current practitioner format', () => {
     const mock = Object.assign({}, MOCK_PRACTITIONER, {
       contact: MOCK_CONTACT,
       email: MOCK_CONTACT.email,
+      firmName: 'A Firm Example',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
 
@@ -29,6 +30,7 @@ describe('marshallPractitioner', () => {
     expect(mock.contact).toBeDefined();
     expect(mock.email).toBeDefined();
     expect(mock.name).toBeDefined();
+    expect(mock.firmName).toBeDefined();
     expect(mock.serviceIndicator).toBeDefined();
 
     const marshalled = marshallPractitioner(mock);
@@ -36,6 +38,7 @@ describe('marshallPractitioner', () => {
     expect(marshalled.barNumber).toEqual(mock.barNumber);
     expect(marshalled.email).toEqual(mock.email);
     expect(marshalled.name).toEqual(mock.name);
+    expect(marshalled.firmName).toBeDefined();
     expect(marshalled.serviceIndicator).toEqual(mock.serviceIndicator);
 
     // Exact format asserted in other tests.

@@ -1,10 +1,10 @@
-export const petitionsClerkViewsCreateNewCase = test => {
+export const petitionsClerkViewsCreateNewCase = cerebralTest => {
   return it('Petitions clerk views Start Case from Paper (internal Case Journey)', async () => {
-    await test.runSequence('gotoStartCaseWizardSequence', {
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence', {
       step: 1,
       wizardStep: 'StartCaseStep1',
     });
 
-    expect(test.getState('currentPage')).toEqual('StartCaseInternal');
+    expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
   });
 };

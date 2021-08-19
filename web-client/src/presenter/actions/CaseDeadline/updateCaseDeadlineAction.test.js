@@ -37,7 +37,7 @@ describe('updateCaseDeadlineAction', () => {
 
     expect(
       applicationContext.getUseCases().updateCaseDeadlineInteractor.mock
-        .calls[0][0].caseDeadline,
+        .calls[0][1].caseDeadline,
     ).toMatchObject({
       associatedJudge: 'Judge Judy',
       deadlineDate: mockComputedDate,

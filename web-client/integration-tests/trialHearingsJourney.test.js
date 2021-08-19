@@ -11,7 +11,7 @@ import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritiz
 
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('trial hearings journey', () => {
   beforeAll(() => {
@@ -19,7 +19,7 @@ describe('trial hearings journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation1 = `Denver, Colorado, ${Date.now()}`;
@@ -36,71 +36,79 @@ describe('trial hearings journey', () => {
     sessionType: 'Small',
     trialLocation: trialLocation2,
   };
-  test.createdTrialSessions = [];
-  test.createdCases = [];
+  cerebralTest.createdTrialSessions = [];
+  cerebralTest.createdCases = [];
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides1);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsNewTrialSession(test);
-  docketClerkCreatesATrialSession(test, overrides2);
-  docketClerkViewsTrialSessionList(test);
-  docketClerkViewsNewTrialSession(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides1);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
+  docketClerkCreatesATrialSession(cerebralTest, overrides2);
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsNewTrialSession(cerebralTest);
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 1', async () => {
-    const caseDetail = await uploadPetition(test, overrides1);
+    const caseDetail = await uploadPetition(cerebralTest, overrides1);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.createdCases.push(test.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkManuallyAddsCaseToTrialSessionWithNote(test);
-  docketClerkAddsCaseToHearing(test, 'Test hearing note one.');
-  docketClerkViewsNewTrialSession(test, true, 'Test hearing note one.');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkManuallyAddsCaseToTrialSessionWithNote(cerebralTest);
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note one.');
+  docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note one.');
 
-  loginAs(test, 'judgeCohen@example.com');
-  judgeViewsTrialSessionWorkingCopy(test, true, 'Test hearing note one.');
+  loginAs(cerebralTest, 'judgeCohen@example.com');
+  judgeViewsTrialSessionWorkingCopy(
+    cerebralTest,
+    true,
+    'Test hearing note one.',
+  );
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 2', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.createdCases.push(test.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkPrioritizesCase(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(test, 'Test hearing note two.');
-  docketClerkViewsNewTrialSession(test, true, 'Test hearing note two.');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note two.');
+  docketClerkViewsNewTrialSession(cerebralTest, true, 'Test hearing note two.');
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('create case 3', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       preferredTrialCity: trialLocation1,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.createdCases.push(test.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.createdCases.push(cerebralTest.docketNumber);
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkBlocksCase(test, trialLocation1, {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkBlocksCase(cerebralTest, trialLocation1, {
     caseCaption: 'Mona Schultz, Petitioner',
     caseStatus: 'New',
     docketNumberSuffix: 'L',
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(test, 'Test hearing note three.');
-  docketClerkViewsNewTrialSession(test, true, 'Test hearing note three.');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note three.');
+  docketClerkViewsNewTrialSession(
+    cerebralTest,
+    true,
+    'Test hearing note three.',
+  );
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(test, 'Test hearing note four.');
-  docketClerkEditsHearingNote(test, 'Updated test hearing note four.');
-  docketClerkRemovesCaseFromHearing(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note four.');
+  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note four.');
+  docketClerkRemovesCaseFromHearing(cerebralTest);
 });

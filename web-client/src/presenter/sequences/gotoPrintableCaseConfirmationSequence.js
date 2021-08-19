@@ -4,11 +4,10 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const gotoPrintableCaseConfirmationSequence = showProgressSequenceDecorator(
-  [
+export const gotoPrintableCaseConfirmationSequence =
+  showProgressSequenceDecorator([
     getCaseAction,
     setCaseAction,
     generateCaseConfirmationPdfUrlAction,
     setCurrentPageAction('PrintableDocketRecord'),
-  ],
-);
+  ]);

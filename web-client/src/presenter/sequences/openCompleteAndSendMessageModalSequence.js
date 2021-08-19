@@ -6,6 +6,7 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -26,6 +27,7 @@ export const openCompleteAndSendMessageModalSequence = [
   setComputeFormDateFactoryAction('dateReceived'),
   getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
+  setFilersFromFilersMapAction,
   validateDocketEntryAction,
   {
     error: [

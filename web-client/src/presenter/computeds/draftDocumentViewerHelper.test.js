@@ -1,43 +1,43 @@
 import { applicationContext } from '../../applicationContext';
+import {
+  clerkOfCourtUser,
+  docketClerkUser,
+  judgeUser,
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { draftDocumentViewerHelper as draftDocumentViewerHelperComputed } from './draftDocumentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
-const { USER_ROLES } = applicationContext.getConstants();
 
 const draftDocumentViewerHelper = withAppContextDecorator(
   draftDocumentViewerHelperComputed,
   applicationContext,
 );
 
-const getBaseState = user => {
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
-const docketClerkUser = {
-  role: USER_ROLES.docketClerk,
-  userId: '123',
-};
-const petitionsClerkUser = {
-  role: USER_ROLES.petitionsClerk,
-  userId: '123',
-};
-const clerkOfCourtUser = {
-  role: USER_ROLES.clerkOfCourt,
-  userId: '123',
-};
-const judgeUser = {
-  role: USER_ROLES.judge,
-  userId: '123',
-};
-const petitionerUser = {
-  role: USER_ROLES.petitioner,
-  userId: '123',
-};
-
 describe('draftDocumentViewerHelper', () => {
+  const mockDocketEntryId = 'e2cfaab4-7ca0-4fda-a03b-96145bc0d68e';
+  const mockDocketNumber = '101-20';
+
+  const getBaseState = user => {
+    return {
+      permissions: getUserPermissions(user),
+      viewerDraftDocumentToDisplay: {
+        docketEntryId: mockDocketEntryId,
+      },
+    };
+  };
+
+  const baseDraftDocketEntry = {
+    docketEntryId: mockDocketEntryId,
+    documentTitle: 'Order to do something',
+    documentType: 'Order',
+    eventCode: 'O',
+    filedBy: 'Test Petitionsclerk',
+    isDraft: true,
+  };
+
   beforeAll(() => {
     applicationContext.getCurrentUser = jest
       .fn()
@@ -49,13 +49,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-            },
-          ],
+          docketEntries: [{}],
         },
       },
     });
@@ -70,17 +64,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -92,18 +76,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              filedBy: 'Test Petitionsclerk',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -117,15 +90,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
+              ...baseDraftDocketEntry,
+              filedBy: undefined,
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -137,13 +105,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-            },
-          ],
+          docketEntries: [baseDraftDocketEntry],
         },
         viewerDraftDocumentToDisplay: {
           docketEntryId: '123',
@@ -151,31 +113,6 @@ describe('draftDocumentViewerHelper', () => {
       },
     });
     expect(result).toEqual({ createdByLabel: '', documentTitle: '' });
-  });
-
-  it('return showAddDocketEntryButton true for user role of docketClerk', () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
-        },
-      },
-    });
-
-    expect(result.showAddDocketEntryButton).toEqual(true);
   });
 
   it('return showAddDocketEntryButton true for user role of petitionsClerk', () => {
@@ -187,15 +124,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
+              ...baseDraftDocketEntry,
+              signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -212,15 +144,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
+              ...baseDraftDocketEntry,
+              signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -235,17 +162,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(judgeUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -262,17 +179,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              eventCode: 'O',
-              isDraft: true,
+              ...baseDraftDocketEntry,
               signedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -287,18 +197,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              eventCode: 'O',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -313,17 +212,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -341,16 +230,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
+              ...baseDraftDocketEntry,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -366,17 +249,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -394,17 +267,16 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
+              ...baseDraftDocketEntry,
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NOT',
-              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'NOT',
         },
       },
@@ -422,17 +294,16 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
+              ...baseDraftDocketEntry,
               documentTitle: 'Notice',
               documentType: 'Notice',
               eventCode: 'NTD',
-              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'NTD',
         },
       },
@@ -450,17 +321,16 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
+              ...baseDraftDocketEntry,
               documentTitle: 'Stipulated Decision',
               documentType: 'Stipulated Decision',
               eventCode: 'SDEC',
-              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'SDEC',
         },
       },
@@ -478,16 +348,10 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
+              ...baseDraftDocketEntry,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -502,17 +366,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -527,17 +381,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -554,17 +398,13 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
+              ...baseDraftDocketEntry,
               documentTitle: 'Notice',
               documentType: 'NOT',
               eventCode: 'NOT',
-              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
         },
       },
     });
@@ -582,17 +422,16 @@ describe('draftDocumentViewerHelper', () => {
         caseDetail: {
           docketEntries: [
             {
-              docketEntryId: 'abc',
+              ...baseDraftDocketEntry,
               documentTitle: 'Stipulated Decision',
               documentType: 'Stipulated Decision',
               eventCode: 'SDEC',
-              isDraft: true,
               signedAt: '2020-06-25T20:49:28.192Z',
             },
           ],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'SDEC',
         },
       },
@@ -607,17 +446,10 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
+          docketEntries: [{ ...baseDraftDocketEntry, eventCode: 'MISC' }],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'MISC', // Does not require a signature
         },
       },
@@ -631,18 +463,10 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              eventCode: 'O', // Requires a signature
-              isDraft: true,
-            },
-          ],
+          docketEntries: [baseDraftDocketEntry],
         },
         viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntryId: mockDocketEntryId,
           eventCode: 'O',
         },
       },
@@ -656,18 +480,7 @@ describe('draftDocumentViewerHelper', () => {
       state: {
         ...getBaseState(petitionerUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: 'abc',
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              eventCode: 'O', // Requires a signature
-              isDraft: true,
-            },
-          ],
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: 'abc',
+          docketEntries: [baseDraftDocketEntry],
         },
       },
     });
@@ -677,61 +490,37 @@ describe('draftDocumentViewerHelper', () => {
 
   it('should return addDocketEntryLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-    const DOCKET_NUMBER = '101-20';
-    const DOCKET_ENTRY_ID = '77a3d50e-e101-435d-a389-99cf5fe2f1f1';
 
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: DOCKET_ENTRY_ID,
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-          docketNumber: DOCKET_NUMBER,
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: DOCKET_ENTRY_ID,
+          docketEntries: [baseDraftDocketEntry],
+          docketNumber: mockDocketNumber,
         },
       },
     });
 
     expect(result.addDocketEntryLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/documents/${DOCKET_ENTRY_ID}/add-court-issued-docket-entry`,
+      `/case-detail/${mockDocketNumber}/documents/${mockDocketEntryId}/add-court-issued-docket-entry`,
     );
   });
 
   it('should return applySignatureLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-    const DOCKET_NUMBER = '101-20';
-    const DOCKET_ENTRY_ID = '77a3d50e-e101-435d-a389-99cf5fe2f1f1';
 
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          docketEntries: [
-            {
-              docketEntryId: DOCKET_ENTRY_ID,
-              documentTitle: 'Order to do something',
-              documentType: 'Order',
-              isDraft: true,
-            },
-          ],
-          docketNumber: DOCKET_NUMBER,
-        },
-        viewerDraftDocumentToDisplay: {
-          docketEntryId: DOCKET_ENTRY_ID,
+          docketEntries: [baseDraftDocketEntry],
+          docketNumber: mockDocketNumber,
         },
       },
     });
 
     expect(result.applySignatureLink).toEqual(
-      `/case-detail/${DOCKET_NUMBER}/edit-order/${DOCKET_ENTRY_ID}/sign`,
+      `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/sign`,
     );
   });
 });

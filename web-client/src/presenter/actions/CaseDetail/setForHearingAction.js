@@ -16,8 +16,7 @@ export const setForHearingAction = async ({ applicationContext, get }) => {
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .setForHearingInteractor({
-      applicationContext,
+    .setForHearingInteractor(applicationContext, {
       calendarNotes,
       docketNumber,
       trialSessionId,

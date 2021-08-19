@@ -13,7 +13,7 @@ export const DocketRecordOverlay = connect(
     caseDetail: state.caseDetail,
     dismissModalSequence: sequences.dismissModalSequence,
     docketRecordIndex: state.docketRecordIndex,
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
   },
@@ -21,7 +21,7 @@ export const DocketRecordOverlay = connect(
     caseDetail,
     dismissModalSequence,
     docketRecordIndex,
-    formattedCaseDetail,
+    formattedDocketEntries,
     openCaseDocumentDownloadUrlSequence,
     runCancelSequence,
   }) {
@@ -77,7 +77,7 @@ export const DocketRecordOverlay = connect(
     const renderModalContent = () => {
       const closeFunc = dismissModalSequence;
       const entry =
-        formattedCaseDetail.formattedDocketEntriesOnDocketRecord[
+        formattedDocketEntries.formattedDocketEntriesOnDocketRecord[
           docketRecordIndex
         ];
       return (

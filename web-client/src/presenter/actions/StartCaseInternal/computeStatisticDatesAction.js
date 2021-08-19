@@ -5,24 +5,16 @@ export const combineLastDateOfPeriodFields = ({ applicationContext, form }) => {
     ...form,
   };
 
-  if (
-    applicationContext
-      .getUtilities()
-      .isValidDateString(
-        `${newForm.lastDateOfPeriodMonth}-${newForm.lastDateOfPeriodDay}-${newForm.lastDateOfPeriodYear}`,
-      )
-  ) {
-    const computedLastDateOfPeriod = applicationContext
-      .getUtilities()
-      .createISODateStringFromObject({
-        day: newForm.lastDateOfPeriodDay,
-        month: newForm.lastDateOfPeriodMonth,
-        year: newForm.lastDateOfPeriodYear,
-      });
-    newForm.lastDateOfPeriod = computedLastDateOfPeriod;
-  } else {
-    newForm.lastDateOfPeriod = undefined;
-  }
+  const computedLastDateOfPeriod = applicationContext
+    .getUtilities()
+    .validateDateAndCreateISO({
+      day: newForm.lastDateOfPeriodDay,
+      month: newForm.lastDateOfPeriodMonth,
+      year: newForm.lastDateOfPeriodYear,
+    });
+
+  newForm.lastDateOfPeriod = computedLastDateOfPeriod;
+
   return newForm;
 };
 

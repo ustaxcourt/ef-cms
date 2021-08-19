@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
 
-export const redirectToCognitoAction = async ({ get, router }) => {
+export const redirectToCognitoAction = ({ get, router }) => {
   router.externalRoute(get(state.cognitoLoginUrl));
 };

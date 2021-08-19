@@ -7,6 +7,7 @@ import React from 'react';
 
 export const DocketRecordHeader = connect(
   {
+    docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     gotoPrintableDocketRecordSequence:
       sequences.gotoPrintableDocketRecordSequence,
@@ -15,6 +16,7 @@ export const DocketRecordHeader = connect(
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
+    docketRecordHelper,
     formattedCaseDetail,
     gotoPrintableDocketRecordSequence,
     showModal,
@@ -62,21 +64,24 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
-            <div className="tablet:grid-col-10 text-right">
-              <Button
-                link
-                aria-label="printable docket record"
-                className="margin-right-0"
-                icon="print"
-                onClick={() => {
-                  gotoPrintableDocketRecordSequence({
-                    docketNumber: formattedCaseDetail.docketNumber,
-                  });
-                }}
-              >
-                Printable Docket Record
-              </Button>
-            </div>
+            {docketRecordHelper.showPrintableDocketRecord && (
+              <div className="tablet:grid-col-10 text-right">
+                <Button
+                  link
+                  aria-label="printable docket record"
+                  className="margin-right-0"
+                  icon="print"
+                  id="printable-docket-record-button"
+                  onClick={() => {
+                    gotoPrintableDocketRecordSequence({
+                      docketNumber: formattedCaseDetail.docketNumber,
+                    });
+                  }}
+                >
+                  Printable Docket Record
+                </Button>
+              </div>
+            )}
           </div>
           <div className="only-small-screens">
             <Button

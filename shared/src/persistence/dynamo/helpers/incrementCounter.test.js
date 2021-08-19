@@ -6,7 +6,7 @@ const { incrementCounter } = require('./incrementCounter');
 
 describe('incrementCounter', () => {
   beforeEach(() => {
-    client.updateConsistent = jest.fn().mockReturnValue(null);
+    client.updateConsistent = jest.fn().mockReturnValue({ id: 1 });
   });
 
   it('should update the docketNumber counter for the provided year', async () => {
@@ -29,9 +29,9 @@ describe('incrementCounter', () => {
   });
 
   it('should update the docketNumber counter for the current year when one is not provided', async () => {
-    const {
-      year: currentYear,
-    } = applicationContext.getUtilities().getMonthDayYearObj();
+    const { year: currentYear } = applicationContext
+      .getUtilities()
+      .getMonthDayYearObj();
 
     await incrementCounter({
       applicationContext,

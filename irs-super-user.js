@@ -44,7 +44,7 @@ const registerUser = async () => {
   console.log('logged in');
 
   if (response.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-    response = await cognito
+    await cognito
       .respondToAuthChallenge({
         ChallengeName: 'NEW_PASSWORD_REQUIRED',
         ChallengeResponses: {
@@ -56,6 +56,7 @@ const registerUser = async () => {
       })
       .promise();
   }
+
   console.log('password changed');
 
   response = await cognito
@@ -68,6 +69,7 @@ const registerUser = async () => {
       ClientId,
     })
     .promise();
+
   console.log('logged in second time');
 
   if (response.ChallengeName === 'MFA_SETUP') {

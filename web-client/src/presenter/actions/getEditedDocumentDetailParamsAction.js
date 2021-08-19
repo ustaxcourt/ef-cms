@@ -8,12 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} contains the docketNumber and docketEntryId
  */
-export const getEditedDocumentDetailParamsAction = async ({ get, props }) => {
+export const getEditedDocumentDetailParamsAction = ({ get, props }) => {
   const caseDetail = get(state.caseDetail);
-  const documentToEdit = get(state.documentToEdit);
-  const docketEntryId = documentToEdit
-    ? documentToEdit.docketEntryId
-    : get(props.primaryDocumentFileId);
+  const docketEntryId =
+    get(state.documentToEdit.docketEntryId) || get(props.primaryDocumentFileId);
 
   return {
     docketEntryId,

@@ -8,7 +8,7 @@ describe('verifyUserPendingEmailAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should make a call to verifyUserPendingEmailInteractor', async () => {
+  it('should make a call to verifyUserPendingEmailInteractor', () => {
     applicationContext
       .getUseCases()
       .verifyUserPendingEmailInteractor.mockReturnValue();
@@ -23,7 +23,7 @@ describe('verifyUserPendingEmailAction', () => {
     });
     expect(
       applicationContext.getUseCases().verifyUserPendingEmailInteractor.mock
-        .calls[0][0].token,
+        .calls[0][1].token,
     ).toEqual('abc');
   });
 });

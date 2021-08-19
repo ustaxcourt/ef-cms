@@ -21,13 +21,14 @@ describe('getJudgesCaseNoteForCaseAction', () => {
       },
       state: { caseDetail: { docketNumber: '123' } },
     });
+
     expect(
       applicationContext.getUseCases().getUserCaseNoteInteractor.mock.calls
         .length,
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().getUserCaseNoteInteractor.mock
-        .calls[0][0].docketNumber,
+        .calls[0][1].docketNumber,
     ).toEqual('123');
   });
 });

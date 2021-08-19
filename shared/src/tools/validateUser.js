@@ -1,14 +1,8 @@
 const { getUniqueId } = require('../sharedAppContext');
 const { User } = require('../business/entities/User');
 
-const [
-  email,
-  role,
-  section,
-  name,
-  judgeFullName,
-  judgeTitle,
-] = process.argv.slice(2);
+const [email, role, section, name, judgeFullName, judgeTitle] =
+  process.argv.slice(2);
 
 const user = new User({
   email,

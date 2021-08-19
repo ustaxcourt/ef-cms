@@ -69,11 +69,7 @@ export const EditCorrespondenceDocument = connect(
             <div className="grid-row grid-gap">
               <div className="desktop:grid-col-5 tablet:grid-row">
                 <div className="blue-container desktop:upload-court-document-description-container">
-                  <FormGroup
-                    errorText={
-                      validationErrors && validationErrors.documentTitle
-                    }
-                  >
+                  <FormGroup errorText={validationErrors?.documentTitle}>
                     <label
                       className="usa-label"
                       htmlFor="upload-description"

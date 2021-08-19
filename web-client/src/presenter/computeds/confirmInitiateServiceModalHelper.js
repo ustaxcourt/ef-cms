@@ -1,4 +1,4 @@
-import { startCase } from 'lodash';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 /**
@@ -11,7 +11,9 @@ import { state } from 'cerebral';
  * view options
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const constants = applicationContext.getConstants();
+  const { CONTACT_TYPE_TITLES, SERVICE_INDICATOR_TYPES } =
+    applicationContext.getConstants();
+  const caseDetail = get(state.caseDetail);
 
   const formattedCase = applicationContext
     .getUtilities()
@@ -20,24 +22,31 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     });
 
   const parties = {
-    petitioner: [
-      applicationContext.getUtilities().getContactPrimary(formattedCase),
-      applicationContext.getUtilities().getContactSecondary(formattedCase),
-    ],
+    petitioner: caseDetail.petitioners,
     privatePractitioners: formattedCase.privatePractitioners,
     respondent: formattedCase.irsPractitioners,
   };
 
   const contactsNeedingPaperService = [];
 
+  const roleToDisplay = party => {
+    if (party.role === ROLES.privatePractitioner) {
+      return 'Petitioner Counsel';
+    } else if (party.role === ROLES.irsPractitioner) {
+      return 'Respondent Counsel';
+    } else {
+      return CONTACT_TYPE_TITLES[party.contactType];
+    }
+  };
+
   Object.keys(parties).forEach(key => {
     parties[key].forEach(party => {
       if (
         party &&
-        party.serviceIndicator === constants.SERVICE_INDICATOR_TYPES.SI_PAPER
+        party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER
       ) {
         contactsNeedingPaperService.push({
-          name: `${party.name}, ${startCase(key)}`,
+          name: `${party.name}, ${roleToDisplay(party)}`,
         });
       }
     });

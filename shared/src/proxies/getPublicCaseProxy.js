@@ -8,7 +8,7 @@ const { get } = require('./requests');
  * @param {string} providers.docketNumber the docket number to get
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPublicCaseInteractor = ({ applicationContext, docketNumber }) => {
+exports.getPublicCaseInteractor = (applicationContext, { docketNumber }) => {
   return get({
     applicationContext,
     endpoint: `/public-api/cases/${docketNumber}`,

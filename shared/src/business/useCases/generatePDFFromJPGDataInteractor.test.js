@@ -24,8 +24,8 @@ describe('generatePDFFromJPGDataInteractor', () => {
     const imgData = [testJpg, testJpg];
 
     const newPdfData = await generatePDFFromJPGDataInteractor(
-      imgData,
       applicationContext,
+      { imgData },
     );
 
     fs.writeFileSync(

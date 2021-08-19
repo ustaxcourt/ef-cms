@@ -52,7 +52,7 @@ describe('sealCaseAction', () => {
       applicationContext.getUseCases().sealCaseInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().sealCaseInteractor.mock.calls[0][0],
+      applicationContext.getUseCases().sealCaseInteractor.mock.calls[0][1],
     ).toMatchObject({ docketNumber: mockDocketNumber });
   });
 

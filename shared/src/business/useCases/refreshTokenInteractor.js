@@ -3,15 +3,15 @@ const qs = require('qs');
 /**
  * Refresh the Cognito token
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.refreshToken the refresh token
  * @returns {object} the token
  */
-exports.refreshTokenInteractor = async ({
+exports.refreshTokenInteractor = async (
   applicationContext,
-  refreshToken,
-}) => {
+  { refreshToken },
+) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     grant_type: 'refresh_token',

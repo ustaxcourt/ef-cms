@@ -20,8 +20,7 @@ export const getDocumentQCInboxForSectionAction = async ({
 
   const workItems = await applicationContext
     .getUseCases()
-    .getDocumentQCInboxForSectionInteractor({
-      applicationContext,
+    .getDocumentQCInboxForSectionInteractor(applicationContext, {
       judgeUser,
       section: user.section,
     });

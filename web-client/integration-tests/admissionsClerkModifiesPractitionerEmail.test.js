@@ -11,24 +11,24 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 import faker from 'faker';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
-    test.barNumber = 'SC2222'; //privatePractitioner3
+    cerebralTest.barNumber = 'SC2222'; //privatePractitioner3
 
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -41,42 +41,44 @@ describe('admissions clerk practitioner journey', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test, true);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
 
   it('admissions clerk navigates to edit form', async () => {
     await refreshElasticsearchIndex();
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
   });
 
   it('admissions clerk updates practitioner email but it already exists', async () => {
-    expect(test.getState('form.pendingEmail')).toBeUndefined();
-    expect(test.getState('form.originalEmail')).toBe(
+    expect(cerebralTest.getState('form.pendingEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: 'privatePractitioner99@example.com',
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: 'privatePractitioner99@example.com',
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       email:
         'An account with this email already exists. Enter a new email address.',
     });
@@ -84,45 +86,53 @@ describe('admissions clerk practitioner journey', () => {
 
   const validEmail = `${faker.internet.userName()}_no_error@example.com`;
   it('admissions clerk updates practitioner email', async () => {
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'updatedEmail',
       value: validEmail,
     });
 
-    await test.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
       value: validEmail,
     });
 
-    await test.runSequence('submitUpdatePractitionerUserSequence');
+    await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    expect(test.getState('modal.showModal')).toBe('EmailVerificationModal');
-    expect(test.getState('currentPage')).toEqual('EditPractitionerUser');
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'EmailVerificationModal',
+    );
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPractitionerUser',
+    );
 
-    await test.runSequence(
+    await cerebralTest.runSequence(
       'closeVerifyEmailModalAndNavigateToPractitionerDetailSequence',
     );
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('currentPage')).toEqual('PractitionerDetail');
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('PractitionerDetail');
 
-    await test.runSequence('gotoEditPractitionerUserSequence', {
-      barNumber: test.barNumber,
+    await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
+      barNumber: cerebralTest.barNumber,
     });
 
-    expect(test.getState('form.pendingEmail')).toBe(validEmail);
-    expect(test.getState('form.originalEmail')).toBe(
+    expect(cerebralTest.getState('form.pendingEmail')).toBe(validEmail);
+    expect(cerebralTest.getState('form.originalEmail')).toBe(
       'privatePractitioner3@example.com',
     );
-    expect(test.getState('form.updatedEmail')).toBeUndefined();
-    expect(test.getState('form.confirmEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
   });
 
   describe('private practitioner logs in and verifies email address', () => {
-    loginAs(test, 'privatePractitioner3@example.com');
-    userVerifiesUpdatedEmailAddress(test, 'practitioner');
+    loginAs(cerebralTest, 'privatePractitioner3@example.com');
+    userVerifiesUpdatedEmailAddress(cerebralTest, 'practitioner');
 
-    loginAs(test, 'privatePractitioner3@example.com');
-    userLogsInAndChecksVerifiedEmailAddress(test, 'practitioner', validEmail);
+    loginAs(cerebralTest, 'privatePractitioner3@example.com');
+    userLogsInAndChecksVerifiedEmailAddress(
+      cerebralTest,
+      'practitioner',
+      validEmail,
+    );
   });
 });

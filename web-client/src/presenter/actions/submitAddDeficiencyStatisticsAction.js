@@ -30,17 +30,18 @@ export const submitAddDeficiencyStatisticsAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {
-    await applicationContext.getUseCases().addDeficiencyStatisticInteractor({
-      applicationContext,
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      docketNumber,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
-      year,
-      yearOrPeriod,
-    });
+    await applicationContext
+      .getUseCases()
+      .addDeficiencyStatisticInteractor(applicationContext, {
+        determinationDeficiencyAmount,
+        determinationTotalPenalties,
+        docketNumber,
+        irsDeficiencyAmount,
+        irsTotalPenalties,
+        lastDateOfPeriod,
+        year,
+        yearOrPeriod,
+      });
 
     return path.success({
       alertSuccess: {
@@ -50,7 +51,8 @@ export const submitAddDeficiencyStatisticsAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        title: 'Errors were found. Please correct your form and resubmit.',
+        message: 'Please try again.',
+        title: 'Statistic could not be added.',
       },
     });
   }

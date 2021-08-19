@@ -75,8 +75,9 @@ exports.getNotificationsInteractor = async (
     filters['section']['inbox'],
   ).length;
 
-  const unreadMessageCount = userInbox.filter(message => !message.isRead)
-    .length;
+  const unreadMessageCount = userInbox.filter(
+    message => !message.isRead,
+  ).length;
 
   return {
     qcIndividualInProgressCount,

@@ -20,7 +20,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Blocking a Case', () => {
   beforeAll(() => {
@@ -28,7 +28,7 @@ describe('Blocking a Case', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -36,163 +36,163 @@ describe('Blocking a Case', () => {
     trialLocation,
   };
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(test);
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   //manual block and unblock - check eligible list
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
-  petitionsClerkBlocksCase(test, trialLocation);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
-  petitionsClerkUnblocksCase(test, trialLocation);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 0);
+  petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   // automatic block with a due date
-  petitionsClerkCreatesACaseDeadline(test);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
 
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([
+    expect(cerebralTest.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
         blocked: false,
-        docketNumber: test.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     ]);
   });
 
-  petitionsClerkRemovesPendingItemFromCase(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
-  petitionsClerkDeletesCaseDeadline(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
+  petitionsClerkRemovesPendingItemFromCase(cerebralTest);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 0);
+  petitionsClerkDeletesCaseDeadline(cerebralTest);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   //automatic block with a pending item
-  loginAs(test, 'irsPractitioner@example.com');
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
 
   it('respondent uploads a proposed stipulated decision (pending item)', async () => {
     await viewCaseDetail({
+      cerebralTest,
       docketNumber: setupTest.docketNumber,
-      test,
     });
-    await uploadProposedStipulatedDecision(test);
+    await uploadProposedStipulatedDecision(cerebralTest);
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('petitions clerk views blocked report with an automatically blocked case for pending item', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([
+    expect(cerebralTest.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
         blocked: false,
-        docketNumber: test.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     ]);
   });
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 0);
-  petitionsClerkRemovesPendingItemFromCase(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 0);
+  petitionsClerkRemovesPendingItemFromCase(cerebralTest);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   //automatic and manual block
-  petitionsClerkBlocksCase(test, trialLocation);
-  petitionsClerkCreatesACaseDeadline(test);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
   it('petitions clerk views blocked report with an automatically and manually blocked case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([
+    expect(cerebralTest.getState('blockedCases')).toMatchObject([
       {
         automaticBlocked: true,
         automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
         blocked: true,
         blockedReason: 'just because',
-        docketNumber: test.docketNumber,
+        docketNumber: cerebralTest.docketNumber,
       },
     ]);
   });
-  petitionsClerkUnblocksCase(test, trialLocation, false);
-  petitionsClerkDeletesCaseDeadline(test);
-  petitionsClerkViewsATrialSessionsEligibleCases(test, 1);
+  petitionsClerkUnblocksCase(cerebralTest, trialLocation, false);
+  petitionsClerkDeletesCaseDeadline(cerebralTest);
+  petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   //add deadline for a case that was manually added to a non-calendared session - it shouldn't actually be set to blocked
   it('petitions clerk manually adds case to trial', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openAddToTrialModalSequence');
+    await cerebralTest.runSequence('openAddToTrialModalSequence');
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'showAllLocations',
       value: true,
     });
 
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
-      value: test.trialSessionId,
+      value: cerebralTest.trialSessionId,
     });
 
-    await test.runSequence('addCaseToTrialSessionSequence');
+    await cerebralTest.runSequence('addCaseToTrialSessionSequence');
     await refreshElasticsearchIndex();
   });
 
-  petitionsClerkCreatesACaseDeadline(test);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    await test.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
     await refreshElasticsearchIndex();
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([]);
+    expect(cerebralTest.getState('blockedCases')).toMatchObject([]);
   });
 
-  markAllCasesAsQCed(test, () => [test.docketNumber]);
-  petitionsClerkSetsATrialSessionsSchedule(test);
+  markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
+  petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-  petitionsClerkCreatesACaseDeadline(test);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
   it('petitions clerk views blocked report with no blocked cases', async () => {
-    await test.runSequence('gotoBlockedCasesReportSequence');
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
 
     await refreshElasticsearchIndex();
 
-    await test.runSequence('getBlockedCasesByTrialLocationSequence', {
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
       key: 'trialLocation',
       value: trialLocation,
     });
 
-    expect(test.getState('blockedCases')).toMatchObject([]);
+    expect(cerebralTest.getState('blockedCases')).toMatchObject([]);
   });
 });

@@ -1,13 +1,18 @@
-export const practitionerViewsCaseDetail = (test, isAssociated = true) => {
+export const practitionerViewsCaseDetail = (
+  cerebralTest,
+  isAssociated = true,
+) => {
   return it('Practitioner views case detail', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    cerebralTest.setState('caseDetail', {});
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
     if (isAssociated) {
-      expect(test.getState('caseDetail.privatePractitioners')).toEqual([]);
+      expect(cerebralTest.getState('caseDetail.privatePractitioners')).toEqual(
+        [],
+      );
     }
   });
 };

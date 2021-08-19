@@ -192,8 +192,8 @@
     "section": "privatePractitioner",
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "entityName": "PrivatePractitioner",
-    "email": "privatePractitioner1@example.com",
     "firmName": "Bogus Barristers",
+    "email": "privatePractitioner1@example.com",
     "barNumber": "PT5432",
     "contact": {
       "address1": "234 Main St",

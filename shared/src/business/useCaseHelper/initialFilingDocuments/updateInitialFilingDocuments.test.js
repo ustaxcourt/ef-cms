@@ -10,7 +10,7 @@ const {
 const {
   updateInitialFilingDocuments,
 } = require('./updateInitialFilingDocuments');
-const { Case } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
@@ -90,7 +90,8 @@ describe('addNewInitialFilingToCase', () => {
     expect(filedDocument.isPaper).toBeTruthy();
   });
 
-  it('should set partyPrimary and partySecondary to true if there is a contactSecondary', async () => {
+  it('should set filers to [contactPrimaryId, contactSecondaryId] if there is a contactSecondary', async () => {
+    const mockSecondaryId = 'b30dc487-e83b-4ec6-8f40-8e0d792e8bbe';
     mockOriginalCase = new Case(
       {
         ...MOCK_CASE,
@@ -99,12 +100,9 @@ describe('addNewInitialFilingToCase', () => {
         petitioners: [
           ...MOCK_CASE.petitioners,
           {
-            address1: '123 Main St',
-            city: 'Somewhere',
+            ...MOCK_CASE.petitioners[0],
+            contactId: mockSecondaryId,
             contactType: CONTACT_TYPES.secondary,
-            name: 'Test Petitioner',
-            postalCode: '12345',
-            state: 'TX',
           },
         ],
       },
@@ -118,12 +116,9 @@ describe('addNewInitialFilingToCase', () => {
       petitioners: [
         ...MOCK_CASE.petitioners,
         {
-          address1: '123 Main St',
-          city: 'Somewhere',
+          ...MOCK_CASE.petitioners[0],
+          contactId: mockSecondaryId,
           contactType: CONTACT_TYPES.secondary,
-          name: 'Test Petitioner',
-          postalCode: '12345',
-          state: 'TX',
         },
       ],
     };
@@ -138,8 +133,10 @@ describe('addNewInitialFilingToCase', () => {
     const filedDocument = mockOriginalCase.docketEntries.find(
       d => d.docketEntryId === mockRQT.docketEntryId,
     );
-    expect(filedDocument.partyPrimary).toBeTruthy();
-    expect(filedDocument.partySecondary).toBeTruthy();
+    expect(filedDocument.filers).toEqual([
+      getContactPrimary(mockCaseToUpdate).contactId,
+      mockSecondaryId,
+    ]);
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {

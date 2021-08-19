@@ -37,7 +37,7 @@ describe('getNotificationsAction', () => {
 
     expect(
       applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][0].judgeUserId,
+        .calls[0][1].judgeUserId,
     ).toEqual('123');
   });
 });

@@ -33,13 +33,7 @@ export const Address = connect(
     function MobileCityAndState() {
       return (
         <Mobile>
-          <FormGroup
-            errorText={
-              validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].city
-            }
-          >
+          <FormGroup errorText={validationErrors?.[type]?.city}>
             <label className="usa-label" htmlFor={`${type}.city`}>
               City
             </label>
@@ -62,13 +56,7 @@ export const Address = connect(
             />
           </FormGroup>
 
-          <FormGroup
-            errorText={
-              validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].state
-            }
-          >
+          <FormGroup errorText={validationErrors?.[type]?.state}>
             <label className="usa-label" htmlFor={`${type}.state`}>
               State
             </label>
@@ -95,9 +83,8 @@ export const Address = connect(
           <div
             className={classNames(
               'usa-form-group',
-              validationErrors &&
-                validationErrors[type] &&
-                (validationErrors[type].city || validationErrors[type].state) &&
+              (validationErrors?.[type]?.city ||
+                validationErrors?.[type]?.state) &&
                 'usa-form-group--error',
             )}
           >
@@ -140,22 +127,18 @@ export const Address = connect(
             </div>
             <div className="grid-row grid-gap">
               <div className="grid-col-8">
-                {validationErrors &&
-                  validationErrors[type] &&
-                  validationErrors[type].city && (
-                    <span className="usa-error-message">
-                      {validationErrors[type].city}
-                    </span>
-                  )}
+                {validationErrors?.[type]?.city && (
+                  <span className="usa-error-message">
+                    {validationErrors[type].city}
+                  </span>
+                )}
               </div>
               <div className="grid-col-4">
-                {validationErrors &&
-                  validationErrors[type] &&
-                  validationErrors[type].state && (
-                    <span className="usa-error-message">
-                      {validationErrors[type].state}
-                    </span>
-                  )}
+                {validationErrors?.[type]?.state && (
+                  <span className="usa-error-message">
+                    {validationErrors[type].state}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -165,13 +148,7 @@ export const Address = connect(
 
     return (
       <>
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].address1
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.address1}>
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
           </label>
@@ -241,13 +218,7 @@ export const Address = connect(
         {NonMobileCityAndState()}
         {MobileCityAndState()}
 
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].postalCode
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.postalCode}>
           <label
             aria-hidden
             className="usa-label"

@@ -262,8 +262,8 @@ describe('case detail edit computed', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
-          petitionPaymentStatus: applicationContext.getConstants()
-            .PAYMENT_STATUS.UNPAID,
+          petitionPaymentStatus:
+            applicationContext.getConstants().PAYMENT_STATUS.UNPAID,
         },
       },
     });
@@ -274,8 +274,8 @@ describe('case detail edit computed', () => {
     const result = runCompute(startCaseInternalHelper, {
       state: {
         form: {
-          petitionPaymentStatus: applicationContext.getConstants()
-            .PAYMENT_STATUS.PAID,
+          petitionPaymentStatus:
+            applicationContext.getConstants().PAYMENT_STATUS.PAID,
         },
       },
     });

@@ -51,9 +51,10 @@ describe('getDocument', () => {
       tempBucketName,
     );
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: '',
-      }),
+      promise: () =>
+        Promise.resolve({
+          Body: '',
+        }),
     });
 
     await getDocument({
@@ -69,9 +70,10 @@ describe('getDocument', () => {
 
   it('retrieves from the documents bucket by default when S3 protocol is set', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
-        Body: '',
-      }),
+      promise: () =>
+        Promise.resolve({
+          Body: '',
+        }),
     });
 
     await getDocument({

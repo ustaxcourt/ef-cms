@@ -203,6 +203,12 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
 
+  triggers = {
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_rest_api.gateway_for_api,
+    ]))
+  }
+
   lifecycle {
     create_before_destroy = true
   }

@@ -15,17 +15,13 @@ beforeAll(() => {
 describe('filePetitionFromPaperInteractor', () => {
   it('throws an error when a null user tries to access the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
-    let error;
-    try {
-      await filePetitionFromPaperInteractor({
-        applicationContext,
+
+    await expect(
+      filePetitionFromPaperInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow();
   });
 
   it('throws an error when an unauthorized user tries to access the case', async () => {
@@ -33,17 +29,13 @@ describe('filePetitionFromPaperInteractor', () => {
       role: ROLES.irsPractitioner,
       userId: 'irsPractitioner',
     });
-    let error;
-    try {
-      await filePetitionFromPaperInteractor({
-        applicationContext,
+
+    await expect(
+      filePetitionFromPaperInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow();
   });
 
   it('calls upload on a Petition file', async () => {
@@ -51,14 +43,15 @@ describe('filePetitionFromPaperInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+
+    await filePetitionFromPaperInteractor(applicationContext, {
       petitionFile: 'this petition file',
       petitionMetadata: null,
     });
+
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].document,
+        .calls[0][1].document,
     ).toEqual('this petition file');
   });
 
@@ -68,13 +61,13 @@ describe('filePetitionFromPaperInteractor', () => {
       userId: 'petitionsClerk',
     });
 
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+    await filePetitionFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFile: 'this APW file',
     });
+
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[0][0].document,
+        .calls[0][1].document,
     ).toEqual('this APW file');
   });
 
@@ -83,13 +76,14 @@ describe('filePetitionFromPaperInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+
+    await filePetitionFromPaperInteractor(applicationContext, {
       ownershipDisclosureFile: 'this ods file',
     });
+
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this ods file');
   });
 
@@ -98,13 +92,14 @@ describe('filePetitionFromPaperInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+
+    await filePetitionFromPaperInteractor(applicationContext, {
       stinFile: 'this stin file',
     });
+
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this stin file');
   });
 
@@ -113,26 +108,27 @@ describe('filePetitionFromPaperInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: 'petitionsClerk',
     });
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+
+    await filePetitionFromPaperInteractor(applicationContext, {
       requestForPlaceOfTrialFile: 'this rqt file',
     });
+
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
-        .calls[1][0].document,
+        .calls[1][1].document,
     ).toEqual('this rqt file');
   });
 
   it('uploads a Petition file and a STIN file', async () => {
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+    await filePetitionFromPaperInteractor(applicationContext, {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
+
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: undefined,
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -141,16 +137,16 @@ describe('filePetitionFromPaperInteractor', () => {
   });
 
   it('uploads an Ownership Disclosure Statement file', async () => {
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+    await filePetitionFromPaperInteractor(applicationContext, {
       ownershipDisclosureFile: 'something',
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
+
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -159,16 +155,16 @@ describe('filePetitionFromPaperInteractor', () => {
   });
 
   it('uploads an Application for Waiver of Filing Fee file', async () => {
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+    await filePetitionFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFile: 'something',
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
     });
+
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFileId:
         'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -178,16 +174,16 @@ describe('filePetitionFromPaperInteractor', () => {
   });
 
   it('uploads a Request for Place of Trial file', async () => {
-    await filePetitionFromPaperInteractor({
-      applicationContext,
+    await filePetitionFromPaperInteractor(applicationContext, {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       requestForPlaceOfTrialFile: 'something',
       stinFile: 'something3',
     });
+
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       petitionFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       requestForPlaceOfTrialFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

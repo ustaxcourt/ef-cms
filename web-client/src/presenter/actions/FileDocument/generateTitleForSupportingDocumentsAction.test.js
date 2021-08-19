@@ -33,11 +33,11 @@ describe('generateTitleForSupportingDocumentsAction', () => {
     });
 
     expect(
-      generateDocumentTitleInteractor.mock.calls[0][0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[0][1].documentMetadata
         .documentType,
     ).toEqual('Motion for a New Trial');
     expect(
-      generateDocumentTitleInteractor.mock.calls[1][0].documentMetadata
+      generateDocumentTitleInteractor.mock.calls[1][1].documentMetadata
         .documentType,
     ).toEqual('Application for Waiver of Filing Fee');
   });

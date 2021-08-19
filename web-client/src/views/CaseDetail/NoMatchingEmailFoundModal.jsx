@@ -25,9 +25,9 @@ export const NoMatchingEmailFoundModal = connect(
       >
         <div id="no-matching-email-modal">
           <p>
-            {form.contactPrimary.name}
+            {form.contact.name}
             <br />
-            {form.contactPrimary.email}
+            {form.contact.updatedEmail}
           </p>
 
           <p>

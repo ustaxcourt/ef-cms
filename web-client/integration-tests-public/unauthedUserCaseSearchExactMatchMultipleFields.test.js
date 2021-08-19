@@ -10,7 +10,7 @@ import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import faker from 'faker';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
@@ -43,7 +43,7 @@ const getContactSecondary = ({ name }) => ({
   state: 'CT',
 });
 
-const updateCaseCaption = async (docketNumber, caseCaption) => {
+const updateCaseCaption = (docketNumber, caseCaption) => {
   loginAs(testClient, 'docketclerk@example.com');
 
   it(`updates the case caption for ${docketNumber} to ${caseCaption}`, async () => {
@@ -77,13 +77,13 @@ describe('Create and serve a case to test contactPrimary.name', () => {
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
     updateCaseCaption(
-      test.docketNumber,
+      cerebralTest.docketNumber,
       'Best match on contact primary name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
@@ -101,7 +101,7 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
     });
 
     afterAll(() => {
-      test.closeSocket();
+      cerebralTest.closeSocket();
     });
 
     loginAs(testClient, 'petitioner@example.com');
@@ -112,14 +112,14 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       notFoundDocketNumberOnContactPrimarySecondaryName =
         caseDetail.docketNumber;
     });
 
     updateCaseCaption(
-      test.docketNumber,
+      cerebralTest.docketNumber,
       "string matches on contact primary's secondary name but will not turn up in a search, Petitioner",
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
@@ -145,13 +145,13 @@ describe('Create and serve a case to test contactSecondary.name', () => {
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
     updateCaseCaption(
-      test.docketNumber,
+      cerebralTest.docketNumber,
       'second-best match on contactSecondary.name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
@@ -174,13 +174,13 @@ describe('Create and serve a case to test caseCaption', () => {
       const caseDetail = await uploadPetition(testClient);
 
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
     const newCaseCaption = `${nameToSearchFor}, name on caseCaption, third-best match, Petitioner`;
-    updateCaseCaption(test.docketNumber, newCaseCaption);
+    updateCaseCaption(cerebralTest.docketNumber, newCaseCaption);
   });
 
   describe('Petitions clerk serves case to IRS', () => {
@@ -203,13 +203,13 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
       });
 
       expect(caseDetail.docketNumber).toBeDefined();
-      test.docketNumber = caseDetail.docketNumber;
+      cerebralTest.docketNumber = caseDetail.docketNumber;
       testClient.docketNumber = caseDetail.docketNumber;
       createdDocketNumbers.push(caseDetail.docketNumber);
     });
 
     updateCaseCaption(
-      test.docketNumber,
+      cerebralTest.docketNumber,
       'fourth-best match of out-of-order terms on contactPrimary.name, Petitioner',
     ); // This is to ensure the results are based solely on the contact information, and not caseCaption
   });
@@ -221,7 +221,7 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
 });
 
 describe('Petitioner searches for exact name match', () => {
-  unauthedUserNavigatesToPublicSite(test);
+  unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it(`returns search results we expect in the correct order when searching for "${firstName} ${lastName}"`, async () => {
     const queryParams = {
@@ -230,10 +230,13 @@ describe('Petitioner searches for exact name match', () => {
       petitionerName: nameToSearchFor,
     };
 
-    test.setState('advancedSearchForm.caseSearchByName', queryParams);
-    await test.runSequence('submitPublicCaseAdvancedSearchSequence', {});
+    cerebralTest.setState('advancedSearchForm.caseSearchByName', queryParams);
+    await cerebralTest.runSequence(
+      'submitPublicCaseAdvancedSearchSequence',
+      {},
+    );
 
-    const searchResults = test.getState(
+    const searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 

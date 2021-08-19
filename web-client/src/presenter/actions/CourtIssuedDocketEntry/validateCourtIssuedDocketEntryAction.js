@@ -4,7 +4,6 @@ import { state } from 'cerebral';
  * validates the court-issued docket entry form
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context needed for getting the validation use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
@@ -22,9 +21,27 @@ export const validateCourtIssuedDocketEntryAction = ({
   let errors = applicationContext
     .getUseCases()
     .validateCourtIssuedDocketEntryInteractor({
-      applicationContext,
       entryMetadata,
     });
+
+  if (entryMetadata.year && entryMetadata.year.toString().length !== 4) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.date = errors.date || 'Enter a four-digit year';
+  }
+
+  if (
+    entryMetadata.filingDateYear &&
+    entryMetadata.filingDateYear.toString().length !== 4
+  ) {
+    if (!errors) {
+      errors = {};
+    }
+
+    errors.filingDate = errors.filingDate || 'Enter a four-digit year';
+  }
 
   // Additional validation to determine if the signature required warning should be displayed
   if (EVENT_CODES_REQUIRING_SIGNATURE.includes(entryMetadata.eventCode)) {

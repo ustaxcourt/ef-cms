@@ -1,54 +1,69 @@
-import { EditPrivatePractitionerFactory } from '../../../shared/src/business/entities/caseAssociation/EditPrivatePractitionerFactory';
+import { EditPetitionerCounselFactory } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounselFactory';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
-const { VALIDATION_ERROR_MESSAGES } = EditPrivatePractitionerFactory;
+const { VALIDATION_ERROR_MESSAGES } = EditPetitionerCounselFactory;
 
-export const petitionsClerkEditsPractitionerOnCase = test => {
+export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
-    expect(test.getState('caseDetail.privatePractitioners').length).toEqual(2);
+    expect(
+      cerebralTest.getState('caseDetail.privatePractitioners').length,
+    ).toEqual(2);
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = cerebralTest.getState(
+      'caseDetail.privatePractitioners.1.barNumber',
+    );
+
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(
-      test.getState('modal.privatePractitioners.1.representingPrimary'),
+      cerebralTest.getState(`form.representingMap.${contactPrimary.contactId}`),
     ).toBeFalsy();
     expect(
-      test.getState('modal.privatePractitioners.1.representingSecondary'),
-    ).toEqual(true);
+      cerebralTest.getState(
+        `form.representingMap.${contactSecondary.contactId}`,
+      ),
+    ).toBeTruthy();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingSecondary',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: `representingMap.${contactSecondary.contactId}`,
       value: false,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
-    expect(
-      test.getState('validationErrors.privatePractitioners.0'),
-    ).toBeFalsy();
-    expect(test.getState('validationErrors.privatePractitioners.1')).toEqual({
-      representingPrimary: VALIDATION_ERROR_MESSAGES.representingPrimary,
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      representing: VALIDATION_ERROR_MESSAGES.representing,
     });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingPrimary',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: `representingMap.${contactPrimary.contactId}`,
       value: true,
     });
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.1.representingSecondary',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: `representingMap.${contactSecondary.contactId}`,
       value: true,
     });
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
-
-    expect(test.getState('caseDetail.privatePractitioners.length')).toEqual(2);
-    const contactPrimary = contactPrimaryFromState(test);
-    const contactSecondary = contactSecondaryFromState(test);
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(
-      test.getState('caseDetail.privatePractitioners.1.representing'),
-    ).toEqual([contactPrimary.contactId, contactSecondary.contactId]);
+      cerebralTest.getState('caseDetail.privatePractitioners.length'),
+    ).toEqual(2);
+
+    expect(
+      cerebralTest.getState('caseDetail.privatePractitioners.1.representing'),
+    ).toEqual([contactSecondary.contactId, contactPrimary.contactId]);
   });
 };

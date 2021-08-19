@@ -21,9 +21,8 @@ describe('JoiValidationConstants', () => {
       expect(error).toBeFalsy();
     });
     it('validates 5+4 zipcodes', () => {
-      const { error } = JoiValidationConstants.US_POSTAL_CODE.validate(
-        '12345-9876',
-      );
+      const { error } =
+        JoiValidationConstants.US_POSTAL_CODE.validate('12345-9876');
       expect(error).toBeFalsy();
     });
     it('rejects bad zipcodes', () => {
@@ -52,9 +51,8 @@ describe('JoiValidationConstants', () => {
       result = JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.validate('19.58');
       expect(result.error).toBeTruthy();
 
-      result = JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.validate(
-        '5:00pm',
-      );
+      result =
+        JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.validate('5:00pm');
       expect(result.error).toBeTruthy();
     });
   });

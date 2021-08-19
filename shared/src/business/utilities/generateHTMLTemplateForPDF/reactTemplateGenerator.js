@@ -27,6 +27,9 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
+  Feature_8652_NoticeOfReceiptOfPetition,
+} = require('../pdfGenerator/documentTemplates/Feature_8652_NoticeOfReceiptOfPetition.jsx');
+const {
   GettingReadyForTrialChecklist,
 } = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
 const {
@@ -39,11 +42,17 @@ const {
   NoticeOfTrialIssued,
 } = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssued.jsx');
 const {
+  NoticeOfTrialIssuedInPerson,
+} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson.jsx');
+const {
   PageMetaHeaderDocket,
 } = require('../pdfGenerator/components/PageMetaHeaderDocket.jsx');
 const {
   PendingReport,
 } = require('../pdfGenerator/documentTemplates/PendingReport.jsx');
+const {
+  PractitionerCaseList,
+} = require('../pdfGenerator/documentTemplates/PractitionerCaseList.jsx');
 const {
   PretrialMemorandum,
 } = require('../pdfGenerator/components/PretrialMemorandum.jsx');
@@ -87,14 +96,17 @@ const components = {
   DateServedFooter,
   DocketRecord,
   DocumentService,
+  Feature_8652_NoticeOfReceiptOfPetition,
   GettingReadyForTrialChecklist,
   NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,
+  NoticeOfTrialIssuedInPerson,
   Order,
   PageMetaHeaderDocket,
   PendingReport,
   PetitionService,
+  PractitionerCaseList,
   PretrialMemorandum,
   ReceiptOfFiling,
   ReportsMetaHeader,

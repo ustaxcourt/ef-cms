@@ -3,9 +3,10 @@ import { docketClerkNavigatesToEditDocketEntryCertificateOfService } from './jou
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesANonstardardDDocumentForCase } from './journey/petitionerFilesANonstardardDDocumentForCase';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   beforeAll(() => {
@@ -13,22 +14,28 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(test);
+    const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
-    test.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
+
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+    cerebralTest.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
   });
-  petitionerFilesANonstardardDDocumentForCase(test, fakeFile);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkChecksDocketEntryEditLink(test);
-  docketClerkQCsDocketEntry(test);
-  docketClerkChecksDocketEntryEditLink(test, { value: true });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  docketClerkNavigatesToEditDocketEntryCertificateOfService(test, 3);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerFilesANonstardardDDocumentForCase(cerebralTest, fakeFile);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkChecksDocketEntryEditLink(cerebralTest);
+  docketClerkQCsDocketEntry(cerebralTest);
+  docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
+
+  docketClerkNavigatesToEditDocketEntryCertificateOfService(cerebralTest, 3);
 });

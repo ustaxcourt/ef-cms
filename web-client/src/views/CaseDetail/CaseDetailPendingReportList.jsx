@@ -7,13 +7,13 @@ import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal: state.modal.showModal,
   },
   function CaseDetailPendingReportList({
-    formattedCaseDetail,
+    formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal,
   }) {
@@ -24,7 +24,7 @@ export const CaseDetailPendingReportList = connect(
             link
             aria-describedby="tab-pending-report"
             className="margin-top-neg-1 margin-bottom-1"
-            href={`/case-detail/${formattedCaseDetail.docketNumber}/pending-report`}
+            href={`/case-detail/${formattedDocketEntries.docketNumber}/pending-report`}
             icon="print"
           >
             Printable Report
@@ -50,7 +50,7 @@ export const CaseDetailPendingReportList = connect(
               <th></th>
             </tr>
           </thead>
-          {formattedCaseDetail.formattedPendingDocketEntriesOnDocketRecord.map(
+          {formattedDocketEntries.formattedPendingDocketEntriesOnDocketRecord.map(
             entry => (
               <tbody key={entry.docketEntryId}>
                 <tr className="pending-item-row">
@@ -84,7 +84,7 @@ export const CaseDetailPendingReportList = connect(
             ),
           )}
         </table>
-        {formattedCaseDetail.formattedPendingDocketEntriesOnDocketRecord
+        {formattedDocketEntries.formattedPendingDocketEntriesOnDocketRecord
           .length === 0 && <p>There is nothing pending.</p>}
         {showModal === 'ConfirmRemoveCaseDetailPendingItemModal' && (
           <ConfirmRemoveCaseDetailPendingItemModal />

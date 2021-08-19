@@ -3,23 +3,23 @@ import { messageDocumentHelper as messageDocumentHelperComputed } from '../../sr
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkViewsMessageWithCorrespondence = test => {
+export const docketClerkViewsMessageWithCorrespondence = cerebralTest => {
   const messageDocumentHelper = withAppContextDecorator(
     messageDocumentHelperComputed,
   );
 
   const getHelper = () => {
     return runCompute(messageDocumentHelper, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
   };
 
   it('Docket clerk views case message with correspondence attached', async () => {
-    const formattedCaseMessages = await getCaseMessagesForCase(test);
+    const formattedCaseMessages = await getCaseMessagesForCase(cerebralTest);
     expect(formattedCaseMessages.inProgressMessages.length).toBe(1);
 
-    await test.runSequence('gotoMessageDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
       parentMessageId:
         formattedCaseMessages.inProgressMessages[0].parentMessageId,
     });

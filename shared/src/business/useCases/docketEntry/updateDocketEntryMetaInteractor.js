@@ -1,5 +1,6 @@
 const {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  UNSERVABLE_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   getDocumentTitleWithAdditionalInfo,
@@ -10,7 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const { DocketEntry, isServed } = require('../../entities/DocketEntry');
 const { NotFoundError } = require('../../../errors/errors');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -34,7 +35,8 @@ const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-exports.shouldGenerateCoversheetForDocketEntry = shouldGenerateCoversheetForDocketEntry;
+exports.shouldGenerateCoversheetForDocketEntry =
+  shouldGenerateCoversheetForDocketEntry;
 /**
  *
  * @param {object} applicationContext the application context
@@ -70,6 +72,20 @@ exports.updateDocketEntryMetaInteractor = async (
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
+  if (!originalDocketEntry) {
+    throw new Error(
+      `Docket entry with id ${docketEntryMeta.docketEntryId} not found.`,
+    );
+  }
+
+  if (
+    !isServed(originalDocketEntry) &&
+    !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
+    !originalDocketEntry.isMinuteEntry
+  ) {
+    throw new Error('Unable to update unserved docket entry.');
+  }
+
   const editableFields = {
     action: docketEntryMeta.action,
     addToCoversheet: docketEntryMeta.addToCoversheet,
@@ -83,6 +99,8 @@ exports.updateDocketEntryMetaInteractor = async (
     documentTitle: docketEntryMeta.documentTitle,
     documentType: docketEntryMeta.documentType,
     eventCode: docketEntryMeta.eventCode,
+    filedBy: docketEntryMeta.filedBy,
+    filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
     freeText2: docketEntryMeta.freeText2,
@@ -93,8 +111,6 @@ exports.updateDocketEntryMetaInteractor = async (
     ordinalValue: docketEntryMeta.ordinalValue,
     otherFilingParty: docketEntryMeta.otherFilingParty,
     partyIrsPractitioner: docketEntryMeta.partyIrsPractitioner,
-    partyPrimary: docketEntryMeta.partyPrimary,
-    partySecondary: docketEntryMeta.partySecondary,
     pending: docketEntryMeta.pending,
     previousDocument: docketEntryMeta.previousDocument,
     scenario: docketEntryMeta.scenario,
@@ -106,12 +122,6 @@ exports.updateDocketEntryMetaInteractor = async (
     trialLocation: docketEntryMeta.trialLocation,
   };
 
-  if (!originalDocketEntry) {
-    throw new Error(
-      `Docket entry with id ${docketEntryMeta.docketEntryId} not found.`,
-    );
-  }
-
   const servedAtUpdated =
     editableFields.servedAt &&
     editableFields.servedAt !== originalDocketEntry.servedAt;
@@ -119,12 +129,14 @@ exports.updateDocketEntryMetaInteractor = async (
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
-  const entryRequiresCoverSheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-    editableFields.eventCode,
-  );
-  const originalEntryRequiresCoversheet = COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-    originalDocketEntry.eventCode,
-  );
+  const entryRequiresCoverSheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      editableFields.eventCode,
+    );
+  const originalEntryRequiresCoversheet =
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      originalDocketEntry.eventCode,
+    );
   const shouldAddNewCoverSheet =
     !originalEntryRequiresCoversheet && entryRequiresCoverSheet;
 
@@ -153,12 +165,8 @@ exports.updateDocketEntryMetaInteractor = async (
     {
       ...originalDocketEntry,
       ...editableFields,
-      // allow constructor to re-generate
-      contactPrimary: caseEntity.getContactPrimary(),
-      contactSecondary: caseEntity.getContactSecondary(),
-      filedBy: undefined,
     },
-    { applicationContext },
+    { applicationContext, petitioners: caseEntity.petitioners },
   ).validate();
 
   caseEntity.updateDocketEntry(docketEntryEntity);

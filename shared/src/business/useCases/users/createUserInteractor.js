@@ -47,14 +47,14 @@ exports.createUserInteractor = async (applicationContext, { user }) => {
     );
   }
 
-  const {
-    userId,
-  } = await applicationContext.getPersistenceGateway().createUser({
-    applicationContext,
-    disableCognitoUser: user.role === ROLES.legacyJudge,
-    password: user.password,
-    user: userEntity.validate().toRawObject(),
-  });
+  const { userId } = await applicationContext
+    .getPersistenceGateway()
+    .createUser({
+      applicationContext,
+      disableCognitoUser: user.role === ROLES.legacyJudge,
+      password: user.password,
+      user: userEntity.validate().toRawObject(),
+    });
 
   userEntity.userId = userId;
 

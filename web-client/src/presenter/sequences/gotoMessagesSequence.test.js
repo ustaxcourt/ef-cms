@@ -12,14 +12,14 @@ describe('gotoMessagesSequence', () => {
     },
   ];
 
-  let test;
+  let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     presenter.sequences = {
       gotoMessagesSequence,
     };
-    test = CerebralTest(presenter);
+    cerebralTest = CerebralTest(presenter);
 
     applicationContext
       .getUseCases()
@@ -34,12 +34,12 @@ describe('gotoMessagesSequence', () => {
   });
 
   it('should change the page to MyAccount and close the opened menu', async () => {
-    await test.runSequence('gotoMessagesSequence', {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
       box: 'inbox',
       queue: 'my',
     });
 
-    expect(test.getState()).toMatchObject({
+    expect(cerebralTest.getState()).toMatchObject({
       messages: mockMessages,
       messagesInboxCount: mockUserInboxCount,
       messagesSectionCount: mockUserSectionCount,

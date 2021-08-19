@@ -4,17 +4,15 @@ const { User } = require('../../entities/User');
 /**
  * createPetitionerAccountInteractor
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createPetitionerAccountInteractor = async ({
+exports.createPetitionerAccountInteractor = async (
   applicationContext,
-  email,
-  name,
-  userId,
-}) => {
+  { email, name, userId },
+) => {
   const userEntity = new User(
     {
       email,

@@ -59,8 +59,9 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    const receiptMockCall = applicationContext.getDocumentGenerators()
-      .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data; // 'data' property of first arg (an object) of first call
 
     const expectedFilingDateForamtted = applicationContext
       .getUtilities()
@@ -87,8 +88,9 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    const receiptMockCall = applicationContext.getDocumentGenerators()
-      .receiptOfFiling.mock.calls[0][0].data; // 'data' property of first arg (an object) of first call
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data; // 'data' property of first arg (an object) of first call
     expect(receiptMockCall.supportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondarySupportingDocuments.length).toBe(2);
     expect(receiptMockCall.secondaryDocument).toBeDefined();
@@ -104,8 +106,9 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       },
     });
 
-    const receiptMockCall = applicationContext.getDocumentGenerators()
-      .receiptOfFiling.mock.calls[0][0].data;
+    const receiptMockCall =
+      applicationContext.getDocumentGenerators().receiptOfFiling.mock
+        .calls[0][0].data;
     expect(receiptMockCall.document.formattedCertificateOfServiceDate).toEqual(
       '08/25/19',
     );

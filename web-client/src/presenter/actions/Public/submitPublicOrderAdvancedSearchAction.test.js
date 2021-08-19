@@ -27,7 +27,7 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         keyword: 'a',
@@ -56,7 +56,7 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         docketNumber: '105-20',

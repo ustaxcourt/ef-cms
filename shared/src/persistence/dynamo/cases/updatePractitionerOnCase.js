@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateIrsPractitionerOnCase = async ({
+exports.updateIrsPractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,
@@ -8,14 +8,14 @@ exports.updateIrsPractitionerOnCase = async ({
 }) =>
   client.put({
     Item: {
+      ...practitioner,
       pk: `case|${docketNumber}`,
       sk: `irsPractitioner|${userId}`,
-      ...practitioner,
     },
     applicationContext,
   });
 
-exports.updatePrivatePractitionerOnCase = async ({
+exports.updatePrivatePractitionerOnCase = ({
   applicationContext,
   docketNumber,
   practitioner,
@@ -23,9 +23,9 @@ exports.updatePrivatePractitionerOnCase = async ({
 }) =>
   client.put({
     Item: {
+      ...practitioner,
       pk: `case|${docketNumber}`,
       sk: `privatePractitioner|${userId}`,
-      ...practitioner,
     },
     applicationContext,
   });

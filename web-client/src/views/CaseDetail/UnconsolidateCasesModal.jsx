@@ -50,7 +50,7 @@ export const UnconsolidateCasesModal = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor={`case-${consolidatedCase.docketNumber}`}
                 >
                   <div className="display-inline margin-right-1">

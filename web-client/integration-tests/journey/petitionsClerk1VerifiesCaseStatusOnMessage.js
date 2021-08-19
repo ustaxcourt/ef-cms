@@ -1,12 +1,12 @@
 export const petitionsClerk1VerifiesCaseStatusOnMessage = (
-  test,
+  cerebralTest,
   expectedCaseStatus,
 ) => {
-  return it('Petitions Clerk1 verifies updated caseStatus on messages', async () => {
-    const messages = test.getState('messages');
+  return it('Petitions Clerk1 verifies updated caseStatus on messages', () => {
+    const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.docketNumber === test.docketNumber,
+      message => message.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(foundMessage.caseStatus).toBe(expectedCaseStatus);

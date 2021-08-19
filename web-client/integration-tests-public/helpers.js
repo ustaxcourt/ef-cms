@@ -8,7 +8,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let test;
+  let cerebralTest;
 
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
@@ -24,15 +24,15 @@ export const setupTest = ({ useCases = {} } = {}) => {
       return 'abc';
     },
     externalRoute: url => {
-      test.currentRouteUrl = url;
+      cerebralTest.currentRouteUrl = url;
     },
     revokeObjectURL: () => {},
     route: async url => {
-      test.currentRouteUrl = url;
+      cerebralTest.currentRouteUrl = url;
       switch (url) {
-        case `/case-detail/${test.docketNumber}`:
-          await test.runSequence('gotoPublicCaseDetailSequence', {
-            docketNumber: test.docketNumber,
+        case `/case-detail/${cerebralTest.docketNumber}`:
+          await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
+            docketNumber: cerebralTest.docketNumber,
           });
           break;
         default:
@@ -48,9 +48,11 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  test = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter);
+  cerebralTest.closeSocket = () => {
+    /* no-op */
+  };
+  cerebralTest.currentRouteUrl = null;
 
-  test.currentRouteUrl = null;
-
-  return test;
+  return cerebralTest;
 };

@@ -10,10 +10,10 @@ import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-const test = setupTest();
-test.draftOrders = [];
+const cerebralTest = setupTest();
+cerebralTest.draftOrders = [];
 
 describe('Docket Clerk edits service indicators for petitioner, practitioner, and respondent', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -23,13 +23,13 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case', async () => {
-    const caseDetail = await uploadPetition(test, {
+    const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -42,28 +42,30 @@ describe('Docket Clerk edits service indicators for petitioner, practitioner, an
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    test.docketNumber = caseDetail.docketNumber;
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkEditsPetitionerInformation(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkAddsPractitionersToCase(test);
-  petitionsClerkAddsRespondentsToCase(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkEditsPetitionerInformation(cerebralTest);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkEditsServiceIndicatorForPetitioner(test);
-  docketClerkEditsServiceIndicatorForPractitioner(test);
-  docketClerkEditsServiceIndicatorForRespondent(test);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
+  docketClerkEditsServiceIndicatorForPractitioner(cerebralTest);
+  docketClerkEditsServiceIndicatorForRespondent(cerebralTest);
   // create an order to serve - it should be served to 3 paper service parties now
-  docketClerkCreatesAnOrder(test, {
+  docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkSignsOrder(test, 0);
-  docketClerkAddsDocketEntryFromOrder(test, 0);
-  docketClerkServesOrderOnPaperParties(test, 0);
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesOrderOnPaperParties(cerebralTest, 0);
 });

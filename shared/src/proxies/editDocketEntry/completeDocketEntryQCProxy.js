@@ -3,15 +3,15 @@ const { put } = require('../requests');
 /**
  * completeDocketEntryQCInteractorProxy
  *
+ * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.completeDocketEntryQCInteractor = ({
+exports.completeDocketEntryQCInteractor = (
   applicationContext,
-  entryMetadata,
-}) => {
+  { entryMetadata },
+) => {
   const { docketNumber } = entryMetadata;
   return put({
     applicationContext,

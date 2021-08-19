@@ -3,10 +3,8 @@ import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const {
-  INITIAL_DOCUMENT_TYPES,
-  PAYMENT_STATUS,
-} = applicationContext.getConstants();
+const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,

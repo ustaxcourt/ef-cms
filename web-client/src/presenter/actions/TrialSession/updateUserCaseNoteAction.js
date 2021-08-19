@@ -14,8 +14,7 @@ export const updateUserCaseNoteAction = async ({
 
   const userNote = await applicationContext
     .getUseCases()
-    .updateUserCaseNoteInteractor({
-      applicationContext,
+    .updateUserCaseNoteInteractor(applicationContext, {
       docketNumber,
       notes,
     });

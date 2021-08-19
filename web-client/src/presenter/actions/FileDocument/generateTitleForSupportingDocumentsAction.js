@@ -22,8 +22,7 @@ export const generateTitleForSupportingDocumentsAction = ({
       if (!isEmpty(supportingDocuments[i])) {
         documentTitle = applicationContext
           .getUseCases()
-          .generateDocumentTitleInteractor({
-            applicationContext,
+          .generateDocumentTitleInteractor(applicationContext, {
             documentMetadata: supportingDocuments[i],
           });
         store.set(
@@ -40,8 +39,7 @@ export const generateTitleForSupportingDocumentsAction = ({
       if (!isEmpty(secondarySupportingDocuments[i])) {
         documentTitle = applicationContext
           .getUseCases()
-          .generateDocumentTitleInteractor({
-            applicationContext,
+          .generateDocumentTitleInteractor(applicationContext, {
             documentMetadata: secondarySupportingDocuments[i],
           });
         store.set(

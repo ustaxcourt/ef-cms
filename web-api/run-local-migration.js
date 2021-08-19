@@ -6,8 +6,8 @@ const {
 (async () => {
   const dynamo = new AWS.DynamoDB({
     credentials: {
-      accessKeyId: 'noop',
-      secretAccessKey: 'noop',
+      accessKeyId: 'S3RVER',
+      secretAccessKey: 'S3RVER',
     },
     endpoint: 'http://localhost:8000',
     region: 'us-east-1',

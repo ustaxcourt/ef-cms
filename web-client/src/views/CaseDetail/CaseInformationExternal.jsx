@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const PetitionDetails = ({ caseDetail, caseDetailHelper }) => (
+const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
     <div className="grid-row">
       <div className="tablet:grid-col-6">
@@ -88,7 +88,7 @@ export const CaseInformationExternal = connect(
                 <div className="card height-full">
                   <div className="content-wrapper">
                     <h3 className="underlined">
-                      Petition Details
+                      Case Details
                       <If bind="formattedCaseDetail.showPrintConfirmationLink">
                         <Button
                           link
@@ -108,7 +108,7 @@ export const CaseInformationExternal = connect(
                         </Button>
                       </If>
                     </h3>
-                    <PetitionDetails
+                    <CaseDetails
                       caseDetail={formattedCaseDetail}
                       caseDetailHelper={caseDetailHelper}
                     />
@@ -130,7 +130,7 @@ export const CaseInformationExternal = connect(
           <div className="grid-container padding-x-0 margin-top-3">
             <div className="margin-top-2">
               <div className="case-info-card padding-bottom-3">
-                <h3>Petition Details</h3>{' '}
+                <h3>Case Details</h3>{' '}
                 <If bind="formattedCaseDetail.showPrintConfirmationLink">
                   <Button
                     link
@@ -148,7 +148,7 @@ export const CaseInformationExternal = connect(
                     Print Confirmation
                   </Button>
                 </If>
-                <PetitionDetails
+                <CaseDetails
                   caseDetail={formattedCaseDetail}
                   caseDetailHelper={caseDetailHelper}
                 />

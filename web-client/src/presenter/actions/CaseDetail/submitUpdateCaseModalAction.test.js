@@ -32,7 +32,7 @@ describe('submitUpdateCaseModalAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateCaseContextInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseCaption: 'Updated Test Caption',
       docketNumber: '123-20',
@@ -57,7 +57,7 @@ describe('submitUpdateCaseModalAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateCaseContextInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseStatus: STATUS_TYPES.generalDocket,
       docketNumber: '123-20',
@@ -82,7 +82,7 @@ describe('submitUpdateCaseModalAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateCaseContextInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseStatus: STATUS_TYPES.generalDocket,
       docketNumber: '123-20',
@@ -108,7 +108,7 @@ describe('submitUpdateCaseModalAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateCaseContextInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       caseStatus: STATUS_TYPES.generalDocket,
       docketNumber: '123-20',

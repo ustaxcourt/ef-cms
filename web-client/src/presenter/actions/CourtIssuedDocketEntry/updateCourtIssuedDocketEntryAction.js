@@ -24,8 +24,7 @@ export const updateCourtIssuedDocketEntryAction = async ({
 
   return await applicationContext
     .getUseCases()
-    .updateCourtIssuedDocketEntryInteractor({
-      applicationContext,
+    .updateCourtIssuedDocketEntryInteractor(applicationContext, {
       docketEntryId,
       documentMeta,
     });

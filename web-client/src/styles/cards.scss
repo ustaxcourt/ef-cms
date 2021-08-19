@@ -32,6 +32,10 @@
     &.gray {
       background-color: color($theme-color-base-lightest);
     }
+
+    &.parties-card {
+      padding: 0.5rem;
+    }
   }
 
   hr {
@@ -135,18 +139,16 @@
   }
 }
 
+.no-margin {
+  margin: 0;
+}
+
 .party-information {
   font-size: 17px;
 
   p {
-    margin-bottom: 10px;
-
     &.representing-label {
       margin-top: 20px;
-    }
-
-    &.no-margin {
-      margin: 0;
     }
   }
 
@@ -231,4 +233,9 @@
 }
 .case-info-card {
   border-bottom: 1px solid color($theme-color-base-lighter);
+}
+
+.card hr.respondent-card-header {
+  width: 100%;
+  margin-left: 0;
 }

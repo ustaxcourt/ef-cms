@@ -6,10 +6,11 @@ import { runAction } from 'cerebral/test';
 describe('getPractitionerDetailAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+
     applicationContext
       .getUseCases()
       .getPractitionerByBarNumberInteractor.mockImplementation(
-        ({ barNumber }) => ({
+        (_applicationContext, { barNumber }) => ({
           barNumber,
         }),
       );

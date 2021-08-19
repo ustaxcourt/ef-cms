@@ -19,8 +19,7 @@ export const getJudgesCaseNoteForCaseAction = async ({
   try {
     userNote = await applicationContext
       .getUseCases()
-      .getUserCaseNoteInteractor({
-        applicationContext,
+      .getUserCaseNoteInteractor(applicationContext, {
         docketNumber,
       });
   } catch (err) {

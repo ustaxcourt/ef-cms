@@ -9,6 +9,7 @@ const {
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
+const { Case } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
@@ -144,9 +145,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
-    const {
-      caseToUpdate,
-    } = applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
@@ -176,10 +176,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
@@ -209,5 +208,28 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       );
 
     expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      documentMeta: {
+        date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'O',
+        freeText: 'Dogs',
+        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
+        serviceStamp: 'Served',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({
+      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
+    });
   });
 });

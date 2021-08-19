@@ -1,3 +1,7 @@
+import './index.scss';
+
+import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
+
 import { AppComponent } from './views/AppComponent';
 import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
@@ -25,6 +29,7 @@ import { faFilePdf as faFilePdfRegular } from '@fortawesome/free-regular-svg-ico
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
+//if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -50,6 +55,7 @@ import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faEye as faEyeSolid } from '@fortawesome/free-solid-svg-icons/faEye';
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -94,6 +100,7 @@ import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
+import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
@@ -112,17 +119,17 @@ const app = {
   initialize: async (applicationContext, debugTools) => {
     const scannerSourceName = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scannerSourceName' });
+      .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
     const scanMode = await applicationContext
       .getUseCases()
-      .getItemInteractor({ applicationContext, key: 'scanMode' });
+      .getItemInteractor(applicationContext, { key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
     const user =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'user' })) ||
+        .getItemInteractor(applicationContext, { key: 'user' })) ||
       presenter.state.user;
     presenter.state.user = user;
     applicationContext.setCurrentUser(user);
@@ -143,7 +150,7 @@ const app = {
     const token =
       (await applicationContext
         .getUseCases()
-        .getItemInteractor({ applicationContext, key: 'token' })) ||
+        .getItemInteractor(applicationContext, { key: 'token' })) ||
       presenter.state.token;
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
@@ -187,6 +194,7 @@ const app = {
       faExclamationCircle,
       faExclamationTriangle,
       faEyeSlash,
+      faEyeSolid,
       faFile,
       faFileAlt,
       faFileAltSolid,
@@ -235,6 +243,7 @@ const app = {
       faTrash,
       faUser,
       faUserCheck,
+      faUserFriends,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

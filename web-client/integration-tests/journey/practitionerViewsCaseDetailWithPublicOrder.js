@@ -1,27 +1,16 @@
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-export const practitionerViewsCaseDetailWithPublicOrder = test => {
+export const practitionerViewsCaseDetailWithPublicOrder = cerebralTest => {
   return it('Practitioner views case detail with a publically-available order', async () => {
-    test.setState('caseDetail', {});
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
-    });
+    cerebralTest.setState('caseDetail', {});
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
-    });
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
-    const publicallyAvailableOrderDocketEntry = formattedCase.formattedDocketEntries.find(
-      d => d.eventCode === 'O',
-    );
+    const publicallyAvailableOrderDocketEntry =
+      formattedDocketEntriesOnDocketRecord.find(d => d.eventCode === 'O');
 
     expect(publicallyAvailableOrderDocketEntry.showLinkToDocument).toBeTruthy();
   });

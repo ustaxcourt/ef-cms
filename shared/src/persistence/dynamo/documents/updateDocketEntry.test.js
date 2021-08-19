@@ -26,9 +26,9 @@ describe('updateDocketEntry', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...mockDocument,
         pk: `case|${mockDocketNumber}`,
         sk: `docket-entry|${mockDocketEntryId}`,
-        ...mockDocument,
       },
     });
   });

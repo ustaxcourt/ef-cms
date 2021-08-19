@@ -34,9 +34,9 @@ describe('createPetitionerUserRecords', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...petitionerUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...petitionerUser,
         userId,
       },
     });

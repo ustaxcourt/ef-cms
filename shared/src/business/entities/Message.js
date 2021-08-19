@@ -1,16 +1,12 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
-  CHAMBERS_SECTIONS,
-  SECTIONS,
-} = require('./EntityConstants');
-const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../utilities/JoiValidationDecorator');
+const { CASE_STATUS_TYPES } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 /**
  * constructor
@@ -108,16 +104,11 @@ Message.VALIDATION_RULES = {
       then: joi.required(),
     })
     .description('The name of the user who completed the message thread'),
-  completedBySection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .when('isCompleted', {
-      is: true,
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    })
-    .description('The section of the user who completed the message thread'),
+  completedBySection: JoiValidationConstants.STRING.when('isCompleted', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.required(),
+  }).description('The section of the user who completed the message thread'),
   completedByUserId: JoiValidationConstants.UUID.when('isCompleted', {
     is: true,
     otherwise: joi.optional().allow(null),
@@ -138,12 +129,9 @@ Message.VALIDATION_RULES = {
   from: JoiValidationConstants.STRING.max(100)
     .required()
     .description('The name of the user who sent the message.'),
-  fromSection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .required()
-    .description('The section of the user who sent the message.'),
+  fromSection: JoiValidationConstants.STRING.required().description(
+    'The section of the user who sent the message.',
+  ),
   fromUserId: JoiValidationConstants.UUID.required().description(
     'The ID of the user who sent the message.',
   ),
@@ -172,14 +160,9 @@ Message.VALIDATION_RULES = {
     .required()
     .allow(null)
     .description('The name of the user who is the recipient of the message.'),
-  toSection: JoiValidationConstants.STRING.valid(
-    ...SECTIONS,
-    ...CHAMBERS_SECTIONS,
-  )
-    .required()
-    .description(
-      'The section of the user who is the recipient of the message.',
-    ),
+  toSection: JoiValidationConstants.STRING.required().description(
+    'The section of the user who is the recipient of the message.',
+  ),
   toUserId: JoiValidationConstants.UUID.required()
     .allow(null)
     .description('The ID of the user who is the recipient of the message.'),

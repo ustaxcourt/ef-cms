@@ -20,8 +20,7 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
 
   await applicationContext
     .getUseCases()
-    .setNoticesForCalendaredTrialSessionInteractor({
-      applicationContext,
+    .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber,
       trialSessionId,
     });

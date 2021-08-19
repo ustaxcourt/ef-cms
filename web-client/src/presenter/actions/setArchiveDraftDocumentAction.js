@@ -8,12 +8,8 @@ import { state } from 'cerebral';
  * @param {object} providers.props incoming cerebral props
  */
 export const setArchiveDraftDocumentAction = ({ props, store }) => {
-  const {
-    docketEntryId,
-    docketNumber,
-    documentTitle,
-    redirectToCaseDetail,
-  } = props;
+  const { docketEntryId, docketNumber, documentTitle, redirectToCaseDetail } =
+    props;
 
   store.set(state.archiveDraftDocument, {
     docketEntryId,

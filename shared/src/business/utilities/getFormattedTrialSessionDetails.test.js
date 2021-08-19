@@ -132,16 +132,44 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('formats trial session start time', () => {
-    let result = formattedTrialSessionDetails({
-      applicationContext,
-      trialSession: {
-        ...TRIAL_SESSION,
-        startTime: '14:00',
-      },
+  describe('formats trial session start times', () => {
+    it('formats trial session start time', () => {
+      let result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '14:00',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedStartTime: '2:00 pm',
+      });
     });
-    expect(result).toMatchObject({
-      formattedStartTime: '2:00 pm',
+
+    it('formats trial session start time in the morning', () => {
+      let result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '10:00',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedStartTime: '10:00 am',
+      });
+    });
+
+    it('formats trial session start time at noon', () => {
+      let result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '12:00',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedStartTime: '12:00 pm',
+      });
     });
   });
 

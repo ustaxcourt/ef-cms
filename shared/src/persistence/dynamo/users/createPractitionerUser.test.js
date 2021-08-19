@@ -7,73 +7,67 @@ const {
 } = require('./createPractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
-const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
-
-const privatePractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const irsPractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test IRS Practitioner',
-  role: ROLES.irsPractitioner,
-  section: 'privatePractitioner',
-};
-
-const inactivePractitionerUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Inactive Practitioner',
-  role: ROLES.inactivePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithSection = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const privatePractitionerUserWithoutBarNumber = {
-  barNumber: '',
-  name: 'Test Private Practitioner',
-  role: ROLES.privatePractitioner,
-  section: 'privatePractitioner',
-};
-
-const otherUser = {
-  barNumber: 'pt1234',
-  email: 'test@example.com',
-  name: 'Test Other',
-  role: ROLES.other,
-  section: 'other',
-};
-
 describe('createPractitionerUser', () => {
+  const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
+  const privatePractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const irsPractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test IRS Practitioner',
+    role: ROLES.irsPractitioner,
+    section: 'privatePractitioner',
+  };
+  const inactivePractitionerUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Inactive Practitioner',
+    role: ROLES.inactivePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithSection = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const privatePractitionerUserWithoutBarNumber = {
+    barNumber: '',
+    name: 'Test Private Practitioner',
+    role: ROLES.privatePractitioner,
+    section: 'privatePractitioner',
+  };
+  const otherUser = {
+    barNumber: 'pt1234',
+    email: 'test@example.com',
+    name: 'Test Other',
+    role: ROLES.other,
+    section: 'other',
+  };
+
   beforeAll(() => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           Username: 'f7bea269-fa95-424d-aed8-2cb988df2073',
         }),
     });
 
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           User: { Username: '123' },
         }),
     });
 
     applicationContext.getCognito().adminUpdateUserAttributes.mockReturnValue({
-      promise: async () => Promise.resolve(),
+      promise: () => Promise.resolve(),
     });
 
     applicationContext.getDocumentClient().put.mockReturnValue({
@@ -92,9 +86,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUser,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUser,
       },
     });
     expect(
@@ -126,9 +120,9 @@ describe('createPractitionerUser', () => {
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
+        ...privatePractitionerUserWithoutBarNumber,
         pk: `user|${userId}`,
         sk: `user|${userId}`,
-        ...privatePractitionerUserWithoutBarNumber,
       },
     });
 
@@ -150,11 +144,30 @@ describe('createPractitionerUser', () => {
       user: privatePractitionerUserWithSection,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
+    ).toBe(privatePractitionerUserWithSection.email);
     expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
+  });
+
+  it('should call cognito adminCreateUser for a private practitioner user with pendingEmail when it is defined', async () => {
+    const mockPendingEmail = 'noone@example.com';
+
+    await createPractitionerUser({
+      applicationContext,
+      user: {
+        ...privatePractitionerUserWithSection,
+        email: undefined,
+        pendingEmail: mockPendingEmail,
+      },
+    });
+
+    expect(
+      applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
+    ).toBe(mockPendingEmail);
   });
 
   it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {
@@ -184,7 +197,7 @@ describe('createPractitionerUser', () => {
 
   it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () => Promise.resolve({}),
+      promise: () => Promise.resolve({}),
     });
 
     await createPractitionerUser({
@@ -201,9 +214,7 @@ describe('createPractitionerUser', () => {
 
   it('should call cognito adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: async () => {
-        throw new Error('bad!');
-      },
+      promise: () => Promise.reject(new Error('bad!')),
     });
 
     await createPractitionerUser({
@@ -273,9 +284,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUser,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUser,
         },
       });
       expect(
@@ -310,9 +321,9 @@ describe('createPractitionerUser', () => {
         applicationContext.getDocumentClient().put.mock.calls[0][0],
       ).toMatchObject({
         Item: {
+          ...privatePractitionerUserWithoutBarNumber,
           pk: `user|${userId}`,
           sk: `user|${userId}`,
-          ...privatePractitionerUserWithoutBarNumber,
         },
       });
     });

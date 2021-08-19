@@ -9,9 +9,9 @@ const createPetitionerUserRecords = async ({
 
   await client.put({
     Item: {
+      ...user,
       pk: `user|${userId}`,
       sk: `user|${userId}`,
-      ...user,
       userId,
     },
     applicationContext,

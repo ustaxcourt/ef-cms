@@ -39,7 +39,7 @@ describe('getDocumentContentsAction', () => {
     });
     expect(
       applicationContext.getUseCases()
-        .getDocumentContentsForDocketEntryInteractor.mock.calls[0][0],
+        .getDocumentContentsForDocketEntryInteractor.mock.calls[0][1],
     ).toMatchObject({
       documentContentsId: mockDocumentContentsId,
     });
@@ -88,5 +88,25 @@ describe('getDocumentContentsAction', () => {
       documentContents: 'a content',
       richText: 'some text',
     });
+  });
+
+  it('returns undefined if requested docket entry ID cannot be found', async () => {
+    const { output } = await runAction(getDocumentContentsAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: mockDocketEntryId,
+              documentContentsId: mockDocumentContentsId,
+            },
+          ],
+        },
+        docketEntryIdToEdit: 'not-found',
+      },
+    });
+    expect(output).toBeUndefined();
   });
 });

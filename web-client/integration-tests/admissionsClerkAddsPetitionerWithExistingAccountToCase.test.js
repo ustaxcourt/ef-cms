@@ -6,9 +6,10 @@ import {
   refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('admissions clerk adds petitioner with existing cognito account to case', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -20,49 +21,62 @@ describe('admissions clerk adds petitioner with existing cognito account to case
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
-  loginAs(test, 'admissionsclerk@example.com');
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    await test.runSequence('gotoEditPetitionerInformationSequence', {
-      docketNumber: test.docketNumber,
-    });
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
-    expect(test.getState('form.email')).toBeUndefined();
-    expect(test.getState('form.confirmEmail')).toBeUndefined();
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.email',
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.updatedEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('updateFormValueSequence', {
-      key: 'contactPrimary.confirmEmail',
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.confirmEmail',
       value: EMAIL_TO_ADD,
     });
 
-    await test.runSequence('updatePetitionerInformationFormSequence');
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
 
-    expect(test.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(test.getState('modal.showModal')).toBe('MatchingEmailFoundModal');
-    expect(test.getState('currentPage')).toEqual('EditPetitionerInformation');
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'MatchingEmailFoundModal',
+    );
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
 
-    await test.runSequence(
+    await cerebralTest.runSequence(
       'submitUpdatePetitionerInformationFromModalSequence',
     );
 
-    expect(test.getState('modal.showModal')).toBeUndefined();
-    expect(test.getState('currentPage')).toEqual('CaseDetailInternal');
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    const contactPrimary = contactPrimaryFromState(test);
+    contactPrimary = contactPrimaryFromState(cerebralTest);
 
     expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
     expect(contactPrimary.serviceIndicator).toEqual(
@@ -72,21 +86,37 @@ describe('admissions clerk adds petitioner with existing cognito account to case
     await refreshElasticsearchIndex();
   });
 
-  loginAs(test, 'petitioner2@example.com');
+  loginAs(cerebralTest, 'petitioner2@example.com');
   it('petitioner with existing account verifies case is added to dashboard', async () => {
-    await test.runSequence('gotoDashboardSequence');
+    await cerebralTest.runSequence('gotoDashboardSequence');
 
-    expect(test.getState('currentPage')).toEqual('DashboardPetitioner');
-    const openCases = test.getState('openCases');
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
+    const openCases = cerebralTest.getState('openCases');
 
-    const addedCase = openCases.find(c => c.docketNumber === test.docketNumber);
+    const addedCase = openCases.find(
+      c => c.docketNumber === cerebralTest.docketNumber,
+    );
     expect(addedCase).toBeDefined();
 
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CaseDetail');
-    expect(test.getState('screenMetadata.isAssociated')).toEqual(true);
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('screenMetadata.isAssociated')).toEqual(true);
+  });
+
+  it('should verify that practitioner representing contactId matches contactPrimary contactId after email is updated', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+
+    const practitionerRepresenting = cerebralTest.getState(
+      'caseDetail.privatePractitioners.0.representing',
+    );
+
+    expect(practitionerRepresenting).toEqual([contactPrimary.contactId]);
   });
 });

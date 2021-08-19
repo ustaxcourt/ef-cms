@@ -17,8 +17,7 @@ export const getMessagesForCaseAction = async ({
 
   const messages = await applicationContext
     .getUseCases()
-    .getMessagesForCaseInteractor({
-      applicationContext,
+    .getMessagesForCaseInteractor(applicationContext, {
       docketNumber,
     });
 

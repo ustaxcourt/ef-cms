@@ -6,6 +6,17 @@ import { UnidentifiedUserError } from './presenter/errors/UnidentifiedUserError'
 import { tryCatchDecorator } from './tryCatchDecorator';
 
 describe('decorateWithTryCatch', () => {
+  it('directly returns function result when response is not a promise', () => {
+    const functions = {
+      fun() {
+        return { passthrough: 'something not asynchronous that succeeds' };
+      },
+    };
+    tryCatchDecorator(functions);
+    const result = functions.fun();
+    expect(result.passthrough).toBeDefined();
+  });
+
   it('catches and returns the expected error on 500 status', async () => {
     const functions = {
       fun() {

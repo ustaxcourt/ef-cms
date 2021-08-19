@@ -20,7 +20,6 @@ export const validateSelectDocumentTypeAction = ({
   const errors = applicationContext
     .getUseCases()
     .validateExternalDocumentInteractor({
-      applicationContext,
       documentMetadata,
     });
 

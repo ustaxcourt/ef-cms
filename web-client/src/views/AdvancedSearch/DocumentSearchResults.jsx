@@ -24,17 +24,26 @@ export const DocumentSearchResults = connect(
       <div aria-live="polite">
         {advancedDocumentSearchHelper.showSearchResults && (
           <>
-            <h1 className="margin-top-4">Search Results</h1>
             {advancedDocumentSearchHelper.showManyResultsMessage && (
-              <WarningNotificationComponent
-                alertWarning={{
-                  message: 'Narrow your search by adding search terms.',
-                  title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
-                }}
-                dismissable={false}
-                scrollToTop={false}
-              />
+              <div className="margin-top-4">
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message: 'Refine your search by adding search criteria.',
+                    title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
+                  }}
+                  dismissable={false}
+                  scrollToTop={false}
+                />
+              </div>
             )}
+            <div className="grid-row">
+              <div className="tablet:grid-col-10">
+                <h1 className="margin-top-1">Results</h1>
+              </div>
+              <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+                {advancedDocumentSearchHelper.numberOfResults} match(es) shown
+              </div>
+            </div>
 
             <table className="usa-table search-results ustc-table responsive-table">
               <thead>
@@ -52,7 +61,10 @@ export const DocumentSearchResults = connect(
               <tbody>
                 {advancedDocumentSearchHelper.formattedSearchResults.map(
                   (result, idx) => (
-                    <tr className="search-result" key={result.docketEntryId}>
+                    <tr
+                      className="search-result"
+                      key={`${result.docketEntryId}-${result.docketNumber}`}
+                    >
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>
@@ -86,7 +98,7 @@ export const DocumentSearchResults = connect(
                           {result.documentTitle}
                         </Button>
                       </td>
-                      <td>{result.numberOfPages}</td>
+                      <td>{result.numberOfPagesFormatted}</td>
                       <td>{result.formattedFiledDate}</td>
                       <td>
                         {result.formattedSignedJudgeName ||

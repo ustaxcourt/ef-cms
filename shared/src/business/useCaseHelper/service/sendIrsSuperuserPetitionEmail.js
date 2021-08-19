@@ -1,11 +1,7 @@
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { Case } = require('../../entities/cases/Case');
 
 exports.sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
@@ -30,25 +26,16 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     privatePractitioners,
   } = caseDetail;
 
-  const contactPrimary = getContactPrimary(caseDetail);
-  const contactSecondary = getContactSecondary(caseDetail);
-
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
     const representingFormatted = [];
-    const representingPrimary = practitioner.getRepresentingPrimary(caseEntity);
-    const representingSecondary = practitioner.getRepresentingSecondary(
-      caseEntity,
-    );
 
-    if (representingPrimary) {
-      representingFormatted.push(contactPrimary.name);
-    }
-
-    if (representingSecondary && contactSecondary) {
-      representingFormatted.push(contactSecondary.name);
-    }
+    caseEntity.petitioners.forEach(p => {
+      if (practitioner.isRepresenting(p.contactId)) {
+        representingFormatted.push(p.name);
+      }
+    });
 
     practitioner.representingFormatted = representingFormatted.join(', ');
   });
@@ -73,8 +60,8 @@ exports.sendIrsSuperuserPetitionEmail = async ({
         docketNumberWithSuffix,
         trialLocation: preferredTrialCity || 'No requested place of trial',
       },
-      contactPrimary,
-      contactSecondary,
+      contactPrimary: caseDetail.petitioners[0],
+      contactSecondary: caseDetail.petitioners[1],
       currentDate,
       docketEntryNumber: docketEntryEntity.index,
       documentDetail: {

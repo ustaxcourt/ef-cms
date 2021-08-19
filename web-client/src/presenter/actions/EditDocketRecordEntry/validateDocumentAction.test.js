@@ -195,4 +195,54 @@ describe('validateDocumentAction', () => {
       applicationContext.getUseCases().validateDocumentInteractor,
     ).toHaveBeenCalled();
   });
+
+  describe('filingDate', () => {
+    it('returns an error message if the user enters a two-digit year', async () => {
+      await runAction(validateDocumentAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocument,
+            filingDateYear: '20',
+          },
+          screenMetadata: {
+            editType: 'CourtIssued',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
+        'Enter a four-digit year',
+      );
+    });
+
+    it('does not overwrite errors returned from the validateDocumentInteractor if the user enters a two-digit year', async () => {
+      applicationContext
+        .getUseCases()
+        .validateDocumentInteractor.mockReturnValue({
+          filingDate: 'The date was invalid',
+        });
+
+      await runAction(validateDocumentAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            ...mockDocument,
+            filingDateYear: '20',
+          },
+          screenMetadata: {
+            editType: 'CourtIssued',
+          },
+        },
+      });
+
+      expect(errorStub.mock.calls[0][0].errors.filingDate).toEqual(
+        'The date was invalid',
+      );
+    });
+  });
 });

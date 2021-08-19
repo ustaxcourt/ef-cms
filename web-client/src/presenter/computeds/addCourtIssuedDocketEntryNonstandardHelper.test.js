@@ -135,7 +135,10 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDateLast = true and showFreeText = true when state.form.eventCode is TRAN (scenario = Type H)', () => {
-    let testState = { ...state, form: { eventCode: TRANSCRIPT_EVENT_CODE } };
+    let testState = {
+      ...state,
+      form: { eventCode: TRANSCRIPT_EVENT_CODE },
+    };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

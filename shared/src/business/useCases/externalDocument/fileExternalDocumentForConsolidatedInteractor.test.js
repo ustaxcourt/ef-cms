@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
@@ -33,22 +34,25 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Guy Fieri, Petitioner',
         caseType: CASE_TYPES_MAP.deficiency,
-        contactPrimary: {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber0,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'fieri@example.com',
+            name: 'Guy Fieri',
+            phone: '1234567890',
+            postalCode: '12345',
+            state: 'CA',
+          },
+        ],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
@@ -57,22 +61,25 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'Enzo Ferrari, Petitioner',
         caseType: CASE_TYPES_MAP.deficiency,
-        contactPrimary: {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'ferrari@example.com',
-          name: 'Enzo Ferrari',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber1,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'ferrari@example.com',
+            name: 'Enzo Ferrari',
+            phone: '1234567890',
+            postalCode: '12345',
+            state: 'CA',
+          },
+        ],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
@@ -81,22 +88,25 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
       {
         caseCaption: 'George Foreman, Petitioner',
         caseType: CASE_TYPES_MAP.deficiency,
-        contactPrimary: {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'foreman@example.com',
-          name: 'George Foreman',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
         createdAt: '2019-04-19T17:29:13.120Z',
         docketEntries: MOCK_CASE.docketEntries,
         docketNumber: docketNumber2,
         filingType: 'Myself',
         leadDocketNumber: docketNumber0,
         partyType: PARTY_TYPES.petitioner,
+        petitioners: [
+          {
+            address1: '123 Main St',
+            city: 'Somewhere',
+            contactType: CONTACT_TYPES.primary,
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'foreman@example.com',
+            name: 'George Foreman',
+            phone: '1234567890',
+            postalCode: '12345',
+            state: 'CA',
+          },
+        ],
         preferredTrialCity: 'Fresno, California',
         procedureType: 'Regular',
         role: ROLES.petitioner,
@@ -278,5 +288,33 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(result[0].docketEntries.length).toEqual(8);
     expect(result[1].docketEntries.length).toEqual(8);
+  });
+
+  it('should use original case caption to create case title when creating work item', async () => {
+    await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
+      docketNumbersForFiling: ['101-19', '102-19'],
+      documentMetadata: {
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        primaryDocumentId: docketEntryId0,
+        secondaryDocument: {
+          docketEntryId: docketEntryId1,
+          documentTitle: 'Redacted',
+          documentType: 'Redacted',
+          eventCode: 'REDC',
+          filedBy: 'Test Petitioner',
+        },
+      },
+      leadDocketNumber: docketNumber0,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({
+      caseTitle: 'Guy Fieri',
+    });
   });
 });

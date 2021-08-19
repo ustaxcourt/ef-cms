@@ -18,8 +18,7 @@ export const serveCourtIssuedDocumentAction = async ({
 
   const result = await applicationContext
     .getUseCases()
-    .serveCourtIssuedDocumentInteractor({
-      applicationContext,
+    .serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId,
       docketNumber,
     });
@@ -28,6 +27,6 @@ export const serveCourtIssuedDocumentAction = async ({
     alertSuccess: {
       message: 'Document served. ',
     },
-    pdfUrl: result ? result.pdfUrl : undefined,
+    pdfUrl: result?.pdfUrl,
   };
 };

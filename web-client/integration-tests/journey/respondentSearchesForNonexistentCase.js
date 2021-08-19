@@ -1,9 +1,9 @@
-export const respondentSearchesForNonexistentCase = test => {
+export const respondentSearchesForNonexistentCase = cerebralTest => {
   return it('Respondent searches for a nonexistent case', async () => {
-    await test.runSequence('updateSearchTermSequence', {
+    await cerebralTest.runSequence('updateSearchTermSequence', {
       searchTerm: '999-99',
     });
-    await test.runSequence('submitCaseSearchSequence');
-    expect(test.getState('currentPage')).toEqual('CaseSearchNoMatches');
+    await cerebralTest.runSequence('submitCaseSearchSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseSearchNoMatches');
   });
 };

@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the path yes or no depending on if the case needs to be refreshed
  */
-export const shouldRefreshCaseAction = async ({ get, path, props }) => {
+export const shouldRefreshCaseAction = ({ get, path, props }) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
   if (docketNumber) {
     return path.yes();

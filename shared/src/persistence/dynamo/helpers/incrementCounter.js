@@ -11,24 +11,26 @@ const {
  * @param {string} providers.year the year of the item to increment, formatted as YYYY
  * @returns {Promise} the promise of the call to persistence
  */
-exports.incrementCounter = ({ applicationContext, key, year }) => {
+exports.incrementCounter = async ({ applicationContext, key, year }) => {
   if (!year) {
     year = `${getMonthDayYearObj().year}`;
   }
 
-  return client.updateConsistent({
-    ExpressionAttributeNames: {
-      '#id': 'id',
-    },
-    ExpressionAttributeValues: {
-      ':value': 1,
-    },
-    Key: {
-      pk: `${key}-${year}`,
-      sk: `${key}-${year}`,
-    },
-    ReturnValues: 'UPDATED_NEW',
-    UpdateExpression: 'ADD #id :value',
-    applicationContext,
-  });
+  return (
+    await client.updateConsistent({
+      ExpressionAttributeNames: {
+        '#id': 'id',
+      },
+      ExpressionAttributeValues: {
+        ':value': 1,
+      },
+      Key: {
+        pk: `${key}-${year}`,
+        sk: `${key}-${year}`,
+      },
+      ReturnValues: 'UPDATED_NEW',
+      UpdateExpression: 'ADD #id :value',
+      applicationContext,
+    })
+  ).id;
 };

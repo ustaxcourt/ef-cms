@@ -26,7 +26,7 @@ describe('getDocumentQCInboxForSection', () => {
             bool: {
               must: [
                 {
-                  prefix: { 'pk.S': 'work-item|' },
+                  prefix: { 'pk.S': 'case|' },
                 },
                 {
                   prefix: { 'sk.S': 'work-item|' },
@@ -54,7 +54,7 @@ describe('getDocumentQCInboxForSection', () => {
               ],
             },
           },
-          size: 1000,
+          size: 5000,
         },
         index: 'efcms-work-item',
       },

@@ -98,10 +98,9 @@ describe('generateCaseInventoryReportPdf', () => {
       filters: { status: CASE_STATUS_TYPES.new },
     });
 
-    const {
-      showJudgeColumn,
-      showStatusColumn,
-    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    const { showJudgeColumn, showStatusColumn } =
+      applicationContext.getDocumentGenerators().caseInventoryReport.mock
+        .calls[0][0].data;
     expect(showStatusColumn).toBeFalsy();
     expect(showJudgeColumn).toBeTruthy();
   });
@@ -117,10 +116,9 @@ describe('generateCaseInventoryReportPdf', () => {
       filters: { associatedJudge: CHIEF_JUDGE },
     });
 
-    const {
-      showJudgeColumn,
-      showStatusColumn,
-    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    const { showJudgeColumn, showStatusColumn } =
+      applicationContext.getDocumentGenerators().caseInventoryReport.mock
+        .calls[0][0].data;
     expect(showStatusColumn).toBeTruthy();
     expect(showJudgeColumn).toBeFalsy();
   });
@@ -139,10 +137,9 @@ describe('generateCaseInventoryReportPdf', () => {
       },
     });
 
-    const {
-      showJudgeColumn,
-      showStatusColumn,
-    } = applicationContext.getDocumentGenerators().caseInventoryReport.mock.calls[0][0].data;
+    const { showJudgeColumn, showStatusColumn } =
+      applicationContext.getDocumentGenerators().caseInventoryReport.mock
+        .calls[0][0].data;
     expect(showStatusColumn).toBeFalsy();
     expect(showJudgeColumn).toBeFalsy();
   });

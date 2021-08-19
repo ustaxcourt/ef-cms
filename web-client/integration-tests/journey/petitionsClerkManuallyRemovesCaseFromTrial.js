@@ -1,15 +1,15 @@
-export const petitionsClerkManuallyRemovesCaseFromTrial = test => {
+export const petitionsClerkManuallyRemovesCaseFromTrial = cerebralTest => {
   return it('Petitions clerk manually removes a case from an uncalendared trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.manuallyAddedTrialCaseDocketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.manuallyAddedTrialCaseDocketNumber,
     });
 
-    await test.runSequence('openRemoveFromTrialSessionModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('openRemoveFromTrialSessionModalSequence');
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeCaseFromTrialSequence');
+    await cerebralTest.runSequence('removeCaseFromTrialSequence');
   });
 };

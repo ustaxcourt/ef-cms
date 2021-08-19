@@ -1,3 +1,3 @@
-import { toggleMenuStateAction } from '../actions/navigation/toggleMenuStateAction';
+import { toggleMenuStateAction } from '../actions/Navigation/toggleMenuStateAction';
 
 export const toggleMenuStateSequence = [toggleMenuStateAction];

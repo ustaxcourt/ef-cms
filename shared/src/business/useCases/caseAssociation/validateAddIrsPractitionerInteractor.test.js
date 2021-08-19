@@ -11,8 +11,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('validateAddIrsPractitionerInteractor', () => {
   it('returns the expected errors object on an empty add irsPractitioner', () => {
-    const errors = validateAddIrsPractitionerInteractor({
-      applicationContext,
+    const errors = validateAddIrsPractitionerInteractor(applicationContext, {
       counsel: {},
     });
 
@@ -22,8 +21,7 @@ describe('validateAddIrsPractitionerInteractor', () => {
   });
 
   it('returns null when no errors occur', () => {
-    const errors = validateAddIrsPractitionerInteractor({
-      applicationContext,
+    const errors = validateAddIrsPractitionerInteractor(applicationContext, {
       counsel: {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: {},

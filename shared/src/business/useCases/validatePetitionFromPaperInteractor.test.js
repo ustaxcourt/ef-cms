@@ -12,8 +12,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
-    const errors = validatePetitionFromPaperInteractor({
-      applicationContext,
+    const errors = validatePetitionFromPaperInteractor(applicationContext, {
       petition: {},
     });
 
@@ -31,8 +30,7 @@ describe('validate petition from paper', () => {
   });
 
   it('returns null if no errors exist', () => {
-    const errors = validatePetitionFromPaperInteractor({
-      applicationContext,
+    const errors = validatePetitionFromPaperInteractor(applicationContext, {
       petition: {
         archivedDocketEntries: [],
         caseCaption: 'testing',

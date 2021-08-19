@@ -1,12 +1,14 @@
-export const docketClerkOpensCaseUnconsolidateModal = test => {
+export const docketClerkOpensCaseUnconsolidateModal = cerebralTest => {
   it('Docket clerk opens the unconsolidate modal', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openCleanModalSequence', {
+    await cerebralTest.runSequence('openCleanModalSequence', {
       showModal: 'UnconsolidateCasesModal',
     });
-    expect(test.getState('modal.showModal')).toEqual('UnconsolidateCasesModal');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'UnconsolidateCasesModal',
+    );
   });
 };

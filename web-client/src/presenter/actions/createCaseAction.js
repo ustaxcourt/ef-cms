@@ -42,8 +42,7 @@ export const createCaseAction = async ({
   try {
     filePetitionResult = await applicationContext
       .getUseCases()
-      .filePetitionInteractor({
-        applicationContext,
+      .filePetitionInteractor(applicationContext, {
         ownershipDisclosureFile,
         ownershipDisclosureUploadProgress: progressFunctions.ownership,
         petitionFile,
@@ -58,11 +57,12 @@ export const createCaseAction = async ({
   const { caseDetail, stinFileId } = filePetitionResult;
 
   const addCoversheet = docketEntryId => {
-    return applicationContext.getUseCases().addCoversheetInteractor({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseDetail.docketNumber,
-    });
+    return applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber: caseDetail.docketNumber,
+      });
   };
 
   const documentsThatNeedCoverSheet = caseDetail.docketEntries

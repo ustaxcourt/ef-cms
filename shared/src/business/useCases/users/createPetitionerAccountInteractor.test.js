@@ -12,8 +12,7 @@ describe('createPetitionerAccountInteractor', () => {
       .getPersistenceGateway()
       .persistUser.mockReturnValue(null);
 
-    await createPetitionerAccountInteractor({
-      applicationContext,
+    await createPetitionerAccountInteractor(applicationContext, {
       email: 'test@example.com',
       name: 'Cody',
       userId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
@@ -38,8 +37,7 @@ describe('createPetitionerAccountInteractor', () => {
 
     let error = null;
     try {
-      await createPetitionerAccountInteractor({
-        applicationContext,
+      await createPetitionerAccountInteractor(applicationContext, {
         name: 'Cody',
         userId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
       });

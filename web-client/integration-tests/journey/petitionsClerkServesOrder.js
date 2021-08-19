@@ -1,34 +1,29 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const petitionsClerkServesOrder = test => {
+export const petitionsClerkServesOrder = cerebralTest => {
   return it('Petitions Clerk serves the order', async () => {
-    let caseDetailFormatted;
+    const { docketEntryId } = cerebralTest;
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
-
-    const { docketEntryId } = test;
-
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
   });
 };

@@ -3,10 +3,9 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const gotoPrintableCaseInventoryReportSequence = showProgressSequenceDecorator(
-  [
+export const gotoPrintableCaseInventoryReportSequence =
+  showProgressSequenceDecorator([
     generatePrintableCaseInventoryReportAction,
     setPdfPreviewUrlSequence,
     setCurrentPageAction('PrintableCaseInventoryReport'),
-  ],
-);
+  ]);

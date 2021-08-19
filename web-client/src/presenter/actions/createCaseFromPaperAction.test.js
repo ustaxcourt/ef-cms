@@ -34,7 +34,7 @@ describe('createCaseFromPaperAction', () => {
         presenter,
       },
       props: {
-        computedDate: '2019-11-05',
+        receivedAt: '2019-11-05',
       },
       state: {
         form: {
@@ -57,7 +57,7 @@ describe('createCaseFromPaperAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       ownershipDisclosureFile: {},
@@ -101,7 +101,7 @@ describe('createCaseFromPaperAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},

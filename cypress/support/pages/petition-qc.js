@@ -18,6 +18,14 @@ exports.getCaseTitleContaining = text => {
   return cy.contains('p#case-title', text);
 };
 
+exports.getIrsNoticeTab = () => {
+  return cy.get('button#tab-irs-notice');
+};
+
+exports.getHasIrsNoticeYesRadioButton = () => {
+  return cy.get('#has-irs-verified-notice-yes');
+};
+
 exports.getReviewPetitionButton = () => {
   return cy.contains('button', 'Review Petition');
 };

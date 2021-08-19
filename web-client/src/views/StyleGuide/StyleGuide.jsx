@@ -7,12 +7,12 @@ import { Typography } from './Typography';
 import React from 'react';
 
 export const StyleGuide = () => (
-  <React.Fragment>
+  <>
     <Typography />
     <Buttons />
     <Tables />
     <Forms />
     <Cards />
     <Tabs />
-  </React.Fragment>
+  </>
 );

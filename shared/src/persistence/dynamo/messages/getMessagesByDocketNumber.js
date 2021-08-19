@@ -8,11 +8,8 @@ const { query } = require('../../dynamodbClientService');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the created message
  */
-exports.getMessagesByDocketNumber = async ({
-  applicationContext,
-  docketNumber,
-}) => {
-  return await query({
+exports.getMessagesByDocketNumber = ({ applicationContext, docketNumber }) =>
+  query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -24,4 +21,3 @@ exports.getMessagesByDocketNumber = async ({
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-};

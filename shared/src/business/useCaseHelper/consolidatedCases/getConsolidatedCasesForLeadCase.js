@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+const { UserCase } = require('../../entities/UserCase');
 
 /**
  * Retrieves all cases associated with the provided leadDocketNumber.
@@ -19,9 +19,8 @@ exports.getConsolidatedCasesForLeadCase = async ({
       leadDocketNumber,
     });
 
-  consolidatedCases = Case.validateRawCollection(consolidatedCases, {
+  consolidatedCases = UserCase.validateRawCollection(consolidatedCases, {
     applicationContext,
-    filtered: true,
   });
 
   return consolidatedCases;

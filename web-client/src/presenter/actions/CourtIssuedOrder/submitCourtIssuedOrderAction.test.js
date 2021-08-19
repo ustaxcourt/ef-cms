@@ -39,7 +39,7 @@ describe('submitCourtIssuedOrderAction', () => {
     ).toBeCalled();
     expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
     expect(
-      applicationContext.getUseCases().virusScanPdfInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toBeCalled();
   });
 
@@ -65,7 +65,7 @@ describe('submitCourtIssuedOrderAction', () => {
 
     expect(
       applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
-        .calls[0][0].documentMetadata.draftOrderState,
+        .calls[0][1].documentMetadata.draftOrderState,
     ).toEqual({
       docketNumber: '111-20',
       documentType: 'Notice of Intervention',

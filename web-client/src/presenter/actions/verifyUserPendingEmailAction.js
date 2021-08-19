@@ -4,8 +4,9 @@ export const verifyUserPendingEmailAction = async ({
 }) => {
   const { token } = props;
 
-  await applicationContext.getUseCases().verifyUserPendingEmailInteractor({
-    applicationContext,
-    token,
-  });
+  await applicationContext
+    .getUseCases()
+    .verifyUserPendingEmailInteractor(applicationContext, {
+      token,
+    });
 };

@@ -14,11 +14,11 @@ describe('setItemInteractor', () => {
         require('../../persistence/localStorage/setItem').setItem,
       );
 
-    await setItemInteractor({
-      applicationContext,
+    await setItemInteractor(applicationContext, {
       key: 'abc',
       value: '123',
     });
+
     const result = await applicationContext.getPersistenceGateway().getItem({
       applicationContext,
       key: 'abc',

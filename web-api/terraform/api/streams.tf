@@ -16,13 +16,17 @@ resource "aws_lambda_function" "zip_streams" {
   environment {
     variables = var.lambda_environment
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
   count                          = var.create_streams
   event_source_arn               = var.stream_arn
   function_name                  = aws_lambda_function.zip_streams[0].arn
-  starting_position              = "LATEST"
+  starting_position              = "TRIM_HORIZON"
   bisect_batch_on_function_error = "true"
   batch_size                     = "100"
 }

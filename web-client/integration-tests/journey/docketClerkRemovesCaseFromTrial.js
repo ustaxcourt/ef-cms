@@ -1,15 +1,15 @@
-export const docketClerkRemovesCaseFromTrial = test => {
+export const docketClerkRemovesCaseFromTrial = cerebralTest => {
   return it('Docket clerk removes case from trial session', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openRemoveFromTrialSessionModalSequence');
-    await test.runSequence('updateModalValueSequence', {
+    await cerebralTest.runSequence('openRemoveFromTrialSessionModalSequence');
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
       value: 'Test disposition',
     });
 
-    await test.runSequence('removeCaseFromTrialSequence');
+    await cerebralTest.runSequence('removeCaseFromTrialSequence');
   });
 };

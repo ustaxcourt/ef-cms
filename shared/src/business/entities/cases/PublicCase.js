@@ -1,5 +1,6 @@
 const joi = require('joi');
 const {
+  CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
@@ -9,13 +10,6 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-  getOtherFilers,
-  getOtherPetitioners,
-  isSealedCase,
-} = require('./Case');
-const {
   JoiValidationConstants,
 } = require('../../../utilities/JoiValidationConstants');
 const {
@@ -23,8 +17,8 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
-const { ContactFactory } = require('../contacts/ContactFactory');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { isSealedCase } = require('./Case');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');
@@ -54,28 +48,12 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
+  this.isStatusNew = rawCase.status === CASE_STATUS_TYPES.new;
 
   const currentUser = applicationContext.getCurrentUser();
 
   if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
-    const contacts = ContactFactory.createContacts({
-      applicationContext,
-      contactInfo: {
-        otherFilers: getOtherFilers(rawCase),
-        otherPetitioners: getOtherPetitioners(rawCase),
-        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
-      },
-      isPaper: rawCase.isPaper,
-      partyType: rawCase.partyType,
-    });
-
-    this.petitioners = [contacts.primary];
-    if (contacts.secondary) {
-      this.petitioners.push(contacts.secondary);
-    }
-    this.petitioners.push(...contacts.otherFilers);
-    this.petitioners.push(...contacts.otherPetitioners);
+    this.petitioners = rawCase.petitioners;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
@@ -84,10 +62,11 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       practitioner => new PrivatePractitioner(practitioner),
     );
   } else if (!this.isSealed) {
-    this.petitioners = [new PublicContact(getContactPrimary(rawCase))];
-    if (getContactSecondary(rawCase)) {
-      this.petitioners.push(new PublicContact(getContactSecondary(rawCase)));
-    }
+    this.petitioners = [];
+    rawCase.petitioners.map(petitioner => {
+      const publicPetitionerContact = new PublicContact(petitioner);
+      this.petitioners.push(publicPetitionerContact);
+    });
   }
 
   // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
@@ -119,6 +98,7 @@ const publicCaseSchema = {
   hasIrsPractitioner: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
+  isStatusNew: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),

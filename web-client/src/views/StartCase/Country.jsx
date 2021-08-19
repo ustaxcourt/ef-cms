@@ -24,13 +24,7 @@ export const Country = connect(
   }) {
     return (
       <React.Fragment>
-        <FormGroup
-          errorText={
-            validationErrors &&
-            validationErrors[type] &&
-            validationErrors[type].countryType
-          }
-        >
+        <FormGroup errorText={validationErrors?.[type]?.countryType}>
           <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
           </label>
@@ -60,13 +54,7 @@ export const Country = connect(
           </select>
         </FormGroup>
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
-          <FormGroup
-            errorText={
-              validationErrors &&
-              validationErrors[type] &&
-              validationErrors[type].country
-            }
-          >
+          <FormGroup errorText={validationErrors?.[type]?.country}>
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name
             </label>

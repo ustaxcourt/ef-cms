@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPdfUrlAction } from './getPdfUrlAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -10,7 +10,7 @@ describe('getPdfUrlAction', () => {
     global.File = jest.fn();
     createObjectURLStub = jest.fn();
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
       createObjectURL: createObjectURLStub,
     };
@@ -18,7 +18,7 @@ describe('getPdfUrlAction', () => {
 
   it('gets the pdf file url for a court issued document', async () => {
     const mockPdf = { url: 'www.example.com' };
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .createCourtIssuedOrderPdfFromHtmlInteractor.mockReturnValue(mockPdf);
 
@@ -39,14 +39,14 @@ describe('getPdfUrlAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
+      applicationContext.getUseCases()
         .createCourtIssuedOrderPdfFromHtmlInteractor,
     ).toBeCalled();
     expect(result.output.pdfUrl).toBe(mockPdf.url);
 
-    const args = applicationContextForClient.getUseCases()
-      .createCourtIssuedOrderPdfFromHtmlInteractor.mock.calls[0][0];
-
+    const args =
+      applicationContext.getUseCases()
+        .createCourtIssuedOrderPdfFromHtmlInteractor.mock.calls[0][1];
     expect(args).toEqual(
       expect.objectContaining({
         contentHtml: '<p>hi</p>',

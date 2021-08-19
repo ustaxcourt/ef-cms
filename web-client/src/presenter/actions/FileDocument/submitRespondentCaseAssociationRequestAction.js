@@ -19,8 +19,7 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   if (user.role === USER_ROLES.irsPractitioner) {
     return await applicationContext
       .getUseCases()
-      .submitCaseAssociationRequestInteractor({
-        applicationContext,
+      .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
       });
   }

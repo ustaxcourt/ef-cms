@@ -1,47 +1,48 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkServesOrderOnPaperParties = (test, draftOrderIndex) => {
+export const docketClerkServesOrderOnPaperParties = (
+  cerebralTest,
+  draftOrderIndex,
+) => {
   return it('Docket Clerk serves the order on 3 parties with paper service', async () => {
-    let caseDetailFormatted;
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: test.getState(),
-      },
-    );
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
 
-    const { docketEntryId } = test.draftOrders[draftOrderIndex];
-
-    const orderDocument = caseDetailFormatted.formattedDocketEntries.find(
+    const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(orderDocument).toBeTruthy();
 
-    await test.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
+    await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: orderDocument.docketEntryId,
-      docketNumber: test.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('CourtIssuedDocketEntry');
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'CourtIssuedDocketEntry',
+    );
 
-    await test.runSequence('openConfirmInitiateServiceModalSequence');
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
-    const helper = runCompute(
+    const modalHelper = runCompute(
       withAppContextDecorator(confirmInitiateServiceModalHelper),
       {
-        state: test.getState(),
+        state: cerebralTest.getState(),
       },
     );
 
-    expect(helper.showPaperAlert).toEqual(true);
+    expect(modalHelper.showPaperAlert).toEqual(true);
 
-    expect(helper.contactsNeedingPaperService.length).toEqual(2);
+    expect(modalHelper.contactsNeedingPaperService.length).toEqual(2);
 
-    await test.runSequence('serveCourtIssuedDocumentFromDocketEntrySequence');
+    await cerebralTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
   });
 };

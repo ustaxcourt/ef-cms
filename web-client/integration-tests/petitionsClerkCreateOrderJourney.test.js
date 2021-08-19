@@ -17,7 +17,7 @@ import { petitionsClerkViewsCaseDetailAfterAddingOrder } from './journey/petitio
 import { petitionsClerkViewsDraftDocuments } from './journey/petitionsClerkViewsDraftDocuments';
 import { petitionsDeletesOrderFromCase } from './journey/petitionsDeletesOrderFromCase';
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Petitions Clerk Create Order Journey', () => {
   beforeAll(() => {
@@ -25,37 +25,37 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
-  petitionerChoosesProcedureType(test);
-  petitionerChoosesCaseType(test);
-  petitionerCreatesNewCase(test, fakeFile);
-  petitionerViewsDashboard(test);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerChoosesProcedureType(cerebralTest);
+  petitionerChoosesCaseType(cerebralTest);
+  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  petitionerViewsDashboard(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(test);
-  petitionsClerkViewsDraftDocuments(test);
-  petitionsClerkAddsOrderToCase(test);
-  petitionsClerkViewsCaseDetailAfterAddingOrder(test);
-  petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkEditsDraftOrder(test, {});
-  petitionsClerkViewsDraftDocuments(test, 1);
-  petitionsClerkEditsDraftOrder(test, {
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest);
+  petitionsClerkAddsOrderToCase(cerebralTest);
+  petitionsClerkViewsCaseDetailAfterAddingOrder(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 1);
+  petitionsClerkEditsDraftOrder(cerebralTest, {});
+  petitionsClerkViewsDraftDocuments(cerebralTest, 1);
+  petitionsClerkEditsDraftOrder(cerebralTest, {
     currentRichText: '<p>This is an edited test order.</p>',
     setRichText: '<p>This is a re-edited test order</p>',
   });
-  petitionsClerkCreatesMessageToChambers(test);
-  petitionsDeletesOrderFromCase(test);
-  petitionsClerkViewsDraftDocuments(test, 0);
+  petitionsClerkCreatesMessageToChambers(cerebralTest);
+  petitionsDeletesOrderFromCase(cerebralTest);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 0);
 
-  petitionsClerkAddsGenericOrderToCase(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  petitionsClerkEditsGenericOrder(test);
-  petitionsClerkSignsOrder(test);
-  petitionsClerkViewsAddDocketEntryForGenericOrder(test);
-  petitionsClerkServesElectronicCaseToIrs(test);
-  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(test);
+  petitionsClerkAddsGenericOrderToCase(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(cerebralTest);
+  petitionsClerkEditsGenericOrder(cerebralTest);
+  petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkViewsAddDocketEntryForGenericOrder(cerebralTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  petitionsClerkAddsDocketEntryForOrderAndSavesForLater(cerebralTest);
 });

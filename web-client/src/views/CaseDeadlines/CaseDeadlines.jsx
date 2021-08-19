@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { DateRangePickerComponent } from './DateRangePickerComponent';
+import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -130,7 +130,7 @@ export const CaseDeadlines = connect(
                   </thead>
                   <tbody>
                     {caseDeadlineReportHelper.caseDeadlines.map(item => (
-                      <tr key={item.docketNumber}>
+                      <tr key={item.caseDeadlineId}>
                         <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
                         </td>

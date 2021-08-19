@@ -1,3 +1,4 @@
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
@@ -12,8 +13,11 @@ import { withAppContextDecorator } from '../src/withAppContext';
 const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
+const caseDetailHeaderHelper = withAppContextDecorator(
+  caseDetailHeaderHelperComputed,
+);
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('Adds automatic block case to trial', () => {
   beforeAll(() => {
@@ -21,7 +25,7 @@ describe('Adds automatic block case to trial', () => {
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
@@ -29,27 +33,30 @@ describe('Adds automatic block case to trial', () => {
     trialLocation,
   };
 
-  loginAs(test, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(test, fakeFile, trialLocation);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
 
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkSetsCaseReadyForTrial(test);
-  loginAs(test, 'docketclerk@example.com');
-  docketClerkCreatesATrialSession(test, overrides);
-  docketClerkViewsTrialSessionList(test);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   // automatic block with a due date
-  petitionsClerkCreatesACaseDeadline(test);
-  test.casesReadyForTrial = [];
-  petitionsClerkManuallyAddsCaseToTrial(test);
+  petitionsClerkCreatesACaseDeadline(cerebralTest);
+  cerebralTest.casesReadyForTrial = [];
+  petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
 
-  it('should be able to add a trial session to an automatically blocked case', async () => {
+  it('should be able to add a trial session to an automatically blocked case', () => {
     const formattedCase = runCompute(formattedCaseDetail, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
+    });
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: cerebralTest.getState(),
     });
 
-    expect(formattedCase.showBlockedTag).toBeTruthy();
+    expect(headerHelper.showBlockedTag).toBeTruthy();
     expect(formattedCase.automaticBlocked).toBeTruthy();
   });
 });

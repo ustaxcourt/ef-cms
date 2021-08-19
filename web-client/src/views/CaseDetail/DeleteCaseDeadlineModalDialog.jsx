@@ -18,7 +18,6 @@ export const DeleteCaseDeadlineModalDialog = connect(
       <ModalDialog
         cancelLabel="No, Cancel"
         cancelSequence={cancelSequence}
-        className=""
         confirmLabel="Yes, Remove"
         confirmSequence={confirmSequence}
         title="Are You Sure You Want to Delete This Deadline?"

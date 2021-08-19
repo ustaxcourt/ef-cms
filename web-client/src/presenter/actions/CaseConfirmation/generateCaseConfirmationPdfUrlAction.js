@@ -15,13 +15,12 @@ export const generateCaseConfirmationPdfUrlAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const {
-    url,
-  } = await applicationContext.getUseCases().getDocumentDownloadUrlInteractor({
-    applicationContext,
-    docketNumber,
-    key: `case-${docketNumber}-confirmation.pdf`,
-  });
+  const { url } = await applicationContext
+    .getUseCases()
+    .getDocumentDownloadUrlInteractor(applicationContext, {
+      docketNumber,
+      key: `case-${docketNumber}-confirmation.pdf`,
+    });
 
   store.set(state.pdfPreviewUrl, url);
 };

@@ -60,6 +60,7 @@ const VALIDATION_ERROR_MESSAGES = {
     },
     'Select a document type',
   ],
+  filers: 'Select a filing party',
   freeText: [
     { contains: 'is required', message: 'Provide an answer' },
     {
@@ -80,8 +81,6 @@ const VALIDATION_ERROR_MESSAGES = {
   objections: 'Enter selection for Objections.',
   ordinalValue: 'Select an iteration',
   partyIrsPractitioner: 'Select a filing party',
-  partyPrimary: 'Select a filing party',
-  partySecondary: 'Select a filing party',
   previousDocument: 'Select a document',
   primaryDocumentFile: 'Upload a document',
   primaryDocumentFileSize: [
@@ -121,20 +120,12 @@ const VALIDATION_ERROR_MESSAGES = {
 };
 
 /**
- *
- * @constructor
- */
-function ExternalDocumentInformationFactory() {}
-
-/**
+ * External Document Information Factory entity
  *
  * @param {object} documentMetadata the document metadata
- * @returns {Function} the created entity
+ * @constructor
  */
-ExternalDocumentInformationFactory.get = documentMetadata => {
-  /**
-   *
-   */
+function ExternalDocumentInformationFactory(documentMetadata) {
   function entityConstructor() {}
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
@@ -148,11 +139,10 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
       rawProps.hasSecondarySupportingDocuments;
     this.hasSupportingDocuments = rawProps.hasSupportingDocuments;
     this.lodged = rawProps.lodged;
+    this.filers = rawProps.filers;
     this.objections = rawProps.objections;
     this.ordinalValue = rawProps.ordinalValue;
-    this.partyPrimary = rawProps.partyPrimary;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
-    this.partySecondary = rawProps.partySecondary;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
     this.secondaryDocument = rawProps.secondaryDocument;
@@ -162,7 +152,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.supportingDocuments = rawProps.supportingDocuments;
 
     if (this.secondaryDocument) {
-      this.secondaryDocument = SecondaryDocumentInformationFactory.get(
+      this.secondaryDocument = SecondaryDocumentInformationFactory(
         {
           ...this.secondaryDocument,
           secondaryDocumentFile: this.secondaryDocumentFile,
@@ -173,7 +163,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory.get(
+        return SupportingDocumentInformationFactory(
           item,
           VALIDATION_ERROR_MESSAGES,
         );
@@ -183,7 +173,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     if (this.secondarySupportingDocuments) {
       this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
         item => {
-          return SupportingDocumentInformationFactory.get(
+          return SupportingDocumentInformationFactory(
             item,
             VALIDATION_ERROR_MESSAGES,
           );
@@ -218,11 +208,13 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
   let schemaOptionalItems = {
     certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+    filers: joi
+      .array()
+      .items(JoiValidationConstants.UUID.required())
+      .required(),
     hasSecondarySupportingDocuments: joi.boolean(),
     objections: JoiValidationConstants.STRING,
     partyIrsPractitioner: joi.boolean(),
-    partyPrimary: joi.boolean(),
-    partySecondary: joi.boolean(),
     secondaryDocumentFile: joi.object(),
     secondaryDocumentFileSize: joi
       .number()
@@ -315,23 +307,28 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
           sortBy(casesWithAPartySelected),
         )
       ) {
-        addProperty('partyPrimary', joi.boolean().invalid(false).required());
+        addProperty(
+          'filers',
+          joi.array().items(joi.string().required()).required(),
+        );
       }
     }
   } else {
     if (
-      documentMetadata.partyPrimary !== true &&
-      documentMetadata.partySecondary !== true &&
+      documentMetadata.filers.length === 0 &&
       documentMetadata.partyIrsPractitioner !== true
     ) {
-      addProperty('partyPrimary', joi.boolean().invalid(false).required());
+      addProperty(
+        'filers',
+        joi.array().items(joi.string().required()).required(),
+      );
     }
   }
 
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new (validEntityDecorator(entityConstructor))(documentMetadata);
-};
+}
 
 module.exports = {
   ExternalDocumentInformationFactory,

@@ -3,10 +3,9 @@ import { setBlockedCasesAction } from '../actions/CaseDetail/setBlockedCasesActi
 import { setFormValueAction } from '../actions/setFormValueAction';
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 
-export const getBlockedCasesByTrialLocationSequence = showProgressSequenceDecorator(
-  [
+export const getBlockedCasesByTrialLocationSequence =
+  showProgressSequenceDecorator([
     setFormValueAction,
     getBlockedCasesByTrialLocationAction,
     setBlockedCasesAction,
-  ],
-);
+  ]);

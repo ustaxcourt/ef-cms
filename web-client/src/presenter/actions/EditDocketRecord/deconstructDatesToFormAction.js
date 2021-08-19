@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.form
  */
-export const deconstructDatesToFormAction = async ({
+export const deconstructDatesToFormAction = ({
   applicationContext,
   props,
   store,

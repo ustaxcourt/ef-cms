@@ -1,36 +1,21 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemTrialDate = async ({
+exports.updateWorkItemTrialDate = ({
   applicationContext,
   trialDate,
-  workItemId,
-}) => {
-  const workItems = await client.query({
+  workItem,
+}) =>
+  client.update({
     ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
+      '#trialDate': 'trialDate',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `work-item|${workItemId}`,
+      ':trialDate': trialDate,
     },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
+    Key: {
+      pk: workItem.pk,
+      sk: workItem.sk,
+    },
+    UpdateExpression: 'SET #trialDate = :trialDate',
     applicationContext,
   });
-
-  for (let workItem of workItems) {
-    await client.update({
-      ExpressionAttributeNames: {
-        '#trialDate': 'trialDate',
-      },
-      ExpressionAttributeValues: {
-        ':trialDate': trialDate,
-      },
-      Key: {
-        pk: workItem.pk,
-        sk: workItem.sk,
-      },
-      UpdateExpression: 'SET #trialDate = :trialDate',
-      applicationContext,
-    });
-  }
-};

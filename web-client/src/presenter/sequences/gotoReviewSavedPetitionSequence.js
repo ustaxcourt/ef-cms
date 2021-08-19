@@ -10,13 +10,13 @@ import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 export const gotoReviewSavedPetitionSequence = [
   shouldLoadCaseAction,
   {
-    ignore: [setCaseOnFormUsingStateAction, setContactsOnFormAction],
+    ignore: [setCaseOnFormUsingStateAction],
     load: showProgressSequenceDecorator([
       getCaseAction,
       setCaseAction,
       setCaseOnFormAction,
-      setContactsOnFormAction,
     ]),
   },
+  setContactsOnFormAction,
   setCurrentPageAction('ReviewSavedPetition'),
 ];

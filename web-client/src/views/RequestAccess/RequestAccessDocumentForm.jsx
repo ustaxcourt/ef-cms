@@ -47,7 +47,7 @@ export const RequestAccessDocumentForm = connect(
         </Hint>
 
         <div className="blue-container">
-          <FormGroup errorText={validationErrors.primaryDocumentFile}>
+          <FormGroup errorText={validationErrors?.primaryDocumentFile}>
             <label
               className={classNames(
                 'usa-label ustc-upload with-hint',
@@ -112,7 +112,7 @@ export const RequestAccessDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor="primaryDocument-attachments"
                 >
                   Attachment(s)
@@ -134,7 +134,7 @@ export const RequestAccessDocumentForm = connect(
                   }}
                 />
                 <label
-                  className="usa-checkbox__label inline-block"
+                  className="usa-checkbox__label"
                   htmlFor="primaryDocument-certificateOfService"
                 >
                   Certificate of Service
@@ -164,7 +164,7 @@ export const RequestAccessDocumentForm = connect(
           </div>
 
           {requestAccessHelper.documentWithObjections && (
-            <FormGroup errorText={validationErrors.objections}>
+            <FormGroup errorText={validationErrors?.objections}>
               <fieldset className="usa-fieldset margin-bottom-0">
                 <legend id="objections-legend">
                   Are there any objections to this document?

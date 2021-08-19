@@ -8,6 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {void}
  */
-export const updateSearchTermAction = async ({ props, store }) => {
+export const updateSearchTermAction = ({ props, store }) => {
   store.set(state.header.searchTerm, props.searchTerm);
 };

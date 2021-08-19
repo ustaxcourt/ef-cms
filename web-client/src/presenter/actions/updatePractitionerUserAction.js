@@ -19,8 +19,7 @@ export const updatePractitionerUserAction = async ({
   try {
     const practitionerUser = await applicationContext
       .getUseCases()
-      .updatePractitionerUserInteractor({
-        applicationContext,
+      .updatePractitionerUserInteractor(applicationContext, {
         barNumber: user.barNumber,
         user,
       });
@@ -32,6 +31,11 @@ export const updatePractitionerUserAction = async ({
       practitionerDetail: practitionerUser,
     });
   } catch (err) {
-    return path.error();
+    return path.error({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Practitioner could not be edited.',
+      },
+    });
   }
 };

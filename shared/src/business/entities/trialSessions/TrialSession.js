@@ -118,6 +118,7 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = {
     'state',
     'postalCode',
     'judge',
+    'chambersPhoneNumber',
   ],
   [TRIAL_SESSION_PROCEEDING_TYPES.remote]: [
     'chambersPhoneNumber',
@@ -225,9 +226,10 @@ joiValidationDecorator(
             then: joi.required(),
           },
         ),
-        docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-          'Docket number of the case.',
-        ),
+        docketNumber:
+          JoiValidationConstants.DOCKET_NUMBER.required().description(
+            'Docket number of the case.',
+          ),
         isManuallyAdded: joi.boolean().optional(),
         removedFromTrial: joi.boolean().optional(),
         removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
@@ -386,6 +388,15 @@ TrialSession.prototype.deleteCaseFromCalendar = function ({ docketNumber }) {
  */
 TrialSession.prototype.canSetAsCalendared = function () {
   return isEmpty(this.getEmptyFields());
+};
+
+/**
+ * checks the trial session's proceedingType and returns true if it's remote
+ *
+ * @returns {boolean} TRUE if the proceedingType is remote; false otherwise
+ */
+TrialSession.prototype.isRemote = function () {
+  return this.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
 };
 
 /**

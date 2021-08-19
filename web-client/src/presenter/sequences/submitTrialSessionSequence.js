@@ -30,7 +30,7 @@ export const submitTrialSessionSequence = [
       stopShowValidationAction,
       createTrialSessionAction,
       {
-        error: [],
+        error: [setAlertErrorAction],
         success: [
           setSaveAlertsForNavigationAction,
           getCreateTrialSessionAlertSuccessAction,

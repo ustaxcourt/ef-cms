@@ -4,6 +4,7 @@ import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRe
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -16,6 +17,7 @@ export const reviewRequestAccessInformationSequence = [
   startShowValidationAction,
   computeCertificateOfServiceFormDateAction,
   setSupportingDocumentScenarioAction,
+  setFilersFromFilersMapAction,
   validateCaseAssociationRequestAction,
   {
     error: [

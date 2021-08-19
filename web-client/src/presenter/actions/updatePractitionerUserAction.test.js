@@ -43,7 +43,7 @@ describe('updatePractitionerUserAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updatePractitionerUserInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       barNumber: 'AB1111',
       user: { firstName: 'Joe', lastName: 'Exotic' },
@@ -73,5 +73,11 @@ describe('updatePractitionerUserAction', () => {
       applicationContext.getUseCases().updatePractitionerUserInteractor,
     ).toHaveBeenCalled();
     expect(errorMock).toHaveBeenCalled();
+    expect(errorMock).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Practitioner could not be edited.',
+      },
+    });
   });
 });

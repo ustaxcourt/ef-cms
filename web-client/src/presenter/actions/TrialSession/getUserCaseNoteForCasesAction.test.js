@@ -40,7 +40,7 @@ describe('getUserCaseNoteForCasesAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().getUserCaseNoteForCasesInteractor.mock
-        .calls[0][0].docketNumbers,
+        .calls[0][1].docketNumbers,
     ).toEqual(['123-45', '678-90']);
   });
 });

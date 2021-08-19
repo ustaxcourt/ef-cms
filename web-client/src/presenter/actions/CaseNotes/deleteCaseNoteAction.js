@@ -12,8 +12,7 @@ export const deleteCaseNoteAction = async ({ applicationContext, get }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const caseDetail = await applicationContext
     .getUseCases()
-    .deleteCaseNoteInteractor({
-      applicationContext,
+    .deleteCaseNoteInteractor(applicationContext, {
       docketNumber,
     });
 

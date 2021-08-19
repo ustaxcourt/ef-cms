@@ -15,6 +15,8 @@ export const resetContactsAction = ({ applicationContext, get, store }) => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
   const showContacts = showContactsHelper(partyType, PARTY_TYPES);
 
+  store.unset(state.form.useSameAsPrimary);
+
   store.set(state.form.contactPrimary, {
     contactId: get(state.form.contactPrimary.contactId),
     countryType: COUNTRY_TYPES.DOMESTIC,

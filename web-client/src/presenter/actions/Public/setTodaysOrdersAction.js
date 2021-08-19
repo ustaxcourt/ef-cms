@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the props object
  * @param {object} providers.store the store object
  */
-export const setTodaysOrdersAction = async ({ get, props, store }) => {
+export const setTodaysOrdersAction = ({ get, props, store }) => {
   const currentResults = get(state.todaysOrders.results);
   const page = get(state.todaysOrders.page) || 1;
   let orderResults;

@@ -21,12 +21,12 @@ exports.saveFileAndGenerateUrl = async ({
     useTempBucket,
   });
 
-  const {
-    url,
-  } = await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-    applicationContext,
-    key: fileId,
-    useTempBucket,
-  });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: fileId,
+      useTempBucket,
+    });
   return { fileId, url };
 };

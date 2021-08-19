@@ -30,9 +30,9 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'user_contact_initial_update_complete':
-        await app.getSequence(
-          'userContactUpdateInitialUpdateCompleteSequence',
-        )({ ...message });
+        await app.getSequence('userContactUpdateInitialUpdateCompleteSequence')(
+          { ...message },
+        );
         break;
       case 'user_contact_full_update_complete':
         await app.getSequence('userContactUpdateCompleteSequence')({

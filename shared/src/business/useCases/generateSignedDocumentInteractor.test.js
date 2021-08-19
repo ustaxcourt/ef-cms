@@ -53,8 +53,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should make a call to load and setup the PDF', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -73,8 +72,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should draw the signature and title text on the pdf document', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    const args = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -83,8 +81,9 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    };
 
+    await generateSignedDocumentInteractor(applicationContext, args);
     expect(drawTextMock.mock.calls[0][0]).toEqual(mockSignatureName);
     expect(drawTextMock.mock.calls[0][1]).toMatchObject({
       font: expect.anything(),
@@ -104,8 +103,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should draw the rectangular stamp on the pdf document', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -129,8 +127,7 @@ describe('generateSignedDocument', () => {
   it('should set the stamp rotation to 0 degrees when the page rotation angle is undefined', async () => {
     rotationReturnValue = { angle: undefined };
 
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    await generateSignedDocumentInteractor(applicationContext, {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -160,8 +157,7 @@ describe('generateSignedDocument', () => {
     const mockRotationAngle = 80;
     rotationReturnValue = { angle: mockRotationAngle };
 
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    const args = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -170,7 +166,9 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    };
+
+    await generateSignedDocumentInteractor(applicationContext, args);
 
     expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
       rotate: { angle: mockRotationAngle },
@@ -187,9 +185,8 @@ describe('generateSignedDocument', () => {
     });
   });
 
-  it('should use a default scale value of 1 when one has not been provided', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+  it('uses a default scale value of 1 if not provided in args', async () => {
+    const args = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -199,16 +196,16 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    };
 
+    await generateSignedDocumentInteractor(applicationContext, args);
     expect(drawTextMock.mock.calls[0][1]).toMatchObject({
       size: TEXT_SIZE, // textSize is calculated using scale
     });
   });
 
   it('should save the pdf', async () => {
-    await generateSignedDocumentInteractor({
-      applicationContext,
+    const args = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -218,7 +215,8 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    };
+    await generateSignedDocumentInteractor(applicationContext, args);
 
     expect(saveMock.mock.calls[0][0]).toMatchObject({
       useObjectStreams: false,

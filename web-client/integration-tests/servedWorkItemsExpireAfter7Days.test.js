@@ -15,7 +15,7 @@ const {
   USER_ROLES: ROLES,
 } = applicationContext.getConstants();
 
-const test = setupTest();
+const cerebralTest = setupTest();
 
 describe('verify old served work items do not show up in the outbox', () => {
   let workItem6Days;
@@ -27,18 +27,18 @@ describe('verify old served work items do not show up in the outbox', () => {
   let workItemId7;
   let workItemId8;
 
-  beforeAll(async () => {
+  beforeAll(() => {
     jest.setTimeout(300000);
   });
 
   afterAll(() => {
-    test.closeSocket();
+    cerebralTest.closeSocket();
   });
 
-  loginAs(test, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('creates a case', async () => {
-    caseDetail = await uploadPetition(test);
+    caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
     const appContext = applicationContextFactory({
@@ -115,12 +115,12 @@ describe('verify old served work items do not show up in the outbox', () => {
     });
   });
 
-  loginAs(test, 'petitionsclerk@example.com');
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   it('the petitionsclerk user should have the expected work items equal to or new than 7 days', async () => {
-    const myOutbox = (await getFormattedDocumentQCMyOutbox(test)).filter(
-      item => item.docketNumber === caseDetail.docketNumber,
-    );
+    const myOutbox = (
+      await getFormattedDocumentQCMyOutbox(cerebralTest)
+    ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(myOutbox.length).toEqual(2);
     expect(
       myOutbox.find(item => item.workItemId === workItemId6),
@@ -130,7 +130,7 @@ describe('verify old served work items do not show up in the outbox', () => {
     ).toBeDefined();
 
     const sectionOutbox = (
-      await getFormattedDocumentQCSectionOutbox(test)
+      await getFormattedDocumentQCSectionOutbox(cerebralTest)
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
     expect(

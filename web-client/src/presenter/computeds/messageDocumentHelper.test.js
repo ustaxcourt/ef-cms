@@ -1,47 +1,36 @@
+/* eslint-disable max-lines */
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  clerkOfCourtUser,
+  docketClerkUser,
+  judgeUser,
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
+let globalUser;
+
+const messageDocumentHelper = withAppContextDecorator(
+  messageDocumentHeperComputed,
+  {
+    ...applicationContext,
+    getCurrentUser: () => {
+      return globalUser;
+    },
+  },
+);
+
 describe('messageDocumentHelper', () => {
-  const { USER_ROLES } = applicationContext.getConstants();
-
-  const messageDocumentHelper = withAppContextDecorator(
-    messageDocumentHeperComputed,
-    applicationContext,
-  );
-
-  const getBaseState = user => {
-    return {
-      permissions: getUserPermissions(user),
-    };
-  };
-
-  const docketClerkUser = {
-    role: USER_ROLES.docketClerk,
-    userId: '123',
-  };
-  const petitionsClerkUser = {
-    role: USER_ROLES.petitionsClerk,
-    userId: '123',
-  };
-  const clerkOfCourtUser = {
-    role: USER_ROLES.clerkOfCourt,
-    userId: '123',
-  };
-  const judgeUser = {
-    role: USER_ROLES.judge,
-    userId: '123',
-  };
-  const petitionerUser = {
-    role: USER_ROLES.petitioner,
-    userId: '123',
-  };
+  const mockDocumentId = '968b10f7-d111-45a9-8729-df050ff6c961';
+  const mockParentMessageId = 'b5c87dd2-98b1-462a-9c21-ff6bb1e0c9f7';
 
   const baseDocketEntry = {
-    docketEntryId: '123',
-    entityName: 'Document',
+    docketEntryId: mockDocumentId,
+    entityName: 'DocketEntry',
     isDraft: true,
   };
 
@@ -57,16 +46,26 @@ describe('messageDocumentHelper', () => {
     docketEntries: [],
   };
 
-  it('should return an empty object when viewerDocumentToDisplay is not set', () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      caseDetail: {
+        ...baseCaseDetail,
+        docketEntries: [baseDocketEntry],
+      },
+      messageViewerDocumentToDisplay: {
+        documentId: mockDocumentId,
+      },
+      parentMessageId: mockParentMessageId,
+      permissions: getUserPermissions(user),
+    };
+  };
 
+  it('return empty object if messageViewerDocumentToDisplay is not set', () => {
     const result = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(docketClerkUser),
-        caseDetail: {
-          ...baseCaseDetail,
-          docketEntries: [baseDocketEntry],
-        },
+        messageViewerDocumentToDisplay: {},
       },
     });
 
@@ -75,74 +74,36 @@ describe('messageDocumentHelper', () => {
 
   describe('showAddDocketEntryButton', () => {
     it('return showAddDocketEntryButton true for user role of docketClerk and a document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(docketClerkUser),
       });
 
       expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
     it('return showAddDocketEntryButton true for user role of petitionsClerk and a document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(petitionsClerkUser),
       });
 
       expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
     it('return showAddDocketEntryButton true for user role of clerkOfCourt and a document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(clerkOfCourtUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(clerkOfCourtUser),
       });
 
       expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
     it('return showAddDocketEntryButton false for user role of docketClerk and a document that is already on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -151,17 +112,12 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showAddDocketEntryButton false for user role of petitionsClerk and a document that is already on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -170,17 +126,12 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showAddDocketEntryButton false for user role of clerkOfCourt and a document that is already on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -189,27 +140,14 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showAddDocketEntryButton false for other internal user roles and a document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(judgeUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(judgeUser),
       });
 
       expect(result.showAddDocketEntryButton).toEqual(false);
     });
 
     it('return showAddDocketEntryButton false if the document is a correspondence file', () => {
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -222,7 +160,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -234,19 +172,8 @@ describe('messageDocumentHelper', () => {
 
   describe('adding and removing signatures', () => {
     it('return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(docketClerkUser),
       });
 
       expect(result.showApplySignatureButton).toEqual(true);
@@ -254,8 +181,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showApplySignatureButton false and showRemoveSignatureButton false for an internal user and an SDEC document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -270,9 +195,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -281,8 +203,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -294,9 +214,6 @@ describe('messageDocumentHelper', () => {
                 signedAt: '2020-06-25T20:49:28.192Z',
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -306,19 +223,8 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user and an unsigned document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(petitionerUser),
       });
 
       expect(result.showApplySignatureButton).toEqual(false);
@@ -326,8 +232,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showRemoveSignatureButton false and showApplySignatureButton false for an external user and a signed document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionerUser),
@@ -340,9 +244,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -351,17 +252,12 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showApplySignatureButton false and showRemoveSignatureButton false for an unsigned document that is already on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -371,8 +267,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showRemoveSignatureButton false and showApplySignatureButton false for a signed document that is alreay on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -386,9 +280,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -397,8 +288,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -414,9 +303,8 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: 'abc',
-            eventCode: 'NOT',
           },
         },
       });
@@ -425,8 +313,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('returns showRemoveSignatureButton false for NTD document type and internal users', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -442,9 +328,8 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: 'abc',
-            eventCode: 'NTD',
           },
         },
       });
@@ -453,8 +338,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {
-      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -467,7 +350,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -479,8 +362,6 @@ describe('messageDocumentHelper', () => {
 
   describe('showEditButtonSigned and showEditButtonNotSigned', () => {
     it('return showEditButtonSigned true for an internal user and a document that is not on the docket record and is signed', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -493,9 +374,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -503,8 +381,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showEditButtonSigned false for an internal user and an SDEC document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -518,9 +394,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -528,27 +401,14 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showEditButtonNotSigned true for an internal user and a document that is not on the docket record and is not signed', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(docketClerkUser),
       });
 
       expect(result.showEditButtonNotSigned).toEqual(true);
     });
 
     it('return showEditButtonNotSigned false for a correspondence document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -562,7 +422,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -572,36 +432,20 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showEditButtonSigned false for an external user and a document that is not on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(petitionerUser),
       });
 
       expect(result.showEditButtonSigned).toEqual(false);
     });
 
     it('return showEditButtonSigned false for an internal user and a document that is already on the docket record', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [{ ...baseDocketEntry, isDraft: false }],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -610,8 +454,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('return showEditButtonNotSigned true and showEditButtonSigned false for Notice document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -625,10 +467,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-            eventCode: 'NOT',
-          },
         },
       });
 
@@ -638,9 +476,7 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('showEditCorrespondenceButton', () => {
-    it('should be true for a correspondence document when the user has permission to edit', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
+    it('returns true for a correspondence document when the user has permission to edit', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -653,7 +489,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -662,12 +498,10 @@ describe('messageDocumentHelper', () => {
       expect(result.showEditCorrespondenceButton).toBeTruthy();
     });
 
-    it('should be false for a correspondence document when the user does not have permission to edit', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
+    it('returns false for a correspondence document when the user does not have permission to edit', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
-          ...getBaseState(docketClerkUser),
+          ...getBaseState(petitionerUser),
           caseDetail: {
             ...baseCaseDetail,
             correspondence: [
@@ -677,7 +511,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '567',
           },
         },
@@ -686,20 +520,9 @@ describe('messageDocumentHelper', () => {
       expect(result.showEditCorrespondenceButton).toBeFalsy();
     });
 
-    it('should be false for a non-correspondence document', () => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
+    it('return showEditCorrespondenceButton false for a non-correspondence document', () => {
       const result = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [baseDocketEntry],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
+        state: getBaseState(docketClerkUser),
       });
 
       expect(result.showEditCorrespondenceButton).toEqual(false);
@@ -719,9 +542,6 @@ describe('messageDocumentHelper', () => {
                 eventCode: 'MISC', // Does not require a signature
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -743,9 +563,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -754,33 +571,6 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('serving documents', () => {
-    beforeEach(() => {
-      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-    });
-
-    it('should set showNotServed to true when the document is servable, unserved, and not a draft document', () => {
-      const { showNotServed } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-            docketEntries: [
-              {
-                ...baseDocketEntry,
-                eventCode: 'O',
-                isDraft: false,
-              },
-            ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
-        },
-      });
-
-      expect(showNotServed).toBe(true);
-    });
-
     it('should set showServeCourtIssuedDocumentButton to false when the document eventCode is not present in the list of court issued documents', () => {
       const { showServeCourtIssuedDocumentButton } = runCompute(
         messageDocumentHelper,
@@ -791,26 +581,10 @@ describe('messageDocumentHelper', () => {
               ...baseCaseDetail,
               docketEntries: [
                 {
-                  docketEntryId: '123',
-                  documentTitle: 'PRE-TRIAL MEMORANDUM for Resp. (C/S 5-16-13)',
-                  documentType: 'Miscellaneous',
+                  ...baseDocketEntry,
                   eventCode: 'PMT',
-                  filedBy: 'See Filings and Proceedings',
-                  filingDate: '2013-05-16T00:00:00.000-04:00',
-                  index: 14,
-                  isFileAttached: true,
-                  isMinuteEntry: false,
-                  isOnDocketRecord: true,
-                  isSealed: false,
-                  isStricken: false,
-                  numberOfPages: 5,
-                  processingStatus: 'complete',
-                  receivedAt: '2013-05-16T00:00:00.000-04:00',
                 },
               ],
-            },
-            viewerDocumentToDisplay: {
-              documentId: '123',
             },
           },
         },
@@ -834,9 +608,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -857,9 +628,6 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -882,9 +650,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -906,9 +671,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -928,19 +690,9 @@ describe('messageDocumentHelper', () => {
                 eventCode: 'A', // paper filed document type
                 isDraft: false,
               },
-              {
-                ...baseDocketEntry,
-                documentId: '456',
-                documentType: 'Order',
-                eventCode: 'O', //court issued document type
-                isDraft: false,
-              },
             ],
           },
           permissions: { SERVE_DOCUMENT: false },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -966,9 +718,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -990,9 +739,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -1013,9 +759,6 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -1040,9 +783,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -1063,7 +803,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '234',
           },
         },
@@ -1089,9 +829,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -1111,9 +848,6 @@ describe('messageDocumentHelper', () => {
                 eventCode: 'PSDE',
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -1143,9 +877,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -1173,9 +904,6 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
@@ -1183,8 +911,6 @@ describe('messageDocumentHelper', () => {
     });
 
     it('should be false if the user is an external user, the eventCode is PSDE, the PSDE is served, and the SDEC event code is not in the documents', () => {
-      applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
-
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionerUser),
@@ -1198,9 +924,6 @@ describe('messageDocumentHelper', () => {
                 servedAt: '2019-08-25T05:00:00.000Z',
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -1221,9 +944,6 @@ describe('messageDocumentHelper', () => {
                 eventCode: 'A',
               },
             ],
-          },
-          viewerDocumentToDisplay: {
-            documentId: '123',
           },
         },
       });
@@ -1249,7 +969,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '789',
           },
         },
@@ -1274,7 +994,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '098',
           },
         },
@@ -1297,7 +1017,7 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
+          messageViewerDocumentToDisplay: {
             documentId: '456',
           },
         },
@@ -1307,7 +1027,7 @@ describe('messageDocumentHelper', () => {
     });
 
     it('should be false when the document is not an archived document', () => {
-      const { isArchived } = runCompute(messageDocumentHelper, {
+      const { archived } = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
@@ -1321,114 +1041,37 @@ describe('messageDocumentHelper', () => {
               },
             ],
           },
-          viewerDocumentToDisplay: {
-            documentId: '123',
-          },
         },
       });
 
-      expect(isArchived).toBeFalsy();
+      expect(archived).toBeFalsy();
     });
   });
 
-  describe('generate links', () => {
-    const PARENT_MESSAGE_ID = 'b52edf38-b34d-4274-a1de-750eadadcc6e';
-    const VIEWER_DOCUMENT_ID_TO_DISPLAY =
-      'a9ccf24b-5130-4be4-b475-69a794427af6';
-
-    it('should return an addDocketEntryLink', () => {
-      const { addDocketEntryLink } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-          },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
-            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
-          },
+  it('should return generated links', () => {
+    const result = runCompute(messageDocumentHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...baseCaseDetail,
         },
-      });
-
-      expect(addDocketEntryLink).toEqual(
-        `/case-detail/${baseCaseDetail.docketNumber}/documents/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/add-court-issued-docket-entry/${PARENT_MESSAGE_ID}`,
-      );
+      },
     });
 
-    it('should return an editCorrespondenceLink', () => {
-      const { editCorrespondenceLink } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-          },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
-            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
-          },
-        },
-      });
-
-      expect(editCorrespondenceLink).toEqual(
-        `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/${PARENT_MESSAGE_ID}`,
-      );
-    });
-
-    it('should return a messageDetailLink', () => {
-      const { messageDetailLink } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-          },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
-            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
-          },
-        },
-      });
-
-      expect(messageDetailLink).toEqual(
-        `/messages/${baseCaseDetail.docketNumber}/message-detail/${PARENT_MESSAGE_ID}`,
-      );
-    });
-
-    it('should return a servePetitionLink', () => {
-      const { servePetitionLink } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-          },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
-            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
-          },
-        },
-      });
-
-      expect(servePetitionLink).toEqual(
-        `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${PARENT_MESSAGE_ID}`,
-      );
-    });
-
-    it('should return a signOrderLink', () => {
-      const { signOrderLink } = runCompute(messageDocumentHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            ...baseCaseDetail,
-          },
-          parentMessageId: PARENT_MESSAGE_ID,
-          viewerDocumentToDisplay: {
-            documentId: VIEWER_DOCUMENT_ID_TO_DISPLAY,
-          },
-        },
-      });
-
-      expect(signOrderLink).toEqual(
-        `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${VIEWER_DOCUMENT_ID_TO_DISPLAY}/sign/${PARENT_MESSAGE_ID}`,
-      );
-    });
+    expect(result.addDocketEntryLink).toEqual(
+      `/case-detail/${baseCaseDetail.docketNumber}/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
+    );
+    expect(result.editCorrespondenceLink).toEqual(
+      `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
+    );
+    expect(result.messageDetailLink).toEqual(
+      `/messages/${baseCaseDetail.docketNumber}/message-detail/${mockParentMessageId}`,
+    );
+    expect(result.servePetitionLink).toEqual(
+      `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${mockParentMessageId}`,
+    );
+    expect(result.signOrderLink).toEqual(
+      `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${mockDocumentId}/sign/${mockParentMessageId}`,
+    );
   });
 });

@@ -27,7 +27,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
     ).toBeCalled();
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         keyword: 'a',
@@ -56,7 +56,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock
-        .calls[0][0],
+        .calls[0][1],
     ).toMatchObject({
       searchParams: {
         docketNumber: '105-20',

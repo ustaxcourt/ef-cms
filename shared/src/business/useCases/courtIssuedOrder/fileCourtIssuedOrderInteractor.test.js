@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
@@ -18,17 +19,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '123 Main St',
-      city: 'Somewhere',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      email: 'fieri@example.com',
-      name: 'Guy Fieri',
-      phone: '1234567890',
-      postalCode: '12345',
-      state: 'CA',
-    },
+    caseType: CASE_TYPES_MAP.whistleblower,
     createdAt: '',
     docketEntries: [
       {
@@ -57,8 +48,22 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
     ],
     docketNumber: '45678-18',
+    docketNumberWithSuffix: '45678-18W',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'fieri@example.com',
+        name: 'Guy Fieri',
+        phone: '1234567890',
+        postalCode: '12345',
+        state: 'CA',
+      },
+    ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
     role: ROLES.petitioner,
@@ -211,8 +216,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
     ).toEqual(4);
-    const result = applicationContext.getPersistenceGateway().updateCase.mock
-      .calls[0][0].caseToUpdate.docketEntries[3];
+    const result =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });
@@ -248,6 +254,30 @@ describe('fileCourtIssuedOrderInteractor', () => {
       documentContentsId: expect.anything(),
       draftOrderState: {},
     });
+  });
+
+  it('should append docket number with suffix and case caption to document contents before storing', async () => {
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const savedDocumentContents = JSON.parse(
+      applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
+    ).documentContents;
+
+    expect(savedDocumentContents).toContain(caseRecord.docketNumberWithSuffix);
+    expect(savedDocumentContents).toContain(caseRecord.caseCaption);
   });
 
   it('should parse and scrape pdf contents', async () => {
@@ -359,10 +389,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length - 1;
 
-    const newlyFiledDocument = applicationContext.getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries[
-      lastDocumentIndex
-    ];
+    const newlyFiledDocument =
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries[lastDocumentIndex];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,

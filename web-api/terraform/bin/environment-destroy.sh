@@ -24,10 +24,10 @@ fi
 
 rm -rf .terraform
 
-BLUE_TABLE_NAME=$(../../../get-destination-table.sh $ENVIRONMENT)
-GREEN_TABLE_NAME=$(../../../get-source-table.sh $ENVIRONMENT)
-BLUE_ELASTICSEARCH_DOMAIN=$(../../../get-destination-elasticsearch.sh $ENVIRONMENT)
-GREEN_ELASTICSEARCH_DOMAIN=$(../../../get-source-elasticsearch.sh $ENVIRONMENT)
+BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
+GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
 
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME

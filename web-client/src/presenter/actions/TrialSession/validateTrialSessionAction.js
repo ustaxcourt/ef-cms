@@ -31,8 +31,7 @@ export const validateTrialSessionAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateTrialSessionInteractor({
-      applicationContext,
+    .validateTrialSessionInteractor(applicationContext, {
       trialSession: { ...trialSession, startDate },
     });
 

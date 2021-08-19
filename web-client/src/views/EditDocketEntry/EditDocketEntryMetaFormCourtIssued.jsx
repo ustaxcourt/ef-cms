@@ -7,7 +7,7 @@ import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
   reactSelectValue,
-} from '../../ustc-ui/utils/documentTypeSelectHelper';
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -112,10 +112,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                   validateCourtIssuedDocketEntrySequence();
                 }}
               />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="attachments"
-              >
+              <label className="usa-checkbox__label" htmlFor="attachments">
                 Attachment(s)
               </label>
             </div>
@@ -139,10 +136,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                   });
                 }}
               />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="pending"
-              >
+              <label className="usa-checkbox__label" htmlFor="pending">
                 Add to pending report
               </label>
             </div>

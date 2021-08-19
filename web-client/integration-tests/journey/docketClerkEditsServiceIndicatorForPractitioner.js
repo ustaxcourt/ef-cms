@@ -1,30 +1,46 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 
-export const docketClerkEditsServiceIndicatorForPractitioner = test => {
+export const docketClerkEditsServiceIndicatorForPractitioner = cerebralTest => {
   return it('docket clerk edits service indicator for a practitioner', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('openEditPrivatePractitionersModalSequence');
+    const barNumber = cerebralTest.getState(
+      'caseDetail.privatePractitioners.0.barNumber',
+    );
 
-    expect(
-      test.getState('modal.privatePractitioners.0.serviceIndicator'),
-    ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber,
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-    await test.runSequence('updateModalValueSequence', {
-      key: 'privatePractitioners.0.serviceIndicator',
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
+
+    expect(cerebralTest.getState('form.serviceIndicator')).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'serviceIndicator',
       value: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
 
     expect(
-      test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),
+      cerebralTest.getState(
+        'caseDetail.privatePractitioners.0.serviceIndicator',
+      ),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
-    await test.runSequence('submitEditPrivatePractitionersModalSequence');
+    await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
     expect(
-      test.getState('caseDetail.privatePractitioners.0.serviceIndicator'),
+      cerebralTest.getState(
+        'caseDetail.privatePractitioners.0.serviceIndicator',
+      ),
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 };

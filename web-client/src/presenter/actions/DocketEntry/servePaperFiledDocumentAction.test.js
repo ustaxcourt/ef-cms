@@ -3,8 +3,6 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { servePaperFiledDocumentAction } from './servePaperFiledDocumentAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('servePaperFiledDocumentAction', () => {
   let caseDetail;
   const docketNumber = '123-45';
@@ -12,6 +10,8 @@ describe('servePaperFiledDocumentAction', () => {
   const pdfUrl = 'www.example.com';
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     caseDetail = {
       docketEntries: [],
       docketNumber,
@@ -21,7 +21,7 @@ describe('servePaperFiledDocumentAction', () => {
   it('serves a paper filed document', async () => {
     applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(() => {
         return { pdfUrl };
       });
 
@@ -44,9 +44,8 @@ describe('servePaperFiledDocumentAction', () => {
 
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({ docketEntryId, docketNumber });
-
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: true,
@@ -57,7 +56,7 @@ describe('servePaperFiledDocumentAction', () => {
   it('returns hasPaper false when there is no pdfUrl after the document has been served', async () => {
     applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor.mockImplementation(async () => {
+      .serveExternallyFiledDocumentInteractor.mockImplementation(() => {
         return {};
       });
 
@@ -80,9 +79,8 @@ describe('servePaperFiledDocumentAction', () => {
 
     expect(
       applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({ docketEntryId, docketNumber });
-
     expect(result.output).toEqual({
       alertSuccess: { message: 'Document served.' },
       hasPaper: false,

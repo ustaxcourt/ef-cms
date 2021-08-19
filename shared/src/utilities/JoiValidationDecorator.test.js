@@ -1,9 +1,14 @@
 const joi = require('joi');
 const {
+  applicationContext,
+} = require('../business/test/createTestApplicationContext');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
+const { Case } = require('../business/entities/cases/Case');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
+const { MOCK_CASE } = require('../test/mockCase');
 
 /**
  * fake entity constructor
@@ -181,6 +186,36 @@ describe('Joi Validation Decorator', () => {
     });
   });
 
+  describe('validate for migration', () => {
+    it('throws an invalid entity error if validation fails', () => {
+      const obj1 = new MockCase({
+        docketNumber: '123-20',
+        title: 'some title',
+      });
+      let error;
+      try {
+        obj1.validateForMigration();
+      } catch (e) {
+        error = e;
+      }
+      expect(error).toBeDefined();
+      expect(error.message).toContain("'somethingId' is required");
+      expect(error.message).not.toContain('"somethingId":"<undefined>"');
+      expect(error.message).not.toContain('"docketNumber":"123-20"');
+    });
+
+    it('sets a non-iterable, non-writable "isValidated" property on an entity which is valid', () => {
+      const obj = new MockCase({
+        docketNumber: '123-20',
+        somethingId: 'some Id on a valid entity',
+        title: 'some title',
+      });
+      obj.validateForMigration();
+      expect(obj.isValidated).toEqual(true);
+      expect(Object.keys(obj.toRawObject())).not.toContain('isValidated');
+    });
+  });
+
   it('should have access to the schema', () => {
     const obj = new MockEntity2({});
     expect(obj.getSchema()).toEqual(MockEntity2Schema);
@@ -263,6 +298,44 @@ describe('Joi Validation Decorator', () => {
 
   it('should return an empty array when calling validateRawCollection with an empty collection', () => {
     expect(MockEntity1.validateRawCollection([], {})).toEqual([]);
+  });
+
+  describe('validateWithLogging', () => {
+    it('should throw a detailed "InvalidEntityError" with logs when `validateWithLogging`', () => {
+      const obj1 = new MockCase({
+        docketNumber: '123-20',
+        title: 'some title',
+      });
+      let error;
+      try {
+        obj1.validateWithLogging(applicationContext);
+      } catch (e) {
+        error = e;
+      }
+      expect(applicationContext.logger.error).toHaveBeenCalledWith(
+        '*** Entity with error: ***',
+        {
+          docketNumber: '123-20',
+          entityName: 'MockCase',
+          somethingId: undefined,
+          title: 'some title',
+        },
+      );
+      expect(error).toBeDefined();
+      expect(error.message).toContain("'somethingId' is required");
+      expect(error.message).not.toContain('"somethingId":"<undefined>"');
+      expect(error.message).not.toContain('"docketNumber":"123-20"');
+    });
+
+    it('should not throw a "InvalidEntityError" when the item is valid', () => {
+      const obj1 = new Case(MOCK_CASE, { applicationContext });
+
+      const validCase = obj1.validateWithLogging(applicationContext);
+
+      expect(validCase.isValid()).toBeTruthy();
+      expect(validCase.getFormattedValidationErrors()).toBeNull();
+      expect(applicationContext.logger.error).not.toHaveBeenCalled();
+    });
   });
 });
 

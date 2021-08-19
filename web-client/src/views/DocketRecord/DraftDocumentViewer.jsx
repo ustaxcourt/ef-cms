@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 export const DraftDocumentViewer = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
+    formattedDocketEntries: state.formattedDocketEntries,
     loadDefaultDraftViewerDocumentToDisplaySequence:
       sequences.loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence:
@@ -16,7 +16,7 @@ export const DraftDocumentViewer = connect(
       state.viewerDraftDocumentToDisplay.docketEntryId,
   },
   function DraftDocumentViewer({
-    formattedCaseDetail,
+    formattedDocketEntries,
     loadDefaultDraftViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
     viewerDraftDocumentIdToDisplay,
@@ -36,7 +36,7 @@ export const DraftDocumentViewer = connect(
                 <div className="grid-col-9">Document</div>
               </div>
               <div className="document-viewer--documents-list">
-                {formattedCaseDetail.formattedDraftDocuments.map(
+                {formattedDocketEntries.formattedDraftDocuments.map(
                   draftDocument => (
                     <Button
                       className={classNames(

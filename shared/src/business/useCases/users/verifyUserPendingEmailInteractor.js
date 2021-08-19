@@ -1,16 +1,74 @@
 const {
-  Case,
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
-const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+
+const updateCasesForPetitioner = async ({
+  applicationContext,
+  petitionerCases,
+  user,
+}) => {
+  const casesToUpdate = await Promise.all(
+    petitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
+
+  const validatedCasesToUpdate = casesToUpdate
+    .map(caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, {
+        applicationContext,
+      });
+
+      const petitionerObject = caseEntity.getPetitionerById(user.userId);
+      if (!petitionerObject) {
+        applicationContext.logger.error(
+          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+        );
+        return;
+      }
+
+      petitionerObject.email = user.email;
+
+      if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitionerObject.contactId,
+        )
+      ) {
+        petitionerObject.serviceIndicator =
+          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      }
+
+      const newCase = new Case(caseEntity, { applicationContext }).validate();
+      return newCase;
+    })
+    // if petitioner is not found on the case, function exits early and returns `undefined`.
+    // if this happens, continue with remaining cases and do not throw exception, but discard
+    // any undefined values by filtering for truthy objects.
+    .filter(Boolean);
+
+  return Promise.all(
+    validatedCasesToUpdate.map(caseToUpdate =>
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      }),
+    ),
+  );
+};
+
+exports.updateCasesForPetitioner = updateCasesForPetitioner;
 
 /**
  * updatePetitionerCases
@@ -31,50 +89,11 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  const casesToUpdate = await Promise.all(
-    petitionerCases.map(({ docketNumber }) =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
-
-  const validatedCasesToUpdate = casesToUpdate
-    .map(caseToUpdate => {
-      const caseRaw = new Case(caseToUpdate, {
-        applicationContext,
-      }).toRawObject();
-
-      const petitionerObject = [
-        getContactPrimary(caseRaw),
-        getContactSecondary(caseRaw),
-      ].find(petitioner => petitioner && petitioner.contactId === user.userId);
-      if (!petitionerObject) {
-        applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseRaw.docketNumber}`,
-        );
-        return;
-      }
-      // This updates the case by reference!
-      petitionerObject.email = user.email;
-
-      // we do this again so that it will convert '' to null
-      return new Case(caseRaw, { applicationContext }).validate();
-    })
-    // if petitioner is not found on the case, function exits early and returns `undefined`.
-    // if this happens, continue with remaining cases and do not throw exception, but discard
-    // any undefined values by filtering for truthy objects.
-    .filter(Boolean);
-
-  return Promise.all(
-    validatedCasesToUpdate.map(caseToUpdate =>
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate,
-      }),
-    ),
-  );
+  return await updateCasesForPetitioner({
+    applicationContext,
+    petitionerCases,
+    user,
+  });
 };
 
 exports.updatePetitionerCases = updatePetitionerCases;
@@ -92,14 +111,15 @@ exports.updatePetitionerCases = updatePetitionerCases;
  * @returns {Promise} resolves upon completion of case updates
  */
 const updatePractitionerCases = async ({ applicationContext, user }) => {
-  const practitionerCases = await applicationContext
+  const practitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getDocketNumbersByUser({
       applicationContext,
       userId: user.userId,
     });
+
   const casesToUpdate = await Promise.all(
-    practitionerCases.map(({ docketNumber }) =>
+    practitionerDocketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -123,6 +143,8 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
       }
       // This updates the case by reference!
       practitionerObject.email = user.email;
+      practitionerObject.serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
 
       // we do this again so that it will convert '' to null
       return new Case(caseEntity, { applicationContext }).validate();
@@ -160,6 +182,7 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
 
   return validCasesToUpdate;
 };
+exports.updatePractitionerCases = updatePractitionerCases;
 
 /**
  * verifyUserPendingEmailInteractor

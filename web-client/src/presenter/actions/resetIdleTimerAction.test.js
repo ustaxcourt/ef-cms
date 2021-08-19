@@ -18,4 +18,11 @@ describe('resetIdleTimerAction', () => {
     });
     expect(mock).toHaveBeenCalled();
   });
+  it('exits quietly if no idle timer is present', async () => {
+    await expect(
+      runAction(resetIdleTimerAction, {
+        state: {},
+      }),
+    ).resolves.toBeDefined();
+  });
 });

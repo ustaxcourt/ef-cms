@@ -4,7 +4,7 @@
 #   script to automate the SES email verification process
 
 # Arguments
-#   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
+#   none
 
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${REGION}" ] && echo "You must have REGION set in your environment" && exit 1

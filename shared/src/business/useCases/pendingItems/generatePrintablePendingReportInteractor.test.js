@@ -29,6 +29,12 @@ describe('generatePrintablePendingReportInteractor', () => {
       documentType: 'Test Document Type',
       receivedAt: '2020-02-02T12:00:00.000Z',
     },
+    {
+      associatedJudge: 'Judge Alvin',
+      docketNumber: '345-67',
+      documentTitle: 'Test Document Title',
+      receivedAt: '2020-03-03T12:00:00.000Z',
+    },
   ];
 
   beforeAll(() => {
@@ -99,9 +105,9 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should format the pending items', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
-    const {
-      pendingItems,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { pendingItems } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(pendingItems).toMatchObject([
       {
         associatedJudge: 'Judge Colvin',
@@ -119,15 +125,22 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
       },
+      {
+        associatedJudge: 'Judge Alvin',
+        caseTitle: '',
+        docketNumber: '345-67',
+        documentTitle: 'Test Document Title',
+        receivedAt: '2020-03-03T12:00:00.000Z',
+      },
     ]);
   });
 
   it('should generate a subtitle with All Judges if no judge filter is applied', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual('All Judges');
   });
 
@@ -136,9 +149,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       judge: 'Colvin',
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual('Judge Colvin');
   });
 
@@ -147,9 +160,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
 
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}`);
   });
@@ -161,9 +174,9 @@ describe('generatePrintablePendingReportInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    const {
-      subtitle,
-    } = applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0].data;
+    const { subtitle } =
+      applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
+        .data;
     expect(subtitle).toEqual(`Docket ${MOCK_CASE.docketNumber}W`);
   });
 
@@ -192,5 +205,19 @@ describe('generatePrintablePendingReportInteractor', () => {
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toHaveBeenCalled();
     expect(results).toEqual('https://example.com');
+  });
+
+  it('fails and logs if the s3 upload fails', async () => {
+    applicationContext.getStorageClient.mockReturnValue({
+      upload: (params, callback) => callback('error'),
+    });
+
+    await expect(
+      generatePrintablePendingReportInteractor(applicationContext, {}),
+    ).rejects.toEqual('error');
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'error uploading to s3',
+    );
   });
 });

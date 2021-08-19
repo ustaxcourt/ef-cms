@@ -1,38 +1,21 @@
 const client = require('../../dynamodbClientService');
 
-exports.updateWorkItemCaseStatus = async ({
+exports.updateWorkItemCaseStatus = ({
   applicationContext,
   caseStatus,
-  workItemId,
-}) => {
-  const workItems = await client.query({
+  workItem,
+}) =>
+  client.update({
     ExpressionAttributeNames: {
-      '#gsi1pk': 'gsi1pk',
+      '#caseStatus': 'caseStatus',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `work-item|${workItemId}`,
+      ':caseStatus': caseStatus,
     },
-    IndexName: 'gsi1',
-    KeyConditionExpression: '#gsi1pk = :gsi1pk',
+    Key: {
+      pk: workItem.pk,
+      sk: workItem.sk,
+    },
+    UpdateExpression: 'SET #caseStatus = :caseStatus',
     applicationContext,
   });
-
-  const updateStatus = workItem => {
-    return client.update({
-      ExpressionAttributeNames: {
-        '#caseStatus': 'caseStatus',
-      },
-      ExpressionAttributeValues: {
-        ':caseStatus': caseStatus,
-      },
-      Key: {
-        pk: workItem.pk,
-        sk: workItem.sk,
-      },
-      UpdateExpression: 'SET #caseStatus = :caseStatus',
-      applicationContext,
-    });
-  };
-
-  await Promise.all(workItems.map(updateStatus));
-};

@@ -29,10 +29,7 @@ exports.getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    foundDeadlines,
-    totalCount,
-  } = await applicationContext
+  const { foundDeadlines, totalCount } = await applicationContext
     .getPersistenceGateway()
     .getCaseDeadlinesByDateRange({
       applicationContext,

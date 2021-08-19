@@ -9,6 +9,7 @@ const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { Case } = require('../../entities/cases/Case');
+const { MOCK_CASE } = require('../../../test/mockCase');
 const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
@@ -38,6 +39,7 @@ describe('sendServedPartiesEmails', () => {
         ],
         docketNumber: '123-20',
         docketNumberWithSuffix: '123-20L',
+        petitioners: MOCK_CASE.petitioners,
         status: CASE_STATUS_TYPES.generalDocket,
       },
       { applicationContext },
@@ -268,5 +270,38 @@ describe('sendServedPartiesEmails', () => {
         email: applicationContext.getIrsSuperuserEmail(),
       },
     ]);
+  });
+
+  it('should not call sendBulkTemplatedEmail when there are no electronic service parties on the case and the case status is new', async () => {
+    const caseEntity = new Case(
+      {
+        caseCaption: 'A Caption',
+        docketEntries: [
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentTitle: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
+        status: CASE_STATUS_TYPES.new,
+      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+      servedParties: {
+        electronic: [],
+      },
+    });
+
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail,
+    ).not.toHaveBeenCalled();
   });
 });

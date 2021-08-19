@@ -1,34 +1,38 @@
-import { updateWorkItemAssociatedJudge } from './updateWorkItemAssociatedJudge';
+const client = require('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
+const {
+  updateWorkItemAssociatedJudge,
+} = require('./updateWorkItemAssociatedJudge');
 
 describe('updateWorkItemAssociatedJudge', () => {
-  beforeAll(() => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          Items: [
-            {
-              pk: 'work-item-123',
-              sk: 'work-item-sortKey',
-            },
-          ],
-        }),
-    });
-    applicationContext.getDocumentClient().update.mockReturnValue({
-      promise: () => Promise.resolve(null),
-    });
+  beforeEach(() => {
+    client.update = jest.fn();
   });
 
-  it('updates workItem with an associated judge', async () => {
+  it('should call client.update with passed in associated judge and work item pk and sk', async () => {
+    const mockAssociatedJudge = 'Judge Cat';
+    const mockPk = 'case|pk';
+    const mockSk = 'work-item|sk';
+
     await updateWorkItemAssociatedJudge({
       applicationContext,
-      associatedJudge: 'Guy Fieri',
-      workItemId: 'work-item-123',
+      associatedJudge: mockAssociatedJudge,
+      workItem: {
+        pk: mockPk,
+        sk: mockSk,
+      },
     });
 
-    expect(applicationContext.getDocumentClient().query).toHaveBeenCalled();
-    expect(applicationContext.getDocumentClient().update).toHaveBeenCalled();
+    expect(client.update.mock.calls[0][0]).toMatchObject({
+      ExpressionAttributeValues: {
+        ':associatedJudge': mockAssociatedJudge,
+      },
+      Key: {
+        pk: mockPk,
+        sk: mockSk,
+      },
+    });
   });
 });

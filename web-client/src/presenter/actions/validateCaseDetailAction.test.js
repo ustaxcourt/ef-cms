@@ -42,7 +42,7 @@ describe('validateCaseDetail', () => {
     });
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][0].caseDetail,
+        .calls[0][1].caseDetail,
     ).toMatchObject({
       docketNumber: '123-45',
       irsNoticeDate: '2009-10-13',
@@ -168,7 +168,7 @@ describe('validateCaseDetail', () => {
     ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePetitionFromPaperInteractor.mock
-        .calls[0][0].petition,
+        .calls[0][1].petition,
     ).toMatchObject({
       applicationForWaiverOfFilingFeeFile: {},
       applicationForWaiverOfFilingFeeFileSize: 1,

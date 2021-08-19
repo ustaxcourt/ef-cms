@@ -14,8 +14,7 @@ export const getCalendaredCasesForTrialSessionAction = async ({
 
   const calendaredCases = await applicationContext
     .getUseCases()
-    .getCalendaredCasesForTrialSessionInteractor({
-      applicationContext,
+    .getCalendaredCasesForTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
 

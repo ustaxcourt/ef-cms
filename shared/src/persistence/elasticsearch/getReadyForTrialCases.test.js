@@ -10,11 +10,9 @@ const { search } = require('./searchClient');
 
 describe('getReadyForTrialCases', () => {
   it('should search for all cases whose status is `General Docket - Not at Issue`', async () => {
-    search.mockImplementation(async () => {
-      return {
-        results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
-        total: 2,
-      };
+    search.mockResolvedValue({
+      results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
+      total: 2,
     });
 
     await getReadyForTrialCases({

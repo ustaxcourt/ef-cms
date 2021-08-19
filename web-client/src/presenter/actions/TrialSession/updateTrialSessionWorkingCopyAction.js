@@ -15,8 +15,7 @@ export const updateTrialSessionWorkingCopyAction = async ({
 
   return await applicationContext
     .getUseCases()
-    .updateTrialSessionWorkingCopyInteractor({
-      applicationContext,
+    .updateTrialSessionWorkingCopyInteractor(applicationContext, {
       trialSessionWorkingCopyToUpdate,
     });
 };

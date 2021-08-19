@@ -8,10 +8,13 @@
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
-MIGRATE_FLAG=$(./get-migrate-flag.sh $ENV)
+MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)
 
 # disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
 AWS_PAGER=""
+
+# exit on any failure
+set -eo pipefail
 
 # turn off the old stream if we are not doing a migration so we do not
 # have 2 streams processing the same stuff

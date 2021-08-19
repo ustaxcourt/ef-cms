@@ -42,6 +42,15 @@ module.exports = {
         'jest/expect-expect': 'off',
       },
     },
+    {
+      files: ['**/*.test.js'],
+      rules: {
+        'max-lines': [
+          'error',
+          { max: 650, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+        ],
+      },
+    },
   ],
   parser: 'babel-eslint',
   parserOptions: {
@@ -73,6 +82,7 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
+    'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -113,6 +123,10 @@ module.exports = {
         },
       },
     ],
+    'max-lines': [
+      'error',
+      { max: 700, skipBlankLines: true, skipComments: true },
+    ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
     'no-restricted-globals': [
@@ -123,7 +137,7 @@ module.exports = {
       { name: 'name' },
       { name: 'document' },
     ],
-    'no-shadow': ['warn', { builtinGlobals: false }],
+    'no-shadow': ['error', { builtinGlobals: false }],
     'no-trailing-spaces': 'error',
     'no-underscore-dangle': ['error', { allowAfterThis: true }],
     'no-unneeded-ternary': ['error', { defaultAssignment: false }],
@@ -177,6 +191,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
+    'require-await': 'warn',
     'security/detect-child-process': 'off',
     'security/detect-non-literal-fs-filename': 'off',
     'security/detect-object-injection': 'off',
@@ -235,6 +250,7 @@ module.exports = {
           'contentinfo',
           'copelands',
           'cors',
+          'court’s',
           'coversheet',
           'desc',
           'disallowance',
@@ -281,10 +297,12 @@ module.exports = {
           'iframe',
           'interactor',
           'irs',
+          'isn’t',
           'istanbul',
           'jacobs',
           'jpg',
           'jsdom',
+          'judge’s',
           'kerrigan',
           'kerrigans',
           'keydown',
@@ -408,7 +426,7 @@ module.exports = {
       },
     },
     react: {
-      version: '17.0.1',
+      version: '17.0.2',
     },
   },
 };

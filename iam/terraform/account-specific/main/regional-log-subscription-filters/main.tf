@@ -133,11 +133,3 @@ resource "aws_cloudwatch_log_subscription_filter" "websockets_disconnect_green" 
   name            = "websockets_disconnect_${element(var.log_group_environments, count.index)}_green_filter"
   log_group_name  = "/aws/lambda/websockets_disconnect_${element(var.log_group_environments, count.index)}_green"
 }
-
-resource "aws_cloudwatch_log_subscription_filter" "legacy_documents_lambda_filter" {
-  count           = length(var.log_group_environments)
-  destination_arn = var.logs_to_elasticsearch_lambda_arn
-  filter_pattern  = ""
-  name            = "legacy_documents_${element(var.log_group_environments, count.index)}_lambda_filter"
-  log_group_name  = "/aws/lambda/legacy_documents_migration_lambda_${element(var.log_group_environments, count.index)}"
-}

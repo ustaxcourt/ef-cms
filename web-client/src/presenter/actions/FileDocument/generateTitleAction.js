@@ -13,8 +13,7 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
 
   let documentTitle = applicationContext
     .getUseCases()
-    .generateDocumentTitleInteractor({
-      applicationContext,
+    .generateDocumentTitleInteractor(applicationContext, {
       documentMetadata,
     });
   store.set(state.form.documentTitle, documentTitle);
@@ -22,8 +21,7 @@ export const generateTitleAction = ({ applicationContext, get, store }) => {
   if (!isEmpty(documentMetadata.secondaryDocument)) {
     documentTitle = applicationContext
       .getUseCases()
-      .generateDocumentTitleInteractor({
-        applicationContext,
+      .generateDocumentTitleInteractor(applicationContext, {
         documentMetadata: documentMetadata.secondaryDocument,
       });
     store.set(state.form.secondaryDocument.documentTitle, documentTitle);

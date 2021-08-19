@@ -4,10 +4,10 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
+export const petitionsClerkBulkAssignsCases = (cerebralTest, createdCases) => {
   return it('Petitions clerk bulk assigns cases', async () => {
     const workQueueFormatted = await runCompute(formattedWorkQueue, {
-      state: test.getState(),
+      state: cerebralTest.getState(),
     });
 
     const selectedWorkItems = createdCases.map(newCase => {
@@ -20,13 +20,15 @@ export const petitionsClerkBulkAssignsCases = (test, createdCases) => {
       };
     });
 
-    const currentUserId = test.getState('user').userId;
+    const currentUserId = cerebralTest.getState('user').userId;
 
-    test.setState('assigneeId', currentUserId);
-    test.setState('assigneeName', 'Petitions Clerk1');
-    test.setState('selectedWorkItems', selectedWorkItems);
+    cerebralTest.setState('assigneeId', currentUserId);
+    cerebralTest.setState('assigneeName', 'Petitions Clerk1');
+    cerebralTest.setState('selectedWorkItems', selectedWorkItems);
 
-    const result = await test.runSequence('assignSelectedWorkItemsSequence');
+    const result = await cerebralTest.runSequence(
+      'assignSelectedWorkItemsSequence',
+    );
 
     const { workQueue } = result.state;
     selectedWorkItems.forEach(assignedWorkItem => {

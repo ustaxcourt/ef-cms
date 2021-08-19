@@ -1,5 +1,6 @@
 const React = require('react');
 const { ChangeOfAddress } = require('./ChangeOfAddress.jsx');
+const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.js');
 const { shallow } = require('enzyme');
 
 describe('ChangeOfAddress', () => {
@@ -187,14 +188,11 @@ describe('ChangeOfAddress', () => {
   it('does not show inCareOf if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.inCareOf;
-    delete oldData.inCareOf;
-
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
-        newData={newData}
-        oldData={oldData}
+        newData={{ ...newData, inCareOf: undefined }}
+        oldData={{ ...oldData, inCareOf: undefined }}
         options={options}
       />,
     );
@@ -212,14 +210,11 @@ describe('ChangeOfAddress', () => {
   it('does not show city if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.city;
-    delete oldData.city;
-
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
-        newData={newData}
-        oldData={oldData}
+        newData={{ ...newData, city: undefined }}
+        oldData={{ ...oldData, city: undefined }}
         options={options}
       />,
     );
@@ -233,8 +228,26 @@ describe('ChangeOfAddress', () => {
   it('does not show country if not provided in the old or new data', () => {
     options.showAddressAndPhoneChange = true;
 
-    delete newData.country;
-    delete oldData.country;
+    const wrapper = shallow(
+      <ChangeOfAddress
+        name="Joe Exotic"
+        newData={{ ...newData, country: undefined }}
+        oldData={{ ...oldData, country: undefined }}
+        options={options}
+      />,
+    );
+    const oldTable = wrapper.find('#contact_info_Old');
+    expect(oldTable.find('tbody tr').text()).not.toContain(oldData.country);
+
+    const newTable = wrapper.find('#contact_info_New');
+    expect(newTable.find('tbody tr').text()).not.toContain(newData.country);
+  });
+
+  it('does not show country if countryType is domestic', () => {
+    options.showAddressAndPhoneChange = true;
+
+    oldData.countryType = COUNTRY_TYPES.DOMESTIC;
+    newData.countryType = COUNTRY_TYPES.DOMESTIC;
 
     const wrapper = shallow(
       <ChangeOfAddress
@@ -249,5 +262,26 @@ describe('ChangeOfAddress', () => {
 
     const newTable = wrapper.find('#contact_info_New');
     expect(newTable.find('tbody tr').text()).not.toContain(newData.country);
+  });
+
+  it('shows country if countryType is international', () => {
+    options.showAddressAndPhoneChange = true;
+
+    oldData.countryType = COUNTRY_TYPES.INTERNATIONAL;
+    newData.countryType = COUNTRY_TYPES.INTERNATIONAL;
+
+    const wrapper = shallow(
+      <ChangeOfAddress
+        name="Joe Exotic"
+        newData={newData}
+        oldData={oldData}
+        options={options}
+      />,
+    );
+    const oldTable = wrapper.find('#contact_info_Old');
+    expect(oldTable.find('tbody tr').text()).toContain(oldData.country);
+
+    const newTable = wrapper.find('#contact_info_New');
+    expect(newTable.find('tbody tr').text()).toContain(newData.country);
   });
 });

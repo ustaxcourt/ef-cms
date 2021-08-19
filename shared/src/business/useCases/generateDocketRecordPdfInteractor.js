@@ -1,8 +1,12 @@
 const {
+  Case,
+  getPractitionersRepresenting,
+  isSealedCase,
+} = require('../entities/cases/Case');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const { Case, isSealedCase } = require('../entities/cases/Case');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 const { UnauthorizedError } = require('../../errors/errors');
 
@@ -63,6 +67,29 @@ exports.generateDocketRecordPdfInteractor = async (
       caseDetail: caseEntity,
       docketRecordSort,
     });
+
+  formattedCaseDetail.petitioners.forEach(petitioner => {
+    petitioner.counselDetails = [];
+
+    const practitioners = getPractitionersRepresenting(
+      formattedCaseDetail,
+      petitioner.contactId,
+    );
+
+    if (practitioners.length > 0) {
+      practitioners.forEach(practitioner => {
+        petitioner.counselDetails.push({
+          email: practitioner.email,
+          name: practitioner.formattedName,
+          phone: practitioner.contact.phone,
+        });
+      });
+    } else {
+      petitioner.counselDetails.push({
+        name: 'None',
+      });
+    }
+  });
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 

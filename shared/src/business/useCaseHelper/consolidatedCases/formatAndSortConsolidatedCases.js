@@ -15,9 +15,8 @@ exports.formatAndSortConsolidatedCases = ({
 }) => {
   const caseConsolidatedCases = [];
   consolidatedCases.forEach(consolidatedCase => {
-    consolidatedCase.isRequestingUserAssociated = !!userAssociatedDocketNumbersMap[
-      consolidatedCase.docketNumber
-    ];
+    consolidatedCase.isRequestingUserAssociated =
+      !!userAssociatedDocketNumbersMap[consolidatedCase.docketNumber];
 
     if (consolidatedCase.docketNumber !== leadDocketNumber) {
       caseConsolidatedCases.push(consolidatedCase);

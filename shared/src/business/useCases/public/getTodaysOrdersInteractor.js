@@ -28,20 +28,19 @@ exports.getTodaysOrdersInteractor = async (
 
   const from = (page - 1) * TODAYS_ORDERS_PAGE_SIZE;
 
-  const {
-    results,
-    totalCount,
-  } = await applicationContext.getPersistenceGateway().advancedDocumentSearch({
-    applicationContext,
-    documentEventCodes: ORDER_EVENT_CODES,
-    endDate: currentDateEnd,
-    from,
-    judgeType: ORDER_JUDGE_FIELD,
-    omitSealed: true,
-    overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
-    sortOrder: todaysOrdersSort,
-    startDate: currentDateStart,
-  });
+  const { results, totalCount } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: ORDER_EVENT_CODES,
+      endDate: currentDateEnd,
+      from,
+      judgeType: ORDER_JUDGE_FIELD,
+      omitSealed: true,
+      overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
+      sortOrder: todaysOrdersSort,
+      startDate: currentDateStart,
+    });
 
   return { results, totalCount };
 };

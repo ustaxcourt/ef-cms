@@ -15,7 +15,7 @@ import {
   courtIssuedDocketEntryOnChange,
   onInputChange,
   reactSelectValue,
-} from '../../ustc-ui/utils/documentTypeSelectHelper';
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -106,8 +106,10 @@ export const CourtIssuedDocketEntry = connect(
                         action,
                         inputValue,
                         name,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
-                        validateSequence: validateCourtIssuedDocketEntrySequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
+                        validateSequence:
+                          validateCourtIssuedDocketEntrySequence,
                       });
                       return true;
                     }}
@@ -115,7 +117,8 @@ export const CourtIssuedDocketEntry = connect(
                       onInputChange({
                         action,
                         inputText,
-                        updateSequence: updateCourtIssuedDocketEntryFormValueSequence,
+                        updateSequence:
+                          updateCourtIssuedDocketEntryFormValueSequence,
                       });
                     }}
                   />
@@ -142,7 +145,7 @@ export const CourtIssuedDocketEntry = connect(
                         }}
                       />
                       <label
-                        className="usa-checkbox__label inline-block"
+                        className="usa-checkbox__label"
                         htmlFor="attachments"
                       >
                         Attachment(s)

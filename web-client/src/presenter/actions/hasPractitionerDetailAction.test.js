@@ -27,6 +27,16 @@ describe('hasPractitionerDetailAction', () => {
       },
     });
 
-    expect(presenter.providers.path.success.mock.calls.length).toEqual(1);
+    expect(presenter.providers.path.success).toHaveBeenCalled();
+  });
+  it('calls the noResults function when no practitionerDetail object exists on props', async () => {
+    await runAction(hasPractitionerDetailAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+    });
+
+    expect(presenter.providers.path.noResults).toHaveBeenCalled();
   });
 });

@@ -15,8 +15,7 @@ export const getPractitionerDetailAction = async ({
 
   const practitionerDetail = await applicationContext
     .getUseCases()
-    .getPractitionerByBarNumberInteractor({
-      applicationContext,
+    .getPractitionerByBarNumberInteractor(applicationContext, {
       barNumber,
     });
 

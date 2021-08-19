@@ -24,8 +24,7 @@ export const createCaseDeadlineAction = async ({
 
   let createCaseDeadlineResult = await applicationContext
     .getUseCases()
-    .createCaseDeadlineInteractor({
-      applicationContext,
+    .createCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
 

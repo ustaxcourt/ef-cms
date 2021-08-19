@@ -40,12 +40,13 @@ export const setPDFForSigningAction = async ({
     store.set(state.pdfForSigning.isPdfAlreadySigned, true);
   }
 
-  pdfObj = await applicationContext.getUseCases().loadPDFForSigningInteractor({
-    applicationContext,
-    docketEntryId,
-    docketNumber: caseDetail.docketNumber,
-    removeCover,
-  });
+  pdfObj = await applicationContext
+    .getUseCases()
+    .loadPDFForSigningInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber: caseDetail?.docketNumber,
+      removeCover,
+    });
 
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };

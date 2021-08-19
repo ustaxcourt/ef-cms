@@ -16,8 +16,7 @@ export const saveCalendarNoteAction = async ({ applicationContext, get }) => {
 
   const trialSession = await applicationContext
     .getUseCases()
-    .saveCalendarNoteInteractor({
-      applicationContext,
+    .saveCalendarNoteInteractor(applicationContext, {
       calendarNote,
       docketNumber,
       trialSessionId,

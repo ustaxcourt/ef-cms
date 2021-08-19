@@ -1,8 +1,11 @@
 const diff = require('diff-arrays-of-objects');
 const { Case } = require('../../entities/cases/Case');
+const { CaseDeadline } = require('../../entities/CaseDeadline');
 const { Correspondence } = require('../../entities/Correspondence');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { IrsPractitioner } = require('../../entities/IrsPractitioner');
+const { Message } = require('../../entities/Message');
+const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
 
 /**
@@ -12,7 +15,7 @@ const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated document data
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
+ * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCaseDocketEntries = ({
   applicationContext,
@@ -41,16 +44,74 @@ const updateCaseDocketEntries = ({
       ...addedArchivedDocketEntries,
       ...updatedArchivedDocketEntries,
     ],
-    { applicationContext },
+    { applicationContext, petitioners: caseToUpdate.petitioners },
   );
 
-  return validDocketEntries.map(doc =>
-    applicationContext.getPersistenceGateway().updateDocketEntry({
+  return validDocketEntries.map(
+    doc =>
+      function updateCaseDocketEntries_cb() {
+        return applicationContext.getPersistenceGateway().updateDocketEntry({
+          applicationContext,
+          docketEntryId: doc.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          document: doc,
+        });
+      },
+  );
+};
+
+/**
+ * Identifies case messages which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<function>} the persistence functions required to complete this action
+ */
+const updateCaseMessages = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const messageUpdatesNecessary =
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
+
+  if (!messageUpdatesNecessary) {
+    return [];
+  }
+
+  const caseMessages = await applicationContext
+    .getPersistenceGateway()
+    .getMessagesByDocketNumber({
       applicationContext,
-      docketEntryId: doc.docketEntryId,
       docketNumber: caseToUpdate.docketNumber,
-      document: doc,
-    }),
+    });
+
+  if (!caseMessages) {
+    return [];
+  }
+
+  caseMessages.forEach(message => {
+    message.caseStatus = caseToUpdate.status;
+    message.caseTitle = Case.getCaseTitle(caseToUpdate.caseCaption);
+    message.docketNumberSuffix = caseToUpdate.docketNumberSuffix;
+  });
+
+  const validMessages = Message.validateRawCollection(caseMessages, {
+    applicationContext,
+  });
+
+  return validMessages.map(
+    message =>
+      function updateCaseMessages_cb() {
+        return applicationContext.getPersistenceGateway().updateMessage({
+          applicationContext,
+          message,
+        });
+      },
   );
 };
 
@@ -61,7 +122,7 @@ const updateCaseDocketEntries = ({
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated correspondence data
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
+ * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCorrespondence = ({
   applicationContext,
@@ -93,12 +154,17 @@ const updateCorrespondence = ({
     { applicationContext },
   );
 
-  return validCorrespondence.map(correspondence =>
-    applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-      applicationContext,
-      correspondence,
-      docketNumber: caseToUpdate.docketNumber,
-    }),
+  return validCorrespondence.map(
+    correspondence =>
+      function updateCorrespondence_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .updateCaseCorrespondence({
+            applicationContext,
+            correspondence,
+            docketNumber: caseToUpdate.docketNumber,
+          });
+      },
   );
 };
 
@@ -110,7 +176,7 @@ const updateCorrespondence = ({
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated hearings data
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
+ * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
   const { removed: deletedHearings } = diff(
@@ -119,12 +185,17 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
     'trialSessionId',
   );
 
-  return deletedHearings.map(({ trialSessionId }) =>
-    applicationContext.getPersistenceGateway().removeCaseFromHearing({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-      trialSessionId,
-    }),
+  return deletedHearings.map(
+    ({ trialSessionId }) =>
+      function updateHearings_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .removeCaseFromHearing({
+            applicationContext,
+            docketNumber: caseToUpdate.docketNumber,
+            trialSessionId,
+          });
+      },
   );
 };
 
@@ -136,7 +207,7 @@ const updateHearings = ({ applicationContext, caseToUpdate, oldCase }) => {
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated IRS practitioner data
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
+ * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateIrsPractitioners = ({
   applicationContext,
@@ -149,29 +220,39 @@ const updateIrsPractitioners = ({
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
-  const deletePractitionerRequests = deletedIrsPractitioners.map(practitioner =>
-    applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-      userId: practitioner.userId,
-    }),
-  );
-
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     [...addedIrsPractitioners, ...updatedIrsPractitioners],
     { applicationContext },
   );
 
-  const updatePractitionerRequests = validIrsPractitioners.map(practitioner =>
-    applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-      practitioner,
-      userId: practitioner.userId,
-    }),
+  const deletePractitionerFunctions = deletedIrsPractitioners.map(
+    practitioner =>
+      function deleteIrsPractitioner_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .removeIrsPractitionerOnCase({
+            applicationContext,
+            docketNumber: caseToUpdate.docketNumber,
+            userId: practitioner.userId,
+          });
+      },
   );
 
-  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+  const updatePractitionerFunctions = validIrsPractitioners.map(
+    practitioner =>
+      function updateIrsPractitioners_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .updateIrsPractitionerOnCase({
+            applicationContext,
+            docketNumber: caseToUpdate.docketNumber,
+            practitioner,
+            userId: practitioner.userId,
+          });
+      },
+  );
+
+  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
 };
 
 /**
@@ -182,7 +263,7 @@ const updateIrsPractitioners = ({
  * @param {object} args.applicationContext the application context
  * @param {object} args.caseToUpdate the case with its updated private practitioner data
  * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<Promise>} the persistence request promises
+ * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updatePrivatePractitioners = ({
   applicationContext,
@@ -199,35 +280,235 @@ const updatePrivatePractitioners = ({
     'userId',
   );
 
-  const deletePractitionerRequests = deletedPrivatePractitioners.map(
-    practitioner =>
-      applicationContext
-        .getPersistenceGateway()
-        .removePrivatePractitionerOnCase({
-          applicationContext,
-          docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
-        }),
-  );
-
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     [...addedPrivatePractitioners, ...updatedPrivatePractitioners],
     { applicationContext },
   );
 
-  const updatePractitionerRequests = validPrivatePractitioners.map(
+  const deletePractitionerFunctions = deletedPrivatePractitioners.map(
     practitioner =>
-      applicationContext
-        .getPersistenceGateway()
-        .updatePrivatePractitionerOnCase({
-          applicationContext,
-          docketNumber: caseToUpdate.docketNumber,
-          practitioner,
-          userId: practitioner.userId,
-        }),
+      function deletePrivatePractitioner_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .removePrivatePractitionerOnCase({
+            applicationContext,
+            docketNumber: caseToUpdate.docketNumber,
+            userId: practitioner.userId,
+          });
+      },
   );
 
-  return [...deletePractitionerRequests, ...updatePractitionerRequests];
+  const updatePractitionerFunctions = validPrivatePractitioners.map(
+    practitioner =>
+      function updatePrivatePractitioner_cb() {
+        return applicationContext
+          .getPersistenceGateway()
+          .updatePrivatePractitionerOnCase({
+            applicationContext,
+            docketNumber: caseToUpdate.docketNumber,
+            practitioner,
+            userId: practitioner.userId,
+          });
+      },
+  );
+
+  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
+};
+
+/**
+ * Identifies work item entries which have been updated and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<function>} the persistence functions required to complete this action
+ */
+const updateCaseWorkItems = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const workItemsRequireUpdate =
+    oldCase.associatedJudge !== caseToUpdate.associatedJudge ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.trialDate !== caseToUpdate.trialDate;
+
+  if (!workItemsRequireUpdate) {
+    return [];
+  }
+
+  const workItems = await applicationContext
+    .getPersistenceGateway()
+    .getWorkItemsByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  const updateWorkItemRecordFunctions = (
+    updatedCase,
+    previousCase,
+    workItemId,
+  ) => {
+    const workItemRequestFunctions = [];
+    if (previousCase.associatedJudge !== updatedCase.associatedJudge) {
+      workItemRequestFunctions.push(() =>
+        applicationContext
+          .getUseCaseHelpers()
+          .updateAssociatedJudgeOnWorkItems({
+            applicationContext,
+            associatedJudge: updatedCase.associatedJudge,
+            workItemId,
+          }),
+      );
+    }
+    if (previousCase.caseCaption !== updatedCase.caseCaption) {
+      workItemRequestFunctions.push(() =>
+        applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems({
+          applicationContext,
+          caseTitle: Case.getCaseTitle(updatedCase.caseCaption),
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.docketNumberSuffix !== updatedCase.docketNumberSuffix) {
+      workItemRequestFunctions.push(() =>
+        applicationContext
+          .getUseCaseHelpers()
+          .updateDocketNumberSuffixOnWorkItems({
+            applicationContext,
+            docketNumberSuffix: updatedCase.docketNumberSuffix,
+            workItemId,
+          }),
+      );
+    }
+    if (previousCase.status !== updatedCase.status) {
+      workItemRequestFunctions.push(() =>
+        applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems({
+          applicationContext,
+          caseStatus: updatedCase.status,
+          workItemId,
+        }),
+      );
+    }
+    if (previousCase.trialDate !== updatedCase.trialDate) {
+      workItemRequestFunctions.push(() =>
+        applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems({
+          applicationContext,
+          trialDate: updatedCase.trialDate || null,
+          workItemId,
+        }),
+      );
+    }
+
+    return workItemRequestFunctions;
+  };
+
+  const workItemIds = workItems.map(mapping => mapping.sk.split('|')[1]);
+  const workItemUpdateFunctions = workItemIds
+    .map(workItemId =>
+      updateWorkItemRecordFunctions(caseToUpdate, oldCase, workItemId),
+    )
+    .flat();
+
+  return workItemUpdateFunctions;
+};
+
+/**
+ * Identifies user case mappings which require updates and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<function>} the persistence functions required to complete this action
+ */
+const updateUserCaseMappings = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const userCaseMappingsRequireUpdate =
+    oldCase.status !== caseToUpdate.status ||
+    oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix ||
+    oldCase.caseCaption !== caseToUpdate.caseCaption ||
+    oldCase.leadDocketNumber !== caseToUpdate.leadDocketNumber;
+
+  if (!userCaseMappingsRequireUpdate) {
+    return [];
+  }
+
+  const userCaseMappings = await applicationContext
+    .getPersistenceGateway()
+    .getUserCaseMappingsByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  const updatedAttributeValues = pick(caseToUpdate, [
+    'caseCaption',
+    'closedDate',
+    'docketNumberSuffix',
+    'docketNumberWithSuffix',
+    'leadDocketNumber',
+    'status',
+  ]);
+
+  return userCaseMappings.map(
+    ucItem =>
+      function updateUserCaseMappings_cb() {
+        applicationContext.getPersistenceGateway().updateUserCaseMapping({
+          applicationContext,
+          userCaseItem: { ...ucItem, ...updatedAttributeValues },
+        });
+      },
+  );
+};
+
+/**
+ * Identifies user case mappings which require updates and issues persistence calls
+ *
+ * @param {object} args the arguments for updating the case
+ * @param {object} args.applicationContext the application context
+ * @param {object} args.caseToUpdate the case with its updated document data
+ * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
+ * @returns {Array<function>} the persistence functions required to complete this action
+ */
+const updateCaseDeadlines = async ({
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  if (oldCase.associatedJudge === caseToUpdate.associatedJudge) {
+    return [];
+  }
+
+  const deadlines = await applicationContext
+    .getPersistenceGateway()
+    .getCaseDeadlinesByDocketNumber({
+      applicationContext,
+      docketNumber: caseToUpdate.docketNumber,
+    });
+
+  deadlines.forEach(
+    caseDeadline =>
+      (caseDeadline.associatedJudge = caseToUpdate.associatedJudge),
+  );
+  const validCaseDeadlines = CaseDeadline.validateRawCollection(deadlines, {
+    applicationContext,
+  });
+
+  return validCaseDeadlines.map(
+    caseDeadline =>
+      function updateCaseDeadlines_cb() {
+        return applicationContext.getPersistenceGateway().createCaseDeadline({
+          applicationContext,
+          caseDeadline,
+        });
+      },
+  );
 };
 
 /**
@@ -260,28 +541,37 @@ exports.updateCaseAndAssociations = async ({
     .toRawObject();
 
   const RELATED_CASE_OPERATIONS = [
+    updateCaseDeadlines,
     updateCaseDocketEntries,
+    updateCaseMessages,
+    updateCaseWorkItems,
     updateCorrespondence,
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
+    updateUserCaseMappings,
   ];
 
-  const requests = RELATED_CASE_OPERATIONS.map(fn =>
+  const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
     fn({
       applicationContext,
       caseToUpdate: validRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
-  ).flat();
+  );
 
-  // TODO: hoist logic from persistence method below to this use case helper.
+  // wait for all validation tasks to complete and for callbacks to be generated
+  const persistenceCallbacks = (await Promise.all(validationRequests)).flat();
 
-  await Promise.all(requests);
+  // all validation has passed, so now execute all persistence callbacks from results
+  const persistenceRequests = persistenceCallbacks.map(persistFn => {
+    persistFn();
+  });
+
+  await Promise.all(persistenceRequests);
 
   return applicationContext.getPersistenceGateway().updateCase({
     applicationContext,
     caseToUpdate: validRawCaseEntity,
-    oldCase: validRawOldCaseEntity,
   });
 };

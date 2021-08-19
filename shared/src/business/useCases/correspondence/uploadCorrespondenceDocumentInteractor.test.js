@@ -25,15 +25,12 @@ describe('uploadCorrespondenceDocumentInteractor', () => {
     mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
-      uploadCorrespondenceDocumentInteractor({
-        applicationContext,
-      }),
+      uploadCorrespondenceDocumentInteractor(applicationContext, {}),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should upload the document file to the specified correspondence document', async () => {
-    await uploadCorrespondenceDocumentInteractor({
-      applicationContext,
+    await uploadCorrespondenceDocumentInteractor(applicationContext, {
       documentFile: mockDocumentFile,
       keyToOverwrite: mockKey,
     });

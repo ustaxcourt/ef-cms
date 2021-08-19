@@ -1,14 +1,14 @@
-export const docketClerkViewsEditDocketRecord = test => {
+export const docketClerkViewsEditDocketRecord = cerebralTest => {
   return it('Docket clerk views Edit Docket Record', async () => {
-    await test.runSequence('gotoCaseDetailSequence', {
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    await test.runSequence('gotoCompleteDocketEntrySequence', {
-      docketEntryId: test.docketRecordEntry.docketEntryId,
-      docketNumber: test.docketNumber,
+    await cerebralTest.runSequence('gotoEditPaperFilingSequence', {
+      docketEntryId: cerebralTest.docketRecordEntry.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(test.getState('currentPage')).toEqual('AddDocketEntry');
+    expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
   });
 };

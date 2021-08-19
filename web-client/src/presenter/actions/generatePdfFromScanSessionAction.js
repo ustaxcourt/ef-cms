@@ -22,15 +22,13 @@ export const generatePdfFromScanSessionAction = async ({
 
   const batches = get(state.scanner.batches[documentSelectedForScan]);
 
-  const scannedBuffer = [];
-  batches.forEach(batch =>
-    batch.pages.forEach(page => scannedBuffer.push(page)),
-  );
+  const imgData = [];
+  batches.forEach(batch => batch.pages.forEach(page => imgData.push(page)));
 
   // this blocks the browser
   const pdfBlob = await applicationContext
     .getUseCases()
-    .generatePDFFromJPGDataInteractor(scannedBuffer, applicationContext);
+    .generatePDFFromJPGDataInteractor(applicationContext, { imgData });
 
   const file = new File([pdfBlob], 'myfile.pdf', {
     type: 'application/pdf',

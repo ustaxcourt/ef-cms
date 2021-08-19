@@ -1,8 +1,8 @@
-export const userNavigatesToAddCorrespondence = (test, user) =>
+export const userNavigatesToAddCorrespondence = (cerebralTest, user) =>
   it(`${user} navigates to add correspondence page`, async () => {
-    await test.runSequence('gotoUploadCorrespondenceDocumentSequence');
+    await cerebralTest.runSequence('gotoUploadCorrespondenceDocumentSequence');
 
-    expect(test.getState('currentPage')).toEqual(
+    expect(cerebralTest.getState('currentPage')).toEqual(
       'UploadCorrespondenceDocument',
     );
   });

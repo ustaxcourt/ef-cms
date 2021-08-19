@@ -7,7 +7,7 @@ describe('authenticateCodeAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .authorizeCodeInteractor.mockImplementation(({ code }) => {
+      .authorizeCodeInteractor.mockImplementation((appContext, { code }) => {
         return {
           refreshToken: `refresh-token-${code}`,
           token: `token-${code}`,
