@@ -7,7 +7,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
-const RespondentCounsel = connect(
+export const RespondentCounsel = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
@@ -88,5 +88,3 @@ const RespondentCounsel = connect(
     );
   },
 );
-
-export { RespondentCounsel };

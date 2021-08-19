@@ -34,4 +34,17 @@ describe('setCaseTypeAction', () => {
 
     expect(state.form.caseType).toEqual(CASE_TYPES_MAP.disclosure);
   });
+
+  it('leaves state.form.caseType unchanged if not a disclosure', async () => {
+    const { state } = await runAction(setCaseTypeAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { caseType: 'bananas' },
+      },
+    });
+
+    expect(state.form.caseType).toEqual('bananas');
+  });
 });

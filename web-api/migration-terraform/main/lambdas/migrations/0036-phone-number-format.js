@@ -14,7 +14,7 @@ const {
 const { User } = require('../../../../../shared/src/business/entities/User');
 const applicationContext = createApplicationContext({});
 
-const migrateItems = async items => {
+const migrateItems = items => {
   const itemsAfter = [];
 
   for (const item of items) {

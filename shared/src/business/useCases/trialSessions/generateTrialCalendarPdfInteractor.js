@@ -88,7 +88,7 @@ exports.generateTrialCalendarPdfInteractor = async (
   });
 };
 
-const getPractitionerName = practitioner => {
+exports.getPractitionerName = practitioner => {
   const { barNumber, name } = practitioner;
   const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
   return `${name}${barNumberFormatted}`;
@@ -104,10 +104,10 @@ exports.formatCases = ({ applicationContext, calendaredCases }) => {
         docketNumber: openCase.docketNumber,
         docketNumberWithSuffix: openCase.docketNumberWithSuffix,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
-          getPractitionerName,
+          exports.getPractitionerName,
         ),
         respondentCounsel: (openCase.irsPractitioners || []).map(
-          getPractitionerName,
+          exports.getPractitionerName,
         ),
       };
     });

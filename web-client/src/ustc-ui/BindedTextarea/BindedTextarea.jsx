@@ -2,7 +2,7 @@ import { connect } from '@cerebral/react';
 import {
   decorateWithPostCallback,
   useCerebralStateFactory,
-} from '../utils/useCerebralState';
+} from '../Utils/useCerebralState';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';

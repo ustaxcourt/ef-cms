@@ -9,7 +9,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardG', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard G',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -20,7 +20,7 @@ describe('ExternalDocumentNonStandardG', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Answer',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Amendment to Answer',
@@ -31,7 +31,7 @@ describe('ExternalDocumentNonStandardG', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Answer',
         documentTitle: over3000Characters,
         documentType: 'Amendment to Answer',
@@ -46,7 +46,7 @@ describe('ExternalDocumentNonStandardG', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Answer',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Amendment to Answer',

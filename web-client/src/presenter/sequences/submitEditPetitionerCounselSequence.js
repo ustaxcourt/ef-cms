@@ -11,8 +11,8 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { submitEditPetitionerCounselAction } from '../actions/caseAssociation/submitEditPetitionerCounselAction';
-import { validateEditPetitionerCounselAction } from '../actions/caseAssociation/validateEditPetitionerCounselAction';
+import { submitEditPetitionerCounselAction } from '../actions/CaseAssociation/submitEditPetitionerCounselAction';
+import { validateEditPetitionerCounselAction } from '../actions/CaseAssociation/validateEditPetitionerCounselAction';
 
 export const submitEditPetitionerCounselSequence = [
   startShowValidationAction,

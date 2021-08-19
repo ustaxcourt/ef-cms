@@ -23,4 +23,31 @@ describe('navigateToPractitionerDetailAction', () => {
       '/practitioner-detail/BN1234',
     );
   });
+
+  it('should call the router to navigate to the practitioner detail for the given bar number found in state if not on props', async () => {
+    await runAction(navigateToPractitionerDetailAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          barNumber: 'BN5678',
+        },
+      },
+    });
+
+    expect(presenter.providers.router.route).toHaveBeenCalledWith(
+      '/practitioner-detail/BN5678',
+    );
+  });
+  it('should not call the router if no bar number can be found in state or props', async () => {
+    await runAction(navigateToPractitionerDetailAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(presenter.providers.router.route).not.toHaveBeenCalled();
+  });
 });
