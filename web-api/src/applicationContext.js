@@ -566,12 +566,6 @@ const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
-  getOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled');
-const {
-  getOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getOrderSearchEnabledInteractor');
-const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
 const {
@@ -1426,7 +1420,6 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
-  getOrderSearchEnabled,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1836,10 +1829,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
-        getOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,

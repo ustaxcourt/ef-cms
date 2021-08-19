@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('featureFlagHelper', () => {
   describe('isSearchEnabled', () => {
-    it('returns isSearchEnabled true when the advanced_document_search feature is enabled and state.isOrderSearchEnabled is true', () => {
+    it('returns isSearchEnabled true when the advanced_document_search feature is enabled', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(true);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -15,16 +15,12 @@ describe('featureFlagHelper', () => {
         },
       );
 
-      const result = runCompute(featureFlagHelper, {
-        state: { isOrderSearchEnabled: true },
-      });
-
-      expect(result).toMatchObject({
+      expect(runCompute(featureFlagHelper, {})).toMatchObject({
         isSearchEnabled: true,
       });
     });
 
-    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled and state.isOrderSearchEnabled is true', () => {
+    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -34,30 +30,7 @@ describe('featureFlagHelper', () => {
         },
       );
 
-      const result = runCompute(featureFlagHelper, {
-        state: { isOrderSearchEnabled: true },
-      });
-
-      expect(result).toMatchObject({
-        isSearchEnabled: false,
-      });
-    });
-
-    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled and state.isOrderSearchEnabled is false', () => {
-      applicationContext.isFeatureEnabled.mockReturnValue(false);
-
-      const featureFlagHelper = withAppContextDecorator(
-        featureFlagHelperComputed,
-        {
-          ...applicationContext,
-        },
-      );
-
-      const result = runCompute(featureFlagHelper, {
-        state: { isOrderSearchEnabled: false },
-      });
-
-      expect(result).toMatchObject({
+      expect(runCompute(featureFlagHelper, {})).toMatchObject({
         isSearchEnabled: false,
       });
     });

@@ -201,9 +201,6 @@ const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
 const {
-  getOrderSearchEnabledLambda,
-} = require('./search/getOrderSearchEnabledLambda');
-const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -857,16 +854,6 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
-  );
-}
-
-/**
- * search
- */
-{
-  app.get(
-    '/search/order-search-enabled',
-    lambdaWrapper(getOrderSearchEnabledLambda),
   );
 }
 
