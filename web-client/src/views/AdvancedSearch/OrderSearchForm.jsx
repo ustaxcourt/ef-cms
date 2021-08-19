@@ -159,19 +159,19 @@ export const OrderSearchForm = connect(
                 <tr>
                   <td>&quot;&quot;</td>
                   <td>
-                    Enter phrases in quotes for <b>exact matches</b> <br />
+                    Include only <b>exact matches</b> <br />
                   </td>
                 </tr>
                 <tr>
                   <td>+</td>
                   <td>
-                    Use + for matches including <b>all</b> words/phrases
+                    AND (includes <b>all</b> words/phrases)
                   </td>
                 </tr>
                 <tr>
                   <td>|</td>
                   <td>
-                    Use | for matches including <b>any</b> words/phrases
+                    OR (includes <b>one or more</b> words/phrases)
                   </td>
                 </tr>
               </tbody>
@@ -214,32 +214,25 @@ export const OrderSearchForm = connect(
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
                   {KeywordField()}
                 </div>
+                <FormGroup
+                  className="advanced-search-panel full-width"
+                  errorText={validationErrors.chooseOneValue}
+                >
+                  <div className="margin-bottom-3 margin-top-3">
+                    {DocketNumberField()}
+                  </div>
+                  <div className="width-full margin-bottom-3 padding-right-2">
+                    or
+                  </div>
 
-                <div className="grid-col-5">
-                  <FormGroup
-                    className="advanced-search-panel full-width"
-                    errorText={validationErrors.chooseOneValue}
-                  >
-                    <div className="margin-bottom-3 margin-top-3">
-                      {DocketNumberField()}
-                    </div>
-                    <div className="width-full margin-bottom-3 padding-right-2">
-                      or
-                    </div>
-
-                    {CaseTitleOrNameField()}
-                  </FormGroup>
-                </div>
+                  {CaseTitleOrNameField()}
+                </FormGroup>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
                   {JudgeSelect()}
                 </div>
-              </div>
-              <div className="grid-row grid-gap-6">
-                <div className="margin-top-4 desktop:padding-bottom-5">
-                  {DateRangeSelect()}
-                </div>
+                <div className="margin-top-4">{DateRangeSelect()}</div>
 
                 {advancedSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
