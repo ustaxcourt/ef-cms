@@ -20,6 +20,7 @@ exports.saveCaseForLater = () => {
 exports.serveCaseToIrs = () => {
   cy.get('#ustc-start-a-case-form button#submit-case').scrollIntoView().click();
   cy.get('button#confirm').scrollIntoView().click();
+  cy.get('.progress-indicator').should('not.exist');
 };
 
 exports.closeScannerSetupDialog = () => {

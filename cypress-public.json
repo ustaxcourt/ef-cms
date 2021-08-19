@@ -5,6 +5,12 @@
   "reporterOptions": {
     "toConsole": true
   },
+  "fixturesFolder": "cypress-integration/fixtures",
+  "integrationFolder": "cypress-integration/integration",
+  "pluginsFile": "cypress-integration/plugins/index.js",
+  "screenshotsFolder": "cypress-integration/screenshots",
+  "videosFolder": "cypress-integration/videos",
+  "supportFile": "cypress-integration/support/index.js",
   "defaultCommandTimeout": 20000,
   "requestTimeout": 12000,
   "viewportWidth": 1200,

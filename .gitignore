@@ -17,8 +17,10 @@ aws/lambdas/*.zip
 coverage/
 cypress-smoketests/screenshots
 cypress-smoketests/videos
-cypress/screenshots
-cypress/videos
+cypress-integration/screenshots
+cypress-integration/videos
+cypress-readonly/screenshots
+cypress-readonly/videos
 dist-public/
 dist/
 gen.conf
