@@ -53,7 +53,7 @@ const getKeysForIssuer = async iss => {
   return (keyCache[iss] = response.data.keys);
 };
 
-const verify = async (key, token) => {
+const verify = (key, token) => {
   return new Promise((resolve, reject) => {
     const pem = jwkToPem(key);
     const options = { issuer: [issMain, issIrs] };
