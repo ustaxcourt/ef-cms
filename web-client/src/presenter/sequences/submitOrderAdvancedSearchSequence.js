@@ -1,4 +1,3 @@
-import { cleanBlankSearchFieldsAction } from '../actions/AdvancedSearch/cleanBlankSearchFieldsAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
@@ -19,7 +18,6 @@ export const submitOrderAdvancedSearchSequence = [
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [
       clearSearchTermAction,
-      cleanBlankSearchFieldsAction,
       validateOrderAdvancedSearchAction,
       {
         error: [
