@@ -15,13 +15,11 @@ import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/val
 
 export const submitOrderAdvancedSearchSequence = [
   getOrderSearchEnabledAction,
-  clearSearchTermAction,
-  cleanBlankSearchFieldsAction,
-  validateOrderAdvancedSearchAction,
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [
       clearSearchTermAction,
+      cleanBlankSearchFieldsAction,
       validateOrderAdvancedSearchAction,
       {
         error: [
