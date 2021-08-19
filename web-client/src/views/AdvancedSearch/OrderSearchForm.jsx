@@ -159,19 +159,19 @@ export const OrderSearchForm = connect(
                 <tr>
                   <td>&quot;&quot;</td>
                   <td>
-                    Enter phrases in quotes for <b>exact matches</b> <br />
+                    Include only <b>exact matches</b> <br />
                   </td>
                 </tr>
                 <tr>
                   <td>+</td>
                   <td>
-                    Use + for matches including <b>all</b> words/phrases
+                    AND (includes <b>all</b> words/phrases)
                   </td>
                 </tr>
                 <tr>
                   <td>|</td>
                   <td>
-                    Use | for matches including <b>any</b> words/phrases
+                    OR (includes <b>one or more</b> words/phrases)
                   </td>
                 </tr>
               </tbody>
