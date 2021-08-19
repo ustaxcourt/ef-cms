@@ -4,7 +4,6 @@ const {
   mockPrimaryId,
   mockSecondaryId,
 } = require('./DocketEntry.test');
-
 const {
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
@@ -19,51 +18,18 @@ const { DocketEntry } = require('./DocketEntry');
 describe('validate', () => {
   const mockUserId = applicationContext.getUniqueId();
 
-  it('should do nothing if valid', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...A_VALID_DOCKET_ENTRY,
+  const validTests = [
+    {
+      description: 'should do nothing if valid',
+      docketEntry: {
         documentContents: 'this is the content of the document',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
-    );
-    docketEntry.docketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-    docketEntry.validate();
-
-    expect(docketEntry.documentContents).not.toBeDefined();
-    expect(docketEntry.isValid()).toBeTruthy();
-  });
-
-  it('should be invalid if filedBy is undefined, filers is valid, and servedAt is populated', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...A_VALID_DOCKET_ENTRY,
-        filedBy: undefined,
-        filers: [mockPrimaryId, mockSecondaryId],
-        isLegacyServed: undefined,
-        servedAt: '2019-08-25T05:00:00.000Z',
-        servedParties: [{ name: 'Test Petitioner' }],
-      },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
-    );
-
-    expect(Object.keys(docketEntry.getFormattedValidationErrors())).toEqual([
-      'filedBy',
-    ]);
-  });
-
-  it('should throw an error on invalid docket entries', () => {
-    expect(() => {
-      new DocketEntry({}, { applicationContext }).validate();
-    }).toThrow('The DocketEntry entity was invalid');
-  });
-
-  it('should not throw an error on valid court-issued docket entry with null filedBy string', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...A_VALID_DOCKET_ENTRY,
-        documentTitle:
-          'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
+    },
+    {
+      description:
+        'should not throw an error on valid court-issued docket entry with null filedBy string',
+      docketEntry: {
+        documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
         filedBy: null,
@@ -71,17 +37,12 @@ describe('validate', () => {
         signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
         signedJudgeName: 'Mock Signed Judge',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
-    ).validate();
-    expect(docketEntry.isValid()).toBeTruthy();
-  });
-
-  it('should not throw an error on valid court-issued docket entry with empty filedBy string', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...A_VALID_DOCKET_ENTRY,
-        documentTitle:
-          'ORDER THAT PETR. BY 4/18/19 FILE, UNDER SEAL, A RESPONSE TO THIS ORDER AS STATED HEREIN.',
+    },
+    {
+      description:
+        'should not throw an error on valid court-issued docket entry with empty filedBy string',
+      docketEntry: {
+        documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
         filedBy: '',
@@ -89,169 +50,267 @@ describe('validate', () => {
         signedByUserId: 'a11077ed-c01d-4add-ab1e-da7aba5eda7a',
         signedJudgeName: 'Mock Signed Judge',
       },
-      { applicationContext, petitioners: MOCK_PETITIONERS },
-    ).validate();
-    expect(docketEntry.isValid()).toBeTruthy();
-  });
+    },
+    {
+      description:
+        'should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true',
+      docketEntry: {
+        documentType: ORDER_TYPES[0].documentType,
+        eventCode: 'O',
+        isLegacy: true,
+        isLegacySealed: true,
+        isSealed: true,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
+        signedJudgeName: 'A Judge',
+      },
+    },
+    {
+      description:
+        'should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined',
+      docketEntry: {
+        documentType: ORDER_TYPES[0].documentType,
+        eventCode: 'O',
+        isLegacySealed: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
+        signedJudgeName: 'A Judge',
+      },
+    },
+    {
+      description:
+        'should pass validation when filedBy is undefined and documentType is not in the list of documents that require filedBy',
+      docketEntry: { ...A_VALID_DOCKET_ENTRY, documentType: 'Petition' },
+    },
+    {
+      description:
+        'should pass validation when "filedBy" is provided and documentType is in the list of documents that require filedBy',
+      docketEntry: {
+        documentType: EXTERNAL_DOCUMENT_TYPES[0],
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filedBy: 'Test Petitioner1',
+      },
+    },
+    {
+      description:
+        'should pass validation when "isAutoGenerated" is true and "filedBy" is undefined for autogenerated docket entry',
+      docketEntry: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        filedBy: undefined,
+        filers: [],
+        isAutoGenerated: true,
+      },
+    },
+    {
+      description:
+        'should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined',
+      docketEntry: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        filedBy: undefined,
+        filers: [],
+      },
+    },
+    {
+      description:
+        'should pass validation when "filedBy" is provided for internal filing event that is not auto generated',
+      docketEntry: {
+        documentType: INTERNAL_DOCUMENT_TYPES[0],
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filedBy: 'Test Petitioner1',
+        filers: [],
+      },
+    },
+    {
+      description:
+        'should pass validation when "isAutoGenerated" is true and "filedBy" is undefined for internal filing event',
+      docketEntry: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        filedBy: undefined,
+        filers: [],
+        isAutoGenerated: true,
+      },
+    },
+    {
+      description:
+        'should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined for internal filing event',
+      docketEntry: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        filedBy: undefined,
+        filers: [],
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature',
+      docketEntry: {
+        documentType: 'Answer',
+        eventCode: 'A',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature',
+      docketEntry: {
+        documentType: 'Answer',
+        eventCode: 'A',
+        isDraft: false,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature',
+      docketEntry: {
+        documentType: 'Order',
+        eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+        isDraft: false,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+    },
+    {
+      description:
+        'should pass validation when isDraft is true and signedJudgeName and signedAt are undefined',
+      docketEntry: {
+        documentType: 'Order',
+        eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+        isDraft: true,
+        signedAt: undefined,
+        signedJudgeName: undefined,
+      },
+    },
+    {
+      description:
+        'should pass validation when the document type is Order and a "signedAt" is provided',
+      docketEntry: {
+        documentType: 'Order',
+        eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+    },
+    {
+      description:
+        'should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided',
+      docketEntry: {
+        documentType: 'Order',
+        eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+    },
+  ];
 
-  describe('handling of sealed legacy documents', () => {
-    it('should pass validation when "isLegacySealed", "isLegacy", and "isSealed" are undefined', () => {
+  validTests.forEach(validTest =>
+    it(`${validTest.description}`, () => {
       const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY, ...validTest.docketEntry },
         {
-          ...A_VALID_DOCKET_ENTRY,
+          applicationContext,
+          petitioners: MOCK_PETITIONERS,
         },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
+      ).validate();
+
       expect(docketEntry.isValid()).toBeTruthy();
-    });
+    }),
+  );
 
-    it('should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined', () => {
+  const invalidTests = [
+    {
+      description:
+        'should be invalid if filedBy is undefined, filers is valid, and servedAt is populated',
+      docketEntry: {
+        filedBy: undefined,
+        filers: [mockPrimaryId, mockSecondaryId],
+        isLegacyServed: undefined,
+        servedAt: '2019-08-25T05:00:00.000Z',
+        servedParties: [{ name: 'Test Petitioner' }],
+      },
+      expectValidationErrors: ['filedBy'],
+    },
+    {
+      description:
+        'should fail validation when "isLegacySealed" is true but "isLegacy" and "isSealed" are undefined',
+      docketEntry: { isLegacySealed: true },
+      expectValidationErrors: ['isLegacy', 'isSealed'],
+    },
+    {
+      description:
+        'should fail validation when "filedBy" is not provided and documentType is in the list of documents that require filedBy',
+      docketEntry: {
+        documentType: EXTERNAL_DOCUMENT_TYPES[0],
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        filedBy: undefined,
+        filers: [],
+      },
+    },
+    {
+      description:
+        'should fail validation when "isAutoGenerated" is false and "filedBy" is undefined for external document',
+      docketEntry: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'NCA',
+        filedBy: undefined,
+        filers: [],
+        isAutoGenerated: false,
+      },
+    },
+    {
+      description: '',
+      docketEntry: {},
+      expectValidationErrors: ['filedBy'],
+    },
+    {
+      description: '',
+      docketEntry: {},
+      expectValidationErrors: ['filedBy'],
+    },
+    {
+      description: '',
+      docketEntry: {},
+      expectValidationErrors: ['filedBy'],
+    },
+  ];
+
+  invalidTests.forEach(invalidTest =>
+    it(`${invalidTest.description}`, () => {
       const docketEntry = new DocketEntry(
+        { ...A_VALID_DOCKET_ENTRY, ...invalidTest.docketEntry },
         {
-          ...A_VALID_DOCKET_ENTRY,
-          isLegacySealed: true,
+          applicationContext,
+          petitioners: MOCK_PETITIONERS,
         },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
+      ).validate();
+
       expect(docketEntry.isValid()).toBeFalsy();
-      expect(docketEntry.getFormattedValidationErrors()).toMatchObject({
-        isLegacy: '"isLegacy" is required',
-        isSealed: '"isSealed" is required',
-      });
-    });
 
-    it('should pass validation when "isLegacy" is true, "isLegacySealed" is true, "isSealed" is true', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'O',
-          isLegacy: true,
-          isLegacySealed: true,
-          isSealed: true,
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
-          signedJudgeName: 'A Judge',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
+      if (invalidTests.expectValidationErrors) {
+        expect(Object.keys(docketEntry.getFormattedValidationErrors())).toEqual(
+          invalidTests.expectValidationErrors,
+        );
+      }
+    }),
+  );
 
-    it('should pass validation when "isLegacySealed" is false, "isSealed" and "isLegacy" are undefined', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: ORDER_TYPES[0].documentType,
-          eventCode: 'O',
-          isLegacySealed: false,
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
-          signedJudgeName: 'A Judge',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
+  it('should throw an error on invalid docket entries', () => {
+    expect(() => {
+      new DocketEntry({}, { applicationContext }).validate();
+    }).toThrow('The DocketEntry entity was invalid');
   });
 
   describe('filedBy scenarios', () => {
-    describe('documentType is not in the list of documents that require filedBy', () => {
-      it('should pass validation when filedBy is undefined', () => {
-        const internalDocketEntry = new DocketEntry(
-          { ...A_VALID_DOCKET_ENTRY, documentType: 'Petition' },
-          { applicationContext, petitioners: MOCK_PETITIONERS },
-        );
-
-        expect(internalDocketEntry.isValid()).toBeTruthy();
-      });
-    });
-
     describe('documentType is in the list of documents that require filedBy', () => {
-      describe('external filing events', () => {
-        describe('that are not autogenerated', () => {
-          it('should fail validation when "filedBy" is not provided', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: EXTERNAL_DOCUMENT_TYPES[0],
-                eventCode: TRANSCRIPT_EVENT_CODE,
-                filedBy: undefined,
-                filers: [],
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-            expect(docketEntry.isValid()).toBeFalsy();
-            expect(docketEntry.filedBy).toBeUndefined();
-          });
-
-          it('should pass validation when "filedBy" is provided', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: EXTERNAL_DOCUMENT_TYPES[0],
-                eventCode: TRANSCRIPT_EVENT_CODE,
-                filedBy: 'Test Petitioner1',
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
-        });
-
-        describe('that are autogenerated', () => {
-          it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: 'Notice of Change of Address',
-                eventCode: 'NCA',
-                filedBy: undefined,
-                filers: [],
-                isAutoGenerated: true,
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.filedBy).toBeUndefined();
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
-
-          it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: 'Notice of Change of Address',
-                eventCode: 'NCA',
-                filedBy: undefined,
-                filers: [],
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.filedBy).toBeUndefined();
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
-
-          it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: 'Notice of Change of Address',
-                eventCode: 'NCA',
-                filedBy: undefined,
-                filers: [],
-                isAutoGenerated: false,
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.isValid()).toBeFalsy();
-          });
-        });
-      });
-
       describe('internal filing events', () => {
         describe('that are not autogenerated', () => {
           it('should fail validation when "filedBy" is not provided', () => {
@@ -268,57 +327,9 @@ describe('validate', () => {
             expect(docketEntry.isValid()).toBeFalsy();
             expect(docketEntry.filedBy).toBeUndefined();
           });
-
-          it('should pass validation when "filedBy" is provided', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: INTERNAL_DOCUMENT_TYPES[0],
-                eventCode: TRANSCRIPT_EVENT_CODE,
-                filedBy: 'Test Petitioner1',
-                filers: [],
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
         });
 
         describe('that are autogenerated', () => {
-          it('should pass validation when "isAutoGenerated" is true and "filedBy" is undefined', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: 'Notice of Change of Address',
-                eventCode: 'NCA',
-                filedBy: undefined,
-                filers: [],
-                isAutoGenerated: true,
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.filedBy).toBeUndefined();
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
-
-          it('should pass validation when "isAutoGenerated" is undefined and "filedBy" is undefined', () => {
-            const docketEntry = new DocketEntry(
-              {
-                ...A_VALID_DOCKET_ENTRY,
-                documentType: 'Notice of Change of Address',
-                eventCode: 'NCA',
-                filedBy: undefined,
-                filers: [],
-              },
-              { applicationContext, petitioners: MOCK_PETITIONERS },
-            );
-
-            expect(docketEntry.filedBy).toBeUndefined();
-            expect(docketEntry.isValid()).toBeTruthy();
-          });
-
           it('should fail validation when "isAutoGenerated" is false and "filedBy" is undefined', () => {
             const docketEntry = new DocketEntry(
               {
@@ -356,22 +367,6 @@ describe('validate', () => {
       expect(docketEntry.isValid()).toBeFalsy();
     });
 
-    it('should pass validation when isDraft is false and signedAt is undefined for a document not requiring signature', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Answer',
-          eventCode: 'A',
-          isDraft: false,
-          signedAt: undefined,
-          signedJudgeName: undefined,
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
     it('should fail validation when isDraft is false and signedJudgeName is undefined for a document requiring signature', () => {
       const docketEntry = new DocketEntry(
         {
@@ -388,56 +383,6 @@ describe('validate', () => {
       expect(docketEntry.isValid()).toBeFalsy();
     });
 
-    it('should pass validation when isDraft is false and signedJudgeName is undefined for a document not requiring signature', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Answer',
-          eventCode: 'A',
-          isDraft: false,
-
-          signedAt: undefined,
-          signedJudgeName: undefined,
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
-    it('should pass validation when isDraft is false and signedJudgeName and signedAt are defined for a document requiring signature', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isDraft: false,
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
-    it('should pass validation when isDraft is true and signedJudgeName and signedAt are undefined', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          isDraft: true,
-          signedAt: undefined,
-          signedJudgeName: undefined,
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
     it('should fail validation when the document type is Order and "signedJudgeName" is not provided', () => {
       const docketEntry = new DocketEntry(
         {
@@ -448,38 +393,6 @@ describe('validate', () => {
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
       expect(docketEntry.isValid()).toBeFalsy();
-      expect(docketEntry.signedJudgeName).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and a "signedAt" is provided', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" and "signedByUserId" are provided', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.isValid()).toBeTruthy();
     });
 
     it('should fail validation when the document type is Order but no "signedAt" is provided', () => {
@@ -492,22 +405,6 @@ describe('validate', () => {
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
       expect(docketEntry.isValid()).toBeFalsy();
-      expect(docketEntry.signedJudgeName).toBeUndefined();
-    });
-
-    it('should pass validation when the document type is Order and "signedJudgeName" is provided', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          documentType: 'Order',
-          eventCode: EVENT_CODES_REQUIRING_SIGNATURE[0],
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: mockUserId,
-          signedJudgeName: 'Dredd',
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.isValid()).toBeTruthy();
     });
   });
 
