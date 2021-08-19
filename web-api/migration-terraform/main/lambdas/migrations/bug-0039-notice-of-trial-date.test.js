@@ -1,7 +1,7 @@
 const {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
-const { migrateItems } = require('./bug-0038-notice-of-trial-date');
+const { migrateItems } = require('./bug-0039-notice-of-trial-date');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
