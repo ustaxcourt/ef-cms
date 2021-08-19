@@ -283,8 +283,9 @@ exports.batchDownloadTrialSessionInteractor = async (
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
 
+    const erMsg = error.message || 'unknown error';
     applicationContext.logger.error(
-      `Error when batch downloading trial session with id ${trialSessionId}`,
+      `Error when batch downloading trial session with id ${trialSessionId} - ${erMsg}`,
       { error },
     );
     await applicationContext.getNotificationGateway().sendNotificationToUser({

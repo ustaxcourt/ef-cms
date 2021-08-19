@@ -24,7 +24,11 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['cypress/**/*.js', 'cypress-smoketests/**/*.js'],
+      files: [
+        'cypress-integration/**/*.js',
+        'cypress-smoketests/**/*.js',
+        'cypress-readonly/**/*.js',
+      ],
       rules: {
         'jest/expect-expect': 'off',
         'jest/valid-expect': 'off',
