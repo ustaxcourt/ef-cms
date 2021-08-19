@@ -1,6 +1,7 @@
 const {
   ExternalDocumentFactory,
 } = require('../../entities/externalDocument/ExternalDocumentFactory');
+const { cloneDeep } = require('lodash');
 
 /**
  * generateDocumentTitleInteractor
@@ -14,6 +15,8 @@ exports.generateDocumentTitleInteractor = (
   applicationContext,
   { documentMetadata },
 ) => {
+  documentMetadata = cloneDeep(documentMetadata);
+
   if (documentMetadata.previousDocument) {
     documentMetadata.previousDocument.documentTitle = applicationContext
       .getUtilities()
@@ -22,9 +25,7 @@ exports.generateDocumentTitleInteractor = (
       });
   }
 
-  const externalDocument = ExternalDocumentFactory.get(documentMetadata, {
-    applicationContext,
-  });
+  const externalDocument = ExternalDocumentFactory(documentMetadata);
 
   return externalDocument.getDocumentTitle();
 };

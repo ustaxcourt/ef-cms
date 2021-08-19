@@ -446,10 +446,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
-      workItemToUpdate: { completedAt: expect.anything() },
+      workItem: { completedAt: expect.anything() },
     });
   });
 

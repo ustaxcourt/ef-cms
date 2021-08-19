@@ -52,7 +52,6 @@ export const completeDocumentSigningAction = async ({
       .uploadDocumentFromClient({
         applicationContext,
         document: documentFile,
-        onUploadProgress: () => {},
       });
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext

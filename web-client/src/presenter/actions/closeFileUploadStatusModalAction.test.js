@@ -32,4 +32,15 @@ describe('closeFileUploadStatusModalAction', () => {
       },
     });
   });
+  it('uses a default timeout value if not provided', async () => {
+    delete process.env.FILE_UPLOAD_MODAL_TIMEOUT;
+    await runAction(closeFileUploadStatusModalAction, {
+      modules: {
+        presenter,
+      },
+    });
+
+    // inspecting arguments of 4th call because it seems `store.set` also invokes setTimeout
+    expect(global.setTimeout.mock.calls[3][1]).toEqual(3000);
+  });
 });

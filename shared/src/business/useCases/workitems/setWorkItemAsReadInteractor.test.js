@@ -91,16 +91,15 @@ describe('setWorkItemAsReadInteractor', () => {
     });
   });
 
-  it('should call updateWorkItem with the work item marked as read', async () => {
+  it('should call saveWorkItem with the work item marked as read', async () => {
     await setWorkItemAsReadInteractor(applicationContext, {
       workItemId: mockWorkItem.workItemId,
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
-      workItemToUpdate: { isRead: true },
+      workItem: { isRead: true },
     });
   });
 });

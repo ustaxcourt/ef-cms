@@ -6,7 +6,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setDocumentToFormAction } from '../actions/editUploadCourtIssuedDocument/setDocumentToFormAction';
+import { setDocumentToFormAction } from '../actions/EditUploadCourtIssuedDocument/setDocumentToFormAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 

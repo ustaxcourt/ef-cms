@@ -4,7 +4,7 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
-import { getOpenAndClosedCasesByUserAction } from '../actions/caseConsolidation/getOpenAndClosedCasesByUserAction';
+import { getOpenAndClosedCasesByUserAction } from '../actions/CaseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -20,7 +20,7 @@ import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsActio
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
-import { startWebSocketConnectionAction } from '../actions/webSocketConnection/startWebSocketConnectionAction';
+import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 
 const { USER_ROLES } = getConstants();

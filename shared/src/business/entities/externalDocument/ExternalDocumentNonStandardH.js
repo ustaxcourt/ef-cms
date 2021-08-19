@@ -26,7 +26,7 @@ ExternalDocumentNonStandardH.prototype.init = function init(
   externalDocumentDecorator(this, rawProps);
 
   const { secondaryDocument } = rawProps;
-  this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument || {});
+  this.secondaryDocument = ExternalDocumentFactory(secondaryDocument || {});
 };
 
 ExternalDocumentNonStandardH.prototype.getDocumentTitle = function () {

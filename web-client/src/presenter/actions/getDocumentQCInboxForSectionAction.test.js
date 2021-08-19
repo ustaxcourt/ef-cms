@@ -5,6 +5,7 @@ import { runAction } from 'cerebral/test';
 
 describe('getDocumentQCInboxForSectionAction', () => {
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
+  const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -54,18 +55,26 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
   });
 
-  it('should return props.workItems based on the section and judge', async () => {
-    const result = await runAction(getDocumentQCInboxForSectionAction, {
+  it('should call getDocumentQCInboxForSectionInteractor with the CHIEF_JUDGE if judgeUser is not found in state and user role is adc', async () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: USER_ROLES.adc,
+      section: 'judgy section',
+    });
+    await runAction(getDocumentQCInboxForSectionAction, {
       modules: {
         presenter,
       },
-      state: {
-        judgeUser: {
-          name: 'A judgy person',
-        },
-      },
+      state: {},
     });
 
-    expect(result.output.workItems).toEqual(mockWorkItems);
+    expect(
+      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      judgeUser: {
+        name: CHIEF_JUDGE,
+      },
+      section: 'judgy section',
+    });
   });
 });

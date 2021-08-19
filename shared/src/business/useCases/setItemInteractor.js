@@ -1,7 +1,6 @@
-exports.setItemInteractor = async (applicationContext, { key, value }) => {
-  return await applicationContext.getPersistenceGateway().setItem({
+exports.setItemInteractor = (applicationContext, { key, value }) =>
+  applicationContext.getPersistenceGateway().setItem({
     applicationContext,
     key,
     value,
   });
-};
