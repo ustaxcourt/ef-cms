@@ -237,6 +237,10 @@ select[disabled] {
     float: right;
   }
 
+  &.padding-bottom-0 {
+    padding-bottom: 0;
+  }
+
   &.read-only-party-information {
     *:last-child {
       margin-bottom: 0;
@@ -1524,16 +1528,48 @@ button.change-scanner-button {
     margin-bottom: 10px;
   }
 
-  .judge-search-row {
-    width: 180px;
+  .grid-row {
+    &.no-flex-wrap {
+      flex-wrap: nowrap;
+    }
   }
 
-  .tiny-to {
-    padding-right: 0px;
-    padding-left: 0px;
-    @media only screen and (min-width: $medium-screen) {
-      margin-left: -10px;
+  .custom-col-7 {
+    @media only screen and (min-width: 1200px) {
+      width: calc(6 / 12 * 100%);
+      flex: 0 1 auto;
     }
+    @media only screen and (min-width: 1250px) {
+      width: calc(6.5 / 12 * 100%);
+      flex: 0 10 auto;
+    }
+    @media only screen and (min-width: 1400px) {
+      width: calc(7 / 12 * 100%);
+      flex: 0 2 auto;
+    }
+  }
+
+  .custom-col-5 {
+    @media only screen and (min-width: 1200px) {
+      width: calc(6 / 12 * 100%);
+      flex: 0 10 auto;
+    }
+    @media only screen and (min-width: 1250px) {
+      width: calc(5.5 / 12 * 100%);
+      flex: 0 1 auto;
+    }
+    @media only screen and (min-width: 1400px) {
+      width: calc(5 / 12 * 100%);
+      flex: 0 1 auto;
+    }
+  }
+
+  .card {
+    margin-bottom: 0;
+  }
+
+  .judge-search-row {
+    width: 180px;
   }
 
   /* big screens */

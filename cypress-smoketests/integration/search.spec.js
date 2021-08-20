@@ -12,7 +12,7 @@ const {
 } = require('../support/pages/advanced-search');
 const {
   fillInCreateCaseFromPaperForm,
-} = require('../../cypress/support/pages/create-paper-petition');
+} = require('../../cypress-integration/support/pages/create-paper-petition');
 const {
   getEnvironmentSpecificFunctions,
 } = require('../support/pages/environment-specific-factory');
