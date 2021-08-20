@@ -30,10 +30,6 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   timeout          = "29"
   runtime          = "nodejs14.x"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
-
   # These can not use null_data_source.locals due to circular dep
   environment {
     variables = {
@@ -68,11 +64,6 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   
   timeout          = "29"
   runtime          = "nodejs14.x"
-  memory_size = "768"
-
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 
   # These can not use null_data_source.locals due to circular dep
   environment {
