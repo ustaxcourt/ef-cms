@@ -7,9 +7,8 @@ exports.isEmailAvailable = async ({ applicationContext, email }) => {
         Username: email,
       })
       .promise();
+    return false;
   } catch (e) {
     return true;
   }
-  //If an error is not thrown, we can assume a user was found
-  return false;
 };
