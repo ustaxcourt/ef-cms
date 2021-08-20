@@ -7,30 +7,30 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.workItem the work item data
+ * @returns {Promise} resolves upon completion of persistence request
  */
-exports.saveWorkItemForDocketClerkFilingExternalDocument = async ({
+exports.saveWorkItemForDocketClerkFilingExternalDocument = ({
   applicationContext,
   workItem,
-}) => {
-  await createSectionOutboxRecord({
-    applicationContext,
-    section: workItem.section,
-    workItem,
-  });
-
-  await createUserOutboxRecord({
-    applicationContext,
-    userId: workItem.assigneeId,
-    workItem,
-  });
-
-  await put({
-    Item: {
-      gsi1pk: `work-item|${workItem.workItemId}`,
-      pk: `case|${workItem.docketNumber}`,
-      sk: `work-item|${workItem.workItemId}`,
-      ...workItem,
-    },
-    applicationContext,
-  });
-};
+}) =>
+  Promise.all([
+    createSectionOutboxRecord({
+      applicationContext,
+      section: workItem.section,
+      workItem,
+    }),
+    createUserOutboxRecord({
+      applicationContext,
+      userId: workItem.assigneeId,
+      workItem,
+    }),
+    put({
+      Item: {
+        ...workItem,
+        gsi1pk: `work-item|${workItem.workItemId}`,
+        pk: `case|${workItem.docketNumber}`,
+        sk: `work-item|${workItem.workItemId}`,
+      },
+      applicationContext,
+    }),
+  ]);
