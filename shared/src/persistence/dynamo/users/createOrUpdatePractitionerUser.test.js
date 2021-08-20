@@ -2,12 +2,12 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
-  createPractitionerUser,
+  createOrUpdatePractitionerUser,
   createUserRecords,
-} = require('./createPractitionerUser');
+} = require('./createOrUpdatePractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
-describe('createPractitionerUser', () => {
+describe('createOrUpdatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const privatePractitionerUser = {
     barNumber: 'pt1234',
@@ -49,6 +49,16 @@ describe('createPractitionerUser', () => {
     name: 'Test Other',
     role: ROLES.other,
     section: 'other',
+  };
+
+  const setupNonExistingUserMock = () => {
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => {
+        const error = new Error();
+        error.code = 'UserNotFoundException';
+        return Promise.reject(error);
+      },
+    });
   };
 
   beforeAll(() => {
@@ -126,7 +136,7 @@ describe('createPractitionerUser', () => {
       },
     });
 
-    await createPractitionerUser({
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: privatePractitionerUserWithoutBarNumber,
     });
@@ -139,7 +149,9 @@ describe('createPractitionerUser', () => {
   });
 
   it('should call cognito adminCreateUser for a private practitioner user with email address', async () => {
-    await createPractitionerUser({
+    setupNonExistingUserMock();
+
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: privatePractitionerUserWithSection,
     });
@@ -147,7 +159,6 @@ describe('createPractitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser.mock.calls[0][0].Username,
     ).toBe(privatePractitionerUserWithSection.email);
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
@@ -155,8 +166,9 @@ describe('createPractitionerUser', () => {
 
   it('should call cognito adminCreateUser for a private practitioner user with pendingEmail when it is defined', async () => {
     const mockPendingEmail = 'noone@example.com';
+    setupNonExistingUserMock();
 
-    await createPractitionerUser({
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: {
         ...privatePractitionerUserWithSection,
@@ -171,25 +183,28 @@ describe('createPractitionerUser', () => {
   });
 
   it('should call cognito adminCreateUser for an IRS practitioner user with email address', async () => {
-    await createPractitionerUser({
+    setupNonExistingUserMock();
+
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: irsPractitionerUser,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
   });
+
   it('should call cognito adminCreateUser for an inactive practitioner user with email address', async () => {
-    await createPractitionerUser({
+    setupNonExistingUserMock();
+
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: inactivePractitionerUser,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
@@ -199,14 +214,20 @@ describe('createPractitionerUser', () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
       promise: () => Promise.resolve({}),
     });
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => {
+        const error = new Error();
+        error.code = 'UserNotFoundException';
+        return Promise.reject(error);
+      },
+    });
 
-    await createPractitionerUser({
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: privatePractitionerUserWithSection,
     });
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
@@ -217,12 +238,19 @@ describe('createPractitionerUser', () => {
       promise: () => Promise.reject(new Error('bad!')),
     });
 
-    await createPractitionerUser({
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Username: '562d6260-aa9b-4010-af99-536d3872c752',
+        }),
+    });
+
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: privatePractitionerUserWithSection,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).not.toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
@@ -231,14 +259,23 @@ describe('createPractitionerUser', () => {
 
   it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {
     await expect(
-      createPractitionerUser({ applicationContext, user: otherUser }),
+      createOrUpdatePractitionerUser({ applicationContext, user: otherUser }),
     ).rejects.toThrow(
       `Role must be ${ROLES.privatePractitioner}, ${ROLES.irsPractitioner}, or ${ROLES.inactivePractitioner}`,
     );
   });
 
   it('should call adminCreateUser with the correct UserAttributes', async () => {
-    await createPractitionerUser({
+    applicationContext.getCognito().adminCreateUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          User: { Username: '123' },
+        }),
+    });
+
+    setupNonExistingUserMock();
+
+    await createOrUpdatePractitionerUser({
       applicationContext,
       user: privatePractitionerUser,
     });

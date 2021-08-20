@@ -11,6 +11,8 @@ const {
   put,
   query,
   queryFull,
+  scan,
+  update,
   updateConsistent,
 } = require('./dynamodbClientService');
 
@@ -66,7 +68,7 @@ describe('dynamodbClientService', function () {
       promise: () => {
         return Promise.resolve({
           Attributes: {
-            id: '123-20',
+            id: MOCK_ITEM.docketNumber,
           },
         });
       },
@@ -75,7 +77,7 @@ describe('dynamodbClientService', function () {
     applicationContext.getDocumentClient().updateConsistent.mockReturnValue({
       promise: () => {
         return Promise.resolve({
-          id: '123-20',
+          id: MOCK_ITEM.docketNumber,
         });
       },
     });
@@ -85,7 +87,7 @@ describe('dynamodbClientService', function () {
         return Promise.resolve({
           Items: [
             {
-              docketNumber: '123-20',
+              docketNumber: MOCK_ITEM.docketNumber,
             },
           ],
         });
@@ -97,7 +99,19 @@ describe('dynamodbClientService', function () {
         return Promise.resolve({
           Items: [
             {
-              docketNumber: '123-20',
+              docketNumber: MOCK_ITEM.docketNumber,
+            },
+          ],
+        });
+      },
+    });
+
+    applicationContext.getDocumentClient().scan.mockReturnValue({
+      promise: () => {
+        return Promise.resolve({
+          Items: [
+            {
+              docketNumber: MOCK_ITEM.docketNumber,
             },
           ],
         });
@@ -117,12 +131,31 @@ describe('dynamodbClientService', function () {
       });
       expect(result).toEqual(MOCK_ITEM);
     });
+
+    it('should filterEmptyStrings in params then return the same Item property passed in in the params', async () => {
+      const result = await put({
+        Item: MOCK_ITEM,
+        applicationContext,
+        fake: '',
+      });
+      expect(result).toEqual(MOCK_ITEM);
+    });
   });
 
   describe('updateConsistent', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await updateConsistent({ applicationContext });
-      expect(result).toEqual({ id: '123-20' });
+      expect(result).toEqual({ id: MOCK_ITEM.docketNumber });
+    });
+  });
+
+  describe('update', () => {
+    it('should return the same Item property passed in in the params', async () => {
+      const result = await update({
+        Item: MOCK_ITEM,
+        applicationContext,
+      });
+      expect(result).toEqual(MOCK_ITEM);
     });
   });
 
@@ -154,13 +187,20 @@ describe('dynamodbClientService', function () {
     });
   });
 
+  describe('scan', () => {
+    it('should return an array of items', async () => {
+      const result = await scan({ applicationContext });
+      expect(result).toEqual([MOCK_ITEM]);
+    });
+  });
+
   describe('batchGet', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
         applicationContext,
         keys: [
           {
-            pk: '123-20',
+            pk: MOCK_ITEM.docketNumber,
           },
         ],
         tableName: 'a',
@@ -180,8 +220,8 @@ describe('dynamodbClientService', function () {
   describe('batchDelete', () => {
     it('should call client.batchWrite with the expected arguments', async () => {
       const item = {
-        pk: '123-20',
-        sk: '123-20',
+        pk: MOCK_ITEM.docketNumber,
+        sk: MOCK_ITEM.docketNumber,
         ...MOCK_ITEM,
       };
 
@@ -214,8 +254,8 @@ describe('dynamodbClientService', function () {
     it('should retry call to client.batchWrite with any UnprocessedItems returned from the first batchWrite call', async () => {
       const items = [
         {
-          pk: '123-20',
-          sk: '123-20',
+          pk: MOCK_ITEM.docketNumber,
+          sk: MOCK_ITEM.docketNumber,
           ...MOCK_ITEM,
         },
         {
@@ -282,8 +322,8 @@ describe('dynamodbClientService', function () {
     it('should log an error if second attempt to batchWrite results in UnprocessedItems', async () => {
       const items = [
         {
-          pk: '123-20',
-          sk: '123-20',
+          pk: MOCK_ITEM.docketNumber,
+          sk: MOCK_ITEM.docketNumber,
           ...MOCK_ITEM,
         },
       ];
@@ -319,13 +359,13 @@ describe('dynamodbClientService', function () {
       await deleteObj({
         applicationContext,
         key: {
-          pk: '123-20',
+          pk: MOCK_ITEM.docketNumber,
         },
       });
       expect(
         applicationContext.getDocumentClient().delete.mock.calls[0][0],
       ).toEqual({
-        Key: { pk: '123-20' },
+        Key: { pk: MOCK_ITEM.docketNumber },
         TableName: 'efcms-local',
       });
     });
