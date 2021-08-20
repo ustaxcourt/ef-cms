@@ -149,6 +149,8 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [Order Search Findings March 2021](./OrderSearchFindings_March2021.pdf)
 
+[Order Search Recommendations July 2021](./OrderSearchRecommendationsJuly2021.pdf)
+
 
 # UI Design System
 

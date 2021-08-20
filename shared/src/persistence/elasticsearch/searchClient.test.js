@@ -117,6 +117,158 @@ const matchesResults = {
   took: 7,
 };
 
+const advancedSearchResults = {
+  _shards: {
+    failed: 0,
+    skipped: 0,
+    successful: 1,
+    total: 1,
+  },
+  hits: {
+    hits: [
+      {
+        _id: 'case|312-21_docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+        _index: 'efcms-docket-entry',
+        _routing: 'case|312-21_case|312-21|mapping',
+        _score: null,
+        _source: {
+          docketEntryId: {
+            S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          },
+          docketNumber: {
+            S: '312-21',
+          },
+          documentTitle: {
+            S: 'Order of Dismissal for Lack of Jurisdiction',
+          },
+          documentType: {
+            S: 'Order of Dismissal for Lack of Jurisdiction',
+          },
+          eventCode: {
+            S: 'ODJ',
+          },
+          filingDate: {
+            S: '2021-08-20T18:16:39.420Z',
+          },
+          isStricken: {
+            BOOL: false,
+          },
+          judge: {
+            S: 'Carluzzo',
+          },
+          numberOfPages: {
+            N: '2',
+          },
+          signedJudgeName: {
+            S: 'Maurice B. Foley',
+          },
+        },
+        _type: '_doc',
+        inner_hits: {
+          'case-mappings': {
+            hits: {
+              hits: [
+                {
+                  _id: 'case|312-21_case|312-21|mapping',
+                  _index: 'efcms-docket-entry',
+                  _score: 1,
+                  _source: {
+                    caseCaption: {
+                      S: 'Brett Osborne, Petitioner',
+                    },
+                    docketNumber: {
+                      S: '312-21',
+                    },
+                    docketNumberWithSuffix: {
+                      S: '312-21W',
+                    },
+                    irsPractitioners: {
+                      L: [],
+                    },
+                    isSealed: {
+                      BOOL: false,
+                    },
+                    petitioners: {
+                      L: [
+                        {
+                          M: {
+                            address1: {
+                              S: '68 Fabien Freeway',
+                            },
+                            address2: {
+                              S: 'Suscipit animi solu',
+                            },
+                            address3: {
+                              S: 'Architecto assumenda',
+                            },
+                            city: {
+                              S: 'Aspernatur nostrum s',
+                            },
+                            contactId: {
+                              S: '7805d1ab-18d0-43ec-bafb-654e83405416',
+                            },
+                            contactType: {
+                              S: 'primary',
+                            },
+                            countryType: {
+                              S: 'domestic',
+                            },
+                            email: {
+                              S: 'petitioner@example.com',
+                            },
+                            isAddressSealed: {
+                              BOOL: false,
+                            },
+                            name: {
+                              S: 'Brett Osborne',
+                            },
+                            phone: {
+                              S: '+1 (537) 235-6147',
+                            },
+                            postalCode: {
+                              S: '89499',
+                            },
+                            sealedAndUnavailable: {
+                              BOOL: false,
+                            },
+                            serviceIndicator: {
+                              S: 'Electronic',
+                            },
+                            state: {
+                              S: 'AK',
+                            },
+                          },
+                        },
+                      ],
+                    },
+                    privatePractitioners: {
+                      L: [],
+                    },
+                  },
+                  _type: '_doc',
+                },
+              ],
+              max_score: 1,
+              total: {
+                relation: 'eq',
+                value: 1,
+              },
+            },
+          },
+        },
+        sort: [1629483399420],
+      },
+    ],
+    max_score: null,
+    total: {
+      relation: 'eq',
+      value: 1,
+    },
+  },
+  timed_out: false,
+  took: 5,
+};
+
 describe('searchClient', () => {
   it('finds no hits', async () => {
     applicationContext.getSearchClient().search.mockReturnValue(emptyResults);
@@ -230,6 +382,60 @@ describe('searchClient', () => {
           ],
           receivedAt: '2020-01-21T16:41:39.474Z',
           sealedDate: '2020-01-21T16:48:28.364Z',
+        },
+      ],
+      total: 1,
+    });
+  });
+
+  it('should unmarshall the case if it was not found in the caseMap', async () => {
+    applicationContext
+      .getSearchClient()
+      .search.mockReturnValue(advancedSearchResults);
+
+    const results = await search({
+      applicationContext,
+      searchParameters: {},
+    });
+
+    expect(results).toMatchObject({
+      results: [
+        {
+          _score: null,
+          caseCaption: 'Brett Osborne, Petitioner',
+          docketEntryId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+          docketNumber: '312-21',
+          docketNumberWithSuffix: '312-21W',
+          documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+          documentType: 'Order of Dismissal for Lack of Jurisdiction',
+          eventCode: 'ODJ',
+          filingDate: '2021-08-20T18:16:39.420Z',
+          irsPractitioners: [],
+          isSealed: false,
+          isStricken: false,
+          judge: 'Carluzzo',
+          numberOfPages: 2,
+          petitioners: [
+            {
+              address1: '68 Fabien Freeway',
+              address2: 'Suscipit animi solu',
+              address3: 'Architecto assumenda',
+              city: 'Aspernatur nostrum s',
+              contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+              contactType: 'primary',
+              countryType: 'domestic',
+              email: 'petitioner@example.com',
+              isAddressSealed: false,
+              name: 'Brett Osborne',
+              phone: '+1 (537) 235-6147',
+              postalCode: '89499',
+              sealedAndUnavailable: false,
+              serviceIndicator: 'Electronic',
+              state: 'AK',
+            },
+          ],
+          privatePractitioners: [],
+          signedJudgeName: 'Maurice B. Foley',
         },
       ],
       total: 1,
