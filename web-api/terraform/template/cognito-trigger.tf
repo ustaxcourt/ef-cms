@@ -37,7 +37,6 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   
   timeout          = "29"
   runtime          = "nodejs14.x"
-  memory_size = "768"
 
   # These can not use null_data_source.locals due to circular dep
   environment {
