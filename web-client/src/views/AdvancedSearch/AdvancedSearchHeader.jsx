@@ -18,6 +18,7 @@ export const AdvancedSearchHeader = connect(
               href={feedBackUrl}
               icon="comment-dots"
               iconColor="dark-blue"
+              target="_blank"
             >
               Send Feedback
             </Button>
