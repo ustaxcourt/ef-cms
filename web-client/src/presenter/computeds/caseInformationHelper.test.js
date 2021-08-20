@@ -520,7 +520,7 @@ describe('caseInformationHelper', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockDocketClerk),
-          caseDetail: { docketEntries: [] },
+          caseDetail: { docketEntries: [], petitioners: [] },
         },
       });
       expect(result.showEditCaseButton).toEqual(true);
@@ -530,7 +530,7 @@ describe('caseInformationHelper', () => {
       const result = runCompute(caseInformationHelper, {
         state: {
           ...getBaseState(mockPrivatePractitioner),
-          caseDetail: { docketEntries: [] },
+          caseDetail: { docketEntries: [], petitioners: [] },
         },
       });
       expect(result.showEditCaseButton).toEqual(false);
