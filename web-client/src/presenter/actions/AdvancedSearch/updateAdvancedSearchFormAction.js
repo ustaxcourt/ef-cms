@@ -16,5 +16,9 @@ export const updateAdvancedSearchFormAction =
    */
   ({ props, store }) => {
     const formType = formName || props.formType;
-    store.set(state.advancedSearchForm[formType][props.key], props.value);
+    if (props.value) {
+      store.set(state.advancedSearchForm[formType][props.key], props.value);
+    } else {
+      store.unset(state.advancedSearchForm[formType][props.key]);
+    }
   };

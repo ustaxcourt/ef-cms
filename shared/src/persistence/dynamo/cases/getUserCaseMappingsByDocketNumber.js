@@ -3,8 +3,8 @@ const client = require('../../dynamodbClientService');
 exports.getUserCaseMappingsByDocketNumber = ({
   applicationContext,
   docketNumber,
-}) => {
-  return client.query({
+}) =>
+  client.query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -15,4 +15,3 @@ exports.getUserCaseMappingsByDocketNumber = ({
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
-};
