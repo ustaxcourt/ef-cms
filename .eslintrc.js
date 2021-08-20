@@ -51,7 +51,7 @@ module.exports = {
       rules: {
         'max-lines': [
           'error',
-          { max: 500, skipBlankLines: true, skipComments: true },
+          { max: 650, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
         ],
       },
     },
