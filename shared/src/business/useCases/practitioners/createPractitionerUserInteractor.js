@@ -36,7 +36,7 @@ exports.createPractitionerUserInteractor = async (
 
   const createdUser = await applicationContext
     .getPersistenceGateway()
-    .createPractitionerUser({
+    .createOrUpdatePractitionerUser({
       applicationContext,
       user: practitioner,
     });
