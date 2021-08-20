@@ -62,7 +62,32 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   };
 };
 
-exports.createUser = async ({
+const isUserAlreadyCreated = async ({
+  applicationContext,
+  email,
+  userPoolId,
+}) => {
+  try {
+    await applicationContext
+      .getCognito()
+      .adminGetUser({
+        UserPoolId: userPoolId,
+        Username: email,
+      })
+      .promise();
+    return true;
+  } catch (e) {
+    if (e.code === 'UserNotFoundException') {
+      return false;
+    } else {
+      throw e;
+    }
+  }
+};
+
+exports.isUserAlreadyCreated = isUserAlreadyCreated;
+
+exports.createOrUpdateUser = async ({
   applicationContext,
   disableCognitoUser = false,
   password,
@@ -74,7 +99,13 @@ exports.createUser = async ({
       ? process.env.USER_POOL_IRS_ID
       : process.env.USER_POOL_ID;
 
-  try {
+  const userExists = await isUserAlreadyCreated({
+    applicationContext,
+    email: user.email,
+    userPoolId,
+  });
+
+  if (!userExists) {
     const response = await applicationContext
       .getCognito()
       .adminCreateUser({
@@ -103,8 +134,7 @@ exports.createUser = async ({
       })
       .promise();
     userId = response.User.Username;
-  } catch (err) {
-    // the user already exists
+  } else {
     const response = await applicationContext
       .getCognito()
       .adminGetUser({

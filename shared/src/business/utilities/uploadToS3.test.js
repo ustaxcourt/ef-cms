@@ -47,4 +47,28 @@ describe('uploadToS3', () => {
       err: 'there was an error uploading',
     });
   });
+
+  it('should not log if the s3 upload completes', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: 'bob',
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
+
+    let mockCaseConfirmationPdfName = 'pdf name';
+
+    applicationContext.getStorageClient.mockReturnValue({
+      getObject: getObjectMock,
+      upload: (params, callback) => callback(),
+    });
+
+    await uploadToS3({
+      applicationContext,
+      mockCaseConfirmationPdfName,
+      testPdfDoc,
+    });
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
 });

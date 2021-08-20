@@ -38,4 +38,22 @@ describe('updateAdvancedSearchFormAction', () => {
       },
     });
   });
+
+  it('should unset state.advancedSearchForm property if the value passed in is an empty string', async () => {
+    const result = await runAction(
+      updateAdvancedSearchFormAction('opinionSearch'),
+      {
+        props: {
+          formType: 'orderSearch',
+          key: 'petitionerName',
+          value: '',
+        },
+        state: {},
+      },
+    );
+
+    expect(result.state.advancedSearchForm).toEqual({
+      opinionSearch: {},
+    });
+  });
 });

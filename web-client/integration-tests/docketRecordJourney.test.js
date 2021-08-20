@@ -1,17 +1,4 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
-import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
-import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
-import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
-import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
-import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
-
 import {
   contactPrimaryFromState,
   createCourtIssuedDocketEntry,
@@ -21,8 +8,20 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
+import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkEditsServiceIndicatorForPetitioner } from './journey/docketClerkEditsServiceIndicatorForPetitioner';
+import { docketClerkFilesRQTBeforePetitionIsServed } from './journey/docketClerkFilesRQTBeforePetitionIsServed';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
+import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const { PAYMENT_STATUS } = applicationContext.getConstants();
 const cerebralTest = setupTest();
@@ -107,62 +106,8 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('files an initial filing type document AFTER a paper petition is added but not served', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'RQT',
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'trialLocation',
-      value: 'Little Rock, AR',
-    });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
-
-    await cerebralTest.runSequence('submitPaperFilingSequence', {
-      isSavingForLater: true,
-    });
-
+  docketClerkFilesRQTBeforePetitionIsServed(cerebralTest, fakeFile);
+  it('verifies docket record after filing initial filing document', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
@@ -244,27 +189,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       eventCode: 'RQT',
       showNotServed: true,
       showServed: false,
-    });
-  });
-
-  loginAs(cerebralTest, 'floater@example.com');
-  it('allows access to the floater user to view the case detail', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-  });
-
-  loginAs(cerebralTest, 'general@example.com');
-  it('allows access to the general user to view the case detail', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-  });
-
-  loginAs(cerebralTest, 'reportersOffice@example.com');
-  it('allows access to the reportersOffice user to view the case detail', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
     });
   });
 

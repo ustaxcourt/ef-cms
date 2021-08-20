@@ -8,8 +8,8 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.message the message data
  * @returns {object} the created message
  */
-exports.createMessage = async ({ applicationContext, message }) => {
-  await put({
+exports.createMessage = ({ applicationContext, message }) =>
+  put({
     Item: {
       ...message,
       gsi1pk: `message|${message.parentMessageId}`,
@@ -18,4 +18,3 @@ exports.createMessage = async ({ applicationContext, message }) => {
     },
     applicationContext,
   });
-};
