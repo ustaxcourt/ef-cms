@@ -1,10 +1,7 @@
-const client = require('../../dynamodbClientService');
+const { put } = require('../../dynamodbClientService');
 
-exports.updateTrialSession = async ({
-  applicationContext,
-  trialSessionToUpdate,
-}) => {
-  return await client.put({
+exports.updateTrialSession = ({ applicationContext, trialSessionToUpdate }) =>
+  put({
     Item: {
       ...trialSessionToUpdate,
       gsi1pk: 'trial-session-catalog',
@@ -13,4 +10,3 @@ exports.updateTrialSession = async ({
     },
     applicationContext,
   });
-};
