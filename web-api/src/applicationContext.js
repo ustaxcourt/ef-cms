@@ -1527,7 +1527,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
                   Username: foundUser.userId,
                 };
               } else {
-                throw new Error('User does not exist');
+                const error = new Error();
+                error.code = 'UserNotFoundException';
+                throw error;
               }
             },
           }),
