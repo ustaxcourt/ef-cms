@@ -8,11 +8,10 @@ const { deleteByGsi } = require('../helpers/deleteByGsi');
  * @param {object} providers.connectionId the websocket connection id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
+exports.deleteUserConnection = ({ applicationContext, connectionId }) =>
   /**
    * Only one record should be found at most.
    * You can't delete for a gsi,
    * So a query is needed to gather pk/sk
    */
-  await deleteByGsi({ applicationContext, gsi: connectionId });
-};
+  deleteByGsi({ applicationContext, gsi: connectionId });
