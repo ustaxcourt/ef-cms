@@ -1,7 +1,7 @@
-const client = require('../../dynamodbClientService');
+const { put } = require('../../dynamodbClientService');
 
-exports.persistUser = async ({ applicationContext, user }) => {
-  await client.put({
+exports.persistUser = ({ applicationContext, user }) =>
+  put({
     Item: {
       ...user,
       pk: `user|${user.userId}`,
@@ -9,4 +9,3 @@ exports.persistUser = async ({ applicationContext, user }) => {
     },
     applicationContext,
   });
-};

@@ -1,4 +1,5 @@
 const client = require('../../dynamodbClientService');
+const { createPractitionerRecords } = require('./createPractitionerUser');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
@@ -49,27 +50,10 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   });
 
   if (
-    (user.role === ROLES.privatePractitioner ||
-      user.role === ROLES.irsPractitioner) &&
-    user.name &&
-    user.barNumber
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner
   ) {
-    const upperCaseName = user.name.toUpperCase();
-    await client.put({
-      Item: {
-        pk: `${user.role}|${upperCaseName}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
-    const upperCaseBarNumber = user.barNumber.toUpperCase();
-    await client.put({
-      Item: {
-        pk: `${user.role}|${upperCaseBarNumber}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
+    await createPractitionerRecords({ applicationContext, user, userId });
   }
 
   return {

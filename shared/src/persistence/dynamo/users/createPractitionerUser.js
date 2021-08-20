@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+const { put } = require('../../dynamodbClientService');
 const { ROLES } = require('../../../business/entities/EntityConstants');
 
 exports.createUserRecords = async ({ applicationContext, user, userId }) => {
@@ -7,40 +7,55 @@ exports.createUserRecords = async ({ applicationContext, user, userId }) => {
   if (user.barNumber === '') {
     delete user.barNumber;
   }
+  const recordCreation = [];
 
-  await client.put({
-    Item: {
-      ...user,
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-      userId,
-    },
-    applicationContext,
-  });
-
-  if (user.name && user.barNumber) {
-    const upperCaseName = user.name.toUpperCase();
-    await client.put({
+  recordCreation.push(
+    put({
       Item: {
-        pk: `${user.role}|${upperCaseName}`,
+        ...user,
+        pk: `user|${userId}`,
         sk: `user|${userId}`,
+        userId,
       },
       applicationContext,
-    });
-    const upperCaseBarNumber = user.barNumber.toUpperCase();
-    await client.put({
-      Item: {
-        pk: `${user.role}|${upperCaseBarNumber}`,
-        sk: `user|${userId}`,
-      },
-      applicationContext,
-    });
-  }
+    }),
+  );
+
+  recordCreation.push(
+    exports.createPractitionerRecords({ applicationContext, user, userId }),
+  );
+
+  await Promise.all(recordCreation);
 
   return {
     ...user,
     userId,
   };
+};
+
+exports.createPractitionerRecords = ({ applicationContext, user, userId }) => {
+  const recordCreation = [];
+  if (user.name && user.barNumber) {
+    const upperCaseName = user.name.toUpperCase();
+    const upperCaseBarNumber = user.barNumber.toUpperCase();
+    recordCreation.push(
+      put({
+        Item: {
+          pk: `${user.role}|${upperCaseName}`,
+          sk: `user|${userId}`,
+        },
+        applicationContext,
+      }),
+      put({
+        Item: {
+          pk: `${user.role}|${upperCaseBarNumber}`,
+          sk: `user|${userId}`,
+        },
+        applicationContext,
+      }),
+    );
+  }
+  return Promise.all(recordCreation);
 };
 
 exports.createPractitionerUser = async ({ applicationContext, user }) => {

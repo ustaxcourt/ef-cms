@@ -1,12 +1,11 @@
-const client = require('../../dynamodbClientService');
+const { put } = require('../../dynamodbClientService');
 
-exports.updateUser = async ({ applicationContext, user }) => {
-  await client.put({
+exports.updateUser = ({ applicationContext, user }) =>
+  put({
     Item: {
+      ...user,
       pk: `user|${user.userId}`,
       sk: `user|${user.userId}`,
-      ...user,
     },
     applicationContext,
   });
-};
