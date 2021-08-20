@@ -5,6 +5,9 @@ const {
 
 faker.seed(faker.datatype.number());
 
+const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
+
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);
   cy.get('.ustc-search-button').click();
@@ -171,4 +174,21 @@ exports.setCaseAsReadyForTrial = () => {
   cy.get('.modal-button-confirm').click();
   cy.get('.modal-dialog').should('not.exist');
   cy.contains(CASE_STATUS_TYPES.generalDocketReadyForTrial).should('exist');
+};
+
+exports.viewPrintableDocketRecord = () => {
+  cy.get('button#printable-docket-record-button').click();
+
+  cy.get('a.modal-button-confirm')
+    .invoke('attr', 'href')
+    .then(href => {
+      cy.request({
+        followRedirect: true,
+        hostname: `public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+        method: 'GET',
+        url: href,
+      }).should(response => {
+        expect(response.status).to.equal(200);
+      });
+    });
 };
