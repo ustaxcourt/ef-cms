@@ -32,7 +32,7 @@ export const AddEditSessionNoteModal = connect(
           errorText={validationErrors.notes}
         >
           <label className="usa-label" htmlFor="case-notes">
-            Judge’s notes
+            {modal.notesLabel}
           </label>
           <BindedTextarea
             aria-label="notes"
