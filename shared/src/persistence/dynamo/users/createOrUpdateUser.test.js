@@ -2,16 +2,19 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
+  createOrUpdateUser,
+  createUserRecords,
+} = require('./createOrUpdateUser');
+const {
   PETITIONS_SECTION,
   ROLES,
 } = require('../../../business/entities/EntityConstants');
-const { createUser, createUserRecords } = require('./createUser');
 
 const JUDGES_CHAMBERS_WITH_LEGACY = applicationContext
   .getPersistenceGateway()
   .getJudgesChambersWithLegacy();
 
-describe('createUser', () => {
+describe('createOrUpdateUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
   const petitionsClerkUser = {
     name: 'Test Petitionsclerk',
@@ -59,20 +62,27 @@ describe('createUser', () => {
     });
   });
 
-  it('should call adminCreateUser', async () => {
+  it('should create a user only if the user does not already exist', async () => {
     const petitionsclerkUser = {
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
       section: PETITIONS_SECTION,
     };
 
-    await createUser({
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => {
+        const error = new Error();
+        error.code = 'UserNotFoundException';
+        return Promise.reject(error);
+      },
+    });
+
+    await createOrUpdateUser({
       applicationContext,
       user: petitionsclerkUser,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(applicationContext.getCognito().adminDisableUser).not.toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
@@ -85,7 +95,15 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () => {
+        const error = new Error();
+        error.code = 'UserNotFoundException';
+        return Promise.reject(error);
+      },
+    });
+
+    await createOrUpdateUser({
       applicationContext,
       disableCognitoUser: true,
       user: petitionsclerkUser,
@@ -93,7 +111,7 @@ describe('createUser', () => {
 
     expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
     expect(applicationContext.getCognito().adminDisableUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(applicationContext.getCognito().adminGetUser).toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
     ).not.toBeCalled();
@@ -107,7 +125,7 @@ describe('createUser', () => {
       section: PETITIONS_SECTION,
     };
 
-    await createUser({ applicationContext, user: petitionsclerkUser });
+    await createOrUpdateUser({ applicationContext, user: petitionsclerkUser });
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
@@ -135,16 +153,17 @@ describe('createUser', () => {
     });
   });
 
-  it('should call adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
-    applicationContext.getCognito().adminCreateUser.mockReturnValue({
-      promise: () => {
-        throw new Error('bad!');
-      },
+  it('should attempt to update the user if the user already exists', async () => {
+    applicationContext.getCognito().adminGetUser.mockReturnValue({
+      promise: () =>
+        Promise.resolve({
+          Username: '562d6260-aa9b-4010-af99-536d3872c752',
+        }),
     });
 
-    await createUser({ applicationContext, user: petitionsClerkUser });
+    await createOrUpdateUser({ applicationContext, user: petitionsClerkUser });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).not.toBeCalled();
     expect(applicationContext.getCognito().adminGetUser).toBeCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
