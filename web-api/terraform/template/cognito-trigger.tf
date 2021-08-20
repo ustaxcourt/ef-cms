@@ -6,6 +6,7 @@ data "archive_file" "zip_triggers" {
     "${path.module}/../template/lambdas/dist/websockets.js",
     "${path.module}/../template/lambdas/dist/cron.js",
     "${path.module}/../template/lambdas/dist/api.js",
+    "${path.module}/../template/lambdas/dist/api-public.js",
     "${path.module}/../template/lambdas/dist/streams.js",
     "${path.module}/../template/lambdas/dist/cognito-triggers.js",
     "${path.module}/../template/lambdas/dist/cognito-authorizer.js",
