@@ -514,4 +514,26 @@ describe('caseInformationHelper', () => {
       expect(result.toggleAdditionalPetitionersDisplay).toEqual('View');
     });
   });
+
+  describe('showEditCaseButton', () => {
+    it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: { docketEntries: [], petitioners: [] },
+        },
+      });
+      expect(result.showEditCaseButton).toEqual(true);
+    });
+
+    it('should set showEditCaseButton to false if the user does not have UPDATE_CASE_CONTENT permission', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: { docketEntries: [], petitioners: [] },
+        },
+      });
+      expect(result.showEditCaseButton).toEqual(false);
+    });
+  });
 });
