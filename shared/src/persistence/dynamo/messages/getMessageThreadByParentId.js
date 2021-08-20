@@ -8,11 +8,11 @@ const { query } = require('../../dynamodbClientService');
  * @param {string} providers.parentMessageId the id of the parent message
  * @returns {object} the created message
  */
-exports.getMessageThreadByParentId = async ({
+exports.getMessageThreadByParentId = ({
   applicationContext,
   parentMessageId,
-}) => {
-  return await query({
+}) =>
+  query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -23,4 +23,3 @@ exports.getMessageThreadByParentId = async ({
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
-};
