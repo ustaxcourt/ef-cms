@@ -5,23 +5,22 @@ exports.getPractitionerByBarNumber = async ({
   barNumber,
 }) => {
   const upperCaseBarNumber = barNumber.toUpperCase();
-  const users = [
-    ...(await getRecordsViaMapping({
-      applicationContext,
-      pk: `irsPractitioner|${upperCaseBarNumber}`,
-      prefix: 'user',
-    })),
-    ...(await getRecordsViaMapping({
-      applicationContext,
-      pk: `privatePractitioner|${upperCaseBarNumber}`,
-      prefix: 'user',
-    })),
-    ...(await getRecordsViaMapping({
-      applicationContext,
-      pk: `inactivePractitioner|${upperCaseBarNumber}`,
-      prefix: 'user',
-    })),
+  const practitionerKeyPrefixes = [
+    'irsPractitioner',
+    'privatePractitioner',
+    'inactivePractitioner',
   ];
+  const practitionerQueryResults = await Promise.all(
+    practitionerKeyPrefixes.map(pkPrefix =>
+      getRecordsViaMapping({
+        applicationContext,
+        pk: `${pkPrefix}|${upperCaseBarNumber}`,
+        prefix: 'user',
+      }),
+    ),
+  );
 
-  return users.pop();
+  const practitioner = practitionerQueryResults.flat().pop();
+
+  return practitioner;
 };
