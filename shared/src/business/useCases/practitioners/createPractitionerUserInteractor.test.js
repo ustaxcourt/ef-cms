@@ -39,7 +39,7 @@ describe('create practitioner user', () => {
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext
       .getPersistenceGateway()
-      .createPractitionerUser.mockResolvedValue(mockUser);
+      .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
   });
 
   it('creates the practitioner user', async () => {
@@ -73,8 +73,8 @@ describe('create practitioner user', () => {
     });
 
     const mockUserCall =
-      applicationContext.getPersistenceGateway().createPractitionerUser.mock
-        .calls[0][0].user;
+      applicationContext.getPersistenceGateway().createOrUpdatePractitionerUser
+        .mock.calls[0][0].user;
 
     expect(mockUserCall.email).toBeUndefined();
     expect(mockUserCall.pendingEmail).toEqual(mockEmail);
