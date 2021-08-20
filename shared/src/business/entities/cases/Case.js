@@ -261,7 +261,7 @@ const assignFieldsForAllUsers = ({ obj, rawCase }) => {
     DocketEntry.isPending(docketEntry),
   );
 
-  obj.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
+  obj.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
   obj.docketNumberWithSuffix =
     obj.docketNumber + (obj.docketNumberSuffix || '');
