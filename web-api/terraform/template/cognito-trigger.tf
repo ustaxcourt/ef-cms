@@ -28,6 +28,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
+  memory_size = "768"
 
   # These can not use null_data_source.locals due to circular dep
   environment {
@@ -62,6 +63,8 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
+  memory_size = "768"
+
 
   # These can not use null_data_source.locals due to circular dep
   environment {
