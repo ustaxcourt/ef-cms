@@ -1,5 +1,7 @@
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const { generateHTMLTemplateForPDF } = require('./generateHTMLTemplateForPDF');
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('generateHTMLTemplateForPDF', () => {
   const content = '<div>Test Main Content</div>';
