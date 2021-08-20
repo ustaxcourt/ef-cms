@@ -182,11 +182,14 @@ const {
   createNewPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
 const {
+  createOrUpdatePractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser');
+const {
+  createOrUpdateUser,
+} = require('../../shared/src/persistence/dynamo/users/createOrUpdateUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
-const {
-  createPractitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
@@ -202,9 +205,6 @@ const {
 const {
   createTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy');
-const {
-  createUser,
-} = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
   createUserForContact,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
@@ -1337,10 +1337,10 @@ const gatewayMethods = {
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createMessage,
-    createPractitionerUser,
+    createOrUpdatePractitionerUser,
+    createOrUpdateUser,
     createTrialSession,
     createTrialSessionWorkingCopy,
-    createUser,
     deleteKeyCount,
     fetchPendingItems,
     getSesStatus,
@@ -1534,7 +1534,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
                   Username: foundUser.userId,
                 };
               } else {
-                throw new Error('User does not exist');
+                const error = new Error();
+                error.code = 'UserNotFoundException';
+                throw error;
               }
             },
           }),

@@ -22,7 +22,7 @@ describe('create user', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+      .createOrUpdateUser.mockReturnValue(mockUser);
 
     const userToCreate = {
       barNumber: '',
@@ -49,7 +49,7 @@ describe('create user', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+      .createOrUpdateUser.mockReturnValue(mockUser);
     const userToCreate = { userId: '145b7d39-8fae-4c2f-893c-3c829598bc71' };
 
     await expect(
@@ -99,12 +99,14 @@ describe('create user', () => {
       role: ROLES.admin,
       userId: 'admin',
     });
-    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
-      barNumber: 'CS20001',
-      name: 'Test PrivatePractitioner',
-      role: ROLES.irsPractitioner,
-      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .createOrUpdateUser.mockReturnValue({
+        barNumber: 'CS20001',
+        name: 'Test PrivatePractitioner',
+        role: ROLES.irsPractitioner,
+        userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+      });
     const mockAdmissionsDate = '1876-02-19';
 
     const user = await createUserInteractor(applicationContext, {
@@ -132,12 +134,14 @@ describe('create user', () => {
       role: ROLES.admin,
       userId: 'admin',
     });
-    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
-      barNumber: 'CS20001',
-      name: 'Test InactivePractitioner',
-      role: ROLES.inactivePractitioner,
-      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .createOrUpdateUser.mockReturnValue({
+        barNumber: 'CS20001',
+        name: 'Test InactivePractitioner',
+        role: ROLES.inactivePractitioner,
+        userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+      });
     const mockAdmissionsDate = '1876-02-19';
 
     const user = await createUserInteractor(applicationContext, {
@@ -166,12 +170,14 @@ describe('create user', () => {
       role: ROLES.admin,
       userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
     });
-    applicationContext.getPersistenceGateway().createUser.mockReturnValue({
-      barNumber: '',
-      name: 'Test PrivatePractitioner',
-      role: ROLES.judh,
-      userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .createOrUpdateUser.mockReturnValue({
+        barNumber: '',
+        name: 'Test PrivatePractitioner',
+        role: ROLES.judh,
+        userId: '745b7d39-8fae-4c2f-893c-3c829598bc71',
+      });
 
     const userToCreate = {
       admissionsDate: '2020-03-14',
@@ -209,7 +215,7 @@ describe('create user', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+      .createOrUpdateUser.mockReturnValue(mockUser);
 
     const userToCreate = {
       barNumber: '',
@@ -224,7 +230,7 @@ describe('create user', () => {
 
     expect(user).not.toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().createUser,
+      applicationContext.getPersistenceGateway().createOrUpdateUser,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         disableCognitoUser: true,
@@ -246,7 +252,7 @@ describe('create user', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .createUser.mockReturnValue(mockUser);
+      .createOrUpdateUser.mockReturnValue(mockUser);
 
     const userToCreate = {
       name: 'Jesse Pinkman',
@@ -260,7 +266,7 @@ describe('create user', () => {
 
     expect(user).not.toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().createUser,
+      applicationContext.getPersistenceGateway().createOrUpdateUser,
     ).toHaveBeenCalledWith(
       expect.objectContaining({
         disableCognitoUser: true,
