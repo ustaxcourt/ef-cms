@@ -9,16 +9,15 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user to get the case notes for
  * @returns {Promise} the promise of the persistence call to get the record
  */
-exports.getUserCaseNoteForCases = async ({
+exports.getUserCaseNoteForCases = ({
   applicationContext,
   docketNumbers,
   userId,
-}) => {
-  return client.batchGet({
+}) =>
+  client.batchGet({
     applicationContext,
     keys: docketNumbers.map(docketNumber => ({
       pk: `user-case-note|${docketNumber}`,
       sk: `user|${userId}`,
     })),
   });
-};

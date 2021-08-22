@@ -237,4 +237,23 @@ describe('formattedTrialSessionDetails', () => {
       expect(result.showOnlyClosedCases).toEqual(true);
     });
   });
+
+  describe('chambersPhoneNumber', () => {
+    it('should format the phone number if it exists and 10 digits exactly', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        chambersPhoneNumber: '1234567890',
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...mockTrialSession,
+          },
+        },
+      });
+
+      expect(result.chambersPhoneNumber).toEqual('123-456-7890');
+    });
+  });
 });

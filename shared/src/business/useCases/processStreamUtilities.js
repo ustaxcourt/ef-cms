@@ -169,6 +169,7 @@ const processDocketEntries = async ({
             documentContentsId: fullDocketEntry.documentContentsId,
           });
           const { documentContents } = JSON.parse(buffer.toString());
+
           fullDocketEntry.documentContents = documentContents;
         } catch (err) {
           applicationContext.logger.error(
@@ -308,7 +309,7 @@ const processMessageEntries = async ({
     applicationContext.logger.error('the records that failed to index', {
       failedRecords,
     });
-    throw new Error('failed to index records');
+    throw new Error('failed to index message records');
   }
 };
 

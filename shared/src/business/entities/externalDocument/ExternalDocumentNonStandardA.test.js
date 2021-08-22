@@ -9,7 +9,7 @@ const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
 describe('ExternalDocumentNonStandardA', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard A',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -20,7 +20,7 @@ describe('ExternalDocumentNonStandardA', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Brief in Support of [Document Name]',
         documentType: 'Brief in Support',
@@ -31,7 +31,7 @@ describe('ExternalDocumentNonStandardA', () => {
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: over3000Characters,
         documentType: 'Brief in Support',
@@ -46,7 +46,7 @@ describe('ExternalDocumentNonStandardA', () => {
 
   describe('title generation', () => {
     it('should generate valid title with previousDocument documentType', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Brief in Support of [Document Name]',
         documentType: 'Brief in Support',
@@ -57,7 +57,7 @@ describe('ExternalDocumentNonStandardA', () => {
     });
 
     it('should generate valid title with previousDocument documentTitle', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Brief in Support of [Document Name]',
         documentType: 'Brief in Support',
@@ -73,7 +73,7 @@ describe('ExternalDocumentNonStandardA', () => {
     });
 
     it('should generate title without previousDocument', () => {
-      const extDoc = ExternalDocumentFactory.get({
+      const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Brief in Support of [Document Name]',
         documentType: 'Brief in Support',

@@ -150,8 +150,8 @@ export const TrialSessionInformation = connect(
                 <div className="card trial-session-card">
                   <div className="content-wrapper">
                     <h3 className="underlined">Details</h3>
-                    <div className="grid-container padding-x-0">
-                      <div className="grid-row grid-gap">
+                    <div className="grid-container padding-x-0 padding-top-1 padding-bottom-1">
+                      <div className="grid-row grid-gap padding-bottom-1">
                         <div className="grid-col-6">
                           <p className="label">Term</p>
                           <p>{formattedTrialSessionDetails.formattedTerm}</p>
@@ -216,7 +216,14 @@ export const TrialSessionInformation = connect(
                       <div className="grid-row grid-gap">
                         <div className="grid-col-6">
                           <p className="label">Judge</p>
-                          <p>{formattedTrialSessionDetails.formattedJudge}</p>
+                          <p className="margin-bottom-0">
+                            {formattedTrialSessionDetails.formattedJudge}
+                          </p>
+                          <p>
+                            {formattedTrialSessionDetails.chambersPhoneNumber
+                              ? formattedTrialSessionDetails.chambersPhoneNumber
+                              : 'No phone number'}
+                          </p>
                         </div>
                         <div className="grid-col-6">
                           <p className="label">Trial clerk</p>
