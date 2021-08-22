@@ -1,4 +1,4 @@
-import { clearOpenClosedCasesCurrentPageAction } from '../actions/caseConsolidation/clearOpenClosedCasesCurrentPageAction';
+import { clearOpenClosedCasesCurrentPageAction } from '../actions/CaseConsolidation/clearOpenClosedCasesCurrentPageAction';
 
 export const clearOpenClosedCasesCurrentPageSequence = [
   clearOpenClosedCasesCurrentPageAction,

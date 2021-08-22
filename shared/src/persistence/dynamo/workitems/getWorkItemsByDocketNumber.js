@@ -1,9 +1,6 @@
 const client = require('../../dynamodbClientService');
 
-exports.getWorkItemMappingsByDocketNumber = ({
-  applicationContext,
-  docketNumber,
-}) => {
+exports.getWorkItemsByDocketNumber = ({ applicationContext, docketNumber }) => {
   return client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

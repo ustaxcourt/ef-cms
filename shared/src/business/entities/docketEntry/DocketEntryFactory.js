@@ -85,7 +85,7 @@ function DocketEntryFactory(rawProps) {
 
     const { secondaryDocument } = rawPropsParam;
     if (secondaryDocument) {
-      this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);
+      this.secondaryDocument = ExternalDocumentFactory(secondaryDocument);
     }
   };
 
@@ -157,7 +157,7 @@ function DocketEntryFactory(rawProps) {
     });
   };
 
-  const exDoc = ExternalDocumentFactory.get(rawProps);
+  const exDoc = ExternalDocumentFactory(rawProps);
   const docketEntryExternalDocumentSchema = exDoc.getSchema();
 
   schema = schema.concat(docketEntryExternalDocumentSchema).concat(

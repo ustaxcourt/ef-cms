@@ -8,9 +8,10 @@ describe('getClientId', () => {
   const expectedClientId = '82b35e7c-9830-4104-bb15-24a2eda7f84e';
   aws.CognitoIdentityServiceProvider = jest.fn().mockReturnValue({
     listUserPoolClients: jest.fn().mockReturnValue({
-      promise: async () => ({
-        UserPoolClients: [{ ClientId: expectedClientId }],
-      }),
+      promise: () =>
+        Promise.resolve({
+          UserPoolClients: [{ ClientId: expectedClientId }],
+        }),
     }),
   });
 

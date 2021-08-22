@@ -69,6 +69,8 @@ exports.fileCourtIssuedOrderInteractor = async (
   }
 
   if (documentMetadata.documentContents) {
+    documentMetadata.documentContents += ` ${caseEntity.docketNumberWithSuffix} ${caseEntity.caseCaption}`;
+
     const documentContentsId = applicationContext.getUniqueId();
 
     const contentToStore = {

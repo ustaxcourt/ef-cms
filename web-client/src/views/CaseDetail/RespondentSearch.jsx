@@ -4,7 +4,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const RespondentSearch = connect(
+export const RespondentSearch = connect(
   {
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
@@ -87,5 +87,3 @@ const RespondentSearch = connect(
     );
   },
 );
-
-export { RespondentSearch };

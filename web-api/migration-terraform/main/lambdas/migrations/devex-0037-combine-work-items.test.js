@@ -43,9 +43,10 @@ describe('migrateItems', () => {
 
     documentClient = {
       get: jest.fn().mockReturnValue({
-        promise: async () => ({
-          Item: mockWorkItemRecord,
-        }),
+        promise: () =>
+          Promise.resolve({
+            Item: mockWorkItemRecord,
+          }),
       }),
     };
   });
@@ -100,9 +101,10 @@ describe('migrateItems', () => {
 
     documentClient = {
       get: jest.fn().mockReturnValue({
-        promise: async () => ({
-          Item: undefined,
-        }),
+        promise: () =>
+          Promise.resolve({
+            Item: undefined,
+          }),
       }),
     };
 

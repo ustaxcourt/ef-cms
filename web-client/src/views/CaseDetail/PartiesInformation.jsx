@@ -9,7 +9,7 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const PartiesInformation = connect(
+export const PartiesInformation = connect(
   {
     caseDetail: state.caseDetail,
     caseInformationHelper: state.caseInformationHelper,
@@ -125,5 +125,3 @@ const PartiesInformation = connect(
     );
   },
 );
-
-export { PartiesInformation };

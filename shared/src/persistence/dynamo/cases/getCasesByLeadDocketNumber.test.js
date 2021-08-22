@@ -9,13 +9,14 @@ const { getCasesByLeadDocketNumber } = require('./getCasesByLeadDocketNumber');
 describe('getCasesByLeadDocketNumber', () => {
   it('attempts to retrieve the cases by leadDocketNumber', async () => {
     applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: async () => ({
-        Items: [
-          {
-            docketNumber: '101-20',
-          },
-        ],
-      }),
+      promise: () =>
+        Promise.resolve({
+          Items: [
+            {
+              docketNumber: '101-20',
+            },
+          ],
+        }),
     });
 
     applicationContext
@@ -52,9 +53,10 @@ describe('getCasesByLeadDocketNumber', () => {
 
   it('returns an empty array when no items are returned', async () => {
     applicationContext.getDocumentClient().query.mockReturnValueOnce({
-      promise: async () => ({
-        Items: [],
-      }),
+      promise: () =>
+        Promise.resolve({
+          Items: [],
+        }),
     });
 
     const result = await getCasesByLeadDocketNumber({

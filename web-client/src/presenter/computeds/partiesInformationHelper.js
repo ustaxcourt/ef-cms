@@ -1,7 +1,7 @@
 import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
-const formatCounsel = ({ counsel, screenMetadata }) => {
+export const formatCounsel = ({ counsel, screenMetadata }) => {
   const counselPendingEmail = screenMetadata.pendingEmails
     ? screenMetadata.pendingEmails[counsel.userId]
     : undefined;

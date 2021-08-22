@@ -13,11 +13,9 @@ describe('getReconciliationReport', () => {
     const mockEndDate = '2018-03-01T00:01:00.000Z';
     const mockStartDate = '2018-05-01T00:01:00.000Z';
 
-    search.mockImplementation(async () => {
-      return {
-        results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
-        total: 2,
-      };
+    search.mockResolvedValue({
+      results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
+      total: 2,
     });
 
     await getReconciliationReport({

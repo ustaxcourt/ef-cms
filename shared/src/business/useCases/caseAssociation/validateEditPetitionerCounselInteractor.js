@@ -10,13 +10,9 @@ const {
  * @param {object} providers.practitioner the petitioner counsel to validate
  * @returns {object} errors
  */
-exports.validateEditPetitionerCounselInteractor = (
-  applicationContext,
-  { practitioner },
-) => {
-  const errors = EditPetitionerCounselFactory.get(practitioner, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+exports.validateEditPetitionerCounselInteractor = ({ practitioner }) => {
+  const errors =
+    EditPetitionerCounselFactory(practitioner).getFormattedValidationErrors();
 
   if (!errors) return null;
   return errors;

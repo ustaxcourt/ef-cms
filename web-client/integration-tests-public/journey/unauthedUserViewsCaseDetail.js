@@ -1,6 +1,6 @@
 import { applicationContextPublic } from '../../src/applicationContextPublic';
 import { contactPrimaryFromState } from '../../integration-tests/helpers';
-import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/public/publicCaseDetailHelper';
+import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/Public/publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
