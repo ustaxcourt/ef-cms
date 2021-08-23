@@ -2,6 +2,8 @@ const createApplicationContext = require('../../../src/applicationContext');
 
 const applicationContext = createApplicationContext({});
 
+exports.applicationContext = applicationContext;
+
 exports.handler = async event => {
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
