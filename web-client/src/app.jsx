@@ -47,6 +47,7 @@ import { faClipboardList } from '@fortawesome/free-solid-svg-icons/faClipboardLi
 import { faClock as faClockSolid } from '@fortawesome/free-solid-svg-icons/faClock';
 import { faCloudDownloadAlt } from '@fortawesome/free-solid-svg-icons/faCloudDownloadAlt';
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons/faCloudUploadAlt';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons/faCommentDots';
 import { faCopy as faCopySolid } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
 import { faEdit as faEditSolid } from '@fortawesome/free-solid-svg-icons/faEdit';
@@ -184,6 +185,7 @@ const app = {
       faCloudUploadAlt,
       faCopy,
       faCopySolid,
+      faCommentDots,
       faDollarSign,
       faEdit,
       faEditSolid,
