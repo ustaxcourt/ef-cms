@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -12,6 +13,7 @@ export const AppMaintenanceModal = connect(
   function AppMaintenanceModal({
     confirmSequence,
     idleLogoutSequence,
+    runCancelSequence,
     shouldIdleLogout,
   }) {
     useEffect(() => {
@@ -22,15 +24,26 @@ export const AppMaintenanceModal = connect(
 
     return (
       <ModalDialog
-        cancelLabel="Cancel"
-        cancelLink="www.google.com"
-        className="app-maintenance-modal"
+        className="app-maintenance-modal text-center"
         closeLink={false}
-        confirmLabel="Log Out"
-        confirmSequence={confirmSequence}
+        showButtons={false}
       >
-        <h2>DAWSON is undergoing maintenance.</h2>
-        <p>Your work may not be saved. Check back later for updates.</p>
+        <h2 className="margin-top-5">DAWSON is undergoing maintenance.</h2>
+        <p className="margin-top-5">
+          Your work may not be saved. Check back later for updates.
+        </p>
+        <p className="margin-top-5 ">
+          <Button onClick={confirmSequence}>Log Out</Button>
+        </p>
+        <p className="text-center">
+          <Button
+            link
+            // link={cancelLink}
+            onClick={runCancelSequence}
+          >
+            Cancel
+          </Button>
+        </p>
       </ModalDialog>
     );
   },
