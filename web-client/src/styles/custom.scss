@@ -1853,6 +1853,11 @@ button.change-scanner-button {
   color: color($theme-color-primary-darker);
 }
 
+.huge-icon {
+  color: color($theme-color-warning);
+  font-size: 50px !important;
+}
+
 .text-middle-margin {
   margin-top: auto;
   margin-bottom: auto;
