@@ -18,7 +18,6 @@ export const AppMaintenanceModal = connect(
       >
         <div className="maintenance-circle">
           <Icon
-            aria-label="wrench"
             className="wrench-icon text-center"
             icon={['fas', 'wrench']}
             size="4x"
