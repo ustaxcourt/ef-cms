@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
 import { Address } from './StartCase/Address';
-import { AppMaintenanceModal } from './AppMaintenanceModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { Country } from './StartCase/Country';
@@ -11,6 +10,7 @@ import { InternationalAddress } from './StartCase/InternationalAddress';
 import { MatchingEmailFoundModal } from './CaseDetail/MatchingEmailFoundModal';
 import { NoMatchingEmailFoundModal } from './CaseDetail/NoMatchingEmailFoundModal';
 import { RemovePetitionerModal } from './CaseDetailEdit/RemovePetitionerModal';
+import { SealAddressModal } from './CaseDetail/SealAddressModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
@@ -355,8 +355,7 @@ export const EditPetitionerInformationInternal = connect(
           <NoMatchingEmailFoundModal />
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
-        {/* todo: put this back so it's not AppMaintenanceModal*/}
-        {showModal === 'SealAddressModal' && <AppMaintenanceModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },

@@ -1845,14 +1845,6 @@ button.change-scanner-button {
   }
 }
 
-.circle {
-  width: 95px;
-  height: 95px;
-  border: 5px solid color($theme-color-warning);
-  margin: 0 auto;
-  border-radius: 50%;
-}
-
 .display-flex {
   display: flex;
 }
@@ -1864,6 +1856,14 @@ button.change-scanner-button {
 .wrench-icon {
   margin-top: 7px;
   color: color($theme-color-warning);
+}
+
+.maintenance-circle {
+  width: 100px;
+  height: 95px;
+  border: 7px solid color($theme-color-warning);
+  margin: 0 auto;
+  border-radius: 50%;
 }
 
 .text-middle-margin {

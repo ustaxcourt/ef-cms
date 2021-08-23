@@ -2,34 +2,21 @@ import { Button } from '../ustc-ui/Button/Button';
 import { Icon } from '../ustc-ui/Icon/Icon';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React, { useEffect } from 'react';
+import { sequences } from 'cerebral';
+import React from 'react';
 
 export const AppMaintenanceModal = connect(
   {
-    confirmSequence: sequences.broadcastStayLoggedInSequence,
-    idleLogoutSequence: sequences.gotoIdleLogoutSequence,
-    shouldIdleLogout: state.shouldIdleLogout,
+    signOutSequence: sequences.signOutSequence,
   },
-  function AppMaintenanceModal({
-    confirmSequence,
-    idleLogoutSequence,
-    runCancelSequence,
-    shouldIdleLogout,
-  }) {
-    useEffect(() => {
-      if (shouldIdleLogout === true) {
-        idleLogoutSequence();
-      }
-    });
-
+  function AppMaintenanceModal({ signOutSequence }) {
     return (
       <ModalDialog
         className="app-maintenance-modal text-center"
         closeLink={false}
         showButtons={false}
       >
-        <div className="circle">
+        <div className="maintenance-circle">
           <Icon
             aria-label="wrench"
             className="wrench-icon text-center"
@@ -42,13 +29,14 @@ export const AppMaintenanceModal = connect(
           Your work may not be saved. Check back later for updates.
         </p>
         <p className="margin-top-5">
-          <Button onClick={confirmSequence}>Log Out</Button>
+          <Button onClick={() => signOutSequence()}>Log Out</Button>
         </p>
         <p className="text-center margin-top-0">
           <Button
             link
+            // cancel sequence to be added in a later task
             // link={cancelLink}
-            onClick={runCancelSequence}
+            // onClick={runCancelSequence}
           >
             Cancel
           </Button>
