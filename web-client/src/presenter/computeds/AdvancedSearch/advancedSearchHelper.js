@@ -38,6 +38,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
     dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
 
   const result = {
+    feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
     showDateRangePicker,
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
