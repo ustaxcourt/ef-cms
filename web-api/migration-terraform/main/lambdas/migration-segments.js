@@ -2,21 +2,6 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 
-// const {
-//   migrateItems: bugMigration0035,
-// } = require('./migrations/bug-0035-private-practitioner-representing');
-// const {
-//   migrateItems: bugMigration0036,
-// } = require('./migrations/bug-0036-public-served-parties-code');
-// const {
-//   migrateItems: devexMigration0037,
-// } = require('./migrations/devex-0037-combine-work-items');
-// const {
-//   migrateItems: migration0036,
-// } = require('./migrations/0036-phone-number-format');
-// const {
-//   migrateItems: migration0038,
-// } = require('./migrations/0038-parse-generated-orders');
 const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
