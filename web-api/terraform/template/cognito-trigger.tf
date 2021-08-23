@@ -1,7 +1,7 @@
 data "archive_file" "zip_triggers" {
   type        = "zip"
-  source_file = "${path.module}/lambdas/dist/cognito-triggers.js"
-  output_path = "${path.module}/lambdas/cognito-triggers.js.zip"
+  source_file = "${path.module}/lambdas/cognito-triggers.js"
+  output_path = "${path.module}/lambdas/dist/cognito-triggers.js.zip"
 }
 
 resource "aws_lambda_permission" "allow_trigger" {
