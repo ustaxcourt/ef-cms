@@ -1,7 +1,14 @@
 data "archive_file" "zip_triggers" {
   type        = "zip"
-  source_file = "${path.module}/lambdas/cognito-triggers.js"
-  output_path = "${path.module}/lambdas/dist/cognito-triggers.js.zip"
+  output_path = "${path.module}/lambdas/cognito-triggers.js.zip"
+  source_dir  = "${path.module}/lambdas/dist/"
+  excludes = ["api-public.js",
+    "api.js".
+    "websockets.js",
+    "cron.js",
+    "streams.js",
+    "cognito-authorizer.js",
+    "report.html", ]
 }
 
 resource "aws_lambda_permission" "allow_trigger" {
