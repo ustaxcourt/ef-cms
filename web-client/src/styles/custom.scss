@@ -1845,6 +1845,13 @@ button.change-scanner-button {
   }
 }
 
+.circle {
+  width: 85px;
+  height: 85px;
+  border: 5px solid color($theme-color-warning);
+  border-radius: 50%;
+}
+
 .display-flex {
   display: flex;
 }
