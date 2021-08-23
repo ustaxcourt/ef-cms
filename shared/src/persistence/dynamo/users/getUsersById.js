@@ -1,4 +1,4 @@
-const { batchGet } = require('../../dynamodbClientService');
+const client = require('../../dynamodbClientService');
 const { uniq } = require('lodash');
 
 /**
@@ -7,11 +7,12 @@ const { uniq } = require('lodash');
  * @param {array} userIds an array of userIds (string) for a user
  * @returns {*} result returned from persistence
  */
-exports.getUsersById = ({ applicationContext, userIds }) =>
-  batchGet({
+exports.getUsersById = async ({ applicationContext, userIds }) => {
+  return await client.batchGet({
     applicationContext,
     keys: uniq(userIds).map(userId => ({
       pk: `user|${userId}`,
       sk: `user|${userId}`,
     })),
   });
+};

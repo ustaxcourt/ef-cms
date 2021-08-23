@@ -1,4 +1,4 @@
-const { put } = require('../../dynamodbClientService');
+const client = require('../../dynamodbClientService');
 
 const createPetitionerUserRecords = async ({
   applicationContext,
@@ -6,27 +6,26 @@ const createPetitionerUserRecords = async ({
   userId,
 }) => {
   delete user.password;
-  const formattedEmail = user.email.toLowerCase().trim();
 
-  await Promise.all([
-    put({
-      Item: {
-        ...user,
-        pk: `user|${userId}`,
-        sk: `user|${userId}`,
-        userId,
-      },
-      applicationContext,
-    }),
-    put({
-      Item: {
-        pk: `user-email|${formattedEmail}`,
-        sk: `user|${userId}`,
-        userId,
-      },
-      applicationContext,
-    }),
-  ]);
+  await client.put({
+    Item: {
+      ...user,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
+      userId,
+    },
+    applicationContext,
+  });
+
+  const formattedEmail = user.email.toLowerCase().trim();
+  await client.put({
+    Item: {
+      pk: `user-email|${formattedEmail}`,
+      sk: `user|${userId}`,
+      userId,
+    },
+    applicationContext,
+  });
 
   return {
     ...user,

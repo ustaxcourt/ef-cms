@@ -6,17 +6,20 @@ const {
 const { getUsersInSection } = require('./getUsersInSection');
 
 exports.getInternalUsers = async ({ applicationContext }) => {
-  const sections = [ADC_SECTION, DOCKET_SECTION, PETITIONS_SECTION];
-  const users = (
-    await Promise.all(
-      sections.map(section =>
-        getUsersInSection({
-          applicationContext,
-          section: `section|${section}`,
-        }),
-      ),
-    )
-  ).flat();
+  const users = [
+    ...(await getUsersInSection({
+      applicationContext,
+      section: `section|${DOCKET_SECTION}`,
+    })),
+    ...(await getUsersInSection({
+      applicationContext,
+      section: `section|${PETITIONS_SECTION}`,
+    })),
+    ...(await getUsersInSection({
+      applicationContext,
+      section: `section|${ADC_SECTION}`,
+    })),
+  ];
 
   return users;
 };
