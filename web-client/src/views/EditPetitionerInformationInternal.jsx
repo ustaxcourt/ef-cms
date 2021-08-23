@@ -355,6 +355,7 @@ export const EditPetitionerInformationInternal = connect(
           <NoMatchingEmailFoundModal />
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
+        {/* todo: put this back so it's not AppMaintenanceModal*/}
         {showModal === 'SealAddressModal' && <AppMaintenanceModal />}
       </>
     );

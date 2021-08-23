@@ -23,11 +23,20 @@ export const AppMaintenanceModal = connect(
 
     return (
       <ModalDialog
-        className="app-maintenance-modal"
         confirmLabel="Log Out"
         confirmSequence={confirmSequence}
+        id="app-maintenance-modal"
       >
-        <WarningNotificationComponent />
+        <h2>DAWSON is undergoing maintenance.</h2>
+        <p>Your work may not be saved. Check back later for updates.</p>
+        {/* steal styling from warning notification instead of using it */}
+        <WarningNotificationComponent
+          alertWarning={{
+            message: 'messaaage',
+            title: 'titlekjwlskjdfs',
+          }}
+          dismissable={false}
+        />
       </ModalDialog>
     );
   },

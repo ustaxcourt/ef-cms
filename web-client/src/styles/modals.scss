@@ -43,6 +43,10 @@
   margin: auto;
   background: $color-white;
 
+  #app-maintenance-modal {
+    background: #faf3d1 !important;
+  }
+
   /* big screens */
   @media only screen and (min-width: $medium-screen) {
     top: 50%;
