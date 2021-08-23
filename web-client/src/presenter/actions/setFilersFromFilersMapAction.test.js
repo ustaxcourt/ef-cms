@@ -19,7 +19,7 @@ describe('setFilersFromFilersMapAction', () => {
     ]);
   });
 
-  it('sets state.form.filedBy to the filers array when state.form.filersMap is empty', async () => {
+  it('sets state.form.filers to an empty array when state.form.filersMap is empty', async () => {
     const result = await runAction(setFilersFromFilersMapAction, {
       state: {
         form: {
@@ -29,6 +29,6 @@ describe('setFilersFromFilersMapAction', () => {
       },
     });
 
-    expect(result.state.form.filers).toEqual(['A legacy user']);
+    expect(result.state.form.filers).toEqual([]);
   });
 });
