@@ -3,7 +3,7 @@ data "archive_file" "zip_triggers" {
   output_path = "${path.module}/lambdas/cognito-triggers.js.zip"
   source_dir  = "${path.module}/lambdas/dist/"
   excludes = ["api-public.js",
-    "api.js".
+    "api.js",
     "websockets.js",
     "cron.js",
     "streams.js",
