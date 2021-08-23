@@ -412,12 +412,6 @@ jobs:
             cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
-      - run:
           name: Setup Dynamsoft Keys
           command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./scripts/get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
