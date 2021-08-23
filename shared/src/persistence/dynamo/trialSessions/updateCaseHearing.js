@@ -1,11 +1,11 @@
-const client = require('../../dynamodbClientService');
+const { put } = require('../../dynamodbClientService');
 
-exports.updateCaseHearing = async ({
+exports.updateCaseHearing = ({
   applicationContext,
   docketNumber,
   hearingToUpdate,
-}) => {
-  return await client.put({
+}) =>
+  put({
     Item: {
       ...hearingToUpdate,
       pk: `case|${docketNumber}`,
@@ -13,4 +13,3 @@ exports.updateCaseHearing = async ({
     },
     applicationContext,
   });
-};

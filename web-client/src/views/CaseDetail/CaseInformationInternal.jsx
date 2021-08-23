@@ -447,7 +447,6 @@ const TrialInformation = ({
 
 export const CaseInformationInternal = connect(
   {
-    caseDetailHeaderHelper: state.caseDetailHeaderHelper,
     caseDetailHelper: state.caseDetailHelper,
     caseInformationHelper: state.caseInformationHelper,
     formattedCaseDetail: state.formattedCaseDetail,
@@ -475,7 +474,6 @@ export const CaseInformationInternal = connect(
   },
 
   function CaseInformationInternal({
-    caseDetailHeaderHelper,
     caseDetailHelper,
     caseInformationHelper,
     formattedCaseDetail,
@@ -500,7 +498,7 @@ export const CaseInformationInternal = connect(
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
             <div className="tablet:grid-col-12 text-right margin-bottom-2">
-              {caseDetailHeaderHelper.showEditCaseButton && (
+              {caseInformationHelper.showEditCaseButton && (
                 <Button
                   link
                   className="margin-0"

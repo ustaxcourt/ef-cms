@@ -48,5 +48,9 @@ exports.createLogger = (opts = {}) => {
     );
   }
 
-  return createWinstonLogger(options);
+  const logger = createWinstonLogger(options);
+
+  // alias Winston's "warning" to "warn".
+  logger.warn = logger.warning;
+  return logger;
 };
