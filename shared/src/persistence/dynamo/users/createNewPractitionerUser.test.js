@@ -1,6 +1,3 @@
-jest.mock('./createPractitionerUser');
-const { createUserRecords } = require('./createPractitionerUser');
-
 jest.mock('../../dynamodbClientService');
 const client = require('../../dynamodbClientService');
 
@@ -57,24 +54,25 @@ describe('createNewPractitionerUser', () => {
     });
 
     it('should put new records with uppercase name and bar number', async () => {
-      const user = {
-        barNumber: 'tpp1234',
-        email: 'practitioner@example.com',
-        name: 'Test Private Practitioner',
-        role: ROLES.privatePractitioner,
-        section: 'practitioner',
-        userId: '123',
-      };
       await createNewPractitionerUser({
         applicationContext,
-        user,
+        user: {
+          barNumber: 'tpp1234',
+          email: 'practitioner@example.com',
+          name: 'Test Private Practitioner',
+          role: ROLES.privatePractitioner,
+          section: 'practitioner',
+          userId: '123',
+        },
       });
 
-      expect(createUserRecords).toHaveBeenCalledWith({
-        applicationContext,
-        user,
-        userId: user.userId,
-      });
+      const putItem2 = client.put.mock.calls[1][0].Item;
+      const putItem3 = client.put.mock.calls[2][0].Item;
+
+      expect(putItem2.pk).toEqual(
+        `${ROLES.privatePractitioner}|TEST PRIVATE PRACTITIONER`,
+      );
+      expect(putItem3.pk).toEqual(`${ROLES.privatePractitioner}|TPP1234`);
     });
   });
 });
