@@ -31,10 +31,11 @@ export const AppMaintenanceModal = connect(
       >
         <Icon
           aria-label="wrench"
-          className="huge-icon"
+          className="wrench-icon"
           icon={['fas', 'wrench']}
+          size="4x"
         />
-        <h2 className="margin-top-5">DAWSON is undergoing maintenance.</h2>
+        <h2 className="margin-top-2">DAWSON is undergoing maintenance.</h2>
         <p className="margin-top-2">
           Your work may not be saved. Check back later for updates.
         </p>
