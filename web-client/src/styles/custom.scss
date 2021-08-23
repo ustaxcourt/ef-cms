@@ -1846,9 +1846,10 @@ button.change-scanner-button {
 }
 
 .circle {
-  width: 85px;
-  height: 85px;
+  width: 95px;
+  height: 95px;
   border: 5px solid color($theme-color-warning);
+  margin: 0 auto;
   border-radius: 50%;
 }
 
@@ -1861,6 +1862,7 @@ button.change-scanner-button {
 }
 
 .wrench-icon {
+  margin-top: 7px;
   color: color($theme-color-warning);
 }
 
