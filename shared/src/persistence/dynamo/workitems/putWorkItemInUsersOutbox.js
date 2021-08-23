@@ -7,14 +7,16 @@ exports.putWorkItemInUsersOutbox = async ({
   userId,
   workItem,
 }) => {
-  await createUserOutboxRecord({
-    applicationContext,
-    userId,
-    workItem,
-  });
-  await createSectionOutboxRecord({
-    applicationContext,
-    section,
-    workItem,
-  });
+  await Promise.all([
+    createUserOutboxRecord({
+      applicationContext,
+      userId,
+      workItem,
+    }),
+    createSectionOutboxRecord({
+      applicationContext,
+      section,
+      workItem,
+    }),
+  ]);
 };
