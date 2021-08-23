@@ -122,6 +122,16 @@ describe('getScannerInterface', () => {
     expect(result).toBe(true);
   });
 
+  it('can get a scanner source name by index', () => {
+    const index = 1;
+    const scannerAPI = getScannerInterface();
+    scannerAPI.setDWObject(DWObject);
+    const result = scannerAPI.getSourceNameByIndex(index);
+
+    expect(scannerAPI.DWObject).toBe(DWObject);
+    expect(result).toBe(mockSources[index]);
+  });
+
   it('can set a scanner source by name', () => {
     const scannerAPI = getScannerInterface();
     scannerAPI.setDWObject(DWObject);

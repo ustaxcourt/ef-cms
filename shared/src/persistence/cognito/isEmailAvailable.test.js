@@ -22,7 +22,11 @@ describe('isEmailAvailable', () => {
 
   it('returns true when there is no corresponding user with the provided email found in cognito', async () => {
     applicationContext.getCognito().adminGetUser.mockReturnValue({
-      promise: () => Promise.reject(new Error('User does not exist')),
+      promise: () => {
+        const e = new Error();
+        e.code = 'UserNotFoundException';
+        return Promise.reject(e);
+      },
     });
 
     await expect(
