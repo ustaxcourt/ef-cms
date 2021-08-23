@@ -493,19 +493,11 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-          },
-        },
-      ]);
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({
+        'judge.S': 'Guy Fieri',
+      });
     });
 
     it('should strip out the "Legacy" title from a judge\'s name', async () => {
@@ -517,22 +509,14 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
-                },
-              },
-            },
-          },
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({
+        'signedJudgeName.S': {
+          operator: 'and',
+          query: 'Guy Fieri',
         },
-      ]);
+      });
     });
 
     it('should strip out the "Judge" title from a judge\'s name', async () => {
@@ -544,19 +528,9 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-          },
-        },
-      ]);
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({ 'judge.S': 'Guy Fieri' });
     });
   });
 });
