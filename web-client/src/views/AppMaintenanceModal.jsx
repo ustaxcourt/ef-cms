@@ -29,20 +29,14 @@ export const AppMaintenanceModal = connect(
         closeLink={false}
         showButtons={false}
       >
-        <span className="fa-layers fa-fw margin-top-2">
-          <Icon
-            aria-label="circle-outline"
-            className="wrench-icon "
-            icon={['fa', 'circle']}
-            size="6x"
-          />
+        <div className="circle">
           <Icon
             aria-label="wrench"
-            className="wrench-icon"
+            className="wrench-icon text-center"
             icon={['fas', 'wrench']}
             size="4x"
           />
-        </span>
+        </div>
         <h2 className="margin-top-2">DAWSON is undergoing maintenance.</h2>
         <p className="margin-top-2">
           Your work may not be saved. Check back later for updates.
