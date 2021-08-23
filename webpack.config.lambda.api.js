@@ -13,7 +13,7 @@ module.exports = {
     streams: './web-api/terraform/template/lambdas/streams.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
-  externals: [],
+  externals: ['aws-sdk'],
   output: {
     clean: true,
     libraryTarget: 'umd',
