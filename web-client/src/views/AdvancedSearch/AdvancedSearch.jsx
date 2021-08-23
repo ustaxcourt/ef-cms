@@ -1,4 +1,4 @@
-import { BigHeader } from '../BigHeader';
+import { AdvancedSearchHeader } from './AdvancedSearchHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
@@ -53,7 +53,7 @@ export const AdvancedSearch = connect(
   }) {
     return (
       <>
-        <BigHeader text="Search" />
+        <AdvancedSearchHeader feedBackUrl={advancedSearchHelper.feedBackUrl} />
 
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />

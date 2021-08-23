@@ -62,13 +62,14 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
       showDateRangePicker: false,
       showPractitionerSearch: undefined,
       showStateSelect: false,
     });
   });
 
-  it('returns only showStateSelect, showPractitionerSearch, and showDateRangePicker when searchResults is undefined', () => {
+  it('does not return search results when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -76,6 +77,7 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
       showDateRangePicker: false,
       showPractitionerSearch: true,
       showStateSelect: false,
