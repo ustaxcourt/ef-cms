@@ -1,0 +1,46 @@
+import { Button } from '../ustc-ui/Button/Button';
+import { Icon } from '../ustc-ui/Icon/Icon';
+import { ModalDialog } from './ModalDialog';
+import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
+import React from 'react';
+
+export const AppMaintenanceModal = connect(
+  {
+    signOutSequence: sequences.signOutSequence,
+  },
+  function AppMaintenanceModal({ signOutSequence }) {
+    return (
+      <ModalDialog
+        className="app-maintenance-modal text-center"
+        closeLink={false}
+        showButtons={false}
+      >
+        <div className="maintenance-circle">
+          <Icon
+            className="wrench-icon text-center"
+            icon={['fas', 'wrench']}
+            size="4x"
+          />
+        </div>
+        <h2 className="margin-top-2">DAWSON is undergoing maintenance.</h2>
+        <p className="margin-top-2">
+          Your work may not be saved. Check back later for updates.
+        </p>
+        <p className="margin-top-5">
+          <Button onClick={() => signOutSequence()}>Log Out</Button>
+        </p>
+        <p className="text-center margin-top-0">
+          <Button
+            link
+            // cancel sequence to be added in a later task
+            // link={cancelLink}
+            // onClick={runCancelSequence}
+          >
+            Cancel
+          </Button>
+        </p>
+      </ModalDialog>
+    );
+  },
+);
