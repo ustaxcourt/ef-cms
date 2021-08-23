@@ -19,6 +19,7 @@ import {
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
+// import { faCircleO } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
 import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
@@ -180,6 +181,7 @@ const app = {
       faCircle,
       faClipboardList,
       faClock,
+      // faCircleO,
       faClockSolid,
       faClone,
       faCloudDownloadAlt,
