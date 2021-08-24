@@ -54,6 +54,10 @@ variable "websockets_object" {
   type = any
 }
 
+variable "maintenance_notify_object" {
+  type = any
+}
+
 variable "puppeteer_layer_object" {
   type = any
 }
@@ -75,6 +79,10 @@ variable "api_object_hash" {
 }
 
 variable "websockets_object_hash" {
+  type = string
+}
+
+variable "maintenance_notify_object_hash" {
   type = string
 }
 
