@@ -1882,3 +1882,13 @@ button.change-scanner-button {
 #document-advanced .advanced-search-full-width {
   max-width: 100%;
 }
+
+.maintenance-page {
+  background-color: color($theme-color-primary);
+  height: 300%;
+  width: 300%;
+  img {
+    height: 150px;
+    width: 145px;
+  }
+}
