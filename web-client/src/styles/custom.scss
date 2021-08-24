@@ -1889,7 +1889,7 @@ button.change-scanner-button {
   align-items: center; /* align vertical */
   justify-content: center; /* align horizontal */
   background-color: color($theme-color-primary-dark);
-  color: white;
+  color: $color-white;
 
   img {
     width: 145px;
@@ -1906,7 +1906,10 @@ button.change-scanner-button {
 }
 
 .maintenance-footer {
-  padding: 20px 0;
+  display: flex;
+  height: 10vh;
+  align-items: center;
+  justify-content: center;
   background-color: color($theme-color-primary-darker);
   color: $color-white;
 
