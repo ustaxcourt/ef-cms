@@ -1,3 +1,4 @@
+import { AppMaintenance } from './AppMaintenance';
 import { Contact } from './Contact';
 import { EmailVerificationInstructions } from './Public/EmailVerificationInstructions';
 import { EmailVerificationSuccess } from './Public/EmailVerificationSuccess';
@@ -7,7 +8,6 @@ import { HeaderPublic } from './Header/HeaderPublic';
 import { HealthCheck } from './Health/HealthCheck';
 import { Interstitial } from './Interstitial';
 import { Loading } from './Loading';
-import { Maintenance } from './Maintenance';
 import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { PublicPrintableDocketRecord } from './Public/PublicPrintableDocketRecord';
@@ -21,13 +21,13 @@ import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';
 
 const pages = {
+  AppMaintenance,
   Contact,
   EmailVerificationInstructions,
   EmailVerificationSuccess,
   ErrorView,
   HealthCheck,
   Interstitial,
-  Maintenance,
   Privacy,
   PublicCaseDetail,
   PublicPrintableDocketRecord,
