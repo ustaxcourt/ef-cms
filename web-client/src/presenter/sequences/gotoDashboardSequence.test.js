@@ -19,6 +19,7 @@ describe('gotoDashboardSequence', () => {
     presenter.sequences = {
       gotoDashboardSequence,
     };
+    presenter.providers.socket = { start: jest.fn() };
     cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue(user);
