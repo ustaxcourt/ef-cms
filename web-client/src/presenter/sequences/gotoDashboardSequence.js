@@ -18,6 +18,7 @@ import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseType
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
@@ -37,72 +38,57 @@ const goToDashboard = [
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   startWebSocketConnectionAction,
-  runPathForUserRoleAction,
   {
-    ...takePathForRoles(
-      [
-        USER_ROLES.adc,
-        USER_ROLES.admin,
-        USER_ROLES.admissionsClerk,
-        USER_ROLES.clerkOfCourt,
-        USER_ROLES.docketClerk,
-        USER_ROLES.floater,
-        USER_ROLES.petitionsClerk,
-        USER_ROLES.reportersOffice,
-        USER_ROLES.trialClerk,
-      ],
-      proceedToMessages,
-    ),
-    chambers: [
-      setMessageInboxPropsAction,
-      getMessages,
-      getJudgeForCurrentUserAction,
-      setJudgeUserAction,
-      getTrialSessionsAction,
-      setTrialSessionsAction,
-      setCurrentPageAction('DashboardChambers'),
-    ],
-    general: [navigateToSectionDocumentQCAction],
-    inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
-    irsPractitioner: [
+    error: [setShowModalFactoryAction('WebSocketErrorModal')],
+    success: [
+      runPathForUserRoleAction,
       {
-        error: [
+        ...takePathForRoles(
+          [
+            USER_ROLES.adc,
+            USER_ROLES.admin,
+            USER_ROLES.admissionsClerk,
+            USER_ROLES.clerkOfCourt,
+            USER_ROLES.docketClerk,
+            USER_ROLES.floater,
+            USER_ROLES.petitionsClerk,
+            USER_ROLES.reportersOffice,
+            USER_ROLES.trialClerk,
+          ],
+          proceedToMessages,
+        ),
+        chambers: [
+          setMessageInboxPropsAction,
+          getMessages,
+          getJudgeForCurrentUserAction,
+          setJudgeUserAction,
+          getTrialSessionsAction,
+          setTrialSessionsAction,
+          setCurrentPageAction('DashboardChambers'),
+        ],
+        general: [navigateToSectionDocumentQCAction],
+        inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
+        irsPractitioner: [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesByUserAction,
           setCasesAction,
           setCurrentPageAction('DashboardRespondent'),
         ],
-        success: [
+        irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
+        judge: [
+          setMessageInboxPropsAction,
+          getMessages,
+          getTrialSessionsAction,
+          setTrialSessionsAction,
+          setCurrentPageAction('DashboardJudge'),
+        ],
+        petitioner: [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesByUserAction,
           setCasesAction,
-          setCurrentPageAction('DashboardRespondent'),
+          setCurrentPageAction('DashboardPetitioner'),
         ],
-      },
-    ],
-    irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
-    judge: [
-      setMessageInboxPropsAction,
-      getMessages,
-      getTrialSessionsAction,
-      setTrialSessionsAction,
-      setCurrentPageAction('DashboardJudge'),
-    ],
-    petitioner: [
-      setDefaultCaseTypeToDisplayAction,
-      getOpenAndClosedCasesByUserAction,
-      setCasesAction,
-      setCurrentPageAction('DashboardPetitioner'),
-    ],
-    privatePractitioner: [
-      {
-        error: [
-          setDefaultCaseTypeToDisplayAction,
-          getOpenAndClosedCasesByUserAction,
-          setCasesAction,
-          setCurrentPageAction('DashboardPractitioner'),
-        ],
-        success: [
+        privatePractitioner: [
           setDefaultCaseTypeToDisplayAction,
           getOpenAndClosedCasesByUserAction,
           setCasesAction,
