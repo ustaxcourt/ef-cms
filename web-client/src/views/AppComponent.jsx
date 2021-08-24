@@ -204,7 +204,7 @@ export const AppComponent = connect(
     }, [currentPage]);
 
     //todo: this is temp while making maintenance page look like it should
-    const showMaintenance = true;
+    const showMaintenance = false;
 
     const CurrentPage = pages[currentPage];
     return showMaintenance ? (
