@@ -17,3 +17,7 @@ ENV=$2
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"S":"'${VALUE}'"}}'
 
+if [ "$VALUE" == "true" ]; then
+  CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
+  aws lambda invoke --function-name "send_maintenance_notifications_"${ENV}"_"${CURRENT_COLOR}
+fi
