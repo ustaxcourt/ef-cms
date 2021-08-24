@@ -10,6 +10,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import {
   courtIssuedDocketEntryOnChange,
@@ -65,6 +66,14 @@ export const CourtIssuedDocketEntry = connect(
             </Hint>
           )}
 
+          {addCourtIssuedDocketEntryHelper.showServiceWarning && (
+            <WarningNotificationComponent
+              alertWarning={{
+                message:
+                  'Document cannot be served until the Petition is served.',
+              }}
+            />
+          )}
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
