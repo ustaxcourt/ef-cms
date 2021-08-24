@@ -90,6 +90,13 @@ describe('socketRouter', () => {
     expect(mockSequence.mock.calls.length).toBe(1);
   });
 
+  it('should call openAppMaintenanceModalSequence if action is maintenance_mode_engaged', () => {
+    socketRouter(mockApp)({
+      data: '{ "action": "maintenance_mode_engaged" }',
+    });
+    expect(mockSequence.mock.calls.length).toBe(1);
+  });
+
   it('should not call a sequence if action is an unknown action', () => {
     socketRouter(mockApp)({
       data: '{ "action": "unknown" }',
