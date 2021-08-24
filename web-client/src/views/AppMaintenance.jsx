@@ -1,3 +1,4 @@
+import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
@@ -29,18 +30,17 @@ export const AppMaintenance = connect(function AppMaintenance() {
           </div>
         </div>
       </section>
-      <div className="maintenance-footer">
+      <footer className="usa-footer usa-footer--slim maintenance-footer">
         <div className="text-center">
           <p className="captioned">Check for real-time status updates.</p>
-          <button
-            link
+          <Button
             className="usa-button--outline"
             href="https://status.ustaxcourt.gov/"
           >
             View System Status
-          </button>
+          </Button>
         </div>
-      </div>
+      </footer>
     </>
   );
 });
