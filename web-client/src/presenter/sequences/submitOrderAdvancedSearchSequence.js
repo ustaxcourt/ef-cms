@@ -12,7 +12,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submitOrderAdvancedSearchAction';
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
-export const submitOrderAdvancedSearchSequence = [
+export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
   getOrderSearchEnabledAction,
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
@@ -26,12 +26,12 @@ export const submitOrderAdvancedSearchSequence = [
           clearSearchResultsAction,
           startShowValidationAction,
         ],
-        success: showProgressSequenceDecorator([
+        success: [
           clearAlertsAction,
           submitOrderAdvancedSearchAction,
           setAdvancedSearchResultsAction,
-        ]),
+        ],
       },
     ],
   },
-];
+]);
