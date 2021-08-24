@@ -107,7 +107,7 @@ describe('validateDocumentAction', () => {
     expect(errorStub).toHaveBeenCalled();
   });
 
-  it('should not cause an error if filers is empty with document tuype', async () => {
+  it('should not cause an error if filers is empty with document type', async () => {
     applicationContext
       .getUseCases()
       .validateDocumentInteractor.mockReturnValue(null);
