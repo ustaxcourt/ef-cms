@@ -18,6 +18,9 @@ const {
   migrateItems: migration0038,
 } = require('./migrations/0038-parse-generated-orders');
 const {
+  migrateItems: migration0040,
+} = require('./migrations/bug-0040-case-received-at');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -67,6 +70,11 @@ const migrateRecords = async ({
   if (!ranMigrations['0038-parse-generated-orders.js']) {
     applicationContext.logger.debug('about to run migration 0038');
     items = await migration0038(items);
+  }
+
+  if (!ranMigrations['bug-0040-case-received-at.js']) {
+    applicationContext.logger.debug('about to run migration 0040');
+    items = await migration0040(items, documentClient);
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -174,6 +182,7 @@ exports.handler = async event => {
     ...(await hasMigrationRan('0036-phone-number-format.js')),
     ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
     ...(await hasMigrationRan('0038-parse-generated-orders.js')),
+    ...(await hasMigrationRan('bug-0040-case-received-at.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
