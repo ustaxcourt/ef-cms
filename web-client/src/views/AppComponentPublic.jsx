@@ -1,3 +1,4 @@
+import { AppMaintenance } from './AppMaintenance';
 import { Contact } from './Contact';
 import { EmailVerificationInstructions } from './Public/EmailVerificationInstructions';
 import { EmailVerificationSuccess } from './Public/EmailVerificationSuccess';
@@ -20,6 +21,7 @@ import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';
 
 const pages = {
+  AppMaintenance,
   Contact,
   EmailVerificationInstructions,
   EmailVerificationSuccess,
