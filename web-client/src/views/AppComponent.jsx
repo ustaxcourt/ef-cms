@@ -4,6 +4,7 @@ import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
 import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { AppMaintenance } from './AppMaintenance';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -202,8 +203,13 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
+    //todo: this is temp while making maintenance page look like it should
+    const showMaintenance = false;
+
     const CurrentPage = pages[currentPage];
-    return (
+    return showMaintenance ? (
+      <AppMaintenance />
+    ) : (
       <>
         <a
           className="usa-skipnav"
