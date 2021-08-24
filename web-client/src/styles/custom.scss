@@ -1853,6 +1853,19 @@ button.change-scanner-button {
   color: color($theme-color-primary-darker);
 }
 
+.wrench-icon {
+  margin-top: 7px;
+  color: color($theme-color-warning);
+}
+
+.maintenance-circle {
+  width: 100px;
+  height: 95px;
+  border: 7px solid color($theme-color-warning);
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
 .text-middle-margin {
   margin-top: auto;
   margin-bottom: auto;
