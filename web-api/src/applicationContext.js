@@ -903,6 +903,9 @@ const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
 const {
+  sendMaintenanceNotificationsInteractor,
+} = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
 const {
@@ -1888,6 +1891,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
