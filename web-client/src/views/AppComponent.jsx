@@ -170,6 +170,7 @@ const pages = {
 };
 
 let initialPageLoaded = false;
+let showHeaderAndFooter = true;
 
 /**
  * Root application component
@@ -195,8 +196,6 @@ export const AppComponent = connect(
       return;
     };
 
-    let showHeaderAndFooter = true;
-
     useEffect(() => {
       if (initialPageLoaded) {
         focusMain();
@@ -204,13 +203,14 @@ export const AppComponent = connect(
       if (currentPage !== 'Interstitial') {
         initialPageLoaded = true;
       }
-      console.log('currentPage', currentPage);
-      if (currentPage === 'AppMaintenance') {
-        showHeaderAndFooter = false;
-      }
     }, [currentPage]);
 
+    if (currentPage === 'AppMaintenance') {
+      showHeaderAndFooter = false;
+    }
+
     const CurrentPage = pages[currentPage];
+
     return (
       <>
         {showHeaderAndFooter && (

@@ -1,6 +1,5 @@
 /* eslint-disable complexity */
 import { Address } from './StartCase/Address';
-import { AppMaintenanceModal } from './AppMaintenanceModal';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { Country } from './StartCase/Country';
@@ -356,7 +355,7 @@ export const EditPetitionerInformationInternal = connect(
           <NoMatchingEmailFoundModal />
         )}
         {showModal === 'RemovePetitionerModal' && <RemovePetitionerModal />}
-        {showModal === 'SealAddressModal' && <AppMaintenanceModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
       </>
     );
   },
