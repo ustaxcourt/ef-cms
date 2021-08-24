@@ -1883,12 +1883,42 @@ button.change-scanner-button {
   max-width: 100%;
 }
 
-.maintenance-page {
-  background-color: color($theme-color-primary);
-  height: 300%;
-  width: 300%;
+.maintenance-content {
+  display: flex;
+  height: 90vh;
+  align-items: center; /* align vertical */
+  justify-content: center; /* align horizontal */
+  background-color: color($theme-color-primary-dark);
+  color: white;
+
   img {
-    height: 150px;
     width: 145px;
+    height: 150px;
+  }
+
+  .maintenance-text {
+    width: 360px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+}
+
+.maintenance-footer {
+  padding: 20px 0;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
+
+  button:hover {
+    color: $color-primary-alt;
+  }
+
+  .usa-button--outline {
+    background-color: $color-white;
+    color: color($theme-color-primary);
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
   }
 }
