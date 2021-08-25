@@ -14566,6 +14566,13 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "createdAt": "2019-03-01T21:40:46.415Z",
+    "servedAt": "2020-03-01T21:40:46.415Z",
+    "servedParties": [
+      {
+        "name": "Brett Osborne",
+        "email": "petitioner@example.com"
+      }
+    ],
     "numberOfPages": 2,
     "filers": [],
     "entityName": "DocketEntry",
