@@ -73,7 +73,7 @@ const migrateRecords = async ({
   }
 
   if (!ranMigrations['bug-0039-notice-of-trial-date.js']) {
-    applicationContext.logger.debug('about to run devex migration 0039');
+    applicationContext.logger.debug('about to run bug migration 0039');
     items = await bugMigration0039(items, documentClient);
   }
 
