@@ -57,7 +57,7 @@ exports.addDocketEntryForOrderAndSaveForLater = () => {
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
   cy.get('button:contains("Order to Show Cause")').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
-  cy.get('span:contains("cannot be served")').should('exist');
+  cy.get('span:contains("Not served")').should('exist');
 };
 
 exports.serveCourtIssuedDocketEntry = () => {
@@ -109,6 +109,17 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.url().should('contain', '/upload-court-issued');
   cy.get('#upload-description').type('An Uploaded PDF');
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
+};
+
+exports.reviewAndServePetition = () => {
+  cy.get('#tab-document-view').click();
+  cy.get('a:contains("Review and Serve Petition")').click();
+  cy.get('button#tab-irs-notice').click();
+  cy.get('label#has-irs-verified-notice-no').click();
+  cy.get('button#submit-case').click();
+  cy.get('button:contains("Serve to IRS")').click();
+  cy.get('button#confirm:contains("Yes, Serve")').click();
+  cy.get('.usa-alert:contains("Petition served")').should('exist');
 };
 
 exports.clickSaveUploadedPdfButton = () => {
