@@ -5,6 +5,7 @@ import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
+import { AppMaintenanceModal } from './AppMaintenanceModal';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -251,6 +252,8 @@ export const AppComponent = connect(
             {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
           </>
         )}
+        {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+        {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
       </>
     );
   },
