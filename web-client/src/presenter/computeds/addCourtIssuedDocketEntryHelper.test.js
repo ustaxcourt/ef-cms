@@ -271,6 +271,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
       },
     });
+    expect(result.showServiceWarning).toEqual(false);
     expect(result.showSaveAndServeButton).toEqual(true);
   });
 
