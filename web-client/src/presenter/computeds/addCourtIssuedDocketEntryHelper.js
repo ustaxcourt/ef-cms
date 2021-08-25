@@ -55,7 +55,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
 
   const isPetitionServed = !!applicationContext
     .getUtilities()
-    .getPetitionDocketEntry(caseDetail)?.servedAt;
+    .caseHasServedPetition(caseDetail);
   const showServiceWarning = !isPetitionServed;
   const showReceivedDate = eventCodeIsUnservable;
   const showSaveAndServeButton = !eventCodeIsUnservable && isPetitionServed;
