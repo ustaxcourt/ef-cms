@@ -11,14 +11,15 @@ data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
   source_dir  = "${path.module}/../template/lambdas/dist/"
-  excludes = ["${path.module}/../template/lambdas/dist/api-public.js",
-    "${path.module}/../template/lambdas/dist/websockets.js",
-    "${path.module}/../template/lambdas/dist/maintenance-notify.js",
-    "${path.module}/../template/lambdas/dist/cron.js",
-    "${path.module}/../template/lambdas/dist/streams.js",
-    "${path.module}/../template/lambdas/dist/cognito-triggers.js",
-    "${path.module}/../template/lambdas/dist/cognito-authorizer.js",
-  "${path.module}/../template/lambdas/dist/report.html", ]
+  excludes = [
+    "api-public.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-triggers.js",
+    "cognito-authorizer.js",
+    "report.html" ]
 }
 
 resource "null_resource" "api_east_object" {
