@@ -77,7 +77,11 @@ export const DocumentViewerDocument = connect(
                 {documentViewerHelper.servedLabel &&
                   documentViewerHelper.servedLabel}
                 {documentViewerHelper.showNotServed && (
-                  <span className="text-semibold not-served">Not served</span>
+                  <span className="text-semibold not-served">
+                    {documentViewerHelper.showUnservedPetitionWarning
+                      ? 'Document cannot be served until the Petition is served.'
+                      : 'Not served'}
+                  </span>
                 )}
               </div>
             </div>
