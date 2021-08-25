@@ -188,4 +188,38 @@ describe('caseDetailSubnavHelper', () => {
       expect(result.showTrackedItemsNotification).toBeFalsy();
     });
   });
+
+  describe('showNotesIcon', () => {
+    it('should be true when caseDetail.caseNote exists', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          caseDetail: {
+            caseNote: 'domo arigato',
+          },
+        },
+      });
+
+      expect(result.showNotesIcon).toBeTruthy();
+    });
+
+    it('should be true when state.judgesNotes exists and is loaded', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          judgesNote: {
+            notes: 'misuta Robotto',
+          },
+        },
+      });
+
+      expect(result.showNotesIcon).toBeTruthy();
+    });
+
+    it('should be false when neither caseNotes nor judgesNotes exist', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {},
+      });
+
+      expect(result.showNotesIcon).toBeFalsy();
+    });
+  });
 });
