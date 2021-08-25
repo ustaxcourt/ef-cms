@@ -96,6 +96,7 @@ const pages = {
   AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
+  AppMaintenance,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -170,6 +171,7 @@ const pages = {
 };
 
 let initialPageLoaded = false;
+let showHeaderAndFooter = true;
 
 /**
  * Root application component
@@ -204,41 +206,51 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    //todo: this is temp while making maintenance page look like it should
-    const showMaintenance = false;
+    if (currentPage === 'AppMaintenance') {
+      showHeaderAndFooter = false;
+    }
 
     const CurrentPage = pages[currentPage];
-    return showMaintenance ? (
-      <AppMaintenance />
-    ) : (
+
+    return (
       <>
-        <a
-          className="usa-skipnav"
-          href="#main-content"
-          tabIndex="0"
-          onClick={focusMain}
-        >
-          Skip to main content
-        </a>
-        <UsaBanner />
-        <Header />
+        {showHeaderAndFooter && (
+          <>
+            <a
+              className="usa-skipnav"
+              href="#main-content"
+              tabIndex="0"
+              onClick={focusMain}
+            >
+              Skip to main content
+            </a>
+            <UsaBanner />
+            <Header />
+          </>
+        )}
+
         <main id="main-content" role="main">
           <CurrentPage />
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
         <Loading />
 
-        <Footer />
-        {zipInProgress && <BatchDownloadProgress />}
+        {showHeaderAndFooter && (
+          <>
+            <Footer />
+            {zipInProgress && <BatchDownloadProgress />}
 
-        {showModal === 'TrialSessionPlanningModal' && (
-          <TrialSessionPlanningModal />
-        )}
-        {showModal === 'CaseInventoryReportModal' && (
-          <CaseInventoryReportModal />
-        )}
-        {showModal === 'FileCompressionErrorModal' && (
-          <FileCompressionErrorModal />
+            {showModal === 'TrialSessionPlanningModal' && (
+              <TrialSessionPlanningModal />
+            )}
+            {showModal === 'CaseInventoryReportModal' && (
+              <CaseInventoryReportModal />
+            )}
+            {showModal === 'FileCompressionErrorModal' && (
+              <FileCompressionErrorModal />
+            )}
+            {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+          </>
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}

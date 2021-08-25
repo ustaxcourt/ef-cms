@@ -1241,6 +1241,14 @@ const router = {
     });
 
     registerRoute(
+      '/maintenance',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Maintenance');
+        return app.getSequence('gotoMaintenanceSequence')();
+      }),
+    );
+
+    registerRoute(
       '..',
       () => {
         setPageTitle('Error');
