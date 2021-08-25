@@ -52,8 +52,8 @@ resource "null_resource" "websockets_east_object" {
 
 data "archive_file" "zip_maintenance_notify" {
   type        = "zip"
-  output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
+  output_path = "${path.module}/lambdas/maintenance-notify.js.zip"
+  source_file = "${path.module}/lambdas/dist/maintenance-notify.js"
 }
 
 resource "null_resource" "maintenance_notify_east_object" {
