@@ -368,6 +368,9 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
+  getAllWebSocketConnections,
+} = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
+const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -906,6 +909,7 @@ const {
   sendMaintenanceNotificationsInteractor,
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
 const {
+  sendNotificationToConnection,
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
 const {
@@ -1396,6 +1400,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteUserOutboxRecord,
   deleteWorkItem,
+  getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1655,6 +1660,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       });
     },
     getNotificationGateway: () => ({
+      sendNotificationToConnection,
       sendNotificationToUser,
     }),
     getPdfJs: () => {
