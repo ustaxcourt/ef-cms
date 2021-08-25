@@ -32,7 +32,7 @@ export const AppMaintenanceModal = connect(
           <Button onClick={() => signOutSequence()}>Log Out</Button>
         </p>
         <p className="text-center margin-top-0">
-          <Button link onClick={() => cancelSequence()}>
+          <Button link onClick={() => cancelSequence({ path: '/maintenance' })}>
             Cancel
           </Button>
         </p>

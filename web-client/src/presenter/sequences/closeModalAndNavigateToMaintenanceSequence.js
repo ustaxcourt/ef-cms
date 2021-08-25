@@ -1,12 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { followRedirectAction } from '../actions/followRedirectAction';
-import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
+import { navigateToPathAction } from '../actions/navigateToPathAction';
 
 export const closeModalAndNavigateToMaintenanceSequence = [
   clearModalAction,
-  followRedirectAction,
-  {
-    default: [navigateToMaintenanceAction],
-    success: [],
-  },
+  navigateToPathAction,
 ];
