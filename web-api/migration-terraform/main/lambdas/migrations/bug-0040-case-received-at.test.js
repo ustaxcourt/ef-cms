@@ -39,12 +39,10 @@ describe('migrateItems', () => {
   it('should return and not modify records that are NOT case records', async () => {
     const items = [
       {
-        noticeOfTrialDate: '2025-04-10T04:00:00.000Z',
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
       {
-        noticeOfTrialDate: '2025-04-10T04:00:00.000Z',
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
       },
@@ -53,18 +51,34 @@ describe('migrateItems', () => {
 
     expect(results).toEqual([
       {
-        noticeOfTrialDate: '2025-04-10T04:00:00.000Z', // field doesn't belong here, but proving it is unmodified
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'user|6d74eadc-0181-4ff5-826c-305200e8733d',
       },
       {
-        noticeOfTrialDate: '2025-04-10T04:00:00.000Z', // field doesn't belong here, but proving it is unmodified
         pk: `case|${MOCK_CASE.docketNumber}`,
         sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
       },
     ]);
 
     expect(documentClient.query).not.toHaveBeenCalled();
+  });
+
+  it('should return and not modify case records that are paper filings', async () => {
+    mockPetitionItem.receivedAt = '2020-01-01T16:00:00.000Z';
+
+    const items = [
+      {
+        ...mockCaseItem,
+        isPaper: true,
+        mailingDate: '2020-06-01T16:00:00.000Z',
+        receivedAt: '2021-06-06T16:00:00.000Z',
+      },
+    ];
+
+    const results = await migrateItems(items, documentClient);
+
+    expect(documentClient.query).not.toHaveBeenCalled();
+    expect(results[0].receivedAt).toEqual('2021-06-06T16:00:00.000Z');
   });
 
   it('should update the case.receivedAt field to match the petition recievedAt if they do not match and the case is electronic', async () => {
@@ -99,15 +113,14 @@ describe('migrateItems', () => {
     expect(results[0].receivedAt).toEqual('2021-06-06T16:00:00.000Z');
   });
 
-  it('should NOT update the case.receivedAt field to match the petition recievedAt if the case is paper', async () => {
-    mockPetitionItem.receivedAt = '2020-01-01T16:00:00.000Z';
+  it('should NOT update the case.receivedAt field to match the petition recievedAt if both dates fall on the same on the same day and the case is electronic', async () => {
+    mockPetitionItem.receivedAt = '2021-06-06T14:01:01.011Z';
 
     const items = [
       {
         ...mockCaseItem,
-        isPaper: true,
-        mailingDate: '2020-06-01T16:00:00.000Z',
-        receivedAt: '2021-06-06T16:00:00.000Z',
+        isPaper: false,
+        receivedAt: '2021-06-06T16:00:00.000Z', // same day as petition, but different time
       },
     ];
 
