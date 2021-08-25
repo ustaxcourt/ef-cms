@@ -19,6 +19,8 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
   const hasPendingItems = get(state.caseDetail.hasPendingItems);
   const caseDeadlines = get(state.caseDeadlines);
   const isIrsPractitioner = user.role === USER_ROLES.irsPractitioner;
+  const showNotesIcon =
+    get(state.caseDetail.caseNote) || get(state.judgesNote.notes);
 
   return {
     selectedCaseInformationTab,
@@ -29,6 +31,7 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     showCorrespondenceTab: isInternalUser,
     showDraftsTab: isInternalUser,
     showMessagesTab: isInternalUser,
+    showNotesIcon,
     showNotesTab: isInternalUser,
     showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,

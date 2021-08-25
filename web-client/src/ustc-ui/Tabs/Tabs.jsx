@@ -33,6 +33,7 @@ const renderTabFactory = ({
       className: childClassName,
       disabled,
       icon,
+      iconClass,
       iconColor,
       id: tabId,
       showIcon,
@@ -76,7 +77,11 @@ const renderTabFactory = ({
         <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {showIcon && (
-            <FontAwesomeIcon color={iconColor || null} icon={icon} />
+            <FontAwesomeIcon
+              className={iconClass}
+              color={iconColor || null}
+              icon={icon}
+            />
           )}
           {showNotificationIcon && (
             <div className="icon-tab-notification">
