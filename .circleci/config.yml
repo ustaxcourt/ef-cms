@@ -447,7 +447,6 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
-            set +e
             docker run \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -468,11 +467,6 @@ jobs:
              -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
-            echo "export WEB_API_DEPLOY_OUTPUT=$?" >> $BASH_ENV
-            set -e
-      - run:
-          name: Setup S3 Maintenance Zip
-          command: ./setup-s3-maintenance-zip.sh
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
