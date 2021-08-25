@@ -68,7 +68,15 @@ export const CaseDetailSubnavTabs = connect(
               />
             )}
             {caseDetailSubnavHelper.showNotesTab && (
-              <Tab id="tab-notes" tabName="notes" title="Notes" />
+              <Tab
+                icon="sticky-note"
+                iconClass="icon-case-notes"
+                iconColor="#ffbe2e"
+                id="tab-notes"
+                showIcon={caseDetailSubnavHelper.showNotesIcon}
+                tabName="notes"
+                title="Notes"
+              />
             )}
           </Tabs>
         </div>
