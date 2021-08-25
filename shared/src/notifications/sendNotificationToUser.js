@@ -1,6 +1,7 @@
 const client = require('../persistence/dynamodbClientService');
 
-const sendNotificationToConnection = async ({
+// todo: test
+exports.sendNotificationToConnection = async ({
   applicationContext,
   connection,
   messageStringified,
@@ -47,7 +48,7 @@ exports.sendNotificationToUser = async ({
   for (const connection of connections) {
     for (let i = 0; i <= maxRetries; i++) {
       try {
-        await sendNotificationToConnection({
+        await exports.sendNotificationToConnection({
           applicationContext,
           connection,
           messageStringified,

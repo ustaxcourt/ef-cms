@@ -14,8 +14,9 @@ exports.getAllWebSocketConnections = ({ applicationContext }) =>
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':prefix': 'connection',
+      ':gsi1pk': 'connection',
     },
-    KeyConditionExpression: 'begins_with(#gsi1pk, :prefix)',
+    IndexName: 'gsi1',
+    KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
