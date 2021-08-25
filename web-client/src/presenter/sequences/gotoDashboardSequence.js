@@ -36,7 +36,6 @@ const goToDashboard = [
   setUserAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
-  startWebSocketConnectionAction,
   runPathForUserRoleAction,
   {
     ...takePathForRoles(
@@ -65,6 +64,7 @@ const goToDashboard = [
     general: [navigateToSectionDocumentQCAction],
     inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
     irsPractitioner: [
+      startWebSocketConnectionAction,
       {
         error: [
           setDefaultCaseTypeToDisplayAction,
@@ -95,6 +95,7 @@ const goToDashboard = [
       setCurrentPageAction('DashboardPetitioner'),
     ],
     privatePractitioner: [
+      startWebSocketConnectionAction,
       {
         error: [
           setDefaultCaseTypeToDisplayAction,
