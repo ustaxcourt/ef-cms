@@ -19,7 +19,7 @@ export const documentViewerHelper = (get, applicationContext) => {
 
   const isPetitionServed = !!applicationContext
     .getUtilities()
-    .getPetitionDocketEntry(caseDetail)?.servedAt;
+    .caseHasServedPetition(caseDetail);
 
   const permissions = get(state.permissions);
 
