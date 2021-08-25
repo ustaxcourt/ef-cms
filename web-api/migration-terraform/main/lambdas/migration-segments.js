@@ -1,22 +1,6 @@
 const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
-
-const {
-  migrateItems: bugMigration0035,
-} = require('./migrations/bug-0035-private-practitioner-representing');
-const {
-  migrateItems: bugMigration0036,
-} = require('./migrations/bug-0036-public-served-parties-code');
-const {
-  migrateItems: devexMigration0037,
-} = require('./migrations/devex-0037-combine-work-items');
-const {
-  migrateItems: migration0036,
-} = require('./migrations/0036-phone-number-format');
-const {
-  migrateItems: migration0038,
-} = require('./migrations/0038-parse-generated-orders');
 const {
   migrateItems: migration0040,
 } = require('./migrations/bug-0040-case-received-at');
@@ -41,37 +25,13 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
 
 const sqs = new AWS.SQS({ region: 'us-east-1' });
 
-// eslint-disable-next-line no-unused-vars
 const migrateRecords = async ({
+  // eslint-disable-next-line no-unused-vars
   documentClient,
   items,
+  // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
-  if (!ranMigrations['bug-0035-private-practitioner-representing.js']) {
-    applicationContext.logger.info('about to run bug migration 0035');
-    items = await bugMigration0035(items, documentClient);
-  }
-
-  if (!ranMigrations['bug-0036-public-served-parties-code.js']) {
-    applicationContext.logger.info('about to run bug migration 0036');
-    items = await bugMigration0036(items);
-  }
-
-  if (!ranMigrations['0036-phone-number-format.js']) {
-    applicationContext.logger.debug('about to run migration 0036');
-    items = await migration0036(items);
-  }
-
-  if (!ranMigrations['devex-0037-combine-work-items.js']) {
-    applicationContext.logger.debug('about to run devex migration 0037');
-    items = await devexMigration0037(items, documentClient);
-  }
-
-  if (!ranMigrations['0038-parse-generated-orders.js']) {
-    applicationContext.logger.debug('about to run migration 0038');
-    items = await migration0038(items);
-  }
-
   if (!ranMigrations['bug-0040-case-received-at.js']) {
     applicationContext.logger.debug('about to run migration 0040');
     items = await migration0040(items, documentClient);
@@ -154,6 +114,7 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 const hasMigrationRan = async key => {
   const { Item } = await dynamoDbDocumentClient
     .get({
@@ -177,11 +138,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    ...(await hasMigrationRan('bug-0035-private-practitioner-representing.js')),
-    ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
-    ...(await hasMigrationRan('0036-phone-number-format.js')),
-    ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
-    ...(await hasMigrationRan('0038-parse-generated-orders.js')),
+    //  ...(await hasMigrationRan('bug-999-example-migration-file.js')),
     ...(await hasMigrationRan('bug-0040-case-received-at.js')),
   };
 
