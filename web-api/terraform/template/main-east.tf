@@ -328,6 +328,7 @@ module "api-east-green" {
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
+  create_maintenance_notify = 1
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
@@ -367,6 +368,7 @@ module "api-east-blue" {
   websockets_object         = null_resource.websockets_east_object
   maintenance_notify_object = null_resource.maintenance_notify_east_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_east_object
+  create_maintenance_notify = 1
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
   source                    = "../api/"
