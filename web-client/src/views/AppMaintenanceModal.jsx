@@ -7,9 +7,10 @@ import React from 'react';
 
 export const AppMaintenanceModal = connect(
   {
+    cancelSequence: sequences.closeModalAndNavigateToMaintenanceSequence,
     signOutSequence: sequences.signOutSequence,
   },
-  function AppMaintenanceModal({ signOutSequence }) {
+  function AppMaintenanceModal({ cancelSequence, signOutSequence }) {
     return (
       <ModalDialog
         className="app-maintenance-modal text-center"
@@ -31,12 +32,7 @@ export const AppMaintenanceModal = connect(
           <Button onClick={() => signOutSequence()}>Log Out</Button>
         </p>
         <p className="text-center margin-top-0">
-          <Button
-            link
-            // cancel sequence to be added in a later task
-            // link={cancelLink}
-            // onClick={runCancelSequence}
-          >
+          <Button link onClick={() => cancelSequence({ path: '/maintenance' })}>
             Cancel
           </Button>
         </p>
