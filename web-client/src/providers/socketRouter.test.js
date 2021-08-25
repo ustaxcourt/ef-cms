@@ -97,6 +97,13 @@ describe('socketRouter', () => {
     expect(mockSequence.mock.calls.length).toBe(1);
   });
 
+  it('should call gotoDashboardSequence if action is maintenance_mode_disengaged', () => {
+    socketRouter(mockApp)({
+      data: '{ "action": "maintenance_mode_disengaged" }',
+    });
+    expect(mockSequence.mock.calls.length).toBe(1);
+  });
+
   it('should not call a sequence if action is an unknown action', () => {
     socketRouter(mockApp)({
       data: '{ "action": "unknown" }',

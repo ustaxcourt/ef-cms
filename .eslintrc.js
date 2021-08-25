@@ -257,6 +257,7 @@ module.exports = {
           'court’s',
           'coversheet',
           'desc',
+          'devex',
           'disallowance',
           'dispositive',
           'docketclerk',
