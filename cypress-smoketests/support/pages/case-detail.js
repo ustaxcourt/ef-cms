@@ -57,7 +57,7 @@ exports.addDocketEntryForOrderAndSaveForLater = () => {
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
   cy.get('button:contains("Order to Show Cause")').click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
-  cy.get('span:contains("cannot be served")').should('exist');
+  cy.get('span:contains("Not served")').should('exist');
 };
 
 exports.serveCourtIssuedDocketEntry = () => {
