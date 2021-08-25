@@ -106,6 +106,10 @@ variable "create_streams" {
   type = number
 }
 
+variable "create_maintenance_notify" {
+  type = number
+}
+
 variable "stream_arn" {
   type = string
 }
