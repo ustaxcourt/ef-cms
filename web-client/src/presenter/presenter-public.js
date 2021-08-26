@@ -24,6 +24,7 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -76,6 +77,7 @@ export const presenter = {
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
     notFoundErrorSequence,
+    openAppMaintenanceModalSequence,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
     sortTodaysOrdersSequence,
