@@ -8,7 +8,5 @@
  */
 export const navigateToPathAction = async ({ props, router }) => {
   const { path } = props;
-
-  console.log('---------', path);
   await router.route(path || '/');
 };
