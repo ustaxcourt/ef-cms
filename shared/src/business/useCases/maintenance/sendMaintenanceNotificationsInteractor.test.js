@@ -6,13 +6,25 @@ describe('sendMaintenanceNotificationsInteractor', () => {
   let mockConnections;
 
   beforeEach(() => {
-    mockConnections = applicationContext
+    mockConnections = [
+      { connection: '1234' },
+      { connection: '5678' },
+      { connection: '9999' },
+    ];
+
+    applicationContext
       .getPersistenceGateway()
-      .getAllWebSocketConnections.mockReturnValue([
-        { connection: '1234' },
-        { connection: '5678' },
-        { connection: '9999' },
-      ]);
+      .getAllWebSocketConnections.mockReturnValue(mockConnections);
+  });
+
+  it.only('should get all websocket connections', async () => {
+    await applicationContext
+      .getUseCases()
+      .sendMaintenanceNotificationsInteractor(applicationContext);
+
+    expect(
+      applicationContext.getPersistenceGateway().getAllWebSocketConnections,
+    ).toHaveBeenCalled();
   });
 
   it('should call sendNotificationToConnection for each connection', async () => {
