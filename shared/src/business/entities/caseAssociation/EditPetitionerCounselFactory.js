@@ -18,9 +18,10 @@ const {
  */
 function EditPetitionerCounselFactory(rawProps) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawPropsParam) {
     Object.assign(this, {
       representing: rawPropsParam.representing,
