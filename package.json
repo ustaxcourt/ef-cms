@@ -278,5 +278,8 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
     "underscore": "^1.13.1"
+  },
+  "devDependencies": {
+    "artillery": "^1.7.7"
   }
 }
