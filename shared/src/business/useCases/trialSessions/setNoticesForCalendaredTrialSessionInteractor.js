@@ -60,7 +60,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: 'maintenance_mode_engaged',
+        action: 'notice_generation_complete',
         hasPaper: false,
       },
       userId: user.userId,
