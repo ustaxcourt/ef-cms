@@ -53,7 +53,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     form.eventCode,
   );
 
-  const isPetitionServed = !!applicationContext
+  const isPetitionServed = applicationContext
     .getUtilities()
     .caseHasServedPetition(caseDetail);
   const showServiceWarning = !isPetitionServed;
