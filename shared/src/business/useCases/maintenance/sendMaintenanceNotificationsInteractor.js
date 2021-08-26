@@ -22,8 +22,25 @@ exports.sendMaintenanceNotificationsInteractor = async applicationContext => {
           connection: allWebsocketConnections[index],
           messageStringified,
         });
-    } catch (e) {
-      // todo something
+    } catch (err) {
+      if (index >= allWebsocketConnections.length) {
+        if (err.statusCode === 410) {
+          // await client.delete({
+          //   applicationContext,
+          //   key: {
+          //     pk: connection.pk,
+          //     sk: connection.sk,
+          //   },
+          // });
+        } else {
+          console.log('as;dlkjfslkdjf');
+          applicationContext.logger.error(
+            'An error occurred while attempting to send notification to user',
+            { error: err },
+          );
+          throw err;
+        }
+      }
     }
   }
 };
