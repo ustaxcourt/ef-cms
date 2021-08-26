@@ -8,7 +8,31 @@ const {
 describe('sendMaintenanceNotificationsInteractor', () => {
   let mockConnections;
 
+  const notificationError = new Error('could not get notification client');
+  notificationError.statusCode = 410;
+
   beforeEach(() => {
+    const postToConnection = jest
+      .fn()
+      .mockReturnValue({ promise: () => Promise.resolve('ok') });
+
+    applicationContext.getNotificationClient
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
+      .mockImplementationOnce(() => {
+        throw notificationError;
+      })
+      .mockImplementation(() => {
+        return { postToConnection };
+      });
+
     mockConnections = [
       { connection: '1234' },
       { connection: '5678' },
@@ -43,7 +67,9 @@ describe('sendMaintenanceNotificationsInteractor', () => {
         new Error({ message: 'oopsies', statusCode: 400 }),
       );
 
-    await sendMaintenanceNotificationsInteractor(applicationContext);
+    await expect(
+      sendMaintenanceNotificationsInteractor(applicationContext),
+    ).rejects.toThrow('');
 
     expect(applicationContext.logger.error.mock.calls[0][1]).toMatchObject({
       message: 'oopsies',
