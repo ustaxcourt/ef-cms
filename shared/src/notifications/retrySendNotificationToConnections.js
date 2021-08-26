@@ -29,7 +29,8 @@ exports.retrySendNotificationToConnections = async ({
         break;
       } catch (err) {
         if (i >= maxRetries) {
-          if (err.statusCode === 410) {
+          const AWSWebSocketConnectionGone = 410;
+          if (err.statusCode === AWSWebSocketConnectionGone) {
             await client.delete({
               applicationContext,
               key: {
