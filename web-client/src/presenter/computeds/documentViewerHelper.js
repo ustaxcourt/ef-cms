@@ -66,6 +66,7 @@ export const documentViewerHelper = (get, applicationContext) => {
     permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
+    isPetitionServed &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !formattedDocumentToDisplay.isPetition &&
