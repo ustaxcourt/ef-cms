@@ -51,7 +51,7 @@ describe('retrySendNotificationToConnections', () => {
     ).toBe(mockConnections.length);
   });
 
-  it('catches exception if statusCode is 410 and calls client.delete', async () => {
+  it('catches exception if connection is no longer available and calls client.delete', async () => {
     await applicationContext
       .getNotificationGateway()
       .sendNotificationToConnection.mockRejectedValue(notificationError);
