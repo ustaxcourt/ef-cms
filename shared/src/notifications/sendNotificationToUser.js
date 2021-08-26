@@ -1,5 +1,3 @@
-const client = require('../persistence/dynamodbClientService');
-
 /**
  * sendNotificationToUser
  *
@@ -23,38 +21,11 @@ exports.sendNotificationToUser = async ({
 
   const messageStringified = JSON.stringify(message);
 
-  const maxRetries = 1;
-
-  for (const connection of connections) {
-    for (let i = 0; i <= maxRetries; i++) {
-      try {
-        await applicationContext
-          .getNotificationGateway()
-          .sendNotificationToConnection({
-            applicationContext,
-            connection,
-            messageStringified,
-          });
-        break;
-      } catch (err) {
-        if (i >= maxRetries) {
-          if (err.statusCode === 410) {
-            await client.delete({
-              applicationContext,
-              key: {
-                pk: connection.pk,
-                sk: connection.sk,
-              },
-            });
-          } else {
-            applicationContext.logger.error(
-              'An error occurred while attempting to send notification to user',
-              { error: err },
-            );
-            throw err;
-          }
-        }
-      }
-    }
-  }
+  await applicationContext
+    .getNotificationGateway()
+    .retrySendNotificationToConnections({
+      applicationContext,
+      connections,
+      messageStringified,
+    });
 };
