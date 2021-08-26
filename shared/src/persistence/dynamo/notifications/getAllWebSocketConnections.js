@@ -7,7 +7,6 @@ const { queryFull } = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise} the promise of the call to persistence
  */
-//todo: add test
 exports.getAllWebSocketConnections = ({ applicationContext }) =>
   queryFull({
     ExpressionAttributeNames: {
