@@ -1,9 +1,6 @@
-import {
-  adcUser,
-  docketClerkUser,
-  petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
+import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -22,7 +19,7 @@ describe('documentViewerHelper', () => {
     docketEntryId: DOCKET_ENTRY_ID,
     documentTitle: 'Petition',
     documentType: 'Petition',
-    eventCode: 'P',
+    eventCode: INITIAL_DOCUMENT_TYPES.petition.documentType,
     index: 1,
     isOnDocketRecord: true,
   };
@@ -189,340 +186,44 @@ describe('documentViewerHelper', () => {
     expect(result.showStricken).toEqual(true);
   });
 
-  describe('showServeCourtIssuedDocumentButton', () => {
-    const showServeCourtIssuedDocumentButtonTests = [
-      {
-        description:
-          'should be true if the document type is a servable court issued document that does not have a served at',
-        docketEntryOverrides: {
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the document type is not a court issued document',
-        docketEntryOverrides: {
-          documentType: 'Miscellaneous',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is a servable court issued document and has servedAt',
-        docketEntryOverrides: {
-          documentType: 'Order',
-          eventCode: 'O',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is a servable court issued document without servedAt but the user does not have permission to serve the document',
-        docketEntryOverrides: {
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        expectation: false,
-        user: adcUser,
-      },
-    ];
-
-    showServeCourtIssuedDocumentButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
-        it(`${description}`, () => {
-          const { showServeCourtIssuedDocumentButton } = runCompute(
-            documentViewerHelper,
-            {
-              state: {
-                ...getBaseState(user || docketClerkUser),
-                caseDetail: {
-                  docketEntries: [
-                    { ...baseDocketEntry, ...docketEntryOverrides },
-                  ],
-                },
+  describe('showUnservedPetitionWarning', () => {
+    it('should be true if an otherwise servable document is selected but the petition on the case is not served', () => {
+      const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry, // the petition
+                docketEntryId: '77747b11-19b3-4c96-b7a1-fa6a5654e2d5',
+                servedAt: undefined,
               },
-            },
-          );
+              { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
+            ],
+          },
+        },
+      });
 
-          expect(showServeCourtIssuedDocumentButton).toEqual(expectation);
-        });
-      },
-    );
-  });
-
-  describe('showServePaperFiledDocumentButton', () => {
-    const showServePaperFiledDocumentButtonTests = [
-      {
-        description:
-          'should be true if the document type is an external document (and not a Petition) that does not have a served at and permisisons.SERVE_DOCUMENT is true',
-        docketEntryOverrides: {
-          documentType: 'Answer',
-          eventCode: 'A',
-        },
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the document type is not an external document',
-        docketEntryOverrides: {
-          documentType: 'Order',
-          eventCode: 'O',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is an external document and has servedAt',
-        docketEntryOverrides: {
-          documentType: 'Answer',
-          eventCode: 'A',
-          servedAt: '2019-03-01T21:40:46.415Z',
-        },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document type is an external document without servedAt but the user does not have permission to serve the document',
-        docketEntryOverrides: {
-          documentType: 'Answer',
-          eventCode: 'A',
-        },
-        expectation: false,
-        user: adcUser,
-      },
-    ];
-
-    showServePaperFiledDocumentButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
-        it(`${description}`, () => {
-          const { showServePaperFiledDocumentButton } = runCompute(
-            documentViewerHelper,
-            {
-              state: {
-                ...getBaseState(user || docketClerkUser),
-                caseDetail: {
-                  docketEntries: [
-                    { ...baseDocketEntry, ...docketEntryOverrides },
-                  ],
-                },
+      expect(showUnservedPetitionWarning).toBe(true);
+    });
+    it('should be false if an servable document is selected and the petition on the case is served', () => {
+      const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry, // the petition
+                docketEntryId: '77747b11-19b3-4c96-b7a1-fa6a5654e2d5',
+                servedAt: '2019-03-01T21:40:46.415Z',
               },
-            },
-          );
-
-          expect(showServePaperFiledDocumentButton).toEqual(expectation);
-        });
-      },
-    );
-  });
-
-  describe('showServePetitionButton', () => {
-    const showServePetitionButtonTests = [
-      {
-        description:
-          'should be false if the document is a served Petition document and the user has SERVE_PETITION permission',
-        docketEntryOverrides: {
-          servedAt: '2019-03-01T21:40:46.415Z',
+              { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
+            ],
+          },
         },
-        expectation: false,
-      },
-      {
-        description:
-          'should be false if the document is a not-served Petition document and the user does not have SERVE_PETITION permission',
-        expectation: false,
-        user: docketClerkUser,
-      },
-      {
-        description:
-          'should be true if the document is a not-served Petition document and the user has SERVE_PETITION permission',
-        expectation: true,
-      },
-    ];
+      });
 
-    showServePetitionButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
-        it(`${description}`, () => {
-          const { showServePetitionButton } = runCompute(documentViewerHelper, {
-            state: {
-              ...getBaseState(user || petitionsClerkUser),
-              caseDetail: {
-                docketEntries: [
-                  { ...baseDocketEntry, ...docketEntryOverrides },
-                ],
-              },
-            },
-          });
-
-          expect(showServePetitionButton).toEqual(expectation);
-        });
-      },
-    );
-  });
-
-  describe('showSignStipulatedDecisionButton', () => {
-    const showSignStipulatedDecisionButtonTests = [
-      {
-        description:
-          'should be true if the eventCode is PSDE, the PSDE is served, and the SDEC eventCode is not in the documents',
-        docketEntries: [
-          {
-            ...baseDocketEntry,
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            servedAt: '2019-08-25T05:00:00.000Z',
-          },
-        ],
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the eventCode is PSDE and the PSDE is not served',
-        docketEntries: [
-          {
-            ...baseDocketEntry,
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-          },
-        ],
-        expectation: false,
-      },
-      {
-        description:
-          'should be true if the document code is PSDE, the PSDE is served, and an archived SDEC eventCode is in the documents',
-        docketEntries: [
-          {
-            ...baseDocketEntry,
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            servedAt: '2019-08-25T05:00:00.000Z',
-          },
-          {
-            archived: true,
-            docketEntryId: '234',
-            documentType: 'Stipulated Decision',
-            eventCode: 'SDEC',
-          },
-        ],
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the document code is PSDE, the PSDE is served, and the SDEC eventCode is in the documents (and is not archived)',
-        docketEntries: [
-          {
-            ...baseDocketEntry,
-            documentType: 'Proposed Stipulated Decision',
-            eventCode: 'PSDE',
-            servedAt: '2019-08-25T05:00:00.000Z',
-          },
-          {
-            docketEntryId: '234',
-            documentType: 'Stipulated Decision',
-            eventCode: 'SDEC',
-          },
-        ],
-        expectation: false,
-      },
-      {
-        description: 'should be false if the eventCode is not PSDE',
-        docketEntries: [
-          {
-            ...baseDocketEntry,
-            documentType: 'Answer',
-            eventCode: 'A',
-          },
-        ],
-        expectation: false,
-      },
-    ];
-
-    showSignStipulatedDecisionButtonTests.forEach(
-      ({ description, docketEntries, expectation }) => {
-        it(`${description}`, () => {
-          const { showSignStipulatedDecisionButton } = runCompute(
-            documentViewerHelper,
-            {
-              state: {
-                ...getBaseState(docketClerkUser),
-                caseDetail: { docketEntries },
-              },
-            },
-          );
-
-          expect(showSignStipulatedDecisionButton).toEqual(expectation);
-        });
-      },
-    );
-  });
-
-  describe('showCompleteQcButton', () => {
-    const showCompleteQcButtonTests = [
-      {
-        description:
-          'should be true if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the user does not have EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: false,
-        user: adcUser,
-      },
-      {
-        description:
-          'should be undefined if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-        },
-        expectation: undefined,
-      },
-      {
-        description:
-          'should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item but is in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          isFileAttached: false,
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: false,
-      },
-    ];
-
-    showCompleteQcButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
-        it(`${description}`, () => {
-          const { showCompleteQcButton } = runCompute(documentViewerHelper, {
-            state: {
-              ...getBaseState(user || docketClerkUser),
-              caseDetail: {
-                docketEntries: [
-                  { ...baseDocketEntry, ...docketEntryOverrides },
-                ],
-              },
-            },
-          });
-
-          expect(showCompleteQcButton).toEqual(expectation);
-        });
-      },
-    );
+      expect(showUnservedPetitionWarning).toBe(false);
+    });
   });
 });

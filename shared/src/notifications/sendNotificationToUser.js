@@ -12,6 +12,7 @@ exports.sendNotificationToUser = async ({
   message,
   userId,
 }) => {
+  console.log('doing this');
   const connections = await applicationContext
     .getPersistenceGateway()
     .getWebSocketConnectionsByUserId({

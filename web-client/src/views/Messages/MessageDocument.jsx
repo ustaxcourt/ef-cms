@@ -195,6 +195,12 @@ export const MessageDocument = connect(
               Signature required for this document.
             </div>
           )}
+        {messageViewerDocumentToDisplay &&
+          messageDocumentHelper.showServiceWarning && (
+            <div className="text-align-right text-secondary-dark text-semibold margin-bottom-1">
+              Document cannot be served until the Petition is served.
+            </div>
+          )}
 
         {messageViewerDocumentToDisplay && messageDocumentHelper.archived && (
           <div className="archived-document-frame">
