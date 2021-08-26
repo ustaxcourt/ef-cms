@@ -19,7 +19,6 @@ exports.retrySendNotificationToConnections = async ({
   for (const connection of connections) {
     for (let i = 0; i <= maxRetries; i++) {
       try {
-        console.log('sending it!', connection.connectionId);
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
