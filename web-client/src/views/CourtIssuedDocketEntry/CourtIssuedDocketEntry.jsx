@@ -72,6 +72,7 @@ export const CourtIssuedDocketEntry = connect(
                 message:
                   'Document cannot be served until the Petition is served.',
               }}
+              dismissable={false}
             />
           )}
           <div className="grid-row grid-gap">

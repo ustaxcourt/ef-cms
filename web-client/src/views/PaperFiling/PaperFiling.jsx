@@ -9,6 +9,7 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
+import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -57,21 +58,32 @@ export const PaperFiling = connect(
                   complete this entry.
                 </Hint>
               )}
+              {paperDocketEntryHelper.showServiceWarning && (
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'Document cannot be served until the Petition is served.',
+                  }}
+                  dismissable={false}
+                />
+              )}
             </div>
 
             <div className="grid-col-5">
               <section className="usa-section DocumentDetail">
                 <PrimaryDocumentForm />
                 <div className="margin-top-5">
-                  <Button
-                    id="save-and-serve"
-                    type="submit"
-                    onClick={() => {
-                      openConfirmPaperServiceModalSequence();
-                    }}
-                  >
-                    Save and Serve
-                  </Button>
+                  {paperDocketEntryHelper.showSaveAndServeButton && (
+                    <Button
+                      id="save-and-serve"
+                      type="submit"
+                      onClick={() => {
+                        openConfirmPaperServiceModalSequence();
+                      }}
+                    >
+                      Save and Serve
+                    </Button>
+                  )}
                   <Button
                     secondary
                     id="save-for-later"
