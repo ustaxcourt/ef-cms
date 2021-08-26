@@ -16,6 +16,7 @@ const {
 const {
   Case,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -241,6 +242,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     caseHasServedDocketEntries: jest
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
+    caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()

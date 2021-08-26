@@ -8,6 +8,7 @@ const {
   createOrder,
   editAndSignOrder,
   goToCaseDetail,
+  reviewAndServePetition,
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
@@ -109,6 +110,11 @@ describe('Petitions clerk', () => {
     fillInCreateCaseFromPaperForm();
     goToReviewCase(testData);
     serveCaseToIrs();
+  });
+
+  it('should be able to serve the petition on the electronically-filed case', () => {
+    goToCaseDetail(testData.createdDocketNumber);
+    reviewAndServePetition();
   });
 });
 
