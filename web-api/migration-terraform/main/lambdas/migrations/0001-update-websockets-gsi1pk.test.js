@@ -2,6 +2,7 @@ const { migrateItems } = require('./0001-update-websockets-gsi1pk');
 
 describe('migrateItems', () => {
   let mockDocketEntry;
+
   beforeEach(() => {
     mockDocketEntry = {
       chambersPhoneNumber: '1111111',
@@ -25,7 +26,7 @@ describe('migrateItems', () => {
     };
   });
 
-  it('should return and not modify records that do NOT have a gsi1pk starting with connection', async () => {
+  it('should return and not modify records that do NOT have a gsi1pk starting with connection', () => {
     const items = [
       {
         gsi1pk: 'trial-session-catalog',
@@ -34,7 +35,7 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = migrateItems(items);
 
     expect(results).toEqual([
       {
@@ -45,7 +46,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should return and not modify records that do not contain a gsi1pk', async () => {
+  it('should return and not modify records that do not contain a gsi1pk', () => {
     const items = [
       {
         ...mockDocketEntry,
@@ -53,24 +54,23 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = migrateItems(items);
 
     expect(results).toEqual(items);
   });
 
-  it.skip('should delete the gsi1pk property on case hearing records that have a gsi1pk of `trial-session-catalog`', async () => {
+  it('should delete the gsi1pk property on websocket connection records that have a gsi1pk of `connection|CONNECTION_ID`', () => {
     const items = [
       {
-        ...mockDocketEntry,
-        gsi1pk: 'trial-session-catalog',
+        gsi1pk: 'connection|1234',
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = migrateItems(items);
 
     expect(results).toEqual([
       {
-        ...mockDocketEntry,
+        gsi1pk: 'connection',
       },
     ]);
   });
