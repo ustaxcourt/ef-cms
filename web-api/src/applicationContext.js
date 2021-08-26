@@ -858,6 +858,9 @@ const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
+  retrySendNotificationToConnections,
+} = require('../../shared/src/business/useCaseHelper/notifications/retrySendNotificationToConnections');
+const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
@@ -910,6 +913,8 @@ const {
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
 const {
   sendNotificationToConnection,
+} = require('../../shared/src/notifications/sendNotificationToConnection');
+const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
 const {
@@ -1660,6 +1665,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       });
     },
     getNotificationGateway: () => ({
+      retrySendNotificationToConnections,
       sendNotificationToConnection,
       sendNotificationToUser,
     }),

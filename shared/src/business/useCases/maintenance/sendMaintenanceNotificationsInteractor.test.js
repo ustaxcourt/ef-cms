@@ -6,39 +6,13 @@ const {
 } = require('./sendMaintenanceNotificationsInteractor');
 
 describe('sendMaintenanceNotificationsInteractor', () => {
-  let mockConnections;
-
-  const notificationError = new Error('could not get notification client');
-  notificationError.statusCode = 410;
+  const mockConnections = [
+    { connection: '1234' },
+    { connection: '5678' },
+    { connection: '9999' },
+  ];
 
   beforeEach(() => {
-    const postToConnection = jest
-      .fn()
-      .mockReturnValue({ promise: () => Promise.resolve('ok') });
-
-    applicationContext.getNotificationClient
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementation(() => {
-        return { postToConnection };
-      });
-
-    mockConnections = [
-      { connection: '1234' },
-      { connection: '5678' },
-      { connection: '9999' },
-    ];
-
     applicationContext
       .getPersistenceGateway()
       .getAllWebSocketConnections.mockReturnValue(mockConnections);
@@ -53,23 +27,18 @@ describe('sendMaintenanceNotificationsInteractor', () => {
   });
 
   it('should sendNotificationToConnection for each connection', async () => {
+    const mockMessage = {
+      action: 'maintenance_mode_engaged',
+    };
     await sendMaintenanceNotificationsInteractor(applicationContext);
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToConnection,
-    ).toHaveBeenCalledTimes(mockConnections.length);
-  });
-
-  it('should log an error if sendNotificationToConnection fails and it is not a 410 error status', async () => {
-    const notificationError = new Error('could not get notification client');
-    notificationError.statusCode = 400;
-
-    await expect(
-      sendMaintenanceNotificationsInteractor(applicationContext),
-    ).rejects.toThrow('');
-
-    expect(applicationContext.logger.error.mock.calls[0][1]).toMatchObject({
-      message: 'oopsies',
-    });
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].connections,
+    ).toBe(mockConnections);
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].messageStringified,
+    ).toBe(JSON.stringify(mockMessage));
   });
 });
