@@ -22,8 +22,8 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 };
 
 export const advancedSearchHelper = (get, applicationContext) => {
-  const permissions = get(state.permissions) || {};
   const user = applicationContext.getCurrentUser();
+  const permissions = get(state.permissions) || {};
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
