@@ -61,11 +61,8 @@ describe('sendMaintenanceNotificationsInteractor', () => {
   });
 
   it('should log an error if sendNotificationToConnection fails and it is not a 410 error status', async () => {
-    applicationContext
-      .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValue(
-        new Error({ message: 'oopsies', statusCode: 400 }),
-      );
+    const notificationError = new Error('could not get notification client');
+    notificationError.statusCode = 400;
 
     await expect(
       sendMaintenanceNotificationsInteractor(applicationContext),
