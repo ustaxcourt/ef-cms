@@ -28,11 +28,13 @@ exports.sendNotificationToUser = async ({
   for (const connection of connections) {
     for (let i = 0; i <= maxRetries; i++) {
       try {
-        await exports.sendNotificationToConnection({
-          applicationContext,
-          connection,
-          messageStringified,
-        });
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToConnection({
+            applicationContext,
+            connection,
+            messageStringified,
+          });
         break;
       } catch (err) {
         if (i >= maxRetries) {
