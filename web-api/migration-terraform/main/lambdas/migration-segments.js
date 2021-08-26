@@ -3,6 +3,9 @@ const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 
 const {
+  migrateItems: migration0001,
+} = require('./migrations/0001-update-websockets-gsi1pk');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -27,7 +30,7 @@ const sqs = new AWS.SQS({ region: 'us-east-1' });
 const migrateRecords = async ({
   // documentClient,
   items,
-  // ranMigrations = {},
+  ranMigrations = {},
 }) => {
   // if (!ranMigrations['bug-0035-private-practitioner-representing.js']) {
   //   applicationContext.logger.info('about to run bug migration 0035');
@@ -53,6 +56,10 @@ const migrateRecords = async ({
   //   applicationContext.logger.debug('about to run migration 0038');
   //   items = await migration0038(items);
   // }
+  if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
+    applicationContext.logger.debug('about to run migration 0001');
+    items = await migration0001(items);
+  }
 
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
@@ -159,7 +166,7 @@ exports.handler = async event => {
     // ...(await hasMigrationRan('bug-0036-public-served-parties-code.js')),
     // ...(await hasMigrationRan('0036-phone-number-format.js')),
     // ...(await hasMigrationRan('devex-0037-combine-work-items.js')),
-    // ...(await hasMigrationRan('0038-parse-generated-orders.js')),
+    ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
