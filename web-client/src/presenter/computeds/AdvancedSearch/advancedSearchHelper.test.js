@@ -17,7 +17,6 @@ describe('advancedSearchHelper', () => {
   let globalUser;
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
     };
@@ -33,6 +32,9 @@ describe('advancedSearchHelper', () => {
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
           MAX_SEARCH_RESULTS: maxSearchResultsOverride,
         };
+      },
+      getCurrentUser: () => {
+        return globalUser;
       },
     },
   );
@@ -64,6 +66,7 @@ describe('advancedSearchHelper', () => {
     expect(result).toEqual({
       feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
       showDateRangePicker: false,
+      showFeedbackButton: true,
       showPractitionerSearch: undefined,
       showStateSelect: false,
     });
@@ -79,6 +82,7 @@ describe('advancedSearchHelper', () => {
     expect(result).toEqual({
       feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
       showDateRangePicker: false,
+      showFeedbackButton: true,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -98,6 +102,23 @@ describe('advancedSearchHelper', () => {
     });
     expect(result).toMatchObject({
       showPractitionerSearch: false,
+    });
+  });
+
+  it('returns showFeedbackButton false when user is an external user', () => {
+    globalUser = {
+      role: USER_ROLES.privatePractitioner,
+      userId: 'practitioner',
+    };
+
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: {},
+      },
+    });
+    expect(result).toMatchObject({
+      showFeedbackButton: false,
     });
   });
 
