@@ -53,7 +53,7 @@ export const AdvancedSearch = connect(
   }) {
     return (
       <>
-        <AdvancedSearchHeader feedBackUrl={advancedSearchHelper.feedBackUrl} />
+        <AdvancedSearchHeader />
 
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />
