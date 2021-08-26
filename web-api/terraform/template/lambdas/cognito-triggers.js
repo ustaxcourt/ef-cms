@@ -24,6 +24,9 @@ const {
   persistUser,
 } = require('../../../../shared/src/persistence/dynamo/users/persistUser');
 const {
+  retrySendNotificationToConnections,
+} = require('../../../../shared/src/notifications/retrySendNotificationToConnections');
+const {
   sendNotificationToUser,
 } = require('../../../../shared/src/notifications/sendNotificationToUser');
 const {
@@ -74,6 +77,7 @@ const applicationContext = {
     });
   },
   getNotificationGateway: () => ({
+    retrySendNotificationToConnections,
     sendNotificationToUser,
   }),
   getPersistenceGateway: () => ({
