@@ -859,7 +859,7 @@ const {
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
   retrySendNotificationToConnections,
-} = require('../../shared/src/business/useCaseHelper/notifications/retrySendNotificationToConnections');
+} = require('../../shared/src/notifications/retrySendNotificationToConnections');
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
