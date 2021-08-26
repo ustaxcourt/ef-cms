@@ -72,7 +72,6 @@ export const socketRouter = (app, onMessageCallbackFn) => {
       case 'maintenance_mode_engaged':
         await app.getSequence('openAppMaintenanceModalSequence')({
           ...message,
-          path: '/maintenance',
         });
         break;
       case 'maintenance_mode_disengaged':
