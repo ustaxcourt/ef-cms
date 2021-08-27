@@ -107,16 +107,6 @@ describe('fileExternalDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
-  it('should throw an error when not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
-    await expect(
-      fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata: {},
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('should throw an error when trying to file a document on a case that does not have a served petition', async () => {
     caseRecord.docketEntries.find(d => d.documentType === 'Petition').servedAt =
       undefined;
