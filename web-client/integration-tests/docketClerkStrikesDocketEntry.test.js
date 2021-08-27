@@ -10,7 +10,6 @@ import { docketClerkStrikesDocketEntry } from './journey/docketClerkStrikesDocke
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from './journey/privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully';
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
@@ -35,8 +34,6 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerFilesADocumentForCase(cerebralTest, fakeFile);
