@@ -38,7 +38,7 @@ export const getCanEditPetitioner = ({
   }
 
   if (user.role === USER_ROLES.privatePractitioner) {
-    return userAssociatedWithCase;
+    return !!userAssociatedWithCase;
   }
 
   if (permissions.EDIT_PETITIONER_INFO) {

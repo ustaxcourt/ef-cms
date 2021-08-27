@@ -329,7 +329,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   it('should set work item as completed if isPaper is true', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Guy Fieri',
-      role: ROLES.petitioner,
+      role: ROLES.docketClerk,
       section: 'docket',
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -361,8 +361,8 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   it('should not set as served when is NOT isAutoServed', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Guy Fieri',
-      role: ROLES.petitioner,
-      section: 'petitions',
+      role: ROLES.docketClerk,
+      section: 'docket',
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
