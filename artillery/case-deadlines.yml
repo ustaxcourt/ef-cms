@@ -1,0 +1,53 @@
+config:
+  target: "https://app-{{ $processEnvironment.DEPLOYING_COLOR }}.{{ $processEnvironment.EFCMS_DOMAIN }}"
+  plugins:
+    metrics-by-endpoint: 
+      useOnlyRequestNames: true
+  phases:
+    - duration: 10
+      arrivalRate: 2
+      name: Sustained load
+
+scenarios:
+  - name: "Case Deadlines"
+    flow:
+      - get:
+          url: "/case-deadlines/3325-15"
+          name: 'case-deadlines'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Case Deadline Search"
+    flow:
+      - get:
+          url: "/case-deadlines?endDate=2021-08-02T03:59:59.999Z&from=0&judge=&pageSize=100&startDate=2010-08-01T04:00:00.000Z"
+          name: 'case-deadline-search'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Case Advanced Search"
+    flow:
+      - get:
+          url: "/cases/search?countryType=domestic&petitionerName=guy&petitionerState=CA&yearFiledMin=1990&yearFiledMax=2021"
+          name: 'case-advanced-search'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Case Public Search"
+    flow:
+      - get:
+          url: "/public-api/search?countryType=domestic&petitionerName=jake&petitionerState=CA&yearFiledMin=1990&yearFiledMax=2021"
+          name: 'case-public-search'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Blocked Cases Report"
+    flow:
+      - get:
+          url: "/reports/blocked/Los%20Angeles,%20California"
+          name: 'blocked-cases-report'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Case Inventory Report"
+    flow:
+      - get:
+          url: "/reports/case-inventory-report?associatedJudge=Carluzzo&from=0&pageSize=25&status="
+          name: 'case-inventory-report'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'

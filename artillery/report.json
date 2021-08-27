@@ -1,0 +1,228 @@
+{
+  "aggregate": {
+    "timestamp": "2021-08-27T15:57:56.398Z",
+    "scenariosCreated": 20,
+    "scenariosCompleted": 20,
+    "requestsCompleted": 20,
+    "latency": {
+      "min": 244,
+      "max": 498,
+      "median": 375.5,
+      "p95": 497.5,
+      "p99": 498
+    },
+    "rps": {
+      "count": 20,
+      "mean": 1.9
+    },
+    "scenarioDuration": {
+      "min": 318.1,
+      "max": 581.9,
+      "median": 453.2,
+      "p95": 581.2,
+      "p99": 581.9
+    },
+    "scenarioCounts": {
+      "Blocked Cases Report": 5,
+      "Case Public Search": 6,
+      "Case Advanced Search": 7,
+      "Case Deadline Search": 2
+    },
+    "errors": {},
+    "codes": {
+      "200": 20
+    },
+    "matches": 0,
+    "customStats": {
+      "blocked-cases-report": {
+        "min": 452,
+        "max": 580,
+        "median": 474,
+        "p95": 580,
+        "p99": 580
+      },
+      "case-public-search": {
+        "min": 434,
+        "max": 581,
+        "median": 448,
+        "p95": 581,
+        "p99": 581
+      },
+      "case-advanced-search": {
+        "min": 317,
+        "max": 467,
+        "median": 439,
+        "p95": 467,
+        "p99": 467
+      },
+      "case-deadline-search": {
+        "min": 386,
+        "max": 483,
+        "median": 434.5,
+        "p95": 483,
+        "p99": 483
+      }
+    },
+    "counters": {
+      "code 200 on blocked-cases-report": 5,
+      "code 200 on case-public-search": 6,
+      "code 200 on case-advanced-search": 7,
+      "code 200 on case-deadline-search": 2
+    },
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 10,
+        "arrivalRate": 2,
+        "name": "Sustained load"
+      }
+    ]
+  },
+  "intermediate": [
+    {
+      "timestamp": "2021-08-27T15:57:55.387Z",
+      "scenariosCreated": 19,
+      "scenariosCompleted": 19,
+      "requestsCompleted": 19,
+      "latency": {
+        "min": 244,
+        "max": 498,
+        "median": 374,
+        "p95": 497.6,
+        "p99": 498
+      },
+      "rps": {
+        "count": 19,
+        "mean": 2
+      },
+      "scenarioDuration": {
+        "min": 318.1,
+        "max": 581.9,
+        "median": 452.7,
+        "p95": 581.3,
+        "p99": 581.9
+      },
+      "scenarioCounts": {
+        "Blocked Cases Report": 5,
+        "Case Public Search": 5,
+        "Case Advanced Search": 7,
+        "Case Deadline Search": 2
+      },
+      "errors": {},
+      "codes": {
+        "200": 19
+      },
+      "matches": 0,
+      "latencies": [
+        403000000,
+        498000000,
+        373000000,
+        358000000,
+        392000000,
+        292000000,
+        244000000,
+        374000000,
+        383000000,
+        371000000,
+        360000000,
+        388000000,
+        377000000,
+        404000000,
+        303000000,
+        497000000,
+        357000000,
+        383000000,
+        311000000
+      ],
+      "customStats": {
+        "blocked-cases-report": {
+          "min": 452,
+          "max": 580,
+          "median": 474,
+          "p95": 580,
+          "p99": 580
+        },
+        "case-public-search": {
+          "min": 434,
+          "max": 581,
+          "median": 445,
+          "p95": 581,
+          "p99": 581
+        },
+        "case-advanced-search": {
+          "min": 317,
+          "max": 467,
+          "median": 439,
+          "p95": 467,
+          "p99": 467
+        },
+        "case-deadline-search": {
+          "min": 386,
+          "max": 483,
+          "median": 434.5,
+          "p95": 483,
+          "p99": 483
+        }
+      },
+      "counters": {
+        "code 200 on blocked-cases-report": 5,
+        "code 200 on case-public-search": 5,
+        "code 200 on case-advanced-search": 7,
+        "code 200 on case-deadline-search": 2
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    },
+    {
+      "timestamp": "2021-08-27T15:57:56.395Z",
+      "scenariosCreated": 1,
+      "scenariosCompleted": 1,
+      "requestsCompleted": 1,
+      "latency": {
+        "min": 448,
+        "max": 448,
+        "median": 448,
+        "p95": 448,
+        "p99": 448
+      },
+      "rps": {
+        "count": 1,
+        "mean": 1
+      },
+      "scenarioDuration": {
+        "min": 534.1,
+        "max": 534.1,
+        "median": 534.1,
+        "p95": 534.1,
+        "p99": 534.1
+      },
+      "scenarioCounts": {
+        "Case Public Search": 1
+      },
+      "errors": {},
+      "codes": {
+        "200": 1
+      },
+      "matches": 0,
+      "latencies": [
+        448000000
+      ],
+      "customStats": {
+        "case-public-search": {
+          "min": 527,
+          "max": 527,
+          "median": 527,
+          "p95": 527,
+          "p99": 527
+        }
+      },
+      "counters": {
+        "code 200 on case-public-search": 1
+      },
+      "concurrency": 0,
+      "pendingRequests": 0,
+      "scenariosAvoided": 0
+    }
+  ]
+}
