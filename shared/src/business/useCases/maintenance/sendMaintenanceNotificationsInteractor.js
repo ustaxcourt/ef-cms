@@ -21,8 +21,7 @@ exports.sendMaintenanceNotificationsInteractor = async (
     : 'maintenance_mode_disengaged';
 
   applicationContext.logger.error(
-    '~~~maintenanceModeMessage!!!',
-    maintenanceModeMessage,
+    `00 in interactor~~~maintenanceModeMessage!!! ${maintenanceModeMessage}`,
   );
 
   const messageStringified = JSON.stringify({
