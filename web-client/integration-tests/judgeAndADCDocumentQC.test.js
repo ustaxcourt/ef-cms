@@ -10,6 +10,7 @@ import {
 } from './helpers';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionsClerkManuallyAddsCaseToCalendaredTrialSession } from './journey/petitionsClerkManuallyAddsCaseToCalendaredTrialSession';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
 const cerebralTest = setupTest();
@@ -47,6 +48,10 @@ describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
       cerebralTest.createdCases.push(caseDetail.docketNumber);
       cerebralTest.docketNumber = caseDetail.docketNumber;
     });
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+    loginAs(cerebralTest, 'petitioner@example.com');
     petitionerFilesADocumentForCase(cerebralTest, fakeFile);
   }
 
