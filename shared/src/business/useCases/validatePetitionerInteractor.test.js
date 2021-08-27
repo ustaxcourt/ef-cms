@@ -117,7 +117,7 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('should return an error when second intervenor is added', () => {
-    mockContact = {
+    const contact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
@@ -129,7 +129,7 @@ describe('validatePetitionerInteractor', () => {
     ];
 
     const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: mockContact,
+      contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });
 
@@ -140,19 +140,37 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('should not return an error when first intervenor is edited', () => {
-    mockContact = {
+    const contact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
     const mockExistingPetitioners = [
       {
-        ...mockContact,
-        contactType: CONTACT_TYPES.intervenor,
+        ...contact,
       },
     ];
 
     const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: mockContact,
+      contactInfo: contact,
+      existingPetitioners: mockExistingPetitioners,
+    });
+
+    expect(errors).toBeFalsy();
+  });
+
+  it('should not edit the first intervenor when the contactType is not intervenor', () => {
+    const contact = {
+      ...mockContact,
+      contactType: CONTACT_TYPES.otherFiler,
+    };
+    const mockExistingPetitioners = [
+      {
+        ...contact,
+      },
+    ];
+
+    const errors = validatePetitionerInteractor(applicationContext, {
+      contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });
 
