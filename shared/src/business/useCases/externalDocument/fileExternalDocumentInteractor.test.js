@@ -107,26 +107,6 @@ describe('fileExternalDocumentInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
-  it('should throw an error when trying to file a document on a case that does not have a served petition', async () => {
-    caseRecord.docketEntries.find(d => d.documentType === 'Petition').servedAt =
-      undefined;
-
-    const documentMetadata = {
-      docketNumber: caseRecord.docketNumber,
-      documentTitle: 'Memorandum in Support',
-      documentType: 'Memorandum in Support',
-      eventCode: 'A',
-      filedBy: 'Test Petitioner',
-      primaryDocumentId: mockDocketEntryId,
-    };
-
-    await expect(
-      fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata,
-      }),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
     await expect(
       fileExternalDocumentInteractor(applicationContext, {
