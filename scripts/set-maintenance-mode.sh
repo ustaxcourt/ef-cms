@@ -19,4 +19,5 @@ CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-dep
 aws lambda invoke --region us-east-1 \
   --function-name "send_maintenance_notifications_"${ENV}"_"${CURRENT_COLOR} \
   --payload '{ "maintenanceMode": '${1}' }' \
+  --cli-binary-format raw-in-base64-out \
   /dev/null
