@@ -182,11 +182,14 @@ const {
   createNewPractitionerUser,
 } = require('../../shared/src/persistence/dynamo/users/createNewPractitionerUser');
 const {
+  createOrUpdatePractitionerUser,
+} = require('../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser');
+const {
+  createOrUpdateUser,
+} = require('../../shared/src/persistence/dynamo/users/createOrUpdateUser');
+const {
   createPetitionerAccountInteractor,
 } = require('../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
-const {
-  createPractitionerUser,
-} = require('../../shared/src/persistence/dynamo/users/createPractitionerUser');
 const {
   createPractitionerUserInteractor,
 } = require('../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor');
@@ -202,9 +205,6 @@ const {
 const {
   createTrialSessionWorkingCopy,
 } = require('../../shared/src/persistence/dynamo/trialSessions/createTrialSessionWorkingCopy');
-const {
-  createUser,
-} = require('../../shared/src/persistence/dynamo/users/createUser');
 const {
   createUserForContact,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
@@ -367,6 +367,9 @@ const {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
+const {
+  getAllWebSocketConnections,
+} = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
 const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
@@ -855,6 +858,9 @@ const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
+  retrySendNotificationToConnections,
+} = require('../../shared/src/notifications/retrySendNotificationToConnections');
+const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
@@ -902,6 +908,12 @@ const {
 const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
+const {
+  sendMaintenanceNotificationsInteractor,
+} = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationToConnection,
+} = require('../../shared/src/notifications/sendNotificationToConnection');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -1337,10 +1349,10 @@ const gatewayMethods = {
     createCaseDeadline,
     createCaseTrialSortMappingRecords,
     createMessage,
-    createPractitionerUser,
+    createOrUpdatePractitionerUser,
+    createOrUpdateUser,
     createTrialSession,
     createTrialSessionWorkingCopy,
-    createUser,
     deleteKeyCount,
     fetchPendingItems,
     getSesStatus,
@@ -1393,6 +1405,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteUserOutboxRecord,
   deleteWorkItem,
+  getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1534,7 +1547,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
                   Username: foundUser.userId,
                 };
               } else {
-                throw new Error('User does not exist');
+                const error = new Error();
+                error.code = 'UserNotFoundException';
+                throw error;
               }
             },
           }),
@@ -1650,6 +1665,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       });
     },
     getNotificationGateway: () => ({
+      retrySendNotificationToConnections,
+      sendNotificationToConnection,
       sendNotificationToUser,
     }),
     getPdfJs: () => {
@@ -1886,6 +1903,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,

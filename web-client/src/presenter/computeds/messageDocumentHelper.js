@@ -25,6 +25,10 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
 
+  const isPetitionServed = applicationContext
+    .getUtilities()
+    .caseHasServedPetition(caseDetail);
+
   const { docketEntries } = caseDetail;
 
   const caseDocument =
@@ -108,12 +112,22 @@ export const messageDocumentHelper = (get, applicationContext) => {
   ).includes(caseDocument.eventCode);
 
   const showServeCourtIssuedDocumentButton =
-    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+    isPetitionServed &&
+    showNotServed &&
+    isCourtIssuedDocument &&
+    permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
+    isPetitionServed &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !isPetitionDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showServiceWarning =
+    !isPetitionDocument &&
+    !isPetitionServed &&
+    showNotServed &&
     permissions.SERVE_DOCUMENT;
 
   const showServePetitionButton =
@@ -156,6 +170,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
+    showServiceWarning,
     showSignStipulatedDecisionButton,
     signOrderLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDocumentIdToDisplay}/sign/${parentMessageId}`,
   };
