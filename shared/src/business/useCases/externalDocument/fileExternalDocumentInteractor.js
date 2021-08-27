@@ -10,7 +10,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
+const { Case, caseHasServedPetition } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -44,6 +44,10 @@ exports.fileExternalDocumentInteractor = async (
       applicationContext,
       docketNumber,
     });
+
+  if (!caseHasServedPetition(caseToUpdate)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
