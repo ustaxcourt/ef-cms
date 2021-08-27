@@ -2,9 +2,6 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  Case /* caseHasServedPetition */,
-} = require('../../entities/cases/Case');
-const {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
@@ -13,6 +10,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -46,11 +44,6 @@ exports.fileExternalDocumentInteractor = async (
       applicationContext,
       docketNumber,
     });
-
-  // TODO 8763-related?
-  // if (!caseHasServedPetition(caseToUpdate)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
   const workItems = [];
