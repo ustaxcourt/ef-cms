@@ -10,7 +10,7 @@ exports.updateMaintenanceMode = async ({
   applicationContext,
   maintenanceMode,
 }) => {
-  await client.update({
+  await client.updateToDeployTable({
     ExpressionAttributeNames: {
       '#current': 'current',
     },
