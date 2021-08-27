@@ -4,7 +4,7 @@ config:
     metrics-by-endpoint: 
       useOnlyRequestNames: true
   phases:
-    - duration: 10
+    - duration: 20
       arrivalRate: 2
       name: Sustained load
 
@@ -49,5 +49,104 @@ scenarios:
       - get:
           url: "/reports/case-inventory-report?associatedJudge=Carluzzo&from=0&pageSize=25&status="
           name: 'case-inventory-report'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Advanced Document Search"
+    # weight: 2
+    flow:
+      - get:
+          url: "/case-documents/order-search?keyword=order"
+          name: 'advanced-document-search'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Pending Items"
+    flow:
+      - get:
+          url: "/reports/pending-items?judge=Buch&page=0"
+          name: 'pending-items'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Reconciliation Report"
+    flow:
+      - get:
+          url: "/v2/reconciliation-report/today"
+          name: 'pending-items'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Messages: User Inbox"
+    flow:
+      - get:
+          url: "/messages/inbox/4a232d0d-3227-421e-ba85-a884f9c370b9"
+          name: 'messages-user-inbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Messages: Completed Section (Docket)"
+    flow:
+      - get:
+          url: "/messages/completed/section/docket"
+          name: 'messages-section-docket-inbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Messages: Sent Section (Docket)"
+    flow:
+      - get:
+          url: "/messages/outbox/section/docket"
+          name: 'messages-section-docket-sent'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Messages: User Completed"
+    flow:
+      - get:
+          url: "/messages/completed/4a232d0d-3227-421e-ba85-a884f9c370b9"
+          name: 'messages-user-completed'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Messages: User Sent"
+    flow:
+      - get:
+          url: "/messages/outbox/4a232d0d-3227-421e-ba85-a884f9c370b9"
+          name: 'messages-user-sent'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Practitioner By Name"
+    flow:
+      - get:
+          url: "/practitioners?name=test"
+          name: 'practitioner-by-name'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Document QC: User Inbox"
+    flow:
+      - get:
+          url: "/users/4a232d0d-3227-421e-ba85-a884f9c370b9/document-qc/inbox"
+          name: 'document-qc-user-inbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Document QC: User Outbox"
+    flow:
+      - get:
+          url: "/users/4a232d0d-3227-421e-ba85-a884f9c370b9/document-qc/served"
+          name: 'document-qc-user-outbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Document QC: User Outbox"
+    flow:
+      - get:
+          url: "/users/4a232d0d-3227-421e-ba85-a884f9c370b9/document-qc/served"
+          name: 'document-qc-user-outbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Document QC: Section Inbox (Docket)"
+    flow:
+      - get:
+          url: "/sections/docket/document-qc/inbox"
+          name: 'document-qc-section-inbox'
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
+  - name: "Document QC: Section Outbox (Docket)"
+    flow:
+      - get:
+          url: "/sections/docket/document-qc/served"
+          name: 'document-qc-section-outbox'
           headers:
             Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
