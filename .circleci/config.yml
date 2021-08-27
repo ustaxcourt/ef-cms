@@ -906,35 +906,35 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
-      - migrate:
-          requires:
-            - deploy
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests-readonly:
+      # - migrate:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      # - smoketests-readonly:
           requires:
             - smoketests
           filters:
@@ -950,7 +950,7 @@ workflows:
                 - experimental5
       - switch-colors:
           requires:
-            - smoketests-readonly
+            - deploy
           filters:
             branches:
               only:
