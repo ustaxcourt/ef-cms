@@ -10,6 +10,8 @@ exports.updateMaintenanceMode = async ({
   applicationContext,
   maintenanceMode,
 }) => {
+  applicationContext.logger.error(`updateMaintenanceMode ${maintenanceMode}`);
+
   await client.updateToDeployTable({
     ExpressionAttributeNames: {
       '#current': 'current',
