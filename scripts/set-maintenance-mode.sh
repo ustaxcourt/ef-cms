@@ -3,7 +3,7 @@
 # Sets the maintenance mode flag to the passed in value in the dynamo deploy table
 
 # Usage
-#   ./engage-maintenance-mode.sh true dev
+#   ./set-maintenance-mode.sh true dev
 
 # Arguments
 #   - $1 - true to engage maintenance mode, false to disengage maintenance mode
@@ -15,9 +15,8 @@
 VALUE=$1
 ENV=$2
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"S":"'${VALUE}'"}}'
-
-if [ "$VALUE" == "true" ]; then
-  CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
-  aws lambda invoke --region us-east-1 --function-name "send_maintenance_notifications_"${ENV}"_"${CURRENT_COLOR} /dev/null
-fi
+CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
+aws lambda invoke --region us-east-1 \
+  --function-name "send_maintenance_notifications_"${ENV}"_"${CURRENT_COLOR} \
+  --payload '{ "maintenanceMode": '${1}' }' \
+  /dev/null
