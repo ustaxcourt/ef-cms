@@ -7,11 +7,13 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.sendMaintenanceNotificationsLambda = event => {
-  console.log(JSON.stringify(event, null, 2));
-
   return genericHandler(
     event,
     async ({ applicationContext }) => {
+      applicationContext.logger.error(
+        'event!!!',
+        JSON.stringify(event, null, 2),
+      );
       return await applicationContext
         .getUseCases()
         .sendMaintenanceNotificationsInteractor(applicationContext, {
