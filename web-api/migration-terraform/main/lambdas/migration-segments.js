@@ -34,7 +34,7 @@ const migrateRecords = async ({
 }) => {
   if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
     applicationContext.logger.debug('about to run migration 0001');
-    items = await migration0001(items);
+    items = migration0001(items);
   }
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
