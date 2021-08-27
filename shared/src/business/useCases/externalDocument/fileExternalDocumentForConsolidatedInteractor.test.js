@@ -362,7 +362,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Guy Fieri',
       role: ROLES.petitioner,
-      section: 'docket',
+      section: 'petitions',
       userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
