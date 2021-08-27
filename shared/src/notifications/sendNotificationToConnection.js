@@ -13,7 +13,9 @@ exports.sendNotificationToConnection = async ({
 }) => {
   const { connectionId, endpoint } = connection;
 
-  applicationContext.logger.error('2 sendNotificationToConnection!!!');
+  applicationContext.logger.error(
+    `2 sendNotificationToConnection!!! messageStringified ${messageStringified}`,
+  );
 
   const notificationClient = applicationContext.getNotificationClient({
     endpoint,

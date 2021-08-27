@@ -15,10 +15,7 @@ exports.retrySendNotificationToConnections = async ({
   messageStringified,
 }) => {
   applicationContext.logger.error(
-    '0 retrySendNotificationToConnections!!!',
-    connections,
-    'messageStringified',
-    messageStringified,
+    `0 retrySendNotificationToConnections connections!!! ${connections}`,
   );
 
   const maxRetries = 1;
@@ -26,7 +23,9 @@ exports.retrySendNotificationToConnections = async ({
   for (const connection of connections) {
     for (let i = 0; i <= maxRetries; i++) {
       try {
-        applicationContext.logger.error('1 sendNotificationToConnection!!!');
+        applicationContext.logger.error(
+          `1 sendNotificationToConnection!!! messageStringified ${messageStringified}`,
+        );
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
