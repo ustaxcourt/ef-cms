@@ -151,6 +151,14 @@ const createMockDocumentClient = () => {
             }),
         };
       }),
+    scan: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
+      return {
+        promise: () =>
+          Promise.resolve({
+            Item: mockDynamoUsers[`${pk} ${sk}`],
+          }),
+      };
+    }),
     update: jest
       .fn()
       .mockImplementation(

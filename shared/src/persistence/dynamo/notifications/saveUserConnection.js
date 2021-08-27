@@ -1,5 +1,7 @@
 const { put } = require('../../dynamodbClientService');
 
+const TIME_TO_EXIST = 60 * 60 * 24;
+
 /**
  * saveUserConnection
  *
@@ -10,23 +12,20 @@ const { put } = require('../../dynamodbClientService');
  * @param {string} providers.userId the user id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.saveUserConnection = async ({
+exports.saveUserConnection = ({
   applicationContext,
   connectionId,
   endpoint,
   userId,
-}) => {
-  const TIME_TO_EXIST = 60 * 60 * 24;
-  return await put({
+}) =>
+  put({
     Item: {
       connectionId,
       endpoint,
-      gsi1pk: `connection|${connectionId}`,
+      gsi1pk: 'connection',
       pk: `user|${userId}`,
       sk: `connection|${connectionId}`,
-      // eslint-disable-next-line @miovision/disallow-date/no-static-date
       ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
     },
     applicationContext,
   });
-};

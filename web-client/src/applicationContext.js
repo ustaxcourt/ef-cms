@@ -7,6 +7,7 @@ import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -649,6 +650,7 @@ const applicationContext = {
       aggregatePartiesForService,
       calculateISODate,
       caseHasServedDocketEntries,
+      caseHasServedPetition,
       checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,
