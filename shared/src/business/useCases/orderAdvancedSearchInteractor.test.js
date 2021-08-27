@@ -1,4 +1,5 @@
 const {
+  DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
@@ -59,6 +60,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     await orderAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -71,6 +73,7 @@ describe('orderAdvancedSearchInteractor', () => {
 
   it('returns results with an authorized user role (petitionsclerk)', async () => {
     const result = await orderAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
       startDate: '2001-01-01',
     });
@@ -96,6 +99,21 @@ describe('orderAdvancedSearchInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0].omitSealed,
     ).toBe(false);
+  });
+
+  it('logs raw search information and results size', async () => {
+    const result = await orderAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+      keyword: 'candy',
+      startDate: '2001-01-01',
+    });
+
+    expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
+      from: 0,
+      size: result.length,
+      timestamp: expect.anything(),
+      userRole: ROLES.petitionsClerk,
+    });
   });
 
   it('returns no more than MAX_SEARCH_RESULTS', async () => {
@@ -124,6 +142,7 @@ describe('orderAdvancedSearchInteractor', () => {
     const keyword = 'keyword';
 
     await orderAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
       startDate: '2001-01-01',
     });

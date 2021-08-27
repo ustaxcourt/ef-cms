@@ -8,7 +8,7 @@ import { withAppContextDecorator } from '../../withAppContext';
 
 describe('internalTypesHelper', () => {
   const INTERNAL_CATEGORY_MAP = {
-    Answer: [
+    'Answer (filed by respondent only)': [
       {
         category: 'Answer (filed by respondent only)',
         documentTitle: 'Amended Answer',
