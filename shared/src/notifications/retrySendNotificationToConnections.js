@@ -15,13 +15,19 @@ exports.retrySendNotificationToConnections = async ({
   messageStringified,
 }) => {
   applicationContext.logger.error(
-    `0 retrySendNotificationToConnections connections!!! ${connections}`,
+    `01 retrySendNotificationToConnections conn.length!!! ${connections.length}`,
   );
+  connections.foreach(c => {
+    applicationContext.logger.error(
+      `0 retrySendNotificationToConnections connections!!! ${c}`,
+    );
+  });
 
   const maxRetries = 1;
 
-  for (const connection of connections) {
-    for (let i = 0; i <= maxRetries; i++) {
+  for (let index = 0; index < connections.length; index++) {
+    // for (const connection of connections) {
+    for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
         applicationContext.logger.error(
           `1 sendNotificationToConnection!!! messageStringified ${messageStringified}`,
@@ -30,23 +36,22 @@ exports.retrySendNotificationToConnections = async ({
           .getNotificationGateway()
           .sendNotificationToConnection({
             applicationContext,
-            connection,
+            connection: connections[index],
             messageStringified,
           });
         break;
       } catch (err) {
-        if (i >= maxRetries) {
+        if (retryCount >= maxRetries) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
             applicationContext.logger.error(
-              '410 error, going to delete connection!!!',
-              connection.pk,
+              `410 error, going to delete connection!!! ${connections[index]}`,
             );
             await client.delete({
               applicationContext,
               key: {
-                pk: connection.pk,
-                sk: connection.sk,
+                pk: connections[index].pk,
+                sk: connections[index].sk,
               },
             });
           } else {
