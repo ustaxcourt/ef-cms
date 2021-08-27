@@ -280,6 +280,7 @@
     "underscore": "^1.13.1"
   },
   "devDependencies": {
-    "artillery": "^1.7.7"
+    "artillery": "^1.7.7",
+    "artillery-plugin-metrics-by-endpoint": "^0.1.1"
   }
 }
