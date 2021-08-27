@@ -108,10 +108,9 @@ describe('fileExternalDocumentInteractor integration test', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValueOnce(petitionsClerkUser);
-    const result = await serveCaseToIrsInteractor(applicationContext, {
+    await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
     });
-    expect(result).toBeDefined();
   });
 
   it('should attach the expected documents to the case', async () => {
