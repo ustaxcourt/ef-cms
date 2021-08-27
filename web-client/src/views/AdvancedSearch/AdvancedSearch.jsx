@@ -111,10 +111,13 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={true}
+                disabled={!featureFlagHelper.isSearchEnabled}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
-                title="Opinion (Coming Soon)"
+                title={
+                  'Opinion' +
+                  (!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : '')
+                }
               >
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
@@ -165,8 +168,12 @@ export const AdvancedSearch = connect(
                   Order
                   {!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : ''}
                 </option>
-                <option disabled={true} value={searchTabs.OPINION}>
-                  Opinion (Coming Soon)
+                <option
+                  disabled={!featureFlagHelper.isSearchEnabled}
+                  value={searchTabs.OPINION}
+                >
+                  Opinion
+                  {!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : ''}
                 </option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
