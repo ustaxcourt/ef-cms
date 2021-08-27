@@ -8,6 +8,7 @@ import { petitionerFilesDocumentForCase } from './journey/petitionerFilesDocumen
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsCaseDetailAfterFilingDocument } from './journey/petitionerViewsCaseDetailAfterFilingDocument';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
 
@@ -26,6 +27,11 @@ describe('petitioner files document', () => {
   petitionerChoosesCaseType(cerebralTest);
   petitionerCreatesNewCase(cerebralTest, fakeFile);
   petitionerViewsDashboard(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsCaseDetail(cerebralTest);
   petitionerFilesDocumentForCase(cerebralTest, fakeFile);
   petitionerViewsCaseDetailAfterFilingDocument(cerebralTest);
