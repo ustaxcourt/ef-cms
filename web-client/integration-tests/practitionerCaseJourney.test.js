@@ -11,6 +11,7 @@ import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkSignsOrder } from './journey/petitionsClerkSignsOrder';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -114,6 +115,7 @@ describe('Practitioner requests access to case', () => {
   // create and serve an order that the privatePractitioner
   // should be able to view even when they are not associated with the case
   loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
   petitionsClerkCreateOrder(cerebralTest);
   petitionsClerkSignsOrder(cerebralTest);
   petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
