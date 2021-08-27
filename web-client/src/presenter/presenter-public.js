@@ -6,9 +6,11 @@ import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabCh
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
+import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
+import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
 import { gotoPublicCaseDetailSequence } from './sequences/Public/gotoPublicCaseDetailSequence';
 import { gotoPublicEmailVerificationInstructionsSequence } from './sequences/gotoPublicEmailVerificationInstructionsSequence';
@@ -22,6 +24,7 @@ import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
+import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
@@ -56,9 +59,11 @@ export const presenter = {
     cerebralBindSimpleSetStateSequence,
     clearAdvancedSearchFormSequence,
     clearPdfPreviewUrlSequence,
+    closeModalAndNavigateToMaintenanceSequence,
     dismissModalSequence,
     gotoContactSequence,
     gotoHealthCheckSequence,
+    gotoMaintenanceSequence,
     gotoPrivacySequence,
     gotoPublicCaseDetailSequence,
     gotoPublicEmailVerificationInstructionsSequence,
@@ -72,6 +77,7 @@ export const presenter = {
     navigateToCognitoSequence,
     navigateToPublicSiteSequence,
     notFoundErrorSequence,
+    openAppMaintenanceModalSequence,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
     sortTodaysOrdersSequence,

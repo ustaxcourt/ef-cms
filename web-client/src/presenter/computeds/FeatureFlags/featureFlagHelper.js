@@ -6,5 +6,9 @@ export const featureFlagHelper = (get, applicationContext) => {
     isOrderSearchEnabled &&
     applicationContext.isFeatureEnabled('advanced_document_search');
 
-  return { isSearchEnabled };
+  const isOpinionSearchEnabled = applicationContext.isFeatureEnabled(
+    'advanced_opinion_search',
+  );
+
+  return { isOpinionSearchEnabled, isSearchEnabled };
 };

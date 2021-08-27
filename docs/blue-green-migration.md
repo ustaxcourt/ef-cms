@@ -55,7 +55,9 @@ If this is the first time running a blue/green deployment on the environment:
    - `<ENV>.<ZONE_NAME>`,
    - `app-failover.<ENV>.<ZONE_NAME>`,
    - `failover.<ENV>.<ZONE_NAME>`, and
-6. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run `./setup-s3-deploy-files.sh <ENV>`.
+6. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run:
+   -  `./setup-s3-deploy-files.sh <ENV>`
+   -  `./setup-s3-maintenance-file.sh <ENV>`
 7. Run the following command to set the environment's migrate flag to **true**:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"true"}}'```
 8. Run the following command to set the environment's initial version (`${VERSION}` being the current version of the migrations, which you can tell in [this terraform file](web-api/terraform/template/main.tf)):

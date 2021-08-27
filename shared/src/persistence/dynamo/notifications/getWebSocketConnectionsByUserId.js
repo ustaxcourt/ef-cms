@@ -8,11 +8,8 @@ const { query } = require('../../dynamodbClientService');
  * @param {object} providers.userId the user id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getWebSocketConnectionsByUserId = async ({
-  applicationContext,
-  userId,
-}) => {
-  return await query({
+exports.getWebSocketConnectionsByUserId = ({ applicationContext, userId }) =>
+  query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -24,4 +21,3 @@ exports.getWebSocketConnectionsByUserId = async ({
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-};

@@ -102,6 +102,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
+import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
@@ -246,6 +247,7 @@ const app = {
       faUser,
       faUserCheck,
       faUserFriends,
+      faWrench,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

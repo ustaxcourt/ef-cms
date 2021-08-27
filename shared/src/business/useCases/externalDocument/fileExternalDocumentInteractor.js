@@ -3,6 +3,7 @@ const {
 } = require('../../utilities/aggregatePartiesForService');
 const {
   CASE_STATUS_TYPES,
+  DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
 } = require('../../entities/EntityConstants');
 const {
@@ -10,7 +11,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { pick } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
