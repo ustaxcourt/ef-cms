@@ -10,10 +10,7 @@ exports.sendMaintenanceNotificationsLambda = event => {
   return genericHandler(
     event,
     async ({ applicationContext }) => {
-      applicationContext.logger.error(
-        'event!!!',
-        JSON.stringify(event, null, 2),
-      );
+      applicationContext.logger.error('event!!!', event);
       return await applicationContext
         .getUseCases()
         .sendMaintenanceNotificationsInteractor(applicationContext, {
