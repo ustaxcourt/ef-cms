@@ -14,7 +14,7 @@ exports.sendMaintenanceNotificationsLambda = event => {
       return await applicationContext
         .getUseCases()
         .sendMaintenanceNotificationsInteractor(applicationContext, {
-          ...JSON.parse(event.body),
+          maintenanceMode: event.maintenanceMode,
         });
     },
     {
