@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../entities/EntityConstants');
@@ -34,6 +35,7 @@ describe('opinionPublicSearchInteractor', () => {
 
   it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
     await opinionPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -62,6 +64,7 @@ describe('opinionPublicSearchInteractor', () => {
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
 
     const results = await opinionPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
@@ -71,6 +74,7 @@ describe('opinionPublicSearchInteractor', () => {
 
   it('should return search results based on the supplied opinion keyword', async () => {
     const result = await opinionPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'memorandum',
       startDate: '2001-01-01',
     });
@@ -82,10 +86,13 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
+
     const results = await opinionPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '2001-01-01',
     });
+
     expect(results.length).toBe(1);
   });
 });

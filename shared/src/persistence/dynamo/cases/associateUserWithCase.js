@@ -5,8 +5,8 @@ exports.associateUserWithCase = ({
   docketNumber,
   userCase,
   userId,
-}) => {
-  return client.put({
+}) =>
+  client.put({
     Item: {
       ...userCase,
       gsi1pk: `user-case|${docketNumber}`,
@@ -15,4 +15,3 @@ exports.associateUserWithCase = ({
     },
     applicationContext,
   });
-};

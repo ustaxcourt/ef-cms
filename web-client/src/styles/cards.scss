@@ -36,6 +36,29 @@
     &.parties-card {
       padding: 0.5rem;
     }
+
+    &.how-to-search {
+      padding: 20px 15px 5px 15px;
+      background-color: color($theme-color-base-lightest);
+      font-size: 15px;
+
+      hr {
+        width: 100%;
+        margin: 0;
+      }
+
+      td {
+        min-width: 30px;
+      }
+
+      p {
+        padding-bottom: 0;
+      }
+    }
+  }
+
+  &.gray {
+    background-color: color($theme-color-base-lightest);
   }
 
   hr {

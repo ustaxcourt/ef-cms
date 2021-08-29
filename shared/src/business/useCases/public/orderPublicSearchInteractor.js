@@ -24,10 +24,19 @@ const { filterForPublic } = require('./publicHelpers');
  */
 exports.orderPublicSearchInteractor = async (
   applicationContext,
-  { caseTitleOrPetitioner, docketNumber, endDate, judge, keyword, startDate },
+  {
+    caseTitleOrPetitioner,
+    dateRange,
+    docketNumber,
+    endDate,
+    judge,
+    keyword,
+    startDate,
+  },
 ) => {
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
+    dateRange,
     docketNumber,
     endDate,
     judge,
