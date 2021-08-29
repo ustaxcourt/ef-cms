@@ -6,6 +6,7 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseDeadline the case deadline data
+ * @returns {Promise} resolves upon creation of case deadline
  */
 exports.createCaseDeadline = ({ applicationContext, caseDeadline }) => {
   const { caseDeadlineId, docketNumber } = caseDeadline;

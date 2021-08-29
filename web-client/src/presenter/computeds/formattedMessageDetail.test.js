@@ -1,5 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedMessageDetail as formattedMessageDetailComputed } from './formattedMessageDetail';
+import {
+  generalUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -11,7 +15,7 @@ describe('formattedMessageDetail', () => {
     },
   );
 
-  const { PETITIONS_SECTION, USER_ROLES } = applicationContext.getConstants();
+  const { PETITIONS_SECTION } = applicationContext.getConstants();
 
   const mockCaseDetail = {
     archivedCorrespondences: [],
@@ -240,138 +244,37 @@ describe('formattedMessageDetail', () => {
     });
   });
 
-  describe('showNotServed', () => {
+  it('should return showNotServed as true if the document type is servable and does not have a servedAt', () => {
     const documentId = applicationContext.getUniqueId();
 
-    it('should be true if the document type is servable and does not have a servedAt', () => {
-      const result = runCompute(formattedMessageDetail, {
-        state: {
-          caseDetail: {
-            ...mockCaseDetail,
-            docketEntries: [
-              {
-                docketEntryId: documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-              },
-            ],
-          },
-          isExpanded: false,
-          messageDetail: [
+    const result = runCompute(formattedMessageDetail, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          docketEntries: [
             {
-              attachments: [
-                {
-                  documentId,
-                  documentTitle: 'Some Stuff',
-                },
-              ],
-              createdAt: '2019-03-01T21:40:46.415Z',
+              docketEntryId: documentId,
+              documentTitle: 'Some Stuff',
+              documentType: 'Order',
+              eventCode: 'O',
             },
           ],
         },
-      });
-
-      expect(result.attachments[0].showNotServed).toEqual(true);
-    });
-
-    it('should be false if the document type is unservable', () => {
-      const result = runCompute(formattedMessageDetail, {
-        state: {
-          caseDetail: {
-            ...mockCaseDetail,
-            docketEntries: [
+        messageDetail: [
+          {
+            attachments: [
               {
-                docketEntryId: documentId,
+                documentId,
                 documentTitle: 'Some Stuff',
-                documentType: 'Corrected Transcript',
-                eventCode: 'CTRA',
               },
             ],
+            createdAt: '2019-03-01T21:40:46.415Z',
           },
-          isExpanded: false,
-          messageDetail: [
-            {
-              attachments: [
-                {
-                  documentId,
-                  documentTitle: 'Some Stuff',
-                },
-              ],
-              createdAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
-        },
-      });
-
-      expect(result.attachments[0].showNotServed).toEqual(false);
+        ],
+      },
     });
 
-    it('should be false if the document type is servable and has servedAt', () => {
-      const result = runCompute(formattedMessageDetail, {
-        state: {
-          caseDetail: {
-            ...mockCaseDetail,
-            docketEntries: [
-              {
-                docketEntryId: documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                servedAt: '2019-03-01T21:40:46.415Z',
-              },
-            ],
-          },
-          isExpanded: false,
-          messageDetail: [
-            {
-              attachments: [
-                {
-                  documentId,
-                  documentTitle: 'Some Stuff',
-                },
-              ],
-              createdAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
-        },
-      });
-
-      expect(result.attachments[0].showNotServed).toEqual(false);
-    });
-
-    it('should be false if the document type is servable and not served and the document is a draft', () => {
-      const result = runCompute(formattedMessageDetail, {
-        state: {
-          caseDetail: {
-            ...mockCaseDetail,
-            docketEntries: [
-              {
-                docketEntryId: documentId,
-                documentTitle: 'Some Stuff',
-                documentType: 'Order',
-                eventCode: 'O',
-                isDraft: true,
-              },
-            ],
-          },
-          isExpanded: false,
-          messageDetail: [
-            {
-              attachments: [
-                {
-                  documentId,
-                  documentTitle: 'Some Stuff',
-                },
-              ],
-              createdAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
-        },
-      });
-
-      expect(result.attachments[0].showNotServed).toEqual(false);
-    });
+    expect(result.attachments[0].showNotServed).toEqual(true);
   });
 
   describe('archived', () => {
@@ -392,7 +295,6 @@ describe('formattedMessageDetail', () => {
               },
             ],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [
@@ -424,7 +326,6 @@ describe('formattedMessageDetail', () => {
               },
             ],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [
@@ -445,9 +346,7 @@ describe('formattedMessageDetail', () => {
 
   describe('showActionButtons', () => {
     it('should be true when message is NOT completed and user role is NOT general', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: USER_ROLES.petitionsClerk,
-      });
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(formattedMessageDetail, {
         state: {
@@ -455,7 +354,6 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [
@@ -478,9 +376,7 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is NOT completed and user role is general', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: USER_ROLES.general,
-      });
+      applicationContext.getCurrentUser.mockReturnValue(generalUser);
 
       const result = runCompute(formattedMessageDetail, {
         state: {
@@ -488,7 +384,6 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [
@@ -511,9 +406,7 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is completed and user role is NOT general', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: USER_ROLES.petitionsClerk,
-      });
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
       const result = runCompute(formattedMessageDetail, {
         state: {
@@ -521,7 +414,6 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [
@@ -544,9 +436,7 @@ describe('formattedMessageDetail', () => {
     });
 
     it('should be false when message is completed and user role is general', () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: USER_ROLES.general,
-      });
+      applicationContext.getCurrentUser.mockReturnValue(generalUser);
 
       const result = runCompute(formattedMessageDetail, {
         state: {
@@ -554,7 +444,6 @@ describe('formattedMessageDetail', () => {
             ...mockCaseDetail,
             docketEntries: [],
           },
-          isExpanded: false,
           messageDetail: [
             {
               attachments: [

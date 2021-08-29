@@ -106,7 +106,7 @@ We use this list when performing a code review to ensure that all tasks have bee
 		- [ ] navigate site only with the keyboard
 		- [ ] use VoiceOver or Narrator to navigate the site with audio only, with the display turned off
 		- [ ] manually test anything that pa11y cannot test automatically (e.g., contrast of text over images)
-- [ ] review static code analysis results in the vendor’s DeepScan account
+- [ ] review static code analysis results in [the vendor’s DeepScan account](https://deepscan.io/dashboard/#view=project&tid=8976&pid=17137&bid=383813&prid=874192&subview=overview)
 - [ ] examine OWASP ZAP output in `docs/`, to ensure that any errors are known to be false positives or have been previously declared to be acceptable
 - [ ] skim all new code, in the context of existing code, [looking for problems](#what-we-look-for) (knowing that the vast majority of new code will be covered by tests)
 - [ ] review all tests

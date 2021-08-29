@@ -128,6 +128,28 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
+  it('should not add a coversheet if a file is not attached to the docket entry', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_CASE.docketEntries[0],
+          isFileAttached: false,
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should replace coversheet on the served petition if the case is not paper', async () => {
     mockCase = { ...MOCK_CASE };
 

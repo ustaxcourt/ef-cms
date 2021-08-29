@@ -1,3 +1,4 @@
+import { DATE_RANGE_SEARCH_OPTIONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedSearchHelper as advancedSearchHelperComputed,
   paginationHelper,
@@ -16,7 +17,6 @@ describe('advancedSearchHelper', () => {
   let globalUser;
 
   const getBaseState = user => {
-    globalUser = user;
     return {
       permissions: getUserPermissions(user),
     };
@@ -32,6 +32,9 @@ describe('advancedSearchHelper', () => {
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
           MAX_SEARCH_RESULTS: maxSearchResultsOverride,
         };
+      },
+      getCurrentUser: () => {
+        return globalUser;
       },
     },
   );
@@ -61,12 +64,15 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
+      showDateRangePicker: false,
+      showFeedbackButton: true,
       showPractitionerSearch: undefined,
       showStateSelect: false,
     });
   });
 
-  it('returns only showStateSelect and showPractitionerSearch when searchResults is undefined', () => {
+  it('does not return search results when searchResults is undefined', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -74,6 +80,9 @@ describe('advancedSearchHelper', () => {
       },
     });
     expect(result).toEqual({
+      feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
+      showDateRangePicker: false,
+      showFeedbackButton: true,
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -96,6 +105,23 @@ describe('advancedSearchHelper', () => {
     });
   });
 
+  it('returns showFeedbackButton false when user is an external user', () => {
+    globalUser = {
+      role: USER_ROLES.privatePractitioner,
+      userId: 'practitioner',
+    };
+
+    const result = runCompute(advancedSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: {},
+      },
+    });
+    expect(result).toMatchObject({
+      showFeedbackButton: false,
+    });
+  });
+
   it('returns showStateSelect true when state.advancedSearchForm.countryType is "domestic"', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
@@ -107,7 +133,7 @@ describe('advancedSearchHelper', () => {
         },
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: true,
     });
@@ -124,7 +150,7 @@ describe('advancedSearchHelper', () => {
         },
       },
     });
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       showPractitionerSearch: true,
       showStateSelect: false,
     });
@@ -454,6 +480,34 @@ describe('advancedSearchHelper', () => {
       const result = paginationHelper(undefined, 1, 25);
 
       expect(result).toEqual({});
+    });
+  });
+
+  describe('showDateRangePicker', () => {
+    it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {
+      const result = runCompute(advancedSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
+          },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeFalsy();
+    });
+
+    it('should be true when state.advancedSearchForm.orderSearch.dateRange is customDates', () => {
+      const result = runCompute(advancedSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES },
+          },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeTruthy();
     });
   });
 });
