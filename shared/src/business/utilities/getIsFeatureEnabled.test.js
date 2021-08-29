@@ -33,7 +33,7 @@ describe('getIsFeatureEnabled', () => {
       expect(isEnabled).toEqual(false);
     });
 
-    it('returns false if the user is an internal user and the current environment is prod', () => {
+    it('returns true if the user is an internal user and the current environment is prod', () => {
       const user = {
         role: ROLES.judge,
       };
@@ -45,7 +45,7 @@ describe('getIsFeatureEnabled', () => {
         env,
       );
 
-      expect(isEnabled).toEqual(false);
+      expect(isEnabled).toEqual(true);
     });
   });
 });
