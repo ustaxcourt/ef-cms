@@ -14,6 +14,7 @@ const {
   scan,
   update,
   updateConsistent,
+  updateToDeployTable,
 } = require('./dynamodbClientService');
 
 describe('dynamodbClientService', function () {
@@ -152,6 +153,16 @@ describe('dynamodbClientService', function () {
   describe('update', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await update({
+        Item: MOCK_ITEM,
+        applicationContext,
+      });
+      expect(result).toEqual(MOCK_ITEM);
+    });
+  });
+
+  describe('updateToDeployTable', () => {
+    it('should return the same Item property passed in in the params', async () => {
+      const result = await updateToDeployTable({
         Item: MOCK_ITEM,
         applicationContext,
       });

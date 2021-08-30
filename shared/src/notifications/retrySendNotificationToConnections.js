@@ -16,26 +16,26 @@ exports.retrySendNotificationToConnections = async ({
 }) => {
   const maxRetries = 1;
 
-  for (const connection of connections) {
-    for (let i = 0; i <= maxRetries; i++) {
+  for (let index = 0; index < connections.length; index++) {
+    for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
             applicationContext,
-            connection,
+            connection: connections[index],
             messageStringified,
           });
         break;
       } catch (err) {
-        if (i >= maxRetries) {
+        if (retryCount >= maxRetries) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
             await client.delete({
               applicationContext,
               key: {
-                pk: connection.pk,
-                sk: connection.sk,
+                pk: connections[index].pk,
+                sk: connections[index].sk,
               },
             });
           } else {
