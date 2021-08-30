@@ -9,10 +9,10 @@ Welcome to the team! 🎉 😎
 #### Access to tools
 
 - [ ] GitHub — speak with your team lead to determine the appropriate repositories and levels of access in the [ustaxcourt](https://github.com/ustaxcourt) and [flexion](https://github.com/flexion) organizations.
-- [ ] [Slack](https://ustaxcourt.slack.com) — look for important channels to join in [How We Work](./how-we-work.md).
+- [ ] [Slack](https://ustaxcourt.slack.com) — look for important channels to join in [How We Work](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/how-we-work.md).
 - [ ] Zoom — speak with your team lead to get access to Zoom if you will be hosting meetings.
 - [ ] Zendesk — get access only if you will be providing customer support.
-- [ ] Trello — used for some backlogs (see the [README](../README.md)). Work with your team lead to gain access.
+- [ ] Trello — used for some backlogs (see the [README](https://github.com/ustaxcourt/ef-cms/blob/staging/README.md)). Work with your team lead to gain access.
 
 #### Access to application data
 
@@ -24,7 +24,7 @@ Welcome to the team! 🎉 😎
 
 - [ ] Zoom and Slack desktop clients (recommended).
 - [ ] ZenHub [browser extension](https://www.zenhub.com/extension) (used to view backlogs).
-- [ ] If you will be running or developing on the application locally, follow the setup steps in the [README](../README.md).
+- [ ] If you will be running or developing on the application locally, follow the setup steps in the [README](https://github.com/ustaxcourt/ef-cms/blob/staging/README.md).
 
 #### Optional tasks
 
