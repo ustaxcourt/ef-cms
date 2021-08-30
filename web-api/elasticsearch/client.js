@@ -12,6 +12,7 @@ const {
 } = require('../elasticsearch/elasticsearch-settings');
 
 const getHost = async DomainName => {
+  console.log(DomainName);
   try {
     const result = await es
       .describeElasticsearchDomain({
