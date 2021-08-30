@@ -4,8 +4,8 @@ config:
     metrics-by-endpoint: 
       useOnlyRequestNames: true
   phases:
-    - duration: 60
-      arrivalRate: 5
+    - duration: 300
+      arrivalRate: 150
       name: Sustained load
 
 scenarios:
@@ -30,13 +30,6 @@ scenarios:
           name: 'case-advanced-search'
           headers:
             Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
-  - name: "Case Public Search"
-    flow:
-      - get:
-          url: "/public-api/search?countryType=domestic&petitionerName=jake&petitionerState=CA&yearFiledMin=1990&yearFiledMax=2021"
-          name: 'case-public-search'
-          headers:
-            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
   - name: "Blocked Cases Report"
     flow:
       - get:
@@ -51,25 +44,10 @@ scenarios:
           name: 'case-inventory-report'
           headers:
             Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
-  - name: "Advanced Document Search"
-    # weight: 2
-    flow:
-      - get:
-          url: "/case-documents/order-search?keyword=order"
-          name: 'advanced-document-search'
-          headers:
-            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
   - name: "Pending Items"
     flow:
       - get:
           url: "/reports/pending-items?judge=Buch&page=0"
-          name: 'pending-items'
-          headers:
-            Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
-  - name: "Reconciliation Report"
-    flow:
-      - get:
-          url: "/v2/reconciliation-report/today"
           name: 'pending-items'
           headers:
             Authorization: 'Bearer {{ $processEnvironment.AUTH_TOKEN }}'
