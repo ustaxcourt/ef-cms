@@ -251,6 +251,7 @@
     "test:client": "CI=false npm run test:_client -- --testPathPattern=\"web-client/.*\\.test\\.js\"",
     "test:debug": "NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --detectOpenHandles --logHeapUsage --runInBand --config web-client/jest.config.js",
     "test:file": "CI=false NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --verbose --no-coverage --runInBand --config web-client/jest.config.js -- ",
+    "test:performance": "artillery run -o ./artillery/private-app-report.json ./artillery/private-app.yml",
     "test:pa11y:1": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-1.config.js",
     "test:pa11y:2": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-2.config.js",
     "test:pa11y:3": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-3.config.js",
