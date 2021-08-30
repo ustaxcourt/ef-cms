@@ -43,6 +43,20 @@ export const PaperFiling = connect(
           <ErrorNotification />
 
           <div className="grid-row grid-gap">
+            <div className="grid-col-7">
+              {paperDocketEntryHelper.showServiceWarning && (
+                <WarningNotificationComponent
+                  alertWarning={{
+                    message:
+                      'Document cannot be served until the Petition is served.',
+                  }}
+                  dismissable={false}
+                />
+              )}
+            </div>
+          </div>
+
+          <div className="grid-row grid-gap">
             <div className="grid-col-5">
               <h1 className="margin-bottom-105">
                 <span>
@@ -57,15 +71,6 @@ export const PaperFiling = connect(
                   This docket entry is incomplete. Add a document and save to
                   complete this entry.
                 </Hint>
-              )}
-              {paperDocketEntryHelper.showServiceWarning && (
-                <WarningNotificationComponent
-                  alertWarning={{
-                    message:
-                      'Document cannot be served until the Petition is served.',
-                  }}
-                  dismissable={false}
-                />
               )}
             </div>
 
