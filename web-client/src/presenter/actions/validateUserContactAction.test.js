@@ -15,7 +15,7 @@ describe('validateUserContactAction', () => {
     };
   });
 
-  it('should return the error path if user is invalid', async () => {
+  it('should return the error path if user is invalid', () => {
     applicationContext
       .getUseCases()
       .validateUserContactInteractor.mockReturnValue('something went wrong');
@@ -28,7 +28,7 @@ describe('validateUserContactAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-  it('should return the success path if user is valid', async () => {
+  it('should return the success path if user is valid', () => {
     applicationContext
       .getUseCases()
       .validateUserContactInteractor.mockReturnValue(undefined);

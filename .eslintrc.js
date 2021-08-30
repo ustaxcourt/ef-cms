@@ -47,7 +47,7 @@ module.exports = {
       rules: {
         'max-lines': [
           'error',
-          { max: 1200, skipBlankLines: true, skipComments: true },
+          { max: 650, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
         ],
       },
     },
@@ -82,6 +82,7 @@ module.exports = {
     'arrow-parens': ['error', 'as-needed'],
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
+    'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
     'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
@@ -124,7 +125,7 @@ module.exports = {
     ],
     'max-lines': [
       'error',
-      { max: 900, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+      { max: 700, skipBlankLines: true, skipComments: true },
     ],
     'no-irregular-whitespace': ['error', { skipStrings: false }],
     'no-prototype-builtins': 'off',
@@ -190,6 +191,7 @@ module.exports = {
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'warn',
     'require-atomic-updates': 'off',
+    'require-await': 'warn',
     'security/detect-child-process': 'off',
     'security/detect-non-literal-fs-filename': 'off',
     'security/detect-object-injection': 'off',
@@ -248,6 +250,7 @@ module.exports = {
           'contentinfo',
           'copelands',
           'cors',
+          'court’s',
           'coversheet',
           'desc',
           'disallowance',
@@ -294,10 +297,12 @@ module.exports = {
           'iframe',
           'interactor',
           'irs',
+          'isn’t',
           'istanbul',
           'jacobs',
           'jpg',
           'jsdom',
+          'judge’s',
           'kerrigan',
           'kerrigans',
           'keydown',

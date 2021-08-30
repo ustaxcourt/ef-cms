@@ -11,7 +11,7 @@ exports.getDocumentQCInboxForSection = async ({
         bool: {
           must: [
             {
-              prefix: { 'pk.S': 'work-item|' },
+              prefix: { 'pk.S': 'case|' },
             },
             {
               prefix: { 'sk.S': 'work-item|' },
@@ -39,7 +39,7 @@ exports.getDocumentQCInboxForSection = async ({
           ],
         },
       },
-      size: 1000,
+      size: 5000,
     },
     index: 'efcms-work-item',
   };

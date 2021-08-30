@@ -1,5 +1,10 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  petitionerUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -19,7 +24,7 @@ export const mockDocketEntry = {
 
 describe('formattedDocketEntries', () => {
   let globalUser;
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, USER_ROLES } =
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
@@ -39,19 +44,6 @@ describe('formattedDocketEntries', () => {
     };
   };
 
-  const petitionsClerkUser = {
-    role: USER_ROLES.petitionsClerk,
-    userId: '111',
-  };
-  const docketClerkUser = {
-    role: USER_ROLES.docketClerk,
-    userId: '222',
-  };
-  const petitionerUser = {
-    role: USER_ROLES.petitioner,
-    userId: '333',
-  };
-
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
       state: {
@@ -61,6 +53,7 @@ describe('formattedDocketEntries', () => {
         },
       },
     });
+
     expect(result).toMatchObject({
       formattedDocketEntries: [],
     });
@@ -199,92 +192,13 @@ describe('formattedDocketEntries', () => {
           caseDetail: sortedCaseDetail,
         },
       });
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        documentType: 'Petition',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
-        documentTitle: 'Request for Place of Trial',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
-        documentType: 'Other',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
-        documentType: 'Ownership Disclosure Statement',
-      });
-    });
 
-    it('sorts the docket record by descending date', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: sortedCaseDetail,
-          sessionMetadata: {
-            docketRecordSort: { [sortedCaseDetail.docketNumber]: 'byDateDesc' },
-          },
-        },
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
-        documentTitle: 'Petition',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
-        documentTitle: 'Request for Place of Trial',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
-        documentTitle: 'Other',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        documentTitle: 'Ownership Disclosure Statement',
-      });
-    });
-
-    it('sorts the docket record by ascending index', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: sortedCaseDetail,
-          sessionMetadata: {
-            docketRecordSort: { [sortedCaseDetail.docketNumber]: 'byIndex' },
-          },
-        },
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        documentTitle: 'Petition',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
-        documentTitle: 'Request for Place of Trial',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
-        documentTitle: 'Ownership Disclosure Statement',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
-        documentTitle: 'Other',
-      });
-    });
-
-    it('sorts the docket record by descending index', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: sortedCaseDetail,
-          sessionMetadata: {
-            docketRecordSort: {
-              [sortedCaseDetail.docketNumber]: 'byIndexDesc',
-            },
-          },
-        },
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        documentTitle: 'Ownership Disclosure Statement',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[1]).toMatchObject({
-        documentTitle: 'Other',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[2]).toMatchObject({
-        documentTitle: 'Request for Place of Trial',
-      });
-      expect(result.formattedDocketEntriesOnDocketRecord[3]).toMatchObject({
-        documentTitle: 'Petition',
-      });
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        { documentType: 'Petition' },
+        { documentTitle: 'Request for Place of Trial' },
+        { documentType: 'Other' },
+        { documentType: 'Ownership Disclosure Statement' },
+      ]);
     });
   });
 
@@ -415,19 +329,12 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntriesOnDocketRecord[0].isStricken).toEqual(
-        true,
-      );
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0]
-          .showDocumentDescriptionWithoutLink,
-      ).toEqual(true);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
-      ).toEqual(false);
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        isStricken: true,
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentViewerLink: false,
+        showLinkToDocument: false,
+      });
     });
 
     it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
@@ -452,19 +359,12 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].isLegacySealed,
-      ).toBeTruthy();
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0]
-          .showDocumentDescriptionWithoutLink,
-      ).toEqual(true);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
-      ).toEqual(false);
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        isLegacySealed: true,
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentViewerLink: false,
+        showLinkToDocument: false,
+      });
     });
 
     it('should show the link to an associated external user when the document has isLegacyServed true and servedAt undefined', () => {
@@ -488,19 +388,12 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].isLegacyServed,
-      ).toBeTruthy();
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0]
-          .showDocumentDescriptionWithoutLink,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toEqual(true);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
-      ).toEqual(false);
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        isLegacyServed: true,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentViewerLink: false,
+        showLinkToDocument: true,
+      });
     });
 
     it('should NOT show the link to an associated external user when the document has isLegacyServed undefined and servedAt undefined', () => {
@@ -523,16 +416,11 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0]
-          .showDocumentDescriptionWithoutLink,
-      ).toEqual(true);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
-      ).toEqual(false);
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentViewerLink: false,
+        showLinkToDocument: false,
+      });
     });
 
     it('should show the link to an internal user for a document with a stricken docket record', () => {
@@ -543,19 +431,12 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntriesOnDocketRecord[0].isStricken).toEqual(
-        true,
-      );
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0]
-          .showDocumentDescriptionWithoutLink,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toEqual(false);
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showDocumentViewerLink,
-      ).toEqual(true);
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        isStricken: true,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentViewerLink: true,
+        showLinkToDocument: false,
+      });
     });
   });
 
@@ -689,12 +570,11 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', async () => {
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
             docketEntries: [
               {
                 ...MOCK_CASE.docketEntries[2],
@@ -715,12 +595,11 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', async () => {
+    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
             docketEntries: [
               {
                 ...MOCK_CASE.docketEntries[2],
@@ -754,8 +633,8 @@ describe('formattedDocketEntries', () => {
     it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
             docketEntries: [
               {
                 ...mockDocketEntry,
@@ -766,7 +645,6 @@ describe('formattedDocketEntries', () => {
               },
             ],
           },
-          ...getBaseState(docketClerkUser),
         },
       });
 
@@ -780,7 +658,6 @@ describe('formattedDocketEntries', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
             docketEntries: [
               {
                 ...mockDocketEntry,

@@ -34,6 +34,22 @@ describe('getUploadPolicyInteractor', () => {
     expect(url).toEqual('policy');
   });
 
+  it('does not check if the file exists if the user is internal', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      isExternalUser: () => false,
+      role: ROLES.docketClerk,
+      userId: 'docket',
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getUploadPolicy.mockReturnValue('policy');
+
+    await getUploadPolicyInteractor(applicationContext, {});
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toBeCalled();
+  });
+
   it('throws an unauthorized exception when file already exists', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       isExternalUser: () => true,

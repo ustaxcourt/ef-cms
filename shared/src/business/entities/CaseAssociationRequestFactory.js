@@ -28,9 +28,10 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
  */
 function CaseAssociationRequestFactory(rawProps) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawPropsParam) {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
@@ -50,7 +51,7 @@ function CaseAssociationRequestFactory(rawProps) {
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory.get(
+        return SupportingDocumentInformationFactory(
           item,
           CaseAssociationRequestFactory.VALIDATION_ERROR_MESSAGES,
         );

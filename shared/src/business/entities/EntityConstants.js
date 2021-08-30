@@ -6,6 +6,20 @@ const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEven
 const { flatten, sortBy, union, without } = require('lodash');
 const { formatNow } = require('../utilities/DateHandler');
 
+const ENABLE_8684 = false;
+
+const filter8684CategoryMap = (categoryMap, showMOTR) => {
+  Object.keys(categoryMap).forEach(category => {
+    categoryMap[category] = categoryMap[category].filter(
+      document => document.eventCode !== 'MOTR' || showMOTR,
+    );
+  });
+};
+
+// feature flag filter for 8684
+filter8684CategoryMap(DOCUMENT_EXTERNAL_CATEGORIES_MAP, ENABLE_8684);
+filter8684CategoryMap(DOCUMENT_INTERNAL_CATEGORIES_MAP, ENABLE_8684);
+
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
@@ -1016,6 +1030,11 @@ const ADVANCED_SEARCH_TABS = {
   PRACTITIONER: 'practitioner',
 };
 
+const DATE_RANGE_SEARCH_OPTIONS = {
+  ALL_DATES: 'allDates',
+  CUSTOM_DATES: 'customDates',
+};
+
 module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
@@ -1055,6 +1074,7 @@ module.exports = deepFreeze({
   COURT_ISSUED_EVENT_CODES,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   CURRENT_YEAR,
+  DATE_RANGE_SEARCH_OPTIONS,
   DEADLINE_REPORT_PAGE_SIZE,
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
   DEFAULT_PROCEDURE_TYPE,
@@ -1146,4 +1166,5 @@ module.exports = deepFreeze({
   LEGACY_TRIAL_CITY_STRINGS,
   US_STATES,
   US_STATES_OTHER,
+  filter8684CategoryMap,
 });

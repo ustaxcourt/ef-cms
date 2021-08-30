@@ -64,4 +64,20 @@ describe('getShouldRedirectToSigningAction', () => {
     // built-in redirect functionality
     expect(result.state.editDocumentEntryPoint).toEqual('DocumentDetail');
   });
+
+  it('should NOT redirect to the document detail page for court issued documents that do not have a Notice event code if no docketEntryId is provided in props', async () => {
+    const result = await runAction(getShouldRedirectToSigningAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: undefined,
+        eventCode: 'YYZ',
+      },
+      state: {},
+    });
+
+    expect(result.state.editDocumentEntryPoint).not.toEqual('DocumentDetail');
+    expect(noMock).toHaveBeenCalled();
+  });
 });

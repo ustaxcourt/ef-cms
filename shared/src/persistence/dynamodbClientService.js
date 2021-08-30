@@ -44,11 +44,13 @@ const getTableName = ({ applicationContext }) =>
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
-const getDeployTableName = ({ applicationContext }) =>
-  `efcms-deploy-${
+
+const getDeployTableName = ({ applicationContext }) => {
+  return `efcms-deploy-${
     (applicationContext.environment || applicationContext.getEnvironment())
       .stage
   }`;
+};
 
 exports.describeTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient();
@@ -129,7 +131,7 @@ exports.updateConsistent = params => {
       ...filteredParams,
     })
     .promise()
-    .then(data => data.Attributes.id);
+    .then(data => data.Attributes);
 };
 
 /**
@@ -143,6 +145,29 @@ exports.get = params => {
     .getDocumentClient()
     .get({
       TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
+    .promise()
+    .then(res => {
+      return removeAWSGlobalFields(res.Item);
+    });
+};
+
+/**
+ * get
+ *
+ * @param {object} params the params to get
+ * @returns {object} the item that was retrieved
+ */
+exports.getFromDeployTable = params => {
+  return params.applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .get({
+      TableName: getDeployTableName({
         applicationContext: params.applicationContext,
       }),
       ...params,
@@ -192,7 +217,7 @@ exports.scan = async params => {
         ...params,
       })
       .promise()
-      .then(async results => {
+      .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         allItems.push(...results.Items);

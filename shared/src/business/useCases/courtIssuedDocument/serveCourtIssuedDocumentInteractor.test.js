@@ -197,7 +197,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockResolvedValue(1);
     applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: async () => ({
+      promise: () => ({
         Body: testPdfDoc,
       }),
     });
@@ -299,7 +299,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
@@ -348,7 +348,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem,
+      applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInOutbox,
@@ -401,7 +401,58 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should remove the case from the trial session if the case has a trialSessionId', async () => {
+  it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        caseOrder: [
+          {
+            docketNumber: '101-20',
+          },
+        ],
+        createdAt: '2019-10-27T05:00:00.000Z',
+        gsi1pk: 'trial-session-catalog',
+        isCalendared: true,
+        judge: {
+          name: 'Judge Colvin',
+          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+        },
+        maxCases: 100,
+        pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: 'Regular',
+        sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        startDate: '2019-11-27T05:00:00.000Z',
+        startTime: '10:00',
+        swingSession: true,
+        swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+        term: 'Fall',
+        termYear: '2019',
+        trialLocation: 'Houston, Texas',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      });
+
+    extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    extendCase.trialDate = '2019-11-27T05:00:00.000Z';
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
+      docketNumber: '101-20',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toHaveBeenCalled();
+
+    const updatedTrialSession =
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate;
+    expect(updatedTrialSession.caseOrder[0].disposition).toEqual(
+      'Status was changed to Closed',
+    );
+  });
+
+  it('should delete the case from the trial session if the case has a trialSessionId and trialSession is not calendared', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
@@ -443,9 +494,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
+
+    const updatedTrialSession =
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate;
+    expect(updatedTrialSession.caseOrder.length).toEqual(0);
   });
 
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
@@ -464,6 +517,89 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway()
           .deleteCaseTrialSortMappingRecords,
       ).toHaveBeenCalled();
+    });
+  });
+
+  it('should throw an error if the document is already pending service', async () => {
+    mockCases[0].docketEntries[0].isPendingService = true;
+
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
+        docketNumber: mockCases[0].docketNumber,
+      }),
+    ).rejects.toThrow('Docket entry is already being served');
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should call the persistence method to set and unset the pending service status on the document', async () => {
+    const docketEntry = mockCases[0].docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    await serveCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: false,
+    });
+  });
+
+  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
+    const docketEntry = mockCases[0].docketEntries[0];
+    docketEntry.isPendingService = false;
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumber: mockCases[0].docketNumber,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: mockCases[0].docketNumber,
+      status: false,
     });
   });
 });

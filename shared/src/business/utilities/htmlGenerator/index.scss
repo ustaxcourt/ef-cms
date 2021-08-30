@@ -84,6 +84,10 @@ h3 {
   &#served-stamp {
     text-decoration: none;
   }
+
+  &.margin-top-0 {
+    margin-top: 0;
+  }
 }
 
 p {
@@ -114,6 +118,13 @@ th {
   background-color: #f0f0f0;
   font-weight: 600;
   white-space: nowrap;
+}
+
+ol {
+  &.inline-ol {
+    padding-left: 1em;
+    margin-left: 0;
+  }
 }
 
 .width-third {
@@ -240,6 +251,10 @@ th {
   }
 }
 
+.indent-paragraph {
+  text-indent: 15px;
+}
+
 .clear {
   clear: both;
 }
@@ -264,6 +279,12 @@ th {
 .card {
   border: 1px solid #ccc;
   margin: 12px 0 12px 0;
+}
+
+.standing-pretrial-card {
+  padding: 0 8px 0 8px;
+  border: 3px solid #000000;
+  margin: 24px 0 12px 0;
 }
 
 .card-header {
@@ -379,16 +400,34 @@ th {
   text-align: center;
 }
 
-.standing-pretrial-order-small-case {
-  line-height: 22px;
+.standing-pretrial-order-regular-case {
+  font-size: 16px;
+  line-height: 120%;
 
-  p {
-    line-height: 22px;
+  &p {
+    line-height: 120%;
+  }
+}
+
+.standing-pretrial-order-small-case {
+  font-size: 16px;
+  line-height: 120%;
+
+  &p {
+    line-height: 120%;
   }
 
   ol {
     li {
       padding-bottom: 20px;
+      padding-left: 2em;
+      ol {
+        li {
+          padding-bottom: 0;
+          padding-left: 1em;
+          margin-left: -2em;
+        }
+      }
     }
   }
 }
@@ -513,6 +552,12 @@ th {
   .practitioner-contact {
     min-height: 50px;
     margin-top: 0;
+  }
+}
+
+#document-notice-of-receipt {
+  .info-box-content {
+    line-height: 17px;
   }
 }
 

@@ -1,10 +1,15 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from './caseDetailHeaderHelper';
+import {
+  docketClerkUser,
+  generalUser,
+  irsPractitionerUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '../../../../shared/src/test/mockUsers';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
@@ -30,34 +35,12 @@ const getBaseState = user => {
 };
 
 describe('caseDetailHeaderHelper', () => {
-  const petitionsClerkUser = {
-    role: ROLES.petitionsClerk,
-    userId: '08f9464a-6eb4-4d58-bf38-5276fe9a5911',
-  };
-  const docketClerkUser = {
-    role: ROLES.docketClerk,
-    userId: '45803a2f-390c-463e-89ad-4bda2caecb8a',
-  };
-  const privatePractitionerUser = {
-    role: ROLES.privatePractitioner,
-    userId: '697c5513-825f-4b3f-8c34-4bd8e17fe510',
-  };
-  const irsPractitionerUser = {
-    role: ROLES.irsPractitioner,
-    userId: '3fa001b7-3e4c-4361-9ffa-42a9a3342ee8',
-  };
-  const petitionerUser = {
-    role: ROLES.petitioner,
-    userId: '62eef575-1779-415c-8b66-dae3a1f0d5e4',
-  };
-
   it('should set showEditCaseButton to true if the user has UPDATE_CASE_CONTENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
-          petitioners: [],
           status: CASE_STATUS_TYPES.new,
         },
       },
@@ -71,7 +54,6 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(privatePractitionerUser),
         caseDetail: {
           docketEntries: [],
-          petitioners: [],
           status: CASE_STATUS_TYPES.new,
         },
       },
@@ -83,12 +65,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: true,
-        },
+        caseDetail: { docketEntries: [] },
       },
     });
     expect(result.showExternalButtons).toEqual(false);
@@ -100,12 +77,6 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
-          petitioners: [],
-        },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: true,
         },
       },
     });
@@ -120,12 +91,6 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
-          petitioners: [],
-        },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: true,
         },
       },
     });
@@ -138,12 +103,6 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
-          petitioners: [],
-        },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: true,
         },
       },
     });
@@ -157,10 +116,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           irsPractitioners: [{ userId: '789' }],
-          petitioners: [],
         },
-        currentPage: 'CaseDetail',
-        form: {},
         screenMetadata: {
           isAssociated: true,
         },
@@ -178,10 +134,7 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [],
           hasIrsPractitioner: true,
           isSealed: true,
-          petitioners: [],
         },
-        currentPage: 'CaseDetail',
-        form: {},
         screenMetadata: {
           isAssociated: false,
         },
@@ -198,10 +151,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: true,
-          petitioners: [],
         },
-        currentPage: 'CaseDetail',
-        form: {},
         screenMetadata: {
           isAssociated: false,
         },
@@ -218,10 +168,7 @@ describe('caseDetailHeaderHelper', () => {
         caseDetail: {
           docketEntries: [],
           hasIrsPractitioner: false,
-          petitioners: [],
         },
-        currentPage: 'CaseDetail',
-        form: {},
         screenMetadata: {
           isAssociated: false,
         },
@@ -235,9 +182,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
+        caseDetail: { docketEntries: [] },
         screenMetadata: {
           isAssociated: false,
           pendingAssociation: true,
@@ -251,9 +196,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
+        caseDetail: { docketEntries: [] },
         screenMetadata: {
           isAssociated: false,
         },
@@ -266,9 +209,8 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'FilePetitionSuccess',
-        form: {},
         screenMetadata: {
           isAssociated: false,
         },
@@ -281,9 +223,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [], isSealed: true, petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
+        caseDetail: { docketEntries: [], isSealed: true },
         screenMetadata: {
           isAssociated: false,
         },
@@ -298,11 +238,8 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(privatePractitionerUser),
         caseDetail: {
           docketEntries: [],
-          petitioners: [],
           privatePractitioners: [{ userId: '123' }],
         },
-        currentPage: 'CaseDetail',
-        form: {},
         screenMetadata: {
           isAssociated: true,
         },
@@ -315,9 +252,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
+        caseDetail: { docketEntries: [] },
         screenMetadata: {
           isAssociated: false,
         },
@@ -326,19 +261,13 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showRequestAccessToCaseButton).toEqual(false);
   });
 
-  it('should show the consolidated case icon if the case is associated with a lead case', async () => {
+  it('should show the consolidated case icon if the case is associated with a lead case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '101-20',
-          petitioners: [],
-        },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: false,
         },
       },
     });
@@ -346,19 +275,13 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showConsolidatedCaseIcon).toEqual(true);
   });
 
-  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', async () => {
+  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
         caseDetail: {
           docketEntries: [],
           leadDocketNumber: '',
-          petitioners: [],
-        },
-        currentPage: 'CaseDetail',
-        form: {},
-        screenMetadata: {
-          isAssociated: false,
         },
       },
     });
@@ -370,9 +293,8 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
-        form: {},
       },
     });
     expect(result.showCaseDetailHeaderMenu).toEqual(true);
@@ -383,9 +305,7 @@ describe('caseDetailHeaderHelper', () => {
   it('should show the Sealed Case banner if the case is sealed', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [], isSealed: true, petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
+        caseDetail: { docketEntries: [], isSealed: true },
         permissions: {},
       },
     });
@@ -395,12 +315,8 @@ describe('caseDetailHeaderHelper', () => {
   it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        permissions: {
-          FILE_EXTERNAL_DOCUMENT: true,
-        },
+        ...getBaseState(petitionerUser),
+        caseDetail: { docketEntries: [] },
         screenMetadata: { isAssociated: true },
       },
     });
@@ -410,12 +326,8 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        permissions: {
-          FILE_EXTERNAL_DOCUMENT: false,
-        },
+        ...getBaseState(docketClerkUser),
+        caseDetail: { docketEntries: [] },
         screenMetadata: { isAssociated: true },
       },
     });
@@ -425,12 +337,8 @@ describe('caseDetailHeaderHelper', () => {
   it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        permissions: {
-          FILE_EXTERNAL_DOCUMENT: true,
-        },
+        ...getBaseState(petitionerUser),
+        caseDetail: { docketEntries: [] },
         screenMetadata: { isAssociated: false },
       },
     });
@@ -441,12 +349,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        permissions: {
-          FILE_EXTERNAL_DOCUMENT: true,
-        },
+        caseDetail: { docketEntries: [] },
         screenMetadata: { isAssociated: false },
       },
     });
@@ -458,12 +361,7 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
-        currentPage: 'CaseDetail',
-        form: {},
-        permissions: {
-          FILE_EXTERNAL_DOCUMENT: true,
-        },
+        caseDetail: { docketEntries: [] },
         screenMetadata: { isAssociated: false },
       },
     });
@@ -475,9 +373,8 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
-        form: {},
       },
     });
     expect(result.showNewTabLink).toBe(true);
@@ -487,26 +384,19 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
-        form: {},
       },
     });
     expect(result.showNewTabLink).toBe(false);
   });
 
   it('should set showCreateMessageButton to false when the user role is General', () => {
-    const user = {
-      role: ROLES.general,
-      userId: 'e7c05404-cfd3-45e2-bc6b-c8aeb8ed869e',
-    };
-
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
-        ...getBaseState(user),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        ...getBaseState(generalUser),
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
-        form: {},
       },
     });
 
@@ -517,9 +407,8 @@ describe('caseDetailHeaderHelper', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
-        caseDetail: { docketEntries: [], petitioners: [] },
+        caseDetail: { docketEntries: [] },
         currentPage: 'CaseDetailInternal',
-        form: {},
       },
     });
 
@@ -544,7 +433,6 @@ describe('caseDetailHeaderHelper', () => {
             privatePractitioners: [{ representing: [representedUserId] }],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
         },
       });
 
@@ -568,7 +456,6 @@ describe('caseDetailHeaderHelper', () => {
             ],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
         },
       });
 
@@ -592,7 +479,6 @@ describe('caseDetailHeaderHelper', () => {
             privatePractitioners: [{ representing: [representedUserId] }],
           },
           currentPage: 'CaseDetailInternal',
-          form: {},
         },
       });
 
@@ -604,13 +490,13 @@ describe('caseDetailHeaderHelper', () => {
     it('should be true when blocked is true', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             ...MOCK_CASE,
             blocked: true,
             blockedDate: '2019-04-19T17:29:13.120Z',
             blockedReason: 'because',
           },
-          ...getBaseState(docketClerkUser),
         },
       });
 
@@ -620,6 +506,7 @@ describe('caseDetailHeaderHelper', () => {
     it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             ...MOCK_CASE,
             automaticBlocked: true,
@@ -627,7 +514,6 @@ describe('caseDetailHeaderHelper', () => {
             automaticBlockedReason: 'Pending Item',
             status: CASE_STATUS_TYPES.new,
           },
-          ...getBaseState(docketClerkUser),
         },
       });
 
@@ -637,6 +523,7 @@ describe('caseDetailHeaderHelper', () => {
     it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
+          ...getBaseState(docketClerkUser),
           caseDetail: {
             ...MOCK_CASE,
             automaticBlocked: true,
@@ -644,7 +531,6 @@ describe('caseDetailHeaderHelper', () => {
             automaticBlockedReason: 'Pending Item',
             status: CASE_STATUS_TYPES.calendared,
           },
-          ...getBaseState(docketClerkUser),
         },
       });
 
@@ -655,11 +541,11 @@ describe('caseDetailHeaderHelper', () => {
       expect(() =>
         runCompute(caseDetailHeaderHelper, {
           state: {
+            ...getBaseState(docketClerkUser),
             caseDetail: {
               ...MOCK_CASE,
               petitioners: undefined,
             },
-            ...getBaseState(docketClerkUser),
           },
         }),
       ).not.toThrow();

@@ -50,7 +50,8 @@ resource "aws_iam_role_policy" "migration_policy" {
                 "dynamodb:ListStreams",
                 "dynamodb:Query",
                 "dynamodb:PutItem",
-                "dynamodb:Scan"
+                "dynamodb:Scan",
+                "dynamodb:DeleteItem"
             ],
             "Resource": [
                 "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/*",
@@ -143,6 +144,16 @@ resource "aws_iam_role_policy" "migration_segments_policy" {
                 "sqs:GetQueueAttributes"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${var.dns_domain}-documents-*"
+            ],
             "Effect": "Allow"
         }
     ]

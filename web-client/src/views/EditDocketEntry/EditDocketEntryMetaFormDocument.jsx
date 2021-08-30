@@ -10,7 +10,7 @@ import {
   docketEntryOnChange,
   onInputChange,
   reactSelectValue,
-} from '../../ustc-ui/utils/documentTypeSelectHelper';
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
@@ -225,10 +225,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 validateDocumentSequence();
               }}
             />
-            <label
-              className="usa-checkbox__label inline-block"
-              htmlFor="add-to-coversheet"
-            >
+            <label className="usa-checkbox__label" htmlFor="add-to-coversheet">
               Add to cover sheet
             </label>
           </div>
@@ -320,10 +317,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   });
                 }}
               />
-              <label
-                className="usa-checkbox__label inline-block"
-                htmlFor="pending"
-              >
+              <label className="usa-checkbox__label" htmlFor="pending">
                 Add to pending report
               </label>
             </div>

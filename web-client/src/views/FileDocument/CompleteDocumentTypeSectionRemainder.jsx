@@ -6,7 +6,7 @@ import {
   fileDocumentSecondaryOnChange,
   onInputChange,
   reactSelectValue,
-} from '../../ustc-ui/utils/documentTypeSelectHelper';
+} from '../../ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 

@@ -33,7 +33,7 @@ describe('validatePetitionerInteractor', () => {
     };
   });
 
-  it('runs validation on a contact with no invalid properties', async () => {
+  it('runs validation on a contact with no invalid properties', () => {
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     });
@@ -41,7 +41,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('should not return validation errors when contact is valid and updatedEmail and confirmEmail are not present', async () => {
+  it('should not return validation errors when contact is valid and updatedEmail and confirmEmail are not present', () => {
     mockContact = {
       ...mockContact,
       confirmEmail: undefined,
@@ -55,7 +55,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toBeFalsy();
   });
 
-  it('runs validation on a contact with invalid properties', async () => {
+  it('runs validation on a contact with invalid properties', () => {
     mockContact = {
       ...mockContact,
       confirmEmail: undefined, // required when updatedEmail is present
@@ -76,7 +76,7 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('runs validation on a secondary contact with invalid properties', async () => {
+  it('runs validation on a secondary contact with invalid properties', () => {
     const contact = {
       ...mockContact,
       confirmEmail: undefined,
@@ -95,7 +95,7 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('returns a validation error when confirmEmail is present without updatedEmail', async () => {
+  it('returns a validation error when confirmEmail is present without updatedEmail', () => {
     const contact = {
       ...mockContact,
       confirmEmail: 'night@example.com',
@@ -116,8 +116,8 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('should return an error when second intervenor is added', async () => {
-    mockContact = {
+  it('should return an error when second intervenor is added', () => {
+    const contact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
@@ -129,7 +129,7 @@ describe('validatePetitionerInteractor', () => {
     ];
 
     const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: mockContact,
+      contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });
 
@@ -139,20 +139,38 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('should not return an error when first intervenor is edited', async () => {
-    mockContact = {
+  it('should not return an error when first intervenor is edited', () => {
+    const contact = {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
     const mockExistingPetitioners = [
       {
-        ...mockContact,
-        contactType: CONTACT_TYPES.intervenor,
+        ...contact,
       },
     ];
 
     const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: mockContact,
+      contactInfo: contact,
+      existingPetitioners: mockExistingPetitioners,
+    });
+
+    expect(errors).toBeFalsy();
+  });
+
+  it('should not edit the first intervenor when the contactType is not intervenor', () => {
+    const contact = {
+      ...mockContact,
+      contactType: CONTACT_TYPES.otherFiler,
+    };
+    const mockExistingPetitioners = [
+      {
+        ...contact,
+      },
+    ];
+
+    const errors = validatePetitionerInteractor(applicationContext, {
+      contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });
 

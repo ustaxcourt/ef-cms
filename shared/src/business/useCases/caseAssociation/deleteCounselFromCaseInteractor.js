@@ -42,7 +42,7 @@ exports.deleteCounselFromCaseInteractor = async (
       userId,
     });
 
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   if (userToDelete.role === ROLES.privatePractitioner) {
     caseEntity.removePrivatePractitioner(userToDelete);
@@ -52,13 +52,7 @@ exports.deleteCounselFromCaseInteractor = async (
     throw new Error('User is not a practitioner');
   }
 
-  caseEntity.petitioners.forEach(petitioner => {
-    if (
-      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
-    ) {
-      petitioner.serviceIndicator = null;
-    }
-  });
+  caseEntity = setupServiceIndicatorForUnrepresentedPetitioners(caseEntity);
 
   aggregatePartiesForService(caseEntity);
 
@@ -77,3 +71,18 @@ exports.deleteCounselFromCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+const setupServiceIndicatorForUnrepresentedPetitioners = caseEntity => {
+  caseEntity.petitioners.forEach(petitioner => {
+    if (
+      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
+    ) {
+      petitioner.serviceIndicator = null;
+    }
+  });
+
+  return caseEntity;
+};
+
+exports.setupServiceIndicatorForUnrepresentedPetitioners =
+  setupServiceIndicatorForUnrepresentedPetitioners;

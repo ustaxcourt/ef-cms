@@ -120,21 +120,17 @@ const VALIDATION_ERROR_MESSAGES = {
 };
 
 /**
- *
- * @constructor
- */
-function ExternalDocumentInformationFactory() {}
-
-/**
+ * External Document Information Factory entity
  *
  * @param {object} documentMetadata the document metadata
- * @returns {Function} the created entity
+ * @constructor
  */
-ExternalDocumentInformationFactory.get = documentMetadata => {
+function ExternalDocumentInformationFactory(documentMetadata) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
@@ -160,7 +156,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     this.supportingDocuments = rawProps.supportingDocuments;
 
     if (this.secondaryDocument) {
-      this.secondaryDocument = SecondaryDocumentInformationFactory.get(
+      this.secondaryDocument = SecondaryDocumentInformationFactory(
         {
           ...this.secondaryDocument,
           secondaryDocumentFile: this.secondaryDocumentFile,
@@ -171,7 +167,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory.get(
+        return SupportingDocumentInformationFactory(
           item,
           VALIDATION_ERROR_MESSAGES,
         );
@@ -181,7 +177,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
     if (this.secondarySupportingDocuments) {
       this.secondarySupportingDocuments = this.secondarySupportingDocuments.map(
         item => {
-          return SupportingDocumentInformationFactory.get(
+          return SupportingDocumentInformationFactory(
             item,
             VALIDATION_ERROR_MESSAGES,
           );
@@ -336,7 +332,7 @@ ExternalDocumentInformationFactory.get = documentMetadata => {
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
   return new (validEntityDecorator(entityConstructor))(documentMetadata);
-};
+}
 
 module.exports = {
   ExternalDocumentInformationFactory,

@@ -2,9 +2,10 @@ let DWObject = null;
 let dynamsoftLoader = null;
 
 exports.getScannerInterface = () => {
-  const completeScanSession = async () => {
+  const completeScanSession = () => {
     DWObject.RemoveAllImages();
     DWObject.CloseSource();
+    return Promise.resolve(true);
   };
 
   const getScanCount = () => DWObject.HowManyImagesInBuffer;

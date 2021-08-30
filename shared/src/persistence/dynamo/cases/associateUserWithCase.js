@@ -1,12 +1,12 @@
 const client = require('../../dynamodbClientService');
 
-exports.associateUserWithCase = async ({
+exports.associateUserWithCase = ({
   applicationContext,
   docketNumber,
   userCase,
   userId,
-}) => {
-  return client.put({
+}) =>
+  client.put({
     Item: {
       ...userCase,
       gsi1pk: `user-case|${docketNumber}`,
@@ -15,4 +15,3 @@ exports.associateUserWithCase = async ({
     },
     applicationContext,
   });
-};

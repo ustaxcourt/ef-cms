@@ -34,7 +34,7 @@ export const submitCorrespondenceAction = async ({
 
   await applicationContext
     .getUseCases()
-    .virusScanPdfInteractor(applicationContext, {
+    .getStatusOfVirusScanInteractor(applicationContext, {
       key: correspondenceId,
     });
 

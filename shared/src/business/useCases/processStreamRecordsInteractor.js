@@ -1,5 +1,4 @@
 const {
-  filterRecords,
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
@@ -8,12 +7,6 @@ const {
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./processStreamUtilities');
-
-const getCase = ({ applicationContext: appContext, docketNumber }) =>
-  appContext.getPersistenceGateway().getCaseByDocketNumber({
-    applicationContext: appContext,
-    docketNumber,
-  });
 
 const getDocument = ({ applicationContext: appContext, documentContentsId }) =>
   appContext.getPersistenceGateway().getDocument({
@@ -53,8 +46,6 @@ exports.processStreamRecordsInteractor = async (
   applicationContext,
   { recordsToProcess },
 ) => {
-  recordsToProcess = recordsToProcess.filter(filterRecords);
-
   const {
     caseEntityRecords,
     docketEntryRecords,
@@ -65,7 +56,6 @@ exports.processStreamRecordsInteractor = async (
   } = partitionRecords(recordsToProcess);
 
   const utils = {
-    getCase,
     getCaseMetadataWithCounsel,
     getDocument,
     getMessage,

@@ -1,6 +1,6 @@
-import { getSortedOptions } from '../../ustc-ui/utils/selectSearchHelper';
+import { getSortedOptions } from '../../ustc-ui/Utils/selectSearchHelper';
 import React from 'react';
-import Select from 'react-select';
+import ReactSelect from 'react-select';
 import classNames from 'classnames';
 
 export class SelectSearch extends React.Component {
@@ -42,7 +42,7 @@ export class SelectSearch extends React.Component {
     };
 
     return (
-      <Select
+      <ReactSelect
         {...aria}
         className={classNames('select-react-element', className)}
         classNamePrefix="select-react-element"

@@ -84,7 +84,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:s3:::${var.dns_domain}-documents-*",
-                "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
+                "arn:aws:s3:::${var.dns_domain}-temp-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-quarantine-*"
             ],
             "Effect": "Allow"
         },
@@ -121,6 +122,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
+                "dynamodb:GetItem",
                 "dynamodb:DescribeTable"
             ],
             "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}",

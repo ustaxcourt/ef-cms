@@ -43,6 +43,7 @@ jobs:
           name: Web Client - Integration Test
           command: |
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              SKIP_CACHE_INVALIDATION=true \
@@ -56,6 +57,7 @@ jobs:
              AWS_ACCESS_KEY_ID=S3RVER \
              AWS_SECRET_ACCESS_KEY=S3RVER \
              TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
              DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
              S3_ENDPOINT=http://localhost:9000 \
              npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
@@ -110,6 +112,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -172,6 +175,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -232,6 +236,72 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run build:all &&
+            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
+            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
+              ./node_modules/.bin/cypress install
+            fi
+            npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:4000/api/swagger
+            sleep 5
+            npm run cypress
+      - store_artifacts:
+          path: /root/project/cypress/videos/
+      - store_artifacts:
+          path: /tmp/cypress
+
+  e2e-cypress-smoketests-local:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: xlarge
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Cypress
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -248,12 +318,8 @@ jobs:
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 5
             npm run cypress:smoketests:local
-            sleep 5
-            npm run cypress
       - store_artifacts:
           path: /root/project/cypress-smoketests/videos/
-      - store_artifacts:
-          path: /root/project/cypress/videos/
       - store_artifacts:
           path: /tmp/cypress
 
@@ -300,6 +366,7 @@ jobs:
           environment:
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
             DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
             S3_ENDPOINT: http://localhost:9000
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
@@ -336,9 +403,7 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export IRS_SUPERUSER_EMAIL=$(./scripts/get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export BOUNCED_EMAIL_RECIPIENT=$(./scripts/get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
@@ -361,6 +426,23 @@ jobs:
       - run:
           name: Setup ES Volume Size
           command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: Setup Blue Green Migration If Needed
+          command: |
+            docker run \
+              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+              -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "ENV=${ENV}" \
+              --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
+      - run:
+          name: Setup Migrate Flag
+          command: echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Setup Destination Table Var
+          command: echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
@@ -426,7 +508,7 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "SESSION_TIMEOUT=${SESSION_TIMEOUT}" \
              -e "SESSION_MODAL_TIMEOUT=${SESSION_MODAL_TIMEOUT}" \
-             --rm efcms /bin/sh -c "./scripts/deploy-ui.sh"
+             --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: |
@@ -441,7 +523,7 @@ jobs:
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "ENV=${ENV}" \
              -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
-             --rm efcms /bin/sh -c "./scripts/deploy-public.sh"
+             --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
       - run:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
@@ -452,7 +534,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -466,7 +548,7 @@ jobs:
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
-            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
+            if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -519,12 +601,14 @@ jobs:
           command: |
             ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
+            EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)
+            echo "export EFCMS_DOMAIN=$EFCMS_DOMAIN" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -540,6 +624,7 @@ jobs:
                -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
+               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -567,6 +652,7 @@ jobs:
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "STREAM_ARN=${STREAM_ARN}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
+               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
             fi
       - run:
@@ -580,6 +666,17 @@ jobs:
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+            fi
+      - run:
+          name: Track successful migrations
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "ENV=${ENV}" \
+                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
             fi
       - run:
           name: Enable Destination Table Stream
@@ -653,6 +750,7 @@ jobs:
           command: |
             ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
             echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
@@ -685,6 +783,38 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 
 workflows:
   version: 2
+  hourly:
+    jobs:
+      - build-client-integration
+      - e2e-pa11y
+      - e2e-pa11y-public
+      - e2e-cypress
+      - e2e-cypress-smoketests-local
+      - e2e-cypress-public
+      - deploy:
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+      - migrate:
+          requires:
+            - deploy
+      - smoketests:
+          requires:
+            - migrate
+      - switch-colors:
+          requires:
+            - smoketests
+    triggers:
+      - schedule:
+          cron: '0 13-22 * * 1-5'
+          filters:
+            branches:
+              only:
+
   build-and-deploy:
     jobs:
       - build-client-integration:
@@ -695,6 +825,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
       - deploy:
@@ -703,6 +835,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
           filters:
             branches:
@@ -716,6 +849,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
                 - dawson
       - migrate:
           requires:
@@ -731,6 +865,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
       - smoketests:
           requires:
             - migrate
@@ -745,6 +880,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
       - switch-colors:
           requires:
             - smoketests
@@ -760,6 +896,7 @@ workflows:
                 - experimental2
                 - experimental3
                 - experimental4
+                - experimental5
                 - dawson
   build-and-deploy-without-smoketests:
     jobs:
@@ -771,6 +908,8 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress:
           <<: *build-and-deploy-without-smoketests-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-without-smoketests-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-without-smoketests-defaults
       - deploy:
@@ -780,6 +919,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
       - migrate:
           <<: *build-and-deploy-without-smoketests-defaults
@@ -800,6 +940,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress:
           <<: *build-and-deploy-with-context-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
       - deploy:
@@ -809,6 +951,7 @@ workflows:
             - e2e-pa11y
             - e2e-pa11y-public
             - e2e-cypress
+            - e2e-cypress-smoketests-local
             - e2e-cypress-public
       - migrate:
           <<: *build-and-deploy-with-context-defaults

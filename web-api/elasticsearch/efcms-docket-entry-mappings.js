@@ -25,11 +25,11 @@ module.exports = {
       type: 'keyword',
     },
     'documentContents.S': {
-      analyzer: 'ustc_analyzer',
+      analyzer: 'english_exact',
       type: 'text',
     },
     'documentTitle.S': {
-      analyzer: 'ustc_analyzer',
+      analyzer: 'english_exact',
       type: 'text',
     },
     'documentType.S': {

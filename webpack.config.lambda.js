@@ -7,17 +7,19 @@ module.exports = {
     rules: [
       {
         exclude: /node_modules/,
+        // eslint-disable-next-line
         test: /\.(jsx)$/,
         use: ['babel-loader'],
       },
       {
+        // eslint-disable-next-line
         test: /\.(map|node)$/,
         use: ['file-loader'],
       },
     ],
   },
   optimization: {
-    minimize: true,
+    minimize: false,
   },
   plugins: [
     new CopyPlugin({

@@ -13,6 +13,7 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 export const submitOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
   const searchParams = clone(get(state.advancedSearchForm.orderSearch));
 
@@ -23,11 +24,22 @@ export const submitOrderAdvancedSearchAction = async ({
     );
   }
 
-  const searchResults = await applicationContext
-    .getUseCases()
-    .orderAdvancedSearchInteractor(applicationContext, {
-      searchParams,
-    });
-
-  return { searchResults };
+  try {
+    const searchResults = await applicationContext
+      .getUseCases()
+      .orderAdvancedSearchInteractor(applicationContext, {
+        searchParams,
+      });
+    return { searchResults };
+  } catch (err) {
+    if (err.responseCode === 429) {
+      store.set(state.alertError, {
+        message: 'Please wait 1 minute before trying your search again.',
+        title: "You've reached your search limit.",
+      });
+      return { searchResults: [] };
+    } else {
+      throw err;
+    }
+  }
 };

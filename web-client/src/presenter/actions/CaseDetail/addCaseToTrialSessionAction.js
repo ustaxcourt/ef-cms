@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const addCaseToTrialSessionAction = async ({
   applicationContext,
   get,
+  path,
 }) => {
   const { docketNumber } = get(state.caseDetail);
   const { calendarNotes, trialSessionId } = get(state.modal);
@@ -23,29 +24,38 @@ export const addCaseToTrialSessionAction = async ({
   const sessionIsCalendared =
     selectedTrialSession && selectedTrialSession.isCalendared;
 
-  const caseDetail = await applicationContext
-    .getUseCases()
-    .addCaseToTrialSessionInteractor(applicationContext, {
+  try {
+    const caseDetail = await applicationContext
+      .getUseCases()
+      .addCaseToTrialSessionInteractor(applicationContext, {
+        calendarNotes,
+        docketNumber,
+        trialSessionId,
+      });
+
+    let alertSuccess;
+    if (sessionIsCalendared) {
+      alertSuccess = {
+        message: 'Case set for trial.',
+      };
+    } else {
+      alertSuccess = {
+        message: 'Case scheduled for trial.',
+      };
+    }
+    return path.success({
+      alertSuccess,
       calendarNotes,
+      caseDetail,
       docketNumber,
       trialSessionId,
     });
-
-  let alertSuccess;
-  if (sessionIsCalendared) {
-    alertSuccess = {
-      message: 'Case set for trial.',
-    };
-  } else {
-    alertSuccess = {
-      message: 'Case scheduled for trial.',
-    };
+  } catch (e) {
+    return path.error({
+      alertError: {
+        message: 'Please try again.',
+        title: 'Case could not be added to trial session.',
+      },
+    });
   }
-  return {
-    alertSuccess,
-    calendarNotes,
-    caseDetail,
-    docketNumber,
-    trialSessionId,
-  };
 };
