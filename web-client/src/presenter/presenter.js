@@ -200,6 +200,7 @@ import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAd
 import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPractitionerModalSequence';
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
+import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDifferenceModalSequence } from './sequences/openCaseDifferenceModalSequence';
@@ -681,6 +682,7 @@ export const presenter = {
     openAddIrsPractitionerModalSequence,
     openAddPrivatePractitionerModalSequence,
     openAddToTrialModalSequence,
+    openAppMaintenanceModalSequence,
     openBlockFromTrialModalSequence,
     openCancelDraftDocumentModalSequence,
     openCaseDifferenceModalSequence,

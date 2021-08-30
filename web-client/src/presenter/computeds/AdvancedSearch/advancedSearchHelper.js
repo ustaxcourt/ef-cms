@@ -22,6 +22,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 };
 
 export const advancedSearchHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions) || {};
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
@@ -36,10 +37,14 @@ export const advancedSearchHelper = (get, applicationContext) => {
 
   const showDateRangePicker =
     dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
+  const showFeedbackButton = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const result = {
     feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
     showDateRangePicker,
+    showFeedbackButton,
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };

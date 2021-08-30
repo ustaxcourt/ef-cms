@@ -8,9 +8,15 @@ const { User } = require('../entities/User');
  * @returns {boolean} whether the feature is enabled
  */
 
+// eslint-disable-next-line no-unused-vars
 const getIsFeatureEnabled = (featureName, user, env) => {
   const features = {
     advanced_document_search: (() => {
+      const isInternalUser = User.isInternalUser(user.role);
+
+      return isInternalUser;
+    })(),
+    advanced_opinion_search: (() => {
       const isProduction = env === 'prod';
       const isInternalUser = User.isInternalUser(user.role);
 

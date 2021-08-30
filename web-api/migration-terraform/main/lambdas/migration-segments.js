@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
+  migrateItems: migration0001,
+} = require('./migrations/0001-update-websockets-gsi1pk');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -29,6 +32,10 @@ const migrateRecords = async ({
   // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
+  if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
+    applicationContext.logger.debug('about to run migration 0001');
+    items = migration0001(items);
+  }
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
 
@@ -131,6 +138,7 @@ exports.handler = async event => {
 
   const ranMigrations = {
     //  ...(await hasMigrationRan('bug-999-example-migration-file.js')),
+    ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
