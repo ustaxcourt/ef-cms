@@ -2,15 +2,28 @@
  * sendMaintenanceNotificationsInteractor
  *
  * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {string} providers.maintenanceMode true or false depending on whether we are turning maintenance mode on or off
  */
-exports.sendMaintenanceNotificationsInteractor = async applicationContext => {
+exports.sendMaintenanceNotificationsInteractor = async (
+  applicationContext,
+  { maintenanceMode },
+) => {
   const allWebsocketConnections = await applicationContext
     .getPersistenceGateway()
     .getAllWebSocketConnections({ applicationContext });
 
-  // todo: dont hardcode
+  await applicationContext.getPersistenceGateway().updateMaintenanceMode({
+    applicationContext,
+    maintenanceMode,
+  });
+
+  const maintenanceModeMessage = maintenanceMode
+    ? 'maintenance_mode_engaged'
+    : 'maintenance_mode_disengaged';
+
   const messageStringified = JSON.stringify({
-    action: 'maintenance_mode_engaged',
+    action: maintenanceModeMessage,
   });
 
   await applicationContext
