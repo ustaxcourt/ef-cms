@@ -50,9 +50,10 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
  */
 function DocketEntryFactory(rawProps) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawPropsParam) {
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
