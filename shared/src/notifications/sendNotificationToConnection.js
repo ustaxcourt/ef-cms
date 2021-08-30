@@ -13,13 +13,6 @@ exports.sendNotificationToConnection = async ({
 }) => {
   const { connectionId, endpoint } = connection;
 
-  applicationContext.logger.error(
-    `2a sendNotificationToConnection!!! messageStringified ${messageStringified}`,
-  );
-  applicationContext.logger.error(
-    `2b sendNotificationToConnection!!! connection ${connection}`,
-  );
-
   const notificationClient = applicationContext.getNotificationClient({
     endpoint,
   });
