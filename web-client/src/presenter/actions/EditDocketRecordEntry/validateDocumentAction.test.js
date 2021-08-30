@@ -107,6 +107,31 @@ describe('validateDocumentAction', () => {
     expect(errorStub).toHaveBeenCalled();
   });
 
+  it('should not cause an error if filers is empty with document type', async () => {
+    applicationContext
+      .getUseCases()
+      .validateDocumentInteractor.mockReturnValue(null);
+    applicationContext
+      .getUseCases()
+      .validateDocketEntryInteractor.mockReturnValue({
+        filers: 'error',
+      });
+
+    await runAction(validateDocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: mockDocument,
+        screenMetadata: {
+          editType: 'Document',
+        },
+      },
+    });
+
+    expect(errorStub).not.toHaveBeenCalled();
+  });
+
   it('should call the success path when no errors are found with a document', async () => {
     applicationContext
       .getUseCases()
