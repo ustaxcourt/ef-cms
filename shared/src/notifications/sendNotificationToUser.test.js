@@ -26,31 +26,15 @@ const connections = [
   },
 ];
 
-const notificationError = new Error('could not get notification client');
-notificationError.statusCode = 410;
-
 describe('send websocket notification to browser', () => {
   const postToConnection = jest
     .fn()
     .mockReturnValue({ promise: () => Promise.resolve('ok') });
 
   beforeEach(() => {
-    applicationContext.getNotificationClient
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementationOnce(() => {
-        throw notificationError;
-      })
-      .mockImplementation(() => {
-        return { postToConnection };
-      });
+    applicationContext.getNotificationClient.mockImplementation(() => {
+      return { postToConnection };
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -58,54 +42,20 @@ describe('send websocket notification to browser', () => {
   });
 
   it('should send notification to user', async () => {
+    const mockMessage = 'hello, computer';
     await sendNotificationToUser({
       applicationContext,
-      message: 'hello, computer',
+      message: mockMessage,
       userId: 'userId-000-000-0000',
     });
 
-    expect(postToConnection.mock.calls.length).toBe(2);
     expect(
-      applicationContext.getDocumentClient().delete.mock.calls.length,
-    ).toBe(2);
-  });
-
-  it('catches exception if statusCode is 410 and calls client.delete', async () => {
-    await sendNotificationToUser({
-      applicationContext,
-      message: 'hello, computer',
-      userId: 'userId-000-000-0000',
-    });
-
-    expect(applicationContext.getDocumentClient().delete).toBeCalled();
-  });
-
-  it('rethrows and logs exception for statusCode not 410', async () => {
-    notificationError.statusCode = 400;
-
-    await expect(
-      sendNotificationToUser({
-        applicationContext,
-        message: 'hello, computer',
-        userId: 'userId-000-000-0000',
-      }),
-    ).rejects.toThrow('could not get notification client');
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
-
-  it('throws non 410 exception', async () => {
-    let error;
-    try {
-      await sendNotificationToUser({
-        applicationContext,
-        message: 'hello, computer',
-        userId: 'userId-000-000-0000',
-      });
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error).toBeDefined();
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].connections,
+    ).toBe(connections);
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].messageStringified,
+    ).toBe(JSON.stringify(mockMessage));
   });
 });
