@@ -14,24 +14,11 @@ exports.retrySendNotificationToConnections = async ({
   connections,
   messageStringified,
 }) => {
-  applicationContext.logger.error(
-    `01 retrySendNotificationToConnections conn.length!!! ${connections.length}`,
-  );
-  connections.forEach(c => {
-    applicationContext.logger.error(
-      `0 retrySendNotificationToConnections connections!!! ${c}`,
-    );
-  });
-
   const maxRetries = 1;
 
   for (let index = 0; index < connections.length; index++) {
-    // for (const connection of connections) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
-        applicationContext.logger.error(
-          `1 sendNotificationToConnection!!! messageStringified ${messageStringified}`,
-        );
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
@@ -44,9 +31,6 @@ exports.retrySendNotificationToConnections = async ({
         if (retryCount >= maxRetries) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
-            applicationContext.logger.error(
-              `410 error, going to delete connection!!! ${connections[index]}`,
-            );
             await client.delete({
               applicationContext,
               key: {
