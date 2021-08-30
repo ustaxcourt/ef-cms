@@ -764,7 +764,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run the related develop workflow below
         - prod # run with context workflow below
         - migration # run without smoketests workflow
 
@@ -815,7 +814,7 @@ workflows:
           filters:
             branches:
               only:
-                - develop
+
   build-and-deploy:
     jobs:
       - build-client-integration:
@@ -841,6 +840,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -857,6 +857,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -871,6 +872,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -885,6 +887,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
