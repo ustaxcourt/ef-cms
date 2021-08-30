@@ -17,7 +17,7 @@ exports.retrySendNotificationToConnections = async ({
   applicationContext.logger.error(
     `01 retrySendNotificationToConnections conn.length!!! ${connections.length}`,
   );
-  connections.foreach(c => {
+  connections.forEach(c => {
     applicationContext.logger.error(
       `0 retrySendNotificationToConnections connections!!! ${c}`,
     );
