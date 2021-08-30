@@ -12,10 +12,12 @@ This process is mostly automated. For Production (`ENV` would be `prod`), the fi
 
 Here are the steps involved:
 
-1. Setup the destination environments.  Load up the `efcms-ENV-deploy` dynamodb table and figure out the destination version.  If `source-table-version` is `beta`, you'd want to delete the `alpha` dynamodb table and cluster, and vice versa.
+1. Setup the destination environments.  Load up the `efcms-ENV-deploy` dynamodb table and figure out the destination version.  If `source-table-version` is `beta`, you would need to delete the `efcms-ENV-alpha` DynamoDB tables (east and west!) as well as the `efcms-search-ENV-alpha` Elasticsearch Cluster, and vice versa.
 
     - delete the efcms-ENV-VERSION on east-1 and west-1
     - delete the efcms-search-ENV-VERSION elasticsearch cluster
+
+    **NOTE:** if you encounter an error trying to delete the DynamoDB table due to a 24-hour restriction, try deleting the `west` table before the `east` table.
 
 2. Run a circle deploy
 
@@ -47,7 +49,7 @@ Here are the steps involved:
 
 ## Manual Migration Steps
 
-The application kicks of a migration automatically if it detects migrations that need to be run in the codebase that haven't yet been run upon that environment. In order to force a migration, perform the following manual steps in order to kick off a blue-green migration. This is used most often to perform a complete re-index of information into Elasticsearch.
+The application kicks off a migration automatically if it detects migrations that need to be run in the codebase that haven't yet been run upon that environment. In order to force a migration, perform the following manual steps in order to kick off a blue-green migration. This is used most often to perform a complete re-index of information into Elasticsearch.
 
 1. Change the `destination-table-version` to the alternate of `alpha` or `beta` depending on whatever the `source-table-version` is in the `efcms-ENV-deploy` table. For instance, if the application is currently running on `alpha`, both the `source-table-version` and `destination-table-version` would be `alpha`. In this case, change the `destination-table-version` to `beta`.
 2. Change the value of the database record with the key of `migrate` to `true`. The system will automatically change this back to `false` after completing the migration.
