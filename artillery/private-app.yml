@@ -1,11 +1,11 @@
 config:
-  target: "https://app-{{ $processEnvironment.DEPLOYING_COLOR }}.{{ $processEnvironment.EFCMS_DOMAIN }}"
+  target: "https://api-{{ $processEnvironment.DEPLOYING_COLOR }}.{{ $processEnvironment.EFCMS_DOMAIN }}"
   plugins:
     metrics-by-endpoint: 
       useOnlyRequestNames: true
   phases:
-    - duration: 300
-      arrivalRate: 500
+    - duration: 60
+      arrivalRate: 5
       name: Sustained load
 
 scenarios:

@@ -12,7 +12,7 @@
 .vscode
 **/*_.js
 /policy.json
-artillery/report.json
+artillery/private-app-report.json
 aws.json
 aws/lambdas/*.zip
 coverage/
