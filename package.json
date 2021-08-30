@@ -145,7 +145,9 @@
     "webpack-dev-server": "^3.11.2",
     "websocket": "^1.0.34",
     "wicg-inert": "^3.1.1",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "artillery": "^1.7.7",
+    "artillery-plugin-metrics-by-endpoint": "^0.1.1"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -281,8 +283,5 @@
     "node-forge": "^0.10.0",
     "underscore": "^1.13.1"
   },
-  "devDependencies": {
-    "artillery": "^1.7.7",
-    "artillery-plugin-metrics-by-endpoint": "^0.1.1"
-  }
+  "devDependencies": {}
 }
