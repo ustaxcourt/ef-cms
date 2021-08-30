@@ -4,8 +4,8 @@ config:
     metrics-by-endpoint: 
       useOnlyRequestNames: true
   phases:
-    - duration: 30
-      arrivalRate: 10
+    - duration: 300
+      arrivalCount: 50
       name: Sustained load
   payload:
     - path: "keywords.csv"
