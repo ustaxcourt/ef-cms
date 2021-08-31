@@ -613,83 +613,83 @@ jobs:
           name: Build Docker Image
           command: |
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Migration Infrastructure
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-               -e "ZONE_NAME=${ZONE_NAME}" \
-               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
-               --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
-            fi
-      - run:
-          name: Disable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream-trigger.sh"
-            fi
-      - run:
-          name: Run Migration
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-               -e "STREAM_ARN=${STREAM_ARN}" \
-               -e "ZONE_NAME=${ZONE_NAME}" \
-               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
-               --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
-            fi
-      - run:
-          name: Wait for SQS Queue to Empty
-          no_output_timeout: 5h
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
-            fi
-      - run:
-          name: Track successful migrations
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
-            fi
-      - run:
-          name: Enable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
-            fi
+      # - run:
+      #     name: Setup Migration Infrastructure
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #          -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #          -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #          -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+      #          -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+      #          -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+      #          -e "ZONE_NAME=${ZONE_NAME}" \
+      #          -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
+      #          --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
+      #       fi
+      # - run:
+      #     name: Disable Destination Table Stream
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #          -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #          -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #          -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #          -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+      #          -e "ENV=${ENV}" \
+      #          --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream-trigger.sh"
+      #       fi
+      # - run:
+      #     name: Run Migration
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #          -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #          -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #          -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #          -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+      #          -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+      #          -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+      #          -e "STREAM_ARN=${STREAM_ARN}" \
+      #          -e "ZONE_NAME=${ZONE_NAME}" \
+      #          -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
+      #          --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
+      #       fi
+      # - run:
+      #     name: Wait for SQS Queue to Empty
+      #     no_output_timeout: 5h
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #          -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #          -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #          -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #          -e "ENV=${ENV}" \
+      #          --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+      #       fi
+      # - run:
+      #     name: Track successful migrations
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #           -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #           -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #           -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #           -e "ENV=${ENV}" \
+      #           --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
+      #       fi
+      # - run:
+      #     name: Enable Destination Table Stream
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #           -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #           -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #           -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #           -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+      #           -e "ENV=${ENV}" \
+      #           --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
+      #       fi
       - run:
           name: Wait for Reindex to Finish
           command: |
