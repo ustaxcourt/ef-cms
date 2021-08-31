@@ -21,7 +21,6 @@ const getClusterStats = async ({ version }) => {
 };
 
 const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
-console.log(destinationVersion, currentVersion);
 
 (async () => {
   let diffTotal = 0;
