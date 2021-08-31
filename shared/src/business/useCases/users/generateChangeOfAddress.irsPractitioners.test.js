@@ -65,10 +65,6 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should run a change of address when address1 changes for an irs practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([{ docketNumber }]);
-
     const cases = await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
@@ -91,13 +87,6 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should not set partyIrsPractitioner if role is not irsPractitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCaseWithIrsPractitioner);
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([{ docketNumber }]);
-
     await generateChangeOfAddress({
       applicationContext,
       contactInfo: {
