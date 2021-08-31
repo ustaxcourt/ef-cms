@@ -27,7 +27,7 @@ export const UserContactEdit = connect(
       <>
         <div className="big-blue-header">
           <div className="grid-container">
-            <h1>Edit Contact Information HIIIIIIIIIII!!!!!!!!</h1>
+            <h1>Edit Contact Information</h1>
           </div>
         </div>
         <section className="usa-section grid-container">

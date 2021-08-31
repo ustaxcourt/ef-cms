@@ -29,10 +29,6 @@ exports.retrySendNotificationToConnections = async ({
           });
         break;
       } catch (err) {
-        applicationContext.logger.error('catching the error', {
-          err,
-        });
-
         if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
