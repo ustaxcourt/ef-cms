@@ -145,7 +145,9 @@
     "webpack-dev-server": "^3.11.2",
     "websocket": "^1.0.34",
     "wicg-inert": "^3.1.1",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "artillery": "^1.7.7",
+    "artillery-plugin-metrics-by-endpoint": "^0.1.1"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -251,6 +253,8 @@
     "test:client": "CI=false npm run test:_client -- --testPathPattern=\"web-client/.*\\.test\\.js\"",
     "test:debug": "NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --detectOpenHandles --logHeapUsage --runInBand --config web-client/jest.config.js",
     "test:file": "CI=false NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --verbose --no-coverage --runInBand --config web-client/jest.config.js -- ",
+    "test:performance": "MULTICORE=1 ARTILLERY_WORKERS=4 artillery run -o ./artillery/private-app-report.json ./artillery/private-app.yml",
+    "test:performance:order": "MULTICORE=1 ARTILLERY_WORKERS=4 artillery run -o ./artillery/private-advanced-order.json ./artillery/private-advanced-order.yml",
     "test:pa11y:1": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-1.config.js",
     "test:pa11y:2": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-2.config.js",
     "test:pa11y:3": "pa11y-ci --config ./web-client/pa11y/pa11y-ci.web-client-3.config.js",
@@ -278,5 +282,6 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
     "underscore": "^1.13.1"
-  }
+  },
+  "devDependencies": {}
 }
