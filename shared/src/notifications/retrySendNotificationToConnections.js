@@ -12,6 +12,7 @@ const client = require('../persistence/dynamodbClientService');
 exports.retrySendNotificationToConnections = async ({
   applicationContext,
   connections,
+  deleteGoneConnections = true,
   messageStringified,
 }) => {
   const maxRetries = 3;
@@ -32,7 +33,7 @@ exports.retrySendNotificationToConnections = async ({
           err,
         });
 
-        if (retryCount >= maxRetries) {
+        if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
             await client.delete({

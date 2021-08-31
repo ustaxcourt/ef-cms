@@ -39,6 +39,7 @@ exports.sendMaintenanceNotificationsInteractor = async (
     .retrySendNotificationToConnections({
       applicationContext,
       connections: allWebsocketConnections,
+      deleteGoneConnections: false, // don't delete because the connection might be on a different region
       messageStringified,
     });
 };
