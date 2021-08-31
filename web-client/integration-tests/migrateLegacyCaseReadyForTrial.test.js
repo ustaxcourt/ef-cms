@@ -19,6 +19,10 @@ describe('Migrate legacy cases that are ready for trial', () => {
     trialLocation: TRIAL_CITY,
   };
 
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, options);
   docketClerkViewsTrialSessionList(cerebralTest);
