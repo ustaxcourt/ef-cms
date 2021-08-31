@@ -277,7 +277,7 @@ module "api-west-green" {
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   cron_object_hash               = ""
-  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
+  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
   create_cron                    = 0
   create_streams                 = 0
@@ -292,7 +292,7 @@ module "api-west-blue" {
   websockets_object         = null_resource.websockets_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
   cron_object               = ""
-  maintenance_notify_object = ""
+  maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
   environment               = var.environment
@@ -319,11 +319,11 @@ module "api-west-blue" {
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
   cron_object_hash               = ""
-  maintenance_notify_object_hash = ""
+  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
   streams_object_hash            = ""
   create_cron                    = 0
   create_streams                 = 0
-  create_maintenance_notify      = 0
+  create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
 }
