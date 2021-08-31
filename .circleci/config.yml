@@ -950,7 +950,7 @@ workflows:
                 - experimental5
       - switch-colors:
           requires:
-            - deploy
+            - smoketests-readonly
           filters:
             branches:
               only:
