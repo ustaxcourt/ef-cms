@@ -28,9 +28,10 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
  */
 function CaseAssociationRequestFactory(rawProps) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawPropsParam) {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
