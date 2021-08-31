@@ -46,28 +46,18 @@ const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
     process.exit(1);
   }
 
-  let shouldKeepChecking = true;
-  while (shouldKeepChecking) {
-    shouldKeepChecking = false;
-
-    for (const indexName of [
-      'efcms-case-deadline',
-      'efcms-message',
-      'efcms-work-item',
-    ]) {
-      const operationsDestination =
-        destinationInfo.indices[indexName].total.translog.operations;
-      if (operationsDestination > 0) {
-        shouldKeepChecking = true;
-        console.log(
-          `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,
-        );
-        await new Promise(resolve => setTimeout(resolve, 60000));
-        destinationInfo = await getClusterStats({
-          version: destinationVersion,
-        });
-        break;
-      }
+  for (const indexName of [
+    'efcms-case-deadline',
+    'efcms-message',
+    'efcms-work-item',
+  ]) {
+    const operationsDestination =
+      destinationInfo.indices[indexName].total.translog.operations;
+    if (operationsDestination > 0) {
+      console.log(
+        `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,
+      );
+      process.exit(1);
     }
   }
 })();
