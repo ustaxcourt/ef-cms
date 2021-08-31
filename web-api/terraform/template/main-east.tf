@@ -182,13 +182,13 @@ data "aws_s3_bucket_object" "websockets_green_east_object" {
 data "aws_s3_bucket_object" "maintenance_notify_blue_east_object" {
   depends_on = [null_resource.maintenance_notify_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = try("maintenance_notify_blue.js.zip", "maintenance_notify_green.js.zip")
+  key        = "maintenance_notify_blue.js.zip"
 }
 
 data "aws_s3_bucket_object" "maintenance_notify_green_east_object" {
   depends_on = [null_resource.maintenance_notify_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = try("maintenance_notify_green.js.zip", "maintenance_notify_blue.js.zip")
+  key        = "maintenance_notify_green.js.zip"
 }
 
 data "aws_s3_bucket_object" "puppeteer_blue_east_object" {
