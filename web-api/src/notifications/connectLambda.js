@@ -8,6 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.connectLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    applicationContext.logger.error(
+      'Websocket connection full requestContext',
+      {
+        requestContext: event.requestContext,
+      },
+    );
+
     const endpoint = event.requestContext.domainName;
 
     const results = await applicationContext
