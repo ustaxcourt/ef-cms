@@ -20,6 +20,17 @@ resource "null_resource" "api_west_object" {
   }
 }
 
+resource "null_resource" "maintenance_notify_west_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_maintenance_notify.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/maintenance_notify_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 
 resource "null_resource" "websockets_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
@@ -121,6 +132,18 @@ data "aws_s3_bucket_object" "websockets_green_west_object" {
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = "websockets_green.js.zip"
   provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "maintenance_notify_blue_west_object" {
+  depends_on = [null_resource.maintenance_notify_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = try("maintenance_notify_blue.js.zip", "maintenance_notify_green.js.zip")
+}
+
+data "aws_s3_bucket_object" "maintenance_notify_green_west_object" {
+  depends_on = [null_resource.maintenance_notify_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = try("maintenance_notify_green.js.zip", "maintenance_notify_blue.js.zip")
 }
 
 data "aws_s3_bucket_object" "puppeteer_blue_west_object" {
@@ -227,7 +250,7 @@ module "api-west-green" {
   websockets_object         = null_resource.websockets_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
   cron_object               = ""
-  maintenance_notify_object = ""
+  maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
   environment               = var.environment
@@ -254,11 +277,11 @@ module "api-west-green" {
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   cron_object_hash               = ""
-  maintenance_notify_object_hash = ""
+  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
   streams_object_hash            = ""
   create_cron                    = 0
   create_streams                 = 0
-  create_maintenance_notify      = 0
+  create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
 }
