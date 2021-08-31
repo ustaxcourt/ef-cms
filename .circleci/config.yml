@@ -970,7 +970,3 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
-      - smoketests-readonly:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - migrate
