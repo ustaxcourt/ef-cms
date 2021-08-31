@@ -24,7 +24,7 @@ describe('saveUserConnection', () => {
       Item: {
         connectionId: 'abc',
         endpoint: {},
-        gsi1pk: 'connection|abc',
+        gsi1pk: 'connection',
         pk: 'user|a66ac519-fd1a-44ac-8226-b4a53d348677',
         sk: 'connection|abc',
         ttl: expect.anything(),

@@ -124,7 +124,7 @@ describe('deleteTrialSessionInteractor', () => {
     expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
   });
 
-  it('does not delete the trial session working copy and if there is no judge on the trial session', async () => {
+  it('does not delete the trial session working copy if there is no judge on the trial session', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,

@@ -24,6 +24,7 @@ import {
   getContactPrimary,
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
+import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -55,7 +56,6 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
-
 const ADVANCED_SEARCH_TABS = {
   CASE: 'case',
   OPINION: 'opinion',
@@ -145,6 +145,8 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getJudgeLastName,
+      isExternalUser: User.isExternalUser,
+      isInternalUser: User.isInternalUser,
       sortDocketEntries,
     };
   },
