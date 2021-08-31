@@ -13,6 +13,10 @@ exports.sendMaintenanceNotificationsInteractor = async (
     .getPersistenceGateway()
     .getAllWebSocketConnections({ applicationContext });
 
+  applicationContext.logger.error('0 allWebsocketConnections', {
+    allWebsocketConnections,
+  });
+
   await applicationContext.getPersistenceGateway().updateMaintenanceMode({
     applicationContext,
     maintenanceMode,
@@ -21,6 +25,11 @@ exports.sendMaintenanceNotificationsInteractor = async (
   const maintenanceModeMessage = maintenanceMode
     ? 'maintenance_mode_engaged'
     : 'maintenance_mode_disengaged';
+
+  applicationContext.logger.error(
+    '1 maintenanceModeMessage',
+    maintenanceModeMessage,
+  );
 
   const messageStringified = JSON.stringify({
     action: maintenanceModeMessage,

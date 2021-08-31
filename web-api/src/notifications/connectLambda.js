@@ -17,7 +17,7 @@ exports.connectLambda = event =>
         endpoint,
       });
 
-    applicationContext.logger.info('Websocket connected', {
+    applicationContext.logger.error('Websocket connected', {
       requestId: {
         connection: event.requestContext.connectionId,
       },
