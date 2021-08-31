@@ -72,4 +72,38 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.primary.showNonstandardForm).toBe(true);
     expect(result.primary.showSecondaryDocumentSelect).toBe(false);
   });
+
+  it('returns an array of documentTypes for select sans [NCA, NCP, NCAP]', () => {
+    const categoryKey = 'Application';
+    const categoryIdx = 0;
+
+    const { category } =
+      DOCUMENT_EXTERNAL_CATEGORIES_MAP[categoryKey][categoryIdx];
+
+    const result = runCompute(completeDocumentTypeSectionHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+        form: {
+          category,
+        },
+      },
+    });
+
+    expect(result.primary).toBeTruthy();
+    expect(result.documentTypesForSelectSorted).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          eventCode: 'NCA',
+        }),
+        expect.objectContaining({
+          eventCode: 'NCP',
+        }),
+        expect.objectContaining({
+          eventCode: 'NCAP',
+        }),
+      ]),
+    );
+  });
 });

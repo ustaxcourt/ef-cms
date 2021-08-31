@@ -22,9 +22,10 @@ function SupportingDocumentInformationFactory(
   VALIDATION_ERROR_MESSAGES,
 ) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
     this.certificateOfService = rawProps.certificateOfService;

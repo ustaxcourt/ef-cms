@@ -7,8 +7,11 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_CASE_WITH_SECONDARY_OTHERS,
+} = require('../../test/mockCase');
 const { getContactPrimary } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
 const { updateContactInteractor } = require('./updateContactInteractor');
 const { User } = require('../entities/User');
 
@@ -239,6 +242,17 @@ describe('updates the contact on a case', () => {
     ).rejects.toThrow('Unauthorized for update case contact');
   });
 
+  it('throws an error if the user to update is not found one the case', async () => {
+    mockCase = { ...MOCK_CASE_WITH_SECONDARY_OTHERS, petitioners: [] };
+
+    await expect(
+      updateContactInteractor(applicationContext, {
+        contactInfo: mockCaseContactPrimary,
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Error: Petitioner was not found on case 109-19.');
+  });
+
   it('does not update the case if the contact information does not change', async () => {
     applicationContext
       .getUtilities()
@@ -338,5 +352,24 @@ describe('updates the contact on a case', () => {
     ).toMatchObject({
       caseTitle: 'Test Petitioner',
     });
+  });
+
+  it('should NOT update the case when the contact information has not changed', async () => {
+    applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue(null);
+
+    applicationContext
+      .getUtilities()
+      .getDocumentTypeForAddressChange.mockReturnValue(null);
+
+    await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+      },
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).not.toHaveBeenCalled();
   });
 });

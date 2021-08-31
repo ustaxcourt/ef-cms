@@ -30,7 +30,8 @@ export const formattedMessageDetail = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);
   const user = applicationContext.getCurrentUser();
-  const { USER_ROLES } = applicationContext.getConstants();
+  const { UNSERVABLE_EVENT_CODES, USER_ROLES } =
+    applicationContext.getConstants();
 
   const { draftDocuments } = applicationContext
     .getUtilities()
@@ -43,7 +44,6 @@ export const formattedMessageDetail = (get, applicationContext) => {
     'createdAt',
     'desc',
   );
-  const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
   const { isCompleted } = formattedMessages[0];
 

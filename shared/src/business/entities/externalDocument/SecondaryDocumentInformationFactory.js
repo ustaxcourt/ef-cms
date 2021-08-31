@@ -20,7 +20,11 @@ function SecondaryDocumentInformationFactory(
   documentMetadata,
   VALIDATION_ERROR_MESSAGES,
 ) {
+  /**
+   * bare constructor for entity factory
+   */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawProps) {
     this.attachments = rawProps.attachments || false;
     this.category = rawProps.category;
