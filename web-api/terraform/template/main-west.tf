@@ -20,12 +20,6 @@ resource "null_resource" "api_west_object" {
   }
 }
 
-data "archive_file" "zip_maintenance_notify" {
-  type        = "zip"
-  output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
-  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
-}
-
 resource "null_resource" "maintenance_notify_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
   provisioner "local-exec" {
@@ -144,12 +138,14 @@ data "aws_s3_bucket_object" "maintenance_notify_blue_west_object" {
   depends_on = [null_resource.maintenance_notify_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = try("maintenance_notify_blue.js.zip", "maintenance_notify_green.js.zip")
+  provider   = aws.us-west-1
 }
 
 data "aws_s3_bucket_object" "maintenance_notify_green_west_object" {
   depends_on = [null_resource.maintenance_notify_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = try("maintenance_notify_green.js.zip", "maintenance_notify_blue.js.zip")
+  provider   = aws.us-west-1
 }
 
 data "aws_s3_bucket_object" "puppeteer_blue_west_object" {
