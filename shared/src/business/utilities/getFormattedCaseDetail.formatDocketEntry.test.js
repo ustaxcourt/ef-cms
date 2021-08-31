@@ -68,6 +68,103 @@ describe('formatDocketEntry', () => {
     expect(results.isCourtIssuedDocument).toBeFalsy();
   });
 
+  it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
+    const result = formatDocketEntry(applicationContext, {
+      addToCoversheet: true,
+      additionalInfo: 'additional information',
+      createdAt: '2019-03-27T21:53:00.297Z',
+      docketEntryId: 'd-1-2-3',
+      documentTitle: 'desc',
+      documentType: 'Petition',
+      index: '1',
+      isOnDocketRecord: true,
+      servedAt: '2019-03-27T21:53:00.297Z',
+    });
+
+    expect(result.descriptionDisplay).toEqual('desc additional information');
+    expect(result.additionalInfoDisplay).toBeUndefined();
+  });
+
+  it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
+    const result = formatDocketEntry(applicationContext, {
+      additionalInfo: 'additional information',
+      createdAt: '2019-03-27T21:53:00.297Z',
+      docketEntryId: 'd-1-2-3',
+      documentTitle: 'desc',
+      documentType: 'Petition',
+      index: '1',
+      isOnDocketRecord: true,
+      servedAt: '2019-03-27T21:53:00.297Z',
+    });
+
+    expect(result.descriptionDisplay).toEqual('desc');
+    expect(result.additionalInfoDisplay).toEqual('additional information');
+  });
+
+  it('should format certificate of service date', () => {
+    const result = formatDocketEntry(applicationContext, {
+      certificateOfServiceDate: '2019-04-27T21:53:00.297Z',
+      createdAt: '2019-05-27T21:53:00.297Z',
+      docketEntryId: 'd-1-2-3',
+      documentType: 'Petition',
+      index: '1',
+      servedAt: '2019-06-27T21:53:00.297Z',
+    });
+
+    expect(result.certificateOfServiceDateFormatted).toEqual('04/27/19');
+  });
+
+  it('should correctly format legacy served docket entries', () => {
+    const result = formatDocketEntry(applicationContext, {
+      isLegacyServed: true,
+    });
+
+    expect(result.isNotServedDocument).toBeFalsy();
+    expect(result.isUnservable).toBeTruthy();
+  });
+
+  describe('isNotServedDocument', () => {
+    it('should be true when isLegacyServed, isMinuteEntry, and servedAt are undefined', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isLegacyServed: undefined,
+        isMinuteEntry: undefined,
+        servedAt: undefined,
+      });
+
+      expect(result.isNotServedDocument).toBe(true);
+    });
+
+    it('should be false when isLegacyServed is true and isMinuteEntry and servedAt are undefined', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isLegacyServed: true,
+        isMinuteEntry: undefined,
+        servedAt: undefined,
+      });
+
+      expect(result.isNotServedDocument).toBe(false);
+    });
+
+    it('should be false when isMinuteEntry is true and isLegacyServed and servedAt are undefined', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isLegacyServed: undefined,
+        isMinuteEntry: true,
+        servedAt: undefined,
+      });
+
+      expect(result.isNotServedDocument).toBe(false);
+    });
+
+    it('should be false when servedAt is defined and isLegacyServed and isMinuteEntry are undefined', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isLegacyServed: undefined,
+        isMinuteEntry: undefined,
+        servedAt: '2019-06-27T21:53:00.297Z',
+      });
+
+      expect(result.isNotServedDocument).toBe(false);
+    });
+  });
+
   describe('isInProgress', () => {
     it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
       const results = formatDocketEntry(applicationContext, {
@@ -129,5 +226,122 @@ describe('formatDocketEntry', () => {
 
       expect(results.isInProgress).toEqual(false);
     });
+  });
+
+  describe('qcNeeded', () => {
+    it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isFileAttached: true,
+        isLegacySealed: true,
+        isOnDocketRecord: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+        workItem: {
+          completedAt: undefined,
+          isRead: false,
+        },
+      });
+      expect(result.qcNeeded).toBeTruthy();
+    });
+
+    it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isFileAttached: false,
+        isLegacySealed: true,
+        isOnDocketRecord: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+        workItem: {
+          completedAt: undefined,
+          isRead: false,
+        },
+      });
+
+      expect(result.qcNeeded).toBeFalsy();
+    });
+
+    it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
+      const result = formatDocketEntry(applicationContext, {
+        isFileAttached: true,
+        isLegacySealed: true,
+        isOnDocketRecord: true,
+        servedAt: '2019-03-01T21:40:46.415Z',
+      });
+
+      expect(result.qcNeeded).toBeFalsy();
+    });
+  });
+
+  describe('createdAtFormatted', () => {
+    const createdAtFormattedTests = [
+      {
+        description:
+          'should format docket entries and set createdAtFormatted to the formatted filingDate if document is not a court-issued document',
+        docketEntry: {
+          createdAt: '2019-03-11T17:29:13.120Z',
+          docketEntryId: '47d9735b-ac41-4adf-8a3c-74d73d3622fb',
+          documentType: 'Petition',
+          filingDate: '2019-04-19T17:29:13.120Z',
+          index: '1',
+          isOnDocketRecord: true,
+        },
+        expectation: '04/19/19',
+      },
+      {
+        description:
+          'should format docket records and set createdAtFormatted to undefined if document is an unserved court-issued document',
+        docketEntry: {
+          documentTitle: 'Order [Judge Name] [Anything]',
+          documentType: 'Order that case is assigned',
+          eventCode: 'OAJ',
+          filingDate: '2019-04-19T17:29:13.120Z',
+        },
+        expectation: undefined,
+      },
+      {
+        description:
+          'should be a formatted date string using the filingDate if the document is on the docket record and is served',
+        docketEntry: {
+          createdAt: '2019-03-11T17:29:13.120Z',
+          filingDate: '2019-04-19T17:29:13.120Z',
+          isOnDocketRecord: true,
+          servedAt: '2019-06-19T17:29:13.120Z',
+        },
+        expectation: '04/19/19',
+      },
+      {
+        description:
+          'should be a formatted date string using the filingDate if the document is on the docket record and is an unserved external document',
+        docketEntry: {
+          createdAt: '2019-03-11T17:29:13.120Z',
+          filingDate: '2019-04-19T17:29:13.120Z',
+          isOnDocketRecord: true,
+          servedAt: undefined,
+        },
+        expectation: '04/19/19',
+      },
+      {
+        description:
+          'should be undefined if the document is on the docket record and is an unserved court-issued document',
+        docketEntry: {
+          createdAt: '2019-03-11T17:29:13.120Z',
+          documentTitle: 'Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          filingDate: '2019-04-19T17:29:13.120Z',
+          isOnDocketRecord: true,
+          servedAt: undefined,
+        },
+        expectation: undefined,
+      },
+    ];
+
+    createdAtFormattedTests.forEach(
+      ({ description, docketEntry, expectation }) => {
+        it(`${description}`, () => {
+          const result = formatDocketEntry(applicationContext, docketEntry);
+
+          expect(result.createdAtFormatted).toEqual(expectation);
+        });
+      },
+    );
   });
 });

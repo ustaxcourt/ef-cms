@@ -9,9 +9,10 @@ import { uploadToS3 } from './uploadToS3';
 describe('uploadToS3', () => {
   let getObjectMock = () => {
     return {
-      promise: async () => ({
-        Body: testPdfDoc,
-      }),
+      promise: () =>
+        Promise.resolve({
+          Body: testPdfDoc,
+        }),
     };
   };
 

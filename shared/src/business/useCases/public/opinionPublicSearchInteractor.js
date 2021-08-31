@@ -25,6 +25,7 @@ exports.opinionPublicSearchInteractor = async (
   applicationContext,
   {
     caseTitleOrPetitioner,
+    dateRange,
     docketNumber,
     endDate,
     judge,
@@ -35,6 +36,7 @@ exports.opinionPublicSearchInteractor = async (
 ) => {
   const opinionSearch = new DocumentSearch({
     caseTitleOrPetitioner,
+    dateRange,
     docketNumber,
     endDate,
     judge,

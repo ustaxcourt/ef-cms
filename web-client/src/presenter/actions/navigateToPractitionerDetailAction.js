@@ -14,8 +14,8 @@ export const navigateToPractitionerDetailAction = async ({
   props,
   router,
 }) => {
-  const user = get(state.form);
-  const barNumber = props.barNumber || user.barNumber;
+  const userBarNumber = get(state.form.barNumber);
+  const barNumber = props.barNumber || userBarNumber;
 
   if (barNumber) {
     await router.route(`/practitioner-detail/${barNumber}`);

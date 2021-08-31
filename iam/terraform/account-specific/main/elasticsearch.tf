@@ -4,7 +4,7 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
 
 resource "aws_elasticsearch_domain" "efcms-logs" {
   domain_name           = "info"
-  elasticsearch_version = "7.4"
+  elasticsearch_version = "7.10"
 
   cluster_config {
     instance_type  = var.es_logs_instance_type

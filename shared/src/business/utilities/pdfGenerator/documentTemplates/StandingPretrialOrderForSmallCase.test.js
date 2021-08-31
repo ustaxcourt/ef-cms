@@ -52,7 +52,7 @@ describe('StandingPretrialOrderForSmallCase', () => {
       />,
     );
 
-    const trialInformation = wrapper.find('.dashed-box');
+    const trialInformation = wrapper.find('#trial-information-card');
 
     expect(trialInformation.text()).toContain(trialInfo.trialLocation);
     expect(trialInformation.text()).toContain(trialInfo.formattedStartTime);

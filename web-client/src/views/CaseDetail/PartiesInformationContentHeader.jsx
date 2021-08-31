@@ -4,13 +4,12 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const PartiesInformationContentHeader = connect(
+export const PartiesInformationContentHeader = connect(
   {
     caseInformationHelper: state.caseInformationHelper,
     form: state.form,
     openAddPrivatePractitionerModalSequence:
       sequences.openAddPrivatePractitionerModalSequence,
-    partiesInformationHelper: state.partiesInformationHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -97,5 +96,3 @@ const PartiesInformationContentHeader = connect(
     );
   },
 );
-
-export { PartiesInformationContentHeader };

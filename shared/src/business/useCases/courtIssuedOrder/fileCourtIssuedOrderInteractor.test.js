@@ -19,7 +19,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   const caseRecord = {
     caseCaption: 'Caption',
-    caseType: CASE_TYPES_MAP.deficiency,
+    caseType: CASE_TYPES_MAP.whistleblower,
     createdAt: '',
     docketEntries: [
       {
@@ -48,6 +48,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       },
     ],
     docketNumber: '45678-18',
+    docketNumberWithSuffix: '45678-18W',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     petitioners: [
@@ -253,6 +254,57 @@ describe('fileCourtIssuedOrderInteractor', () => {
       documentContentsId: expect.anything(),
       draftOrderState: {},
     });
+  });
+
+  it('should append docket number with suffix and case caption to document contents before storing', async () => {
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentContents: 'I am some document contents',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const savedDocumentContents = JSON.parse(
+      applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
+    ).documentContents;
+
+    expect(savedDocumentContents).toContain(caseRecord.docketNumberWithSuffix);
+    expect(savedDocumentContents).toContain(caseRecord.caseCaption);
+  });
+
+  it('should set documentMetadata documentContents if parseAndScrapePdfContents returns content', async () => {
+    const mockDocumentContents = 'bloop ee doop brnabowbow';
+    applicationContext
+      .getUseCaseHelpers()
+      .parseAndScrapePdfContents.mockReturnValue(mockDocumentContents);
+
+    await fileCourtIssuedOrderInteractor(applicationContext, {
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: mockUserId,
+        signedJudgeName: 'Dredd',
+      },
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const savedDocumentContents = JSON.parse(
+      applicationContext
+        .getPersistenceGateway()
+        .saveDocumentFromLambda.mock.calls[0][0].document.toString(),
+    ).documentContents;
+
+    expect(savedDocumentContents).toContain(mockDocumentContents);
   });
 
   it('should parse and scrape pdf contents', async () => {

@@ -566,6 +566,12 @@ const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
+  getOrderSearchEnabled,
+} = require('../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled');
+const {
+  getOrderSearchEnabledInteractor,
+} = require('../../shared/src/business/useCases/search/getOrderSearchEnabledInteractor');
+const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
 const {
@@ -719,8 +725,8 @@ const {
   getWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/getWorkItemInteractor');
 const {
-  getWorkItemMappingsByDocketNumber,
-} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemMappingsByDocketNumber');
+  getWorkItemsByDocketNumber,
+} = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByDocketNumber');
 const {
   getWorkItemsByWorkItemId,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
@@ -1117,9 +1123,6 @@ const {
   updateUserRecords,
 } = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
 const {
-  updateWorkItem,
-} = require('../../shared/src/persistence/dynamo/workitems/updateWorkItem');
-const {
   updateWorkItemAssociatedJudge,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
 const {
@@ -1369,7 +1372,6 @@ const gatewayMethods = {
     updateUser,
     updateUserCaseNote,
     updateUserEmail,
-    updateWorkItem,
   }),
   // methods below are not known to create "entity" records
   advancedDocumentSearch,
@@ -1424,6 +1426,7 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
+  getOrderSearchEnabled,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1448,7 +1451,7 @@ const gatewayMethods = {
   getUsersInSection,
   getWebSocketConnectionsByUserId,
   getWorkItemById,
-  getWorkItemMappingsByDocketNumber,
+  getWorkItemsByDocketNumber,
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
@@ -1833,6 +1836,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
+        getOrderSearchEnabledInteractor: applicationContext =>
+          environment.stage === 'local'
+            ? true
+            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,

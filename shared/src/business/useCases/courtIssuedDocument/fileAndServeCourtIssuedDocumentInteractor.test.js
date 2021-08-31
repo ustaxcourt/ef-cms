@@ -17,10 +17,15 @@ const {
 const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
+const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
+
+jest.mock('./addServedStampToDocument', () => ({
+  addServedStampToDocument: jest.fn(),
+}));
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -271,7 +276,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should remove the case from the trial session if the case has a trialSessionId', async () => {
+  it('should delete the case from the trial session if the case has a trialSessionId and is not calendared', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
@@ -283,6 +288,62 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         createdAt: '2019-10-27T05:00:00.000Z',
         gsi1pk: 'trial-session-catalog',
         isCalendared: false,
+        judge: {
+          name: 'Judge Colvin',
+          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+        },
+        maxCases: 100,
+        pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: 'Regular',
+        sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+        startDate: '2019-11-27T05:00:00.000Z',
+        startTime: '10:00',
+        swingSession: true,
+        swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+        term: 'Fall',
+        termYear: '2019',
+        trialLocation: 'Houston, Texas',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      });
+
+    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        date: '2019-03-01T21:40:46.415Z',
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
+        documentType: 'Order',
+        eventCode: 'OD',
+        freeText: 'Dogs',
+        generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
+        serviceStamp: 'Served',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession,
+    ).toHaveBeenCalled();
+  });
+
+  it('should remove the case from the trial session if the case has a trialSessionId and isCalendared', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        caseOrder: [
+          {
+            docketNumber: '101-20',
+          },
+        ],
+        createdAt: '2019-10-27T05:00:00.000Z',
+        gsi1pk: 'trial-session-catalog',
+        isCalendared: true,
         judge: {
           name: 'Judge Colvin',
           userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
@@ -446,10 +507,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateWorkItem.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
-      workItemToUpdate: { completedAt: expect.anything() },
+      workItem: { completedAt: expect.anything() },
     });
   });
 
@@ -603,42 +663,21 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it('should call the persistence method to unset the pending service status on the document if there is an error when serving', async () => {
-    const docketEntry = caseRecord.docketEntries[0];
-    docketEntry.isPendingService = false;
+  it('should include `Entered and Served` in the the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
+    const docketEntry = {
+      ...caseRecord.docketEntries[0],
+      documentType: 'Notice',
+      eventCode: 'ODJ',
+    };
 
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
-        new Error('whoops, that is an error!'),
-      );
-
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
-          ...docketEntry,
-        },
-      }),
-    ).rejects.toThrow('whoops, that is an error!');
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: true,
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      documentMeta: {
+        ...docketEntry,
+      },
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: false,
-    });
+      addServedStampToDocument.mock.calls[0][0].serviceStampText,
+    ).toContain('Entered and Served');
   });
 });

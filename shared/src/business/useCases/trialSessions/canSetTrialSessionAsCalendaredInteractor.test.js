@@ -39,7 +39,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
     ).toThrow('Unauthorized');
   });
 
-  it('gets the result back from the interactor', () => {
+  it('gets the result back from the interactor with empty fields and an in-person trial proceeding', () => {
     user = {
       role: ROLES.petitionsClerk,
       userId: 'petitionsclerk',
@@ -56,7 +56,46 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     expect(result).toEqual({
       canSetAsCalendared: false,
-      emptyFields: ['address1', 'city', 'state', 'postalCode', 'judge'],
+      emptyFields: [
+        'address1',
+        'city',
+        'state',
+        'postalCode',
+        'judge',
+        'chambersPhoneNumber',
+      ],
+      isRemote: false,
+    });
+  });
+
+  it('gets the result back from the interactor with no empty fields and a remote trial proceeding', () => {
+    user = {
+      role: ROLES.petitionsClerk,
+      userId: 'petitionsclerk',
+    };
+
+    applicationContext.getUniqueId.mockReturnValue('easy-as-abc-123');
+
+    const result = canSetTrialSessionAsCalendaredInteractor(
+      applicationContext,
+      {
+        trialSession: {
+          ...MOCK_TRIAL,
+
+          chambersPhoneNumber: '1234567890',
+          joinPhoneNumber: '099987654321',
+          judge: { name: 'Bootsy Collins' },
+          meetingId: '4',
+          password: '42',
+          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        },
+      },
+    );
+
+    expect(result).toEqual({
+      canSetAsCalendared: true,
+      emptyFields: [],
+      isRemote: true,
     });
   });
 });

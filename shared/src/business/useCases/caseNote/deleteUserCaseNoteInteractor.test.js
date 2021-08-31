@@ -41,4 +41,26 @@ describe('deleteUserCaseNoteInteractor', () => {
 
     expect(caseNote).toBeDefined();
   });
+
+  it('deletes a case note associated with the current userId when there is no associated judge', async () => {
+    const mockUser = new User({
+      name: 'Judge Colvin',
+      role: ROLES.judge,
+      userId: '123456',
+    });
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
+    applicationContext.getUseCases.mockReturnValue({
+      getJudgeForUserChambersInteractor: () => null,
+    });
+
+    await deleteUserCaseNoteInteractor(applicationContext, {
+      docketNumber: '123-45',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteUserCaseNote.mock
+        .calls[0][0].userId,
+    ).toEqual('123456');
+  });
 });

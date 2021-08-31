@@ -213,12 +213,33 @@ describe('updateCaseDetailsInteractor', () => {
       docketNumber: mockCase.docketNumber,
     });
 
-    const wavedDocument = result.docketEntries.find(
+    const paidDocument = result.docketEntries.find(
       entry =>
         entry.documentType === MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
     );
 
-    expect(wavedDocument).toBeTruthy();
+    expect(paidDocument).toBeTruthy();
+  });
+
+  it('should not create a docket entry when payment status remains unpaid', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      });
+
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result).toMatchObject({
+      docketEntries: MOCK_CASE.docketEntries,
+    });
   });
 
   it('should call createCaseTrialSortMappingRecords if the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
@@ -276,6 +297,29 @@ describe('updateCaseDetailsInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...generalDocketReadyForTrialCase,
+        procedureType: 'Regular',
+      });
+
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Small',
+      },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
+  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        preferredTrialCity: undefined,
         procedureType: 'Regular',
       });
 

@@ -14,7 +14,7 @@ describe('getMessageById', () => {
 
   beforeAll(() => {
     applicationContext.getDocumentClient().get.mockReturnValue({
-      promise: async () => Promise.resolve({ Item: mockMessage }),
+      promise: () => Promise.resolve({ Item: mockMessage }),
     });
   });
 

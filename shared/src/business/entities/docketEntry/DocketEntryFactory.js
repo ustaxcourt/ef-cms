@@ -50,9 +50,10 @@ DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
  */
 function DocketEntryFactory(rawProps) {
   /**
-   *
+   * bare constructor for entity factory
    */
   function entityConstructor() {}
+
   entityConstructor.prototype.init = function init(rawPropsParam) {
     this.additionalInfo = rawPropsParam.additionalInfo;
     this.additionalInfo2 = rawPropsParam.additionalInfo2;
@@ -85,7 +86,7 @@ function DocketEntryFactory(rawProps) {
 
     const { secondaryDocument } = rawPropsParam;
     if (secondaryDocument) {
-      this.secondaryDocument = ExternalDocumentFactory.get(secondaryDocument);
+      this.secondaryDocument = ExternalDocumentFactory(secondaryDocument);
     }
   };
 
@@ -157,7 +158,7 @@ function DocketEntryFactory(rawProps) {
     });
   };
 
-  const exDoc = ExternalDocumentFactory.get(rawProps);
+  const exDoc = ExternalDocumentFactory(rawProps);
   const docketEntryExternalDocumentSchema = exDoc.getSchema();
 
   schema = schema.concat(docketEntryExternalDocumentSchema).concat(

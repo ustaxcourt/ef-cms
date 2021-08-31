@@ -1,4 +1,4 @@
-import { BigHeader } from '../BigHeader';
+import { AdvancedSearchHeader } from './AdvancedSearchHeader';
 import { CaseSearchForm } from './CaseSearchForm';
 import { DocumentSearchResults } from './DocumentSearchResults';
 import { ErrorNotification } from '../ErrorNotification';
@@ -10,6 +10,7 @@ import { PractitionerSearchResults } from './PractitionerSearchResults';
 import { SearchResults } from './SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -52,11 +53,12 @@ export const AdvancedSearch = connect(
   }) {
     return (
       <>
-        <BigHeader text="Search" />
+        <AdvancedSearchHeader />
 
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />
           <SuccessNotification />
+          <WarningNotification />
           <NonMobile>
             <Tabs
               bind="advancedSearchTab"

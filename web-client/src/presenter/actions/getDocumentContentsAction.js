@@ -13,15 +13,15 @@ export const getDocumentContentsAction = async ({
   const { caseDetail, docketEntryIdToEdit } = props;
 
   if (docketEntryIdToEdit) {
-    const { documentContentsId } = caseDetail.docketEntries.find(
+    const docketEntry = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryIdToEdit,
     );
 
-    if (documentContentsId) {
+    if (docketEntry) {
       const { documentContents, richText } = await applicationContext
         .getUseCases()
         .getDocumentContentsForDocketEntryInteractor(applicationContext, {
-          documentContentsId,
+          documentContentsId: docketEntry.documentContentsId,
         });
 
       return { documentContents, richText };

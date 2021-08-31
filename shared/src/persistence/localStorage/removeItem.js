@@ -1,3 +1,1 @@
-exports.removeItem = async ({ key }) => {
-  return window.localStorage.removeItem(key);
-};
+exports.removeItem = ({ key }) => window.localStorage.removeItem(key);

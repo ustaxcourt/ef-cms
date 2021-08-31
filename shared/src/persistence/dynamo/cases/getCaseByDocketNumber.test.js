@@ -10,7 +10,7 @@ const { getCaseByDocketNumber } = require('./getCaseByDocketNumber');
 describe('getCaseByDocketNumber', () => {
   it('should return data as received from persistence', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           Items: [
             {
@@ -45,7 +45,7 @@ describe('getCaseByDocketNumber', () => {
 
   it('should return case and its associated data', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () =>
+      promise: () =>
         Promise.resolve({
           Items: [
             {
@@ -171,7 +171,7 @@ describe('getCaseByDocketNumber', () => {
 
   it('should return default object if nothing is returned from the client query request', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () => Promise.resolve({ Items: [] }),
+      promise: () => Promise.resolve({ Items: [] }),
     });
 
     const result = await getCaseByDocketNumber({
@@ -192,7 +192,7 @@ describe('getCaseByDocketNumber', () => {
 
   it('should return default object if nothing is returned from the client query request', async () => {
     applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: async () => Promise.resolve({ Items: [] }),
+      promise: () => Promise.resolve({ Items: [] }),
     });
 
     const result = await getCaseByDocketNumber({

@@ -1,3 +1,3 @@
-import { clearExistingDocumentAction } from '../actions/editUploadCourtIssuedDocument/clearExistingDocumentAction';
+import { clearExistingDocumentAction } from '../actions/EditUploadCourtIssuedDocument/clearExistingDocumentAction';
 
 export const clearExistingDocumentSequence = [clearExistingDocumentAction];

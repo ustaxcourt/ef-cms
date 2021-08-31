@@ -1,6 +1,5 @@
 import {
   CONTACT_TYPES,
-  INITIAL_DOCUMENT_TYPES,
   ROLES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -21,10 +20,6 @@ describe('partiesInformationHelper', () => {
   const mockParticipant = {
     contactId: '25d51a3b-969e-4bb4-a932-cc9645ba888c',
     contactType: CONTACT_TYPES.participant,
-  };
-  const mockPetitionsClerk = {
-    role: ROLES.petitionsClerk,
-    userId: '0dd60083-ab1f-4a43-95f8-bfbc69b48777',
   };
   let mockPetitioner;
   let mockPrivatePractitioner;
@@ -181,17 +176,13 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
+      expect(
+        result.formattedPetitioners[0].representingPractitioners,
+      ).toMatchObject([
         {
-          ...mockPetitioner,
-          hasCounsel: true,
-          representingPractitioners: [
-            {
-              ...mockPrivatePractitioner,
-              formattedEmail: mockEmail,
-              representing: [mockPetitioner.contactId],
-            },
-          ],
+          ...mockPrivatePractitioner,
+          formattedEmail: mockEmail,
+          representing: [mockPetitioner.contactId],
         },
       ]);
     });
@@ -209,19 +200,10 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
-        {
-          ...mockPetitioner,
-          hasCounsel: true,
-          representingPractitioners: [
-            {
-              ...mockPrivatePractitioner,
-              email: undefined,
-              formattedEmail: 'No email provided',
-            },
-          ],
-        },
-      ]);
+      expect(
+        result.formattedPetitioners[0].representingPractitioners[0]
+          .formattedEmail,
+      ).toEqual('No email provided');
     });
 
     it('should set hasCounsel to false for a petitioner that is not represented', () => {
@@ -237,13 +219,7 @@ describe('partiesInformationHelper', () => {
         },
       });
 
-      expect(result.formattedPetitioners).toMatchObject([
-        {
-          ...mockPetitioner,
-          hasCounsel: false,
-          representingPractitioners: [],
-        },
-      ]);
+      expect(result.formattedPetitioners[0].hasCounsel).toEqual(false);
     });
 
     it('should set formattedEmail for a petitioner that has a verified email', () => {
@@ -375,136 +351,6 @@ describe('partiesInformationHelper', () => {
   });
 
   describe('formattedRespondents', () => {
-    it("should set formattedEmail to the counsel's email when it is defined and there is no pending email", () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [mockIrsPractitioner],
-          },
-        },
-      });
-
-      expect(result.formattedRespondents[0].formattedEmail).toBe(mockEmail);
-    });
-
-    it('should set formattedEmail to `No email provided` when the respondent does not have an email or a pending email', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [{ ...mockIrsPractitioner, email: undefined }],
-          },
-        },
-      });
-
-      expect(result.formattedRespondents[0].formattedEmail).toBe(
-        'No email provided',
-      );
-    });
-
-    it('should set formattedEmail to undefined, and set formattedPending email when the respondent does not have an email but has a pending email', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [{ ...mockIrsPractitioner, email: undefined }],
-          },
-          screenMetadata: {
-            pendingEmails: {
-              [mockIrsPractitioner.userId]: mockEmail,
-            },
-          },
-        },
-      });
-
-      expect(result.formattedRespondents[0].formattedEmail).toBeUndefined();
-      expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
-        `${mockEmail} (Pending)`,
-      );
-    });
-
-    it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to email when it is defined', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [
-              { ...mockIrsPractitioner, email: 'lalal@example' },
-            ],
-          },
-          screenMetadata: {
-            pendingEmails: {
-              [mockIrsPractitioner.userId]: mockEmail,
-            },
-          },
-        },
-      });
-
-      expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
-        `${mockEmail} (Pending)`,
-      );
-      expect(result.formattedRespondents[0].formattedEmail).toBe(
-        'lalal@example',
-      );
-    });
-
-    it('should set formattedPendingEmail when the respondent has a pending email and formattedEmail to undefined when it is the same as the pending email', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [{ ...mockIrsPractitioner, email: mockEmail }],
-          },
-          screenMetadata: {
-            pendingEmails: {
-              [mockIrsPractitioner.userId]: mockEmail,
-            },
-          },
-        },
-      });
-
-      expect(result.formattedRespondents[0].formattedPendingEmail).toBe(
-        `${mockEmail} (Pending)`,
-      );
-      expect(result.formattedRespondents[0].formattedEmail).toBeUndefined();
-    });
-
-    it('should not set formattedPendingEmail when the respondent has no pending email', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [mockIrsPractitioner],
-          },
-          screenMetadata: {
-            pendingEmails: {
-              [mockIrsPractitioner.userId]: undefined,
-            },
-          },
-        },
-      });
-
-      expect(
-        result.formattedRespondents[0].formattedPendingEmail,
-      ).toBeUndefined();
-    });
-
-    it('should not set formattedPendingEmail when screenMetadata.pendingEmails is undefined', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            irsPractitioners: [mockIrsPractitioner],
-          },
-        },
-      });
-
-      expect(
-        result.formattedRespondents[0].formattedPendingEmail,
-      ).toBeUndefined();
-    });
-
     it('should set canEditRespondent to true for internal users', () => {
       const result = runCompute(partiesInformationHelper, {
         state: {
@@ -567,232 +413,6 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.showParticipantsTab).toEqual(true);
-    });
-  });
-
-  describe('canEditPetitioner', () => {
-    it('is false when the petition has not been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: undefined,
-              },
-            ],
-            petitioners: [mockPetitioner],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
-    });
-
-    it('is true when the user is an internal user with permission to edit petitioner info and the petition has been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [
-              {
-                contactType: CONTACT_TYPES.primary,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
-    });
-
-    it('is false when the petitioner is otherPetitioner and we are logged in as an external user', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPetitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [
-              {
-                contactType: CONTACT_TYPES.otherPetitioner,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
-    });
-
-    it('is false when the user is an internal user without permission to edit petitioner info', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPetitionsClerk),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [
-              {
-                contactType: CONTACT_TYPES.primary,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(false);
-    });
-
-    it('is true when the user is the corresponding petitioner and the petition has been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPetitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [mockPetitioner],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBe(true);
-    });
-
-    it('is false when the user is not the corresponding petitioner and the petition has been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPetitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [
-              {
-                ...mockPetitioner,
-                contactId: '38eb11a1-53be-4a5d-967c-b7334ddfd82f',
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
-    });
-
-    it('is true when the current user is a private practitioner associated with the case and the petition has been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPrivatePractitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [mockPetitioner],
-            privatePractitioners: [
-              {
-                ...mockPrivatePractitioner,
-                representing: [mockPetitioner.contactId],
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBeTruthy();
-    });
-
-    it('is false when the current user is a private practitioner associated with the case and the petition has been served BUT the petitioner is an otherPetitioner', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPrivatePractitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [
-              {
-                ...mockPetitioner,
-                contactType: CONTACT_TYPES.primary,
-              },
-            ],
-            privatePractitioners: [
-              {
-                ...mockPrivatePractitioner,
-                representing: [mockPetitioner.contactId],
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBeTruthy();
-    });
-
-    it('is false when the current user is a private practitioner not associated with the case and the petition has been served', () => {
-      const result = runCompute(partiesInformationHelper, {
-        state: {
-          ...getBaseState(mockPrivatePractitioner),
-          caseDetail: {
-            docketEntries: [
-              {
-                documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                servedAt: '2020-08-01',
-              },
-            ],
-            petitioners: [mockPetitioner],
-          },
-        },
-      });
-
-      expect(result.formattedPetitioners[0].canEditPetitioner).toBeFalsy();
-    });
-
-    it('should not throw an exception when privatePractitioners is undefined', () => {
-      expect(() =>
-        runCompute(partiesInformationHelper, {
-          state: {
-            ...getBaseState(mockPrivatePractitioner),
-            caseDetail: {
-              docketEntries: [
-                {
-                  documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-                  servedAt: '2020-08-01',
-                },
-              ],
-              petitioners: [mockPetitioner],
-            },
-          },
-        }),
-      ).not.toThrow();
     });
   });
 
