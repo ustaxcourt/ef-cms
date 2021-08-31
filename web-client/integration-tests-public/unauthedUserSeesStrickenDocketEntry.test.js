@@ -32,7 +32,7 @@ describe('unauthed user sees stricken docket entry', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates a case', () => {

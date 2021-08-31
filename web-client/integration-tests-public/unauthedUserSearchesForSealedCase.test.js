@@ -23,7 +23,7 @@ describe('unauthed user searches for sealed case', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case to search for', () => {

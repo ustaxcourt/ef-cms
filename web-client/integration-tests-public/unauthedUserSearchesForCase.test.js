@@ -31,7 +31,7 @@ describe('unauthed user searches for case', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case to search for', () => {

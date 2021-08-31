@@ -58,7 +58,7 @@ function createCaseWithCaption(captionString) {
     });
 
     afterAll(() => {
-      cerebralTest.closeSocket();
+      testClient.closeSocket();
     });
 
     describe('Petitioner creates the case with the desired caption string', () => {

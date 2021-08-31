@@ -69,7 +69,7 @@ describe('Create and serve a case to test contactPrimary.name', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case', () => {
@@ -104,7 +104,7 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case', () => {
@@ -140,7 +140,7 @@ describe('Create and serve a case to test contactSecondary.name', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case', () => {
@@ -176,7 +176,7 @@ describe('Create and serve a case to test caseCaption', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case', () => {
@@ -207,7 +207,7 @@ describe('Create and serve a case to test contactPrimary.name with terms out of 
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   describe('Petitioner creates case', () => {

@@ -49,7 +49,7 @@ function createCaseWithSecondaryName(name) {
     });
 
     afterAll(() => {
-      cerebralTest.closeSocket();
+      testClient.closeSocket();
     });
 
     describe(`Petitioner creates case for ${name}`, () => {
