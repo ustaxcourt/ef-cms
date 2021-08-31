@@ -31,7 +31,7 @@ export const validateUserContactAction = ({
   } else {
     return path.error({
       alertError: {
-        title: 'BOOO YOU DID BAD THINGS',
+        title: 'Errors were found. Please correct your form and resubmit.',
       },
       errors: {
         contact: errors,
