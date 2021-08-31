@@ -114,7 +114,10 @@ exports.generateChangeOfAddress = async ({
         howMuch: -6,
         units: 'months',
       });
-      const isOpen = caseEntity.status !== CASE_STATUS_TYPES.closed;
+      const isOpen = ![
+        CASE_STATUS_TYPES.closed,
+        CASE_STATUS_TYPES.new,
+      ].includes(caseEntity.status);
       const isRecent =
         caseEntity.closedDate &&
         dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
