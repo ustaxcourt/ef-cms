@@ -9,7 +9,7 @@ describe('Unauthed user views health check', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   unauthedUserViewsHealthCheck(cerebralTest);

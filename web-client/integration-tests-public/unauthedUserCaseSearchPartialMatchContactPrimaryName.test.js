@@ -57,7 +57,7 @@ function createCase(name) {
     });
 
     afterAll(() => {
-      cerebralTest.closeSocket();
+      testClient.closeSocket();
     });
 
     describe(`Petitioner creates case for ${name}`, () => {
