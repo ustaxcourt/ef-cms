@@ -20,6 +20,12 @@ resource "null_resource" "api_west_object" {
   }
 }
 
+data "archive_file" "zip_maintenance_notify" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/maintenance-notify.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/maintenance-notify.js"
+}
+
 resource "null_resource" "maintenance_notify_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
   provisioner "local-exec" {
