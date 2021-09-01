@@ -1,29 +1,23 @@
 import { state } from 'cerebral';
 
 /**
- * gets the maintenance mode value
+ * gets the maintenance mode value for the public site
  *
  * @param {object} applicationContext object that contains all the context specific methods
- * @param {object} get the cerebral get object
  * @param {object} path the cerebral path object
  * @param {object} store the cerebral store
  * @returns {object} path.maintenanceOn if true, path.maintenanceOff if false
  */
-export const getMaintenanceModeAction = async ({
+export const getMaintenanceModeForPublicAction = async ({
   applicationContext,
-  get,
   path,
   store,
 }) => {
-  let maintenanceMode = get(state.maintenanceMode);
+  const maintenanceMode = await applicationContext
+    .getUseCases()
+    .getMaintenanceModeInteractor(applicationContext);
 
-  if (maintenanceMode === undefined) {
-    maintenanceMode = await applicationContext
-      .getUseCases()
-      .getMaintenanceModeInteractor(applicationContext);
-
-    store.set(state.maintenanceMode, maintenanceMode);
-  }
+  store.set(state.maintenanceMode, maintenanceMode);
 
   return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
 };

@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getMaintenanceModeAction } from './getMaintenanceModeAction';
+import { getMaintenanceModeForPublicAction } from './getMaintenanceModeForPublicAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getMaintenanceModeAction', () => {
+describe('getMaintenanceModeForPublicAction', () => {
   const pathMaintenanceOnStub = jest.fn();
   const pathMaintenanceOffStub = jest.fn();
 
@@ -21,7 +21,7 @@ describe('getMaintenanceModeAction', () => {
   });
 
   it('should set maintenanceMode on state', async () => {
-    const result = await runAction(getMaintenanceModeAction, {
+    const result = await runAction(getMaintenanceModeForPublicAction, {
       modules: {
         presenter,
       },
@@ -32,7 +32,7 @@ describe('getMaintenanceModeAction', () => {
   });
 
   it('returns path.maintenanceOn if maintenance mode is turned on', async () => {
-    await runAction(getMaintenanceModeAction, {
+    await runAction(getMaintenanceModeForPublicAction, {
       modules: {
         presenter,
       },
@@ -47,7 +47,7 @@ describe('getMaintenanceModeAction', () => {
       .getUseCases()
       .getMaintenanceModeInteractor.mockReturnValue(false);
 
-    await runAction(getMaintenanceModeAction, {
+    await runAction(getMaintenanceModeForPublicAction, {
       modules: {
         presenter,
       },
@@ -55,20 +55,5 @@ describe('getMaintenanceModeAction', () => {
     });
 
     expect(pathMaintenanceOffStub).toHaveBeenCalled();
-  });
-
-  it('should not retrieve maintenanceMode from persistence when it is already defined in state', async () => {
-    await runAction(getMaintenanceModeAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        maintenanceMode: true,
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getMaintenanceModeInteractor,
-    ).not.toHaveBeenCalled();
   });
 });
