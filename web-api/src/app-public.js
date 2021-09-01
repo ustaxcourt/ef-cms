@@ -31,6 +31,9 @@ const {
   getCaseForPublicDocketSearchLambda,
 } = require('./public-api/getCaseForPublicDocketSearchLambda');
 const {
+  getMaintenanceModeLambda,
+} = require('./maintenance/getMaintenanceModeLambda');
+const {
   getPublicDocumentDownloadUrlLambda,
 } = require('./public-api/getPublicDocumentDownloadUrlLambda');
 const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
@@ -78,5 +81,9 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
+app.get(
+  '/public-api/maintenance-mode',
+  lambdaWrapper(getMaintenanceModeLambda),
+);
 
 exports.app = app;
