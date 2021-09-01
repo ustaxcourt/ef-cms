@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  CASE_STATUS_TYPES,
+} = require('../../../business/entities/EntityConstants');
 
 /**
  * getIndexedCasesForUser
@@ -27,9 +30,15 @@ exports.getIndexedCasesForUser = async ({
     applicationContext,
   });
 
-  caseItems.filter(({ status }) => {
+  let filteredCaseItems = caseItems.filter(({ status }) => {
     return statuses.includes(status);
   });
 
-  return caseItems;
+  if (statuses.length === 1 && statuses[0] === CASE_STATUS_TYPES.closed) {
+    filteredCaseItems = filteredCaseItems.sort((a, b) => {
+      return new Date(b.closedDate) - new Date(a.closedDate);
+    });
+  }
+
+  return filteredCaseItems;
 };
