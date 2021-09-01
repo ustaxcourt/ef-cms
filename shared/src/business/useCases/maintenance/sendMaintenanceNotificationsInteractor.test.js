@@ -19,7 +19,9 @@ describe('sendMaintenanceNotificationsInteractor', () => {
   });
 
   it('should get all websocket connections', async () => {
-    await sendMaintenanceNotificationsInteractor(applicationContext);
+    await sendMaintenanceNotificationsInteractor(applicationContext, {
+      maintenanceMode: true,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getAllWebSocketConnections,
@@ -30,7 +32,27 @@ describe('sendMaintenanceNotificationsInteractor', () => {
     const mockMessage = {
       action: 'maintenance_mode_engaged',
     };
-    await sendMaintenanceNotificationsInteractor(applicationContext);
+    await sendMaintenanceNotificationsInteractor(applicationContext, {
+      maintenanceMode: true,
+    });
+
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].connections,
+    ).toBe(mockConnections);
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0].messageStringified,
+    ).toBe(JSON.stringify(mockMessage));
+  });
+
+  it('should sendNotificationToConnection for each connection for maintenanceMode false', async () => {
+    const mockMessage = {
+      action: 'maintenance_mode_disengaged',
+    };
+    await sendMaintenanceNotificationsInteractor(applicationContext, {
+      maintenanceMode: false,
+    });
 
     expect(
       applicationContext.getNotificationGateway()

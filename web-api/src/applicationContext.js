@@ -1078,6 +1078,9 @@ const {
   updatePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
+  updateMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode');
+const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
 const {
@@ -1376,6 +1379,7 @@ const gatewayMethods = {
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
+    updateMaintenanceMode,
     updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
