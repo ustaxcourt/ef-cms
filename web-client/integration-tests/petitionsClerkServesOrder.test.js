@@ -1,5 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -18,7 +17,11 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreateOrder(cerebralTest);
