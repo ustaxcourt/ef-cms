@@ -53,14 +53,9 @@ const ifHasAccess = (
   cb,
 ) => {
   return function () {
-    console.log(
-      "app.getState('maintenanceMode')",
-      app.getState('maintenanceMode'),
-    );
     if (!app.getState('user')) {
       return redirect.gotoLoginPage(app);
     } else if (app.getState('maintenanceMode')) {
-      console.log('in hereeeeee!!!!!!');
       return redirect.gotoMaintenancePage(app);
     } else {
       if (
