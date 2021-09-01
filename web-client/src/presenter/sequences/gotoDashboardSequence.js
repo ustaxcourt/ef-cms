@@ -4,6 +4,7 @@ import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
+import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesByUserAction } from '../actions/CaseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
@@ -37,6 +38,7 @@ const goToDashboard = [
   setUserAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  getMaintenanceModeAction,
   startWebSocketConnectionAction,
   {
     error: [setShowModalFactoryAction('WebSocketErrorModal')],
