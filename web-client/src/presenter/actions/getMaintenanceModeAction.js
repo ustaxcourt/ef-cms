@@ -17,7 +17,7 @@ export const getMaintenanceModeAction = async ({
 }) => {
   let maintenanceMode = get(state.maintenanceMode);
 
-  if (maintenanceMode === undefined) {
+  if (maintenanceMode === null) {
     maintenanceMode = await applicationContext
       .getUseCases()
       .getMaintenanceModeInteractor(applicationContext);
