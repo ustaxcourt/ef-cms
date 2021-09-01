@@ -12,9 +12,11 @@ Accepted
 
 Prior to this decision, the Serverless Framework was used to package and deploy Lambda code to AWS. Any additional infrastructure needed (like S3 buckets) were configured using Terraform before running `serverless deploy`.
 
+Serverless uses the [Cloud Formation resource specification](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-resource-specification.html). This was finalized in 2011, and much as changed since then rendering it somewhat obsolete.
+
 When running deployments, Serverless Framework uses AWS CloudFormation. CloudFormation has a 200 resource limit for a single CloudFormation run, which caused us to [split our deployment into multiple Serverless configuration sets](https://github.com/flexion/ef-cms/pull/2276).
 
-Additionally, CloudFormation stacks can get into a locked state when using Serverless, and to unlock the stack to get it deployable again the stack has to be destroyed and re-created. This is a routine and regular issue that we have experienced.
+Additionally, CloudFormation stacks can get into a locked state when using Serverless, and to unlock the stack to get it deployable again the stack has to be destroyed and re-created. This is a routine and regular issue that we have experienced. It was also painfully time-consuming to remove them and then recreate.
 
 ## Decision
 
