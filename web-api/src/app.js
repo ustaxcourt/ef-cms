@@ -195,9 +195,6 @@ const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
-  getMaintenanceModeLambda,
-} = require('./maintenance/getMaintenanceModeLambda');
-const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
@@ -1046,10 +1043,5 @@ app.get(
   app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
   app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
 }
-
-/**
- * maintenance-mode
- */
-app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
 
 exports.app = app;
