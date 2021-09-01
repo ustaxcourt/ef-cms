@@ -15,7 +15,7 @@ exports.retrySendNotificationToConnections = async ({
   deleteGoneConnections = true,
   messageStringified,
 }) => {
-  const maxRetries = 3;
+  const maxRetries = 1;
 
   for (let index = 0; index < connections.length; index++) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
