@@ -67,6 +67,23 @@ describe('retrySendNotificationToConnections', () => {
     );
   });
 
+  it('does not call client.delete if deleteGoneConnections is false', async () => {
+    await applicationContext
+      .getNotificationGateway()
+      .sendNotificationToConnection.mockRejectedValue(notificationError);
+
+    await retrySendNotificationToConnections({
+      applicationContext,
+      connections: mockConnections,
+      deleteGoneConnections: false,
+      messageStringified: mockMessageStringified,
+    });
+
+    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledTimes(
+      0,
+    );
+  });
+
   it('rethrows and logs exception for statusCode not 410', async () => {
     notificationError.statusCode = 400;
     await applicationContext

@@ -64,11 +64,6 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
-      case 'admin_contact_update_error':
-        await app.getSequence('adminContactUpdateErrorSequence')({
-          ...message,
-        });
-        break;
       case 'maintenance_mode_engaged':
         await app.getSequence('openAppMaintenanceModalSequence')({
           ...message,

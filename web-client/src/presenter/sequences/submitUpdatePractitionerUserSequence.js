@@ -5,31 +5,20 @@ import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmission
 import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
-import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
 import { validatePractitionerAction } from '../actions/validatePractitionerAction';
 
 const afterSuccess = [
-  startWebSocketConnectionAction,
+  updatePractitionerUserAction,
   {
-    error: [
-      unsetWaitingForResponseAction,
-      setShowModalFactoryAction('WebSocketErrorModal'),
-    ],
-    success: [
-      updatePractitionerUserAction,
-      {
-        error: [setAlertErrorAction, unsetWaitingForResponseAction],
-        success: [setPractitionerDetailAction, clearScreenMetadataAction],
-      },
-    ],
+    error: [setAlertErrorAction, unsetWaitingForResponseAction],
+    success: [setPractitionerDetailAction, clearScreenMetadataAction],
   },
 ];
 
