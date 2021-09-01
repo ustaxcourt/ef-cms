@@ -531,7 +531,7 @@ const {
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
 const {
   getIndexedCasesForUser,
-} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
+} = require('../../shared/src/persistence/dynamo/users/getIndexedCasesForUser');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
