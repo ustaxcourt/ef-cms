@@ -15,6 +15,6 @@ describe('getMaintenanceModeInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getMaintenanceMode,
     ).toHaveBeenCalled();
-    expect(result).toBe(true);
+    expect(result).toBe(mockMaintenanceMode);
   });
 });
