@@ -137,14 +137,14 @@ data "aws_s3_bucket_object" "websockets_green_west_object" {
 data "aws_s3_bucket_object" "maintenance_notify_blue_west_object" {
   depends_on = [null_resource.maintenance_notify_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = try("maintenance_notify_blue.js.zip", "maintenance_notify_green.js.zip")
+  key        = "maintenance_notify_blue.js.zip"
   provider   = aws.us-west-1
 }
 
 data "aws_s3_bucket_object" "maintenance_notify_green_west_object" {
   depends_on = [null_resource.maintenance_notify_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
-  key        = try("maintenance_notify_green.js.zip", "maintenance_notify_blue.js.zip")
+  key        = "maintenance_notify_green.js.zip"
   provider   = aws.us-west-1
 }
 
