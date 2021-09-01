@@ -8,6 +8,7 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsRespondentsToCase = cerebralTest => {
   return it('Petitions clerk manually adds multiple irsPractitioners to case', async () => {
+    expect(cerebralTest.docketNumber).toBeDefined();
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
