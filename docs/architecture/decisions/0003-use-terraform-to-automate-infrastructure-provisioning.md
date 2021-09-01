@@ -14,7 +14,7 @@ As specified in the Court’s [Deliverables and Performance Standards](https://g
 
 Terraform and Serverless were initially selected to configure AWS. This issue is documented in retrospect, and Serverless was moved away from (which will be documented in a further decision record) — so this issue will focus on Terraform exclusively.
 
-Terraform is a popular and [recommended](https://engineering.18f.gov/language-selection/) framework for automating infrastructure and storing configuration in code.
+Terraform was deemed the most popular and [recommended](https://engineering.18f.gov/language-selection/) framework for automating infrastructure and storing configuration in code.
 
 ## Decision
 
@@ -26,7 +26,7 @@ We’ll automate provisioning and configuring infrastructure components using Te
 
 > What becomes easier or more difficult to do and any risks introduced by the change that will need to be mitigated.
 
-- Creating new environments is easier because it’s done by executing an automated command instead of a set of steps which must be done manually.
+- Creating new environments is easier because it’s done by executing an automated command instead of a set of steps which must be done manually. Could not imagine delivering the project manually.
 - The risk of misconfiguration of an environment decreases.
 - Management of Terraform state adds complexity to configuration, but is an acceptable level of complexity due to the automation benefits. Terraform state is version-specific, so upgrading versions of Terraform can be complex to execute.
   - This complexity is mitigated by automatically running Terraform on each deploy, decreasing the chance of Terraform state falling more than one version update behind.
