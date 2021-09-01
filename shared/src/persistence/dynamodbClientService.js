@@ -113,6 +113,27 @@ exports.update = params => {
 };
 
 /**
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+exports.updateToDeployTable = params => {
+  const filteredParams = filterEmptyStrings(params);
+  return params.applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .update({
+      TableName: getDeployTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...filteredParams,
+    })
+    .promise()
+    .then(() => params.Item);
+};
+
+/**
  * updateConsistent
  *
  * @param {object} params the params to update
