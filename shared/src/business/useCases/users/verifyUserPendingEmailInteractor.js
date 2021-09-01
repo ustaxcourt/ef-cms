@@ -85,7 +85,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
     .getPersistenceGateway()
     .getIndexedCasesForUser({
       applicationContext,
-      statuses: applicationContext.getConstants().CASE_STATUSES,
       userId: user.userId,
     });
 
