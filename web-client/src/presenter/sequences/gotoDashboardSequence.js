@@ -8,6 +8,7 @@ import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesByUserAction } from '../actions/CaseConsolidation/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
+import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
@@ -39,65 +40,70 @@ const goToDashboard = [
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   getMaintenanceModeAction,
-  startWebSocketConnectionAction,
   {
-    error: [setShowModalFactoryAction('WebSocketErrorModal')],
-    success: [
-      runPathForUserRoleAction,
+    maintenanceOff: [
+      startWebSocketConnectionAction,
       {
-        ...takePathForRoles(
-          [
-            USER_ROLES.adc,
-            USER_ROLES.admin,
-            USER_ROLES.admissionsClerk,
-            USER_ROLES.clerkOfCourt,
-            USER_ROLES.docketClerk,
-            USER_ROLES.floater,
-            USER_ROLES.petitionsClerk,
-            USER_ROLES.reportersOffice,
-            USER_ROLES.trialClerk,
-          ],
-          proceedToMessages,
-        ),
-        chambers: [
-          setMessageInboxPropsAction,
-          getMessages,
-          getJudgeForCurrentUserAction,
-          setJudgeUserAction,
-          getTrialSessionsAction,
-          setTrialSessionsAction,
-          setCurrentPageAction('DashboardChambers'),
-        ],
-        general: [navigateToSectionDocumentQCAction],
-        inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
-        irsPractitioner: [
-          setDefaultCaseTypeToDisplayAction,
-          getOpenAndClosedCasesByUserAction,
-          setCasesAction,
-          setCurrentPageAction('DashboardRespondent'),
-        ],
-        irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
-        judge: [
-          setMessageInboxPropsAction,
-          getMessages,
-          getTrialSessionsAction,
-          setTrialSessionsAction,
-          setCurrentPageAction('DashboardJudge'),
-        ],
-        petitioner: [
-          setDefaultCaseTypeToDisplayAction,
-          getOpenAndClosedCasesByUserAction,
-          setCasesAction,
-          setCurrentPageAction('DashboardPetitioner'),
-        ],
-        privatePractitioner: [
-          setDefaultCaseTypeToDisplayAction,
-          getOpenAndClosedCasesByUserAction,
-          setCasesAction,
-          setCurrentPageAction('DashboardPractitioner'),
+        error: [setShowModalFactoryAction('WebSocketErrorModal')],
+        success: [
+          runPathForUserRoleAction,
+          {
+            ...takePathForRoles(
+              [
+                USER_ROLES.adc,
+                USER_ROLES.admin,
+                USER_ROLES.admissionsClerk,
+                USER_ROLES.clerkOfCourt,
+                USER_ROLES.docketClerk,
+                USER_ROLES.floater,
+                USER_ROLES.petitionsClerk,
+                USER_ROLES.reportersOffice,
+                USER_ROLES.trialClerk,
+              ],
+              proceedToMessages,
+            ),
+            chambers: [
+              setMessageInboxPropsAction,
+              getMessages,
+              getJudgeForCurrentUserAction,
+              setJudgeUserAction,
+              getTrialSessionsAction,
+              setTrialSessionsAction,
+              setCurrentPageAction('DashboardChambers'),
+            ],
+            general: [navigateToSectionDocumentQCAction],
+            inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
+            irsPractitioner: [
+              setDefaultCaseTypeToDisplayAction,
+              getOpenAndClosedCasesByUserAction,
+              setCasesAction,
+              setCurrentPageAction('DashboardRespondent'),
+            ],
+            irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
+            judge: [
+              setMessageInboxPropsAction,
+              getMessages,
+              getTrialSessionsAction,
+              setTrialSessionsAction,
+              setCurrentPageAction('DashboardJudge'),
+            ],
+            petitioner: [
+              setDefaultCaseTypeToDisplayAction,
+              getOpenAndClosedCasesByUserAction,
+              setCasesAction,
+              setCurrentPageAction('DashboardPetitioner'),
+            ],
+            privatePractitioner: [
+              setDefaultCaseTypeToDisplayAction,
+              getOpenAndClosedCasesByUserAction,
+              setCasesAction,
+              setCurrentPageAction('DashboardPractitioner'),
+            ],
+          },
         ],
       },
     ],
+    maintenanceOn: [gotoMaintenanceSequence],
   },
 ];
 
