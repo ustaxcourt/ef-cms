@@ -17,7 +17,7 @@ describe('getMaintenanceModeForPublicAction', () => {
 
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(true);
+      .getMaintenanceModePublicInteractor.mockReturnValue(true);
   });
 
   it('should set maintenanceMode on state', async () => {
@@ -45,7 +45,7 @@ describe('getMaintenanceModeForPublicAction', () => {
   it('returns path.maintenanceOff if maintenance mode is turned off', async () => {
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(false);
+      .getMaintenanceModePublicInteractor.mockReturnValue(false);
 
     await runAction(getMaintenanceModeForPublicAction, {
       modules: {
