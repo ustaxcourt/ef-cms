@@ -1,16 +1,23 @@
+import { state } from 'cerebral';
+
 /**
- * fetches the inbox messages for the user
+ * gets the maintenance mode value
  *
  * @param {object} applicationContext object that contains all the context specific methods
- * @returns {Promise<{Message: Array}>} a list of messages
+ * @param {object} path the cerebral path object
+ * @param {object} store the cerebral store
+ * @returns {object} path.maintenanceOn if true, path.maintenanceOff if false
  */
-// todo
-export const getMaintenanceModeAction = async ({ applicationContext }) => {
-  const messages = await applicationContext
+export const getMaintenanceModeAction = async ({
+  applicationContext,
+  path,
+  store,
+}) => {
+  const maintenanceMode = await applicationContext
     .getUseCases()
-    .getMaintenanceModeInteractor(applicationContext, {
-      userId: applicationContext.getCurrentUser().userId,
-    });
+    .getMaintenanceModeInteractor(applicationContext);
 
-  return { messages };
+  store.set(state.maintenanceMode, maintenanceMode);
+
+  return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
 };

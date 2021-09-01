@@ -4,22 +4,56 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getMaintenanceModeAction', () => {
-  const maintenanceModeMock = true;
+  const pathMaintenanceOnStub = jest.fn();
+  const pathMaintenanceOffStub = jest.fn();
+
+  presenter.providers.path = {
+    maintenanceOff: pathMaintenanceOffStub,
+    maintenanceOn: pathMaintenanceOnStub,
+  };
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+
     applicationContext
       .getUseCases()
-      .getMaintenanceModeInteractor.mockReturnValue(maintenanceModeMock);
+      .getMaintenanceModeInteractor.mockReturnValue(true);
   });
 
-  it('returns the maintenance mode', async () => {
-    const results = await runAction(getMaintenanceModeAction, {
+  it('should set maintenanceMode on state', async () => {
+    const result = await runAction(getMaintenanceModeAction, {
       modules: {
         presenter,
       },
       state: {},
     });
-    expect(results.maintenanceMode).toEqual([maintenanceModeMock]);
+
+    expect(result.state.maintenanceMode).toEqual(true);
+  });
+
+  it('returns path.maintenanceOn if maintenance mode is turned on', async () => {
+    await runAction(getMaintenanceModeAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(pathMaintenanceOnStub).toHaveBeenCalled();
+  });
+
+  it('returns path.maintenanceOff if maintenance mode is turned off', async () => {
+    applicationContext
+      .getUseCases()
+      .getMaintenanceModeInteractor.mockReturnValue(false);
+
+    await runAction(getMaintenanceModeAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(pathMaintenanceOffStub).toHaveBeenCalled();
   });
 });
