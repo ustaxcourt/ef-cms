@@ -20,12 +20,14 @@ describe('getMaintenanceModeAction', () => {
       .getMaintenanceModeInteractor.mockReturnValue(true);
   });
 
-  it('should set maintenanceMode on state', async () => {
+  it('should set maintenanceMode on state when it is null', async () => {
     const result = await runAction(getMaintenanceModeAction, {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        maintenanceMode: null,
+      },
     });
 
     expect(result.state.maintenanceMode).toEqual(true);
@@ -36,7 +38,9 @@ describe('getMaintenanceModeAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        maintenanceMode: true,
+      },
     });
 
     expect(pathMaintenanceOnStub).toHaveBeenCalled();
@@ -51,7 +55,9 @@ describe('getMaintenanceModeAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        maintenanceMode: false,
+      },
     });
 
     expect(pathMaintenanceOffStub).toHaveBeenCalled();
