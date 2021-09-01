@@ -7,11 +7,11 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.opinionAdvancedSearchLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
+  genericHandler(event, ({ applicationContext }) =>
+    applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor(
         applicationContext,
         event.queryStringParameters,
-      );
-  });
+      ),
+  );

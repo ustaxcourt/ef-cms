@@ -56,10 +56,10 @@ InternalDocumentSearchResult.schema = joi.object().keys({
   eventCode: JoiValidationConstants.STRING,
   isSealed: joi.boolean(),
   isStricken: joi.boolean(),
-  judge: JoiValidationConstants.STRING.optional(),
+  judge: JoiValidationConstants.STRING.optional().allow(null),
   numberOfPages: joi.number().integer().optional().allow(null),
   sealedDate: JoiValidationConstants.ISO_DATE,
-  signedJudgeName: JoiValidationConstants.STRING.optional(),
+  signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
 });
 
 joiValidationDecorator(
