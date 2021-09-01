@@ -115,10 +115,7 @@ export const AdvancedDocumentSearch = connect(
                 >
                   <option value="">- Select -</option>
                   {judges.map(judge => (
-                    <option
-                      key={judge.judgeFullName}
-                      value={judge.judgeFullName}
-                    >
+                    <option key={judge.judgeFullName} value={judge.name}>
                       {judge.name}
                     </option>
                   ))}
