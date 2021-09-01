@@ -66,9 +66,7 @@ export const presenter = {
     gotoHealthCheckSequence: showMaintenancePageDecorator(
       gotoHealthCheckSequence,
     ),
-    gotoMaintenanceSequence: showMaintenancePageDecorator(
-      gotoMaintenanceSequence,
-    ),
+    gotoMaintenanceSequence,
     gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
     gotoPublicCaseDetailSequence: showMaintenancePageDecorator(
       gotoPublicCaseDetailSequence,

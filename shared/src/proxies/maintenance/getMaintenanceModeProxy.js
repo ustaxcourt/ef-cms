@@ -10,6 +10,6 @@ const { get } = require('../requests');
 exports.getMaintenanceModeInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/maintenance-mode',
+    endpoint: '/public-api/maintenance-mode',
   });
 };

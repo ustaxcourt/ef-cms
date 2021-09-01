@@ -44,6 +44,7 @@ import {
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
@@ -69,6 +70,7 @@ const allUseCases = {
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
   getHealthCheckInteractor,
+  getMaintenanceModeInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
