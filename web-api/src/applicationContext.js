@@ -1862,7 +1862,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getJudgesForPublicSearchInteractor,
         getMaintenanceModeInteractor: applicationContext =>
           environment.stage === 'local'
-            ? process.env.maintenanceMode
+            ? process.env.MAINTENANCE_MODE
             : getMaintenanceModeInteractor(applicationContext),
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
