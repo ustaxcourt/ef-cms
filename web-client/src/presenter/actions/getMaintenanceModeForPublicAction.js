@@ -15,7 +15,7 @@ export const getMaintenanceModeForPublicAction = async ({
 }) => {
   const maintenanceMode = await applicationContext
     .getUseCases()
-    .getMaintenanceModeInteractor(applicationContext);
+    .getMaintenanceModePublicInteractor(applicationContext);
 
   store.set(state.maintenanceMode, maintenanceMode);
 
