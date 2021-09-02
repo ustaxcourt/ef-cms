@@ -71,7 +71,10 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'maintenance_mode_disengaged':
-        await app.getSequence('gotoDashboardSequence')({
+        await app.getSequence('clearModalSequence')({
+          ...message,
+        });
+        await app.getSequence('navigateToPathSequence')({
           ...message,
         });
         break;
