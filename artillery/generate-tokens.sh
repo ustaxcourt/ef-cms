@@ -78,7 +78,7 @@ do
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME="${user}"',PASSWORD'="${DEFAULT_PASS}")
+    --auth-parameters USERNAME="${user}"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
   token=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
   echo $token >> tokens.csv
 done
