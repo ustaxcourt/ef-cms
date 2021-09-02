@@ -90,7 +90,7 @@ describe('Internal Document Search Result entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('passes validation if numberOfPages is null', () => {
+  it('passes validation if optional numberOfPages, judge, and signedJudgeName are all null', () => {
     const searchResult = new InternalDocumentSearchResult({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -99,7 +99,9 @@ describe('Internal Document Search Result entity', () => {
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
       isSealed: true,
+      judge: null,
       numberOfPages: null,
+      signedJudgeName: null,
     });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
