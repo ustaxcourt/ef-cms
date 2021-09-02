@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearLoginFormAction } from '../actions/clearLoginFormAction';
+import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeAction';
 import { clearUserAction } from '../actions/clearUserAction';
 import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -10,6 +11,7 @@ export const signOutSequence = [
   stopWebSocketConnectionAction,
   clearAlertsAction,
   clearUserAction,
+  clearMaintenanceModeAction,
   clearLoginFormAction,
   navigateToCognitoAction,
 ];
