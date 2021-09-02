@@ -1,5 +1,4 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
-import { clearModalSequence } from './clearModalSequence';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
@@ -36,7 +35,6 @@ const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 const goToDashboard = [
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
-  clearModalSequence,
   getUserAction,
   setUserAction,
   clearSelectedWorkItemsAction,
