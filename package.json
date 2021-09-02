@@ -215,6 +215,7 @@
     "loadtest:small": "./web-api/load-test-trial-session.sh dev us-east-1 100",
     "maintenance:disengage": "./scripts/set-maintenance-mode.sh false",
     "maintenance:engage": "./scripts/set-maintenance-mode.sh true",
+    "maintenance:engage:local": "TODO how do we call this",
     "migrate:local": "DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000  AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 node ./web-api/run-local-migration.js",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
     "postinstall": "husky install",
