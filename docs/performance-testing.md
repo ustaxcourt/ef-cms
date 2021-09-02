@@ -25,7 +25,14 @@ The ES tests will hit a majority of our API endpoints that use elasticsearch beh
 
 ## Changing Parameters
 
-In artillery, there are two main ways to change the amount of users hiting your api.  Inside the phases block, you can change the length of time in the performance test via changing the `duration` parameter.  You can set `arrivalRate` or `arrivalCount` to change the number of users the performance test simulate.  `arrivalRate` is how many users will run your scenarios per second.  So an rate of 5 means there will be 5 random scenarios ran every second.  `arrivalCount` is the total amount of users that will run your scenarios over the course of the entire performance tests.  For example, if your test duration 5 minutes, and you have an arrivalCount of 100, that means you will have about 300s / 100 = 1 request every 3 seconds.
+Artillery tests are defined used .yml files.  Those .yml files contain a config object with the following properties
+
+- target, the url to test against
+- plugins, any artillery plugins (we use one to get the average response times for each endpoint)
+- phases, you can break up your test into phases, where each phases runs in order before the next.  This is useful if you want to ramp up your test users before doing a sustained load test
+- payload, where you can load in .csv files and randomly select values from it in your tests
+
+In artillery, there are two main ways to change the amount of users hiting your api.  Inside the config.phases property, you can change the length of time in the performance test via changing the `duration` parameter.  You can set `arrivalRate` or `arrivalCount` to change the number of users the performance test simulate.  `arrivalRate` is how many users will run your scenarios per second.  So a rate of 5 means there will be 5 random scenarios ran every second.  `arrivalCount` is the total amount of users that will run your scenarios over the course of the entire performance tests.  For example, if your test duration 5 minutes, and you have an arrivalCount of 100, that means you will have about 300s / 100 = 1 request every 3 seconds.
 
 In regards to the https://github.com/flexion/ef-cms/issues/8793 story, this is how the breakdown would work:
 
