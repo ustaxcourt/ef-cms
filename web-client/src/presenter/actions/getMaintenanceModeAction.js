@@ -17,12 +17,20 @@ export const getMaintenanceModeAction = async ({
 }) => {
   let maintenanceMode = get(state.maintenanceMode);
 
-  if (maintenanceMode === undefined) {
+  if (maintenanceMode === null) {
     maintenanceMode = await applicationContext
       .getUseCases()
       .getMaintenanceModeInteractor(applicationContext);
 
+    // todo: refactor into a set action
     store.set(state.maintenanceMode, maintenanceMode);
+
+    await applicationContext
+      .getUseCases()
+      .setItemInteractor(applicationContext, {
+        key: 'maintenanceMode',
+        value: maintenanceMode,
+      });
   }
 
   return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
