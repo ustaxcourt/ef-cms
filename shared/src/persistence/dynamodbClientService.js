@@ -45,11 +45,16 @@ const getTableName = ({ applicationContext }) =>
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
 
-const getDeployTableName = ({ applicationContext }) => {
-  return `efcms-deploy-${
-    (applicationContext.environment || applicationContext.getEnvironment())
-      .stage
-  }`;
+exports.getDeployTabgit leName = ({ applicationContext }) => {
+  const env = (
+    applicationContext.environment || applicationContext.getEnvironment()
+  ).stage;
+
+  if (env === 'local') {
+    return applicationContext.getEnvironment().dynamoDbTableName;
+  }
+
+  return `efcms-deploy-${env}`;
 };
 
 exports.describeTable = async ({ applicationContext }) => {
@@ -68,7 +73,7 @@ exports.describeDeployTable = async ({ applicationContext }) => {
   });
 
   const params = {
-    TableName: getDeployTableName({ applicationContext }),
+    TableName: exports.getDeployTableName({ applicationContext }),
   };
 
   return await dynamoClient.describeTable(params).promise();
