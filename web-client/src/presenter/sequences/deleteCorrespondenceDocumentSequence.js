@@ -9,7 +9,7 @@ import { loadDefaultViewerCorrespondenceSequence } from './loadDefaultViewerCorr
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const deleteCorrespondenceDocumentSequence =
   showProgressSequenceDecorator([
