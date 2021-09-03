@@ -991,6 +991,8 @@ const router = {
             set(trialSessionFilter, key, value);
           });
           setPageTitle('Trial sessions');
+          console.log('doing the thing');
+          app.getSequence('startWebSocketConnectionSequence')();
           return app.getSequence('gotoTrialSessionsSequence')({
             query: trialSessionFilter,
           });
