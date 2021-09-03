@@ -326,6 +326,7 @@ import { showViewPetitionerCounselModalSequence } from './sequences/showViewPeti
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { startScanSequence } from './sequences/startScanSequence';
+import { startWebSocketConnectionSequence } from './sequences/startWebSocketConnectionSequence';
 import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
@@ -806,6 +807,7 @@ export const presenter = {
     signOutSequence,
     skipSigningOrderSequence,
     startScanSequence,
+    startWebSocketConnectionSequence,
     strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,
     submitAddDeficiencyStatisticsSequence,
