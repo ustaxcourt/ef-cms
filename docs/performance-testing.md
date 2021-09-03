@@ -1,4 +1,4 @@
-# How to run Artillery Performance Tests
+# Artillery Performance Tests
 
 ## How to run the order tests
 
@@ -25,7 +25,7 @@ The ES tests will hit a majority of our API endpoints that use elasticsearch beh
 
 ## Changing Parameters
 
-Artillery tests are defined used .yml files.  Those .yml files contain a config object with the following properties
+Artillery tests are defined in the `yml` files located in the `/artillery/` directory, which use the following configuration properties:
 
 - target, the url to test against
 - plugins, any artillery plugins (we use one to get the average response times for each endpoint)
@@ -36,11 +36,11 @@ In artillery, there are two main ways to change the amount of users hiting your 
 
 In regards to the https://github.com/flexion/ef-cms/issues/8793 story, this is how the breakdown would work:
 
-for X and Y, if you are using `arrivalCount`, you need to calculate the duration / arrivalCount to figure out how many X requests happen every Y seconds over a duration of Z.
+For X and Y, if you are using `arrivalCount`, you need to calculate the duration / arrivalCount to figure out how many X requests happen every Y seconds over a duration of Z.
 
-for X, if you are using `arrivalRate`, the arrivalRate will be how many requests happen every second.  So arrivalRate of 10 means 10 requests a second.
+For X, if you are using `arrivalRate`, the arrivalRate will be how many requests happen every second.  So arrivalRate of 10 means 10 requests a second.
 
-for XX and YY, there is a `private-app-report.json` and `private-advanced-order.json` which prints out the number of counts for status codes and the mean response times. 
+For XX and YY, there is a `private-app-report.json` and `private-advanced-order.json` which prints out the number of counts for status codes and the mean response times. 
 
 ```
 "case-deadline-search": {
