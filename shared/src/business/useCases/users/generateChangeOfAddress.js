@@ -34,7 +34,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string}  providers.websocketMessagePrefix is it the `user` or an `admin` performing this action?
  * @returns {Promise<Case[]>} the cases that were updated
  */
-exports.generateChangeOfAddress = async ({
+const generateChangeOfAddress = async ({
   applicationContext,
   bypassDocketEntry = false,
   contactInfo,
@@ -317,3 +317,5 @@ const generateAndServeDocketEntry = async ({
 
   caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
+
+module.exports = { generateAndServeDocketEntry, generateChangeOfAddress };
