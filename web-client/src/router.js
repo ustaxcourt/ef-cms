@@ -2,7 +2,6 @@
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
-import { socketProvider } from './providers/socket';
 import route from 'riot-route';
 
 const BASE_ROUTE = '/';
@@ -817,6 +816,7 @@ const router = {
       '/document-qc',
       ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
+        app.getSequence('startWebSocketConnectionSequence');
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: null,
@@ -992,14 +992,6 @@ const router = {
             set(trialSessionFilter, key, value);
           });
           setPageTitle('Trial sessions');
-          console.log('doing the thing');
-          app.getSequence('startWebSocketConnectionSequence')({
-            path: {
-              error: () => {},
-              success: () => {},
-            },
-            socket: socketProvider,
-          });
           return app.getSequence('gotoTrialSessionsSequence')({
             query: trialSessionFilter,
           });
