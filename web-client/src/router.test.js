@@ -5,11 +5,16 @@ const { ifHasAccess, route, router } = require('./router');
 
 describe('router', () => {
   const getUserMock = jest.fn();
+  const getMaintenanceModeMock = jest.fn();
   const getPermissionsMock = jest.fn().mockReturnValue({ foo: true });
   const sequenceMock = jest.fn().mockReturnValue('Yay');
   const getSequenceMock = jest.fn().mockReturnValue(sequenceMock);
   const callbackFn = jest.fn();
-  const redirect = { goto404: jest.fn(), gotoLoginPage: jest.fn() };
+  const redirect = {
+    goto404: jest.fn(),
+    gotoLoginPage: jest.fn(),
+    gotoMaintenancePage: jest.fn(),
+  };
   const stateMock = jest.fn();
 
   const appMock = {
@@ -22,6 +27,8 @@ describe('router', () => {
           return getUserMock();
         case 'permissions':
           return getPermissionsMock();
+        case 'maintenanceMode':
+          return getMaintenanceModeMock();
         default:
           return stateMock();
       }
@@ -33,12 +40,24 @@ describe('router', () => {
       getUserMock.mockReturnValue(undefined);
       ifHasAccess({ app: appMock, redirect }, callbackFn)();
       expect(redirect.goto404).not.toHaveBeenCalled();
+      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
       expect(callbackFn).not.toHaveBeenCalled();
       expect(redirect.gotoLoginPage).toHaveBeenCalled();
     });
 
+    it('redirects to maintenance page if maintenanceMode is true', () => {
+      getUserMock.mockReturnValue({ username: 'Karl Childers' });
+      getMaintenanceModeMock.mockReturnValue(true);
+
+      ifHasAccess({ app: appMock, redirect }, callbackFn)();
+      expect(redirect.goto404).not.toHaveBeenCalled();
+      expect(callbackFn).not.toHaveBeenCalled();
+      expect(redirect.gotoMaintenancePage).toHaveBeenCalled();
+    });
+
     it('redirects to 404 if user does not have the correct permissions', () => {
       getUserMock.mockReturnValue({ username: 'Karl Childers' });
+      getMaintenanceModeMock.mockReturnValue(false);
       stateMock.mockReturnValue({ permissions: undefined });
       ifHasAccess(
         {
@@ -49,6 +68,7 @@ describe('router', () => {
         callbackFn,
       )();
       expect(redirect.gotoLoginPage).not.toHaveBeenCalled();
+      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
       expect(callbackFn).not.toHaveBeenCalled();
       expect(redirect.goto404).toHaveBeenCalled();
     });
@@ -67,6 +87,7 @@ describe('router', () => {
         callbackFn,
       )();
       expect(redirect.gotoLoginPage).not.toHaveBeenCalled();
+      expect(redirect.gotoMaintenancePage).not.toHaveBeenCalled();
       expect(redirect.goto404).not.toHaveBeenCalled();
       expect(callbackFn).toHaveBeenCalled();
     });

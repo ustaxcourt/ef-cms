@@ -11,7 +11,6 @@ import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
-import { adminContactUpdateErrorSequence } from './sequences/adminContactUpdateErrorSequence';
 import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
 import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
@@ -494,7 +493,6 @@ export const presenter = {
     addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
     adminContactUpdateCompleteSequence,
-    adminContactUpdateErrorSequence,
     adminContactUpdateInitialUpdateCompleteSequence,
     adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,

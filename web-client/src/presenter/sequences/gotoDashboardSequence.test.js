@@ -16,6 +16,7 @@ describe('gotoDashboardSequence', () => {
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    presenter.providers.socket = { start: jest.fn() };
     presenter.sequences = {
       gotoDashboardSequence,
     };

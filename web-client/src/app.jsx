@@ -141,6 +141,11 @@ const app = {
       presenter.state.permissions = userPermissions;
     }
 
+    const maintenanceMode = await applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'maintenanceMode' });
+    presenter.state.maintenanceMode = maintenanceMode;
+
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
