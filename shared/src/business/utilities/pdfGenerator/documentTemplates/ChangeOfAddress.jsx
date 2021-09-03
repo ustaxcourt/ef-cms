@@ -13,6 +13,7 @@ const renderTable = ({ data, label, options }) => {
       </thead>
       <tbody>
         <tr>
+          {options.showEmailChange && <td>{data.email}</td>}
           {options.showOnlyPhoneChange && <td>{data.phone}</td>}
           {!options.showOnlyPhoneChange && (
             <td>
