@@ -16,5 +16,5 @@ exports.getMaintenanceMode = async ({ applicationContext }) => {
     applicationContext,
   });
 
-  return result.current;
+  return result?.current;
 };
