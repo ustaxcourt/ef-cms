@@ -2,6 +2,7 @@
 import { forEach, set } from 'lodash';
 import { queryStringDecoder } from './utilities/queryStringDecoder';
 import { setPageTitle } from './presenter/utilities/setPageTitle';
+import { socketProvider } from './providers/socket';
 import route from 'riot-route';
 
 const BASE_ROUTE = '/';
@@ -992,7 +993,13 @@ const router = {
           });
           setPageTitle('Trial sessions');
           console.log('doing the thing');
-          app.getSequence('startWebSocketConnectionSequence')();
+          app.getSequence('startWebSocketConnectionSequence')({
+            path: {
+              error: () => {},
+              success: () => {},
+            },
+            socket: socketProvider,
+          });
           return app.getSequence('gotoTrialSessionsSequence')({
             query: trialSessionFilter,
           });
