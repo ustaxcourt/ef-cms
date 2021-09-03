@@ -1,10 +1,6 @@
 const { compact, isEmpty, isEqual, partition } = require('lodash');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
-  caseItem.docketNumberWithSuffix = `${caseItem.docketNumber}${
-    caseItem.docketNumberSuffix || ''
-  }`;
-
   caseItem.caseTitle = applicationContext.getCaseTitle(
     caseItem.caseCaption || '',
   );
