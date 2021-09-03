@@ -27,6 +27,7 @@ import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { state } from './state-public';
@@ -61,17 +62,34 @@ export const presenter = {
     clearPdfPreviewUrlSequence,
     closeModalAndNavigateToMaintenanceSequence,
     dismissModalSequence,
-    gotoContactSequence,
-    gotoHealthCheckSequence,
+    gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
+    gotoHealthCheckSequence: showMaintenancePageDecorator(
+      gotoHealthCheckSequence,
+    ),
     gotoMaintenanceSequence,
-    gotoPrivacySequence,
-    gotoPublicCaseDetailSequence,
-    gotoPublicEmailVerificationInstructionsSequence,
-    gotoPublicEmailVerificationSuccessSequence,
-    gotoPublicPrintableDocketRecordSequence,
-    gotoPublicSearchSequence,
-    gotoTodaysOpinionsSequence,
-    gotoTodaysOrdersSequence,
+    gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
+    gotoPublicCaseDetailSequence: showMaintenancePageDecorator(
+      gotoPublicCaseDetailSequence,
+    ),
+    gotoPublicEmailVerificationInstructionsSequence:
+      showMaintenancePageDecorator(
+        gotoPublicEmailVerificationInstructionsSequence,
+      ),
+    gotoPublicEmailVerificationSuccessSequence: showMaintenancePageDecorator(
+      gotoPublicEmailVerificationSuccessSequence,
+    ),
+    gotoPublicPrintableDocketRecordSequence: showMaintenancePageDecorator(
+      gotoPublicPrintableDocketRecordSequence,
+    ),
+    gotoPublicSearchSequence: showMaintenancePageDecorator(
+      gotoPublicSearchSequence,
+    ),
+    gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
+      gotoTodaysOpinionsSequence,
+    ),
+    gotoTodaysOrdersSequence: showMaintenancePageDecorator(
+      gotoTodaysOrdersSequence,
+    ),
     loadMoreTodaysOrdersSequence,
     navigateBackSequence,
     navigateToCognitoSequence,
