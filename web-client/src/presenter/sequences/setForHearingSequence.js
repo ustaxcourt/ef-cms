@@ -10,7 +10,7 @@ import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeActio
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { validateSetForHearingAction } from '../actions/CaseDetail/validateSetForHearingAction';

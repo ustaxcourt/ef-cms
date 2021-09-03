@@ -5,7 +5,7 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const gotoPrintableDocketRecordSequence = showProgressSequenceDecorator([
   clearModalStateAction,

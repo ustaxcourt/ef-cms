@@ -5,7 +5,7 @@ import { setCaseOnFormUsingStateAction } from '../actions/setCaseOnFormUsingStat
 import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { shouldLoadCaseAction } from '../actions/shouldLoadCaseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const gotoReviewSavedPetitionSequence = [
   shouldLoadCaseAction,
