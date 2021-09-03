@@ -37,7 +37,6 @@ const pages = {
 };
 
 let initialPageLoaded = false;
-let showHeaderAndFooter = true;
 
 /**
  * Root application component for the public site
@@ -63,9 +62,7 @@ export const AppComponentPublic = connect(
       }
     });
 
-    if (currentPage === 'AppMaintenance') {
-      showHeaderAndFooter = false;
-    }
+    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     if (!process.env.CI) {
       useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');
