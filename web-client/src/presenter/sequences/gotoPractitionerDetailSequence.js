@@ -4,7 +4,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const gotoPractitionerDetailSequence = [
   showProgressSequenceDecorator([

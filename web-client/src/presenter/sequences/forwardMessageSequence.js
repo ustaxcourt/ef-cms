@@ -10,7 +10,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';

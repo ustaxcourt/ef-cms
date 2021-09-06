@@ -2,7 +2,7 @@ import { generateCaseConfirmationPdfUrlAction } from '../actions/CaseConfirmatio
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const gotoPrintableCaseConfirmationSequence =
   showProgressSequenceDecorator([

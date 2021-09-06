@@ -4,7 +4,7 @@ import { getPractitionersByNameAction } from '../actions/AdvancedSearch/getPract
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validatePractitionerSearchByNameAction } from '../actions/AdvancedSearch/validatePractitionerSearchByNameAction';
