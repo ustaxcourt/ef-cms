@@ -9,22 +9,23 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoUploadCourtIssuedDocument = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  initializeUploadFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setCurrentPageAction('UploadCourtIssuedDocument'),
-];
+const gotoUploadCourtIssuedDocument = startWebSocketConnectionSequenceDecorator(
+  [
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    initializeUploadFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setCurrentPageAction('UploadCourtIssuedDocument'),
+  ],
+);
 
-export const gotoUploadCourtIssuedDocumentSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [gotoUploadCourtIssuedDocument],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoUploadCourtIssuedDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: [gotoUploadCourtIssuedDocument],
+    unauthorized: [redirectToCognitoAction],
+  },
+];

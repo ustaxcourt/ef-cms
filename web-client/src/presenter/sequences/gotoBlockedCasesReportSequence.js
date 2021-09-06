@@ -21,9 +21,9 @@ const gotoBlockedCasesReport = [
 export const gotoBlockedCasesReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
       parallel([fetchUserNotificationsSequence, gotoBlockedCasesReport]),
-    ),
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -3,15 +3,15 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessionPlanningReport = [
-  setCurrentPageAction('TrialSessionPlanningReport'),
-];
-
-export const gotoTrialSessionPlanningReportSequence =
+const gotoTrialSessionPlanningReport =
   startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoTrialSessionPlanningReport,
-      unauthorized: [redirectToCognitoAction],
-    },
+    setCurrentPageAction('TrialSessionPlanningReport'),
   ]);
+
+export const gotoTrialSessionPlanningReportSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: gotoTrialSessionPlanningReport,
+    unauthorized: [redirectToCognitoAction],
+  },
+];

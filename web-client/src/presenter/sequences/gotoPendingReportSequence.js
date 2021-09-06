@@ -11,7 +11,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoPendingReport = [
+const gotoPendingReport = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
@@ -20,13 +20,12 @@ const gotoPendingReport = [
   clearPendingReportsAction,
   parallel([fetchUserNotificationsSequence, getSetJudgesSequence]),
   setCurrentPageAction('PendingReport'),
-];
+]);
 
-export const gotoPendingReportSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoPendingReport,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoPendingReportSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: gotoPendingReport,
+    unauthorized: [redirectToCognitoAction],
+  },
+];

@@ -16,7 +16,7 @@ import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequest
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoRequestAccess = [
+const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -45,13 +45,12 @@ const gotoRequestAccess = [
     ],
     unauthorized: [navigateToCaseDetailAction],
   },
-];
+]);
 
-export const gotoRequestAccessSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoRequestAccess,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoRequestAccessSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: gotoRequestAccess,
+    unauthorized: [redirectToCognitoAction],
+  },
+];
