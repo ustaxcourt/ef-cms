@@ -18,34 +18,34 @@ import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoMessageDetail = showProgressSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  getCaseAction,
-  setCaseAction,
-  setParentMessageIdAction,
-  getMessageThreadAction,
-  setMessageAction,
-  getMostRecentMessageInThreadAction,
-  getDefaultAttachmentViewerDocumentToDisplayAction,
-  setMessageDetailViewerDocumentToDisplayAction,
-  setDefaultIsExpandedAction,
-  setCaseDetailPageTabActionGenerator('messages'),
-  setCurrentPageAction('MessageDetail'),
-  getShouldMarkMessageAsReadAction,
-  {
-    markRead: [setMessageAsReadAction],
-    noAction: [],
-  },
+const gotoMessageDetail = startWebSocketConnectionSequenceDecorator([
+  showProgressSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    getCaseAction,
+    setCaseAction,
+    setParentMessageIdAction,
+    getMessageThreadAction,
+    setMessageAction,
+    getMostRecentMessageInThreadAction,
+    getDefaultAttachmentViewerDocumentToDisplayAction,
+    setMessageDetailViewerDocumentToDisplayAction,
+    setDefaultIsExpandedAction,
+    setCaseDetailPageTabActionGenerator('messages'),
+    setCurrentPageAction('MessageDetail'),
+    getShouldMarkMessageAsReadAction,
+    {
+      markRead: [setMessageAsReadAction],
+      noAction: [],
+    },
+  ]),
 ]);
 
-// todo??
-export const gotoMessageDetailSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoMessageDetail,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoMessageDetailSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: gotoMessageDetail,
+    unauthorized: [redirectToCognitoAction],
+  },
+];

@@ -12,9 +12,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence =
-  // todo: how to wrap with multiple decorators?
-  // startWebSocketConnectionSequenceDecorator toooooo
-  startWebSocketConnectionSequenceDecorator(
+  startWebSocketConnectionSequenceDecorator([
     showProgressSequenceDecorator([
       clearAlertsAction,
       clearErrorAlertsAction,
@@ -30,4 +28,4 @@ export const gotoEditPetitionerInformationInternalSequence =
       },
       setCurrentPageAction('EditPetitionerInformationInternal'),
     ]),
-  );
+  ]);

@@ -7,7 +7,6 @@ import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAct
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-//todo multiple decorators
 export const gotoPractitionerDetailSequence =
   startWebSocketConnectionSequenceDecorator([
     showProgressSequenceDecorator([

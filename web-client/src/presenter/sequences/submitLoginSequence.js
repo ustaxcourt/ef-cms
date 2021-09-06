@@ -9,7 +9,6 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-//todo ??
 export const submitLoginSequence = startWebSocketConnectionSequenceDecorator(
   showProgressSequenceDecorator([
     createTokenAction,
