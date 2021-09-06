@@ -8,21 +8,26 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence =
-  showProgressSequenceDecorator([
-    clearAlertsAction,
-    clearErrorAlertsAction,
-    setCurrentPageAction('Interstitial'),
-    stopShowValidationAction,
-    getCaseAction,
-    setCaseAction,
-    setupPetitionerContactInformationFormAction,
-    isInternalUserAction,
-    {
-      no: [],
-      yes: [getUserPendingEmailAction, setUserPendingEmailAction],
-    },
-    setCurrentPageAction('EditPetitionerInformationInternal'),
-  ]);
+  // todo: how to wrap with multiple decorators?
+  // startWebSocketConnectionSequenceDecorator toooooo
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      clearAlertsAction,
+      clearErrorAlertsAction,
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      getCaseAction,
+      setCaseAction,
+      setupPetitionerContactInformationFormAction,
+      isInternalUserAction,
+      {
+        no: [],
+        yes: [getUserPendingEmailAction, setUserPendingEmailAction],
+      },
+      setCurrentPageAction('EditPetitionerInformationInternal'),
+    ]),
+  );

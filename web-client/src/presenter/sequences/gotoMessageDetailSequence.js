@@ -16,6 +16,7 @@ import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoMessageDetail = showProgressSequenceDecorator([
   setCurrentPageAction('Interstitial'),
@@ -39,10 +40,12 @@ const gotoMessageDetail = showProgressSequenceDecorator([
   },
 ]);
 
-export const gotoMessageDetailSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoMessageDetail,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+// todo??
+export const gotoMessageDetailSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoMessageDetail,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

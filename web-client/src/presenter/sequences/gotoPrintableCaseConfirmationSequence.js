@@ -3,11 +3,15 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
+//todo multiple decorators
 export const gotoPrintableCaseConfirmationSequence =
-  showProgressSequenceDecorator([
-    getCaseAction,
-    setCaseAction,
-    generateCaseConfirmationPdfUrlAction,
-    setCurrentPageAction('PrintableDocketRecord'),
-  ]);
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      getCaseAction,
+      setCaseAction,
+      generateCaseConfirmationPdfUrlAction,
+      setCurrentPageAction('PrintableDocketRecord'),
+    ]),
+  );
