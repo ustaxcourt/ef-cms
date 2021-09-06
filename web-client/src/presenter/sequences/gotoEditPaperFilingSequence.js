@@ -11,6 +11,7 @@ import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketReco
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPdfPreviewUrlForEditPaperFilingAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForEditPaperFilingAction';
 import { setupEditPaperFilingAction } from '../actions/setupEditPaperFilingAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
@@ -31,10 +32,11 @@ export const gotoEditPaperFiling = [
   setCurrentPageAction('PaperFiling'),
 ];
 
-export const gotoEditPaperFilingSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditPaperFiling,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditPaperFilingSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoEditPaperFiling,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

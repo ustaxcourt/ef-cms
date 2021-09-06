@@ -8,6 +8,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentToFormAction } from '../actions/EditUploadCourtIssuedDocument/setDocumentToFormAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoEditUploadCourtIssuedDocument = [
@@ -23,10 +24,11 @@ const gotoEditUploadCourtIssuedDocument = [
   setCurrentPageAction('EditUploadCourtIssuedDocument'),
 ];
 
-export const gotoEditUploadCourtIssuedDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [gotoEditUploadCourtIssuedDocument],
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditUploadCourtIssuedDocumentSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: [gotoEditUploadCourtIssuedDocument],
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

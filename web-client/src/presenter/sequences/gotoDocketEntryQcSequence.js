@@ -13,6 +13,7 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
@@ -38,10 +39,11 @@ export const gotoDocketEntryQc = [
   },
 ];
 
-export const gotoDocketEntryQcSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoDocketEntryQc,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoDocketEntryQcSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoDocketEntryQc,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

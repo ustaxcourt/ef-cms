@@ -17,6 +17,7 @@ import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEdi
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
@@ -47,10 +48,11 @@ export const gotoEditDocketEntryMeta = [
   setCurrentPageAction('EditDocketEntryMeta'),
 ];
 
-export const gotoEditDocketEntryMetaSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditDocketEntryMeta,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditDocketEntryMetaSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoEditDocketEntryMeta,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

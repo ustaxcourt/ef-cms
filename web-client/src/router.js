@@ -816,7 +816,6 @@ const router = {
       '/document-qc',
       ifHasAccess({ app }, () => {
         setPageTitle('Document QC');
-        app.getSequence('startWebSocketConnectionSequence');
         return app.getSequence('gotoWorkQueueSequence')({
           box: null,
           queue: null,
