@@ -34,11 +34,10 @@ const gotoEditTrialSession = [
   setCurrentPageAction('EditTrialSession'),
 ];
 
-export const gotoEditTrialSessionSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoEditTrialSession,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditTrialSessionSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditTrialSession),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

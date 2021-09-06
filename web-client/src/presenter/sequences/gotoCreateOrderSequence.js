@@ -19,28 +19,27 @@ export const gotoCaseDetailWithModal = [
   navigateToCaseDetailAction,
 ];
 
-export const gotoCreateOrderSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        setRedirectUrlAction,
-        hasOrderTypeSelectedAction,
-        {
-          no: gotoCaseDetailWithModal,
-          proceed: [
-            unsetDocumentToEditAction,
-            clearModalAction,
-            setCurrentPageAction('Interstitial'),
-            stopShowValidationAction,
-            clearFormAction,
-            setCreateOrderModalDataOnFormAction,
-            convertHtml2PdfSequence,
-            setIsCreatingOrderAction,
-            setCurrentPageAction('CreateOrder'),
-          ],
-        },
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoCreateOrderSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      setRedirectUrlAction,
+      hasOrderTypeSelectedAction,
+      {
+        no: gotoCaseDetailWithModal,
+        proceed: [
+          unsetDocumentToEditAction,
+          clearModalAction,
+          setCurrentPageAction('Interstitial'),
+          stopShowValidationAction,
+          clearFormAction,
+          setCreateOrderModalDataOnFormAction,
+          convertHtml2PdfSequence,
+          setIsCreatingOrderAction,
+          setCurrentPageAction('CreateOrder'),
+        ],
+      },
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

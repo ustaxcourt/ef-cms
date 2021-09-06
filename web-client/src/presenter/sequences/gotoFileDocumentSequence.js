@@ -37,11 +37,10 @@ const gotoFileDocument = [
   },
 ];
 
-export const gotoFileDocumentSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoFileDocument,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoFileDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoFileDocument),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

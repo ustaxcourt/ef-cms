@@ -30,11 +30,10 @@ const gotoAddTrialSession = [
   setCurrentPageAction('AddTrialSession'),
 ];
 
-export const gotoAddTrialSessionSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoAddTrialSession,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoAddTrialSessionSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddTrialSession),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

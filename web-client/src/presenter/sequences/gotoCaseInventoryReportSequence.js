@@ -24,20 +24,19 @@ const gotoDashboardWithModal = [
   navigateToDashboardAction,
 ];
 
-export const gotoCaseInventoryReportSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        hasCaseInventoryReportFilterSelectedAction,
-        {
-          no: gotoDashboardWithModal,
-          proceed: parallel([
-            fetchUserNotificationsSequence,
-            gotoCaseInventoryReport,
-          ]),
-        },
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoCaseInventoryReportSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      hasCaseInventoryReportFilterSelectedAction,
+      {
+        no: gotoDashboardWithModal,
+        proceed: parallel([
+          fetchUserNotificationsSequence,
+          gotoCaseInventoryReport,
+        ]),
+      },
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

@@ -24,11 +24,10 @@ export const gotoAddPaperFiling = [
   setCurrentPageAction('PaperFiling'),
 ];
 
-export const gotoAddPaperFilingSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoAddPaperFiling,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoAddPaperFilingSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddPaperFiling),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

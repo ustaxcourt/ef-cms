@@ -18,14 +18,12 @@ const gotoBlockedCasesReport = [
   setCurrentPageAction('BlockedCasesReport'),
 ];
 
-export const gotoBlockedCasesReportSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: parallel([
-        fetchUserNotificationsSequence,
-        gotoBlockedCasesReport,
-      ]),
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoBlockedCasesReportSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      parallel([fetchUserNotificationsSequence, gotoBlockedCasesReport]),
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

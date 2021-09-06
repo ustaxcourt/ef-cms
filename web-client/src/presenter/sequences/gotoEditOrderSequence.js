@@ -32,10 +32,10 @@ const gotoEditOrder = [
   setCurrentPageAction('CreateOrder'),
 ];
 
-export const gotoEditOrderSequence = startWebSocketConnectionSequenceDecorator([
+export const gotoEditOrderSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoEditOrder,
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditOrder),
     unauthorized: [redirectToCognitoAction],
   },
-]);
+];

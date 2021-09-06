@@ -18,11 +18,10 @@ const gotoContactEdit = [
   setCurrentPageAction('ContactEdit'),
 ];
 
-export const gotoContactEditSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoContactEdit,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoContactEditSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoContactEdit),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

@@ -32,11 +32,10 @@ export const gotoEditPaperFiling = [
   setCurrentPageAction('PaperFiling'),
 ];
 
-export const gotoEditPaperFilingSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoEditPaperFiling,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditPaperFilingSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

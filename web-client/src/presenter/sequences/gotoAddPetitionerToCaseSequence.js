@@ -8,19 +8,18 @@ import { setDefaultAddPetitionerToCaseFormAction } from '../actions/setDefaultAd
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddPetitionerToCaseSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        setCurrentPageAction('Interstitial'),
-        stopShowValidationAction,
-        clearFormAction,
-        getCaseAction,
-        setCaseAction,
-        setDefaultAddPetitionerToCaseFormAction,
-        setCurrentPageAction('AddPetitionerToCase'),
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoAddPetitionerToCaseSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      clearFormAction,
+      getCaseAction,
+      setCaseAction,
+      setDefaultAddPetitionerToCaseFormAction,
+      setCurrentPageAction('AddPetitionerToCase'),
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

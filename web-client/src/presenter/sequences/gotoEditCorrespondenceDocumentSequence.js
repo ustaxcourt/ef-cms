@@ -24,11 +24,12 @@ const gotoEditCorrespondenceDocument = [
   setCurrentPageAction('EditCorrespondenceDocument'),
 ];
 
-export const gotoEditCorrespondenceDocumentSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [gotoEditCorrespondenceDocument],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditCorrespondenceDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoEditCorrespondenceDocument,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

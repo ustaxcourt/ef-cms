@@ -8,19 +8,18 @@ import { setDefaultFormForAddDeficiencySatisticsAction } from '../actions/setDef
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddDeficiencyStatisticsSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        setCurrentPageAction('Interstitial'),
-        stopShowValidationAction,
-        clearFormAction,
-        getCaseAction,
-        setCaseAction,
-        setDefaultFormForAddDeficiencySatisticsAction,
-        setCurrentPageAction('AddDeficiencyStatistics'),
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoAddDeficiencyStatisticsSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      clearFormAction,
+      getCaseAction,
+      setCaseAction,
+      setDefaultFormForAddDeficiencySatisticsAction,
+      setCurrentPageAction('AddDeficiencyStatistics'),
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

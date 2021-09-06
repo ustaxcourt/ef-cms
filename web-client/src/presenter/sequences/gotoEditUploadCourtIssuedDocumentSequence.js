@@ -24,11 +24,12 @@ const gotoEditUploadCourtIssuedDocument = [
   setCurrentPageAction('EditUploadCourtIssuedDocument'),
 ];
 
-export const gotoEditUploadCourtIssuedDocumentSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [gotoEditUploadCourtIssuedDocument],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditUploadCourtIssuedDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoEditUploadCourtIssuedDocument,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

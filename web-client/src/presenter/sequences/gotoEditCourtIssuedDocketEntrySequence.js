@@ -34,11 +34,12 @@ export const gotoEditCourtIssuedDocketEntry = [
   setCurrentPageAction('CourtIssuedDocketEntry'),
 ];
 
-export const gotoEditCourtIssuedDocketEntrySequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoEditCourtIssuedDocketEntry,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditCourtIssuedDocketEntrySequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoEditCourtIssuedDocketEntry,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];
