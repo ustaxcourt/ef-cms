@@ -8,9 +8,8 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-//todo multiple decorators
 export const gotoPrintableDocketRecordSequence =
-  startWebSocketConnectionSequenceDecorator(
+  startWebSocketConnectionSequenceDecorator([
     showProgressSequenceDecorator([
       clearModalStateAction,
       getCaseAction,
@@ -20,4 +19,4 @@ export const gotoPrintableDocketRecordSequence =
       setPdfPreviewUrlSequence,
       setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
     ]),
-  );
+  ]);

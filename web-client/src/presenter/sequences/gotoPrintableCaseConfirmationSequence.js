@@ -5,13 +5,12 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-//todo multiple decorators
 export const gotoPrintableCaseConfirmationSequence =
-  startWebSocketConnectionSequenceDecorator(
+  startWebSocketConnectionSequenceDecorator([
     showProgressSequenceDecorator([
       getCaseAction,
       setCaseAction,
       generateCaseConfirmationPdfUrlAction,
       setCurrentPageAction('PrintableDocketRecord'),
     ]),
-  );
+  ]);
