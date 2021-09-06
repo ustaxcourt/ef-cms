@@ -9,6 +9,7 @@ import { openCaseInventoryReportModalSequence } from './openCaseInventoryReportM
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoCaseInventoryReport = [
   setCurrentPageAction('Interstitial'),
@@ -23,19 +24,20 @@ const gotoDashboardWithModal = [
   navigateToDashboardAction,
 ];
 
-export const gotoCaseInventoryReportSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [
-      hasCaseInventoryReportFilterSelectedAction,
-      {
-        no: gotoDashboardWithModal,
-        proceed: parallel([
-          fetchUserNotificationsSequence,
-          gotoCaseInventoryReport,
-        ]),
-      },
-    ],
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoCaseInventoryReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: [
+        hasCaseInventoryReportFilterSelectedAction,
+        {
+          no: gotoDashboardWithModal,
+          proceed: parallel([
+            fetchUserNotificationsSequence,
+            gotoCaseInventoryReport,
+          ]),
+        },
+      ],
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

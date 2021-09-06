@@ -16,6 +16,7 @@ import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/se
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoTrialSessionDetails = [
   setCurrentPageAction('Interstitial'),
@@ -45,10 +46,11 @@ const gotoTrialSessionDetails = [
   setCurrentPageAction('TrialSessionDetail'),
 ];
 
-export const gotoTrialSessionDetailSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoTrialSessionDetails,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoTrialSessionDetailSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoTrialSessionDetails,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

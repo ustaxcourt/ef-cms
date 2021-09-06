@@ -13,6 +13,7 @@ import { setTrialSessionDetailsOnFormAction } from '../actions/TrialSession/setT
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setTrialStartTimeAction } from '../actions/setTrialStartTimeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoEditTrialSession = [
@@ -33,10 +34,11 @@ const gotoEditTrialSession = [
   setCurrentPageAction('EditTrialSession'),
 ];
 
-export const gotoEditTrialSessionSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditTrialSession,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditTrialSessionSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoEditTrialSession,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

@@ -13,6 +13,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
 import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoRequestAccess = [
@@ -46,10 +47,11 @@ const gotoRequestAccess = [
   },
 ];
 
-export const gotoRequestAccessSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoRequestAccess,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoRequestAccessSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoRequestAccess,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

@@ -13,28 +13,30 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoAddCourtIssuedDocketEntrySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [
-      setCurrentPageAction('Interstitial'),
-      stopShowValidationAction,
-      clearFormAction,
-      setRedirectUrlAction,
-      getUsersInSectionAction({ section: 'judge' }),
-      getFilterCurrentJudgeUsersAction,
-      setUsersByKeyAction('judges'),
-      getCaseAction,
-      setCaseAction,
-      setDocketEntryIdAction,
-      setCourtIssuedDocumentInitialDataAction,
-      setDefaultServiceStampAction,
-      generateCourtIssuedDocumentTitleAction,
-      setIsEditingDocketEntryAction(false),
-      setCurrentPageAction('CourtIssuedDocketEntry'),
-    ],
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoAddCourtIssuedDocketEntrySequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: [
+        setCurrentPageAction('Interstitial'),
+        stopShowValidationAction,
+        clearFormAction,
+        setRedirectUrlAction,
+        getUsersInSectionAction({ section: 'judge' }),
+        getFilterCurrentJudgeUsersAction,
+        setUsersByKeyAction('judges'),
+        getCaseAction,
+        setCaseAction,
+        setDocketEntryIdAction,
+        setCourtIssuedDocumentInitialDataAction,
+        setDefaultServiceStampAction,
+        generateCourtIssuedDocumentTitleAction,
+        setIsEditingDocketEntryAction(false),
+        setCurrentPageAction('CourtIssuedDocketEntry'),
+      ],
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);
