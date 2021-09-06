@@ -10,6 +10,7 @@ import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
@@ -18,27 +19,28 @@ export const gotoCaseDetailWithModal = [
   navigateToCaseDetailAction,
 ];
 
-export const gotoCreateOrderSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: [
-      setRedirectUrlAction,
-      hasOrderTypeSelectedAction,
-      {
-        no: gotoCaseDetailWithModal,
-        proceed: [
-          unsetDocumentToEditAction,
-          clearModalAction,
-          setCurrentPageAction('Interstitial'),
-          stopShowValidationAction,
-          clearFormAction,
-          setCreateOrderModalDataOnFormAction,
-          convertHtml2PdfSequence,
-          setIsCreatingOrderAction,
-          setCurrentPageAction('CreateOrder'),
-        ],
-      },
-    ],
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoCreateOrderSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: [
+        setRedirectUrlAction,
+        hasOrderTypeSelectedAction,
+        {
+          no: gotoCaseDetailWithModal,
+          proceed: [
+            unsetDocumentToEditAction,
+            clearModalAction,
+            setCurrentPageAction('Interstitial'),
+            stopShowValidationAction,
+            clearFormAction,
+            setCreateOrderModalDataOnFormAction,
+            convertHtml2PdfSequence,
+            setIsCreatingOrderAction,
+            setCurrentPageAction('CreateOrder'),
+          ],
+        },
+      ],
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

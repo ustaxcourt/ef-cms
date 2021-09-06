@@ -12,6 +12,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoFileDocument = [
@@ -36,10 +37,11 @@ const gotoFileDocument = [
   },
 ];
 
-export const gotoFileDocumentSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoFileDocument,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoFileDocumentSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoFileDocument,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

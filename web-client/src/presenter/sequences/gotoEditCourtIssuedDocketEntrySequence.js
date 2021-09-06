@@ -13,6 +13,7 @@ import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketReco
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditCourtIssuedDocketEntry = [
@@ -33,10 +34,11 @@ export const gotoEditCourtIssuedDocketEntry = [
   setCurrentPageAction('CourtIssuedDocketEntry'),
 ];
 
-export const gotoEditCourtIssuedDocketEntrySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoEditCourtIssuedDocketEntry,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoEditCourtIssuedDocketEntrySequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoEditCourtIssuedDocketEntry,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

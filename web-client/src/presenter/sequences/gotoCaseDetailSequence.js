@@ -31,6 +31,7 @@ import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseA
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 
 const { USER_ROLES } = getConstants();
@@ -72,46 +73,48 @@ const gotoCaseDetailInternalWithNotes = [
   gotoCaseDetailInternal,
 ];
 
-export const gotoCaseDetailSequence = [
-  setCurrentPageAction('Interstitial'),
-  clearScreenMetadataAction,
-  clearFormAction,
-  closeMobileMenuAction,
-  setDefaultCaseDetailTabAction,
-  setIsPrimaryTabAction,
-  getCaseAction,
-  setCaseAction,
-  getConsolidatedCasesByCaseAction,
-  setConsolidatedCasesForCaseAction,
-  setDefaultDocketRecordSortAction,
-  setDefaultEditDocumentEntryPointAction,
-  runPathForUserRoleAction,
-  {
-    ...takePathForRoles(
-      [
-        USER_ROLES.adc,
-        USER_ROLES.admissionsClerk,
-        USER_ROLES.chambers,
-        USER_ROLES.clerkOfCourt,
-        USER_ROLES.docketClerk,
-        USER_ROLES.floater,
-        USER_ROLES.general,
-        USER_ROLES.petitionsClerk,
-        USER_ROLES.reportersOffice,
-        USER_ROLES.trialClerk,
-      ],
-      [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
-    ),
-    ...takePathForRoles(
-      [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
-      gotoCaseDetailExternal,
-    ),
-    ...takePathForRoles(
-      [USER_ROLES.privatePractitioner, USER_ROLES.irsPractitioner],
-      gotoCaseDetailExternalPractitioners,
-    ),
-    chambers: gotoCaseDetailInternalWithNotes,
-    judge: gotoCaseDetailInternalWithNotes,
-  },
-  setCaseDetailPageTabUnfrozenAction,
-];
+export const gotoCaseDetailSequence = startWebSocketConnectionSequenceDecorator(
+  [
+    setCurrentPageAction('Interstitial'),
+    clearScreenMetadataAction,
+    clearFormAction,
+    closeMobileMenuAction,
+    setDefaultCaseDetailTabAction,
+    setIsPrimaryTabAction,
+    getCaseAction,
+    setCaseAction,
+    getConsolidatedCasesByCaseAction,
+    setConsolidatedCasesForCaseAction,
+    setDefaultDocketRecordSortAction,
+    setDefaultEditDocumentEntryPointAction,
+    runPathForUserRoleAction,
+    {
+      ...takePathForRoles(
+        [
+          USER_ROLES.adc,
+          USER_ROLES.admissionsClerk,
+          USER_ROLES.chambers,
+          USER_ROLES.clerkOfCourt,
+          USER_ROLES.docketClerk,
+          USER_ROLES.floater,
+          USER_ROLES.general,
+          USER_ROLES.petitionsClerk,
+          USER_ROLES.reportersOffice,
+          USER_ROLES.trialClerk,
+        ],
+        [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
+      ),
+      ...takePathForRoles(
+        [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
+        gotoCaseDetailExternal,
+      ),
+      ...takePathForRoles(
+        [USER_ROLES.privatePractitioner, USER_ROLES.irsPractitioner],
+        gotoCaseDetailExternalPractitioners,
+      ),
+      chambers: gotoCaseDetailInternalWithNotes,
+      judge: gotoCaseDetailInternalWithNotes,
+    },
+    setCaseDetailPageTabUnfrozenAction,
+  ],
+);

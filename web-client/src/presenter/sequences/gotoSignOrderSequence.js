@@ -10,8 +10,9 @@ import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningActio
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoSignOrderSequence = [
+export const gotoSignOrderSequence = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   setRedirectUrlAction,
   getCaseAction,
@@ -25,4 +26,4 @@ export const gotoSignOrderSequence = [
   setPDFPageForSigningAction,
   setParentMessageIdAction,
   setCurrentPageAction('SignOrder'),
-];
+]);
