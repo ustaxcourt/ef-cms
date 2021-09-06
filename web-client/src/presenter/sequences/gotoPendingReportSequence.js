@@ -9,6 +9,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoPendingReport = [
   setCurrentPageAction('Interstitial'),
@@ -21,10 +22,11 @@ const gotoPendingReport = [
   setCurrentPageAction('PendingReport'),
 ];
 
-export const gotoPendingReportSequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoPendingReport,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoPendingReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoPendingReport,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);

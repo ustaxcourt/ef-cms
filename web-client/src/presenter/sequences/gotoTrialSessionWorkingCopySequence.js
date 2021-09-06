@@ -23,6 +23,7 @@ import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSe
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setUsersAction } from '../actions/setUsersAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
@@ -81,10 +82,11 @@ const gotoTrialSessionDetails = [
   },
 ];
 
-export const gotoTrialSessionWorkingCopySequence = [
-  isLoggedInAction,
-  {
-    isLoggedIn: gotoTrialSessionDetails,
-    unauthorized: [redirectToCognitoAction],
-  },
-];
+export const gotoTrialSessionWorkingCopySequence =
+  startWebSocketConnectionSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: gotoTrialSessionDetails,
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]);
