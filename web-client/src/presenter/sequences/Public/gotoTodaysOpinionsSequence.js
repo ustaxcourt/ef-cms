@@ -2,14 +2,9 @@ import { getTodaysOpinionsAction } from '../../actions/Public/getTodaysOpinionsA
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setTodaysOpinionsAction } from '../../actions/Public/setTodaysOpinionsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
-import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 
-// todo ??
-export const gotoTodaysOpinionsSequence =
-  startWebSocketConnectionSequenceDecorator(
-    showProgressSequenceDecorator([
-      getTodaysOpinionsAction,
-      setTodaysOpinionsAction,
-      setCurrentPageAction('TodaysOpinions'),
-    ]),
-  );
+export const gotoTodaysOpinionsSequence = showProgressSequenceDecorator([
+  getTodaysOpinionsAction,
+  setTodaysOpinionsAction,
+  setCurrentPageAction('TodaysOpinions'),
+]);

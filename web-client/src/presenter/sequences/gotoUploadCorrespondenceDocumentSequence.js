@@ -8,21 +8,21 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoUploadCorrespondenceDocument = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setCurrentPageAction('UploadCorrespondenceDocument'),
-];
-
-export const gotoUploadCorrespondenceDocumentSequence =
+const gotoUploadCorrespondenceDocument =
   startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [gotoUploadCorrespondenceDocument],
-      unauthorized: [redirectToCognitoAction],
-    },
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setCurrentPageAction('UploadCorrespondenceDocument'),
   ]);
+
+export const gotoUploadCorrespondenceDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: [gotoUploadCorrespondenceDocument],
+    unauthorized: [redirectToCognitoAction],
+  },
+];

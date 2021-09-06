@@ -52,7 +52,7 @@ const checkUserAssociationAndProceed = [
   },
 ];
 
-const gotoTrialSessionDetails = [
+const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
   setTrialSessionIdAction,
@@ -80,13 +80,12 @@ const gotoTrialSessionDetails = [
     judge: checkUserAssociationAndProceed,
     trialclerk: checkUserAssociationAndProceed,
   },
-];
+]);
 
-export const gotoTrialSessionWorkingCopySequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoTrialSessionDetails,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoTrialSessionWorkingCopySequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: gotoTrialSessionDetails,
+    unauthorized: [redirectToCognitoAction],
+  },
+];

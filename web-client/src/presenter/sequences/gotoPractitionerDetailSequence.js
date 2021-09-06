@@ -7,18 +7,17 @@ import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAct
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPractitionerDetailSequence =
-  startWebSocketConnectionSequenceDecorator([
-    showProgressSequenceDecorator([
-      isLoggedInAction,
-      {
-        isLoggedIn: [
-          clearErrorAlertsAction,
-          getPractitionerDetailAction,
-          setPractitionerDetailAction,
-          setCurrentPageAction('PractitionerDetail'),
-        ],
-        unauthorized: [redirectToCognitoAction],
-      },
-    ]),
-  ]);
+export const gotoPractitionerDetailSequence = [
+  showProgressSequenceDecorator([
+    isLoggedInAction,
+    {
+      isLoggedIn: startWebSocketConnectionSequenceDecorator([
+        clearErrorAlertsAction,
+        getPractitionerDetailAction,
+        setPractitionerDetailAction,
+        setCurrentPageAction('PractitionerDetail'),
+      ]),
+      unauthorized: [redirectToCognitoAction],
+    },
+  ]),
+];

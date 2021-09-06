@@ -5,15 +5,14 @@ import { navigateToPublicEmailVerificationSuccessAction } from '../actions/Publi
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { verifyUserPendingEmailAction } from '../actions/verifyUserPendingEmailAction';
 
-export const gotoVerifyEmailSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        verifyUserPendingEmailAction,
-        clearUserAction,
-        navigateToPublicEmailVerificationSuccessAction,
-      ],
-      unauthorized: [navigateToPublicEmailVerificationInstructionsAction],
-    },
-  ]);
+export const gotoVerifyEmailSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      verifyUserPendingEmailAction,
+      clearUserAction,
+      navigateToPublicEmailVerificationSuccessAction,
+    ]),
+    unauthorized: [navigateToPublicEmailVerificationInstructionsAction],
+  },
+];
