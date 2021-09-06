@@ -10,7 +10,7 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAction';
 import { setPendingEmailsOnCaseAction } from '../../actions/setPendingEmailsOnCaseAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddIrsPractitionerAction } from '../../actions/CaseAssociation/validateAddIrsPractitionerAction';

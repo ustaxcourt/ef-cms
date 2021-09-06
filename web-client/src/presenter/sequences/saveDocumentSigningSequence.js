@@ -12,7 +12,7 @@ import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabActio
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const saveDocumentSigningSequence = showProgressSequenceDecorator([
   clearAlertsAction,
