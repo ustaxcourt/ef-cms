@@ -33,11 +33,12 @@ const gotoCaseDeadlineReport = [
   setCurrentPageAction('CaseDeadlines'),
 ];
 
-export const gotoCaseDeadlineReportSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoCaseDeadlineReport,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoCaseDeadlineReportSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoCaseDeadlineReport,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

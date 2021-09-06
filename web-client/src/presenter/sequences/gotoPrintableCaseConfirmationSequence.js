@@ -6,11 +6,11 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoPrintableCaseConfirmationSequence =
-  startWebSocketConnectionSequenceDecorator([
+  startWebSocketConnectionSequenceDecorator(
     showProgressSequenceDecorator([
       getCaseAction,
       setCaseAction,
       generateCaseConfirmationPdfUrlAction,
       setCurrentPageAction('PrintableDocketRecord'),
     ]),
-  ]);
+  );

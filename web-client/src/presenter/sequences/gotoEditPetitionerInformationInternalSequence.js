@@ -12,7 +12,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence =
-  startWebSocketConnectionSequenceDecorator([
+  startWebSocketConnectionSequenceDecorator(
     showProgressSequenceDecorator([
       clearAlertsAction,
       clearErrorAlertsAction,
@@ -28,4 +28,4 @@ export const gotoEditPetitionerInformationInternalSequence =
       },
       setCurrentPageAction('EditPetitionerInformationInternal'),
     ]),
-  ]);
+  );

@@ -18,7 +18,7 @@ import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoMessageDetail = startWebSocketConnectionSequenceDecorator([
+const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
   showProgressSequenceDecorator([
     setCurrentPageAction('Interstitial'),
     closeMobileMenuAction,
@@ -40,7 +40,7 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator([
       noAction: [],
     },
   ]),
-]);
+);
 
 export const gotoMessageDetailSequence = [
   isLoggedInAction,

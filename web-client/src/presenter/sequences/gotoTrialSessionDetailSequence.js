@@ -46,11 +46,12 @@ const gotoTrialSessionDetails = [
   setCurrentPageAction('TrialSessionDetail'),
 ];
 
-export const gotoTrialSessionDetailSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoTrialSessionDetails,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoTrialSessionDetailSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoTrialSessionDetails,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

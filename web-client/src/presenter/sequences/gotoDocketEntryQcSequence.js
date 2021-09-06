@@ -39,11 +39,10 @@ export const gotoDocketEntryQc = [
   },
 ];
 
-export const gotoDocketEntryQcSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoDocketEntryQc,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoDocketEntryQcSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoDocketEntryQc),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

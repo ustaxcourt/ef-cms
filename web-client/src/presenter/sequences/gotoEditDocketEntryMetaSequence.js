@@ -48,11 +48,12 @@ export const gotoEditDocketEntryMeta = [
   setCurrentPageAction('EditDocketEntryMeta'),
 ];
 
-export const gotoEditDocketEntryMetaSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoEditDocketEntryMeta,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditDocketEntryMetaSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoEditDocketEntryMeta,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

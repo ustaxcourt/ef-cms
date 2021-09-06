@@ -8,19 +8,18 @@ import { setEditDeficiencyStatisticFormAction } from '../actions/setEditDeficien
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditDeficiencyStatisticSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        setCurrentPageAction('Interstitial'),
-        stopShowValidationAction,
-        clearFormAction,
-        getCaseAction,
-        setCaseAction,
-        setEditDeficiencyStatisticFormAction,
-        setCurrentPageAction('EditDeficiencyStatistic'),
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditDeficiencyStatisticSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      clearFormAction,
+      getCaseAction,
+      setCaseAction,
+      setEditDeficiencyStatisticFormAction,
+      setCurrentPageAction('EditDeficiencyStatistic'),
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

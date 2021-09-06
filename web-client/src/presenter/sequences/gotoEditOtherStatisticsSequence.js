@@ -8,19 +8,18 @@ import { setEditOtherStatisticsFormAction } from '../actions/setEditOtherStatist
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditOtherStatisticsSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [
-        setCurrentPageAction('Interstitial'),
-        stopShowValidationAction,
-        clearFormAction,
-        getCaseAction,
-        setCaseAction,
-        setEditOtherStatisticsFormAction,
-        setCurrentPageAction('EditOtherStatistics'),
-      ],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoEditOtherStatisticsSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      clearFormAction,
+      getCaseAction,
+      setCaseAction,
+      setEditOtherStatisticsFormAction,
+      setCurrentPageAction('EditOtherStatistics'),
+    ]),
+    unauthorized: [redirectToCognitoAction],
+  },
+];

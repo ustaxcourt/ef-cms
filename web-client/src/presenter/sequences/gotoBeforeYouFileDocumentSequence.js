@@ -14,11 +14,12 @@ const gotoBeforeYouFileDocument = [
   setCurrentPageAction('BeforeYouFileADocument'),
 ];
 
-export const gotoBeforeYouFileDocumentSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: gotoBeforeYouFileDocument,
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoBeforeYouFileDocumentSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(
+      gotoBeforeYouFileDocument,
+    ),
+    unauthorized: [redirectToCognitoAction],
+  },
+];
