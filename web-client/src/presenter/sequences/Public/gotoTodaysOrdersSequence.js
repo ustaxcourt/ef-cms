@@ -2,9 +2,14 @@ import { getTodaysOrdersAction } from '../../actions/Public/getTodaysOrdersActio
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setTodaysOrdersAction } from '../../actions/Public/setTodaysOrdersAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoTodaysOrdersSequence = showProgressSequenceDecorator([
-  getTodaysOrdersAction,
-  setTodaysOrdersAction,
-  setCurrentPageAction('TodaysOrders'),
-]);
+//todo ??
+export const gotoTodaysOrdersSequence =
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      getTodaysOrdersAction,
+      setTodaysOrdersAction,
+      setCurrentPageAction('TodaysOrders'),
+    ]),
+  );

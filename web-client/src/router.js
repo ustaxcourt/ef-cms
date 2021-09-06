@@ -998,10 +998,12 @@ const router = {
       ),
     );
 
+    //todo ??
     registerRoute('/idle-logout', () => {
       return app.getSequence('gotoIdleLogoutSequence')();
     });
 
+    //todo ??
     registerRoute('/log-in...', () => {
       const { code, path, token } = queryStringDecoder();
       if (code) {

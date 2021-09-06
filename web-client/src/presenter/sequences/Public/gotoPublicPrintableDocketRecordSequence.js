@@ -6,14 +6,18 @@ import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 
+//todo ??
 export const gotoPublicPrintableDocketRecordSequence =
-  showProgressSequenceDecorator([
-    clearModalStateAction,
-    getPublicCaseAction,
-    setCaseAction,
-    generatePublicDocketRecordPdfUrlAction,
-    setPdfPreviewUrlSequence,
-    setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
-    setCurrentPageAction('PublicCaseDetail'),
-  ]);
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      clearModalStateAction,
+      getPublicCaseAction,
+      setCaseAction,
+      generatePublicDocketRecordPdfUrlAction,
+      setPdfPreviewUrlSequence,
+      setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
+      setCurrentPageAction('PublicCaseDetail'),
+    ]),
+  );

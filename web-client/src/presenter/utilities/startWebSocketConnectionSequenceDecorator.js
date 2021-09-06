@@ -3,6 +3,7 @@ import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/s
 
 export const startWebSocketConnectionSequenceDecorator = actionsList => {
   const wrappedActions = [
+    () => console.log('omg im in the decorator'),
     startWebSocketConnectionAction,
     {
       error: [setShowModalFactoryAction('WebSocketErrorModal')],
