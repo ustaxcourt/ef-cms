@@ -5,14 +5,16 @@ import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesActio
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../../actions/setOpinionTypesAction';
+import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPublicSearchSequence = [
-  setCurrentPageAction('Interstitial'),
-  clearAlertsAction,
-  defaultAdvancedSearchFormAction,
-  getPublicJudgesAction,
-  setAllAndCurrentJudgesAction,
-  getOpinionTypesAction,
-  setOpinionTypesAction,
-  setCurrentPageAction('PublicSearch'),
-];
+export const gotoPublicSearchSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    clearAlertsAction,
+    defaultAdvancedSearchFormAction,
+    getPublicJudgesAction,
+    setAllAndCurrentJudgesAction,
+    getOpinionTypesAction,
+    setOpinionTypesAction,
+    setCurrentPageAction('PublicSearch'),
+  ]);

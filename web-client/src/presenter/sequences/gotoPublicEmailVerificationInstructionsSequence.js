@@ -1,9 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPublicEmailVerificationInstructionsSequence = [
-  clearAlertsAction,
-  clearScreenMetadataAction,
-  setCurrentPageAction('EmailVerificationInstructions'),
-];
+export const gotoPublicEmailVerificationInstructionsSequence =
+  startWebSocketConnectionSequenceDecorator([
+    clearAlertsAction,
+    clearScreenMetadataAction,
+    setCurrentPageAction('EmailVerificationInstructions'),
+  ]);
