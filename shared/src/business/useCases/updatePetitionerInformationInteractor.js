@@ -26,7 +26,7 @@ const getIsUserAuthorized = ({ oldCase, updatedPetitionerData, user }) => {
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
       oldCase,
-      updatedPetitionerData.contactId,
+      updatedPetitionerData?.contactId,
     );
 
     isRepresentingCounsel = practitioners.find(
