@@ -31,6 +31,18 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
   return returnData;
 };
 
+const checkMaintenanceMode = async ({ applicationContext }) => {
+  const maintenanceMode = await applicationContext
+    .getPersistenceGateway()
+    .getMaintenanceMode({ applicationContext });
+
+  if (maintenanceMode) {
+    throw new Error('Maintenance mode is enabled');
+  }
+};
+
+exports.checkMaintenanceMode = checkMaintenanceMode;
+
 /**
  * generic handler function for use in lambdas
  *
@@ -54,6 +66,8 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
         request: awsEvent,
         user,
       });
+
+      await checkMaintenanceMode({ applicationContext });
 
       const results = await cb({ applicationContext, user });
 
