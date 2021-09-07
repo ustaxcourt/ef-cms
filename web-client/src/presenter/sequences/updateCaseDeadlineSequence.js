@@ -7,7 +7,7 @@ import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDe
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateCaseDeadlineAction } from '../actions/CaseDeadline/updateCaseDeadlineAction';

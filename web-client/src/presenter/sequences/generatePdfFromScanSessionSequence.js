@@ -5,7 +5,7 @@ import { resetScanSessionAction } from '../actions/resetScanSessionAction';
 import { selectDocumentForPreviewSequence } from './selectDocumentForPreviewSequence';
 import { setDocumentUploadModeSequence } from './setDocumentUploadModeSequence';
 import { setIsScanningFalseAction } from '../actions/setIsScanningFalseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { updateFormValueSequence } from './updateFormValueSequence';
 import { validateFileSizeAction } from '../actions/validateFileSizeAction';
 import { validatePetitionFromPaperSequence } from './validatePetitionFromPaperSequence';

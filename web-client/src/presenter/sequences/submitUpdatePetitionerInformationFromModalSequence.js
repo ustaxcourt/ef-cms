@@ -1,5 +1,5 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitUpdatePetitionerInformationSequence } from './submitUpdatePetitionerInformationSequence';
 
 export const submitUpdatePetitionerInformationFromModalSequence = [

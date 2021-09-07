@@ -78,9 +78,11 @@ If this is the first time running a blue/green deployment on the environment:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"${VERSION}"}}'```
 9. Run the following command to set the environment's migrate flag to **false** (for next time):
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'```
-10. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
+10. Run the following command to set the environment's maintenance-mode flag to **false**:
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"S":"false"}}'```
+11. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
     ```./web-api/verify-ses-email.sh```
-11. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
+12. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
     ```./web-client/switch-colors.sh```
 
 
