@@ -371,6 +371,9 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
+  getAllWebSocketConnections,
+} = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
+const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
 const {
@@ -858,6 +861,9 @@ const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
+  retrySendNotificationToConnections,
+} = require('../../shared/src/notifications/retrySendNotificationToConnections');
+const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
@@ -905,6 +911,12 @@ const {
 const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
+const {
+  sendMaintenanceNotificationsInteractor,
+} = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationToConnection,
+} = require('../../shared/src/notifications/sendNotificationToConnection');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -1068,6 +1080,9 @@ const {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
+const {
+  updateMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode');
 const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
@@ -1367,6 +1382,7 @@ const gatewayMethods = {
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
+    updateMaintenanceMode,
     updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
@@ -1396,6 +1412,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteUserOutboxRecord,
   deleteWorkItem,
+  getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1655,6 +1672,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       });
     },
     getNotificationGateway: () => ({
+      retrySendNotificationToConnections,
+      sendNotificationToConnection,
       sendNotificationToUser,
     }),
     getPdfJs: () => {
@@ -1892,6 +1911,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,

@@ -84,6 +84,9 @@ const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
+  getAllWebSocketConnections,
+} = require('../../persistence/dynamo/notifications/getAllWebSocketConnections');
+const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
 const {
@@ -431,6 +434,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
+    getAllWebSocketConnections: jest
+      .fn()
+      .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByDateRange: jest.fn(),

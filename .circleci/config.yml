@@ -698,6 +698,7 @@ jobs:
                 -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                 -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                 -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
                 -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                 -e "ENV=${ENV}" \
                 --rm efcms /bin/sh -c "./wait-for-reindex-to-finish.sh"
