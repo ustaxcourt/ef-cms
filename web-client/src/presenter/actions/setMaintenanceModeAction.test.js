@@ -18,4 +18,18 @@ describe('setMaintenanceModeAction', () => {
     });
     expect(state.maintenanceMode).toBe(true);
   });
+
+  it('should call setItemInteractor', async () => {
+    await runAction(setMaintenanceModeAction, {
+      modules: { presenter },
+      props: {
+        maintenanceMode: true,
+      },
+      state: {},
+    });
+
+    expect(
+      applicationContext.getUseCases().setItemInteractor,
+    ).toHaveBeenCalled();
+  });
 });
