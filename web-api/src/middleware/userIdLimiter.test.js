@@ -44,11 +44,11 @@ describe('userIdLimiter', () => {
           },
         },
         applicationContext: {
-          getPersistenceGateway: () => ({
-            deleteKeyCount: jest.fn(),
-            incrementKeyCount: incrementKeyCountMock,
-            setExpiresAt: jest.fn(),
-          }),
+          // getPersistenceGateway: () => ({
+          //   deleteKeyCount: jest.fn(),
+          //   incrementKeyCount: incrementKeyCountMock,
+          //   setExpiresAt: jest.fn(),
+          // }),
         },
       },
       res,
