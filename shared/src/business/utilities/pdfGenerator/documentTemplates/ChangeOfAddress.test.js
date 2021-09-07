@@ -39,7 +39,10 @@ describe('ChangeOfAddress', () => {
       caseCaptionExtension: 'Petitioner(s)',
       caseTitle: 'Test Petitioner',
       docketNumberWithSuffix: '123-45S',
-      showAddressAndPhoneChange: true,
+      isAddressAndPhoneChange: false,
+      isAddressChange: false,
+      isEmailChange: false,
+      isPhoneChangeOnly: false,
     };
   });
 
@@ -49,7 +52,11 @@ describe('ChangeOfAddress', () => {
         name="Joe Exotic"
         newData={{ ...newData, countryType: undefined }}
         oldData={{ ...oldData, countryType: undefined }}
-        options={options}
+        options={{
+          ...options,
+          isAddressAndPhoneChange: true,
+          isAddressChange: true,
+        }}
       />,
     );
     const table = wrapper.find('#contact_info_Old');
@@ -67,13 +74,17 @@ describe('ChangeOfAddress', () => {
     expect(tableRowText).toContain(oldData.phone);
   });
 
-  it('renders a table with the new contact information', () => {
+  it('renders a table with the new contact address and phone information', () => {
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, countryType: undefined }}
         oldData={{ ...oldData, countryType: undefined }}
-        options={options}
+        options={{
+          ...options,
+          isAddressAndPhoneChange: true,
+          isAddressChange: true,
+        }}
       />,
     );
     const table = wrapper.find('#contact_info_New');
@@ -91,7 +102,7 @@ describe('ChangeOfAddress', () => {
     expect(tableRowText).toContain(newData.phone);
   });
 
-  it('only displays an email address change if options.showEmailChange is true', () => {
+  it('only displays an email address change if options.isEmailChange is true', () => {
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
@@ -99,9 +110,10 @@ describe('ChangeOfAddress', () => {
         oldData={oldData}
         options={{
           ...options,
-          showAddressAndPhoneChange: false,
-          showEmailChange: true,
-          showOnlyPhoneChange: false,
+          isAddressAndPhoneChange: false,
+          isAddressChange: false,
+          isEmailChange: true,
+          isPhoneChangeOnly: false,
         }}
       />,
     );
@@ -128,13 +140,13 @@ describe('ChangeOfAddress', () => {
     // TOOD expect new table text not to contain phone, address
   });
 
-  it('only displays a phone number change if options.showOnlyPhoneChange is true', () => {
+  it('only displays a phone number change if options.isPhoneChangeOnly is true', () => {
     const wrapper = shallow(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={newData}
         oldData={oldData}
-        options={{ ...options, showOnlyPhoneChange: true }}
+        options={{ ...options, isPhoneChangeOnly: true }}
       />,
     );
     const oldTable = wrapper.find('#contact_info_Old');
@@ -181,8 +193,7 @@ describe('ChangeOfAddress', () => {
         oldData={oldData}
         options={{
           ...options,
-          showAddressAndPhoneChange: false,
-          showOnlyPhoneChange: false,
+          isAddressChange: true,
         }}
       />,
     );
@@ -293,7 +304,7 @@ describe('ChangeOfAddress', () => {
         name="Joe Exotic"
         newData={{ ...newData, countryType: COUNTRY_TYPES.DOMESTIC }}
         oldData={{ ...oldData, countryType: COUNTRY_TYPES.DOMESTIC }}
-        options={options}
+        options={{ ...options, isAddressChange: true }}
       />,
     );
     const oldTableRowText = wrapper
@@ -301,10 +312,13 @@ describe('ChangeOfAddress', () => {
       .find('tbody tr')
       .text();
 
+    expect(oldTableRowText).toContain(oldData.address1);
     expect(oldTableRowText).not.toContain(oldData.country);
 
     const newTable = wrapper.find('#contact_info_New');
     const newTableRowText = newTable.find('tbody tr').text();
+
+    expect(newTableRowText).toContain(newData.address1);
     expect(newTableRowText).not.toContain(newData.country);
   });
 
@@ -314,7 +328,7 @@ describe('ChangeOfAddress', () => {
         name="Joe Exotic"
         newData={{ ...newData, countryType: COUNTRY_TYPES.INTERNATIONAL }}
         oldData={{ ...oldData, countryType: COUNTRY_TYPES.INTERNATIONAL }}
-        options={options}
+        options={{ ...options, isAddressChange: true }}
       />,
     );
     const oldTableRowText = wrapper
