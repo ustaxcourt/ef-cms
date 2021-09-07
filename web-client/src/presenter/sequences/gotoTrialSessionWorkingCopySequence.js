@@ -23,6 +23,7 @@ import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSe
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setUsersAction } from '../actions/setUsersAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
 
@@ -51,7 +52,7 @@ const checkUserAssociationAndProceed = [
   },
 ];
 
-const gotoTrialSessionDetails = [
+const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
   setTrialSessionIdAction,
@@ -79,7 +80,7 @@ const gotoTrialSessionDetails = [
     judge: checkUserAssociationAndProceed,
     trialclerk: checkUserAssociationAndProceed,
   },
-];
+]);
 
 export const gotoTrialSessionWorkingCopySequence = [
   isLoggedInAction,
