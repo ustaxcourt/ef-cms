@@ -13,12 +13,13 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddCourtIssuedDocketEntrySequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
       setCurrentPageAction('Interstitial'),
       stopShowValidationAction,
       clearFormAction,
@@ -34,7 +35,7 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       generateCourtIssuedDocumentTitleAction,
       setIsEditingDocketEntryAction(false),
       setCurrentPageAction('CourtIssuedDocketEntry'),
-    ],
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];
