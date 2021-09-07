@@ -158,6 +158,12 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showServePaperFiledDocumentButton', () => {
+    const petitionDocketEntry = {
+      ...baseDocketEntry,
+      docketEntryId: 'petition-docket-entry-uuid',
+      documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+      servedAt: '2019-03-01T21:40:46.415Z',
+    };
     const showServePaperFiledDocumentButtonTests = [
       {
         description:
@@ -197,15 +203,6 @@ describe('documentViewerHelper', () => {
         expectation: false,
         user: adcUser,
       },
-      {
-        description:
-          'should be false if the petition on the case is not yet served',
-        docketEntryOverrides: {
-          documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-          servedAt: undefined,
-        },
-        expectation: false,
-      },
     ];
 
     showServePaperFiledDocumentButtonTests.forEach(
@@ -218,6 +215,7 @@ describe('documentViewerHelper', () => {
                 ...getBaseState(user || docketClerkUser),
                 caseDetail: {
                   docketEntries: [
+                    petitionDocketEntry,
                     { ...baseDocketEntry, ...docketEntryOverrides },
                   ],
                 },
@@ -229,6 +227,32 @@ describe('documentViewerHelper', () => {
         });
       },
     );
+
+    it('should be false if petition on the case is not yet served', () => {
+      const { showServePaperFiledDocumentButton } = runCompute(
+        documentViewerHelper,
+        {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              docketEntries: [
+                {
+                  ...petitionDocketEntry,
+                  servedAt: undefined,
+                },
+                {
+                  ...baseDocketEntry,
+                  documentType: 'Answer',
+                  eventCode: 'A',
+                },
+              ],
+            },
+          },
+        },
+      );
+
+      expect(showServePaperFiledDocumentButton).toEqual(false);
+    });
   });
 
   describe('showServePetitionButton', () => {
