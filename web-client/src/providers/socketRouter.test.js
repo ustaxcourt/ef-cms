@@ -100,7 +100,7 @@ describe('socketRouter', () => {
     });
   });
 
-  it('should call disengageAppMaintenanceSequenceif action is maintenance_mode_disengaged', async () => {
+  it('should call disengageAppMaintenanceSequence if action is maintenance_mode_disengaged', async () => {
     await socketRouter(mockApp)({
       data: '{ "action": "maintenance_mode_disengaged" }',
     });
