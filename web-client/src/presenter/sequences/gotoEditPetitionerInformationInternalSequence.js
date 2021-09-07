@@ -7,7 +7,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence =

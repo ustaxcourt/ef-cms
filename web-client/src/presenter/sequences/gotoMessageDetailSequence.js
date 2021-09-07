@@ -15,7 +15,7 @@ import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 const gotoMessageDetail = showProgressSequenceDecorator([
   setCurrentPageAction('Interstitial'),

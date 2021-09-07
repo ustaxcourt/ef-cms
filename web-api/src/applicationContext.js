@@ -1861,10 +1861,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
-        getMaintenanceModeInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? process.env.MAINTENANCE_MODE
-            : getMaintenanceModeInteractor(applicationContext),
+        getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
