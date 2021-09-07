@@ -15,7 +15,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
-const gotoEditOrder = [
+const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setRedirectUrlAction,
   unsetDocumentToEditAction,
   clearModalAction,
@@ -30,12 +30,12 @@ const gotoEditOrder = [
   setParentMessageIdAction,
   convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
-];
+]);
 
 export const gotoEditOrderSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditOrder),
+    isLoggedIn: gotoEditOrder,
     unauthorized: [redirectToCognitoAction],
   },
 ];

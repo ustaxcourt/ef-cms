@@ -16,7 +16,7 @@ import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessions
 import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessions = [
+const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
@@ -36,13 +36,12 @@ const gotoTrialSessions = [
   ]),
   setTrialSessionsFiltersAction,
   setCurrentPageAction('TrialSessions'),
-];
+]);
 
-export const gotoTrialSessionsSequence =
-  startWebSocketConnectionSequenceDecorator([
-    isLoggedInAction,
-    {
-      isLoggedIn: [gotoTrialSessions],
-      unauthorized: [redirectToCognitoAction],
-    },
-  ]);
+export const gotoTrialSessionsSequence = [
+  isLoggedInAction,
+  {
+    isLoggedIn: [gotoTrialSessions],
+    unauthorized: [redirectToCognitoAction],
+  },
+];

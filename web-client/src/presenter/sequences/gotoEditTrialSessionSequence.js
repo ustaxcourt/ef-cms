@@ -16,7 +16,7 @@ import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditTrialSession = [
+const gotoEditTrialSession = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -32,12 +32,12 @@ const gotoEditTrialSession = [
   getUsersInSectionAction({ section: 'trialClerks' }),
   setUsersByKeyAction('trialClerks'),
   setCurrentPageAction('EditTrialSession'),
-];
+]);
 
 export const gotoEditTrialSessionSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditTrialSession),
+    isLoggedIn: gotoEditTrialSession,
     unauthorized: [redirectToCognitoAction],
   },
 ];

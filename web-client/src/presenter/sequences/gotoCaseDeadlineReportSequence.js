@@ -14,7 +14,7 @@ import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadlin
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoCaseDeadlineReport = [
+const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScreenMetadataAction,
@@ -31,14 +31,12 @@ const gotoCaseDeadlineReport = [
     ],
   ]),
   setCurrentPageAction('CaseDeadlines'),
-];
+]);
 
 export const gotoCaseDeadlineReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoCaseDeadlineReport,
-    ),
+    isLoggedIn: gotoCaseDeadlineReport,
     unauthorized: [redirectToCognitoAction],
   },
 ];

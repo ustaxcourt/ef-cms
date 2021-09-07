@@ -17,7 +17,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoDocketEntryQc = [
+export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -37,12 +37,12 @@ export const gotoDocketEntryQc = [
     markRead: [setWorkItemAsReadAction],
     noAction: [],
   },
-];
+]);
 
 export const gotoDocketEntryQcSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoDocketEntryQc),
+    isLoggedIn: gotoDocketEntryQc,
     unauthorized: [redirectToCognitoAction],
   },
 ];

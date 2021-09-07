@@ -21,39 +21,38 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditDocketEntryMeta = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearScansAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryMetaFormForEditAction,
-  setDocketEntryMetaTypeAction,
-  chooseMetaTypePathAction,
-  {
-    courtIssued: [
-      initCourtIssuedOrderFormPropsFromEventCodeAction,
-      getUsersInSectionAction({ section: 'judge' }),
-      getFilterCurrentJudgeUsersAction,
-      setUsersByKeyAction('judges'),
-      computeJudgeNameWithTitleAction,
-      generateCourtIssuedDocumentTitleAction,
-    ],
-    document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
-    noDocument: [],
-  },
-  setDefaultEditDocketEntryMetaTabAction,
-  setCurrentPageAction('EditDocketEntryMeta'),
-];
+export const gotoEditDocketEntryMeta =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearScansAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryMetaFormForEditAction,
+    setDocketEntryMetaTypeAction,
+    chooseMetaTypePathAction,
+    {
+      courtIssued: [
+        initCourtIssuedOrderFormPropsFromEventCodeAction,
+        getUsersInSectionAction({ section: 'judge' }),
+        getFilterCurrentJudgeUsersAction,
+        setUsersByKeyAction('judges'),
+        computeJudgeNameWithTitleAction,
+        generateCourtIssuedDocumentTitleAction,
+      ],
+      document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
+      noDocument: [],
+    },
+    setDefaultEditDocketEntryMetaTabAction,
+    setCurrentPageAction('EditDocketEntryMeta'),
+  ]);
 
 export const gotoEditDocketEntryMetaSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoEditDocketEntryMeta,
-    ),
+    isLoggedIn: gotoEditDocketEntryMeta,
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -8,7 +8,7 @@ import { setupContactFormAction } from '../actions/setupContactFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoContactEdit = [
+const gotoContactEdit = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -16,12 +16,12 @@ const gotoContactEdit = [
   getCaseAction,
   setupContactFormAction,
   setCurrentPageAction('ContactEdit'),
-];
+]);
 
 export const gotoContactEditSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoContactEdit),
+    isLoggedIn: gotoContactEdit,
     unauthorized: [redirectToCognitoAction],
   },
 ];
