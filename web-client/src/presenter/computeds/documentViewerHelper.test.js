@@ -206,6 +206,20 @@ describe('documentViewerHelper', () => {
 
       expect(showUnservedPetitionWarning).toBe(true);
     });
+
+    it('should be false if the selected document is the petition', () => {
+      const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [baseDocketEntry],
+          },
+        },
+      });
+
+      expect(showUnservedPetitionWarning).toBe(false);
+    });
+
     it('should be false if an servable document is selected and the petition on the case is served', () => {
       const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
         state: {

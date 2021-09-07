@@ -14,6 +14,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const cerebralTest = setupTest();
@@ -55,6 +56,7 @@ describe('admissions clerk practitioner journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(cerebralTest);
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
