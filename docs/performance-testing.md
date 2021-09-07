@@ -7,7 +7,7 @@ The order tests will only hit the order search endpoint.  Before you can run the
 
 - USER_POOL_ID
 - CLIENT_ID
-- DEFAULT_PASS
+- DEFAULT_ACCOUNT_PASS
 - REGION
 
 After exporting those ENV variables, you can run the following script `cd artillery && ./generate-tokens.sh`.
