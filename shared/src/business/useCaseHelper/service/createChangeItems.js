@@ -30,7 +30,7 @@ const createDocketEntryForChange = async ({
         caseTitle,
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        documentTitle: documentType.title,
+        documentType,
         name: contactName,
         newData,
         oldData,

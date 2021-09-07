@@ -206,7 +206,7 @@ const generateAndServeDocketEntry = async ({
         caseTitle,
         docketNumber: caseDetail.docketNumber,
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
-        documentTitle: documentType.title,
+        documentType,
         name: `${practitionerName} (${user.barNumber})`,
         newData,
         oldData,
