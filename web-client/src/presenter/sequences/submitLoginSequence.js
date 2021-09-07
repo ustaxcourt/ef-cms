@@ -7,17 +7,14 @@ import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
-import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const submitLoginSequence = startWebSocketConnectionSequenceDecorator(
-  showProgressSequenceDecorator([
-    createTokenAction,
-    decodeTokenAction,
-    setTokenAction,
-    getUserAction,
-    setUserAction,
-    setUserPermissionsAction,
-    clearAlertsAction,
-    navigateToPathAction,
-  ]),
-);
+export const submitLoginSequence = showProgressSequenceDecorator([
+  createTokenAction,
+  decodeTokenAction,
+  setTokenAction,
+  getUserAction,
+  setUserAction,
+  setUserPermissionsAction,
+  clearAlertsAction,
+  navigateToPathAction,
+]);
