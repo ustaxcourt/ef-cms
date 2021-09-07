@@ -271,8 +271,8 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
       },
     });
-    expect(result.showServiceWarning).toEqual(true);
-    expect(result.showSaveAndServeButton).toEqual(false);
+    expect(result.showServiceWarning).toEqual(false);
+    expect(result.showSaveAndServeButton).toEqual(true);
   });
 
   it('should return showServiceWarning false and showSaveAndServeButton true if eventCode is NOT found in unservable event codes list and petition on case has been served', () => {
