@@ -95,13 +95,19 @@ describe('socketRouter', () => {
       data: '{ "action": "maintenance_mode_engaged" }',
     });
     expect(mockSequence.mock.calls.length).toBe(1);
+    expect(mockSequence.mock.calls[0][0]).toMatchObject({
+      maintenanceMode: true,
+    });
   });
 
-  it('should call clearModalSequence and navigateToPathSequence if action is maintenance_mode_disengaged', async () => {
+  it('should call disengageAppMaintenanceSequence if action is maintenance_mode_disengaged', async () => {
     await socketRouter(mockApp)({
       data: '{ "action": "maintenance_mode_disengaged" }',
     });
-    expect(mockSequence.mock.calls.length).toBe(2);
+    expect(mockSequence.mock.calls.length).toBe(1);
+    expect(mockSequence.mock.calls[0][0]).toMatchObject({
+      maintenanceMode: false,
+    });
   });
 
   it('should not call a sequence if action is an unknown action', async () => {

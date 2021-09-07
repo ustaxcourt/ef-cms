@@ -85,6 +85,7 @@ import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequen
 import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
+import { disengageAppMaintenanceSequence } from './sequences/disengageAppMaintenanceSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
@@ -567,6 +568,7 @@ export const presenter = {
     deleteUploadedPdfSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
+    disengageAppMaintenanceSequence,
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,
