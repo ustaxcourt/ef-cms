@@ -63,6 +63,4 @@ describe('getIsFeatureEnabled', () => {
 
     expect(isEnabled).toEqual(false);
   });
-
-
 });
