@@ -16,30 +16,29 @@ import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-export const gotoEditCourtIssuedDocketEntry = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getUsersInSectionAction({ section: 'judge' }),
-  getFilterCurrentJudgeUsersAction,
-  setUsersByKeyAction('judges'),
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryFormForDocketEditAction,
-  getComputedFormDateFactoryAction(null, true),
-  generateCourtIssuedDocumentTitleAction,
-  setDocketEntryIdAction,
-  setIsEditingDocketEntryAction(true),
-  setCurrentPageAction('CourtIssuedDocketEntry'),
-];
+export const gotoEditCourtIssuedDocketEntry =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    getFilterCurrentJudgeUsersAction,
+    setUsersByKeyAction('judges'),
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryFormForDocketEditAction,
+    getComputedFormDateFactoryAction(null, true),
+    generateCourtIssuedDocumentTitleAction,
+    setDocketEntryIdAction,
+    setIsEditingDocketEntryAction(true),
+    setCurrentPageAction('CourtIssuedDocketEntry'),
+  ]);
 
 export const gotoEditCourtIssuedDocketEntrySequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoEditCourtIssuedDocketEntry,
-    ),
+    isLoggedIn: gotoEditCourtIssuedDocketEntry,
     unauthorized: [redirectToCognitoAction],
   },
 ];

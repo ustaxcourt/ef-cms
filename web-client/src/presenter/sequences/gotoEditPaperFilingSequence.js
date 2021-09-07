@@ -15,7 +15,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditPaperFiling = [
+export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -30,12 +30,12 @@ export const gotoEditPaperFiling = [
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
   setCurrentPageAction('PaperFiling'),
-];
+]);
 
 export const gotoEditPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoEditPaperFiling),
+    isLoggedIn: gotoEditPaperFiling,
     unauthorized: [redirectToCognitoAction],
   },
 ];

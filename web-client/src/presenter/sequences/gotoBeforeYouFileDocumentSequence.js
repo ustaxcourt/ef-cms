@@ -6,20 +6,18 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoBeforeYouFileDocument = [
+const gotoBeforeYouFileDocument = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   getCaseAction,
   setCaseAction,
   setCurrentPageAction('BeforeYouFileADocument'),
-];
+]);
 
 export const gotoBeforeYouFileDocumentSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoBeforeYouFileDocument,
-    ),
+    isLoggedIn: gotoBeforeYouFileDocument,
     unauthorized: [redirectToCognitoAction],
   },
 ];

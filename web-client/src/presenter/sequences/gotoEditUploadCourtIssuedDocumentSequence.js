@@ -11,25 +11,24 @@ import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditUploadCourtIssuedDocument = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  setRedirectUrlAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryIdAction,
-  setDocumentToFormAction,
-  setCurrentPageAction('EditUploadCourtIssuedDocument'),
-];
+const gotoEditUploadCourtIssuedDocument =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    setRedirectUrlAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryIdAction,
+    setDocumentToFormAction,
+    setCurrentPageAction('EditUploadCourtIssuedDocument'),
+  ]);
 
 export const gotoEditUploadCourtIssuedDocumentSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: startWebSocketConnectionSequenceDecorator(
-      gotoEditUploadCourtIssuedDocument,
-    ),
+    isLoggedIn: gotoEditUploadCourtIssuedDocument,
     unauthorized: [redirectToCognitoAction],
   },
 ];
