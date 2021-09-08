@@ -10,6 +10,10 @@ const {
 } = require('../support/pages/maintenance');
 
 describe('Maintenance mode', () => {
+  before(() => {
+    cy.clearLocalStorage();
+  });
+
   after(() => {
     disengageMaintenance();
   });
@@ -25,9 +29,8 @@ describe('Maintenance mode', () => {
     getMaintenancePageContent().should('exist');
   });
 
-  it.skip('should route to the maintenance page if user directly routes to a URL', () => {
-    // this is sending the user to the login screen
-    cy.visit('trial-sessions');
+  it('should route to the maintenance page if user directly routes to a URL', () => {
+    cy.goToRoute('trial-sessions');
     getMaintenancePageContent().should('exist');
   });
 
