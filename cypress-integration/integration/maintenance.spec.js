@@ -1,43 +1,60 @@
 const {
-  getCaseList,
-  getStartCaseButton,
-  navigateTo: navigateToDashboard,
-} = require('../support/pages/dashboard-practitioner');
-
-const { fillInAndSubmitForm } = require('../support/pages/start-a-case');
+  disengageMaintenance,
+  engageMaintenance,
+  getCancelButton,
+  getLoginHeader,
+  getLogoutButton,
+  getMaintenanceModal,
+  getMaintenancePageContent,
+  navigateTo: loginAs,
+} = require('../support/pages/maintenance');
 
 describe('Maintenance mode', () => {
-  describe('engaged', () => {
-    it.only('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
-      navigateToDashboard('petitionsclerk');
-      // login
-      // exec npm run maintenance:engage:local
-      // expect maintenance modal
-      getCaseList().should('have.length', 3);
-
-      // on clicking log out, user is logged out
-      // on clicking cancel, route to maintenance page
-    });
-
-    it('should route to the maintenance page if user logs in', () => {
-      getStartCaseButton().click();
-    });
-
-    it('should route to the maintenance page if user goes to public pages', () => {});
-
-    it('should route to the maintenance page if user directly routes to a URL', () => {});
+  it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
+    loginAs('petitionsclerk');
+    engageMaintenance();
+    getMaintenanceModal().should('exist');
   });
 
-  describe('disengaged', () => {
-    it('should route to the home page if user is already logged in and maintenance mode is disengaged', () => {});
-
-    it('should route to the home page if user logged in during maintenance mode', () => {});
-
-    it('should route to public pages', () => {});
+  it('should route to maintenance page on clicking cancel in the modal', () => {
+    getCancelButton().click();
+    getMaintenancePageContent().should('exist');
   });
 
-  // it('expect the case list to be displayed with 4 items now', () => {
-  //   getCaseList().should('exist');
-  //   getCaseList().should('have.length', 4);
-  // });
+  it.skip('should route to the maintenance page if user directly routes to a URL', () => {
+    // this is sending the user to the login screen
+    cy.visit('trial-sessions');
+    getMaintenancePageContent().should('exist');
+  });
+
+  it('should route to the home page if maintenance mode is disengaged and the user was logged in', () => {
+    disengageMaintenance();
+    getMaintenanceModal().should('not.exist');
+    cy.url().should('include', 'messages/my/inbox');
+  });
+
+  it('should logout the user on clicking logout on the modal', () => {
+    loginAs('petitionsclerk');
+    engageMaintenance();
+    getMaintenanceModal().should('exist');
+
+    getLogoutButton().click();
+    getLoginHeader().should('exist');
+  });
+
+  it('should show the maintenance page if they log in and maintenance mode is engaged', () => {
+    loginAs('petitionsclerk');
+    getMaintenancePageContent().should('exist');
+  });
+
+  describe.skip('engaged', () => {
+    //   it('should route to the maintenance page if user goes to public pages', () => {});
+    // });
+  });
+
+  describe.skip('disengaged', () => {
+    //   it('should route to public pages', () => {});
+  });
+
+  //TODO: end with maintenance mode disengaged
 });
