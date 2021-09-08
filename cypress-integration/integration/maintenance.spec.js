@@ -10,6 +10,10 @@ const {
 } = require('../support/pages/maintenance');
 
 describe('Maintenance mode', () => {
+  after(() => {
+    disengageMaintenance();
+  });
+
   it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
     loginAs('petitionsclerk');
     engageMaintenance();
@@ -46,15 +50,4 @@ describe('Maintenance mode', () => {
     loginAs('petitionsclerk');
     getMaintenancePageContent().should('exist');
   });
-
-  describe.skip('engaged', () => {
-    //   it('should route to the maintenance page if user goes to public pages', () => {});
-    // });
-  });
-
-  describe.skip('disengaged', () => {
-    //   it('should route to public pages', () => {});
-  });
-
-  //TODO: end with maintenance mode disengaged
 });

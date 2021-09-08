@@ -1,6 +1,7 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
 };
+
 exports.navigateToDashboard = () => {
   cy.visit('/');
 };
