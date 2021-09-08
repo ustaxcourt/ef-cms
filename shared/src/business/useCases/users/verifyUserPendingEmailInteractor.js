@@ -26,7 +26,6 @@ const updateCaseEntityAndGenerateChange = async ({
   caseToUpdate,
   user,
 }) => {
-  console.log(JSON.stringify(caseToUpdate, null, 2));
   const caseEntity = new Case(caseToUpdate, {
     applicationContext,
   });
@@ -58,10 +57,7 @@ const updateCaseEntityAndGenerateChange = async ({
     caseToUpdate.closedDate &&
     dateStringsCompared(caseToUpdate.closedDate, MAX_CLOSED_DATE) >= 0;
 
-  console.log({ caseToUpdate, isRecent });
-
   if (isOpen || isRecent) {
-    // TODO write tests for me!
     await applicationContext.getUseCaseHelpers().generateAndServeDocketEntry({
       applicationContext,
       caseToUpdate,
@@ -87,8 +83,6 @@ const updateCasesForPetitioner = async ({
       }),
     ),
   );
-
-  console.log('Hey', casesToUpdate[0].status);
 
   const validatedCasesToUpdateInPersistence = (
     await Promise.all(
