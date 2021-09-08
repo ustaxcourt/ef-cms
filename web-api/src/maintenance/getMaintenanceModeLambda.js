@@ -7,8 +7,12 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getMaintenanceModeLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getMaintenanceModeInteractor(applicationContext);
-  });
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext
+        .getUseCases()
+        .getMaintenanceModeInteractor(applicationContext);
+    },
+    { bypassMaintenanceCheck: true },
+  );
