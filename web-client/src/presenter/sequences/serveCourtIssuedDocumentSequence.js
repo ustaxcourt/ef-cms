@@ -10,7 +10,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const serveCourtIssuedDocumentSequence = showProgressSequenceDecorator([
   serveCourtIssuedDocumentAction,

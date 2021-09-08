@@ -13,10 +13,11 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoDocketEntryQc = [
+export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -36,7 +37,7 @@ export const gotoDocketEntryQc = [
     markRead: [setWorkItemAsReadAction],
     noAction: [],
   },
-];
+]);
 
 export const gotoDocketEntryQcSequence = [
   isLoggedInAction,

@@ -2,11 +2,13 @@ import { generatePrintablePendingReportAction } from '../actions/PendingItems/ge
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTitleForGlobalReportAction } from '../actions/PendingItems/setTitleForGlobalReportAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPrintablePendingReportSequence = [
-  setCurrentPageAction('Interstitial'),
-  generatePrintablePendingReportAction,
-  setPdfPreviewUrlSequence,
-  setTitleForGlobalReportAction,
-  setCurrentPageAction('SimplePdfPreviewPage'),
-];
+export const gotoPrintablePendingReportSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    generatePrintablePendingReportAction,
+    setPdfPreviewUrlSequence,
+    setTitleForGlobalReportAction,
+    setCurrentPageAction('SimplePdfPreviewPage'),
+  ]);

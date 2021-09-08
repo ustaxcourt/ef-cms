@@ -463,6 +463,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getOrderSearchEnabled: jest.fn(),
     getReconciliationReport: jest.fn(),

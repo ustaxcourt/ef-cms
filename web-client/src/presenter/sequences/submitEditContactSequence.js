@@ -5,7 +5,7 @@ import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseD
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updateContactAction } from '../actions/updateContactAction';
 import { validatePetitionerAction } from '../actions/validatePetitionerAction';
