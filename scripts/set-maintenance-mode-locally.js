@@ -6,7 +6,7 @@ const maintenanceMode = process.argv[2];
 
 const setMaintenanceModeLocally = async () => {
   await sendMaintenanceNotificationsLambda({
-    maintenanceMode,
+    maintenanceMode: maintenanceMode === 'true',
   });
 };
 
