@@ -12,6 +12,9 @@ const {
 const {
   fileExternalDocumentInteractor,
 } = require('../useCases/externalDocument/fileExternalDocumentInteractor');
+const {
+  serveCaseToIrsInteractor,
+} = require('../useCases/serveCaseToIrs/serveCaseToIrsInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
@@ -30,6 +33,14 @@ describe('fileExternalDocumentInteractor integration test', () => {
     userId: PETITIONER_USER_ID,
   };
 
+  const PETITIONS_CLERK_USER_ID = '7776b51f-8584-4040-afe7-933985728fcf';
+  let caseDetail;
+  const petitionsClerkUser = {
+    name: 'Test Petitionsclerk',
+    role: ROLES.petitionsClerk,
+    userId: PETITIONS_CLERK_USER_ID,
+  };
+
   beforeEach(() => {
     window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
     window.Date.prototype.getFullYear = jest.fn().mockReturnValue(CREATED_YEAR);
@@ -40,8 +51,8 @@ describe('fileExternalDocumentInteractor integration test', () => {
       .getUserById.mockReturnValue(petitionerUser);
   });
 
-  it('should attach the expected documents to the case', async () => {
-    const caseDetail = await createCaseInteractor(applicationContext, {
+  it('should permit petitioner to create a case', async () => {
+    caseDetail = await createCaseInteractor(applicationContext, {
       petitionFileId: '92eac064-9ca5-4c56-80a0-c5852c752277',
       petitionMetadata: {
         caseCaption: 'Caption',
@@ -70,7 +81,39 @@ describe('fileExternalDocumentInteractor integration test', () => {
       },
       stinFileId: '72de0fac-f63c-464f-ac71-0f54fd248484',
     });
+    expect(caseDetail).toBeDefined();
+  });
 
+  it('should allow petitions clerk to serve the case', async () => {
+    applicationContext
+      .getUseCases()
+      .addCoversheetInteractor.mockImplementation(() => ({
+        createdAt: '2011-02-22T00:01:00.000Z',
+        docketEntryId: 'e110995d-b825-4f7e-899e-1773aa8e7016',
+        docketNumber: '101-20',
+        documentTitle: 'Summary Opinion',
+        documentType: 'Summary Opinion',
+        entityName: 'DocketEntry',
+        eventCode: 'SOP',
+        filingDate: '2011-02-22T00:01:00.000Z',
+        index: 2,
+        isDraft: false,
+        isMinuteEntry: false,
+        isOnDocketRecord: false,
+        judge: 'Buch',
+        processingStatus: 'complete',
+        userId: PETITIONS_CLERK_USER_ID,
+      }));
+    applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerkUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValueOnce(petitionsClerkUser);
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+    });
+  });
+
+  it('should attach the expected documents to the case', async () => {
     await fileExternalDocumentInteractor(applicationContext, {
       documentMetadata: {
         attachments: false,
@@ -178,11 +221,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
           isOnDocketRecord: true,
           scenario: 'Nonstandard H',
           supportingDocument: 'Brief in Support',
-          userId: PETITIONER_USER_ID,
+          userId: PETITIONS_CLERK_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.generalDocket,
             docketEntry: {
               docketEntryId: '12de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle:
@@ -192,7 +235,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
-            sentBy: 'Test Petitioner',
+            sentBy: 'Test Petitionsclerk',
           },
         },
         {
@@ -206,11 +249,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentType: 'Amended',
           },
           scenario: 'Nonstandard A',
-          userId: PETITIONER_USER_ID,
+          userId: PETITIONS_CLERK_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.generalDocket,
             docketEntry: {
               docketEntryId: '22de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
@@ -219,7 +262,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
-            sentBy: 'Test Petitioner',
+            sentBy: 'Test Petitionsclerk',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
         },
@@ -232,11 +275,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
           lodged: true,
           previousDocument: { documentType: 'Petition' },
           scenario: 'Nonstandard A',
-          userId: PETITIONER_USER_ID,
+          userId: PETITIONS_CLERK_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.generalDocket,
             docketEntry: {
               docketEntryId: '32de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Petition',
@@ -245,7 +288,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
-            sentBy: 'Test Petitioner',
+            sentBy: 'Test Petitionsclerk',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
         },
@@ -261,11 +304,11 @@ describe('fileExternalDocumentInteractor integration test', () => {
             documentType: 'Amended',
           },
           scenario: 'Nonstandard A',
-          userId: PETITIONER_USER_ID,
+          userId: PETITIONS_CLERK_USER_ID,
           workItem: {
             assigneeId: null,
             assigneeName: null,
-            caseStatus: CASE_STATUS_TYPES.new,
+            caseStatus: CASE_STATUS_TYPES.generalDocket,
             docketEntry: {
               docketEntryId: '42de0fac-f63c-464f-ac71-0f54fd248484',
               documentTitle: 'Brief in Support of Amended Answer',
@@ -274,7 +317,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
             docketNumber: caseDetail.docketNumber,
             docketNumberWithSuffix: '101-19S',
             section: DOCKET_SECTION,
-            sentBy: 'Test Petitioner',
+            sentBy: 'Test Petitionsclerk',
             updatedAt: '2019-03-01T22:54:06.000Z',
           },
         },
@@ -299,7 +342,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
           address2: 'Ad cumque quidem lau',
           address3: 'Anim est dolor animi',
           city: 'Rerum eaque cupidata',
-          contactType: CONTACT_TYPES.primary,
+          contactType: CONTACT_TYPES.petitioner,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
           name: 'Test Petitioner',
@@ -311,7 +354,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
       preferredTrialCity: 'Aberdeen, South Dakota',
       privatePractitioners: [],
       procedureType: 'Small',
-      status: CASE_STATUS_TYPES.new,
+      status: CASE_STATUS_TYPES.generalDocket,
     });
 
     applicationContext.getCurrentUser.mockReturnValue(

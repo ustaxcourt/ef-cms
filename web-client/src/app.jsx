@@ -274,8 +274,8 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp, applicationContext);
+    router.initialize(cerebralApp, route);
 
     ReactDOM.render(
       <Container app={cerebralApp}>

@@ -11,7 +11,7 @@ import { setCasePropFromStateAction } from '../../actions/setCasePropFromStateAc
 import { setPendingEmailsOnCaseAction } from '../../actions/setPendingEmailsOnCaseAction';
 import { setRepresentingFromRepresentingMapActionFactory } from '../../actions/setRepresentingFromRepresentingMapActionFactory';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateAddPrivatePractitionerAction } from '../../actions/CaseAssociation/validateAddPrivatePractitionerAction';
