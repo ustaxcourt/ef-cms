@@ -114,7 +114,10 @@ describe('updatePetitionerInformationInteractor', () => {
         ...mockCase,
         privatePractitioners: [
           {
-            representing: [mockUser.userId],
+            barNumber: 'EP0001',
+            name: 'Example Practitioner',
+            representing: [PRIMARY_CONTACT_ID],
+            role: ROLES.privatePractitioner,
             userId: mockRepresentingId,
           },
         ],
@@ -124,11 +127,11 @@ describe('updatePetitionerInformationInteractor', () => {
       updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
-          contactId: mockUser.userId,
+          ...mockPetitioners[0],
           countryType: COUNTRY_TYPES.DOMESTIC,
         },
       }),
-    ).toBeDefined();
+    ).resolves.toBeDefined();
   });
 
   it('should throw an error when the petitioner to update can not be found on the case', async () => {

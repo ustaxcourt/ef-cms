@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -297,6 +298,40 @@ describe('verifyUserPendingEmailInteractor', () => {
           .calls[1][0].caseToUpdate,
       ).toMatchObject({
         privatePractitioners: [{ email: 'other@example.com' }],
+      });
+    });
+
+    describe.only('generating a docket entry', () => {
+      it('should call generateAndServeDocketEntry if case is open', async () => {
+        applicationContext
+          .getPersistenceGateway()
+          .getIndexedCasesForUser.mockReturnValue([
+            { docketNumber: MOCK_CASE.docketNumber },
+          ]);
+        applicationContext
+          .getPersistenceGateway()
+          .getUserById.mockReturnValueOnce({
+            ...validUser,
+            pendingEmailVerificationToken: TOKEN,
+          });
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockImplementation(() => {
+            console.log('Please...');
+            return {
+              ...MOCK_CASE,
+              status: CASE_STATUS_TYPES.generalDocket,
+            };
+          });
+        await expect(
+          verifyUserPendingEmailInteractor(applicationContext, {
+            token: TOKEN,
+          }),
+        ).resolves.toBeUndefined(); // has no return value
+
+        expect(
+          applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+        ).toHaveBeenCalled();
       });
     });
 
