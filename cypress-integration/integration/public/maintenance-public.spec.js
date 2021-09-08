@@ -5,15 +5,15 @@ const {
   navigateToDashboard,
 } = require('../../support/pages/maintenance');
 
-describe.skip('Maintenance mode public view', () => {
+describe('Maintenance mode public view', () => {
   before(() => {
     getMaintenancePageContent().should('not.exist');
   });
 
   describe('engaged', () => {
     it('should route to the maintenance page if user goes to public pages', () => {
-      navigateToDashboard();
       engageMaintenance();
+      navigateToDashboard();
       getMaintenancePageContent().should('exist');
     });
   });
@@ -21,6 +21,7 @@ describe.skip('Maintenance mode public view', () => {
   describe('disengaged', () => {
     it('should route to public pages', () => {
       disengageMaintenance();
+      navigateToDashboard();
       getMaintenancePageContent().should('not.exist');
     });
   });
