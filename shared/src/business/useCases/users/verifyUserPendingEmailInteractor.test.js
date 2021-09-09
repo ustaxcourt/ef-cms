@@ -12,6 +12,7 @@ const {
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -358,6 +359,18 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   describe('generating a docket entry', () => {
+    beforeAll(() => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generateAndServeDocketEntry.mockReturnValue({
+          changeOfAddressDocketEntry: {
+            ...MOCK_DOCUMENTS[0],
+            entityName: 'DocketEntry',
+            isMinuteEntry: 'false',
+          },
+        });
+    });
+
     it('should call generateAndServeDocketEntry if case is open', async () => {
       applicationContext
         .getPersistenceGateway()
