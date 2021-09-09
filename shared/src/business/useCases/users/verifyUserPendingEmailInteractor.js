@@ -1,15 +1,74 @@
 const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
+  calculateISODate,
+  dateStringsCompared,
+} = require('../../utilities/DateHandler');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
+
+const MAX_CLOSED_DATE = calculateISODate({
+  howMuch: -6,
+  units: 'months',
+});
+
+const updateCaseEntityAndGenerateChange = async ({
+  applicationContext,
+  caseToUpdate,
+  user,
+}) => {
+  const caseEntity = new Case(caseToUpdate, {
+    applicationContext,
+  });
+
+  const petitionerObject = caseEntity.getPetitionerById(user.userId);
+  if (!petitionerObject) {
+    applicationContext.logger.error(
+      `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+    );
+    return;
+  }
+
+  const oldEmail = petitionerObject.email;
+  petitionerObject.email = user.email;
+
+  if (
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    )
+  ) {
+    petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  const validCase = new Case(caseEntity, { applicationContext }).validate();
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    caseToUpdate.status,
+  );
+  const isRecent =
+    caseToUpdate.closedDate &&
+    dateStringsCompared(caseToUpdate.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  if (isOpen || isRecent) {
+    await applicationContext.getUseCaseHelpers().generateAndServeDocketEntry({
+      applicationContext,
+      caseToUpdate,
+      newData: user.email,
+      oldData: oldEmail,
+      practitionerName: undefined,
+      user,
+    });
+  }
+  return validCase;
+};
 
 const updateCasesForPetitioner = async ({
   applicationContext,
@@ -25,41 +84,20 @@ const updateCasesForPetitioner = async ({
     ),
   );
 
-  const validatedCasesToUpdate = casesToUpdate
-    .map(caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, {
-        applicationContext,
-      });
-
-      const petitionerObject = caseEntity.getPetitionerById(user.userId);
-      if (!petitionerObject) {
-        applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
-        );
-        return;
-      }
-
-      petitionerObject.email = user.email;
-
-      if (
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-          petitionerObject.contactId,
-        )
-      ) {
-        petitionerObject.serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      }
-
-      const newCase = new Case(caseEntity, { applicationContext }).validate();
-      return newCase;
-    })
-    // if petitioner is not found on the case, function exits early and returns `undefined`.
-    // if this happens, continue with remaining cases and do not throw exception, but discard
-    // any undefined values by filtering for truthy objects.
-    .filter(Boolean);
+  const validatedCasesToUpdateInPersistence = (
+    await Promise.all(
+      casesToUpdate.map(caseToUpdate =>
+        updateCaseEntityAndGenerateChange({
+          applicationContext,
+          caseToUpdate,
+          user,
+        }),
+      ),
+    )
+  ).filter(Boolean);
 
   return Promise.all(
-    validatedCasesToUpdate.map(caseToUpdate =>
+    validatedCasesToUpdateInPersistence.map(caseToUpdate =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
@@ -252,11 +290,13 @@ exports.verifyUserPendingEmailInteractor = async (
         applicationContext,
         user: updatedRawUser,
       });
-    } else {
+    } else if (userEntity.role === ROLES.privatePractitioner) {
       await updatePractitionerCases({
         applicationContext,
         user: updatedRawUser,
       });
+    } else {
+      throw new Error(`Refusing to update cases for ${userEntity.role}`);
     }
   } catch (error) {
     applicationContext.logger.error(error);
