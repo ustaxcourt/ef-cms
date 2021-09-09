@@ -873,26 +873,26 @@ workflows:
                 - develop
   build-and-deploy:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-smoketests-local:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
       - deploy:
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
+          # requires:
+          #   - build-client-integration
+          #   - e2e-pa11y
+          #   - e2e-pa11y-public
+          #   - e2e-cypress
+          #   - e2e-cypress-smoketests-local
+          #   - e2e-cypress-public
           filters:
             branches:
               only:
@@ -906,35 +906,35 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
-      - migrate:
-          requires:
-            - deploy
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests:
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests-readonly:
+      # - migrate:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      # - smoketests-readonly:
           requires:
             - smoketests
           filters:
@@ -950,7 +950,7 @@ workflows:
                 - experimental5
       - switch-colors:
           requires:
-            - smoketests-readonly
+            - deploy
           filters:
             branches:
               only:
