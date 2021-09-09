@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   calculateISODate,
   dateStringsCompared,
 } = require('../../utilities/DateHandler');
@@ -16,17 +19,12 @@ const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const MAX_CLOSED_DATE = calculateISODate({
-  howMuch: -6,
-  units: 'months',
-});
-
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
-  caseToUpdate,
+  rawCaseData,
   user,
 }) => {
-  const caseEntity = new Case(caseToUpdate, {
+  const caseEntity = new Case(rawCaseData, {
     applicationContext,
   });
 
@@ -39,7 +37,11 @@ const updateCaseEntityAndGenerateChange = async ({
   }
 
   const oldEmail = petitionerObject.email;
+  const newData = { email: user.email };
+  const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
+
+  const servedParties = aggregatePartiesForService(caseEntity);
 
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
@@ -48,26 +50,40 @@ const updateCaseEntityAndGenerateChange = async ({
   ) {
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
-
-  const validCase = new Case(caseEntity, { applicationContext }).validate();
+  //TODO create method on caseEntity
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
-    caseToUpdate.status,
+    caseEntity.status,
   );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
   const isRecent =
-    caseToUpdate.closedDate &&
-    dateStringsCompared(caseToUpdate.closedDate, MAX_CLOSED_DATE) >= 0;
+    caseEntity.closedDate &&
+    dateStringsCompared(caseEntity.closedDate, MAX_CLOSED_DATE) >= 0;
 
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange(newData, oldData);
+
+  let changeOfAddressDocketEntry;
   if (isOpen || isRecent) {
-    await applicationContext.getUseCaseHelpers().generateAndServeDocketEntry({
-      applicationContext,
-      caseToUpdate,
-      newData: user.email,
-      oldData: oldEmail,
-      practitionerName: undefined,
-      user,
-    });
+    ({ changeOfAddressDocketEntry } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        caseEntity,
+        documentType,
+        newData,
+        oldData,
+        servedParties,
+        user,
+      }));
   }
-  return validCase;
+
+  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
+
+  return caseEntity.validate();
 };
 
 const updateCasesForPetitioner = async ({
@@ -75,7 +91,7 @@ const updateCasesForPetitioner = async ({
   petitionerCases,
   user,
 }) => {
-  const casesToUpdate = await Promise.all(
+  const rawCasesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
@@ -86,10 +102,10 @@ const updateCasesForPetitioner = async ({
 
   const validatedCasesToUpdateInPersistence = (
     await Promise.all(
-      casesToUpdate.map(caseToUpdate =>
+      rawCasesToUpdate.map(rawCaseData =>
         updateCaseEntityAndGenerateChange({
           applicationContext,
-          caseToUpdate,
+          rawCaseData,
           user,
         }),
       ),

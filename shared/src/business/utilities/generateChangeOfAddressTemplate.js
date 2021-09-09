@@ -53,22 +53,24 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
     addressFields.includes(field),
   );
   const isPhoneChange = !!initialDiff.phone;
+  const isEmailChange = newData.email && newData.email !== oldData.email;
 
-  if (isAddressChange && !isPhoneChange) {
+  if (isEmailChange) {
+    documentType = {
+      eventCode: 'NOCE',
+      title: 'Notice of Change of Email Address',
+    };
+  } else if (isAddressChange && !isPhoneChange) {
     documentType = {
       eventCode: 'NCA',
       title: 'Notice of Change of Address',
     };
-  }
-
-  if (isPhoneChange && !isAddressChange) {
+  } else if (isPhoneChange && !isAddressChange) {
     documentType = {
       eventCode: 'NCP',
       title: 'Notice of Change of Telephone Number',
     };
-  }
-
-  if (isAddressChange && isPhoneChange) {
+  } else if (isAddressChange && isPhoneChange) {
     documentType = {
       eventCode: 'NCAP',
       title: 'Notice of Change of Address and Telephone Number',
