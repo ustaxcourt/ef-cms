@@ -79,6 +79,7 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   formatDateString,
@@ -550,6 +551,12 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
+const {
+  getMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode');
+const {
+  getMaintenanceModeInteractor,
+} = require('../../shared/src/business/useCases/getMaintenanceModeInteractor');
 const {
   getMessageById,
 } = require('../../shared/src/persistence/dynamo/messages/getMessageById');
@@ -1361,6 +1368,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getMaintenanceMode,
     getSesStatus,
     incrementCounter,
     incrementKeyCount,
@@ -1857,6 +1865,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
+        getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
@@ -1958,6 +1967,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateDifferenceInDays,
         calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,

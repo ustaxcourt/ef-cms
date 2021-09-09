@@ -171,7 +171,6 @@ const pages = {
 };
 
 let initialPageLoaded = false;
-let showHeaderAndFooter = true;
 
 /**
  * Root application component
@@ -206,9 +205,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    if (currentPage === 'AppMaintenance') {
-      showHeaderAndFooter = false;
-    }
+    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
 

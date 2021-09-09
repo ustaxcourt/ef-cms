@@ -17,6 +17,7 @@ exports.sendMaintenanceNotificationsLambda = event =>
         });
     },
     {
+      bypassMaintenanceCheck: true,
       user: {},
     },
   );

@@ -9,22 +9,25 @@ import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabActio
 import { setDocumentForPreviewSequence } from '../sequences/setDocumentForPreviewSequence';
 import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentSelectedForPreviewAction } from '../actions/unsetDocumentSelectedForPreviewAction';
 
-export const gotoPetitionQcSequence = [
-  setCurrentPageAction('Interstitial'),
-  clearFormsAction,
-  setRedirectUrlAction,
-  stopShowValidationAction,
-  setDocumentDetailTabAction,
-  getCaseAction,
-  setCaseAction,
-  setCaseOnFormAction,
-  setContactsOnFormAction,
-  setFormForCaseAction,
-  unsetDocumentSelectedForPreviewAction,
-  setDefaultDocumentSelectedForPreviewAction,
-  setDocumentForPreviewSequence,
-  setCurrentPageAction('PetitionQc'),
-];
+export const gotoPetitionQcSequence = startWebSocketConnectionSequenceDecorator(
+  [
+    setCurrentPageAction('Interstitial'),
+    clearFormsAction,
+    setRedirectUrlAction,
+    stopShowValidationAction,
+    setDocumentDetailTabAction,
+    getCaseAction,
+    setCaseAction,
+    setCaseOnFormAction,
+    setContactsOnFormAction,
+    setFormForCaseAction,
+    unsetDocumentSelectedForPreviewAction,
+    setDefaultDocumentSelectedForPreviewAction,
+    setDocumentForPreviewSequence,
+    setCurrentPageAction('PetitionQc'),
+  ],
+);

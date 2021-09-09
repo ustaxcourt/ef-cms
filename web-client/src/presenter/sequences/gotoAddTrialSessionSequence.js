@@ -10,6 +10,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoAddTrialSession = [
@@ -32,7 +33,7 @@ const gotoAddTrialSession = [
 export const gotoAddTrialSessionSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddTrialSession,
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddTrialSession),
     unauthorized: [redirectToCognitoAction],
   },
 ];
