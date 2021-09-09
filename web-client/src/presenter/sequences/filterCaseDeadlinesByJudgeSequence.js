@@ -2,7 +2,7 @@ import { clearCaseDeadlinesAction } from '../actions/CaseDeadline/clearCaseDeadl
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setCaseDeadlineReportJudgeFilterAction } from '../actions/CaseDeadline/setCaseDeadlineReportJudgeFilterAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const filterCaseDeadlinesByJudgeSequence = showProgressSequenceDecorator(
   [

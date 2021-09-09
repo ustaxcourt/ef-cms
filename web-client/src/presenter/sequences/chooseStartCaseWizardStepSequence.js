@@ -1,5 +1,5 @@
 import { chooseStartCaseWizardStepAction } from '../actions/chooseStartCaseWizardStepAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const chooseStartCaseWizardStepSequence = [
-  chooseStartCaseWizardStepAction,
-];
+export const chooseStartCaseWizardStepSequence =
+  startWebSocketConnectionSequenceDecorator([chooseStartCaseWizardStepAction]);

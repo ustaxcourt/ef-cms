@@ -5,7 +5,7 @@ import { saveCaseNoteAction } from '../actions/CaseNotes/saveCaseNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseNoteOnCaseDetailAction } from '../actions/CaseNotes/setCaseNoteOnCaseDetailAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
