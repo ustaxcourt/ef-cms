@@ -32,6 +32,7 @@ const downloadPdf = async ({
   docketEntryId,
   docketEntryNo,
   docketNumber,
+  path,
 }) => {
   // download pdf from S3
   const data = await S3.getObject({
@@ -44,7 +45,7 @@ const downloadPdf = async ({
 
   console.log(filename);
 
-  await fs.promises.writeFile(`${OUTPUT_DIR}${filename}`, data.Body);
+  await fs.promises.writeFile(`${path}${filename}`, data.Body);
 };
 
 (async () => {
@@ -71,13 +72,15 @@ const downloadPdf = async ({
     }
     // continue;
 
-    // if (isFileAttached || !isSealed) {
-    //   await downloadPdf({
-    //     caseCaption: caseEntity.caseCaption,
-    //     docketEntryId,
-    //     docketEntryNo: index,
-    //     docketNumber,
-    //   });
+    if (isFileAttached) {
+      await downloadPdf({
+        caseCaption: caseEntity.caseCaption,
+        docketEntryId,
+        docketEntryNo: index,
+        docketNumber,
+        path: `${OUTPUT_DIR}${isSealed ? 'sealed' : 'unsealed'}/`,
+      });
+    }
   }
 
   console.log(`we found this many sealed documents: ${numSealed}`);
