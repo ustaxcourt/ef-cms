@@ -6,17 +6,19 @@ import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { shouldLoadCaseAction } from '../actions/shouldLoadCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoReviewSavedPetitionSequence = [
-  shouldLoadCaseAction,
-  {
-    ignore: [setCaseOnFormUsingStateAction],
-    load: showProgressSequenceDecorator([
-      getCaseAction,
-      setCaseAction,
-      setCaseOnFormAction,
-    ]),
-  },
-  setContactsOnFormAction,
-  setCurrentPageAction('ReviewSavedPetition'),
-];
+export const gotoReviewSavedPetitionSequence =
+  startWebSocketConnectionSequenceDecorator([
+    shouldLoadCaseAction,
+    {
+      ignore: [setCaseOnFormUsingStateAction],
+      load: showProgressSequenceDecorator([
+        getCaseAction,
+        setCaseAction,
+        setCaseOnFormAction,
+      ]),
+    },
+    setContactsOnFormAction,
+    setCurrentPageAction('ReviewSavedPetition'),
+  ]);

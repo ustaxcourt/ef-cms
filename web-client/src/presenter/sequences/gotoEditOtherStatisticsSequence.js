@@ -5,12 +5,13 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setEditOtherStatisticsFormAction } from '../actions/setEditOtherStatisticsFormAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditOtherStatisticsSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
       setCurrentPageAction('Interstitial'),
       stopShowValidationAction,
       clearFormAction,
@@ -18,7 +19,7 @@ export const gotoEditOtherStatisticsSequence = [
       setCaseAction,
       setEditOtherStatisticsFormAction,
       setCurrentPageAction('EditOtherStatistics'),
-    ],
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];

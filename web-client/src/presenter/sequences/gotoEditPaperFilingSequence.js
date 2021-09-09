@@ -11,10 +11,11 @@ import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketReco
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPdfPreviewUrlForEditPaperFilingAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForEditPaperFilingAction';
 import { setupEditPaperFilingAction } from '../actions/setupEditPaperFilingAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditPaperFiling = [
+export const gotoEditPaperFiling = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
@@ -29,7 +30,7 @@ export const gotoEditPaperFiling = [
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
   setCurrentPageAction('PaperFiling'),
-];
+]);
 
 export const gotoEditPaperFilingSequence = [
   isLoggedInAction,

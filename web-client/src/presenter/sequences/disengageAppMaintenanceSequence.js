@@ -1,14 +1,16 @@
+import { clearModalSequence } from './clearModalSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
+import { navigateToPathSequence } from './navigateToPathSequence';
 import { setMaintenanceModeAction } from '../actions/setMaintenanceModeAction';
-import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openAppMaintenanceModalSequence = [
+export const disengageAppMaintenanceSequence = [
   isLoggedInAction,
   {
     isLoggedIn: [
+      clearModalSequence,
       setMaintenanceModeAction,
-      setShowModalFactoryAction('AppMaintenanceModal'),
+      navigateToPathSequence,
     ],
     unauthorized: [navigateToPathAction],
   },
