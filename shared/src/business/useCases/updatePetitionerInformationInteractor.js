@@ -116,7 +116,7 @@ const updatePetitionerInformationInteractor = async (
     ],
   );
 
-  const petitionerInfoChange = applicationContext
+  const documentChangeType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
@@ -158,7 +158,7 @@ const updatePetitionerInformationInteractor = async (
     updatedPetitionerData.contactId,
   );
 
-  if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
+  if (documentChangeType && !updatedCaseContact.isAddressSealed) {
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
@@ -168,12 +168,13 @@ const updatePetitionerInformationInteractor = async (
         updatedCaseContact.contactId,
       );
 
+    const newData = editableFields;
     petitionerChangeDocs = await createDocketEntryAndWorkItem({
       applicationContext,
       caseEntity,
-      change: petitionerInfoChange,
-      editableFields,
-      oldCaseContact,
+      documentChangeType,
+      newData,
+      oldData: oldCaseContact,
       partyWithPaperService,
       privatePractitionersRepresentingContact,
       servedParties,
