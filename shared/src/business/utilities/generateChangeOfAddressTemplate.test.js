@@ -127,4 +127,19 @@ describe('getDocumentTypeForAddressChange', () => {
       title: 'Notice of Change of Address and Telephone Number',
     });
   });
+
+  it('Returns Notice of Change of Email Address when only the email fields differ', () => {
+    const result = getDocumentTypeForAddressChange({
+      newData: {
+        ...caseDetail.contactPrimary,
+        email: 'davidByrne@example.com',
+      },
+      oldData: caseDetail.contactPrimary,
+    });
+
+    expect(result).toEqual({
+      eventCode: 'NOCE',
+      title: 'Notice of Change of Email Address',
+    });
+  });
 });
