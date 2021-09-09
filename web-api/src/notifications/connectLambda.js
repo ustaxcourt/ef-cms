@@ -7,21 +7,25 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.connectLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    const endpoint = event.requestContext.domainName;
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      const endpoint = event.requestContext.domainName;
 
-    const results = await applicationContext
-      .getUseCases()
-      .onConnectInteractor(applicationContext, {
-        connectionId: event.requestContext.connectionId,
-        endpoint,
+      const results = await applicationContext
+        .getUseCases()
+        .onConnectInteractor(applicationContext, {
+          connectionId: event.requestContext.connectionId,
+          endpoint,
+        });
+
+      applicationContext.logger.info('Websocket connected', {
+        requestId: {
+          connection: event.requestContext.connectionId,
+        },
       });
 
-    applicationContext.logger.info('Websocket connected', {
-      requestId: {
-        connection: event.requestContext.connectionId,
-      },
-    });
-
-    return results;
-  });
+      return results;
+    },
+    { bypassMaintenanceCheck: true },
+  );
