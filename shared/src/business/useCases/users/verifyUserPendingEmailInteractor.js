@@ -64,11 +64,15 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const documentType = applicationContext
     .getUtilities()
-    .getDocumentTypeForAddressChange(newData, oldData);
+    .getDocumentTypeForAddressChange({ newData, oldData });
 
-  let changeOfAddressDocketEntry;
+  const privatePractitionersRepresentingContact =
+    caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    );
+
   if (isOpen || isRecent) {
-    ({ changeOfAddressDocketEntry } = await applicationContext
+    const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
         applicationContext,
@@ -76,12 +80,12 @@ const updateCaseEntityAndGenerateChange = async ({
         documentType,
         newData,
         oldData,
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
-      }));
+      });
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   }
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 
   return caseEntity.validate();
 };

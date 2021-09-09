@@ -185,13 +185,13 @@ const generateAndServeDocketEntry = async ({
   documentType,
   newData,
   oldData,
+  privatePractitionersRepresentingContact,
   servedParties,
   user,
 }) => {
   const petitionerHasPaperService = caseEntity.petitioners.some(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
-
   const paperServiceRequested =
     petitionerHasPaperService ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
@@ -207,6 +207,7 @@ const generateAndServeDocketEntry = async ({
       newData,
       oldCaseContact: oldData,
       partyWithPaperService: petitionerHasPaperService,
+      privatePractitionersRepresentingContact,
       servedParties,
       user,
     }));
