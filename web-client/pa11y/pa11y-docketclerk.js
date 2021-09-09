@@ -232,4 +232,5 @@ module.exports = [
     notes: 'checks the add petitioner to case page',
     url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/add-petitioner-to-case',
   },
+  'http://localhost:1234/mock-login?token=docketclerk&path=/maintenance',
 ];
