@@ -6,15 +6,17 @@ import { getPaperServiceAlertWarningAction } from '../actions/getPaperServiceAle
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoPrintPaperServiceSequence = [
-  setCurrentPageAction('Interstitial'),
-  clearModalAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  getPaperServiceAlertWarningAction,
-  setAlertWarningAction,
-  setCurrentPageAction('PrintPaperService'),
-];
+export const gotoPrintPaperServiceSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    clearModalAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    getPaperServiceAlertWarningAction,
+    setAlertWarningAction,
+    setCurrentPageAction('PrintPaperService'),
+  ]);

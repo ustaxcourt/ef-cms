@@ -5,9 +5,10 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setupContactFormAction } from '../actions/setupContactFormAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoContactEdit = [
+const gotoContactEdit = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -15,7 +16,7 @@ const gotoContactEdit = [
   getCaseAction,
   setupContactFormAction,
   setCurrentPageAction('ContactEdit'),
-];
+]);
 
 export const gotoContactEditSequence = [
   isLoggedInAction,

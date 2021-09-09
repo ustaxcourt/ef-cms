@@ -38,6 +38,8 @@ describe('fileExternalDocumentInteractor', () => {
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -103,16 +105,6 @@ describe('fileExternalDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
-  });
-
-  it('should throw an error when not authorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({});
-
-    await expect(
-      fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata: {},
-      }),
-    ).rejects.toThrow('Unauthorized');
   });
 
   it('should validate docket entry entities before adding them to the case and not call service or persistence methods', async () => {
