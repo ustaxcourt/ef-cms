@@ -68,6 +68,7 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
       });
 
       const { bypassMaintenanceCheck } = options;
+
       if (!bypassMaintenanceCheck) {
         await checkMaintenanceMode({ applicationContext });
       }
