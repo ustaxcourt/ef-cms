@@ -77,7 +77,6 @@ const generateChangeOfAddressForPractitioner = async ({
           applicationContext,
           docketNumber,
         });
-
       let caseEntity = new Case(userCase, { applicationContext });
 
       const practitionerName = updatedName || user.name;
@@ -120,14 +119,14 @@ const generateChangeOfAddressForPractitioner = async ({
         dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
 
       if (!bypassDocketEntry && (isOpen || isRecent)) {
-        ({ caseEntity } = await prepareToGenerateAndServeDocketEntry({
+        await prepareToGenerateAndServeDocketEntry({
           applicationContext,
           caseEntity,
           newData,
           oldData,
           practitionerName,
           user,
-        }));
+        });
       }
 
       const updatedCase = await applicationContext
@@ -136,7 +135,6 @@ const generateChangeOfAddressForPractitioner = async ({
           applicationContext,
           caseToUpdate: caseEntity,
         });
-
       updatedCases.push(updatedCase);
     } catch (error) {
       applicationContext.logger.error(error);
@@ -167,7 +165,7 @@ const generateChangeOfAddressForPractitioner = async ({
  * @param {object} providers.oldData the old practitioner contact information (for comparison)
  * @param {object} providers.practitionerName the name of the practitioner
  * @param {object} providers.user the user object that includes userId, barNumber etc.
- * @returns {Promise<User[]>} the internal users
+ * @returns {Promise<*>} resolves upon completion of docket entry service
  */
 const prepareToGenerateAndServeDocketEntry = async ({
   applicationContext,
@@ -212,7 +210,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
     user,
   });
 
-  return caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
+  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
 
 module.exports = {
