@@ -53,6 +53,7 @@ const downloadPdf = async ({
   // caseEntity.docketEntries.forEach(e => console.log);
   // console.log(caseEntity.docketEntries[0]);
   // const docketEntries = caseEntity.docketEntries.map(e => );
+  let numSealed = 0;
   for (const docketEntry of caseEntity.docketEntries) {
     const {
       docketEntryId,
@@ -64,17 +65,20 @@ const downloadPdf = async ({
     // console.log(docketEntry);
     const isSealed = isLegacySealed || documentTitle.indexOf('(SEALED)') > -1;
 
-    console.log(`isSealed; ${isSealed}; ${docketEntryId}, ${index}`);
-
-    continue;
-
-    if (isFileAttached || !isSealed) {
-      await downloadPdf({
-        caseCaption: caseEntity.caseCaption,
-        docketEntryId,
-        docketEntryNo: index,
-        docketNumber,
-      });
+    if (isSealed) {
+      numSealed++;
+      console.log(`${index} - ${documentTitle}`);
     }
+    // continue;
+
+    // if (isFileAttached || !isSealed) {
+    //   await downloadPdf({
+    //     caseCaption: caseEntity.caseCaption,
+    //     docketEntryId,
+    //     docketEntryNo: index,
+    //     docketNumber,
+    //   });
   }
+
+  console.log(`we found this many sealed documents: ${numSealed}`);
 })();
