@@ -328,6 +328,9 @@ const {
   forwardMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardMessageInteractor');
 const {
+  generateAndServeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
+const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -1747,6 +1750,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
+        generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
