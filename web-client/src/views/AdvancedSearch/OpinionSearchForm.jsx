@@ -11,6 +11,7 @@ import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+const classNames = require('classnames');
 
 export const OpinionSearchForm = connect(
   {
@@ -124,11 +125,14 @@ export const OpinionSearchForm = connect(
                       validateSequence={validateOpinionSearchSequence}
                     />
                   </div>
-
                   <div className="custom-col-5 desktop:grid-col-7 grid-col-12">
                     <FormGroup
-                      className="advanced-search-panel full-width"
-                      errorText={validationErrors.chooseOneValue}
+                      className={classNames(
+                        'advanced-search-panel',
+                        'full-width',
+                        validationErrors.chooseOneValue &&
+                          'usa-form-group--error',
+                      )}
                     >
                       <div className="margin-bottom-0">
                         <DocketNumberSearchField
@@ -156,6 +160,9 @@ export const OpinionSearchForm = connect(
                         validateSequence={validateOpinionSearchSequence}
                       />
                     </FormGroup>
+                    <span className="usa-error-message ">
+                      {validationErrors.chooseOneValue}
+                    </span>
                   </div>
                 </div>
                 <div className="grid-row grid-gap-3 margin-top-2">
