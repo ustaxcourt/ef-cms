@@ -315,8 +315,6 @@ exports.verifyUserPendingEmailInteractor = async (
         applicationContext,
         user: updatedRawUser,
       });
-    } else {
-      throw new Error(`Refusing to update cases for ${userEntity.role}`);
     }
   } catch (error) {
     applicationContext.logger.error(error);

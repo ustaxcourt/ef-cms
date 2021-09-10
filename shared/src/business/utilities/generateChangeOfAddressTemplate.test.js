@@ -76,7 +76,7 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: { ...caseDetail.contactPrimary, address2: 'something' },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       eventCode: 'NCA',
       title: 'Notice of Change of Address',
     });
@@ -91,7 +91,7 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       eventCode: 'NCA',
       title: 'Notice of Change of Address',
     });
@@ -106,7 +106,7 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       eventCode: 'NCP',
       title: 'Notice of Change of Telephone Number',
     });
@@ -122,7 +122,7 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       eventCode: 'NCAP',
       title: 'Notice of Change of Address and Telephone Number',
     });
@@ -137,7 +137,7 @@ describe('getDocumentTypeForAddressChange', () => {
       oldData: caseDetail.contactPrimary,
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       eventCode: 'NOCE',
       title: 'Notice of Change of Email Address',
     });
