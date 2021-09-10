@@ -1,5 +1,6 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../../useCases/addCoversheetInteractor');
@@ -26,7 +27,6 @@ const { WorkItem } = require('../../entities/WorkItem');
 const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
-  contactName,
   documentType,
   docketMeta = {},
   newData,
@@ -36,8 +36,15 @@ const createDocketEntryForChange = async ({
 }) => {
   const caseDetail = caseEntity.validate().toRawObject();
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-  if (!contactName) {
-    ({ contactName } = newData);
+  let changeOfAddressName = newData.name;
+  let contactName = newData.name;
+
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner
+  ) {
+    changeOfAddressName = `${user.name} (${user.barNumber})`;
+    contactName = user.name;
   }
 
   const changeOfAddressPdf = await applicationContext
@@ -50,7 +57,7 @@ const createDocketEntryForChange = async ({
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         documentType,
-        name: contactName,
+        name: changeOfAddressName,
         newData,
         oldData,
       },
@@ -179,6 +186,7 @@ const createDocketEntryAndWorkItem = async ({
 
 const generateAndServeDocketEntry = async ({
   applicationContext,
+  barNumber,
   caseEntity,
   contactName,
   docketMeta,
@@ -201,7 +209,9 @@ const generateAndServeDocketEntry = async ({
   if (paperServiceRequested) {
     ({ changeOfAddressDocketEntry } = await createDocketEntryAndWorkItem({
       applicationContext,
+      barNumber,
       caseEntity,
+      contactName,
       docketMeta,
       documentType,
       newData,
@@ -214,6 +224,7 @@ const generateAndServeDocketEntry = async ({
   } else {
     ({ changeOfAddressDocketEntry } = await createDocketEntryForChange({
       applicationContext,
+      barNumber,
       caseEntity,
       contactName,
       docketMeta,
