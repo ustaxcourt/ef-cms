@@ -184,7 +184,6 @@ const prepareToGenerateAndServeDocketEntry = async ({
 
   if (!documentType) return;
 
-  const contactName = `${practitionerName} (${user.barNumber})`;
   const servedParties = aggregatePartiesForService(caseEntity);
 
   const docketMeta = {};
@@ -198,10 +197,11 @@ const prepareToGenerateAndServeDocketEntry = async ({
     docketMeta.partyIrsPractitioner = true;
   }
 
+  newData.practitionerName = user.name;
   const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
     applicationContext,
+    barNumber: user.barNumber,
     caseEntity,
-    contactName,
     docketMeta,
     documentType,
     newData,
