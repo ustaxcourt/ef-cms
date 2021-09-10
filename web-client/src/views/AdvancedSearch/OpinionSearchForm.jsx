@@ -1,16 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
+import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
 import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
+import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const OpinionSearchForm = connect(
   {
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.legacyAndCurrentJudges,
@@ -20,6 +24,7 @@ export const OpinionSearchForm = connect(
     validationErrors: state.validationErrors,
   },
   function OpinionSearchForm({
+    advancedDocumentSearchHelper,
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
     judges,
@@ -83,22 +88,26 @@ export const OpinionSearchForm = connect(
                 </FormGroup>
               </div>
               <div className="grid-row grid-gap-6">
-                {/* <div className="judge-search-row margin-top-4">
-                  {JudgeSelect()}
-                </div> */}
-                {/* <div className="margin-top-4">{DateRangeSelect()}</div> */}
+                <div className="judge-search-row margin-top-4">
+                  <JudgeSelect judges={judges} />
+                </div>
+                <DateRangeSelect
+                  searchValue={advancedSearchForm.opinionSearch.dateRange}
+                  updateSequence={updateAdvancedOpinionSearchFormValueSequence}
+                  validateSequence={validateOpinionSearchSequence}
+                />
 
-                {/* {advancedSearchHelper.showDateRangePicker && (
+                {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <SearchDateRangePickerComponent
                       formType="orderSearch"
                       updateSequence={
-                        updateAdvancedOrderSearchFormValueSequence
+                        updateAdvancedOpinionSearchFormValueSequence
                       }
-                      validateSequence={validateOrderSearchSequence}
+                      validateSequence={validateOpinionSearchSequence}
                     />
                   </div>
-                )} */}
+                )}
               </div>
             </div>
           </Mobile>
@@ -151,25 +160,33 @@ export const OpinionSearchForm = connect(
                 </div>
                 <div className="grid-row grid-gap-3 margin-top-2">
                   <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
-                    {/* <div className="width-card-lg">{JudgeSelect()}</div> */}
+                    <div className="width-card-lg">
+                      <JudgeSelect judges={judges} />
+                    </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
-                      {/* {DateRangeSelect()} */}
+                      <DateRangeSelect
+                        searchValue={advancedSearchForm.opinionSearch.dateRange}
+                        updateSequence={
+                          updateAdvancedOpinionSearchFormValueSequence
+                        }
+                        validateSequence={validateOpinionSearchSequence}
+                      />
                     </div>
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {/* {advancedSearchHelper.showDateRangePicker && (
+                      {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <SearchDateRangePickerComponent
                             formType="orderSearch"
                             updateSequence={
-                              updateAdvancedOrderSearchFormValueSequence
+                              updateAdvancedOpinionSearchFormValueSequence
                             }
-                            validateSequence={validateOrderSearchSequence}
+                            validateSequence={validateOpinionSearchSequence}
                           />
                         </div>
-                      )} */}
+                      )}
                     </div>
                   </div>
                 </div>
