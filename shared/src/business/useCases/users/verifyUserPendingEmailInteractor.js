@@ -50,6 +50,7 @@ const updateCaseEntityAndGenerateChange = async ({
   ) {
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
+
   //TODO create method on caseEntity
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
     caseEntity.status,
@@ -106,13 +107,14 @@ const updateCasesForPetitioner = async ({
 
   const validatedCasesToUpdateInPersistence = (
     await Promise.all(
-      rawCasesToUpdate.map(rawCaseData =>
-        updateCaseEntityAndGenerateChange({
+      rawCasesToUpdate.map(rawCaseData => {
+        console.log(rawCaseData.docketNumber);
+        return updateCaseEntityAndGenerateChange({
           applicationContext,
           rawCaseData,
           user,
-        }),
-      ),
+        });
+      }),
     )
   ).filter(Boolean);
 
@@ -147,9 +149,10 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
+  // FIXME don't keep filtering these cases.
   return await updateCasesForPetitioner({
     applicationContext,
-    petitionerCases,
+    petitionerCases: petitionerCases.filter(c => c.docketNumber === '112-19'),
     user,
   });
 };
