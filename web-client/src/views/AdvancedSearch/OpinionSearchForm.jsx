@@ -1,11 +1,10 @@
-import { AdvancedDocumentSearch } from './AdvancedDocumentSearch';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
+import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { OpinionSearchByKeyword } from './OpinionSearchByKeyword';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -52,19 +51,36 @@ export const OpinionSearchForm = connect(
                     validateSequence={validateOpinionSearchSequence}
                   />
                 </div>
-                {/* <FormGroup
+                <FormGroup
                   className="advanced-search-panel full-width"
                   errorText={validationErrors.chooseOneValue}
                 >
                   <div className="margin-bottom-3 margin-top-3">
-                    {DocketNumberField()}
+                    <DocketNumberSearchField
+                      searchValue={
+                        advancedSearchForm.opinionSearch.docketNumber
+                      }
+                      updateSequence={
+                        updateAdvancedOpinionSearchFormValueSequence
+                      }
+                      validateSequence={validateOpinionSearchSequence}
+                    />
                   </div>
+
                   <div className="width-full margin-bottom-3 padding-right-2">
                     or
                   </div>
 
-                  {CaseTitleOrNameField()}
-                </FormGroup> */}
+                  <CaseTitleOrNameSearchField
+                    searchValue={
+                      advancedSearchForm.opinionSearch.caseTitleOrPetitioner
+                    }
+                    updateSequence={
+                      updateAdvancedOpinionSearchFormValueSequence
+                    }
+                    validateSequence={validateOpinionSearchSequence}
+                  />
+                </FormGroup>
               </div>
               <div className="grid-row grid-gap-6">
                 {/* <div className="judge-search-row margin-top-4">
@@ -106,14 +122,30 @@ export const OpinionSearchForm = connect(
                       errorText={validationErrors.chooseOneValue}
                     >
                       <div className="margin-bottom-0">
-                        {/* {DocketNumberField()} */}
+                        <DocketNumberSearchField
+                          searchValue={
+                            advancedSearchForm.opinionSearch.docketNumber
+                          }
+                          updateSequence={
+                            updateAdvancedOpinionSearchFormValueSequence
+                          }
+                          validateSequence={validateOpinionSearchSequence}
+                        />
                       </div>
 
                       <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                         or
                       </div>
 
-                      {/* {CaseTitleOrNameField()} */}
+                      <CaseTitleOrNameSearchField
+                        searchValue={
+                          advancedSearchForm.opinionSearch.caseTitleOrPetitioner
+                        }
+                        updateSequence={
+                          updateAdvancedOpinionSearchFormValueSequence
+                        }
+                        validateSequence={validateOpinionSearchSequence}
+                      />
                     </FormGroup>
                   </div>
                 </div>
