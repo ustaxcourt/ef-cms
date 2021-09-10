@@ -71,6 +71,36 @@ describe('advancedDocumentSearchHelper', () => {
 
       expect(result.showDateRangePicker).toBeTruthy();
     });
+
+    it('should be false when state.advancedSearchForm.opinionSearch.dateRange is allDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            opinionSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
+          },
+          advancedSearchTab: 'opinion',
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeFalsy();
+    });
+
+    it('should be true when state.advancedSearchForm.opinionSearch.dateRange is customDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            opinionSearch: {
+              dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+            },
+          },
+          advancedSearchTab: 'opinion',
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeTruthy();
+    });
   });
 
   it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
