@@ -11,7 +11,7 @@ import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 export const OrderSearchForm = connect(
   {
