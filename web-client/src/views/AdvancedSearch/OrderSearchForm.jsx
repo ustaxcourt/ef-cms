@@ -1,6 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
+import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
@@ -33,52 +34,6 @@ export const OrderSearchForm = connect(
     validateOrderSearchSequence,
     validationErrors,
   }) {
-    const DocketNumberField = () => (
-      <>
-        <label className="usa-label text-no-wrap" htmlFor="docket-number">
-          Docket number
-        </label>
-        <input
-          className="usa-input maxw-15"
-          id="docket-number"
-          name="docketNumber"
-          type="text"
-          value={advancedSearchForm.orderSearch.docketNumber || ''}
-          onBlur={() => validateOrderSearchSequence()}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value.toUpperCase(),
-            });
-          }}
-        />
-      </>
-    );
-
-    const CaseTitleOrNameField = () => (
-      <>
-        <div>
-          <label className="usa-label text-no-wrap" htmlFor="title-or-name">
-            Case title / Petitioner’s name
-          </label>
-          <input
-            className="usa-input"
-            id="title-or-name"
-            name="caseTitleOrPetitioner"
-            type="text"
-            value={advancedSearchForm.orderSearch.caseTitleOrPetitioner || ''}
-            onBlur={() => validateOrderSearchSequence()}
-            onChange={e => {
-              updateAdvancedOrderSearchFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-      </>
-    );
-
     const JudgeSelect = () => (
       <>
         <label className="usa-label" htmlFor="order-date-range">
@@ -152,13 +107,25 @@ export const OrderSearchForm = connect(
                   errorText={validationErrors.chooseOneValue}
                 >
                   <div className="margin-bottom-3 margin-top-3">
-                    {DocketNumberField()}
+                    <DocketNumberSearchField
+                      searchValue={advancedSearchForm.orderSearch.docketNumber}
+                      updateSequence={
+                        updateAdvancedOrderSearchFormValueSequence
+                      }
+                      validateSequence={validateOrderSearchSequence}
+                    />
                   </div>
                   <div className="width-full margin-bottom-3 padding-right-2">
                     or
                   </div>
 
-                  {CaseTitleOrNameField()}
+                  <CaseTitleOrNameSearchField
+                    searchValue={
+                      advancedSearchForm.orderSearch.caseTitleOrPetitioner
+                    }
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
                 </FormGroup>
               </div>
               <div className="grid-row grid-gap-6">
@@ -201,14 +168,29 @@ export const OrderSearchForm = connect(
                       errorText={validationErrors.chooseOneValue}
                     >
                       <div className="margin-bottom-0">
-                        {DocketNumberField()}
+                        <DocketNumberSearchField
+                          searchValue={
+                            advancedSearchForm.orderSearch.docketNumber
+                          }
+                          updateSequence={
+                            updateAdvancedOrderSearchFormValueSequence
+                          }
+                          validateSequence={validateOrderSearchSequence}
+                        />
                       </div>
-
                       <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                         or
                       </div>
 
-                      {CaseTitleOrNameField()}
+                      <CaseTitleOrNameSearchField
+                        searchValue={
+                          advancedSearchForm.orderSearch.caseTitleOrPetitioner
+                        }
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
                     </FormGroup>
                   </div>
                 </div>
