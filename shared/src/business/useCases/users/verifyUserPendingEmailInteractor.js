@@ -149,7 +149,7 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  // FIXME don't keep filtering these cases.
+  // TODO don't keep filtering these cases.
   return await updateCasesForPetitioner({
     applicationContext,
     petitionerCases: petitionerCases.filter(c => c.docketNumber === '112-19'),
