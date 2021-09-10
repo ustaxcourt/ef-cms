@@ -11,7 +11,7 @@ import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-const classNames = require('classnames');
+import classNames from 'classnames';
 
 export const OpinionSearchForm = connect(
   {
@@ -92,11 +92,15 @@ export const OpinionSearchForm = connect(
                 <div className="judge-search-row margin-top-4">
                   <JudgeSelect judges={judges} />
                 </div>
-                <DateRangeSelect
-                  searchValue={advancedSearchForm.opinionSearch.dateRange}
-                  updateSequence={updateAdvancedOpinionSearchFormValueSequence}
-                  validateSequence={validateOpinionSearchSequence}
-                />
+                <div className="margin-top-4">
+                  <DateRangeSelect
+                    searchValue={advancedSearchForm.opinionSearch.dateRange}
+                    updateSequence={
+                      updateAdvancedOpinionSearchFormValueSequence
+                    }
+                    validateSequence={validateOpinionSearchSequence}
+                  />
+                </div>
 
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
