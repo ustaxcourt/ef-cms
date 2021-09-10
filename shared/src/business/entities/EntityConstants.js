@@ -60,12 +60,26 @@ const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
 };
 
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
-  { documentType: 'Notice of Change of Address', eventCode: 'NCA' },
+  {
+    documentType: 'Notice of Change of Address',
+    eventCode: 'NCA',
+    title: 'Notice of Change of Address',
+  },
   {
     documentType: 'Notice of Change of Address and Telephone Number',
     eventCode: 'NCAP',
+    title: 'Notice of Change of Address and Telephone Number',
   },
-  { documentType: 'Notice of Change of Telephone Number', eventCode: 'NCP' },
+  {
+    documentType: 'Notice of Change of Telephone Number',
+    eventCode: 'NCP',
+    title: 'Notice of Change of Telephone Number',
+  },
+  {
+    documentType: 'Notice of Change of Email Address',
+    eventCode: 'NOCE',
+    title: 'Notice of Change of Email Address',
+  },
 ];
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
