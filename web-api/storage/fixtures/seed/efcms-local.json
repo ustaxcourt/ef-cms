@@ -14865,23 +14865,6 @@
         "name": "Brian Earl Spilner",
         "state": "CA",
         "email": "petitioner@example.com"
-      },
-      {
-        "isAddressSealed": false,
-        "address3": "Officiis sit consect",
-        "contactId": "3335d1ab-18d0-43ec-bafb-654e83405416",
-        "address2": "Eiusmod officiis dol",
-        "city": "Laborum Expedita qu",
-        "address1": "40 East Cowley Boulevard",
-        "postalCode": "18152",
-        "contactType": "primary",
-        "sealedAndUnavailable": false,
-        "countryType": "domestic",
-        "serviceIndicator": "Electronic",
-        "phone": "+1 (523) 202-1718",
-        "name": "Mister Electronic Service",
-        "state": "MA",
-        "email": "petitioner@example.com"
       }
     ],
     "initialDocketNumberSuffix": "L",

@@ -189,7 +189,6 @@ const generateAndServeDocketEntry = async ({
   servedParties,
   user,
 }) => {
-  console.log('Served parties?', { servedParties });
   const petitionerHasPaperService = caseEntity.petitioners.some(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
@@ -224,13 +223,6 @@ const generateAndServeDocketEntry = async ({
       servedParties,
       user,
     }));
-  }
-
-  if (!changeOfAddressDocketEntry.servedPartiesCode) {
-    console.log(
-      caseEntity.docketNumber,
-      JSON.stringify(changeOfAddressDocketEntry, null, 2),
-    );
   }
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
