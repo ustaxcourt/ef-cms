@@ -1,9 +1,10 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
+import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
 import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
+import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
@@ -13,9 +14,8 @@ import React from 'react';
 
 export const OrderSearchForm = connect(
   {
-    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
-    advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
@@ -24,63 +24,15 @@ export const OrderSearchForm = connect(
     validationErrors: state.validationErrors,
   },
   function OrderSearchForm({
+    advancedDocumentSearchHelper,
     advancedSearchForm,
-    advancedSearchHelper,
     clearAdvancedSearchFormSequence,
-    DATE_RANGE_SEARCH_OPTIONS,
     judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
   }) {
-    const JudgeSelect = () => (
-      <>
-        <label className="usa-label" htmlFor="order-date-range">
-          Judge
-        </label>
-        <BindedSelect
-          bind={'advancedSearchForm.orderSearch.judge'}
-          className="usa-input"
-          id="order-judge"
-          name="judge"
-        >
-          <option value="">All judges</option>
-          {judges.map(judge => (
-            <option key={judge.judgeFullName} value={judge.judgeFullName}>
-              {judge.name}
-            </option>
-          ))}
-        </BindedSelect>
-      </>
-    );
-
-    const DateRangeSelect = () => (
-      <>
-        <label className="usa-label" htmlFor="order-date-range">
-          Date range
-        </label>
-        <select
-          className="usa-select"
-          id="order-date-range"
-          name="dateRange"
-          value={advancedSearchForm.orderSearch.dateRange}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-            validateOrderSearchSequence();
-          }}
-        >
-          <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>All dates</option>
-          <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
-            Custom dates
-          </option>
-        </select>
-      </>
-    );
-
     return (
       <>
         <form
@@ -130,11 +82,17 @@ export const OrderSearchForm = connect(
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  {JudgeSelect()}
+                  <JudgeSelect judges={judges} />
                 </div>
-                <div className="margin-top-4">{DateRangeSelect()}</div>
+                <div className="margin-top-4">
+                  <DateRangeSelect
+                    searchValue={advancedSearchForm.orderSearch.dateRange}
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
+                </div>
 
-                {advancedSearchHelper.showDateRangePicker && (
+                {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <SearchDateRangePickerComponent
                       formType="orderSearch"
@@ -196,15 +154,23 @@ export const OrderSearchForm = connect(
                 </div>
                 <div className="grid-row grid-gap-3 margin-top-2">
                   <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
-                    <div className="width-card-lg">{JudgeSelect()}</div>
+                    <div className="width-card-lg">
+                      <JudgeSelect judges={judges} />
+                    </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
-                      {DateRangeSelect()}
+                      <DateRangeSelect
+                        searchValue={advancedSearchForm.orderSearch.dateRange}
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
                     </div>
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {advancedSearchHelper.showDateRangePicker && (
+                      {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <SearchDateRangePickerComponent
                             formType="orderSearch"
