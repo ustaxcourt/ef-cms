@@ -37,7 +37,11 @@ const updateCaseEntityAndGenerateChange = async ({
   }
 
   const oldEmail = petitionerObject.email;
-  const newData = { email: user.email };
+  const newData = {
+    contactName: petitionerObject.name,
+    email: user.email,
+  };
+
   const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
 
@@ -104,11 +108,9 @@ const updateCasesForPetitioner = async ({
       }),
     ),
   );
-
   const validatedCasesToUpdateInPersistence = (
     await Promise.all(
       rawCasesToUpdate.map(rawCaseData => {
-        console.log(rawCaseData.docketNumber);
         return updateCaseEntityAndGenerateChange({
           applicationContext,
           rawCaseData,
@@ -149,10 +151,9 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
       userId: user.userId,
     });
 
-  // TODO don't keep filtering these cases.
   return await updateCasesForPetitioner({
     applicationContext,
-    petitionerCases: petitionerCases.filter(c => c.docketNumber === '112-19'),
+    petitionerCases,
     user,
   });
 };
@@ -301,7 +302,6 @@ exports.verifyUserPendingEmailInteractor = async (
   userEntity.pendingEmailVerificationToken = undefined;
 
   const updatedRawUser = userEntity.validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: updatedRawUser,

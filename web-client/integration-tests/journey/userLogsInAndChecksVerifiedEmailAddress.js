@@ -27,7 +27,9 @@ export const userLogsInAndChecksVerifiedEmailAddress = (
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
-
+    expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
+      cerebralTest.docketNumber,
+    );
     if (user === 'petitioner') {
       const contactPrimary = contactPrimaryFromState(cerebralTest);
       const petitionerEmail = contactPrimary.email;
