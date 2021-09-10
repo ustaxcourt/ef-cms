@@ -2,12 +2,13 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
+import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import howToUseSearch from '../../pdfs/how-to-use-search.pdf';
 
 export const OrderSearchForm = connect(
   {
@@ -32,29 +33,6 @@ export const OrderSearchForm = connect(
     validateOrderSearchSequence,
     validationErrors,
   }) {
-    const KeywordField = () => (
-      <>
-        <p className="margin-top-0">
-          <span className="text-semibold">Search by keyword and phrase</span>
-        </p>
-        <input
-          aria-describedby="search-orders-header search-description"
-          className="usa-input maxw-tablet-lg"
-          id="order-search"
-          name="keyword"
-          type="text"
-          value={advancedSearchForm.orderSearch.keyword || ''}
-          onBlur={() => validateOrderSearchSequence()}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-        />
-      </>
-    );
-
     const DocketNumberField = () => (
       <>
         <label className="usa-label text-no-wrap" htmlFor="docket-number">
@@ -148,57 +126,6 @@ export const OrderSearchForm = connect(
       </>
     );
 
-    const HowToSearchCard = () => (
-      <>
-        <div className="card gray">
-          <div className="content-wrapper how-to-search">
-            <h3>How to Use Search</h3>
-            <hr />
-            <table className="margin-bottom-0 search-info">
-              <tbody>
-                <tr>
-                  <td>&quot;&quot;</td>
-                  <td>
-                    Include only <b>exact matches</b> <br />
-                  </td>
-                </tr>
-                <tr>
-                  <td>+</td>
-                  <td>
-                    AND (includes <b>all</b> words/phrases)
-                  </td>
-                </tr>
-                <tr>
-                  <td>|</td>
-                  <td>
-                    OR (includes <b>one or more</b> words/phrases)
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p>
-              <i>No other commands are supported at this time</i>
-            </p>
-            <p>
-              <FontAwesomeIcon
-                className="fa-icon-blue"
-                icon="file-pdf"
-                size="1x"
-              />
-              <a
-                className="usa-link--external"
-                href={howToUseSearch}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Learn more about searching in DAWSON
-              </a>
-            </p>
-          </div>
-        </div>
-      </>
-    );
-
     return (
       <>
         <form
@@ -208,11 +135,17 @@ export const OrderSearchForm = connect(
           }}
         >
           <Mobile>
-            <div className="margin-bottom-3">{HowToSearchCard()}</div>
+            <div className="margin-bottom-3">
+              <HowToSearch />
+            </div>
             <div className="blue-container">
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
-                  {KeywordField()}
+                  <KeywordSearchField
+                    searchValue={advancedSearchForm.orderSearch.keyword}
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
                 </div>
                 <FormGroup
                   className="advanced-search-panel full-width"
@@ -253,7 +186,13 @@ export const OrderSearchForm = connect(
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
                 <div className="grid-row grid-gap-6">
                   <div className="custom-col-7 desktop:grid-col-5 grid-col-12 right-gray-border padding-bottom-2">
-                    {KeywordField()}
+                    <KeywordSearchField
+                      searchValue={advancedSearchForm.orderSearch.keyword}
+                      updateSequence={
+                        updateAdvancedOrderSearchFormValueSequence
+                      }
+                      validateSequence={validateOrderSearchSequence}
+                    />
                   </div>
 
                   <div className="custom-col-5 desktop:grid-col-7 grid-col-12">
@@ -299,7 +238,7 @@ export const OrderSearchForm = connect(
                 </div>
               </div>
               <div className="grid-col-3 margin-left-1">
-                {HowToSearchCard()}
+                <HowToSearch />
               </div>
             </div>
           </NonMobile>
