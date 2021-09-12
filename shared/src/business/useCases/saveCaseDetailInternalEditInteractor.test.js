@@ -324,4 +324,29 @@ describe('updateCase', () => {
       mockCase.petitioners[0].contactId,
     ]);
   });
+
+  it('should not allow the recevedAt field to be updated if it is an electronic filing', async () => {
+    const currentCaseDetail = {
+      ...mockCase,
+      isPaper: false,
+      receivedAt: '2021-01-01T16:00:00.000Z',
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({ ...currentCaseDetail });
+
+    const result = await saveCaseDetailInternalEditInteractor(
+      applicationContext,
+      {
+        caseToUpdate: {
+          ...mockCase,
+          contactPrimary: getContactPrimary(mockCase),
+          receivedAt: '2021-08-08T16:00:00.000Z', // a new receivedAt
+        },
+        docketNumber: mockCase.docketNumber,
+      },
+    );
+
+    expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
+  });
 });

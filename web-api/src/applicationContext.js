@@ -79,6 +79,7 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   formatDateString,
@@ -1932,6 +1933,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateDifferenceInDays,
         calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,
