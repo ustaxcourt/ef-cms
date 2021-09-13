@@ -13,7 +13,7 @@ exports.getClosedCasesInteractor = async applicationContext => {
 
   const closedCases = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getCasesForUser({
       applicationContext,
       userId,
     });

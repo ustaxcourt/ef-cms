@@ -83,7 +83,7 @@ exports.updateCasesForPetitioner = updateCasesForPetitioner;
 const updatePetitionerCases = async ({ applicationContext, user }) => {
   const petitionerCases = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getCasesForUser({
       applicationContext,
       userId: user.userId,
     });
