@@ -1,4 +1,5 @@
 import {
+  ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   DATE_RANGE_SEARCH_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -74,103 +75,113 @@ describe('docket clerk opinion advanced search', () => {
   //   });
   // });
 
-  // describe('search for things that should be found', () => {
-  //   it('search for a keyword that is present in a served opinion', async () => {
-  //     cerebralTest.setState('advancedSearchForm', {
-  //       opinionSearch: {
-  //         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-  //         keyword: 'sunglasses',
-  //         startDate: '1995-08-03',
-  //       },
-  //     });
+  const updateOpinionForm = async formValues => {
+    for (let [key, value] of Object.entries(formValues)) {
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
+  };
 
-  //     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+  describe('search for things that should be found', () => {
+    it('search for a keyword that is present in a served opinion', async () => {
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'sunglasses',
+        startDate: '1995-08-03',
+      });
 
-  //     expect(
-  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-  //     ).toEqual(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-  //           documentTitle:
-  //             'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-  //         }),
-  //       ]),
-  //     );
-  //   });
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-  //   it('search for a keyword and docket number that is present in a served opinion', async () => {
-  //     cerebralTest.setState('advancedSearchForm', {
-  //       opinionSearch: {
-  //         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-  //         docketNumber: '105-20',
-  //         keyword: 'sunglasses',
-  //         startDate: '1995-08-03',
-  //       },
-  //     });
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          }),
+        ]),
+      );
+    });
 
-  //     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+    // it('search for a keyword and docket number that is present in a served opinion', async () => {
+    //   cerebralTest.setState('advancedSearchForm', {
+    //     opinionSearch: {
+    //       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+    //       docketNumber: '105-20',
+    //       keyword: 'sunglasses',
+    //       startDate: '1995-08-03',
+    //     },
+    //   });
 
-  //     expect(
-  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-  //     ).toEqual(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-  //           documentTitle:
-  //             'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-  //         }),
-  //       ]),
-  //     );
-  //   });
+    //   await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-  //   it('includes the number of pages present in each document in the search results', async () => {
-  //     cerebralTest.setState('advancedSearchForm', {
-  //       opinionSearch: {
-  //         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-  //         keyword: 'sunglasses',
-  //         startDate: '1995-08-03',
-  //       },
-  //     });
+    //   expect(
+    //     cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+    //   ).toEqual(
+    //     expect.arrayContaining([
+    //       expect.objectContaining({
+    //         docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+    //         documentTitle:
+    //           'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+    //       }),
+    //     ]),
+    //   );
+    // });
 
-  //     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+    // it('includes the number of pages present in each document in the search results', async () => {
+    //   cerebralTest.setState('advancedSearchForm', {
+    //     opinionSearch: {
+    //       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+    //       keyword: 'sunglasses',
+    //       startDate: '1995-08-03',
+    //     },
+    //   });
 
-  //     expect(
-  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-  //     ).toEqual(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           numberOfPages: 1,
-  //         }),
-  //       ]),
-  //     );
-  //   });
+    //   await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-  //   it('search for an opinion type that is present in any served opinion', async () => {
-  //     cerebralTest.setState('advancedSearchForm', {
-  //       opinionSearch: {
-  //         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-  //         keyword: 'opinion',
-  //         opinionType: 'T.C. Opinion',
-  //         startDate: '1995-08-03',
-  //       },
-  //     });
+    //   expect(
+    //     cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+    //   ).toEqual(
+    //     expect.arrayContaining([
+    //       expect.objectContaining({
+    //         numberOfPages: 1,
+    //       }),
+    //     ]),
+    //   );
+    // });
 
-  //     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+    // it('search for an opinion type that is present in any served opinion', async () => {
+    //   cerebralTest.setState('advancedSearchForm', {
+    //     opinionSearch: {
+    //       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+    //       keyword: 'opinion',
+    //       opinionType: 'T.C. Opinion',
+    //       startDate: '1995-08-03',
+    //     },
+    //   });
 
-  //     expect(
-  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-  //     ).toEqual(
-  //       expect.arrayContaining([
-  //         expect.objectContaining({
-  //           docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-  //           documentTitle:
-  //             'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-  //         }),
-  //       ]),
-  //     );
-  //   });
-  // });
+    //   await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+    //   expect(
+    //     cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+    //   ).toEqual(
+    //     expect.arrayContaining([
+    //       expect.objectContaining({
+    //         docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+    //         documentTitle:
+    //           'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+    //       }),
+    //     ]),
+    //   );
+    // });
+  });
 
   it('clears search fields', async () => {
     await cerebralTest.runSequence(
@@ -187,6 +198,12 @@ describe('docket clerk opinion advanced search', () => {
 
     expect(cerebralTest.getState('advancedSearchForm.opinionSearch')).toEqual({
       keyword: '',
+      opinionTypes: {
+        [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
+      },
     });
   });
 
