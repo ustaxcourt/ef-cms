@@ -128,16 +128,22 @@ export const OpinionSearchForm = connect(
                         className="usa-checkbox width-full"
                         key={opinionType}
                       >
+                        {console.log(
+                          'woo',
+                          !!advancedSearchForm.opinionSearch.opinionTypes[
+                            ADVANCED_SEARCH_OPINION_TYPES[opinionType]
+                          ],
+                        )}
                         <input
                           checked={
                             advancedSearchForm.opinionSearch.opinionTypes &&
                             !!advancedSearchForm.opinionSearch.opinionTypes[
-                              opinionType
+                              ADVANCED_SEARCH_OPINION_TYPES[opinionType]
                             ]
                           }
                           className="usa-checkbox__input include-types"
                           id={`opinionTypes.${opinionType}`}
-                          name={`opinionTypes.${opinionType}`}
+                          name={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
                           type="checkbox"
                           onChange={e => {
                             updateAdvancedOpinionSearchFormValueSequence({
@@ -148,7 +154,7 @@ export const OpinionSearchForm = connect(
                         />
                         <label
                           className="margin-top-0 usa-checkbox__label"
-                          htmlFor={`opinionTypes.${opinionType}`}
+                          htmlFor={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
                         >
                           {opinionType}
                         </label>
