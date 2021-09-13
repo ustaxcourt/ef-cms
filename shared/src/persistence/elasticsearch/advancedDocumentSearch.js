@@ -138,11 +138,9 @@ exports.advancedDocumentSearch = async ({
     } else {
       documentQueryFilter.push({
         bool: {
-          should: {
-            match: opinionTypes.map(opinionType => ({
-              term: { 'documentType.S': opinionType },
-            })),
-          },
+          should: opinionTypes.map(opinionType => ({
+            term: { 'documentType.S': opinionType },
+          })),
         },
       });
     }
