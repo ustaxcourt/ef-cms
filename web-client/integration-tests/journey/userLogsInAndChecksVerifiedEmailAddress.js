@@ -27,6 +27,7 @@ export const userLogsInAndChecksVerifiedEmailAddress = (
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
+    expect(cerebralTest.docketNumber).toBeDefined();
     expect(cerebralTest.getState('caseDetail.docketNumber')).toEqual(
       cerebralTest.docketNumber,
     );
