@@ -6,6 +6,13 @@ import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearch
 describe('submitOpinionAdvancedSearchAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
+  let mockResults = () => true;
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .opinionAdvancedSearchInteractor.mockImplementation(mockResults);
+  });
+
   it('should call opinionAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: {
@@ -15,6 +22,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
         advancedSearchForm: {
           opinionSearch: {
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -44,6 +52,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -65,13 +74,11 @@ describe('submitOpinionAdvancedSearchAction', () => {
   });
 
   it('should set the error alert if 429 statusCode is returned', async () => {
-    applicationContext
-      .getUseCases()
-      .opinionAdvancedSearchInteractor.mockImplementation(() => {
-        const e = new Error();
-        e.responseCode = 429;
-        throw e;
-      });
+    mockResults = () => {
+      const e = new Error();
+      e.responseCode = 429;
+      throw e;
+    };
 
     const { state } = await runAction(submitOpinionAdvancedSearchAction, {
       modules: {
@@ -82,6 +89,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -94,13 +102,11 @@ describe('submitOpinionAdvancedSearchAction', () => {
   });
 
   it('should throw any other error other than 429 statusCode', async () => {
-    applicationContext
-      .getUseCases()
-      .opinionAdvancedSearchInteractor.mockImplementation(() => {
-        const e = new Error();
-        e.responseCode = 500;
-        throw e;
-      });
+    mockResults = () => {
+      const e = new Error();
+      e.responseCode = 500;
+      throw e;
+    };
 
     await expect(
       runAction(submitOpinionAdvancedSearchAction, {
@@ -112,10 +118,37 @@ describe('submitOpinionAdvancedSearchAction', () => {
             opinionSearch: {
               docketNumber: '105-20L',
               keyword: 'a',
+              opinionTypes: {},
             },
           },
         },
       }),
     ).rejects.toThrow();
+  });
+
+  it('should filter out opinion types that are not selected for search', async () => {
+    await runAction(submitOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {
+              Avocado: false,
+              Banana: false,
+              Cucumber: true,
+              Mango: true,
+            },
+          },
+        },
+        form: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().opinionAdvancedSearchInteractor.mock
+        .calls[0][1].opinionSearch,
+    ).toMatchObject({ opinionTypes: ['Cucumber', 'Mango'] });
   });
 });
