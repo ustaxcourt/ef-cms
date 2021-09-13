@@ -123,8 +123,10 @@ export const OpinionSearchForm = connect(
                     <div className="usa-checkbox width-full" key={opinionType}>
                       <input
                         checked={
-                          advancedSearchForm.opinionTypes &&
-                          !!advancedSearchForm.opinionTypes[opinionType]
+                          advancedSearchForm.opinionSearch.opinionTypes &&
+                          !!advancedSearchForm.opinionSearch.opinionTypes[
+                            opinionType
+                          ]
                         }
                         className="usa-checkbox__input include-types"
                         id={`opinionTypes.${opinionType}`}
@@ -244,8 +246,10 @@ export const OpinionSearchForm = connect(
                     <div className="usa-checkbox" key={opinionType}>
                       <input
                         checked={
-                          advancedSearchForm.opinionTypes &&
-                          !!advancedSearchForm.opinionTypes[opinionType]
+                          advancedSearchForm.opinionSearch.opinionTypes &&
+                          !!advancedSearchForm.opinionSearch.opinionTypes[
+                            opinionType
+                          ]
                         }
                         className="usa-checkbox__input include-types"
                         id={`opinionTypes.${opinionType}`}
