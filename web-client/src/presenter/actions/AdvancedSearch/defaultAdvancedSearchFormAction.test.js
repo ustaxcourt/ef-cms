@@ -20,7 +20,14 @@ describe('defaultAdvancedSearchFormAction', () => {
       caseSearchByName: {
         countryType: COUNTRY_TYPES.DOMESTIC,
       },
-      opinionSearch: {},
+      opinionSearch: {
+        opinionTypes: {
+          Bench: true,
+          Memorandum: true,
+          Summary: true,
+          TC: true,
+        },
+      },
       orderSearch: {},
       practitionerSearchByBarNumber: {},
       practitionerSearchByName: {},
