@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  ADVANCED_SEARCH_OPINION_TYPES,
+  DATE_RANGE_SEARCH_OPTIONS,
+} = require('../EntityConstants');
+const {
   calculateISODate,
   createEndOfDayISO,
   createStartOfDayISO,
@@ -11,7 +15,6 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
@@ -137,7 +140,11 @@ DocumentSearch.schema = joi
       .description('The keyword to search by'),
     opinionTypes: joi
       .array()
-      .items(JoiValidationConstants.STRING.allow(''))
+      .items(
+        JoiValidationConstants.STRING.valid(
+          ...Object.values(ADVANCED_SEARCH_OPINION_TYPES),
+        ),
+      )
       .optional()
       .description(
         'The opinion document types to filter the search results by',

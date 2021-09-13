@@ -72,7 +72,7 @@ describe('Document Search entity', () => {
 
   it('should pass validation with multiple opinionTypes', () => {
     const documentSearch = new DocumentSearch({
-      opinionTypes: ['Bench', 'T.C.'],
+      opinionTypes: ['OST', 'TCOP'],
     });
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
