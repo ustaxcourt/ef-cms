@@ -247,20 +247,18 @@ describe('advancedDocumentSearch', () => {
       expect.arrayContaining([
         {
           bool: {
-            should: {
-              match: [
-                {
-                  term: {
-                    'documentType.S': 'Summary Opinion',
-                  },
+            should: [
+              {
+                term: {
+                  'documentType.S': 'Summary Opinion',
                 },
-                {
-                  term: {
-                    'documentType.S': 'Bench',
-                  },
+              },
+              {
+                term: {
+                  'documentType.S': 'Bench',
                 },
-              ],
-            },
+              },
+            ],
           },
         },
       ]),
