@@ -1,19 +1,22 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
+import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
+import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
+import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
+import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import howToUseSearch from '../../pdfs/how-to-use-search.pdf';
+import classNames from 'classnames';
 
 export const OrderSearchForm = connect(
   {
-    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
-    advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
@@ -22,183 +25,15 @@ export const OrderSearchForm = connect(
     validationErrors: state.validationErrors,
   },
   function OrderSearchForm({
+    advancedDocumentSearchHelper,
     advancedSearchForm,
-    advancedSearchHelper,
     clearAdvancedSearchFormSequence,
-    DATE_RANGE_SEARCH_OPTIONS,
     judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
   }) {
-    const KeywordField = () => (
-      <>
-        <p className="margin-top-0">
-          <span className="text-semibold">Search by keyword and phrase</span>
-        </p>
-        <input
-          aria-describedby="search-orders-header search-description"
-          className="usa-input maxw-tablet-lg"
-          id="order-search"
-          name="keyword"
-          type="text"
-          value={advancedSearchForm.orderSearch.keyword || ''}
-          onBlur={() => validateOrderSearchSequence()}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-          }}
-        />
-      </>
-    );
-
-    const DocketNumberField = () => (
-      <>
-        <label className="usa-label text-no-wrap" htmlFor="docket-number">
-          Docket number
-        </label>
-        <input
-          className="usa-input maxw-15"
-          id="docket-number"
-          name="docketNumber"
-          type="text"
-          value={advancedSearchForm.orderSearch.docketNumber || ''}
-          onBlur={() => validateOrderSearchSequence()}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value.toUpperCase(),
-            });
-          }}
-        />
-      </>
-    );
-
-    const CaseTitleOrNameField = () => (
-      <>
-        <div>
-          <label className="usa-label text-no-wrap" htmlFor="title-or-name">
-            Case title / Petitioner’s name
-          </label>
-          <input
-            className="usa-input"
-            id="title-or-name"
-            name="caseTitleOrPetitioner"
-            type="text"
-            value={advancedSearchForm.orderSearch.caseTitleOrPetitioner || ''}
-            onBlur={() => validateOrderSearchSequence()}
-            onChange={e => {
-              updateAdvancedOrderSearchFormValueSequence({
-                key: e.target.name,
-                value: e.target.value,
-              });
-            }}
-          />
-        </div>
-      </>
-    );
-
-    const JudgeSelect = () => (
-      <>
-        <label className="usa-label" htmlFor="order-date-range">
-          Judge
-        </label>
-        <BindedSelect
-          bind={'advancedSearchForm.orderSearch.judge'}
-          className="usa-input"
-          id="order-judge"
-          name="judge"
-        >
-          <option value="">All judges</option>
-          {judges.map(judge => (
-            <option key={judge.judgeFullName} value={judge.judgeFullName}>
-              {judge.name}
-            </option>
-          ))}
-        </BindedSelect>
-      </>
-    );
-
-    const DateRangeSelect = () => (
-      <>
-        <label className="usa-label" htmlFor="order-date-range">
-          Date range
-        </label>
-        <select
-          className="usa-select"
-          id="order-date-range"
-          name="dateRange"
-          value={advancedSearchForm.orderSearch.dateRange}
-          onChange={e => {
-            updateAdvancedOrderSearchFormValueSequence({
-              key: e.target.name,
-              value: e.target.value,
-            });
-            validateOrderSearchSequence();
-          }}
-        >
-          <option value={DATE_RANGE_SEARCH_OPTIONS.ALL_DATES}>All dates</option>
-          <option value={DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES}>
-            Custom dates
-          </option>
-        </select>
-      </>
-    );
-
-    const HowToSearchCard = () => (
-      <>
-        <div className="card gray">
-          <div className="content-wrapper how-to-search">
-            <h3>How to Use Search</h3>
-            <hr />
-            <table className="margin-bottom-0 search-info">
-              <tbody>
-                <tr>
-                  <td>&quot;&quot;</td>
-                  <td>
-                    Include only <b>exact matches</b> <br />
-                  </td>
-                </tr>
-                <tr>
-                  <td>+</td>
-                  <td>
-                    AND (includes <b>all</b> words/phrases)
-                  </td>
-                </tr>
-                <tr>
-                  <td>|</td>
-                  <td>
-                    OR (includes <b>one or more</b> words/phrases)
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p>
-              <i>No other commands are supported at this time</i>
-            </p>
-            <p>
-              <FontAwesomeIcon
-                className="fa-icon-blue"
-                icon="file-pdf"
-                size="1x"
-              />
-              <a
-                className="usa-link--external"
-                href={howToUseSearch}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                Learn more about searching in DAWSON
-              </a>
-            </p>
-          </div>
-        </div>
-      </>
-    );
-
     return (
       <>
         <form
@@ -208,33 +43,57 @@ export const OrderSearchForm = connect(
           }}
         >
           <Mobile>
-            <div className="margin-bottom-3">{HowToSearchCard()}</div>
+            <div className="margin-bottom-3">
+              <HowToSearch />
+            </div>
             <div className="blue-container">
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
-                  {KeywordField()}
+                  <KeywordSearchField
+                    searchValue={advancedSearchForm.orderSearch.keyword}
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
                 </div>
                 <FormGroup
                   className="advanced-search-panel full-width"
                   errorText={validationErrors.chooseOneValue}
                 >
                   <div className="margin-bottom-3 margin-top-3">
-                    {DocketNumberField()}
+                    <DocketNumberSearchField
+                      searchValue={advancedSearchForm.orderSearch.docketNumber}
+                      updateSequence={
+                        updateAdvancedOrderSearchFormValueSequence
+                      }
+                      validateSequence={validateOrderSearchSequence}
+                    />
                   </div>
                   <div className="width-full margin-bottom-3 padding-right-2">
                     or
                   </div>
 
-                  {CaseTitleOrNameField()}
+                  <CaseTitleOrNameSearchField
+                    searchValue={
+                      advancedSearchForm.orderSearch.caseTitleOrPetitioner
+                    }
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
                 </FormGroup>
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  {JudgeSelect()}
+                  <JudgeSelect judges={judges} />
                 </div>
-                <div className="margin-top-4">{DateRangeSelect()}</div>
+                <div className="margin-top-4">
+                  <DateRangeSelect
+                    searchValue={advancedSearchForm.orderSearch.dateRange}
+                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
+                    validateSequence={validateOrderSearchSequence}
+                  />
+                </div>
 
-                {advancedSearchHelper.showDateRangePicker && (
+                {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <SearchDateRangePickerComponent
                       formType="orderSearch"
@@ -253,37 +112,73 @@ export const OrderSearchForm = connect(
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
                 <div className="grid-row grid-gap-6">
                   <div className="custom-col-7 desktop:grid-col-5 grid-col-12 right-gray-border padding-bottom-2">
-                    {KeywordField()}
+                    <KeywordSearchField
+                      searchValue={advancedSearchForm.orderSearch.keyword}
+                      updateSequence={
+                        updateAdvancedOrderSearchFormValueSequence
+                      }
+                      validateSequence={validateOrderSearchSequence}
+                    />
                   </div>
 
                   <div className="custom-col-5 desktop:grid-col-7 grid-col-12">
                     <FormGroup
-                      className="advanced-search-panel full-width"
-                      errorText={validationErrors.chooseOneValue}
+                      className={classNames(
+                        'advanced-search-panel',
+                        'full-width',
+                        validationErrors.chooseOneValue &&
+                          'usa-form-group--error',
+                      )}
                     >
                       <div className="margin-bottom-0">
-                        {DocketNumberField()}
+                        <DocketNumberSearchField
+                          searchValue={
+                            advancedSearchForm.orderSearch.docketNumber
+                          }
+                          updateSequence={
+                            updateAdvancedOrderSearchFormValueSequence
+                          }
+                          validateSequence={validateOrderSearchSequence}
+                        />
                       </div>
-
                       <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                         or
                       </div>
 
-                      {CaseTitleOrNameField()}
+                      <CaseTitleOrNameSearchField
+                        searchValue={
+                          advancedSearchForm.orderSearch.caseTitleOrPetitioner
+                        }
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
                     </FormGroup>
+                    <span className="usa-error-message">
+                      {validationErrors.chooseOneValue}
+                    </span>
                   </div>
                 </div>
                 <div className="grid-row grid-gap-3 margin-top-2">
                   <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
-                    <div className="width-card-lg">{JudgeSelect()}</div>
+                    <div className="width-card-lg">
+                      <JudgeSelect judges={judges} />
+                    </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
-                      {DateRangeSelect()}
+                      <DateRangeSelect
+                        searchValue={advancedSearchForm.orderSearch.dateRange}
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
                     </div>
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {advancedSearchHelper.showDateRangePicker && (
+                      {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <SearchDateRangePickerComponent
                             formType="orderSearch"
@@ -299,7 +194,7 @@ export const OrderSearchForm = connect(
                 </div>
               </div>
               <div className="grid-col-3 margin-left-1">
-                {HowToSearchCard()}
+                <HowToSearch />
               </div>
             </div>
           </NonMobile>

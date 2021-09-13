@@ -25,15 +25,15 @@ const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
 // Temporarily disabled for story 7387
 describe.skip(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    testPublic.closeSocket();
+  });
+
   describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
-
-    afterAll(() => {
-      testPublic.closeSocket();
-    });
-
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {

@@ -12,10 +12,13 @@ describe('gotoDashboardSequence', () => {
   const openCases = [{ docketNumber: '111-22' }];
   const closedCases = [{ docketNumber: '333-44' }];
 
+  const startSocketMock = jest.fn();
+
   let cerebralTest;
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+    presenter.providers.socket = { start: startSocketMock };
     presenter.sequences = {
       gotoDashboardSequence,
     };
@@ -42,5 +45,13 @@ describe('gotoDashboardSequence', () => {
       openCases,
       user,
     });
+  });
+
+  it('should start a websocket connection', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(user);
+
+    await cerebralTest.runSequence('gotoDashboardSequence');
+
+    expect(startSocketMock).toHaveBeenCalled();
   });
 });

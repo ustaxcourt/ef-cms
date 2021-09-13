@@ -17,35 +17,37 @@ import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEdi
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
-export const gotoEditDocketEntryMeta = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearScansAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryMetaFormForEditAction,
-  setDocketEntryMetaTypeAction,
-  chooseMetaTypePathAction,
-  {
-    courtIssued: [
-      initCourtIssuedOrderFormPropsFromEventCodeAction,
-      getUsersInSectionAction({ section: 'judge' }),
-      getFilterCurrentJudgeUsersAction,
-      setUsersByKeyAction('judges'),
-      computeJudgeNameWithTitleAction,
-      generateCourtIssuedDocumentTitleAction,
-    ],
-    document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
-    noDocument: [],
-  },
-  setDefaultEditDocketEntryMetaTabAction,
-  setCurrentPageAction('EditDocketEntryMeta'),
-];
+export const gotoEditDocketEntryMeta =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearScansAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryMetaFormForEditAction,
+    setDocketEntryMetaTypeAction,
+    chooseMetaTypePathAction,
+    {
+      courtIssued: [
+        initCourtIssuedOrderFormPropsFromEventCodeAction,
+        getUsersInSectionAction({ section: 'judge' }),
+        getFilterCurrentJudgeUsersAction,
+        setUsersByKeyAction('judges'),
+        computeJudgeNameWithTitleAction,
+        generateCourtIssuedDocumentTitleAction,
+      ],
+      document: [updateDocketEntryWizardDataAction, generateTitlePreviewAction],
+      noDocument: [],
+    },
+    setDefaultEditDocketEntryMetaTabAction,
+    setCurrentPageAction('EditDocketEntryMeta'),
+  ]);
 
 export const gotoEditDocketEntryMetaSequence = [
   isLoggedInAction,

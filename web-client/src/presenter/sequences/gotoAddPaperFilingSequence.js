@@ -7,6 +7,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddPaperFilingAction } from '../actions/resetAddPaperFilingAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
@@ -26,7 +27,7 @@ export const gotoAddPaperFiling = [
 export const gotoAddPaperFilingSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: gotoAddPaperFiling,
+    isLoggedIn: startWebSocketConnectionSequenceDecorator(gotoAddPaperFiling),
     unauthorized: [redirectToCognitoAction],
   },
 ];

@@ -31,11 +31,12 @@ import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseA
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 
 const { USER_ROLES } = getConstants();
 
-const gotoCaseDetailInternal = [
+const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   resetHeaderAccordionsSequence,
   getTrialSessionsAction,
   setTrialSessionsAction,
@@ -49,28 +50,30 @@ const gotoCaseDetailInternal = [
   getPendingEmailsOnCaseAction,
   setPendingEmailsOnCaseAction,
   setCurrentPageAction('CaseDetailInternal'),
-];
+]);
 
-const gotoCaseDetailExternal = [
+const gotoCaseDetailExternal = startWebSocketConnectionSequenceDecorator([
   getCaseAssociationAction,
   setCaseAssociationAction,
   setCurrentPageAction('CaseDetail'),
-];
+]);
 
-const gotoCaseDetailExternalPractitioners = [
-  getCaseAssociationAction,
-  setCaseAssociationAction,
-  getPendingEmailsOnCaseAction,
-  setPendingEmailsOnCaseAction,
-  setCurrentPageAction('CaseDetail'),
-];
+const gotoCaseDetailExternalPractitioners =
+  startWebSocketConnectionSequenceDecorator([
+    getCaseAssociationAction,
+    setCaseAssociationAction,
+    getPendingEmailsOnCaseAction,
+    setPendingEmailsOnCaseAction,
+    setCurrentPageAction('CaseDetail'),
+  ]);
 
-const gotoCaseDetailInternalWithNotes = [
-  setDocketEntryIdAction,
-  getJudgesCaseNoteForCaseAction,
-  setJudgesCaseNoteOnCaseDetailAction,
-  gotoCaseDetailInternal,
-];
+const gotoCaseDetailInternalWithNotes =
+  startWebSocketConnectionSequenceDecorator([
+    setDocketEntryIdAction,
+    getJudgesCaseNoteForCaseAction,
+    setJudgesCaseNoteOnCaseDetailAction,
+    gotoCaseDetailInternal,
+  ]);
 
 export const gotoCaseDetailSequence = [
   setCurrentPageAction('Interstitial'),
