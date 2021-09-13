@@ -86,6 +86,9 @@ const {
   updateCaseAndAssociations,
 } = require('../../../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
+  updateDocketEntry,
+} = require('../../../../shared/src/persistence/dynamo/documents/updateDocketEntry');
+const {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } = require('../../../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
@@ -163,7 +166,7 @@ const applicationContext = {
     dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
     stage: process.env.STAGE,
   }),
-  getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL, // FIXME check terraform vars
+  getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
   getNodeSass: () => {
     return sass;
   },
@@ -193,6 +196,7 @@ const applicationContext = {
     saveDocumentFromLambda,
     saveWorkItem,
     updateCase,
+    updateDocketEntry,
     updateIrsPractitionerOnCase,
     updatePrivatePractitionerOnCase,
     updateUser,

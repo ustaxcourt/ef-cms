@@ -54,6 +54,7 @@ import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -169,6 +170,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       saveDocumentFromLambda,
       saveWorkItem,
       updateCase,
+      updateDocketEntry,
       updateUser,
     }),
     getPug: () => {

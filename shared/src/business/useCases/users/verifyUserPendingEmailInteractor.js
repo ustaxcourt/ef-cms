@@ -38,8 +38,8 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const oldEmail = petitionerObject.email;
   const newData = {
-    contactName: petitionerObject.name,
     email: user.email,
+    name: petitionerObject.name,
   };
 
   const oldData = { email: oldEmail };
