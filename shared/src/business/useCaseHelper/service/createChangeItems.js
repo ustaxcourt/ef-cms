@@ -20,7 +20,6 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.documentType the document type of the document being created
  * @param {object} providers.newData the new practitioner contact information
  * @param {object} providers.oldData the old practitioner contact information (for comparison)
- * @param {object} providers.practitionerName the name of the practitioner
  * @param {object} providers.user the user object that includes userId, barNumber etc.
  * @returns {Promise<User[]>} the internal users
  */
@@ -36,17 +35,16 @@ const createDocketEntryForChange = async ({
 }) => {
   const caseDetail = caseEntity.validate().toRawObject();
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-  let changeOfAddressName = newData.name;
+  let changeOfAddressPdfName = newData.name;
   let contactName = newData.name;
 
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner
   ) {
-    changeOfAddressName = `${user.name} (${user.barNumber})`;
-    contactName = user.name;
+    changeOfAddressPdfName = `${newData.name} (${user.barNumber})`;
+    contactName = newData.name;
   }
-
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
     .changeOfAddress({
@@ -57,7 +55,7 @@ const createDocketEntryForChange = async ({
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         documentType,
-        name: changeOfAddressName,
+        name: changeOfAddressPdfName,
         newData,
         oldData,
       },
@@ -100,7 +98,6 @@ const createDocketEntryForChange = async ({
 
   caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
-
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: changeOfAddressPdfWithCover,
@@ -205,7 +202,6 @@ const generateAndServeDocketEntry = async ({
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
   let changeOfAddressDocketEntry;
-
   if (paperServiceRequested) {
     ({ changeOfAddressDocketEntry } = await createDocketEntryAndWorkItem({
       applicationContext,
@@ -215,7 +211,7 @@ const generateAndServeDocketEntry = async ({
       docketMeta,
       documentType,
       newData,
-      oldCaseContact: oldData,
+      oldData,
       partyWithPaperService: petitionerHasPaperService,
       privatePractitionersRepresentingContact,
       servedParties,

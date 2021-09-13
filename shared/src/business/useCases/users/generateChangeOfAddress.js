@@ -197,7 +197,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
     docketMeta.partyIrsPractitioner = true;
   }
 
-  newData.practitionerName = user.name;
+  newData.name = practitionerName;
   const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
     applicationContext,
     barNumber: user.barNumber,
