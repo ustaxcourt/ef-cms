@@ -6,11 +6,10 @@ import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearch
 describe('submitOpinionAdvancedSearchAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  let mockResults = () => true;
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor.mockImplementation(mockResults);
+      .opinionAdvancedSearchInteractor.mockReturnValue(true);
   });
 
   it('should call opinionAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
@@ -74,11 +73,13 @@ describe('submitOpinionAdvancedSearchAction', () => {
   });
 
   it('should set the error alert if 429 statusCode is returned', async () => {
-    mockResults = () => {
-      const e = new Error();
-      e.responseCode = 429;
-      throw e;
-    };
+    applicationContext
+      .getUseCases()
+      .opinionAdvancedSearchInteractor.mockImplementation(() => {
+        const e = new Error();
+        e.responseCode = 429;
+        throw e;
+      });
 
     const { state } = await runAction(submitOpinionAdvancedSearchAction, {
       modules: {
@@ -102,11 +103,13 @@ describe('submitOpinionAdvancedSearchAction', () => {
   });
 
   it('should throw any other error other than 429 statusCode', async () => {
-    mockResults = () => {
-      const e = new Error();
-      e.responseCode = 500;
-      throw e;
-    };
+    applicationContext
+      .getUseCases()
+      .opinionAdvancedSearchInteractor.mockImplementation(() => {
+        const e = new Error();
+        e.responseCode = 500;
+        throw e;
+      });
 
     await expect(
       runAction(submitOpinionAdvancedSearchAction, {
@@ -148,7 +151,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
 
     expect(
       applicationContext.getUseCases().opinionAdvancedSearchInteractor.mock
-        .calls[0][1].opinionSearch,
-    ).toMatchObject({ opinionTypes: ['Cucumber', 'Mango'] });
+        .calls[0][1].searchParams.opinionTypes,
+    ).toEqual(['Cucumber', 'Mango']);
   });
 });
