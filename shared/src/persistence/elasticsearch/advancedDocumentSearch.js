@@ -130,6 +130,7 @@ exports.advancedDocumentSearch = async ({
     }
   }
 
+  console.log('opinionTypes', opinionTypes);
   if (opinionTypes && opinionTypes.length) {
     if (opinionTypes.length === 1) {
       documentQueryFilter.push({
@@ -189,6 +190,8 @@ exports.advancedDocumentSearch = async ({
       break;
   }
 
+  console.log('documentQueryFilter', documentQueryFilter);
+
   const documentQuery = {
     body: {
       _source: sourceFields,
@@ -210,6 +213,9 @@ exports.advancedDocumentSearch = async ({
     applicationContext,
     searchParameters: documentQuery,
   });
+
+  console.log('results', results);
+  console.log('documentQuery', documentQuery);
 
   return { results, totalCount: total };
 };
