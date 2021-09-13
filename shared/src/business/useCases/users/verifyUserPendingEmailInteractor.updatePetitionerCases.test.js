@@ -27,13 +27,13 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValue([]);
+      .getCasesForUser.mockReturnValue([]);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(undefined);
   });
 
-  it('should call getIndexedCasesForUser with user.userId', async () => {
+  it('should call getCasesForUser with user.userId', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(undefined);
@@ -43,14 +43,14 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getIndexedCasesForUser.mock
+      applicationContext.getPersistenceGateway().getCasesForUser.mock
         .calls[0][0],
     ).toMatchObject({
       userId: validUser.userId,
     });
   });
 
-  it('should call getCaseByDocketNumber for each case returned by getIndexedCasesForUser', async () => {
+  it('should call getCaseByDocketNumber for each case returned by getCasesForUser', async () => {
     const casesMock = [
       {
         ...MOCK_CASE,
@@ -75,7 +75,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockResolvedValue(casesMock);
+      .getCasesForUser.mockResolvedValue(casesMock);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(casesMock[0]);
@@ -104,7 +104,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should log an error if the petitioner is not found on a case returned by getIndexedCasesForUser and call updateCaseAndAssociations only once', async () => {
+  it('should log an error if the petitioner is not found on a case returned by getCasesForUser and call updateCaseAndAssociations only once', async () => {
     userCases = [
       {
         ...MOCK_CASE,
@@ -123,7 +123,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValue(userCases);
+      .getCasesForUser.mockReturnValue(userCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -161,7 +161,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValueOnce(userCases);
+      .getCasesForUser.mockReturnValueOnce(userCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -198,7 +198,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValue(userCases);
+      .getCasesForUser.mockReturnValue(userCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -242,7 +242,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValue(userCases);
+      .getCasesForUser.mockReturnValue(userCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -289,7 +289,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValue(userCases);
+      .getCasesForUser.mockReturnValue(userCases);
 
     applicationContext
       .getPersistenceGateway()

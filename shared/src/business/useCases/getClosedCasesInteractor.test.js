@@ -21,7 +21,7 @@ describe('getClosedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockImplementation(() => mockFoundCasesList);
+      .getCasesForUser.mockImplementation(() => mockFoundCasesList);
     UserCase.validateRawCollection.mockImplementation(
       foundCases => foundCases || [],
     );
@@ -37,7 +37,7 @@ describe('getClosedCasesInteractor', () => {
     await getClosedCasesInteractor(applicationContext);
 
     expect(
-      applicationContext.getPersistenceGateway().getIndexedCasesForUser,
+      applicationContext.getPersistenceGateway().getCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
