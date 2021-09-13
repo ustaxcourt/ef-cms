@@ -361,7 +361,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     it('should call generateAndServeDocketEntry if case is open', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getIndexedCasesForUser.mockReturnValue([
+        .getCasesForUser.mockReturnValue([
           { docketNumber: MOCK_CASE.docketNumber },
         ]);
       applicationContext
@@ -396,7 +396,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       });
       applicationContext
         .getPersistenceGateway()
-        .getIndexedCasesForUser.mockReturnValue([
+        .getCasesForUser.mockReturnValue([
           { docketNumber: MOCK_CASE.docketNumber },
         ]);
       applicationContext
@@ -432,7 +432,7 @@ describe('verifyUserPendingEmailInteractor', () => {
       });
       applicationContext
         .getPersistenceGateway()
-        .getIndexedCasesForUser.mockReturnValue([
+        .getCasesForUser.mockReturnValue([
           { docketNumber: MOCK_CASE.docketNumber },
         ]);
       applicationContext
