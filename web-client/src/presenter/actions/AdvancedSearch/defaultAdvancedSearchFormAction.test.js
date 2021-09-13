@@ -4,9 +4,9 @@ import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormActi
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContextForClient;
-
 describe('defaultAdvancedSearchFormAction', () => {
+  presenter.providers.applicationContext = applicationContextForClient;
+
   it('sets defaults on state.advancedSearchForm if state.advancedSearchForm is empty', async () => {
     const result = await runAction(defaultAdvancedSearchFormAction, {
       modules: { presenter },
@@ -22,10 +22,10 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
       opinionSearch: {
         opinionTypes: {
-          Bench: true,
-          Memorandum: true,
-          Summary: true,
-          TC: true,
+          MOP: true,
+          OST: true,
+          SOP: true,
+          TCOP: true,
         },
       },
       orderSearch: {},
