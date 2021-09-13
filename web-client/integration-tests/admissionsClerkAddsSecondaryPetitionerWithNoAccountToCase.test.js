@@ -125,4 +125,6 @@ describe('admissions clerk adds secondary petitioner without existing cognito ac
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
+
+  it('TODO admissions clerk verifies new NOCE docket entry on case', () => {});
 });

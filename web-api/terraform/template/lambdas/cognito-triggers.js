@@ -1,4 +1,24 @@
 const AWS = require('aws-sdk');
+const pdfLib = require('pdf-lib');
+const pug = require('pug');
+const sass = require('sass');
+const {
+  calculateDifferenceInDays,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} = require('../../../../shared/src/business/utilities/DateHandler');
+const {
+  changeOfAddress,
+} = require('../../../../shared/src/business/utilities/documentGenerators/changeOfAddress');
+const {
+  countPagesInDocument,
+} = require('../../../../shared/src/business/useCaseHelper/countPagesInDocument');
+const {
+  coverSheet,
+} = require('../../../../shared/src/business/utilities/documentGenerators/coverSheet');
 const {
   createLogger,
 } = require('../../../../shared/src/utilities/createLogger');
@@ -6,11 +26,23 @@ const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
+  generateAndServeDocketEntry,
+} = require('../../../../shared/src/business/useCaseHelper/service/createChangeItems');
+const {
+  generatePdfFromHtmlInteractor,
+} = require('../../../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
+const {
   getCaseByDocketNumber,
 } = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getChromiumBrowser,
+} = require('../../../../shared/src/business/utilities/getChromiumBrowser');
+const {
   getDocketNumbersByUser,
 } = require('../../../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
+const {
+  getDocumentTypeForAddressChange,
+} = require('../../../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
   getUserById,
 } = require('../../../../shared/src/persistence/dynamo/users/getUserById');
@@ -27,11 +59,23 @@ const {
   retrySendNotificationToConnections,
 } = require('../../../../shared/src/notifications/retrySendNotificationToConnections');
 const {
+  saveDocumentFromLambda,
+} = require('../../../../shared/src/persistence/s3/saveDocumentFromLambda');
+const {
+  saveWorkItem,
+} = require('../../../../shared/src/persistence/dynamo/workitems/saveWorkItem');
+const {
+  sendBulkTemplatedEmail,
+} = require('../../../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+const {
   sendNotificationToConnection,
 } = require('../../../../shared/src/notifications/sendNotificationToConnection');
 const {
   sendNotificationToUser,
 } = require('../../../../shared/src/notifications/sendNotificationToUser');
+const {
+  sendServedPartiesEmails,
+} = require('../../../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
@@ -48,8 +92,11 @@ const {
 const {
   updateUser,
 } = require('../../../../shared/src/persistence/dynamo/users/updateUser');
+const { Case } = require('../../../../shared/src/business/entities/cases/Case');
+const { getUniqueId } = require('../../../../shared/src/sharedAppContext.js');
+const { DynamoDB, S3, SES } = AWS;
 
-const { DynamoDB } = AWS;
+const environment = { s3Endpoint: process.env.S3_ENDPOINT || 'localhost' };
 
 const logger = createLogger({
   defaultMeta: {
@@ -59,18 +106,67 @@ const logger = createLogger({
   },
 });
 
+let s3Cache;
+let sesCache;
+
 const applicationContext = {
+  getCaseTitle: Case.getCaseTitle,
+  getChromiumBrowser,
+  getConstants: () => ({ MAX_SES_RETRIES: 6 }),
   getCurrentUser: () => ({}),
+  getDispatchers: () => ({
+    sendBulkTemplatedEmail,
+  }),
   getDocumentClient: () => {
     return new DynamoDB.DocumentClient({
       endpoint: process.env.DYNAMODB_ENDPOINT,
       region: process.env.AWS_REGION,
     });
   },
+  getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
+  getDocumentsBucketName: () => {
+    return process.env.DOCUMENTS_BUCKET_NAME || '';
+  },
+  getEmailClient: () => {
+    if (process.env.CI || process.env.DISABLE_EMAILS === 'true') {
+      return {
+        getSendStatistics: () => {
+          // mock this out so the health checks pass on smoke tests
+          return {
+            promise: () => ({
+              SendDataPoints: [
+                {
+                  Rejects: 0,
+                },
+              ],
+            }),
+          };
+        },
+        sendBulkTemplatedEmail: () => {
+          return {
+            promise: () => {
+              return { Status: [] };
+            },
+          };
+        },
+      };
+    } else {
+      if (!sesCache) {
+        sesCache = new SES({
+          region: 'us-east-1',
+        });
+      }
+      return sesCache;
+    }
+  },
   getEnvironment: () => ({
     dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
     stage: process.env.STAGE,
   }),
+  getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL, // FIXME check terraform vars
+  getNodeSass: () => {
+    return sass;
+  },
   getNotificationClient: ({ endpoint }) => {
     return new AWS.ApiGatewayManagementApi({
       endpoint,
@@ -84,6 +180,9 @@ const applicationContext = {
     sendNotificationToConnection,
     sendNotificationToUser,
   }),
+  getPdfLib: () => {
+    return pdfLib;
+  },
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
     getDocketNumbersByUser,
@@ -91,15 +190,46 @@ const applicationContext = {
     getUserCaseMappingsByDocketNumber,
     getWebSocketConnectionsByUserId,
     persistUser,
+    saveDocumentFromLambda,
+    saveWorkItem,
     updateCase,
     updateIrsPractitionerOnCase,
     updatePrivatePractitionerOnCase,
     updateUser,
   }),
-  getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
+  getPug: () => {
+    return pug;
+  },
+  getStorageClient: () => {
+    if (!s3Cache) {
+      s3Cache = new S3({
+        endpoint: environment.s3Endpoint,
+        region: 'us-east-1',
+        s3ForcePathStyle: true,
+      });
+    }
+    return s3Cache;
+  },
+  getUniqueId,
+  getUseCaseHelpers: () => ({
+    countPagesInDocument,
+    generateAndServeDocketEntry,
+    sendServedPartiesEmails,
+    updateCaseAndAssociations,
+  }),
   getUseCases: () => ({
     createPetitionerAccountInteractor,
+    generatePdfFromHtmlInteractor,
     setUserEmailFromPendingEmailInteractor,
+  }),
+  getUtilities: () => ({
+    calculateDifferenceInDays,
+    calculateISODate,
+    createISODateString,
+    formatDateString,
+    formatNow,
+    getDocumentTypeForAddressChange,
+    prepareDateFromString,
   }),
   logger: {
     debug: logger.debug.bind(logger),
