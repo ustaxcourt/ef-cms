@@ -113,6 +113,39 @@ export const OpinionSearchForm = connect(
                     />
                   </div>
                 )}
+
+                <div className="grid-row grid-gap margin-bottom-2">
+                  <legend className="usa-legend" id="include-types-legend">
+                    Include types:
+                  </legend>
+
+                  {['Bench', 'Memorandum', 'Summary', 'TC'].map(opinionType => (
+                    <div className="usa-checkbox width-full" key={opinionType}>
+                      <input
+                        checked={
+                          advancedSearchForm.opinionTypes &&
+                          !!advancedSearchForm.opinionTypes[opinionType]
+                        }
+                        className="usa-checkbox__input include-types"
+                        id={`opinionTypes.${opinionType}`}
+                        name={`opinionTypes.${opinionType}`}
+                        type="checkbox"
+                        onChange={e => {
+                          updateAdvancedOpinionSearchFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                        }}
+                      />
+                      <label
+                        className="margin-top-0 usa-checkbox__label"
+                        htmlFor={`opinionTypes.${opinionType}`}
+                      >
+                        {opinionType}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </Mobile>
@@ -201,7 +234,41 @@ export const OpinionSearchForm = connect(
                     </div>
                   </div>
                 </div>
+
+                <div className="grid-row grid-gap margin-bottom-2">
+                  <legend className="usa-legend" id="include-types-legend">
+                    Include types:
+                  </legend>
+
+                  {['Bench', 'Memorandum', 'Summary', 'TC'].map(opinionType => (
+                    <div className="usa-checkbox" key={opinionType}>
+                      <input
+                        checked={
+                          advancedSearchForm.opinionTypes &&
+                          !!advancedSearchForm.opinionTypes[opinionType]
+                        }
+                        className="usa-checkbox__input include-types"
+                        id={`opinionTypes.${opinionType}`}
+                        name={`opinionTypes.${opinionType}`}
+                        type="checkbox"
+                        onChange={e => {
+                          updateAdvancedOpinionSearchFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                        }}
+                      />
+                      <label
+                        className="margin-top-0 usa-checkbox__label"
+                        htmlFor={`opinionTypes.${opinionType}`}
+                      >
+                        {opinionType}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
+
               <div className="grid-col-3 margin-left-1">
                 <HowToSearch />
               </div>

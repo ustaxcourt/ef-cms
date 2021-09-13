@@ -16,10 +16,18 @@ export const validateOpinionAdvancedSearchAction = ({
   path,
 }) => {
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
+
+  const opinionTypes = Object.keys(opinionSearch.opinionTypes).filter(
+    opinionType => opinionSearch.opinionTypes[opinionType] === true,
+  );
+
   const errors = applicationContext
     .getUseCases()
     .validateOpinionAdvancedSearchInteractor(applicationContext, {
-      opinionSearch,
+      opinionSearch: {
+        ...opinionSearch,
+        opinionTypes,
+      },
     });
 
   const isValid = isEmpty(errors);
