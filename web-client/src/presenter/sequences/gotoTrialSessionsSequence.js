@@ -14,8 +14,9 @@ import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessions = [
+const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
@@ -35,7 +36,7 @@ const gotoTrialSessions = [
   ]),
   setTrialSessionsFiltersAction,
   setCurrentPageAction('TrialSessions'),
-];
+]);
 
 export const gotoTrialSessionsSequence = [
   isLoggedInAction,

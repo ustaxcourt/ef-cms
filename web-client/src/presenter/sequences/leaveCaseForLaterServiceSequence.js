@@ -4,7 +4,7 @@ import { getSavePetitionForLaterServiceAlertSuccessAction } from '../actions/get
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const leaveCaseForLaterServiceSequence = showProgressSequenceDecorator([
   clearAlertsAction,

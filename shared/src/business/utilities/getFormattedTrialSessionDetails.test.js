@@ -321,11 +321,13 @@ describe('formattedTrialSessionDetails', () => {
             ...MOCK_CASE,
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '101-18W',
           },
           {
             ...MOCK_CASE,
             caseCaption: undefined,
             docketNumber: '103-19',
+            docketNumberWithSuffix: '103-19',
           },
           {
             ...MOCK_CASE,
@@ -388,6 +390,7 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '102-17W',
           },
           {
             ...MOCK_CASE,
@@ -395,6 +398,7 @@ describe('formattedTrialSessionDetails', () => {
             disposition: 'omg',
             docketNumber: '101-16',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+            docketNumberWithSuffix: '101-16S',
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
           },

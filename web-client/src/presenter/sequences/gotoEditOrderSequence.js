@@ -11,10 +11,11 @@ import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
-const gotoEditOrder = [
+const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setRedirectUrlAction,
   unsetDocumentToEditAction,
   clearModalAction,
@@ -29,7 +30,7 @@ const gotoEditOrder = [
   setParentMessageIdAction,
   convertHtml2PdfSequence,
   setCurrentPageAction('CreateOrder'),
-];
+]);
 
 export const gotoEditOrderSequence = [
   isLoggedInAction,

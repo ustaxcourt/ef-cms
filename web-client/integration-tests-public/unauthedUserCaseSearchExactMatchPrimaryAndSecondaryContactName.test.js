@@ -44,7 +44,7 @@ describe(`Petitioner creates cases with name ${firstName}`, () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');

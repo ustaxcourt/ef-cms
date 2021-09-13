@@ -4,7 +4,7 @@ import { primePropsFromCaseDetailAction } from '../actions/CaseDetail/primeProps
 import { primePropsFromModalStateAction } from '../actions/Modal/primePropsFromModalStateAction';
 import { removeCaseDetailPendingItemAction } from '../actions/PendingItems/removeCaseDetailPendingItemAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const removeCaseDetailPendingItemSequence =
   showProgressSequenceDecorator([

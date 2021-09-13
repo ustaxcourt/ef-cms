@@ -80,6 +80,60 @@ describe('updatePetitionerInformationInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
 
+  it('should throw an error when the user making the request is a private practitioner not associated with the case', async () => {
+    mockUser = { ...mockUser, role: ROLES.privatePractitioner };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCase,
+        privatePractitioners: [{ representing: [], userId: '7' }],
+      });
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should not throw an error when the user making the request is a private practitioner who is associated with the case', async () => {
+    const mockRepresentingId = '1a061240-1320-47c5-9f54-0ff975045d84';
+    applicationContext.getCurrentUser.mockImplementationOnce(
+      () =>
+        new User({
+          ...mockUser,
+          role: ROLES.privatePractitioner,
+          userId: mockRepresentingId,
+        }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCase,
+        privatePractitioners: [
+          {
+            barNumber: 'EP0001',
+            name: 'Example Practitioner',
+            representing: [PRIMARY_CONTACT_ID],
+            role: ROLES.privatePractitioner,
+            userId: mockRepresentingId,
+          },
+        ],
+      });
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).resolves.toBeDefined();
+  });
+
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
     const mockNotFoundContactId = 'cd37d820-cbde-4591-8b5a-dc74da12f2a2'; // this contactId is not on the case
 

@@ -10,6 +10,7 @@ import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
@@ -21,7 +22,7 @@ export const gotoCaseDetailWithModal = [
 export const gotoCreateOrderSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
       setRedirectUrlAction,
       hasOrderTypeSelectedAction,
       {
@@ -38,7 +39,7 @@ export const gotoCreateOrderSequence = [
           setCurrentPageAction('CreateOrder'),
         ],
       },
-    ],
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];
