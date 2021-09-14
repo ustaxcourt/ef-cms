@@ -6,10 +6,7 @@ import { docketClerkRemovesSignatureFromUploadedCourtIssuedDocument } from './jo
 import { docketClerkSignsUploadedCourtIssuedDocument } from './journey/docketClerkSignsUploadedCourtIssuedDocument';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
@@ -27,9 +24,14 @@ describe('Docket Clerk Uploads Court-Issued Order to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      caseType: 'Whistleblower',
+      procedureType: 'Regular',
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
