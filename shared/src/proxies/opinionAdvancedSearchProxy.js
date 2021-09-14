@@ -1,5 +1,6 @@
 const querystring = require('querystring');
 const { get } = require('./requests');
+const { omit } = require('lodash');
 
 /**
  * opinionAdvancedSearchInteractor
@@ -13,10 +14,13 @@ exports.opinionAdvancedSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {
-  const queryString = querystring.stringify(searchParams);
+  const searchParamsWithoutOpinionTypes = omit(searchParams, 'opinionTypes');
+  const queryString = querystring.stringify(searchParamsWithoutOpinionTypes);
+
+  const opinionTypesQuery = searchParams.opinionTypes.join(',');
 
   return get({
     applicationContext,
-    endpoint: `/case-documents/opinion-search?${queryString}`,
+    endpoint: `/case-documents/opinion-search?${queryString}&opinionTypes=${opinionTypesQuery}`,
   });
 };

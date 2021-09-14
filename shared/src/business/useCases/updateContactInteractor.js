@@ -108,6 +108,7 @@ exports.updateContactInteractor = async (
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
+          documentType,
           name: contactInfo.name,
           newData: contactInfo,
           oldData: oldCaseContact,

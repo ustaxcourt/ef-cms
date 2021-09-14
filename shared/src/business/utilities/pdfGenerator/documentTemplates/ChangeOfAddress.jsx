@@ -13,8 +13,9 @@ const renderTable = ({ data, label, options }) => {
       </thead>
       <tbody>
         <tr>
-          {options.showOnlyPhoneChange && <td>{data.phone}</td>}
-          {!options.showOnlyPhoneChange && (
+          {options.isEmailChange && <td>{data.email}</td>}
+          {options.isPhoneChangeOnly && <td>{data.phone}</td>}
+          {options.isAddressChange && (
             <td>
               {data.inCareOf && <div>c/o {data.inCareOf}</div>}
               <div>{data.address1}</div>
@@ -25,7 +26,7 @@ const renderTable = ({ data, label, options }) => {
                 {data.state} {data.postalCode}
                 {data.countryType !== COUNTRY_TYPES.DOMESTIC &&
                   data.country && <div>{data.country}</div>}
-                {options.showAddressAndPhoneChange && (
+                {options.isAddressAndPhoneChange && (
                   <div className="extra-margin-top">{data.phone}</div>
                 )}
               </div>

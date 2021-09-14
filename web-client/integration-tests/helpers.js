@@ -96,7 +96,10 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       updateCase,
       updateUser,
     }),
-    getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
+    getUseCaseHelpers: () => ({
+      generateAndServeDocketEntry: () => {},
+      updateCaseAndAssociations,
+    }),
     logger: {
       debug: () => {},
       error: () => {},

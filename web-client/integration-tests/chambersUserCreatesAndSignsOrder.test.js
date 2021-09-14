@@ -5,11 +5,7 @@ import { chambersUserViewsCaseDetail } from './journey/chambersUserViewsCaseDeta
 import { chambersUserViewsCaseDetailAfterAddingOrder } from './journey/chambersUserViewsCaseDetailAfterAddingOrder';
 import { chambersUserViewsDraftDocuments } from './journey/chambersUserViewsDraftDocuments';
 import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -24,10 +20,11 @@ describe('Chambers dashboard', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest);
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
-  petitionerViewsDashboard(cerebralTest);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'colvinsChambers@example.com');
   chambersUserViewsCaseDetail(cerebralTest, 2);
