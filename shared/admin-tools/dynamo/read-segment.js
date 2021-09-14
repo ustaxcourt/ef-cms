@@ -12,6 +12,8 @@ const dynamoDbDocumentClient = new AWS.DynamoDB.DocumentClient({
   service: dynamodb,
 });
 
+const [segmentArg, totalSegmentsArg] = process.argv.slice(2);
+
 const scanTableSegment = async (segment, totalSegments) => {
   let hasMoreResults = true;
   let lastKey = null;
@@ -37,6 +39,6 @@ const scanTableSegment = async (segment, totalSegments) => {
   return items;
 };
 
-scanTableSegment(53880, 68806, []).then(items => {
+scanTableSegment(segmentArg, totalSegmentsArg, []).then(items => {
   console.log(items.length);
 });
