@@ -83,6 +83,24 @@ describe('docket clerk opinion advanced search', () => {
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
       ).toEqual([]);
     });
+
+    it('search without selecting any opinionTypes', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm({
+        keyword: 'opinion',
+        opinionTypes: {},
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
   });
 
   describe('search for things that should be found', () => {
