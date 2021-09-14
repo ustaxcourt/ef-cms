@@ -143,7 +143,7 @@ DocumentSearch.schema = joi
       .items(
         JoiValidationConstants.STRING.valid(
           ...Object.values(ADVANCED_SEARCH_OPINION_TYPES),
-        ),
+        ).allow(''),
       )
       .optional()
       .description(
