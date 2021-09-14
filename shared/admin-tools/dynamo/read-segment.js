@@ -39,6 +39,6 @@ const scanTableSegment = async (segment, totalSegments) => {
   return items;
 };
 
-scanTableSegment(segmentArg, totalSegmentsArg, []).then(items => {
+scanTableSegment(segmentArg, totalSegmentsArg).then(items => {
   console.log(items.length);
 });
