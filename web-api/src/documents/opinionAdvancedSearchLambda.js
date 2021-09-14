@@ -8,7 +8,8 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.opinionAdvancedSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const opinionTypes = event.queryStringParameters.userIds?.split(',') || [];
+    const opinionTypes =
+      event.queryStringParameters.opinionTypes?.split(',') || [];
 
     return await applicationContext
       .getUseCases()
