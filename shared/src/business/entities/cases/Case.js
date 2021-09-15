@@ -1171,6 +1171,30 @@ Case.prototype.getPetitionerById = function (contactId) {
 };
 
 /**
+ * Retrieves the petitioner with email userEmail on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {Object} the contact object
+ */
+const getPetitionerByEmail = function (rawCase, userEmail) {
+  return rawCase.petitioners?.find(
+    petitioner => petitioner.email === userEmail,
+  );
+};
+
+/**
+ * gets the petitioner with email userEmail from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerByEmail = function (userEmail) {
+  return getPetitionerByEmail(this, userEmail);
+};
+
+/**
  * adds the petitioner to the petitioners array
  *
  * @params {object} petitioner the petitioner to add to the case

@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  calculateISODate,
+  dateStringsCompared,
+} = require('..//utilities/DateHandler');
+const {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
@@ -18,9 +22,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  updateCasesForPetitioner,
-} = require('./users/verifyUserPendingEmailInteractor');
 const { defaults, pick } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
@@ -46,6 +47,121 @@ const getIsUserAuthorized = ({ oldCase, updatedPetitionerData, user }) => {
     isRepresentingCounsel ||
     isCurrentPetitioner ||
     isAuthorized(user, ROLE_PERMISSIONS.EDIT_PETITIONER_INFO)
+  );
+};
+
+const updateCaseEntityAndGenerateChange = async ({
+  applicationContext,
+  petitionerOnCase,
+  rawCaseData,
+  user,
+}) => {
+  const caseEntity = new Case(rawCaseData, {
+    applicationContext,
+  });
+
+  const petitionerObject = caseEntity.getPetitionerById(
+    petitionerOnCase.contactId,
+  );
+  if (!petitionerObject) {
+    applicationContext.logger.error(
+      `Could not find user|${petitionerOnCase.contactId} on ${caseEntity.docketNumber}`,
+    );
+    return;
+  }
+
+  const { oldEmail } = petitionerOnCase;
+  const newData = {
+    email: user.email,
+    name: petitionerObject.name,
+  };
+
+  const oldData = { email: oldEmail };
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  if (
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    )
+  ) {
+    petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  //TODO create method on caseEntity
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    caseEntity.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    caseEntity.closedDate &&
+    dateStringsCompared(caseEntity.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({ newData, oldData });
+
+  const privatePractitionersRepresentingContact =
+    caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    );
+
+  if (isOpen || isRecent) {
+    const { changeOfAddressDocketEntry } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        caseEntity,
+        documentType,
+        newData,
+        oldData,
+        privatePractitionersRepresentingContact,
+        servedParties,
+        user,
+      });
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+  }
+
+  return caseEntity.validate();
+};
+
+const updateCasesForPetitioner = async ({
+  applicationContext,
+  petitionerCases,
+  petitionerOnCase,
+  user,
+}) => {
+  const rawCasesToUpdate = await Promise.all(
+    petitionerCases.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      }),
+    ),
+  );
+  const validatedCasesToUpdateInPersistence = (
+    await Promise.all(
+      rawCasesToUpdate.map(rawCaseData => {
+        return updateCaseEntityAndGenerateChange({
+          applicationContext,
+          petitionerOnCase,
+          rawCaseData,
+          user,
+        });
+      }),
+    )
+  ).filter(Boolean);
+
+  return Promise.all(
+    validatedCasesToUpdateInPersistence.map(caseToUpdate =>
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate,
+      }),
+    ),
   );
 };
 
@@ -83,7 +199,6 @@ const updatePetitionerInformationInteractor = async (
       `Case with docketNumber ${oldCase.docketNumber} has not been served`,
     );
   }
-
   const oldCaseContact = getPetitionerById(
     oldCase,
     updatedPetitionerData.contactId,
@@ -157,18 +272,14 @@ const updatePetitionerInformationInteractor = async (
   let petitionerChangeDocs;
   let serviceResults;
 
-  const updatedCaseContact = caseEntity.getPetitionerById(
-    updatedPetitionerData.contactId,
-  );
-
-  if (documentType && !updatedCaseContact.isAddressSealed) {
+  if (documentType && !oldCaseContact.isAddressSealed) {
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
     const privatePractitionersRepresentingContact =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        updatedCaseContact.contactId,
+        oldCaseContact.contactId,
       );
 
     const newData = editableFields;
@@ -212,10 +323,9 @@ const updatePetitionerInformationInteractor = async (
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
-          name: updatedCaseContact.name,
+          name: oldCaseContact.name,
         });
     } else {
-      console.log('we are here');
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .addExistingUserToCase({
@@ -223,23 +333,34 @@ const updatePetitionerInformationInteractor = async (
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
-          name: updatedCaseContact.name,
+          name: oldCaseContact.name,
         });
+
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: caseEntity,
+      });
+      const petitionerOnCase = caseEntity.getPetitionerByEmail(
+        updatedPetitionerData.updatedEmail,
+      );
+
+      petitionerOnCase.oldEmail = oldCaseContact.email;
+
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       const petitionerCases = await applicationContext
         .getPersistenceGateway()
         .getIndexedCasesForUser({
           applicationContext,
           statuses: applicationContext.getConstants().CASE_STATUSES,
-          userId: updatedPetitionerData.contactId,
+          userId: petitionerOnCase.contactId,
         });
-
-      console.log('petitionerCases', petitionerCases);
 
       await updateCasesForPetitioner({
         applicationContext,
         petitionerCases,
-        user: updatedPetitionerData,
+        petitionerOnCase,
+        user,
       });
     }
   }
