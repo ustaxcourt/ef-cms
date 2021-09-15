@@ -36,20 +36,4 @@ describe('startWebSocketConnectionAction', () => {
 
     expect(pathSuccessStub).toHaveBeenCalled();
   });
-
-  it('should call the error path if there is an error when starting the socket', async () => {
-    const start = jest.fn().mockImplementation(() => {
-      throw new Error('Nope!');
-    });
-
-    presenter.providers.socket = { start };
-
-    await runAction(startWebSocketConnectionAction, {
-      modules: {
-        presenter,
-      },
-    });
-
-    expect(pathErrorStub).toHaveBeenCalled();
-  });
 });
