@@ -18,6 +18,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  updateCasesForPetitioner,
+} = require('./users/verifyUserPendingEmailInteractor');
 const { defaults, pick } = require('lodash');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 
@@ -212,6 +215,7 @@ const updatePetitionerInformationInteractor = async (
           name: updatedCaseContact.name,
         });
     } else {
+      console.log('we are here');
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .addExistingUserToCase({
@@ -221,6 +225,22 @@ const updatePetitionerInformationInteractor = async (
           email: updatedPetitionerData.updatedEmail,
           name: updatedCaseContact.name,
         });
+
+      const petitionerCases = await applicationContext
+        .getPersistenceGateway()
+        .getIndexedCasesForUser({
+          applicationContext,
+          statuses: applicationContext.getConstants().CASE_STATUSES,
+          userId: updatedPetitionerData.contactId,
+        });
+
+      console.log('petitionerCases', petitionerCases);
+
+      await updateCasesForPetitioner({
+        applicationContext,
+        petitionerCases,
+        user: updatedPetitionerData,
+      });
     }
   }
 

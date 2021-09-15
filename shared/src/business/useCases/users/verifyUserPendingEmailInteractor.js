@@ -21,6 +21,7 @@ const { User } = require('../../entities/User');
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
+  petitioner,
   rawCaseData,
   user,
 }) => {
@@ -28,22 +29,22 @@ const updateCaseEntityAndGenerateChange = async ({
     applicationContext,
   });
 
-  const petitionerObject = caseEntity.getPetitionerById(user.userId);
+  const petitionerObject = caseEntity.getPetitionerById(petitioner.userId);
   if (!petitionerObject) {
     applicationContext.logger.error(
-      `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+      `Could not find user|${petitioner.userId} on ${caseEntity.docketNumber}`,
     );
     return;
   }
 
   const oldEmail = petitionerObject.email;
   const newData = {
-    email: user.email,
+    email: petitioner.email,
     name: petitionerObject.name,
   };
 
   const oldData = { email: oldEmail };
-  petitionerObject.email = user.email;
+  petitionerObject.email = petitioner.email;
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
