@@ -198,6 +198,7 @@ const generateAndServeDocketEntry = async ({
   const petitionerHasPaperService = caseEntity.petitioners.some(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
+
   const paperServiceRequested =
     petitionerHasPaperService ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
