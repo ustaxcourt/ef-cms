@@ -206,15 +206,26 @@ export const CourtIssuedDocketEntry = connect(
                 </div>
 
                 <div id="service-parties">
-                  {addCourtIssuedDocketEntryHelper.serviceParties.map(party => (
-                    <div className="margin-bottom-2" key={party.displayName}>
-                      {party.displayName}
-                      <div className="float-right">
-                        <b>Service: </b>
-                        {party.serviceIndicator}
-                      </div>
+                  {addCourtIssuedDocketEntryHelper.eventCodeIsUnservable && (
+                    <div className="margin-bottom-2">
+                      This document type does not require service
                     </div>
-                  ))}
+                  )}
+                  {!addCourtIssuedDocketEntryHelper.eventCodeIsUnservable &&
+                    addCourtIssuedDocketEntryHelper.serviceParties.map(
+                      party => (
+                        <div
+                          className="margin-bottom-2"
+                          key={party.displayName}
+                        >
+                          {party.displayName}
+                          <div className="float-right">
+                            <b>Service: </b>
+                            {party.serviceIndicator}
+                          </div>
+                        </div>
+                      ),
+                    )}
                 </div>
 
                 {addCourtIssuedDocketEntryHelper.showReceivedDate && (
