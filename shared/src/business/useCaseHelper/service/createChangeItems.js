@@ -18,8 +18,8 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseEntity the instantiated Case class (updated by reference)
  * @param {object} providers.documentType the document type of the document being created
- * @param {object} providers.newData the new practitioner contact information
- * @param {object} providers.oldData the old practitioner contact information (for comparison)
+ * @param {object} providers.newData the new contact information
+ * @param {object} providers.oldData the old contact information (for comparison)
  * @param {object} providers.user the user object that includes userId, barNumber etc.
  * @returns {Promise<User[]>} the internal users
  */
@@ -38,6 +38,7 @@ const createDocketEntryForChange = async ({
   let changeOfAddressPdfName = newData.name;
   let contactName = newData.name;
 
+  // should only be true when called via generateChangeOfAddress
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner
