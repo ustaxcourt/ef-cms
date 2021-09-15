@@ -10,10 +10,7 @@ import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSaves
 import { docketClerkViewsEditDocketRecord } from './journey/docketClerkViewsEditDocketRecord';
 import { docketClerkViewsQCInProgress } from './journey/docketClerkViewsQCInProgress';
 import { docketClerkViewsSectionQCInProgress } from './journey/docketClerkViewsSectionQCInProgress';
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 
 const cerebralTest = setupTest();
 
@@ -44,10 +41,13 @@ describe('Create Docket Entry From Scans', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile, {
-    caseType: CASE_TYPES_MAP.cdp,
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      caseType: CASE_TYPES_MAP.cdp,
+      procedureType: 'Regular',
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
