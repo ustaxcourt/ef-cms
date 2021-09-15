@@ -31,7 +31,7 @@ exports.opinionAdvancedSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionType,
+    opinionTypes,
     startDate,
   },
 ) => {
@@ -48,7 +48,7 @@ exports.opinionAdvancedSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionType,
+    opinionTypes,
     startDate,
   });
 
