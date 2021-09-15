@@ -1,4 +1,7 @@
 const {
+  addExistingUserToCase,
+} = require('../useCaseHelper/caseAssociation/addExistingUserToCase');
+const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -443,13 +446,49 @@ describe('updatePetitionerInformationInteractor', () => {
     });
   });
 
-  describe('update petitioner email', () => {
+  describe.only('admissions clerk adds a verified petitioner email', () => {
+    const mockUpdatedEmail = 'changed-email@example.com';
+    const foundMockVerifiedPetitioner = {
+      email: mockUpdatedEmail,
+      userId: applicationContext.getUniqueId(),
+    };
+    beforeAll(() => {
+      const admissionsClerkUser = {
+        email: 'admissionsclerk@example.com',
+        entityName: 'User',
+        name: 'Test Admissions Clerk',
+        role: 'admissionsclerk',
+        section: 'admissions',
+        userId: '9d7d63b7-d7a5-4905-ba89-ef71bf30057f',
+      };
+
+      applicationContext.getCurrentUser.mockImplementation(
+        () => new User(admissionsClerkUser),
+      );
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCognitoUserIdByEmail.mockReturnValue('someMockId');
+
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValue(foundMockVerifiedPetitioner);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockReturnValue(mockCase);
+
+      applicationContext
+        .getUseCaseHelpers()
+        .addExistingUserToCase.mockImplementation(addExistingUserToCase); // the real implementation, but inside, it is using the mocks above
+    });
+
     it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
       await updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
           ...mockPetitioners[0],
-          updatedEmail: 'changed-email@example.com',
+          updatedEmail: mockUpdatedEmail,
         },
       });
 
