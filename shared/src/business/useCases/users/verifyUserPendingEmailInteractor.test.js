@@ -265,7 +265,7 @@ describe('verifyUserPendingEmailInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockReturnValueOnce([
+      .getCasesForUser.mockReturnValueOnce([
         { docketNumber: MOCK_CASE.docketNumber },
       ]);
 

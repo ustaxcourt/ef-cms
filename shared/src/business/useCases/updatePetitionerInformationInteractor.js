@@ -349,9 +349,8 @@ const updatePetitionerInformationInteractor = async (
 
       const petitionerCases = await applicationContext
         .getPersistenceGateway()
-        .getIndexedCasesForUser({
+        .getCasesForUser({
           applicationContext,
-          statuses: applicationContext.getConstants().CASE_STATUSES,
           userId: petitionerOnCase.contactId,
         });
 
