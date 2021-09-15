@@ -70,13 +70,11 @@ const updateCaseEntityAndGenerateChange = async ({
     return;
   }
 
-  const { oldEmail } = petitionerOnCase;
   const newData = {
-    email: user.email,
+    email: petitionerOnCase.newEmail,
     name: petitionerObject.name,
   };
-
-  const oldData = { email: oldEmail };
+  const oldData = { email: petitionerOnCase.oldEmail };
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -345,6 +343,7 @@ const updatePetitionerInformationInteractor = async (
       );
 
       petitionerOnCase.oldEmail = oldCaseContact.email;
+      petitionerOnCase.newEmail = updatedPetitionerData.updatedEmail;
 
       await new Promise(resolve => setTimeout(resolve, 3000));
 
