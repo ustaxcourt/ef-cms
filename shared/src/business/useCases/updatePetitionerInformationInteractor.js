@@ -345,8 +345,6 @@ const updatePetitionerInformationInteractor = async (
       petitionerOnCase.oldEmail = oldCaseContact.email;
       petitionerOnCase.newEmail = updatedPetitionerData.updatedEmail;
 
-      await new Promise(resolve => setTimeout(resolve, 3000));
-
       const petitionerCases = await applicationContext
         .getPersistenceGateway()
         .getCasesForUser({
