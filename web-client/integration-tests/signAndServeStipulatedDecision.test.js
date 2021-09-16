@@ -3,6 +3,7 @@ import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWork
 import { docketClerkCompletesDocketEntryQcAndSendsMessage } from './journey/docketClerkCompletesDocketEntryQcAndSendsMessage';
 import { docketClerkCreatesDocketEntryForSignedStipulatedDecision } from './journey/docketClerkCreatesDocketEntryForSignedStipulatedDecision';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { respondentUploadsProposedStipulatedDecision } from './journey/respondentUploadsProposedStipulatedDecision';
 
 const cerebralTest = setupTest({
@@ -30,6 +31,9 @@ describe('a user signs and serves a stipulated decision', () => {
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   respondentUploadsProposedStipulatedDecision(cerebralTest);

@@ -44,11 +44,19 @@ const getTableName = ({ applicationContext }) =>
     applicationContext.environment.dynamoDbTableName) ||
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
-const getDeployTableName = ({ applicationContext }) =>
-  `efcms-deploy-${
-    (applicationContext.environment || applicationContext.getEnvironment())
-      .stage
-  }`;
+
+const getDeployTableName = ({ applicationContext }) => {
+  const env =
+    applicationContext.environment || applicationContext.getEnvironment();
+
+  if (env.stage === 'local') {
+    return env.dynamoDbTableName;
+  }
+
+  return `efcms-deploy-${env.stage}`;
+};
+
+exports.getDeployTableName = getDeployTableName;
 
 exports.describeTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient();
@@ -111,6 +119,27 @@ exports.update = params => {
 };
 
 /**
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+exports.updateToDeployTable = params => {
+  const filteredParams = filterEmptyStrings(params);
+  return params.applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .update({
+      TableName: getDeployTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...filteredParams,
+    })
+    .promise()
+    .then(() => params.Item);
+};
+
+/**
  * updateConsistent
  *
  * @param {object} params the params to update
@@ -143,6 +172,29 @@ exports.get = params => {
     .getDocumentClient()
     .get({
       TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...params,
+    })
+    .promise()
+    .then(res => {
+      return removeAWSGlobalFields(res.Item);
+    });
+};
+
+/**
+ * get
+ *
+ * @param {object} params the params to get
+ * @returns {object} the item that was retrieved
+ */
+exports.getFromDeployTable = params => {
+  return params.applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .get({
+      TableName: getDeployTableName({
         applicationContext: params.applicationContext,
       }),
       ...params,

@@ -314,6 +314,29 @@ describe('updateCaseDetailsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should call createCaseTrialSortMappingRecords if the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...generalDocketReadyForTrialCase,
+        preferredTrialCity: undefined,
+        procedureType: 'Regular',
+      });
+
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...generalDocketReadyForTrialCase,
+        procedureType: 'Small',
+      },
+      docketNumber: generalDocketReadyForTrialCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .createCaseTrialSortMappingRecords,
+    ).toHaveBeenCalled();
+  });
+
   it('should NOT call createCaseTrialSortMappingRecords if there are no changes that would alter the trial sort tags', async () => {
     applicationContext
       .getPersistenceGateway()

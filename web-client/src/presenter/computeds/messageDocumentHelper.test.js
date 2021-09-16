@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   clerkOfCourtUser,
@@ -34,6 +35,14 @@ describe('messageDocumentHelper', () => {
     isDraft: true,
   };
 
+  const petitionDocketEntry = {
+    docketEntryId: 'some-petition-id',
+    documentType: INITIAL_DOCUMENT_TYPES.petition.documentType, // the petition
+    entityName: 'DocketEntry',
+    isDraft: true,
+    servedAt: '2019-03-01T21:40:46.415Z',
+  };
+
   const baseCorrespondence = {
     correspondenceId: '456',
     documentTitle: 'The Correspondence',
@@ -51,7 +60,7 @@ describe('messageDocumentHelper', () => {
     return {
       caseDetail: {
         ...baseCaseDetail,
-        docketEntries: [baseDocketEntry],
+        docketEntries: [petitionDocketEntry, baseDocketEntry],
       },
       messageViewerDocumentToDisplay: {
         documentId: mockDocumentId,
@@ -103,7 +112,10 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
+            docketEntries: [
+              petitionDocketEntry,
+              { ...baseDocketEntry, isDraft: false },
+            ],
           },
         },
       });
@@ -117,7 +129,10 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
+            docketEntries: [
+              petitionDocketEntry,
+              { ...baseDocketEntry, isDraft: false },
+            ],
           },
         },
       });
@@ -131,7 +146,10 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(clerkOfCourtUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
+            docketEntries: [
+              petitionDocketEntry,
+              { ...baseDocketEntry, isDraft: false },
+            ],
           },
         },
       });
@@ -187,6 +205,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 eventCode: 'SDEC',
@@ -209,6 +228,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 signedAt: '2020-06-25T20:49:28.192Z',
@@ -238,6 +258,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 signedAt: '2020-06-25T20:49:28.192Z',
@@ -257,7 +278,10 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
+            docketEntries: [
+              petitionDocketEntry,
+              { ...baseDocketEntry, isDraft: false },
+            ],
           },
         },
       });
@@ -273,6 +297,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 isDraft: false,
@@ -294,6 +319,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentTitle: 'Notice',
@@ -319,6 +345,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentTitle: 'Notice',
@@ -368,6 +395,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 signedAt: '2020-06-25T20:49:28.192Z',
@@ -387,6 +415,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 eventCode: 'SDEC',
@@ -445,7 +474,10 @@ describe('messageDocumentHelper', () => {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
-            docketEntries: [{ ...baseDocketEntry, isDraft: false }],
+            docketEntries: [
+              petitionDocketEntry,
+              { ...baseDocketEntry, isDraft: false },
+            ],
           },
         },
       });
@@ -460,6 +492,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 eventCode: 'NOT',
@@ -537,6 +570,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 eventCode: 'MISC', // Does not require a signature
@@ -556,6 +590,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 eventCode: 'O', // Requires a signature
@@ -571,6 +606,28 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('serving documents', () => {
+    it('should set showServiceWarning to true if the petition is unserved and we are viewing a servable (non-petition) document', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              { ...petitionDocketEntry, servedAt: undefined },
+              {
+                ...baseDocketEntry,
+                documentType: 'Answer',
+                eventCode: 'A',
+                isDraft: false,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.showServiceWarning).toBe(true);
+    });
+
     it('should set showServeCourtIssuedDocumentButton to false when the document eventCode is not present in the list of court issued documents', () => {
       const { showServeCourtIssuedDocumentButton } = runCompute(
         messageDocumentHelper,
@@ -580,6 +637,7 @@ describe('messageDocumentHelper', () => {
             caseDetail: {
               ...baseCaseDetail,
               docketEntries: [
+                petitionDocketEntry,
                 {
                   ...baseDocketEntry,
                   eventCode: 'PMT',
@@ -600,6 +658,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Order',
@@ -621,6 +680,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Order',
@@ -635,13 +695,14 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePaperFiledDocumentButton).toBe(false);
     });
 
-    it('should set showServePaperFiledDocumentButton to true when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+    it('should set showServePaperFiledDocumentButton to true when the document is a servable paper filed document that is unserved, and not a draft document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Answer',
@@ -656,6 +717,28 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePaperFiledDocumentButton).toBe(true);
     });
 
+    it('should set showServePaperFiledDocumentButton to true when the document is a servable paper filed document but the petition is unserved', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              { ...petitionDocketEntry, servedAt: undefined },
+              {
+                ...baseDocketEntry,
+                documentType: 'Answer',
+                eventCode: 'A',
+                isDraft: false,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+
     it('should set showServeCourtIssuedDocumentButton to false when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
@@ -663,6 +746,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Answer',
@@ -684,10 +768,11 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
-                documentType: 'Answer',
-                eventCode: 'A', // paper filed document type
+                documentType: 'Order',
+                eventCode: 'O', //court issued document type
                 isDraft: false,
               },
             ],
@@ -698,6 +783,29 @@ describe('messageDocumentHelper', () => {
 
       expect(result.showServeCourtIssuedDocumentButton).toBe(false);
       expect(result.showServePaperFiledDocumentButton).toBe(false);
+    });
+
+    it('should set showServeCourtIssuedDocumentButton to false when petition on the case is not served', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              { ...petitionDocketEntry, servedAt: undefined },
+              {
+                ...baseDocketEntry,
+                documentType: 'Order',
+                eventCode: 'O', //court issued document type
+                isDraft: false,
+              },
+            ],
+          },
+          permissions: { SERVE_DOCUMENT: true },
+        },
+      });
+
+      expect(result.showServeCourtIssuedDocumentButton).toBe(false);
     });
   });
 
@@ -821,6 +929,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
@@ -842,6 +951,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
@@ -862,6 +972,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
@@ -890,6 +1001,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
@@ -917,6 +1029,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Proposed Stipulated Decision',
@@ -938,6 +1051,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Answer',
@@ -960,6 +1074,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             archivedDocketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 archived: true,
@@ -1033,6 +1148,7 @@ describe('messageDocumentHelper', () => {
           caseDetail: {
             ...baseCaseDetail,
             docketEntries: [
+              petitionDocketEntry,
               {
                 ...baseDocketEntry,
                 documentType: 'Answer',

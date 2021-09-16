@@ -4,6 +4,8 @@ import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
 import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
 import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
+import { AppMaintenance } from './AppMaintenance';
+import { AppMaintenanceModal } from './AppMaintenanceModal';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -94,6 +96,7 @@ const pages = {
   AddPetitionerToCase,
   AddTrialSession,
   AdvancedSearch,
+  AppMaintenance,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -202,38 +205,52 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
+    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+
     const CurrentPage = pages[currentPage];
+
     return (
       <>
-        <a
-          className="usa-skipnav"
-          href="#main-content"
-          tabIndex="0"
-          onClick={focusMain}
-        >
-          Skip to main content
-        </a>
-        <UsaBanner />
-        <Header />
+        {showHeaderAndFooter && (
+          <>
+            <a
+              className="usa-skipnav"
+              href="#main-content"
+              tabIndex="0"
+              onClick={focusMain}
+            >
+              Skip to main content
+            </a>
+            <UsaBanner />
+            <Header />
+          </>
+        )}
+
         <main id="main-content" role="main">
           <CurrentPage />
           {userContactEditInProgress && <UserContactEditProgress />}
         </main>
         <Loading />
 
-        <Footer />
-        {zipInProgress && <BatchDownloadProgress />}
+        {showHeaderAndFooter && (
+          <>
+            <Footer />
+            {zipInProgress && <BatchDownloadProgress />}
 
-        {showModal === 'TrialSessionPlanningModal' && (
-          <TrialSessionPlanningModal />
-        )}
-        {showModal === 'CaseInventoryReportModal' && (
-          <CaseInventoryReportModal />
-        )}
-        {showModal === 'FileCompressionErrorModal' && (
-          <FileCompressionErrorModal />
+            {showModal === 'TrialSessionPlanningModal' && (
+              <TrialSessionPlanningModal />
+            )}
+            {showModal === 'CaseInventoryReportModal' && (
+              <CaseInventoryReportModal />
+            )}
+            {showModal === 'FileCompressionErrorModal' && (
+              <FileCompressionErrorModal />
+            )}
+            {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+          </>
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+        {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
       </>
     );
   },

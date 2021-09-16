@@ -261,7 +261,7 @@ const assignFieldsForAllUsers = ({ obj, rawCase }) => {
     DocketEntry.isPending(docketEntry),
   );
 
-  obj.noticeOfTrialDate = rawCase.noticeOfTrialDate || createISODateString();
+  obj.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
   obj.docketNumberWithSuffix =
     obj.docketNumber + (obj.docketNumberSuffix || '');
@@ -1315,6 +1315,11 @@ const getPetitionDocketEntry = function (rawCase) {
   );
 };
 
+const caseHasServedPetition = rawCase => {
+  const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+  return petitionDocketEntry && isServed(petitionDocketEntry);
+};
+
 Case.prototype.getIrsSendDate = function () {
   const petitionDocketEntry = this.getPetitionDocketEntry();
   if (petitionDocketEntry) {
@@ -2266,6 +2271,7 @@ module.exports = {
   Case: validEntityDecorator(Case),
   caseDecorator,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,

@@ -7,7 +7,7 @@ import { completeMessageAction } from '../actions/CaseDetail/completeMessageActi
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { setMessageAction } from '../actions/setMessageAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const completeMessageSequence = showProgressSequenceDecorator([
   clearAlertsAction,

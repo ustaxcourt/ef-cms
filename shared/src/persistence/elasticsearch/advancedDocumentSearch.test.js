@@ -185,12 +185,27 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search by opinion type when an opinion document type is provided', async () => {
+  it('does not search for a judge when the judgeType is neither `judge` nor a signed judge', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      judge: 'Judge Guy Fieri',
+      judgeType: 'something else',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must,
+    ).toEqual([
+      getCaseMappingQueryParams(null), // match all parents
+    ]);
+  });
+
+  it('does a search by a single opinion type when an opinion document type is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionType: 'Summary Opinion',
+      opinionTypes: ['Summary Opinion'],
     });
 
     const expectation = [
@@ -219,12 +234,42 @@ describe('advancedDocumentSearch', () => {
     });
   });
 
+  it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      opinionTypes: ['Summary Opinion', 'Bench'],
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toEqual(
+      expect.arrayContaining([
+        {
+          bool: {
+            should: [
+              {
+                term: {
+                  'documentType.S': 'Summary Opinion',
+                },
+              },
+              {
+                term: {
+                  'documentType.S': 'Bench',
+                },
+              },
+            ],
+          },
+        },
+      ]),
+    );
+  });
+
   it('should not include sealed documents in the search results', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionType: 'Summary Opinion',
     });
 
     const expectation = [
@@ -236,13 +281,6 @@ describe('advancedDocumentSearch', () => {
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool,
     ).toMatchObject({
-      filter: expect.arrayContaining([
-        {
-          term: {
-            'documentType.S': 'Summary Opinion',
-          },
-        },
-      ]),
       must: expectation,
     });
   });
@@ -413,7 +451,7 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('should include sorting option when sortOrder is provided', async () => {
+  it('should sort by filingDate when sortOrder is provided as DOCUMENT_SEARCH_SORT.FILING_DATE_ASC', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -424,6 +462,20 @@ describe('advancedDocumentSearch', () => {
 
     expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
       { 'filingDate.S': 'asc' },
+    ]);
+  });
+
+  it('should sort by numberOfPages when sortOrder is provided as DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: opinionEventCodes,
+      endDate: '2020-02-21T04:59:59.999Z',
+      sortOrder: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
+      startDate: '2020-02-20T05:00:00.000Z',
+    });
+
+    expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
+      { 'numberOfPages.N': 'asc' },
     ]);
   });
 
@@ -464,19 +516,11 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-          },
-        },
-      ]);
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({
+        'judge.S': 'Guy Fieri',
+      });
     });
 
     it('should strip out the "Legacy" title from a judge\'s name', async () => {
@@ -488,22 +532,14 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
-                },
-              },
-            },
-          },
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({
+        'signedJudgeName.S': {
+          operator: 'and',
+          query: 'Guy Fieri',
         },
-      ]);
+      });
     });
 
     it('should strip out the "Judge" title from a judge\'s name', async () => {
@@ -515,19 +551,9 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must,
-      ).toEqual([
-        getCaseMappingQueryParams(null), // match all parents
-        {
-          bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-          },
-        },
-      ]);
+        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+          .should.match,
+      ).toEqual({ 'judge.S': 'Guy Fieri' });
     });
   });
 });

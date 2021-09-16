@@ -31,18 +31,21 @@ export const getCanEditPetitioner = ({
 }) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  let canEditPetitioner = false;
+  if (!petitionIsServed) return false;
+
   if (user.role === USER_ROLES.petitioner) {
-    canEditPetitioner = petitioner.contactId === user.userId;
-  } else if (user.role === USER_ROLES.privatePractitioner) {
-    canEditPetitioner = userAssociatedWithCase;
-  } else if (permissions.EDIT_PETITIONER_INFO) {
-    canEditPetitioner = true;
+    return petitioner.contactId === user.userId;
   }
 
-  canEditPetitioner = petitionIsServed && canEditPetitioner;
+  if (user.role === USER_ROLES.privatePractitioner) {
+    return !!userAssociatedWithCase;
+  }
 
-  return canEditPetitioner;
+  if (permissions.EDIT_PETITIONER_INFO) {
+    return true;
+  }
+
+  return false;
 };
 
 export const partiesInformationHelper = (get, applicationContext) => {
@@ -109,7 +112,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
     const petitionIsServed = !!applicationContext
       .getUtilities()
-      .getPetitionDocketEntry(caseDetail)?.servedAt;
+      .caseHasServedPetition(caseDetail);
 
     const canEditPetitioner = getCanEditPetitioner({
       applicationContext,
