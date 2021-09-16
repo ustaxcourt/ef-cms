@@ -26,7 +26,9 @@ const {
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
+  calculateISODate,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
@@ -1184,6 +1186,35 @@ const getPetitionerByEmail = function (rawCase, userEmail) {
 };
 
 /**
+ * checks if the case is eligible for service.
+ *
+ * @returns {boolean} if the case is eligible or not
+ */
+const isCaseEligibleForService = function (rawCase) {
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  return isOpen || isRecent;
+};
+
+/**
+ * checks if the case is eligible for service.
+ *
+ * @returns {boolean} if the case is eligible or not
+ */
+Case.prototype.isCaseEligibleForService = function () {
+  return isCaseEligibleForService(this);
+};
+
+/**
  * gets the petitioner with email userEmail from the petitioners array
  *
  * @params {object} params the params object
@@ -1193,7 +1224,6 @@ const getPetitionerByEmail = function (rawCase, userEmail) {
 Case.prototype.getPetitionerByEmail = function (userEmail) {
   return getPetitionerByEmail(this, userEmail);
 };
-
 /**
  * adds the petitioner to the petitioners array
  *
@@ -2304,6 +2334,7 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
+  isCaseEligibleForService,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   updatePetitioner,
