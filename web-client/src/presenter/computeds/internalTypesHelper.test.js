@@ -40,38 +40,6 @@ describe('internalTypesHelper', () => {
         scenario: 'Nonstandard G',
       },
     ],
-    Notice: [
-      {
-        category: 'Notice',
-        documentTitle: 'Notice of Change of Address',
-        documentType: 'Notice of Change of Address',
-        eventCode: 'NCA',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Notice',
-        documentTitle: 'Notice of Change of Address and Telephone Number',
-        documentType: 'Notice of Change of Address and Telephone Number',
-        eventCode: 'NCAP',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-      {
-        category: 'Notice',
-        documentTitle: 'Notice of Change of Telephone Number',
-        documentType: 'Notice of Change of Telephone Number',
-        eventCode: 'NCP',
-        labelFreeText: '',
-        labelPreviousDocument: '',
-        ordinalField: '',
-        scenario: 'Standard',
-      },
-    ],
     'Seriatim Brief': [
       {
         category: 'Seriatim Brief',
@@ -182,7 +150,7 @@ describe('internalTypesHelper', () => {
   });
 
   describe('produces a list', () => {
-    it('of value/label objects (that does not include NCA, NCP, or NCAP type documents) sorted by their label (default) when no search text is provided', () => {
+    it('of value/label objects sorted by their label (default) when no search text is provided', () => {
       const expected = [
         { label: 'Amended Answer', value: 'AA' },
         { label: 'Amendment to Answer', value: 'ATAN' },
@@ -192,38 +160,6 @@ describe('internalTypesHelper', () => {
 
       const result = runCompute(internalTypesHelper, {
         state: {},
-      });
-
-      expect(result.internalDocumentTypesForSelect).toMatchObject(expected);
-      expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-        expected,
-      );
-    });
-
-    it('that includes NCA type documents when the currently edited document is NCA type', () => {
-      const docketEntryId = 'ABC123';
-      const expected = [
-        { label: 'Amended Answer', value: 'AA' },
-        { label: 'Amendment to Answer', value: 'ATAN' },
-        { label: 'Answer', value: 'A' },
-        { label: 'Notice of Change of Address', value: 'NCA' },
-        { label: 'Seriatim Answering Memorandum Brief', value: 'SAMB' },
-      ];
-
-      const result = runCompute(internalTypesHelper, {
-        state: {
-          caseDetail: {
-            docketEntries: [
-              {
-                docketEntryId,
-                eventCode: 'NCA',
-              },
-            ],
-          },
-          form: {
-            docketEntryId,
-          },
-        },
       });
 
       expect(result.internalDocumentTypesForSelect).toMatchObject(expected);

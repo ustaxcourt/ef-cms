@@ -34,7 +34,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string}  providers.websocketMessagePrefix is it the `user` or an `admin` performing this action?
  * @returns {Promise<Case[]>} the cases that were updated
  */
-exports.generateChangeOfAddress = async ({
+const generateChangeOfAddress = async ({
   applicationContext,
   bypassDocketEntry = false,
   contactInfo,
@@ -114,7 +114,10 @@ exports.generateChangeOfAddress = async ({
         howMuch: -6,
         units: 'months',
       });
-      const isOpen = caseEntity.status !== CASE_STATUS_TYPES.closed;
+      const isOpen = ![
+        CASE_STATUS_TYPES.closed,
+        CASE_STATUS_TYPES.new,
+      ].includes(caseEntity.status);
       const isRecent =
         caseEntity.closedDate &&
         dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
@@ -203,7 +206,7 @@ const generateAndServeDocketEntry = async ({
         caseTitle,
         docketNumber: caseDetail.docketNumber,
         docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
-        documentTitle: documentType.title,
+        documentType,
         name: `${practitionerName} (${user.barNumber})`,
         newData,
         oldData,
@@ -317,3 +320,5 @@ const generateAndServeDocketEntry = async ({
 
   caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
+
+module.exports = { generateAndServeDocketEntry, generateChangeOfAddress };

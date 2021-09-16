@@ -1,7 +1,7 @@
-const client = require('../../dynamodbClientService');
+const { query } = require('../../dynamodbClientService');
 
-exports.getWorkItemsByDocketNumber = ({ applicationContext, docketNumber }) => {
-  return client.query({
+exports.getWorkItemsByDocketNumber = ({ applicationContext, docketNumber }) =>
+  query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -13,4 +13,3 @@ exports.getWorkItemsByDocketNumber = ({ applicationContext, docketNumber }) => {
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
   });
-};

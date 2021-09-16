@@ -111,6 +111,17 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
+exports.reviewAndServePetition = () => {
+  cy.get('#tab-document-view').click();
+  cy.get('a:contains("Review and Serve Petition")').click();
+  cy.get('button#tab-irs-notice').click();
+  cy.get('label#has-irs-verified-notice-no').click();
+  cy.get('button#submit-case').click();
+  cy.get('button:contains("Serve to IRS")').click();
+  cy.get('button#confirm:contains("Yes, Serve")').click();
+  cy.get('.usa-alert:contains("Petition served")').should('exist');
+};
+
 exports.clickSaveUploadedPdfButton = () => {
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('h1:contains("Drafts")').should('exist');

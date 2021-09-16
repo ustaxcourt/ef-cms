@@ -5,10 +5,10 @@ const {
 } = require('../../../shared/src/persistence/dynamo/users/createPetitionerUserRecords');
 const {
   createUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createUser');
+} = require('../../../shared/src/persistence/dynamo/users/createOrUpdateUser');
 const {
   createUserRecords: createPractitionerUserRecords,
-} = require('../../../shared/src/persistence/dynamo/users/createPractitionerUser');
+} = require('../../../shared/src/persistence/dynamo/users/createOrUpdatePractitionerUser');
 const {
   ROLES,
 } = require('../../../shared/src/business/entities/EntityConstants');

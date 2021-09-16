@@ -1,14 +1,10 @@
-const client = require('../../dynamodbClientService');
+const { get } = require('../../dynamodbClientService');
 
-exports.getTrialSessionById = async ({
-  applicationContext,
-  trialSessionId,
-}) => {
-  return await client.get({
+exports.getTrialSessionById = ({ applicationContext, trialSessionId }) =>
+  get({
     Key: {
       pk: `trial-session|${trialSessionId}`,
       sk: `trial-session|${trialSessionId}`,
     },
     applicationContext,
   });
-};

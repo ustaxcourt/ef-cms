@@ -12,7 +12,7 @@ const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { docketClerkUser, MOCK_PRACTITIONER } = require('../../test/mockUsers');
+const { docketClerkUser } = require('../../test/mockUsers');
 const { getOtherFilers } = require('../entities/cases/Case');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
@@ -38,11 +38,6 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
-
-  const basePractitioner = {
-    ...MOCK_PRACTITIONER,
-    representing: [mockPetitioners[0].contactId],
-  };
 
   beforeAll(() => {
     addCoverToPdf.mockResolvedValue({});
@@ -83,6 +78,60 @@ describe('updatePetitionerInformationInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should throw an error when the user making the request is a private practitioner not associated with the case', async () => {
+    mockUser = { ...mockUser, role: ROLES.privatePractitioner };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCase,
+        privatePractitioners: [{ representing: [], userId: '7' }],
+      });
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow('Unauthorized for editing petition details');
+  });
+
+  it('should not throw an error when the user making the request is a private practitioner who is associated with the case', async () => {
+    const mockRepresentingId = '1a061240-1320-47c5-9f54-0ff975045d84';
+    applicationContext.getCurrentUser.mockImplementationOnce(
+      () =>
+        new User({
+          ...mockUser,
+          role: ROLES.privatePractitioner,
+          userId: mockRepresentingId,
+        }),
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCase,
+        privatePractitioners: [
+          {
+            barNumber: 'EP0001',
+            name: 'Example Practitioner',
+            representing: [PRIMARY_CONTACT_ID],
+            role: ROLES.privatePractitioner,
+            userId: mockRepresentingId,
+          },
+        ],
+      });
+
+    await expect(
+      updatePetitionerInformationInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {
+          ...mockPetitioners[0],
+          countryType: COUNTRY_TYPES.DOMESTIC,
+        },
+      }),
+    ).resolves.toBeDefined();
   });
 
   it('should throw an error when the petitioner to update can not be found on the case', async () => {
@@ -391,145 +440,6 @@ describe('updatePetitionerInformationInteractor', () => {
         .workItem,
     ).toMatchObject({
       caseTitle: 'Test Petitioner',
-    });
-  });
-
-  describe('createWorkItemForChange', () => {
-    it('should create a work item for the NCA when the petitioner is unrepresented', async () => {
-      mockCase = {
-        ...mockCase,
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [mockPetitioners[0]],
-        privatePractitioners: [
-          {
-            ...basePractitioner,
-            representing: ['6c5b79e0-2429-4ebc-8e9c-483d0282d4e0'],
-          },
-        ],
-      };
-
-      const result = await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[0],
-            address1: 'A Changed Street',
-          },
-        },
-      );
-
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-        'for Test Primary Petitioner',
-      );
-    });
-
-    it('should NOT create a work item for the NCA when the petitioner is represented and their service preference is NOT paper', async () => {
-      mockCase = {
-        ...mockCase,
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [mockPetitioners[0]],
-        privatePractitioners: [
-          { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
-        ],
-      };
-
-      const result = await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[0],
-            address1: 'A Changed Street',
-          },
-        },
-      );
-
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).not.toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
-      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-        'for Test Primary Petitioner',
-      );
-    });
-
-    it('should create a work item for the NCA when the petitioner is represented and their service preference is paper', async () => {
-      mockCase = {
-        ...mockCase,
-        partyType: PARTY_TYPES.petitioner,
-        petitioners: [mockPetitioners[0]],
-        privatePractitioners: [
-          { ...basePractitioner, representing: [PRIMARY_CONTACT_ID] },
-        ],
-      };
-
-      const result = await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[0],
-            address1: 'A Changed Street',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        },
-      );
-
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-        'for Test Primary Petitioner',
-      );
-    });
-
-    it('should create a work item for the NCA when the petitioner is represented and a private practitioner on the case requests paper service', async () => {
-      mockCase = {
-        ...mockCase,
-        privatePractitioners: [
-          {
-            ...basePractitioner,
-            representing: [PRIMARY_CONTACT_ID],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      };
-
-      const result = await updatePetitionerInformationInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          updatedPetitionerData: {
-            ...mockPetitioners[1],
-            address1: 'A Changed Street',
-          },
-        },
-      );
-
-      const noticeOfChangeDocketEntryWithWorkItem =
-        result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).toHaveBeenCalled();
-      expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-      expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-        'for Test Secondary Petitioner',
-      );
     });
   });
 

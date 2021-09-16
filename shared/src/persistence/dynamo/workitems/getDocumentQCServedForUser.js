@@ -3,14 +3,14 @@ const {
 } = require('../../../business/utilities/DateHandler');
 const { queryFull } = require('../../dynamodbClientService');
 
-exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
+exports.getDocumentQCServedForUser = ({ applicationContext, userId }) => {
   const afterDate = prepareDateFromString()
     .startOf('day')
     .subtract(7, 'd')
     .utc()
     .format();
 
-  const workItems = await queryFull({
+  return queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -22,6 +22,4 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
   });
-
-  return workItems;
 };

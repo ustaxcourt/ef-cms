@@ -5,12 +5,13 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultAddPetitionerToCaseFormAction } from '../actions/setDefaultAddPetitionerToCaseFormAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoAddPetitionerToCaseSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [
+    isLoggedIn: startWebSocketConnectionSequenceDecorator([
       setCurrentPageAction('Interstitial'),
       stopShowValidationAction,
       clearFormAction,
@@ -18,7 +19,7 @@ export const gotoAddPetitionerToCaseSequence = [
       setCaseAction,
       setDefaultAddPetitionerToCaseFormAction,
       setCurrentPageAction('AddPetitionerToCase'),
-    ],
+    ]),
     unauthorized: [redirectToCognitoAction],
   },
 ];

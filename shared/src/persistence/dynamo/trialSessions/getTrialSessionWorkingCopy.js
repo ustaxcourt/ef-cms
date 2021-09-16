@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+const { get } = require('../../dynamodbClientService');
 
 /**
  * getTrialSessionWorkingCopy
@@ -9,16 +9,15 @@ const client = require('../../dynamodbClientService');
  * @param {string} providers.userId the id of the user
  * @returns {Promise} the promise of the call to persistence
  */
-exports.getTrialSessionWorkingCopy = async ({
+exports.getTrialSessionWorkingCopy = ({
   applicationContext,
   trialSessionId,
   userId,
-}) => {
-  return await client.get({
+}) =>
+  get({
     Key: {
       pk: `trial-session-working-copy|${trialSessionId}`,
       sk: `user|${userId}`,
     },
     applicationContext,
   });
-};

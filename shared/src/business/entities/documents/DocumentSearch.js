@@ -36,7 +36,7 @@ function DocumentSearch() {
 DocumentSearch.prototype.init = function init(rawProps = {}) {
   this.judge = rawProps.judge;
 
-  this.opinionType = rawProps.opinionType;
+  this.opinionTypes = rawProps.opinionTypes;
 
   this.from = rawProps.from ?? 0;
   this.userRole = rawProps.userRole;
@@ -135,9 +135,13 @@ DocumentSearch.schema = joi
     keyword: JoiValidationConstants.STRING.optional()
       .allow('')
       .description('The keyword to search by'),
-    opinionType: JoiValidationConstants.STRING.allow('')
+    opinionTypes: joi
+      .array()
+      .items(JoiValidationConstants.STRING.allow(''))
       .optional()
-      .description('The opinion document type to filter the search results by'),
+      .description(
+        'The opinion document types to filter the search results by',
+      ),
     startDate: joi.alternatives().conditional('dateRange', {
       is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       otherwise: joi.forbidden(),
