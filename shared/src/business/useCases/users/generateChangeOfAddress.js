@@ -2,17 +2,12 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  dateStringsCompared,
-} = require('../../utilities/DateHandler');
+  generateAndServeDocketEntry,
+} = require('../../useCaseHelper/service/createChangeItems');
 const {
-  CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const {
-  generateAndServeDocketEntry,
-} = require('../../useCaseHelper/service/createChangeItems');
 const { Case } = require('../../entities/cases/Case');
 const { clone } = require('lodash');
 
@@ -103,22 +98,11 @@ const generateChangeOfAddressForPractitioner = async ({
         practitionerObject.email = updatedEmail;
       }
 
-      // we do this again so that it will convert '' to null
+      // TODO: is this even needed any more?
+      // we new up another case from the existing case convert '' to null
       caseEntity = new Case(caseEntity, { applicationContext });
 
-      const maxClosedDate = calculateISODate({
-        howMuch: -6,
-        units: 'months',
-      });
-      const isOpen = ![
-        CASE_STATUS_TYPES.closed,
-        CASE_STATUS_TYPES.new,
-      ].includes(caseEntity.status);
-      const isRecent =
-        caseEntity.closedDate &&
-        dateStringsCompared(caseEntity.closedDate, maxClosedDate) >= 0;
-
-      if (!bypassDocketEntry && (isOpen || isRecent)) {
+      if (!bypassDocketEntry && caseEntity.isCaseEligibleForService()) {
         await prepareToGenerateAndServeDocketEntry({
           applicationContext,
           caseEntity,

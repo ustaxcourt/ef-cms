@@ -2,18 +2,13 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
-  calculateISODate,
-  dateStringsCompared,
-} = require('../../utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -55,18 +50,6 @@ const updateCaseEntityAndGenerateChange = async ({
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  //TODO create method on caseEntity
-  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
-    caseEntity.status,
-  );
-  const MAX_CLOSED_DATE = calculateISODate({
-    howMuch: -6,
-    units: 'months',
-  });
-  const isRecent =
-    caseEntity.closedDate &&
-    dateStringsCompared(caseEntity.closedDate, MAX_CLOSED_DATE) >= 0;
-
   const documentType = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
@@ -76,7 +59,7 @@ const updateCaseEntityAndGenerateChange = async ({
       petitionerObject.contactId,
     );
 
-  if (isOpen || isRecent) {
+  if (caseEntity.isCaseEligibleForService()) {
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
