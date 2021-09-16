@@ -52,13 +52,11 @@ export const admissionsClerkEditsPractitionerInfo = cerebralTest => {
       cerebralTest.getState('practitionerDetail.contact.address1'),
     ).toEqual('123 Legal Way');
 
-    console.log('which case?', cerebralTest.docketNumber);
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
     const caseDetail = cerebralTest.getState('caseDetail');
-    console.log('caseDetail', caseDetail);
     const noticeDocument = caseDetail.docketEntries.find(
       document => document.documentType === 'Notice of Change of Address',
     );
