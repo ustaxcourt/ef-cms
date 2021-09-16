@@ -56,19 +56,9 @@ const updateCaseEntityAndGenerateChange = async ({
     applicationContext,
   });
 
-  const petitionerObject = caseEntity.getPetitionerById(
-    petitionerOnCase.contactId,
-  );
-  if (!petitionerObject) {
-    applicationContext.logger.error(
-      `Could not find user|${petitionerOnCase.contactId} on ${caseEntity.docketNumber}`,
-    );
-    return;
-  }
-
   const newData = {
     email: petitionerOnCase.newEmail,
-    name: petitionerObject.name,
+    name: petitionerOnCase.name,
   };
   const oldData = { email: petitionerOnCase.oldEmail };
 
@@ -76,10 +66,10 @@ const updateCaseEntityAndGenerateChange = async ({
 
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerObject.contactId,
+      petitionerOnCase.contactId,
     )
   ) {
-    petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    petitionerOnCase.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
   const documentType = applicationContext
@@ -88,7 +78,7 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const privatePractitionersRepresentingContact =
     caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerObject.contactId,
+      petitionerOnCase.contactId,
     );
 
   if (caseEntity.isCaseEligibleForService()) {
@@ -322,24 +312,25 @@ const updatePetitionerInformationInteractor = async (
         applicationContext,
         caseToUpdate: caseEntity,
       });
-      const petitionerOnCase = caseEntity.getPetitionerByEmail(
+      const existingPetitioner = caseEntity.getPetitionerByEmail(
         updatedPetitionerData.updatedEmail,
       );
 
-      petitionerOnCase.oldEmail = oldCaseContact.email;
-      petitionerOnCase.newEmail = updatedPetitionerData.updatedEmail;
+      oldCaseContact.oldEmail = oldCaseContact.email;
+      oldCaseContact.newEmail = updatedPetitionerData.updatedEmail;
+      oldCaseContact.contactId = existingPetitioner.contactId;
 
       const petitionerCases = await applicationContext
         .getPersistenceGateway()
         .getCasesForUser({
           applicationContext,
-          userId: petitionerOnCase.contactId,
+          userId: existingPetitioner.contactId,
         });
 
       await updateCasesForPetitioner({
         applicationContext,
         petitionerCases,
-        petitionerOnCase,
+        petitionerOnCase: oldCaseContact,
         user,
       });
     }
