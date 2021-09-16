@@ -34,7 +34,6 @@ describe('Modify Petitioner Email', () => {
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    console.log('docketNumber!', caseDetail.docketNumber);
     await refreshElasticsearchIndex();
   });
 
