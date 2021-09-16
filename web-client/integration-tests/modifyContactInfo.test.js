@@ -56,6 +56,6 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCasePrimaryContactAddressAndPhone(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsNoticeOfChangeOfAddress(cerebralTest);
+  docketClerkViewsNoticeOfChangeOfAddress({ cerebralTest });
   docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(cerebralTest);
 });
