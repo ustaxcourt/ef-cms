@@ -446,7 +446,7 @@ describe('updatePetitionerInformationInteractor', () => {
     });
   });
 
-  describe.only('admissions clerk adds a verified petitioner email', () => {
+  describe('admissions clerk adds a verified petitioner email', () => {
     const mockUpdatedEmail = 'changed-email@example.com';
     const foundMockVerifiedPetitioner = {
       email: mockUpdatedEmail,
@@ -476,7 +476,7 @@ describe('updatePetitionerInformationInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesForUser.mockReturnValue(mockCase);
+        .getCasesForUser.mockReturnValue([MOCK_CASE]);
 
       applicationContext
         .getUseCaseHelpers()
@@ -497,8 +497,8 @@ describe('updatePetitionerInformationInteractor', () => {
       ).toHaveBeenCalled();
 
       expect(
-        applicationContext.getPersistenceGateway().updateCase,
-      ).toHaveBeenCalledTimes(1);
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      ).toHaveBeenCalled();
     });
 
     it('should not call the update addExistingUserToCase use case helper when the petitioner is unchanged', async () => {
