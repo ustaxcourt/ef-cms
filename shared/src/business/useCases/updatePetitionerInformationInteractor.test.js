@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   addExistingUserToCase,
 } = require('../useCaseHelper/caseAssociation/addExistingUserToCase');
@@ -5,6 +6,7 @@ const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
@@ -22,6 +24,7 @@ const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
 jest.mock('./addCoversheetInteractor');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
+const { DocketEntry } = require('../entities/DocketEntry');
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
@@ -484,6 +487,30 @@ describe('updatePetitionerInformationInteractor', () => {
     });
 
     it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generateAndServeDocketEntry.mockReturnValue({
+          changeOfAddressDocketEntry: new DocketEntry(
+            {
+              createdAt: '2018-11-21T20:49:28.192Z',
+              docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketNumber: '101-18',
+              documentTitle: 'Petition',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+              filedBy: 'Test Petitioner',
+              filingDate: '2018-03-01T05:00:00.000Z',
+              index: 1,
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              processingStatus: 'complete',
+              receivedAt: '2018-03-01T05:00:00.000Z',
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+            { applicationContext },
+          ),
+        });
+
       await updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
