@@ -191,7 +191,7 @@ const generateAndServeDocketEntry = async ({
   documentType,
   newData,
   oldData,
-  privatePractitionersRepresentingContact,
+  privatePractitionersRepresentingContact = [],
   servedParties,
   user,
 }) => {
@@ -204,7 +204,7 @@ const generateAndServeDocketEntry = async ({
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
   let changeOfAddressDocketEntry;
-  if (paperServiceRequested) {
+  if (paperServiceRequested || !privatePractitionersRepresentingContact) {
     ({ changeOfAddressDocketEntry } = await createDocketEntryAndWorkItem({
       applicationContext,
       barNumber,
