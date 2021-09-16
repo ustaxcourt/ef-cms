@@ -76,7 +76,7 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
-  const privatePractitionersRepresentingContact =
+  const isContactRepresented =
     caseEntity.isUserIdRepresentedByPrivatePractitioner(
       petitionerOnCase.contactId,
     );
@@ -88,9 +88,9 @@ const updateCaseEntityAndGenerateChange = async ({
         applicationContext,
         caseEntity,
         documentType,
+        isContactRepresented,
         newData,
         oldData,
-        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });
@@ -249,7 +249,7 @@ const updatePetitionerInformationInteractor = async (
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    const privatePractitionersRepresentingContact =
+    const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         oldCaseContact.contactId,
       );
@@ -259,10 +259,10 @@ const updatePetitionerInformationInteractor = async (
       applicationContext,
       caseEntity,
       documentType,
+      isContactRepresented,
       newData,
       oldData: oldCaseContact,
       partyWithPaperService,
-      privatePractitionersRepresentingContact,
       servedParties,
       user,
     });
