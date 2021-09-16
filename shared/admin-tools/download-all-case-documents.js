@@ -57,6 +57,7 @@ const downloadPdf = async ({
   let numSealed = 0;
   for (const docketEntry of caseEntity.docketEntries) {
     const {
+      additionalInfo2,
       docketEntryId,
       documentTitle,
       index,
@@ -64,7 +65,10 @@ const downloadPdf = async ({
       isLegacySealed,
     } = docketEntry;
     // console.log(docketEntry);
-    const isSealed = isLegacySealed || documentTitle.indexOf('(SEALED)') > -1;
+    const isSealed =
+      isLegacySealed ||
+      documentTitle.indexOf('(SEALED)') > -1 ||
+      additionalInfo2?.indexOf('(SEALED)') > -1;
 
     if (isSealed) {
       numSealed++;
