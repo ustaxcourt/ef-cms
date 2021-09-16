@@ -54,7 +54,7 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
-  const privatePractitionersRepresentingContact =
+  const isContactRepresented =
     caseEntity.isUserIdRepresentedByPrivatePractitioner(
       petitionerObject.contactId,
     );
@@ -66,9 +66,9 @@ const updateCaseEntityAndGenerateChange = async ({
         applicationContext,
         caseEntity,
         documentType,
+        isContactRepresented,
         newData,
         oldData,
-        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });

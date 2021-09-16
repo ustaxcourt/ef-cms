@@ -152,10 +152,10 @@ const createDocketEntryAndWorkItem = async ({
   caseEntity,
   docketMeta,
   documentType,
+  isContactRepresented,
   newData,
   oldData,
   partyWithPaperService,
-  privatePractitionersRepresentingContact,
   servedParties,
   user,
 }) => {
@@ -171,7 +171,7 @@ const createDocketEntryAndWorkItem = async ({
     user,
   });
 
-  if (!privatePractitionersRepresentingContact || partyWithPaperService) {
+  if (!isContactRepresented || partyWithPaperService) {
     await createWorkItemForChange({
       applicationContext,
       caseEntity,
@@ -189,22 +189,31 @@ const generateAndServeDocketEntry = async ({
   contactName,
   docketMeta,
   documentType,
+  isContactRepresented,
   newData,
   oldData,
-  privatePractitionersRepresentingContact = [],
   servedParties,
   user,
 }) => {
-  const petitionerHasPaperService = caseEntity.petitioners.some(
+  const partyWithPaperService = caseEntity.petitioners.some(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
   const paperServiceRequested =
-    petitionerHasPaperService ||
+    partyWithPaperService ||
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
+  let shouldCreateWorkItem;
+  if (user.role !== (ROLES.irsPractitioner || ROLES.privatePractitioner)) {
+    shouldCreateWorkItem = paperServiceRequested;
+  } else {
+    if (paperServiceRequested || !isContactRepresented) {
+      shouldCreateWorkItem = true;
+    }
+  }
+
   let changeOfAddressDocketEntry;
-  if (paperServiceRequested || !privatePractitionersRepresentingContact) {
+  if (shouldCreateWorkItem) {
     ({ changeOfAddressDocketEntry } = await createDocketEntryAndWorkItem({
       applicationContext,
       barNumber,
@@ -212,10 +221,10 @@ const generateAndServeDocketEntry = async ({
       contactName,
       docketMeta,
       documentType,
+      isContactRepresented,
       newData,
       oldData,
-      partyWithPaperService: petitionerHasPaperService,
-      privatePractitionersRepresentingContact,
+      partyWithPaperService,
       servedParties,
       user,
     }));
