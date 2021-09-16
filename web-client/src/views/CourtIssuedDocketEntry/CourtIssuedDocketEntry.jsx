@@ -207,7 +207,7 @@ export const CourtIssuedDocketEntry = connect(
 
                 <div id="service-parties">
                   {addCourtIssuedDocketEntryHelper.eventCodeIsUnservable && (
-                    <div className="margin-bottom-2">
+                    <div className="margin-bottom-4">
                       This document type does not require service
                     </div>
                   )}
