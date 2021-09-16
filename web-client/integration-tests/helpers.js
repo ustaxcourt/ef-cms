@@ -493,6 +493,8 @@ export const uploadPetition = async (
 
 export const loginAs = (cerebralTest, user) =>
   it(`login as ${user}`, async () => {
+    await cerebralTest.runSequence('signOutSequence');
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'name',
       value: user,

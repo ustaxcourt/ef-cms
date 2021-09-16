@@ -7,7 +7,7 @@ import { createMessageAction } from '../actions/CaseDetail/createMessageAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';

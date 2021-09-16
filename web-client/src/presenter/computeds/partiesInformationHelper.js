@@ -112,7 +112,7 @@ export const partiesInformationHelper = (get, applicationContext) => {
 
     const petitionIsServed = !!applicationContext
       .getUtilities()
-      .getPetitionDocketEntry(caseDetail)?.servedAt;
+      .caseHasServedPetition(caseDetail);
 
     const canEditPetitioner = getCanEditPetitioner({
       applicationContext,

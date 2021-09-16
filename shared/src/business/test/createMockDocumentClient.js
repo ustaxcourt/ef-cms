@@ -83,6 +83,14 @@ const createMockDocumentClient = () => {
       };
     }),
     getData: () => mockDynamoUsers,
+    getFromDeployTable: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
+      return {
+        promise: () =>
+          Promise.resolve({
+            Item: mockDynamoUsers[`${pk} ${sk}`],
+          }),
+      };
+    }),
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoUsers[`${Item.pk} ${Item.sk}`] = Item;
       return {
@@ -151,6 +159,14 @@ const createMockDocumentClient = () => {
             }),
         };
       }),
+    scan: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
+      return {
+        promise: () =>
+          Promise.resolve({
+            Item: mockDynamoUsers[`${pk} ${sk}`],
+          }),
+      };
+    }),
     update: jest
       .fn()
       .mockImplementation(
