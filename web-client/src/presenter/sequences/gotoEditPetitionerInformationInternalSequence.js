@@ -7,22 +7,25 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditPetitionerInformationInternalSequence =
-  showProgressSequenceDecorator([
-    clearAlertsAction,
-    clearErrorAlertsAction,
-    setCurrentPageAction('Interstitial'),
-    stopShowValidationAction,
-    getCaseAction,
-    setCaseAction,
-    setupPetitionerContactInformationFormAction,
-    isInternalUserAction,
-    {
-      no: [],
-      yes: [getUserPendingEmailAction, setUserPendingEmailAction],
-    },
-    setCurrentPageAction('EditPetitionerInformationInternal'),
-  ]);
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      clearAlertsAction,
+      clearErrorAlertsAction,
+      setCurrentPageAction('Interstitial'),
+      stopShowValidationAction,
+      getCaseAction,
+      setCaseAction,
+      setupPetitionerContactInformationFormAction,
+      isInternalUserAction,
+      {
+        no: [],
+        yes: [getUserPendingEmailAction, setUserPendingEmailAction],
+      },
+      setCurrentPageAction('EditPetitionerInformationInternal'),
+    ]),
+  );

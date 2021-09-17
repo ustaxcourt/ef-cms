@@ -66,6 +66,7 @@ export const DocketRecord = connect(
         <table
           aria-label="docket record"
           className="usa-table case-detail ustc-table responsive-table"
+          id="docket-record-table"
         >
           <thead>
             <tr>
@@ -96,7 +97,7 @@ export const DocketRecord = connect(
                       entry.isInProgress && 'in-progress',
                       entry.qcWorkItemsUntouched && 'qc-untouched',
                     )}
-                    key={entry.index}
+                    key={entry.docketEntryId}
                   >
                     <td className="center-column hide-on-mobile">
                       {entry.index}

@@ -44,15 +44,15 @@ secondaryNames.forEach(createCaseWithSecondaryName);
  */
 function createCaseWithSecondaryName(name) {
   describe(`Create and serve a case for ${name}`, () => {
+    beforeAll(() => {
+      jest.setTimeout(30000);
+    });
+
+    afterAll(() => {
+      testClient.closeSocket();
+    });
+
     describe(`Petitioner creates case for ${name}`, () => {
-      beforeAll(() => {
-        jest.setTimeout(30000);
-      });
-
-      afterAll(() => {
-        cerebralTest.closeSocket();
-      });
-
       loginAs(testClient, 'petitioner@example.com');
 
       it('Create case', async () => {

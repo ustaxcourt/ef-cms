@@ -9,21 +9,23 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-export const gotoAdvancedSearchSequence = [
-  setCurrentPageAction('Interstitial'),
-  clearScreenMetadataAction,
-  closeMobileMenuAction,
-  defaultAdvancedSearchFormAction,
-  getUsersInSectionAction({ section: 'judge' }),
-  setAllAndCurrentJudgesAction,
-  getOpinionTypesAction,
-  setOpinionTypesAction,
-  setAdvancedSearchPropsOnFormAction,
-  setCurrentPageAction('AdvancedSearch'),
-  getOrderSearchEnabledAction,
-  {
-    no: [setAlertWarningAction],
-    yes: [],
-  },
-];
+export const gotoAdvancedSearchSequence =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    clearScreenMetadataAction,
+    closeMobileMenuAction,
+    defaultAdvancedSearchFormAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    setAllAndCurrentJudgesAction,
+    getOpinionTypesAction,
+    setOpinionTypesAction,
+    setAdvancedSearchPropsOnFormAction,
+    setCurrentPageAction('AdvancedSearch'),
+    getOrderSearchEnabledAction,
+    {
+      no: [setAlertWarningAction],
+      yes: [],
+    },
+  ]);

@@ -23,7 +23,7 @@ lookup a user by their email,user-email|${EMAIL},user|${USER_ID},
 user outbox workitems sorted by date,user-outbox|${USER_ID},$datetime,work-item|${WORK_ITEM_ID}
 associate user with a case,user|${USER_ID},case|${CASE_ID},user-case|${CASE_ID}
 associate user with pending case,user|${USER_ID},pending-case|${CASE_ID},
-save web socket connection associated with the user,user|${USER_ID},connection|${SOCKET_ID},connection|${SOCKET_ID}
+save web socket connection associated with the user,user|${USER_ID},connection|${SOCKET_ID},connection
 create a user,user|${USER_ID},user|${USER_ID},
 save work items for a user inbox,user|${USER_ID},work-item|${WORK_ITEM_ID},work-item|${WORK_ITEM_ID}
 a work item entry,work-item|${WORK_ITEM_ID},work-item|${WORK_ITEM_ID},work-item|${WORK_ITEM_ID}

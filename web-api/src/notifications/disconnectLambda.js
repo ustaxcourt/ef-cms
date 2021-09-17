@@ -24,5 +24,5 @@ exports.disconnectLambda = event =>
 
       return results;
     },
-    { user: {} },
+    { bypassMaintenanceCheck: true, user: {} },
   );

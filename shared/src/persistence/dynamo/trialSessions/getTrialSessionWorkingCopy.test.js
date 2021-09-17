@@ -1,3 +1,4 @@
+jest.mock('../../dynamodbClientService');
 const client = require('../../dynamodbClientService');
 const {
   applicationContext,
@@ -6,7 +7,7 @@ const { getTrialSessionWorkingCopy } = require('./getTrialSessionWorkingCopy');
 
 describe('getTrialSessionWorkingCopy', () => {
   beforeEach(() => {
-    client.get = jest.fn().mockReturnValue({
+    client.get.mockReturnValue({
       pk: 'trial-session-working-copy|123',
       sk: '456',
       sort: 'practitioner',

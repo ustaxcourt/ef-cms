@@ -64,11 +64,15 @@ const updateCaseCaption = (docketNumber, caseCaption) => {
 };
 
 describe('Create and serve a case to test contactPrimary.name', () => {
-  describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(20000);
-    });
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
+  describe('Petitioner creates case', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -95,15 +99,15 @@ describe('Create and serve a case to test contactPrimary.name', () => {
 });
 
 describe('Create and serve a case to test contactPrimary.secondaryName', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
   describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
-
-    afterAll(() => {
-      cerebralTest.closeSocket();
-    });
-
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -131,11 +135,15 @@ describe('Create and serve a case to test contactPrimary.secondaryName', () => {
 });
 
 describe('Create and serve a case to test contactSecondary.name', () => {
-  describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
+  describe('Petitioner creates case', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -163,11 +171,15 @@ describe('Create and serve a case to test contactSecondary.name', () => {
 });
 
 describe('Create and serve a case to test caseCaption', () => {
-  describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
+  describe('Petitioner creates case', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
@@ -190,11 +202,15 @@ describe('Create and serve a case to test caseCaption', () => {
 });
 
 describe('Create and serve a case to test contactPrimary.name with terms out of order that shows last in search results', () => {
-  describe('Petitioner creates case', () => {
-    beforeAll(() => {
-      jest.setTimeout(30000);
-    });
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
 
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
+  describe('Petitioner creates case', () => {
     loginAs(testClient, 'petitioner@example.com');
 
     it('Create case', async () => {
