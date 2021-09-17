@@ -25,6 +25,35 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
+
+          <div className="usa-radio usa-radio__inline">
+            <input
+              aria-describedby="session-scope"
+              checked={form.sessionScope}
+              className="usa-radio__input"
+              id={`sessionScope`}
+              name="sessionScope"
+              type="radio"
+              // value={option}
+              // onBlur={() => {
+              //   validateTrialSessionSequence();
+              // }}
+              // onChange={e => {
+              //   updateTrialSessionFormDataSequence({
+              //     key: e.target.name,
+              //     value: e.target.value,
+              //   });
+              // }}
+            />
+            <label
+              // aria-label={option.toUpperCase()}
+              className="smaller-padding-right usa-radio__label"
+              htmlFor={`sessionScope`}
+            >
+              Location-based
+            </label>
+          </div>
+
           <DateInput
             errorText={validationErrors.startDate}
             id="start-date"
