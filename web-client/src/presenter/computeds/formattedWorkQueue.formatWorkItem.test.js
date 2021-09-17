@@ -330,20 +330,19 @@ describe('formatWorkItem', () => {
     expect(result.isCourtIssuedDocument).toBeFalsy();
   });
 
-  it('should return isCourtIssuedDocument as true when the eventCode is a court issued document type and the docketEntry.isPaper is undefined', () => {
+  it('should return isCourtIssuedDocument as true when the eventCode is a court issued document type', () => {
     const workItem = {
       ...baseWorkItem,
       docketEntry: {
         ...baseWorkItem.docketEntry,
         documentType: 'Miscellaneous',
         eventCode: 'O',
-        isPaper: undefined,
       },
     };
 
     const result = formatWorkItem({ applicationContext, workItem });
 
-    expect(result.isCourtIssuedDocument).toBe(true);
+    expect(result.isCourtIssuedDocument).toBeTruthy();
   });
 
   it('should return isOrder as true when the documentType is a court issued document type', () => {

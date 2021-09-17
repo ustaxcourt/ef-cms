@@ -100,10 +100,9 @@ export const formatWorkItem = ({
     applicationContext,
   );
 
-  result.isCourtIssuedDocument =
-    !!COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
-      result.docketEntry.eventCode,
-    ) && !result.docketEntry.isPaper;
+  result.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(result.docketEntry.eventCode);
 
   result.isOrder = !!orderDocumentTypes.includes(
     result.docketEntry.documentType,
@@ -135,6 +134,7 @@ const getDocketEntryEditLink = ({
   let editLink;
   if (
     formattedDocument.isCourtIssuedDocument &&
+    !formattedDocument.isPaper &&
     !applicationContext.getUtilities().isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
