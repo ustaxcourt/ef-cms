@@ -26,6 +26,9 @@ const {
   createPetitionerAccountInteractor,
 } = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
 const {
+  documentUrlTranslator,
+} = require('../../../..shared/src/business/utilities/documentUrlTranslator');
+const {
   generateAndServeDocketEntry,
 } = require('../../../../shared/src/business/useCaseHelper/service/createChangeItems');
 const {
@@ -102,7 +105,10 @@ const { Case } = require('../../../../shared/src/business/entities/cases/Case');
 const { getUniqueId } = require('../../../../shared/src/sharedAppContext.js');
 const { DynamoDB, S3, SES } = AWS;
 
-const environment = { s3Endpoint: process.env.S3_ENDPOINT || 'localhost' };
+const environment = {
+  s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
+  tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
+};
 
 const logger = createLogger({
   defaultMeta: {
@@ -116,6 +122,7 @@ let s3Cache;
 let sesCache;
 
 const applicationContext = {
+  documentUrlTranslator,
   getCaseTitle: Case.getCaseTitle,
   getChromiumBrowser,
   getConstants: () => ({ MAX_SES_RETRIES: 6 }),
@@ -217,6 +224,9 @@ const applicationContext = {
       });
     }
     return s3Cache;
+  },
+  getTempDocumentsBucketName: () => {
+    return environment.tempDocumentsBucketName;
   },
   getUniqueId,
   getUseCaseHelpers: () => ({
