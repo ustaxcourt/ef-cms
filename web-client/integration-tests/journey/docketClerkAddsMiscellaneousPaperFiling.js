@@ -1,4 +1,9 @@
 import { contactPrimaryFromState } from '../helpers';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkAddsMiscellaneousPaperFiling = (
   cerebralTest,
@@ -78,8 +83,21 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
 
-    // go to individual in progress
-    // check link for misc doc
-    // check page is complete de
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'inProgress',
+      queue: 'my',
+    });
+
+    const formattedQueue = runCompute(formattedWorkQueue, {
+      state: cerebralTest.getState(),
+    });
+
+    const miscellaneousWorkItem = formattedQueue.find(
+      doc => doc.docketEntryId === miscellaneousDocument.docketEntryId,
+    );
+
+    expect(miscellaneousWorkItem.editLink).toEqual('/complete');
   });
 };
