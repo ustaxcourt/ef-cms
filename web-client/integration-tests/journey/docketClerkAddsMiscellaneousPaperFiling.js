@@ -1,4 +1,4 @@
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -66,6 +66,8 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
+
+    await refreshElasticsearchIndex();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
