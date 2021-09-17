@@ -44,6 +44,9 @@ const {
   getDocumentTypeForAddressChange,
 } = require('../../../../shared/src/business/utilities/generateChangeOfAddressTemplate');
 const {
+  getDownloadPolicyUrl,
+} = require('../../../../shared/src/persistence/s3/getDownloadPolicyUrl');
+const {
   getUserById,
 } = require('../../../../shared/src/persistence/dynamo/users/getUserById');
 const {
@@ -189,6 +192,7 @@ const applicationContext = {
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
     getDocketNumbersByUser,
+    getDownloadPolicyUrl,
     getUserById,
     getUserCaseMappingsByDocketNumber,
     getWebSocketConnectionsByUserId,
