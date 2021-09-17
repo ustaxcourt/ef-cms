@@ -155,41 +155,6 @@ const createWorkItemForChange = async ({
   });
 };
 
-const createDocketEntryAndWorkItem = async ({
-  applicationContext,
-  caseEntity,
-  docketMeta,
-  documentType,
-  isContactRepresented,
-  newData,
-  oldData,
-  partyWithPaperService,
-  servedParties,
-  user,
-}) => {
-  const changeDocs = await createDocketEntryForChange({
-    applicationContext,
-    caseEntity,
-    contactName: newData.name,
-    docketMeta,
-    documentType,
-    newData,
-    oldData,
-    servedParties,
-    user,
-  });
-
-  if (!isContactRepresented || partyWithPaperService) {
-    await createWorkItemForChange({
-      applicationContext,
-      caseEntity,
-      changeOfAddressDocketEntry: changeDocs.changeOfAddressDocketEntry,
-      user,
-    });
-  }
-  return changeDocs;
-};
-
 const generateAndServeDocketEntry = async ({
   applicationContext,
   barNumber,
@@ -219,41 +184,33 @@ const generateAndServeDocketEntry = async ({
   ) {
     shouldCreateWorkItem = paperServiceRequested;
   } else {
-    if (paperServiceRequested || !isContactRepresented) {
+    if (partyWithPaperService || !isContactRepresented) {
       shouldCreateWorkItem = true;
     }
   }
 
   let changeOfAddressDocketEntry;
   let url;
+  ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
+    applicationContext,
+    barNumber,
+    caseEntity,
+    contactName,
+    docketMeta,
+    documentType,
+    newData,
+    oldData,
+    servedParties,
+    user,
+  }));
+
   if (shouldCreateWorkItem) {
-    ({ changeOfAddressDocketEntry, url } = await createDocketEntryAndWorkItem({
+    await createWorkItemForChange({
       applicationContext,
-      barNumber,
       caseEntity,
-      contactName,
-      docketMeta,
-      documentType,
-      isContactRepresented,
-      newData,
-      oldData,
-      partyWithPaperService,
-      servedParties,
+      changeOfAddressDocketEntry,
       user,
-    }));
-  } else {
-    ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
-      applicationContext,
-      barNumber,
-      caseEntity,
-      contactName,
-      docketMeta,
-      documentType,
-      newData,
-      oldData,
-      servedParties,
-      user,
-    }));
+    });
   }
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
@@ -266,7 +223,6 @@ const generateAndServeDocketEntry = async ({
 };
 
 module.exports = {
-  createDocketEntryAndWorkItem,
   createDocketEntryForChange,
   createWorkItemForChange,
   generateAndServeDocketEntry,
