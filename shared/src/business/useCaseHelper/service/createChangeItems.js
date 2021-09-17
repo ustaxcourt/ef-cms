@@ -43,9 +43,10 @@ const createDocketEntryForChange = async ({
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner
   ) {
-    changeOfAddressPdfName = `${newData.name} (${user.barNumber})`;
+    changeOfAddressPdfName = changeOfAddressPdfName + ` (${user.barNumber})`;
     contactName = newData.name;
   }
+
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
     .changeOfAddress({
