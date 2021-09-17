@@ -166,6 +166,11 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getPersistenceGateway: () => ({
       getCaseByDocketNumber,
       getDocketNumbersByUser,
+      getDownloadPolicyUrl: () => {
+        return {
+          url: 'http://example.com',
+        };
+      },
       getUserById,
       saveDocumentFromLambda,
       saveWorkItem,
