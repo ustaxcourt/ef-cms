@@ -12,9 +12,6 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
-  createDocketEntryAndWorkItem,
-} = require('../useCaseHelper/service/createChangeItems');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
@@ -237,40 +234,30 @@ const updatePetitionerInformationInteractor = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let petitionerChangeDocs;
-  let serviceResults;
+  let serviceUrl;
 
   if (documentType && !oldCaseContact.isAddressSealed) {
-    const partyWithPaperService = caseEntity.hasPartyWithServiceType(
-      SERVICE_INDICATOR_TYPES.SI_PAPER,
-    );
-
     const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         oldCaseContact.contactId,
       );
 
     const newData = editableFields;
-    petitionerChangeDocs = await createDocketEntryAndWorkItem({
-      applicationContext,
-      caseEntity,
-      documentType,
-      isContactRepresented,
-      newData,
-      oldData: oldCaseContact,
-      partyWithPaperService,
-      servedParties,
-      user,
-    });
+    const oldData = oldCaseContact;
 
-    serviceResults = await applicationContext
+    const { url } = await applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
+      .generateAndServeDocketEntry({
         applicationContext,
         caseEntity,
-        docketEntryId:
-          petitionerChangeDocs.changeOfAddressDocketEntry.docketEntryId,
+        documentType,
+        isContactRepresented,
+        newData,
+        oldData,
+        servedParties,
+        user,
       });
+    serviceUrl = url;
   }
 
   if (
@@ -341,7 +328,7 @@ const updatePetitionerInformationInteractor = async (
 
   return {
     paperServiceParties: servedParties.paper,
-    paperServicePdfUrl: serviceResults?.url,
+    paperServicePdfUrl: serviceUrl,
     updatedCase,
   };
 };

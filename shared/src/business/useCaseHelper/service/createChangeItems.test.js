@@ -190,4 +190,30 @@ describe('generateAndServeDocketEntry', () => {
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
   });
+
+  it('does not throw an error if docketMeta is undefined', async () => {
+    await expect(
+      generateAndServeDocketEntry({
+        ...testArguments,
+        caseEntity: new Case(
+          {
+            ...testCaseEntity,
+            petitioners: [
+              {
+                ...testCaseEntity.petitioners[0],
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+              },
+            ],
+          },
+          { applicationContext },
+        ),
+        docketMeta: undefined,
+        user: {
+          ...testUser,
+          role: ROLES.privatePractitioner,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      }),
+    ).resolves.toBeTruthy();
+  });
 });

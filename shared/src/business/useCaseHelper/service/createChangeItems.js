@@ -105,11 +105,18 @@ const createDocketEntryForChange = async ({
     document: changeOfAddressPdfWithCover,
     key: newDocketEntryId,
   });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: newDocketEntryId,
+    });
 
   return {
     changeOfAddressDocketEntry,
     changeOfAddressPdfWithCover,
     servedParties,
+    url,
   };
 };
 
@@ -218,8 +225,9 @@ const generateAndServeDocketEntry = async ({
   }
 
   let changeOfAddressDocketEntry;
+  let url;
   if (shouldCreateWorkItem) {
-    ({ changeOfAddressDocketEntry } = await createDocketEntryAndWorkItem({
+    ({ changeOfAddressDocketEntry, url } = await createDocketEntryAndWorkItem({
       applicationContext,
       barNumber,
       caseEntity,
@@ -234,7 +242,7 @@ const generateAndServeDocketEntry = async ({
       user,
     }));
   } else {
-    ({ changeOfAddressDocketEntry } = await createDocketEntryForChange({
+    ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
       applicationContext,
       barNumber,
       caseEntity,
@@ -254,7 +262,7 @@ const generateAndServeDocketEntry = async ({
     servedParties,
   });
 
-  return { caseEntity, changeOfAddressDocketEntry };
+  return { caseEntity, changeOfAddressDocketEntry, url };
 };
 
 module.exports = {

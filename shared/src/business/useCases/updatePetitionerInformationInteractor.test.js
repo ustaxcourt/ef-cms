@@ -229,7 +229,7 @@ describe('updatePetitionerInformationInteractor', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
   });
 
