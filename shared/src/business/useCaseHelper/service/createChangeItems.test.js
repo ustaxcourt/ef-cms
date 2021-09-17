@@ -1,10 +1,13 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { generateAndServeDocketEntry } = require('./createChangeItems');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('generateAndServeDocketEntry', () => {
   let testCaseEntity;
@@ -134,5 +137,57 @@ describe('generateAndServeDocketEntry', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should NOT create a work item when privatePractitioner updates their email and no parties have paper service', async () => {
+    await generateAndServeDocketEntry({
+      ...testArguments,
+      caseEntity: new Case(
+        {
+          ...testCaseEntity,
+          petitioners: [
+            {
+              ...testCaseEntity.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      ),
+      user: {
+        ...testUser,
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      },
+    });
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should create a work item when privatePractitioner updates their email and their service was set to paper', async () => {
+    await generateAndServeDocketEntry({
+      ...testArguments,
+      caseEntity: new Case(
+        {
+          ...testCaseEntity,
+          petitioners: [
+            {
+              ...testCaseEntity.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      ),
+      user: {
+        ...testUser,
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalled();
   });
 });
