@@ -100,9 +100,10 @@ export const formatWorkItem = ({
     applicationContext,
   );
 
-  result.isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode }) => eventCode,
-  ).includes(result.docketEntry.eventCode);
+  result.isCourtIssuedDocument =
+    !!COURT_ISSUED_EVENT_CODES.map(({ eventCode }) => eventCode).includes(
+      result.docketEntry.eventCode,
+    ) && !result.docketEntry.isPaper;
 
   result.isOrder = !!orderDocumentTypes.includes(
     result.docketEntry.documentType,
