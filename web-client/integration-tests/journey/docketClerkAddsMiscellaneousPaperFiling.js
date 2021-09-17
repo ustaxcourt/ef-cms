@@ -85,6 +85,8 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
 
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
     await cerebralTest.runSequence('chooseWorkQueueSequence', {
       box: 'inProgress',
       queue: 'my',
