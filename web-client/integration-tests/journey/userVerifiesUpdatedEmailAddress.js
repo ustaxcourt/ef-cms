@@ -4,7 +4,6 @@ export const userVerifiesUpdatedEmailAddress = (cerebralTest, user) =>
   it(`${user} verifies updated email address`, async () => {
     const userFromState = cerebralTest.getState('user');
     const userFromPersistence = await getUserRecordById(userFromState.userId);
-
     const emailVerificationToken =
       userFromPersistence.pendingEmailVerificationToken;
 

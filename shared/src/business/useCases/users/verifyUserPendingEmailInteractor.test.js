@@ -12,6 +12,7 @@ const {
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -252,6 +253,44 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).not.toBeCalled();
   });
 
+  it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValueOnce({
+      ...getContactPrimary(MOCK_CASE),
+      email: 'test@example.com',
+      pendingEmail: 'other@example.com',
+      pendingEmailVerificationToken: TOKEN,
+      role: ROLES.petitioner,
+      userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockReturnValueOnce([
+        { docketNumber: MOCK_CASE.docketNumber },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockImplementationOnce(() => {
+        return userCases.map(c => c.docketNumber);
+      });
+
+    await verifyUserPendingEmailInteractor(applicationContext, {
+      token: TOKEN,
+    });
+
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-21',
+    );
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).not.toBeCalled();
+  });
+
   describe('update cases', () => {
     beforeEach(() => {
       userCases = [
@@ -358,6 +397,18 @@ describe('verifyUserPendingEmailInteractor', () => {
   });
 
   describe('generating a docket entry', () => {
+    beforeAll(() => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generateAndServeDocketEntry.mockReturnValue({
+          changeOfAddressDocketEntry: {
+            ...MOCK_DOCUMENTS[0],
+            entityName: 'DocketEntry',
+            isMinuteEntry: 'false',
+          },
+        });
+    });
+
     it('should call generateAndServeDocketEntry if case is open', async () => {
       applicationContext
         .getPersistenceGateway()

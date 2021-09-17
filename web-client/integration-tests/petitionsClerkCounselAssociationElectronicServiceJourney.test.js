@@ -24,28 +24,33 @@ const formattedCaseDetail = withAppContextDecorator(
 
 describe('Petitions Clerk Counsel Association Journey', () => {
   beforeAll(() => {
-    jest.setTimeout(30000);
+    jest.setTimeout(40000);
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner4@example.com');
+  const loginUsername = 'petitioner4@example.com';
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
-      contactSecondary: {
-        address1: '734 Cowley Parkway',
-        city: 'Amazing',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Test Petitioner 2',
-        phone: '+1 (884) 358-9729',
-        postalCode: '77546',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'AZ',
+    const caseDetail = await uploadPetition(
+      cerebralTest,
+      {
+        contactSecondary: {
+          address1: '734 Cowley Parkway',
+          city: 'Amazing',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Test Petitioner 2',
+          phone: '+1 (884) 358-9729',
+          postalCode: '77546',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'AZ',
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
       },
-      partyType: PARTY_TYPES.petitionerSpouse,
-    });
+      loginUsername,
+    );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
@@ -206,7 +211,6 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
     cerebralTest.contactPrimaryId = contactPrimary.contactId;
-
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
