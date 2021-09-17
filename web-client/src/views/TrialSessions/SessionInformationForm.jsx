@@ -7,6 +7,7 @@ import classNames from 'classnames';
 
 export const SessionInformationForm = connect(
   {
+    TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
     form: state.form,
     formattedTrialSessions: state.formattedTrialSessions,
     updateTrialSessionFormDataSequence:
@@ -17,6 +18,7 @@ export const SessionInformationForm = connect(
   function SessionInformationForm({
     form,
     formattedTrialSessions,
+    TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -25,35 +27,40 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-
-          <div className="usa-radio usa-radio__inline">
-            <input
-              aria-describedby="session-scope"
-              checked={form.sessionScope}
-              className="usa-radio__input"
-              id={`sessionScope`}
-              name="sessionScope"
-              type="radio"
-              // value={option}
-              // onBlur={() => {
-              //   validateTrialSessionSequence();
-              // }}
-              // onChange={e => {
-              //   updateTrialSessionFormDataSequence({
-              //     key: e.target.name,
-              //     value: e.target.value,
-              //   });
-              // }}
-            />
-            <label
-              // aria-label={option.toUpperCase()}
-              className="smaller-padding-right usa-radio__label"
-              htmlFor={`sessionScope`}
-            >
-              Location-based
-            </label>
+          <div className="margin-bottom-2">
+            <legend className="usa-legend" id="session-type-legend">
+              Session scope
+            </legend>
+            {Object.entries(TRIAL_SESSION_SCOPE_TYPES).map(([key, value]) => (
+              <div className="usa-radio usa-radio__inline" key={key}>
+                <input
+                  aria-describedby="session-scope"
+                  checked={form.sessionScope === value}
+                  className="usa-radio__input"
+                  id={`${key}-sessionScope`}
+                  name="sessionScope"
+                  type="radio"
+                  value={value}
+                  onBlur={() => {
+                    validateTrialSessionSequence();
+                  }}
+                  onChange={e => {
+                    updateTrialSessionFormDataSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <label
+                  aria-label={value}
+                  className="smaller-padding-right usa-radio__label"
+                  htmlFor={'sessionScope'}
+                >
+                  {value}
+                </label>
+              </div>
+            ))}
           </div>
-
           <DateInput
             errorText={validationErrors.startDate}
             id="start-date"
