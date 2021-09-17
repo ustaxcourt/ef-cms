@@ -184,7 +184,7 @@ const generateAndServeDocketEntry = async ({
   ) {
     shouldCreateWorkItem = paperServiceRequested;
   } else {
-    if (partyWithPaperService || !isContactRepresented) {
+    if (paperServiceRequested || !isContactRepresented) {
       shouldCreateWorkItem = true;
     }
   }
