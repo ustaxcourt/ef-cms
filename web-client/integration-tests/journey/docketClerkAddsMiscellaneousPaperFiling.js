@@ -58,7 +58,9 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       value: 'A title',
     });
 
-    await cerebralTest.runSequence('submitPaperFilingSequence');
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
+      isSavingForLater: true,
+    });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
@@ -75,5 +77,9 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
 
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
+
+    // go to individual in progress
+    // check link for misc doc
+    // check page is complete de
   });
 };
