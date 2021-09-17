@@ -1,5 +1,9 @@
 const joi = require('joi');
-const { activate, createDawsonUser, deactivate } = require('./admin');
+const {
+  activateAdminAccount,
+  createDawsonUser,
+  deactivateAdminAccount,
+} = require('./admin');
 const { checkEnvVar, getUserPoolId } = require('../util');
 const { CognitoIdentityServiceProvider } = require('aws-sdk');
 
@@ -145,8 +149,8 @@ const sendWelcomeEmail = async email => {
     section: process.argv[5],
   };
   checkParams(params);
-  await activate();
+  await activateAdminAccount();
   await createDawsonUser({ user: params });
-  await deactivate();
+  await deactivateAdminAccount();
   await sendWelcomeEmail(params.email);
 })();

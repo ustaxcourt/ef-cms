@@ -49,7 +49,7 @@ exports.createUserInteractor = async (applicationContext, { user }) => {
 
   const { userId } = await applicationContext
     .getPersistenceGateway()
-    .createUser({
+    .createOrUpdateUser({
       applicationContext,
       disableCognitoUser: user.role === ROLES.legacyJudge,
       password: user.password,

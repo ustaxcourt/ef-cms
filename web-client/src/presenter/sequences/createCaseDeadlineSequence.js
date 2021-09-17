@@ -9,7 +9,7 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCaseDeadlineAction';

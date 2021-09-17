@@ -8,11 +8,11 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionWorkingCopy the trial session working copy data
  * @returns {Promise} the promise of the call to persistence
  */
-exports.createTrialSessionWorkingCopy = async ({
+exports.createTrialSessionWorkingCopy = ({
   applicationContext,
   trialSessionWorkingCopy,
-}) => {
-  return await put({
+}) =>
+  put({
     Item: {
       ...trialSessionWorkingCopy,
       pk: `trial-session-working-copy|${trialSessionWorkingCopy.trialSessionId}`,
@@ -20,4 +20,3 @@ exports.createTrialSessionWorkingCopy = async ({
     },
     applicationContext,
   });
-};

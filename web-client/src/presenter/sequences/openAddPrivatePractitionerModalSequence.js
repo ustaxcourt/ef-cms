@@ -7,7 +7,7 @@ import { setDefaultServiceIndicatorAction } from '../actions/setDefaultServiceIn
 import { setPractitionersAction } from '../actions/ManualAssociation/setPractitionersAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const openAddPrivatePractitionerModalSequence =
   showProgressSequenceDecorator([

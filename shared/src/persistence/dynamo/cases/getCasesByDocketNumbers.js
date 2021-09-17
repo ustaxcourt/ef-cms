@@ -9,15 +9,11 @@ const { uniq } = require('lodash');
  * @param {Array} providers.docketNumbers the docket numbers to get
  * @returns {Array} the case details
  */
-exports.getCasesByDocketNumbers = async ({
-  applicationContext,
-  docketNumbers,
-}) => {
-  return await client.batchGet({
+exports.getCasesByDocketNumbers = ({ applicationContext, docketNumbers }) =>
+  client.batchGet({
     applicationContext,
     keys: uniq(docketNumbers).map(docketNumber => ({
       pk: `case|${docketNumber}`,
       sk: `case|${docketNumber}`,
     })),
   });
-};

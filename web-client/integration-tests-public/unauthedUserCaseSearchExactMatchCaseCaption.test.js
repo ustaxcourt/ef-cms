@@ -53,15 +53,15 @@ caseCaptionNames.forEach(createCaseWithCaption);
  */
 function createCaseWithCaption(captionString) {
   describe(`Create and serve a case with "${captionString}" in the case caption`, () => {
+    beforeAll(() => {
+      jest.setTimeout(30000);
+    });
+
+    afterAll(() => {
+      testClient.closeSocket();
+    });
+
     describe('Petitioner creates the case with the desired caption string', () => {
-      beforeAll(() => {
-        jest.setTimeout(30000);
-      });
-
-      afterAll(() => {
-        cerebralTest.closeSocket();
-      });
-
       loginAs(testClient, 'petitioner@example.com');
 
       it('Creates the case', async () => {

@@ -35,6 +35,13 @@
   width: 100%;
 }
 
+.app-maintenance-modal {
+  width: 650px !important;
+
+  @media only screen and (min-width: $medium-screen) {
+    background: #faf3d1 !important;
+  }
+}
 .modal-dialog {
   position: relative;
   display: block;
