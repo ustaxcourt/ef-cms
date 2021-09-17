@@ -95,9 +95,9 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
     });
 
     const miscellaneousWorkItem = formattedQueue.find(
-      doc => doc.docketEntryId === miscellaneousDocument.docketEntryId,
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
-    expect(miscellaneousWorkItem.editLink).toEqual('/complete');
+    expect(miscellaneousWorkItem.editLink).toContain('/complete');
   });
 };
