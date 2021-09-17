@@ -18,33 +18,24 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 4,
-    });
+    const docketEntryFormValues = {
+      dateReceivedDay: 30,
+      dateReceivedMonth: 4,
+      dateReceivedYear: 2001,
+      eventCode: 'MISC',
+      freeText: 'A title',
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 100,
+    };
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 30,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2001,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
+    for (const [key, value] of Object.entries(docketEntryFormValues)) {
+      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+        key,
+        value,
+      });
+    }
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -52,16 +43,6 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
         value: true,
       },
     );
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'MISC',
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'A title',
-    });
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
