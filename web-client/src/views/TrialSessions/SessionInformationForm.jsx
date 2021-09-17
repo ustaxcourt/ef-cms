@@ -27,7 +27,7 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-          <div className="margin-bottom-2">
+          <div className="margin-bottom-3">
             <legend className="usa-legend" id="session-type-legend">
               Session scope
             </legend>
