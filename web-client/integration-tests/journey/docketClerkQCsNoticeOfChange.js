@@ -14,7 +14,6 @@ export const docketClerkQCsNoticeOfChange = ({
   documentTitle,
 }) => {
   return it(`Docket Clerk QCs ${documentTitle}`, async () => {
-    console.log('????Docketclerkqcs', cerebralTest.getState('caseDetail'));
     await refreshElasticsearchIndex();
 
     cerebralTest.setState('caseDetail', {});
@@ -30,7 +29,6 @@ export const docketClerkQCsNoticeOfChange = ({
     const workQueueFormatted = runCompute(formattedWorkQueue, {
       state: cerebralTest.getState(),
     });
-    console.log('workQueueFormatted!!', workQueueFormatted);
     const noticeOfChangeQCItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );

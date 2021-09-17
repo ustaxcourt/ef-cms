@@ -204,7 +204,11 @@ const generateAndServeDocketEntry = async ({
     user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
 
   let shouldCreateWorkItem;
-  if (user.role !== (ROLES.irsPractitioner || ROLES.privatePractitioner)) {
+
+  if (
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.privatePractitioner
+  ) {
     shouldCreateWorkItem = paperServiceRequested;
   } else {
     if (paperServiceRequested || !isContactRepresented) {
