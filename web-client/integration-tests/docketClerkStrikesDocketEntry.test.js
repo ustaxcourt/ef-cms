@@ -34,6 +34,8 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitioner@example.com');
   petitionerFilesADocumentForCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

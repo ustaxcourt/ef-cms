@@ -12,10 +12,11 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 const { DOCKET_SECTION, PETITIONS_SECTION, USER_ROLES } = getConstants();
 
-const goToWorkQueue = [
+const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
@@ -56,7 +57,7 @@ const goToWorkQueue = [
     chooseWorkQueueSequence,
   ]),
   setCurrentPageAction('WorkQueue'),
-];
+]);
 
 export const gotoWorkQueueSequence = [
   isLoggedInAction,

@@ -6,18 +6,21 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoUploadCourtIssuedDocument = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  initializeUploadFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setCurrentPageAction('UploadCourtIssuedDocument'),
-];
+const gotoUploadCourtIssuedDocument = startWebSocketConnectionSequenceDecorator(
+  [
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    initializeUploadFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setCurrentPageAction('UploadCourtIssuedDocument'),
+  ],
+);
 
 export const gotoUploadCourtIssuedDocumentSequence = [
   isLoggedInAction,

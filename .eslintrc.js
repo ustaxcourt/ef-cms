@@ -24,7 +24,11 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ['cypress/**/*.js', 'cypress-smoketests/**/*.js'],
+      files: [
+        'cypress-integration/**/*.js',
+        'cypress-smoketests/**/*.js',
+        'cypress-readonly/**/*.js',
+      ],
       rules: {
         'jest/expect-expect': 'off',
         'jest/valid-expect': 'off',
@@ -47,7 +51,7 @@ module.exports = {
       rules: {
         'max-lines': [
           'error',
-          { max: 650, skipBlankLines: true, skipComments: true }, // TODO - devex 864 - max 500 lines
+          { max: 500, skipBlankLines: true, skipComments: true },
         ],
       },
     },
@@ -253,6 +257,7 @@ module.exports = {
           'court’s',
           'coversheet',
           'desc',
+          'devex',
           'disallowance',
           'dispositive',
           'docketclerk',

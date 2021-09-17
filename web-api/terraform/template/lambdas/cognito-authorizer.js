@@ -53,8 +53,8 @@ const getKeysForIssuer = async iss => {
   return (keyCache[iss] = response.data.keys);
 };
 
-const verify = async (key, token) => {
-  return new Promise((resolve, reject) => {
+const verify = (key, token) =>
+  new Promise((resolve, reject) => {
     const pem = jwkToPem(key);
     const options = { issuer: [issMain, issIrs] };
 
@@ -66,7 +66,6 @@ const verify = async (key, token) => {
       }
     });
   });
-};
 
 exports.handler = async (event, context) => {
   const logger = getLogger(context);
@@ -84,7 +83,7 @@ exports.handler = async (event, context) => {
   try {
     keys = await getKeysForIssuer(iss);
   } catch (error) {
-    logger.warning(
+    logger.warn(
       'Could not fetch keys for token issuer, considering request unauthorized',
       error,
     );
@@ -95,7 +94,7 @@ exports.handler = async (event, context) => {
   const key = keys.find(k => k.kid === kid);
 
   if (!key) {
-    logger.warning(
+    logger.warn(
       'The key used to sign the authorization token was not found in the user pool’s keys, considering request unauthorized',
       {
         issuer: iss,
@@ -111,7 +110,7 @@ exports.handler = async (event, context) => {
   try {
     payload = await verify(key, token);
   } catch (error) {
-    logger.warning(
+    logger.warn(
       'The token is not valid, considering request unauthorized',
       error,
     );

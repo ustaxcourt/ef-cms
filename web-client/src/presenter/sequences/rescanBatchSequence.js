@@ -5,7 +5,7 @@ import { handleInvalidScannerSourceAction } from '../actions/handleInvalidScanne
 import { handleScanErrorAction } from '../actions/handleScanErrorAction';
 import { rescanBatchAction } from '../actions/rescanBatchAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 

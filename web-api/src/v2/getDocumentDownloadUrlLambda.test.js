@@ -20,6 +20,9 @@ const createSilentAppContext = user => {
   });
 
   applicationContext.environment.dynamoDbTableName = 'mocked';
+  applicationContext.getPersistenceGateway().getMaintenanceMode = jest
+    .fn()
+    .mockReturnValue(false);
 
   return applicationContext;
 };

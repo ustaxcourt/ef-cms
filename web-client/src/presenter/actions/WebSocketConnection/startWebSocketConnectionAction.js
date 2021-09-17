@@ -9,8 +9,11 @@
 export const startWebSocketConnectionAction = async ({ path, socket }) => {
   try {
     await socket.start();
-    return path.success();
-  } catch {
-    return path.error();
-  }
+    // 7095 - We don't do anything with the error anymore because it will make
+    // the application unusable for people who have disabled websocket requests
+    // on their browser.
+    // eslint-disable-next-line no-empty
+  } catch (e) {}
+
+  return path.success();
 };

@@ -5,6 +5,9 @@ const {
 
 faker.seed(faker.datatype.number());
 
+const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
+const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
+
 exports.goToCaseDetail = docketNumber => {
   cy.get('#search-field').type(docketNumber);
   cy.get('.ustc-search-button').click();
@@ -108,6 +111,17 @@ exports.uploadCourtIssuedDocPdf = () => {
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
 };
 
+exports.reviewAndServePetition = () => {
+  cy.get('#tab-document-view').click();
+  cy.get('a:contains("Review and Serve Petition")').click();
+  cy.get('button#tab-irs-notice').click();
+  cy.get('label#has-irs-verified-notice-no').click();
+  cy.get('button#submit-case').click();
+  cy.get('button:contains("Serve to IRS")').click();
+  cy.get('button#confirm:contains("Yes, Serve")').click();
+  cy.get('.usa-alert:contains("Petition served")').should('exist');
+};
+
 exports.clickSaveUploadedPdfButton = () => {
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('h1:contains("Drafts")').should('exist');
@@ -171,4 +185,21 @@ exports.setCaseAsReadyForTrial = () => {
   cy.get('.modal-button-confirm').click();
   cy.get('.modal-dialog').should('not.exist');
   cy.contains(CASE_STATUS_TYPES.generalDocketReadyForTrial).should('exist');
+};
+
+exports.viewPrintableDocketRecord = () => {
+  cy.get('button#printable-docket-record-button').click();
+
+  cy.get('a.modal-button-confirm')
+    .invoke('attr', 'href')
+    .then(href => {
+      cy.request({
+        followRedirect: true,
+        hostname: `public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
+        method: 'GET',
+        url: href,
+      }).should(response => {
+        expect(response.status).to.equal(200);
+      });
+    });
 };
