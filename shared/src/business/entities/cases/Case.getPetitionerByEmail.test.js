@@ -7,7 +7,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 describe('getPetitionerByEmail', () => {
   const mockContactEmail = 'petitioner@example.com';
 
-  it('returns petitioner with matching contactId from petitioners array', () => {
+  it('returns petitioner with matching email from petitioners array', () => {
     const myCase = new Case(MOCK_CASE, { applicationContext });
     expect(myCase.getPetitionerByEmail(mockContactEmail)).toBeDefined();
   });
