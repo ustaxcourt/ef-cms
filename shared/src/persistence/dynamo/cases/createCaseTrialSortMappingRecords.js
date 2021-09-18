@@ -39,23 +39,24 @@ exports.createCaseTrialSortMappingRecords = async ({
     });
   }
 
-  await put({
-    Item: {
-      docketNumber,
-      gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-      pk: 'eligible-for-trial-case-catalog',
-      sk: nonHybrid,
-    },
-    applicationContext,
-  });
-
-  await put({
-    Item: {
-      docketNumber,
-      gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
-      pk: 'eligible-for-trial-case-catalog',
-      sk: hybrid,
-    },
-    applicationContext,
-  });
+  await Promise.all([
+    put({
+      Item: {
+        docketNumber,
+        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
+        pk: 'eligible-for-trial-case-catalog',
+        sk: nonHybrid,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        docketNumber,
+        gsi1pk: `eligible-for-trial-case-catalog|${docketNumber}`,
+        pk: 'eligible-for-trial-case-catalog',
+        sk: hybrid,
+      },
+      applicationContext,
+    }),
+  ]);
 };

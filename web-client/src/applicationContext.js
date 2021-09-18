@@ -7,6 +7,7 @@ import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -47,6 +48,7 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
+import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -408,6 +410,7 @@ const allUseCases = {
   getIrsPractitionersBySearchKeyInteractor,
   getItemInteractor,
   getJudgeForUserChambersInteractor,
+  getMaintenanceModeInteractor,
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
@@ -649,6 +652,7 @@ const applicationContext = {
       aggregatePartiesForService,
       calculateISODate,
       caseHasServedDocketEntries,
+      caseHasServedPetition,
       checkDate,
       compareCasesByDocketNumber,
       compareISODateStrings,

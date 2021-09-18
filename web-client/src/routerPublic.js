@@ -80,6 +80,11 @@ const router = {
       )();
     });
 
+    route('/maintenance', () => {
+      setPageTitle('Maintenance');
+      return app.getSequence('gotoMaintenanceSequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

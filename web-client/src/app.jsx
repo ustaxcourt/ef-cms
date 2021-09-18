@@ -102,6 +102,7 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
+import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
@@ -139,6 +140,11 @@ const app = {
     if (userPermissions) {
       presenter.state.permissions = userPermissions;
     }
+
+    const maintenanceMode = await applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'maintenanceMode' });
+    presenter.state.maintenanceMode = maintenanceMode;
 
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
@@ -246,6 +252,7 @@ const app = {
       faUser,
       faUserCheck,
       faUserFriends,
+      faWrench,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
@@ -267,8 +274,8 @@ const app = {
 
     const cerebralApp = App(presenter, debugTools);
 
-    router.initialize(cerebralApp, route);
     initializeSocketProvider(cerebralApp, applicationContext);
+    router.initialize(cerebralApp, route);
 
     ReactDOM.render(
       <Container app={cerebralApp}>

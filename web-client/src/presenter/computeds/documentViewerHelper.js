@@ -17,6 +17,10 @@ export const documentViewerHelper = (get, applicationContext) => {
       caseDetail,
     });
 
+  const isPetitionServed = !!applicationContext
+    .getUtilities()
+    .caseHasServedPetition(caseDetail);
+
   const permissions = get(state.permissions);
 
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -50,9 +54,19 @@ export const documentViewerHelper = (get, applicationContext) => {
   ).includes(formattedDocumentToDisplay.eventCode);
 
   const showServeCourtIssuedDocumentButton =
-    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+    isPetitionServed &&
+    showNotServed &&
+    isCourtIssuedDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showUnservedPetitionWarning =
+    !isPetitionServed &&
+    showNotServed &&
+    !formattedDocumentToDisplay.isPetition &&
+    permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
+    isPetitionServed &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !formattedDocumentToDisplay.isPetition &&
@@ -71,18 +85,6 @@ export const documentViewerHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
-  let showStricken;
-
-  if (viewerDocumentToDisplay.isStricken !== undefined) {
-    showStricken = viewerDocumentToDisplay.isStricken;
-  } else {
-    const entry = formattedCaseDetail.formattedDocketEntries.find(
-      docketEntry =>
-        docketEntry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
-    );
-    showStricken = entry.isStricken;
-  }
-
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
@@ -97,6 +99,7 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePaperFiledDocumentButton,
     showServePetitionButton,
     showSignStipulatedDecisionButton,
-    showStricken,
+    showStricken: !!formattedDocumentToDisplay.isStricken,
+    showUnservedPetitionWarning,
   };
 };

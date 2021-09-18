@@ -8,6 +8,7 @@ const {
   createOrder,
   editAndSignOrder,
   goToCaseDetail,
+  reviewAndServePetition,
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
 } = require('../support/pages/case-detail');
@@ -29,7 +30,7 @@ const {
 } = require('../support/pages/create-electronic-petition');
 const {
   fillInCreateCaseFromPaperForm,
-} = require('../../cypress/support/pages/create-paper-petition');
+} = require('../../cypress-integration/support/pages/create-paper-petition');
 const {
   getEnvironmentSpecificFunctions,
 } = require('../support/pages/environment-specific-factory');
@@ -45,11 +46,8 @@ const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const {
-  closeScannerSetupDialog,
-  getUserToken,
-  login,
-} = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, getUserToken, login } =
+  getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(async () => {
@@ -112,6 +110,11 @@ describe('Petitions clerk', () => {
     fillInCreateCaseFromPaperForm();
     goToReviewCase(testData);
     serveCaseToIrs();
+  });
+
+  it('should be able to serve the petition on the electronically-filed case', () => {
+    goToCaseDetail(testData.createdDocketNumber);
+    reviewAndServePetition();
   });
 });
 

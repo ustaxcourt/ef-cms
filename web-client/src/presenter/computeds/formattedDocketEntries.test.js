@@ -99,47 +99,6 @@ describe('formattedDocketEntries', () => {
     ]);
   });
 
-  it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = runCompute(formattedDocketEntries, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-              documentTitle: 'Motion for Leave to File Administrative Record',
-              documentType: 'Motion for Leave to File Administrative Record',
-              eventCode: 'M115',
-              filingDate: '2020-07-08T16:33:41.180Z',
-              isOnDocketRecord: true,
-              lodged: true,
-            },
-            {
-              docketEntryId: '6ca934be-aa01-476d-a437-9d50cc5c9e98',
-              documentTitle: 'Motion for Leave to File Administrative Record',
-              documentType: 'Motion for Leave to File Administrative Record',
-              eventCode: 'M115',
-              filingDate: '2020-07-08T16:33:41.180Z',
-              isOnDocketRecord: true,
-              lodged: false,
-            },
-          ],
-        },
-      },
-    });
-
-    const lodgedDocument = result.formattedDocketEntriesOnDocketRecord.find(
-      d => d.docketEntryId === '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
-    );
-    const unlodgedDocument = result.formattedDocketEntriesOnDocketRecord.find(
-      d => d.docketEntryId === '6ca934be-aa01-476d-a437-9d50cc5c9e98',
-    );
-
-    expect(lodgedDocument.eventCode).toEqual('MISCL');
-    expect(unlodgedDocument.eventCode).not.toEqual('MISCL');
-  });
-
   describe('sorts docket records', () => {
     let sortedCaseDetail;
 
@@ -203,49 +162,24 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('draft documents', () => {
-    const docketEntries = [
-      {
-        createdAt: '2019-02-28T21:14:39.488Z',
-        description: 'Petition',
-        docketEntryId: 'Petition',
-        documentType: 'Petition',
-        eventCode: 'P',
-        filedBy: 'Jessica Frase Marine',
-        filingDate: '2019-02-28T21:14:39.488Z',
-        index: 1,
-        isOnDocketRecord: true,
-        showValidationInput: '2019-02-28T21:14:39.488Z',
-        status: 'served',
-      },
-      {
-        archived: false,
-        createdAt: '2019-02-28T21:14:39.488Z',
-        docketEntryId: 'd-1-2-3',
-        documentTitle: 'Order to do something',
-        documentType: 'Order',
-        eventCode: 'O',
-        isDraft: true,
-        isOnDocketRecord: false,
-      },
-      {
-        archived: false,
-        createdAt: '2019-02-28T21:14:39.488Z',
-        docketEntryId: 'd-2-3-4',
-        documentTitle: 'Stipulated Decision',
-        documentType: 'Stipulated Decision',
-        eventCode: 'SDEC',
-        isDraft: true,
-        isOnDocketRecord: false,
-      },
-    ];
-
     it('formats draft documents', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...MOCK_CASE,
-            docketEntries,
+            docketEntries: [
+              {
+                archived: false,
+                createdAt: '2019-02-28T21:14:39.488Z',
+                docketEntryId: 'd-1-2-3',
+                documentTitle: 'Order to do something',
+                documentType: 'Order',
+                eventCode: 'O',
+                isDraft: true,
+                isOnDocketRecord: false,
+              },
+            ],
           },
         },
       });
@@ -265,20 +199,6 @@ describe('formattedDocketEntries', () => {
           signedAtFormatted: undefined,
           signedAtFormattedTZ: undefined,
         },
-        {
-          createdAtFormatted: '02/28/19',
-          descriptionDisplay: 'Stipulated Decision',
-          docketEntryId: 'd-2-3-4',
-          documentType: 'Stipulated Decision',
-          isCourtIssuedDocument: true,
-          isInProgress: false,
-          isNotServedDocument: true,
-          isPetition: false,
-          isStatusServed: false,
-          showDocumentViewerLink: true,
-          signedAtFormatted: undefined,
-          signedAtFormattedTZ: undefined,
-        },
       ]);
     });
 
@@ -288,7 +208,7 @@ describe('formattedDocketEntries', () => {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
             ...MOCK_CASE,
-            docketEntries: [docketEntries[0]],
+            docketEntries: [],
           },
         },
       });
@@ -300,20 +220,13 @@ describe('formattedDocketEntries', () => {
   describe('stricken docket record', () => {
     const docketEntries = [
       {
-        attachments: false,
-        certificateOfService: false,
-        createdAt: '2019-06-19T17:29:13.120Z',
-        description: 'Motion to Dismiss for Lack of Jurisdiction',
-        docketEntryId: '69094dbb-72bf-481e-a592-8d50dad7ffa8',
+        ...mockDocketEntry,
         documentTitle: 'Motion to Dismiss for Lack of Jurisdiction',
         documentType: 'Motion to Dismiss for Lack of Jurisdiction',
         eventCode: 'M073',
-        filingDate: '2019-06-19T17:29:13.120Z',
         isFileAttached: true,
         isLegacy: true,
-        isOnDocketRecord: true,
         isStricken: true,
-        numberOfPages: 24,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       },
     ];
@@ -447,43 +360,6 @@ describe('formattedDocketEntries', () => {
         docketEntries: [
           {
             ...mockDocketEntry,
-            docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-            documentTitle: 'Petition',
-            documentType: 'Petition',
-            eventCode: 'P',
-            index: 1,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            pending: false,
-          },
-          {
-            ...mockDocketEntry,
-            docketEntryId: '087eb3f6-b164-40f3-980f-835da7292097',
-            documentTitle: 'Request for Place of Trial at Seattle, Washington',
-            documentType: 'Request for Place of Trial',
-            eventCode: 'RQT',
-            index: 2,
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            isStricken: false,
-            pending: false,
-          },
-          {
-            ...mockDocketEntry,
-            docketEntryId: '2efcd272-da92-4e31-bedc-28cdad2e08b0',
-            documentTitle: 'Statement of Taxpayer Identification',
-            documentType: 'Statement of Taxpayer Identification',
-            eventCode: 'STIN',
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: false,
-            isStricken: false,
-            pending: false,
-          },
-          {
-            ...mockDocketEntry,
             docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
             documentTitle: 'Proposed Stipulated Decision',
             documentType: 'Proposed Stipulated Decision',
@@ -499,32 +375,6 @@ describe('formattedDocketEntries', () => {
               { email: 'petitioner@example.com', name: 'Mona Schultz' },
             ],
           },
-          {
-            ...mockDocketEntry,
-            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
-            documentTitle: 'Answer',
-            documentType: 'Answer',
-            eventCode: 'A',
-            index: 4,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            pending: true,
-          },
-          {
-            ...mockDocketEntry,
-            docketEntryId: 'aa632296-fb1d-4aa7-8f06-6eeab813ac09',
-            documentTitle: 'Hearing',
-            documentType: 'Hearing before',
-            eventCode: 'HEAR',
-            index: 5,
-            isFileAttached: true,
-            isMinuteEntry: false,
-            isOnDocketRecord: true,
-            isStricken: false,
-            pending: true,
-          },
         ],
       };
 
@@ -535,26 +385,8 @@ describe('formattedDocketEntries', () => {
         },
       });
 
-      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
-        {
-          isOnDocketRecord: true,
-        },
-        {
-          isOnDocketRecord: true,
-        },
-        {
-          isOnDocketRecord: true,
-        },
-        {
-          isOnDocketRecord: true,
-        },
-        {
-          isOnDocketRecord: true,
-        },
-      ]);
-
       expect(result.formattedPendingDocketEntriesOnDocketRecord.length).toEqual(
-        2,
+        1,
       );
       expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -562,69 +394,6 @@ describe('formattedDocketEntries', () => {
           isOnDocketRecord: true,
           pending: true,
         },
-        {
-          eventCode: 'HEAR',
-          isOnDocketRecord: true,
-          pending: true,
-        },
-      ]);
-    });
-
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when isLegacyServed is true and the item is pending', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...MOCK_CASE.docketEntries[2],
-                docketEntryId: '999999',
-                isLegacyServed: true,
-                isOnDocketRecord: true,
-                pending: true,
-                servedAt: undefined,
-                servedParties: undefined,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
-        { docketEntryId: '999999' },
-      ]);
-    });
-
-    it('should add items to formattedPendingDocketEntriesOnDocketRecord when servedAt is defined and the item is pending', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...MOCK_CASE.docketEntries[2],
-                docketEntryId: '999999',
-                isLegacyServed: false,
-                isOnDocketRecord: true,
-                pending: true,
-                servedAt: '2019-08-25T05:00:00.000Z',
-                servedParties: [
-                  {
-                    name: 'Bernard Lowe',
-                  },
-                  {
-                    name: 'IRS',
-                    role: 'irsSuperuser',
-                  },
-                ],
-              },
-            ],
-          },
-        },
-      });
-
-      expect(result.formattedPendingDocketEntriesOnDocketRecord).toMatchObject([
-        { docketEntryId: '999999' },
       ]);
     });
   });
