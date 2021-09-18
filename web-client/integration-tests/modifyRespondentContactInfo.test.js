@@ -5,6 +5,7 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
 import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
@@ -22,18 +23,26 @@ describe('Modify Respondent Contact Information', () => {
   let caseDetail;
   cerebralTest.createdDocketNumbers = [];
 
-  for (let i = 0; i < 3; i++) {
-    loginAs(cerebralTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('create case and associate a respondent which will be served', async () => {
+    caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
-    it(`create case #${i} and associate a respondent`, async () => {
-      caseDetail = await uploadPetition(cerebralTest);
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
-    });
-
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkAddsRespondentsToCase(cerebralTest);
-  }
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('create case and associate a respondent which will NOT be served', async () => {
+    caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.createdDocketNumbers.push(caseDetail.docketNumber);
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
   it('wait for ES index', async () => {
     // waiting for the respondent to be associated with the newly created cases
@@ -48,7 +57,6 @@ describe('Modify Respondent Contact Information', () => {
     await refreshElasticsearchIndex(5000);
   });
 
-  for (let i = 0; i < 3; i++) {
-    respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, i);
-  }
+  respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 0, true);
+  respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 1, false);
 });

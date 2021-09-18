@@ -65,6 +65,7 @@ export const PractitionerSearchByBarNumber = connect(
               <div className="tablet:grid-col-6">
                 <Button
                   className="advanced-search__button margin-top-2"
+                  id="practitioner-search-by-bar-number-button"
                   onClick={e => {
                     e.preventDefault();
                     submitPractitionerBarNumberSearchSequence();

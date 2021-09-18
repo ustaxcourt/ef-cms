@@ -2,8 +2,11 @@ import { refreshElasticsearchIndex } from '../helpers';
 export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
   cerebralTest,
   createdDocketNumberIndex,
+  shouldExist = true,
 ) => {
-  return it('respondent views case detail notice of change of address', async () => {
+  return it(`respondent views case detail notice of change of address ${
+    shouldExist ? 'exists' : 'does not exist'
+  }`, async () => {
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.createdDocketNumbers[createdDocketNumberIndex],
@@ -26,17 +29,18 @@ export const respondentViewsCaseDetailNoticeOfChangeOfAddress = (
     const changeOfAddressDocument = documents.find(
       document => document.documentType === 'Notice of Change of Address',
     );
-
-    expect(changeOfAddressDocument.servedAt).toBeDefined();
-
-    expect(changeOfAddressDocument).toBeDefined();
-
-    expect(changeOfAddressDocument.documentTitle).toBe(
-      'Notice of Change of Address',
-    );
-    expect(changeOfAddressDocument.additionalInfo).toBe(
-      'for Test IRS Practitioner',
-    );
-    expect(changeOfAddressDocument.filedBy).toBeUndefined();
+    if (shouldExist) {
+      expect(changeOfAddressDocument).toBeDefined();
+      expect(changeOfAddressDocument.servedAt).toBeDefined();
+      expect(changeOfAddressDocument.documentTitle).toBe(
+        'Notice of Change of Address',
+      );
+      expect(changeOfAddressDocument.additionalInfo).toBe(
+        'for Test IRS Practitioner',
+      );
+      expect(changeOfAddressDocument.filedBy).toBeUndefined();
+    } else {
+      expect(changeOfAddressDocument).not.toBeDefined();
+    }
   });
 };

@@ -34,6 +34,9 @@ const back = () => {
   window.history.back();
 };
 
+const gotoMaintenancePage = app => {
+  return app.getSequence('gotoMaintenanceSequence')();
+};
 const gotoLoginPage = app => {
   const path = app.getState('cognitoLoginUrl');
   externalRoute(path);
@@ -43,7 +46,7 @@ const goto404 = app => {
     path: '404',
   });
 };
-const accessRedirects = { goto404, gotoLoginPage };
+const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
 
 const ifHasAccess = (
   { app, permissionToCheck, redirect = accessRedirects },
@@ -52,6 +55,8 @@ const ifHasAccess = (
   return function () {
     if (!app.getState('user')) {
       return redirect.gotoLoginPage(app);
+    } else if (app.getState('maintenanceMode')) {
+      return redirect.gotoMaintenancePage(app);
     } else {
       if (
         permissionToCheck &&
@@ -1239,6 +1244,14 @@ const router = {
       setPageTitle('Contact');
       return app.getSequence('gotoContactSequence')();
     });
+
+    registerRoute(
+      '/maintenance',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Maintenance');
+        return app.getSequence('gotoMaintenanceSequence')();
+      }),
+    );
 
     registerRoute(
       '..',

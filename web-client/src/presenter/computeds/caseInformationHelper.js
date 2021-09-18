@@ -48,6 +48,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     isInternalUser,
     showAddCounsel,
     showAddPartyButton,
+    showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
     showHearingsTable,

@@ -9,7 +9,7 @@ import { setAddConsolidatedCaseSuccessMessageAction } from '../actions/CaseConso
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const submitAddConsolidatedCaseSequence = [
   primePropsForCanConsolidateAction,
