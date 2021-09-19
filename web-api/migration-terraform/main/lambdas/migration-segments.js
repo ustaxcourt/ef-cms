@@ -5,6 +5,9 @@ const {
   migrateItems: bugMigration0039,
 } = require('./migrations/bug-0039-notice-of-trial-date');
 const {
+  migrateItems: migration0001,
+} = require('./migrations/0001-update-websockets-gsi1pk');
+const {
   migrateItems: migration0040,
 } = require('./migrations/bug-0040-case-received-at');
 const {
@@ -35,6 +38,11 @@ const migrateRecords = async ({
   // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
+  if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
+    applicationContext.logger.debug('about to run migration 0001');
+    items = migration0001(items);
+  }
+
   if (!ranMigrations['bug-0040-case-received-at.js']) {
     applicationContext.logger.debug('about to run migration 0040');
     items = await migration0040(items, documentClient);
@@ -122,7 +130,7 @@ const scanTableSegment = async (segment, totalSegments, ranMigrations) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line
 const hasMigrationRan = async key => {
   const { Item } = await dynamoDbDocumentClient
     .get({
@@ -146,7 +154,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    //  ...(await hasMigrationRan('bug-999-example-migration-file.js')),
+    ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
     ...(await hasMigrationRan('bug-0039-notice-of-trial-date.js')),
     ...(await hasMigrationRan('bug-0040-case-received-at.js')),
   };

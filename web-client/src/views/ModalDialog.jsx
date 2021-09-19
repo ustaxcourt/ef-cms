@@ -12,6 +12,7 @@ export const ModalDialog = ({
   cancelSequence,
   children,
   className,
+  closeLink = true,
   confirmHref,
   confirmLabel,
   confirmSequence,
@@ -113,19 +114,21 @@ export const ModalDialog = ({
                   )}
                 </div>
                 <div className="mobile-lg:grid-col-3">
-                  <Button
-                    iconRight
-                    link
-                    className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
-                    icon="times-circle"
-                    onClick={
-                      useRunConfirmSequence
-                        ? runConfirmSequence
-                        : runCancelSequence
-                    }
-                  >
-                    Close
-                  </Button>
+                  {closeLink && (
+                    <Button
+                      iconRight
+                      link
+                      className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                      icon="times-circle"
+                      onClick={
+                        useRunConfirmSequence
+                          ? runConfirmSequence
+                          : runCancelSequence
+                      }
+                    >
+                      Close
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

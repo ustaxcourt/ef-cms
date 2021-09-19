@@ -49,18 +49,65 @@ describe('getIsFeatureEnabled', () => {
     });
   });
 
-  it('returns false if the user is NOT an internal user and the current environment is prod', () => {
-    const user = {
-      role: ROLES.privatePractitioner,
-    };
-    const env = 'prod';
+  describe('advanced_opinion_search', () => {
+    it('returns true if the user is an internal user and the current environment is NOT prod', () => {
+      const user = {
+        role: ROLES.judge,
+      };
+      const env = 'mig';
 
-    const isEnabled = getIsFeatureEnabled(
-      'advanced_document_search',
-      user,
-      env,
-    );
+      const isEnabled = getIsFeatureEnabled(
+        'advanced_opinion_search',
+        user,
+        env,
+      );
 
-    expect(isEnabled).toEqual(false);
+      expect(isEnabled).toEqual(true);
+    });
+
+    it('returns false if the user is NOT an internal user and the current environment is NOT prod', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+      };
+      const env = 'mig';
+
+      const isEnabled = getIsFeatureEnabled(
+        'advanced_opinion_search',
+        user,
+        env,
+      );
+
+      expect(isEnabled).toEqual(false);
+    });
+
+    it('returns false if the user is an internal user and the current environment is prod', () => {
+      const user = {
+        role: ROLES.judge,
+      };
+      const env = 'prod';
+
+      const isEnabled = getIsFeatureEnabled(
+        'advanced_opinion_search',
+        user,
+        env,
+      );
+
+      expect(isEnabled).toEqual(false);
+    });
+
+    it('returns false if the user is NOT an internal user and the current environment is prod', () => {
+      const user = {
+        role: ROLES.privatePractitioner,
+      };
+      const env = 'prod';
+
+      const isEnabled = getIsFeatureEnabled(
+        'advanced_document_search',
+        user,
+        env,
+      );
+
+      expect(isEnabled).toEqual(false);
+    });
   });
 });

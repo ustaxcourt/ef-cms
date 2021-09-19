@@ -20,6 +20,17 @@ resource "null_resource" "api_west_object" {
   }
 }
 
+resource "null_resource" "maintenance_notify_west_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_maintenance_notify.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/maintenance_notify_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 
 resource "null_resource" "websockets_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
@@ -123,6 +134,20 @@ data "aws_s3_bucket_object" "websockets_green_west_object" {
   provider   = aws.us-west-1
 }
 
+data "aws_s3_bucket_object" "maintenance_notify_blue_west_object" {
+  depends_on = [null_resource.maintenance_notify_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "maintenance_notify_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "maintenance_notify_green_west_object" {
+  depends_on = [null_resource.maintenance_notify_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "maintenance_notify_green.js.zip"
+  provider   = aws.us-west-1
+}
+
 data "aws_s3_bucket_object" "puppeteer_blue_west_object" {
   depends_on = [null_resource.puppeteer_layer_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
@@ -222,18 +247,19 @@ module "api-west-waf" {
 }
 
 module "api-west-green" {
-  api_object             = null_resource.api_west_object
-  api_public_object      = null_resource.api_public_west_object
-  websockets_object      = null_resource.websockets_west_object
-  puppeteer_layer_object = null_resource.puppeteer_layer_west_object
-  cron_object            = ""
-  streams_object         = ""
-  source                 = "../api/"
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  authorizer_uri         = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  account_id             = data.aws_caller_identity.current.account_id
-  zone_id                = data.aws_route53_zone.zone.id
+  api_object                = null_resource.api_west_object
+  api_public_object         = null_resource.api_public_west_object
+  websockets_object         = null_resource.websockets_west_object
+  puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
+  cron_object               = ""
+  maintenance_notify_object = null_resource.maintenance_notify_west_object
+  streams_object            = ""
+  source                    = "../api/"
+  environment               = var.environment
+  dns_domain                = var.dns_domain
+  authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  account_id                = data.aws_caller_identity.current.account_id
+  zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
@@ -245,34 +271,37 @@ module "api-west-green" {
   providers = {
     aws = aws.us-west-1
   }
-  current_color          = "green"
-  deploying_color        = var.deploying_color
-  lambda_bucket_id       = aws_s3_bucket.api_lambdas_bucket_west.id
-  public_object_hash     = data.aws_s3_bucket_object.api_public_green_west_object.etag
-  api_object_hash        = data.aws_s3_bucket_object.api_green_west_object.etag
-  websockets_object_hash = data.aws_s3_bucket_object.websockets_green_west_object.etag
-  puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
-  cron_object_hash       = ""
-  streams_object_hash    = ""
-  create_cron            = 0
-  create_streams         = 0
-  stream_arn             = ""
-  web_acl_arn            = module.api-west-waf.web_acl_arn
+  current_color                  = "green"
+  deploying_color                = var.deploying_color
+  lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
+  public_object_hash             = data.aws_s3_bucket_object.api_public_green_west_object.etag
+  api_object_hash                = data.aws_s3_bucket_object.api_green_west_object.etag
+  websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
+  puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
+  cron_object_hash               = ""
+  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
+  streams_object_hash            = ""
+  create_cron                    = 0
+  create_streams                 = 0
+  create_maintenance_notify      = 1
+  stream_arn                     = ""
+  web_acl_arn                    = module.api-west-waf.web_acl_arn
 }
 
 module "api-west-blue" {
-  api_object             = null_resource.api_west_object
-  api_public_object      = null_resource.api_public_west_object
-  websockets_object      = null_resource.websockets_west_object
-  puppeteer_layer_object = null_resource.puppeteer_layer_west_object
-  cron_object            = ""
-  streams_object         = ""
-  source                 = "../api/"
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  authorizer_uri         = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
-  account_id             = data.aws_caller_identity.current.account_id
-  zone_id                = data.aws_route53_zone.zone.id
+  api_object                = null_resource.api_west_object
+  api_public_object         = null_resource.api_public_west_object
+  websockets_object         = null_resource.websockets_west_object
+  puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
+  cron_object               = ""
+  maintenance_notify_object = null_resource.maintenance_notify_west_object
+  streams_object            = ""
+  source                    = "../api/"
+  environment               = var.environment
+  dns_domain                = var.dns_domain
+  authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  account_id                = data.aws_caller_identity.current.account_id
+  zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
@@ -284,17 +313,19 @@ module "api-west-blue" {
   providers = {
     aws = aws.us-west-1
   }
-  current_color          = "blue"
-  deploying_color        = var.deploying_color
-  lambda_bucket_id       = aws_s3_bucket.api_lambdas_bucket_west.id
-  public_object_hash     = data.aws_s3_bucket_object.api_public_blue_west_object.etag
-  api_object_hash        = data.aws_s3_bucket_object.api_blue_west_object.etag
-  websockets_object_hash = data.aws_s3_bucket_object.websockets_blue_west_object.etag
-  puppeteer_object_hash  = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
-  cron_object_hash       = ""
-  streams_object_hash    = ""
-  create_cron            = 0
-  create_streams         = 0
-  stream_arn             = ""
-  web_acl_arn            = module.api-west-waf.web_acl_arn
+  current_color                  = "blue"
+  deploying_color                = var.deploying_color
+  lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
+  public_object_hash             = data.aws_s3_bucket_object.api_public_blue_west_object.etag
+  api_object_hash                = data.aws_s3_bucket_object.api_blue_west_object.etag
+  websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
+  puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
+  cron_object_hash               = ""
+  maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
+  streams_object_hash            = ""
+  create_cron                    = 0
+  create_streams                 = 0
+  create_maintenance_notify      = 1
+  stream_arn                     = ""
+  web_acl_arn                    = module.api-west-waf.web_acl_arn
 }

@@ -13,8 +13,9 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const goToMessages = [
+const goToMessages = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
@@ -31,7 +32,7 @@ const goToMessages = [
   },
   setMessagesAction,
   setCurrentPageAction('Messages'),
-];
+]);
 
 export const gotoMessagesSequence = [
   isLoggedInAction,

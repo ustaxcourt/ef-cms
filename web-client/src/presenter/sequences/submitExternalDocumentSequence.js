@@ -8,7 +8,7 @@ import { openFileUploadStatusModalAction } from '../actions/openFileUploadStatus
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitRespondentCaseAssociationRequestAction } from '../actions/FileDocument/submitRespondentCaseAssociationRequestAction';
 import { uploadExternalDocumentsAction } from '../actions/FileDocument/uploadExternalDocumentsAction';
 import { uploadExternalDocumentsForConsolidatedAction } from '../actions/FileDocument/uploadExternalDocumentsForConsolidatedAction';

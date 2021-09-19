@@ -6,7 +6,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setPropsForRemoveSignatureAction } from '../actions/setPropsForRemoveSignatureAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const removeSignatureSequence = showProgressSequenceDecorator([
   clearAlertsAction,

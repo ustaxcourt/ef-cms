@@ -1,6 +1,7 @@
 import {
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
+  INITIAL_DOCUMENT_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -224,12 +225,40 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     expect(result.showSaveAndServeButton).toEqual(false);
   });
 
-  it('should return showSaveAndServeButton true if eventCode is NOT found in unservable event codes list', () => {
+  it('should return showServiceWarning true and showSaveAndServeButton false if petition on case is not yet served', () => {
     const result = runCompute(addCourtIssuedDocketEntryHelper, {
       state: {
         caseDetail: {
           ...state.caseDetail,
           docketEntries: [
+            {
+              docketEntryId: '123',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        docketEntryId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showServiceWarning).toEqual(true);
+    expect(result.showSaveAndServeButton).toEqual(false);
+  });
+
+  it('should return showServiceWarning false and showSaveAndServeButton true if eventCode is NOT found in unservable event codes list and petition on case has been served', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          docketEntries: [
+            {
+              docketEntryId: '111',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              servedAt: '2019-03-01T21:40:46.415Z',
+            },
             {
               docketEntryId: '123',
               signedAt: '2019-03-01T21:40:46.415Z',
@@ -242,6 +271,34 @@ describe('addCourtIssuedDocketEntryHelper', () => {
         },
       },
     });
+    expect(result.showServiceWarning).toEqual(false);
+    expect(result.showSaveAndServeButton).toEqual(true);
+  });
+
+  it('should return showServiceWarning false and showSaveAndServeButton true if eventCode is NOT found in unservable event codes list and petition on case has been served', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, {
+      state: {
+        caseDetail: {
+          ...state.caseDetail,
+          docketEntries: [
+            {
+              docketEntryId: '111',
+              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+              servedAt: '2019-03-01T21:40:46.415Z',
+            },
+            {
+              docketEntryId: '123',
+              signedAt: '2019-03-01T21:40:46.415Z',
+            },
+          ],
+        },
+        docketEntryId: '123',
+        form: {
+          eventCode: 'O',
+        },
+      },
+    });
+    expect(result.showServiceWarning).toEqual(false);
     expect(result.showSaveAndServeButton).toEqual(true);
   });
 

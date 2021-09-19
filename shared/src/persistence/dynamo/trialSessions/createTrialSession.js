@@ -8,8 +8,8 @@ const { put } = require('../../dynamodbClientService');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise} the promise of the call to persistence
  */
-exports.createTrialSession = async ({ applicationContext, trialSession }) => {
-  return await put({
+exports.createTrialSession = ({ applicationContext, trialSession }) =>
+  put({
     Item: {
       gsi1pk: 'trial-session-catalog',
       pk: `trial-session|${trialSession.trialSessionId}`,
@@ -18,4 +18,3 @@ exports.createTrialSession = async ({ applicationContext, trialSession }) => {
     },
     applicationContext,
   });
-};
