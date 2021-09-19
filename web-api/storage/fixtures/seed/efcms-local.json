@@ -14566,6 +14566,13 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "createdAt": "2019-03-01T21:40:46.415Z",
+    "servedAt": "2020-03-01T21:40:46.415Z",
+    "servedParties": [
+      {
+        "name": "Brett Osborne",
+        "email": "petitioner@example.com"
+      }
+    ],
     "numberOfPages": 2,
     "filers": [],
     "entityName": "DocketEntry",
@@ -16085,5 +16092,10 @@
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "email": "floater@example.com"
+  },
+  {
+    "pk": "maintenance-mode",
+    "sk": "maintenance-mode",
+    "current": false
   }
 ]

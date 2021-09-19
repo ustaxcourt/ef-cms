@@ -16,6 +16,12 @@ const getIsFeatureEnabled = (featureName, user, env) => {
 
       return isInternalUser;
     })(),
+    advanced_opinion_search: (() => {
+      const isProduction = env === 'prod';
+      const isInternalUser = User.isInternalUser(user.role);
+
+      return !isProduction && isInternalUser;
+    })(),
   };
 
   return !!features[featureName];

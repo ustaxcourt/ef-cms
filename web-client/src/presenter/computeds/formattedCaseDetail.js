@@ -14,7 +14,11 @@ export const formattedClosedCases = (get, applicationContext) => {
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-const getUserIsAssignedToSession = ({ currentUser, get, trialSessionId }) => {
+export const getUserIsAssignedToSession = ({
+  currentUser,
+  get,
+  trialSessionId,
+}) => {
   const sessions = get(state.trialSessions);
   let session;
   if (sessions) {
