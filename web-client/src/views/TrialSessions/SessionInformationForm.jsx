@@ -10,20 +10,20 @@ export const SessionInformationForm = connect(
     TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
     form: state.form,
     formattedTrialSessions: state.formattedTrialSessions,
+    sessionInformationHelper: state.sessionInformationHelper,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
-    sessionInformationHelper: state.sessionInformationHelper
   },
   function SessionInformationForm({
     form,
     formattedTrialSessions,
+    sessionInformationHelper,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
-    sessionInformationHelper
   }) {
     return (
       <>
@@ -71,176 +71,93 @@ export const SessionInformationForm = connect(
             onBlur={validateTrialSessionSequence}
             onChange={updateTrialSessionFormDataSequence}
           />
-          { !sessionInformationHelper.isStandaloneSession && (
-            <>
-             <FormGroup errorText={validationErrors.startTime}>
-             <fieldset className="start-time usa-fieldset margin-bottom-0">
-               <legend className="usa-legend" id="start-time-legend">
-                 Time <span className="usa-hint">(optional)</span>
-               </legend>
-               <div className="grid-row grid-gap-6">
-                 <div className="grid-col-3 ustc-time-of-day">
-                   <div className="usa-form-group ustc-time-of-day--hour">
-                     <input
-                       aria-describedby="start-time-legend"
-                       aria-label="hour"
-                       className="usa-input usa-input-inline"
-                       id="start-time-hours"
-                       max="12"
-                       min="1"
-                       name="startTimeHours"
-                       type="number"
-                       value={form.startTimeHours || ''}
-                       onChange={e => {
-                         updateTrialSessionFormDataSequence({
-                           key: e.target.name,
-                           value: e.target.value,
-                         });
-                       }}
-                     />
-                   </div>
-                   <div className="usa-form-group ustc-time-of-day--minute">
-                     <input
-                       aria-describedby="start-time-legend"
-                       aria-label="minutes"
-                       className="usa-input usa-input-inline"
-                       id="start-time-minutes"
-                       max="59"
-                       min="0"
-                       name="startTimeMinutes"
-                       type="number"
-                       value={form.startTimeMinutes || ''}
-                       onChange={e => {
-                         updateTrialSessionFormDataSequence({
-                           key: e.target.name,
-                           value: e.target.value,
-                         });
-                       }}
-                     />
-                   </div>
-                 </div>
-                 <div className="grid-col-6 ustc-time-of-day">
-                   <div className="ustc-time-of-day--am-pm">
-                     {['am', 'pm'].map(option => (
-                       <div className="usa-radio usa-radio__inline" key={option}>
-                         <input
-                           aria-describedby="start-time-legend"
-                           checked={form.startTimeExtension === option}
-                           className="usa-radio__input"
-                           id={`startTimeExtension-${option}`}
-                           name="startTimeExtension"
-                           type="radio"
-                           value={option}
-                           onBlur={() => {
-                             validateTrialSessionSequence();
-                           }}
-                           onChange={e => {
-                             updateTrialSessionFormDataSequence({
-                               key: e.target.name,
-                               value: e.target.value,
-                             });
-                           }}
-                         />
-                         <label
-                           aria-label={option.toUpperCase()}
-                           className="smaller-padding-right usa-radio__label"
-                           htmlFor={`startTimeExtension-${option}`}
-                         >
-                           {option}
-                         </label>
-                       </div>
-                     ))}
-                   </div>
-                 </div>
-               </div>
-             </fieldset>
-           </FormGroup>
-          <FormGroup errorText={validationErrors.startTime}>
-            <fieldset className="start-time usa-fieldset margin-bottom-0">
-              <legend className="usa-legend" id="start-time-legend">
-                Time <span className="usa-hint">(optional)</span>
-              </legend>
-              <div className="grid-row grid-gap-6">
-                <div className="grid-col-3 ustc-time-of-day">
-                  <div className="usa-form-group ustc-time-of-day--hour">
-                    <input
-                      aria-describedby="start-time-legend"
-                      aria-label="hour"
-                      className="usa-input usa-input-inline"
-                      id="start-time-hours"
-                      max="12"
-                      min="1"
-                      name="startTimeHours"
-                      type="number"
-                      value={form.startTimeHours || ''}
-                      onChange={e => {
-                        updateTrialSessionFormDataSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
+          {!sessionInformationHelper.isStandaloneSession && (
+            <FormGroup errorText={validationErrors.startTime}>
+              <fieldset className="start-time usa-fieldset margin-bottom-0">
+                <legend className="usa-legend" id="start-time-legend">
+                  Time <span className="usa-hint">(optional)</span>
+                </legend>
+                <div className="grid-row grid-gap-6">
+                  <div className="grid-col-3 ustc-time-of-day">
+                    <div className="usa-form-group ustc-time-of-day--hour">
+                      <input
+                        aria-describedby="start-time-legend"
+                        aria-label="hour"
+                        className="usa-input usa-input-inline"
+                        id="start-time-hours"
+                        max="12"
+                        min="1"
+                        name="startTimeHours"
+                        type="number"
+                        value={form.startTimeHours || ''}
+                        onChange={e => {
+                          updateTrialSessionFormDataSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="usa-form-group ustc-time-of-day--minute">
+                      <input
+                        aria-describedby="start-time-legend"
+                        aria-label="minutes"
+                        className="usa-input usa-input-inline"
+                        id="start-time-minutes"
+                        max="59"
+                        min="0"
+                        name="startTimeMinutes"
+                        type="number"
+                        value={form.startTimeMinutes || ''}
+                        onChange={e => {
+                          updateTrialSessionFormDataSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
-                  <div className="usa-form-group ustc-time-of-day--minute">
-                    <input
-                      aria-describedby="start-time-legend"
-                      aria-label="minutes"
-                      className="usa-input usa-input-inline"
-                      id="start-time-minutes"
-                      max="59"
-                      min="0"
-                      name="startTimeMinutes"
-                      type="number"
-                      value={form.startTimeMinutes || ''}
-                      onChange={e => {
-                        updateTrialSessionFormDataSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-                <div className="grid-col-6 ustc-time-of-day">
-                  <div className="ustc-time-of-day--am-pm">
-                    {['am', 'pm'].map(option => (
-                      <div className="usa-radio usa-radio__inline" key={option}>
-                        <input
-                          aria-describedby="start-time-legend"
-                          checked={form.startTimeExtension === option}
-                          className="usa-radio__input"
-                          id={`startTimeExtension-${option}`}
-                          name="startTimeExtension"
-                          type="radio"
-                          value={option}
-                          onBlur={() => {
-                            validateTrialSessionSequence();
-                          }}
-                          onChange={e => {
-                            updateTrialSessionFormDataSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                        <label
-                          aria-label={option.toUpperCase()}
-                          className="smaller-padding-right usa-radio__label"
-                          htmlFor={`startTimeExtension-${option}`}
+                  <div className="grid-col-6 ustc-time-of-day">
+                    <div className="ustc-time-of-day--am-pm">
+                      {['am', 'pm'].map(option => (
+                        <div
+                          className="usa-radio usa-radio__inline"
+                          key={option}
                         >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
+                          <input
+                            aria-describedby="start-time-legend"
+                            checked={form.startTimeExtension === option}
+                            className="usa-radio__input"
+                            id={`startTimeExtension-${option}`}
+                            name="startTimeExtension"
+                            type="radio"
+                            value={option}
+                            onBlur={() => {
+                              validateTrialSessionSequence();
+                            }}
+                            onChange={e => {
+                              updateTrialSessionFormDataSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            aria-label={option.toUpperCase()}
+                            className="smaller-padding-right usa-radio__label"
+                            htmlFor={`startTimeExtension-${option}`}
+                          >
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </fieldset>
-          </FormGroup>
-          </>
- 
-          )
-          }
+              </fieldset>
+            </FormGroup>
+          )}
 
           {formattedTrialSessions.showSwingSessionOption && (
             <>
@@ -312,34 +229,32 @@ export const SessionInformationForm = connect(
               <legend className="usa-legend" id="session-type-legend">
                 Session type
               </legend>
-              {['Regular', 'Small', 'Hybrid', 'Special', 'Motion/Hearing'].map(
-                option => (
-                  <div className="usa-radio" key={option}>
-                    <input
-                      aria-describedby="session-type-legend"
-                      checked={form.sessionType === option}
-                      className="usa-radio__input"
-                      id={`session-type-${option}`}
-                      name="sessionType"
-                      type="radio"
-                      value={option}
-                      onChange={e => {
-                        updateTrialSessionFormDataSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                        validateTrialSessionSequence();
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      htmlFor={`session-type-${option}`}
-                    >
-                      {option}
-                    </label>
-                  </div>
-                ),
-              )}
+              {sessionInformationHelper.sessionTypes.map(option => (
+                <div className="usa-radio" key={option}>
+                  <input
+                    aria-describedby="session-type-legend"
+                    checked={form.sessionType === option}
+                    className="usa-radio__input"
+                    id={`session-type-${option}`}
+                    name="sessionType"
+                    type="radio"
+                    value={option}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                      validateTrialSessionSequence();
+                    }}
+                  />
+                  <label
+                    className="usa-radio__label"
+                    htmlFor={`session-type-${option}`}
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
             </fieldset>
           </FormGroup>
 
