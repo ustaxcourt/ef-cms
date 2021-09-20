@@ -28,7 +28,7 @@ export const SessionInformationForm = connect(
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
           <div className="margin-bottom-3">
-            <legend className="usa-legend" id="session-type-legend">
+            <legend className="usa-legend" id="session-scope-legend">
               Session scope
             </legend>
             {Object.entries(TRIAL_SESSION_SCOPE_TYPES).map(([key, value]) => (

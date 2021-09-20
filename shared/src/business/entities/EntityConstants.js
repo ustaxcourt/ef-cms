@@ -41,7 +41,7 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
 };
 
 const TRIAL_SESSION_SCOPE_TYPES = {
-  locationBased: 'Location Based',
+  locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 };
 
