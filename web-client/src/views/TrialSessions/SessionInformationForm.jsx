@@ -27,9 +27,9 @@ export const SessionInformationForm = connect(
   }) {
     return (
       <>
-        <h2 className="margin-top-0 margin-bottom-2">Session Information</h2>
+        <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-          <div className="margin-bottom-3">
+          <div className="margin-bottom-5">
             <legend className="usa-legend" id="session-scope-legend">
               Session scope
             </legend>
