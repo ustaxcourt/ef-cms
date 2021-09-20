@@ -12,6 +12,7 @@ export const LocationInformationForm = connect(
     TRIAL_SESSION_PROCEEDING_TYPES:
       state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
+    trialSessionInformationHelper: state.trialSessionInformationHelper,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -20,6 +21,7 @@ export const LocationInformationForm = connect(
   function LocationInformationForm({
     form,
     TRIAL_SESSION_PROCEEDING_TYPES,
+    trialSessionInformationHelper,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
