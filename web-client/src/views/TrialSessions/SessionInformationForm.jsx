@@ -166,71 +166,72 @@ export const SessionInformationForm = connect(
             </FormGroup>
           )}
 
-          {formattedTrialSessions.showSwingSessionOption && (
-            <>
-              <div className="usa-form-group">
-                <div className="usa-checkbox">
-                  <input
-                    checked={form.swingSession || false}
-                    className="usa-checkbox__input"
-                    id="swing-session"
-                    name="swingSession"
-                    type="checkbox"
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.checked,
-                      });
-                    }}
-                  />
-                  <label
-                    className="usa-checkbox__label"
-                    htmlFor="swing-session"
-                  >
-                    This is part of a Swing session
-                  </label>
+          {formattedTrialSessions.showSwingSessionOption &&
+            !addTrialSessionInformationHelper.isStandaloneSession && (
+              <>
+                <div className="usa-form-group">
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.swingSession || false}
+                      className="usa-checkbox__input"
+                      id="swing-session"
+                      name="swingSession"
+                      type="checkbox"
+                      onChange={e => {
+                        updateTrialSessionFormDataSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor="swing-session"
+                    >
+                      This is part of a Swing session
+                    </label>
+                  </div>
                 </div>
-              </div>
-              {formattedTrialSessions.showSwingSessionList && (
-                <FormGroup errorText={validationErrors.swingSessionId}>
-                  <label
-                    className="usa-label"
-                    htmlFor="swing-session-id"
-                    id="swing-session-id-label"
-                  >
-                    Which Trial Session is This Associated With?
-                  </label>
-                  <select
-                    aria-describedby="swing-session-id-label"
-                    className={classNames(
-                      'usa-select',
-                      validationErrors.swingSessionId && 'usa-select--error',
-                    )}
-                    id="swing-session-id"
-                    name="swingSessionId"
-                    value={form.swingSessionId || ''}
-                    onChange={e => {
-                      updateTrialSessionFormDataSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                      validateTrialSessionSequence();
-                    }}
-                  >
-                    <option value="">- Select -</option>
-                    {formattedTrialSessions.sessionsByTerm.map(session => (
-                      <option
-                        key={session.trialSessionId}
-                        value={session.trialSessionId}
-                      >
-                        {session.trialLocation}
-                      </option>
-                    ))}
-                  </select>
-                </FormGroup>
-              )}
-            </>
-          )}
+                {formattedTrialSessions.showSwingSessionList && (
+                  <FormGroup errorText={validationErrors.swingSessionId}>
+                    <label
+                      className="usa-label"
+                      htmlFor="swing-session-id"
+                      id="swing-session-id-label"
+                    >
+                      Which Trial Session is This Associated With?
+                    </label>
+                    <select
+                      aria-describedby="swing-session-id-label"
+                      className={classNames(
+                        'usa-select',
+                        validationErrors.swingSessionId && 'usa-select--error',
+                      )}
+                      id="swing-session-id"
+                      name="swingSessionId"
+                      value={form.swingSessionId || ''}
+                      onChange={e => {
+                        updateTrialSessionFormDataSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                        validateTrialSessionSequence();
+                      }}
+                    >
+                      <option value="">- Select -</option>
+                      {formattedTrialSessions.sessionsByTerm.map(session => (
+                        <option
+                          key={session.trialSessionId}
+                          value={session.trialSessionId}
+                        >
+                          {session.trialLocation}
+                        </option>
+                      ))}
+                    </select>
+                  </FormGroup>
+                )}
+              </>
+            )}
           <FormGroup errorText={validationErrors.sessionType}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="usa-legend" id="session-type-legend">

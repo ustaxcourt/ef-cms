@@ -254,6 +254,24 @@ describe('TrialSession entity', () => {
 
       expect(trialSession.isValid()).toBe(true);
     });
+
+    it(`should require trialLocation when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        trialLocation: 'Select a trial session location',
+      });
+    });
   });
 
   describe('required fields when calendared', () => {

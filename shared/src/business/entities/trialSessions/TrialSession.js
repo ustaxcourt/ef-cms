@@ -60,15 +60,14 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.password = rawSession.password;
   this.postalCode = rawSession.postalCode;
+  this.sessionScope =
+    rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
-  this.sessionScope = rawSession.sessionScope;
   this.startDate = rawSession.startDate;
   this.startTime = rawSession.startTime || '10:00';
   this.state = rawSession.state;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
-  this.sessionScope =
-    rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
   this.trialLocation = rawSession.trialLocation;
