@@ -2,6 +2,7 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -28,6 +29,13 @@ exports.createTrialSessionInteractor = async (
   }
 
   if (['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType)) {
+    trialSessionToAdd.setAsCalendared();
+  }
+
+  if (
+    trialSessionToAdd.sessionScope ===
+    TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+  ) {
     trialSessionToAdd.setAsCalendared();
   }
 
