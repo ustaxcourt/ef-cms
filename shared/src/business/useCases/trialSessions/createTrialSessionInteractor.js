@@ -28,13 +28,10 @@ exports.createTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType)) {
-    trialSessionToAdd.setAsCalendared();
-  }
-
   if (
+    ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||
     trialSessionToAdd.sessionScope ===
-    TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
   ) {
     trialSessionToAdd.setAsCalendared();
   }
