@@ -40,6 +40,11 @@ const TRIAL_SESSION_PROCEEDING_TYPES = {
   remote: 'Remote',
 };
 
+const TRIAL_SESSION_SCOPE_TYPES = {
+  locationBased: 'Location-based',
+  standaloneRemote: 'Standalone Remote',
+};
+
 const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
@@ -1157,6 +1162,7 @@ module.exports = deepFreeze({
   TRIAL_CITIES,
   TRIAL_CITY_STRINGS,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   TRIAL_CLERKS_SECTION,
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
