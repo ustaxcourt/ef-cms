@@ -80,6 +80,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  sendUpdatePetitionerCasesMessage,
+} = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
+const {
   setUserEmailFromPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
 const {
@@ -96,12 +99,15 @@ const {
   updatePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
 const {
+  updatePetitionerCasesInteractor,
+} = require('../../shared/src/business/useCases/users/updatePetitionerCasesInteractor');
+const {
   updateUser,
 } = require('../../shared/src/persistence/dynamo/users/updateUser');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
 const { createLogger } = require('../../shared/src/utilities/createLogger');
 const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
-const { DynamoDB, S3, SES } = AWS;
+const { DynamoDB, S3, SES, SQS } = AWS;
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -123,6 +129,7 @@ const logger = createLogger({
 
 let s3Cache;
 let sesCache;
+let sqsCache;
 
 const applicationContext = {
   documentUrlTranslator,
@@ -184,6 +191,32 @@ const applicationContext = {
     stage: process.env.STAGE,
   }),
   getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
+  getMessageGateway: () => ({
+    sendUpdatePetitionerCasesMessage: ({
+      applicationContext: appContext,
+      user,
+    }) => {
+      if (environment.stage === 'local') {
+        updatePetitionerCasesInteractor({
+          applicationContext: appContext,
+          user,
+        });
+      } else {
+        sendUpdatePetitionerCasesMessage({
+          applicationContext: appContext,
+          user,
+        });
+      }
+    },
+  }),
+  getMessagingClient: () => {
+    if (!sqsCache) {
+      sqsCache = new SQS({
+        apiVersion: '2012-11-05',
+      });
+    }
+    return sqsCache;
+  },
   getNodeSass: () => {
     return sass;
   },

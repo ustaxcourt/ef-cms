@@ -293,10 +293,16 @@ exports.verifyUserPendingEmailInteractor = async (
 
   try {
     if (userEntity.role === ROLES.petitioner) {
-      await updatePetitionerCases({
-        applicationContext,
-        user: updatedRawUser,
-      });
+      // await updatePetitionerCases({
+      //   applicationContext,
+      //   user: updatedRawUser,
+      // });
+      await applicationContext
+        .getMessageGateway()
+        .sendUpdatePetitionerCasesMessage({
+          applicationContext,
+          user: updatedRawUser,
+        });
     } else if (userEntity.role === ROLES.privatePractitioner) {
       await updatePractitionerCases({
         applicationContext,
