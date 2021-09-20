@@ -2,6 +2,7 @@ import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocke
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
+import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
@@ -83,7 +84,6 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
-import { sessionInformationHelper } from './computeds/TrialSession/sessionInformationHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
@@ -95,7 +95,6 @@ import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
-import { trialSessionInformationHelper } from './computeds/TrialSession/trialSessionInformationHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
@@ -114,6 +113,7 @@ const helpers = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addToTrialSessionModalHelper,
+  addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
@@ -192,7 +192,6 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  sessionInformationHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   startCaseHelper,
@@ -204,7 +203,6 @@ const helpers = {
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
-  trialSessionInformationHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsHelper,
   trialSessionsSummaryHelper,

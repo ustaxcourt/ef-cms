@@ -8,18 +8,18 @@ import classNames from 'classnames';
 export const SessionInformationForm = connect(
   {
     TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
+    addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
     form: state.form,
     formattedTrialSessions: state.formattedTrialSessions,
-    sessionInformationHelper: state.sessionInformationHelper,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
     validationErrors: state.validationErrors,
   },
   function SessionInformationForm({
+    addTrialSessionInformationHelper,
     form,
     formattedTrialSessions,
-    sessionInformationHelper,
     TRIAL_SESSION_SCOPE_TYPES,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
@@ -67,7 +67,7 @@ export const SessionInformationForm = connect(
           <DateInput
             errorText={validationErrors.startDate}
             hintText={
-              sessionInformationHelper.isStandaloneSession
+              addTrialSessionInformationHelper.isStandaloneSession
                 ? 'All standalone remote sessions begin at 1 p.m. ET.'
                 : undefined
             }
@@ -78,7 +78,7 @@ export const SessionInformationForm = connect(
             onChange={updateTrialSessionFormDataSequence}
           />
 
-          {!sessionInformationHelper.isStandaloneSession && (
+          {!addTrialSessionInformationHelper.isStandaloneSession && (
             <FormGroup errorText={validationErrors.startTime}>
               <fieldset className="start-time usa-fieldset margin-bottom-0">
                 <legend className="usa-legend" id="start-time-legend">
@@ -236,7 +236,7 @@ export const SessionInformationForm = connect(
               <legend className="usa-legend" id="session-type-legend">
                 Session type
               </legend>
-              {sessionInformationHelper.sessionTypes.map(option => (
+              {addTrialSessionInformationHelper.sessionTypes.map(option => (
                 <div className="usa-radio" key={option}>
                   <input
                     aria-describedby="session-type-legend"
@@ -264,7 +264,7 @@ export const SessionInformationForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-          {!sessionInformationHelper.isStandaloneSession && (
+          {!addTrialSessionInformationHelper.isStandaloneSession && (
             <FormGroup errorText={validationErrors.maxCases}>
               <label className="usa-label" htmlFor="max-cases">
                 Number of cases allowed
