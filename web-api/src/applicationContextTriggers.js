@@ -104,7 +104,12 @@ const { getUniqueId } = require('../../shared/src/sharedAppContext.js');
 const { DynamoDB, S3, SES } = AWS;
 
 const environment = {
+  appEndpoint: process.env.EFCMS_DOMAIN
+    ? `app.${process.env.EFCMS_DOMAIN}`
+    : 'localhost:1234',
+  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   s3Endpoint: process.env.S3_ENDPOINT || 'localhost',
+  stage: process.env.STAGE,
   tempDocumentsBucketName: process.env.TEMP_DOCUMENTS_BUCKET_NAME || '',
 };
 
@@ -121,6 +126,10 @@ let sesCache;
 
 const applicationContext = {
   documentUrlTranslator,
+  environment,
+  getAppEndpoint: () => {
+    return environment.appEndpoint;
+  },
   getCaseTitle: Case.getCaseTitle,
   getChromiumBrowser,
   getConstants: () => ({ MAX_SES_RETRIES: 6 }),
