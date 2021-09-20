@@ -12,6 +12,7 @@ const {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
@@ -59,6 +60,8 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.password = rawSession.password;
   this.postalCode = rawSession.postalCode;
+  this.sessionScope =
+    rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
   this.startTime = rawSession.startTime || '10:00';
@@ -164,7 +167,11 @@ TrialSession.validationRules = {
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    maxCases: joi.number().greater(0).integer().required(),
+    maxCases: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      otherwise: joi.number().greater(0).integer().required(),
+      then: joi.optional(),
+    }),
     meetingId: stringRequiredForRemoteProceedings,
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
@@ -172,6 +179,9 @@ TrialSession.validationRules = {
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
+    ).required(),
+    sessionScope: JoiValidationConstants.STRING.valid(
+      ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
     ).required(),
     sessionType: JoiValidationConstants.STRING.valid(
       ...Object.values(SESSION_TYPES),
@@ -198,13 +208,17 @@ TrialSession.validationRules = {
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    trialLocation: joi
-      .alternatives()
-      .try(
-        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-      )
-      .required(),
+    trialLocation: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      otherwise: joi
+        .alternatives()
+        .try(
+          JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+          JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+        )
+        .required(),
+      then: joi.optional(),
+    }),
     trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
