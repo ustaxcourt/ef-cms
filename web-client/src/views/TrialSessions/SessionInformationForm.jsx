@@ -66,17 +66,17 @@ export const SessionInformationForm = connect(
 
           <DateInput
             errorText={validationErrors.startDate}
+            hintText={
+              sessionInformationHelper.isStandaloneSession
+                ? 'All standalone remote sessions begin at 1 p.m. ET.'
+                : undefined
+            }
             id="start-date"
             label="Start date"
             values={form}
             onBlur={validateTrialSessionSequence}
             onChange={updateTrialSessionFormDataSequence}
           />
-          {sessionInformationHelper.isStandaloneSession && (
-            <span className="usa-hint">
-              All standalone remote sessions begin at 1 p.m. ET.
-            </span>
-          )}
 
           {!sessionInformationHelper.isStandaloneSession && (
             <FormGroup errorText={validationErrors.startTime}>
