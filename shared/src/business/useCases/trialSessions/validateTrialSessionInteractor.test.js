@@ -2,32 +2,20 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  NewTrialSession,
-} = require('../../entities/trialSessions/NewTrialSession');
-const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   validateTrialSessionInteractor,
 } = require('./validateTrialSessionInteractor');
 const { formatNow } = require('../../utilities/DateHandler');
-const { omit } = require('lodash');
 
 describe('validateTrialSessionInteractor', () => {
-  it('returns the expected errors object on an empty trial session', () => {
+  it('returns a list of errors when the trial session is invalid', () => {
     const errors = validateTrialSessionInteractor(applicationContext, {
       trialSession: {},
     });
 
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(
-        omit(NewTrialSession.VALIDATION_ERROR_MESSAGES, [
-          'postalCode',
-          'swingSessionId',
-          'startTime',
-        ]),
-      ),
-    );
+    expect(Object.keys(errors).length).toBeGreaterThan(0);
   });
 
   it('returns null for a valid trial session', () => {
