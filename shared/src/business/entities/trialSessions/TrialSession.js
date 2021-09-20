@@ -67,6 +67,8 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.state = rawSession.state;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
+  this.sessionScope =
+    rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
   this.trialLocation = rawSession.trialLocation;
