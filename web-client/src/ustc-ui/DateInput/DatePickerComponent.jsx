@@ -7,6 +7,7 @@ export const DatePickerComponent = ({
   className,
   errorText,
   hideLegend,
+  hintText,
   label,
   name,
   names,
@@ -108,6 +109,7 @@ export const DatePickerComponent = ({
           type="text"
         />
       </div>
+      {hintText && <span className="usa-hint margin-top-2">{hintText}</span>}
     </FormGroup>
   );
 };
