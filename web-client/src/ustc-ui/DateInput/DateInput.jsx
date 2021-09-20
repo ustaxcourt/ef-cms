@@ -10,7 +10,7 @@ export const DateInput = props => {
     onBlur = () => {},
     onChange = () => {},
     hideLegend,
-    hintText = undefined,
+    hintText,
     optional,
     values = null,
     names = {
