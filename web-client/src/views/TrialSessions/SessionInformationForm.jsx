@@ -63,6 +63,7 @@ export const SessionInformationForm = connect(
               </div>
             ))}
           </div>
+
           <DateInput
             errorText={validationErrors.startDate}
             id="start-date"
@@ -71,6 +72,12 @@ export const SessionInformationForm = connect(
             onBlur={validateTrialSessionSequence}
             onChange={updateTrialSessionFormDataSequence}
           />
+          {sessionInformationHelper.isStandaloneSession && (
+            <span className="usa-hint">
+              All standalone remote sessions begin at 1 p.m. ET.
+            </span>
+          )}
+
           {!sessionInformationHelper.isStandaloneSession && (
             <FormGroup errorText={validationErrors.startTime}>
               <fieldset className="start-time usa-fieldset margin-bottom-0">
