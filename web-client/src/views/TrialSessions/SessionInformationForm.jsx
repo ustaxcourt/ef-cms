@@ -27,7 +27,7 @@ export const SessionInformationForm = connect(
   }) {
     return (
       <>
-        <h2 className="margin-top-0">Session Information</h2>
+        <h2 className="margin-top-0 margin-bottom-2">Session Information</h2>
         <div className="blue-container">
           <div className="margin-bottom-3">
             <legend className="usa-legend" id="session-scope-legend">
@@ -264,29 +264,30 @@ export const SessionInformationForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-
-          <FormGroup errorText={validationErrors.maxCases}>
-            <label className="usa-label" htmlFor="max-cases">
-              Number of cases allowed
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input usa-input--small"
-              id="max-cases"
-              name="maxCases"
-              type="text"
-              value={form.maxCases || ''}
-              onBlur={() => {
-                validateTrialSessionSequence();
-              }}
-              onChange={e => {
-                updateTrialSessionFormDataSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
+          {!sessionInformationHelper.isStandaloneSession && (
+            <FormGroup errorText={validationErrors.maxCases}>
+              <label className="usa-label" htmlFor="max-cases">
+                Number of cases allowed
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input usa-input--small"
+                id="max-cases"
+                name="maxCases"
+                type="text"
+                value={form.maxCases || ''}
+                onBlur={() => {
+                  validateTrialSessionSequence();
+                }}
+                onChange={e => {
+                  updateTrialSessionFormDataSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
+          )}
         </div>
       </>
     );
