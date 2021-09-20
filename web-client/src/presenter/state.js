@@ -95,6 +95,7 @@ import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionInformationHelper } from './computeds/TrialSession/trialSessionInformationHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
@@ -203,6 +204,7 @@ const helpers = {
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,
+  trialSessionInformationHelper,
   trialSessionWorkingCopyHelper,
   trialSessionsHelper,
   trialSessionsSummaryHelper,

@@ -28,7 +28,7 @@ export const LocationInformationForm = connect(
   }) {
     return (
       <>
-        <h2 className="margin-top-4">Location Information</h2>
+        <h2 className="margin-top-4">{trialSessionInformationHelper.title}</h2>
         <div className="blue-container">
           <FormGroup errorText={validationErrors.proceedingType}>
             <fieldset className="start-time usa-fieldset margin-bottom-0">
@@ -95,7 +95,7 @@ export const LocationInformationForm = connect(
           {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson && (
             <InPersonProceedingForm />
           )}
-          {form.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote && (
+          {trialSessionInformationHelper.displayRemoteProceedingForm && (
             <RemoteProceedingForm />
           )}
         </div>

@@ -1,14 +1,25 @@
 import { state } from 'cerebral';
 
 export const trialSessionInformationHelper = (get, applicationContext) => {
-  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
+  const { TRIAL_SESSION_PROCEEDING_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+
+  const { proceedingType, sessionScope } = get(state.form);
 
   const isStandaloneSession =
-    get(state.form.sessionScope) === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+    sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
 
-    const title  = 
+  const title = isStandaloneSession
+    ? 'Remote Proceeding Information'
+    : 'Location Information';
+
+  const displayRemoteProceedingForm =
+    proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote ||
+    isStandaloneSession;
 
   return {
+    displayRemoteProceedingForm,
     isStandaloneSession,
+    title,
   };
 };
