@@ -109,7 +109,7 @@ export const DatePickerComponent = ({
           type="text"
         />
       </div>
-      {hintText && <span className="usa-hint">{hintText}</span>}
+      {hintText && <span className="usa-hint margin-top-2">{hintText}</span>}
     </FormGroup>
   );
 };
