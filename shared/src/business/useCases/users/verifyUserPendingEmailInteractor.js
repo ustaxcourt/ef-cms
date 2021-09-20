@@ -91,20 +91,22 @@ const updateCasesForPetitioner = async ({
       }),
     ),
   );
-  const validatedCasesToUpdateInPersistence = (
-    await Promise.all(
-      rawCasesToUpdate.map(rawCaseData => {
-        return updateCaseEntityAndGenerateChange({
-          applicationContext,
-          rawCaseData,
-          user,
-        });
+
+  const validatedCasesToUpdateInPersistence = [];
+  for (let rawCaseData of rawCasesToUpdate) {
+    validatedCasesToUpdateInPersistence.push(
+      await updateCaseEntityAndGenerateChange({
+        applicationContext,
+        rawCaseData,
+        user,
       }),
-    )
-  ).filter(Boolean);
+    );
+  }
+  const filteredCasesToUpdateInPersistence =
+    validatedCasesToUpdateInPersistence.filter(Boolean);
 
   return Promise.all(
-    validatedCasesToUpdateInPersistence.map(caseToUpdate =>
+    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
