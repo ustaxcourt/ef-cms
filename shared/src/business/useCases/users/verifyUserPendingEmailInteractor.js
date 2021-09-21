@@ -1,32 +1,25 @@
 const {
-  calculateISODate,
-  dateStringsCompared,
-} = require('../../utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
-const MAX_CLOSED_DATE = calculateISODate({
-  howMuch: -6,
-  units: 'months',
-});
-
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
-  caseToUpdate,
+  rawCaseData,
   user,
 }) => {
-  const caseEntity = new Case(caseToUpdate, {
+  const caseEntity = new Case(rawCaseData, {
     applicationContext,
   });
 
@@ -39,7 +32,15 @@ const updateCaseEntityAndGenerateChange = async ({
   }
 
   const oldEmail = petitionerObject.email;
+  const newData = {
+    email: user.email,
+    name: petitionerObject.name,
+  };
+
+  const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
+
+  const servedParties = aggregatePartiesForService(caseEntity);
 
   if (
     !caseEntity.isUserIdRepresentedByPrivatePractitioner(
@@ -49,25 +50,32 @@ const updateCaseEntityAndGenerateChange = async ({
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
-  const validCase = new Case(caseEntity, { applicationContext }).validate();
-  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
-    caseToUpdate.status,
-  );
-  const isRecent =
-    caseToUpdate.closedDate &&
-    dateStringsCompared(caseToUpdate.closedDate, MAX_CLOSED_DATE) >= 0;
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({ newData, oldData });
 
-  if (isOpen || isRecent) {
-    await applicationContext.getUseCaseHelpers().generateAndServeDocketEntry({
-      applicationContext,
-      caseToUpdate,
-      newData: user.email,
-      oldData: oldEmail,
-      practitionerName: undefined,
-      user,
-    });
+  const isContactRepresented =
+    caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    );
+
+  if (caseEntity.isCaseEligibleForService()) {
+    const { changeOfAddressDocketEntry } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        caseEntity,
+        documentType,
+        isContactRepresented,
+        newData,
+        oldData,
+        servedParties,
+        user,
+      });
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   }
-  return validCase;
+
+  return caseEntity.validate();
 };
 
 const updateCasesForPetitioner = async ({
@@ -75,7 +83,7 @@ const updateCasesForPetitioner = async ({
   petitionerCases,
   user,
 }) => {
-  const casesToUpdate = await Promise.all(
+  const rawCasesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
@@ -84,20 +92,21 @@ const updateCasesForPetitioner = async ({
     ),
   );
 
-  const validatedCasesToUpdateInPersistence = (
-    await Promise.all(
-      casesToUpdate.map(caseToUpdate =>
-        updateCaseEntityAndGenerateChange({
-          applicationContext,
-          caseToUpdate,
-          user,
-        }),
-      ),
-    )
-  ).filter(Boolean);
+  const validatedCasesToUpdateInPersistence = [];
+  for (let rawCaseData of rawCasesToUpdate) {
+    validatedCasesToUpdateInPersistence.push(
+      await updateCaseEntityAndGenerateChange({
+        applicationContext,
+        rawCaseData,
+        user,
+      }),
+    );
+  }
+  const filteredCasesToUpdateInPersistence =
+    validatedCasesToUpdateInPersistence.filter(Boolean);
 
   return Promise.all(
-    validatedCasesToUpdateInPersistence.map(caseToUpdate =>
+    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
@@ -277,7 +286,6 @@ exports.verifyUserPendingEmailInteractor = async (
   userEntity.pendingEmailVerificationToken = undefined;
 
   const updatedRawUser = userEntity.validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: updatedRawUser,
@@ -294,8 +302,6 @@ exports.verifyUserPendingEmailInteractor = async (
         applicationContext,
         user: updatedRawUser,
       });
-    } else {
-      throw new Error(`Refusing to update cases for ${userEntity.role}`);
     }
   } catch (error) {
     applicationContext.logger.error(error);

@@ -56,7 +56,30 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
                 "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
             ],
             "Effect": "Allow"
-        }  
+        },
+        {
+            "Action": [
+                "ses:SendBulkTemplatedEmail"
+            ],
+            "Resource": [
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectTagging"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${var.dns_domain}-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
+            ],
+            "Effect": "Allow"
+        }
     ]
 }
 EOF

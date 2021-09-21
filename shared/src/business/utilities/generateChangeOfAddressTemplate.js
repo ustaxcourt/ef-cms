@@ -1,3 +1,6 @@
+const {
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
+} = require('../../business/entities/EntityConstants');
 const { union } = require('lodash');
 
 /**
@@ -53,26 +56,24 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
     addressFields.includes(field),
   );
   const isPhoneChange = !!initialDiff.phone;
+  const isEmailChange = newData.email && newData.email !== oldData.email;
 
-  if (isAddressChange && !isPhoneChange) {
-    documentType = {
-      eventCode: 'NCA',
-      title: 'Notice of Change of Address',
-    };
-  }
-
-  if (isPhoneChange && !isAddressChange) {
-    documentType = {
-      eventCode: 'NCP',
-      title: 'Notice of Change of Telephone Number',
-    };
-  }
-
-  if (isAddressChange && isPhoneChange) {
-    documentType = {
-      eventCode: 'NCAP',
-      title: 'Notice of Change of Address and Telephone Number',
-    };
+  if (isEmailChange) {
+    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+      e => e.eventCode === 'NOCE',
+    );
+  } else if (isAddressChange && !isPhoneChange) {
+    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+      e => e.eventCode === 'NCA',
+    );
+  } else if (isPhoneChange && !isAddressChange) {
+    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+      e => e.eventCode === 'NCP',
+    );
+  } else if (isAddressChange && isPhoneChange) {
+    documentType = NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+      e => e.eventCode === 'NCAP',
+    );
   }
 
   return documentType;

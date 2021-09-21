@@ -7,6 +7,7 @@ module.exports = {
     'src/**/*.js',
     'migration-terraform/main/lambdas/migrations/*.js',
     '!src/applicationContext.js',
+    '!src/applicationContextTriggers.js',
     '!src/**/*Handlers.js',
     '!src/**/*Lambda.js',
     '!src/app.js',
