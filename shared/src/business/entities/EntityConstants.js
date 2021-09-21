@@ -65,12 +65,26 @@ const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
 };
 
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
-  { documentType: 'Notice of Change of Address', eventCode: 'NCA' },
+  {
+    documentType: 'Notice of Change of Address',
+    eventCode: 'NCA',
+    title: 'Notice of Change of Address',
+  },
   {
     documentType: 'Notice of Change of Address and Telephone Number',
     eventCode: 'NCAP',
+    title: 'Notice of Change of Address and Telephone Number',
   },
-  { documentType: 'Notice of Change of Telephone Number', eventCode: 'NCP' },
+  {
+    documentType: 'Notice of Change of Telephone Number',
+    eventCode: 'NCP',
+    title: 'Notice of Change of Telephone Number',
+  },
+  {
+    documentType: 'Notice of Change of Email Address',
+    eventCode: 'NOCE',
+    title: 'Notice of Change of Email Address',
+  },
 ];
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
@@ -178,6 +192,13 @@ const ORDER_TYPES = [
 ];
 
 const BENCH_OPINION_EVENT_CODE = 'OST';
+
+const ADVANCED_SEARCH_OPINION_TYPES = {
+  Bench: BENCH_OPINION_EVENT_CODE,
+  Memorandum: 'MOP',
+  Summary: 'SOP',
+  'T.C.': 'TCOP',
+};
 
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
@@ -1044,6 +1065,7 @@ module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   ALL_DOCUMENT_TYPES,
   ALL_DOCUMENT_TYPES_MAP,

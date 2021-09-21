@@ -83,7 +83,10 @@ export const OrderSearchForm = connect(
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  <JudgeSelect judges={judges} />
+                  <JudgeSelect
+                    formValue={'advancedSearchForm.orderSearch.judge'}
+                    judges={judges}
+                  />
                 </div>
                 <div className="margin-top-4">
                   <DateRangeSelect
@@ -163,7 +166,10 @@ export const OrderSearchForm = connect(
                 <div className="grid-row grid-gap-3 margin-top-2">
                   <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
                     <div className="width-card-lg">
-                      <JudgeSelect judges={judges} />
+                      <JudgeSelect
+                        formValue={'advancedSearchForm.orderSearch.judge'}
+                        judges={judges}
+                      />
                     </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
                       <DateRangeSelect

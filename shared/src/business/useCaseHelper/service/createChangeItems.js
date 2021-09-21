@@ -1,18 +1,33 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const { addCoverToPdf } = require('../../useCases/addCoversheetInteractor');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+
 const { WorkItem } = require('../../entities/WorkItem');
 
+/**
+ * This function isolates task of generating the Docket Entry
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.caseEntity the instantiated Case class (updated by reference)
+ * @param {object} providers.documentType the document type of the document being created
+ * @param {object} providers.newData the new contact information
+ * @param {object} providers.oldData the old contact information (for comparison)
+ * @param {object} providers.user the user object that includes userId, barNumber etc.
+ * @returns {Promise<User[]>} the internal users
+ */
 const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
-  contactName,
   documentType,
+  docketMeta = {},
   newData,
   oldData,
   servedParties,
@@ -20,6 +35,17 @@ const createDocketEntryForChange = async ({
 }) => {
   const caseDetail = caseEntity.validate().toRawObject();
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+  let changeOfAddressPdfName = newData.name;
+  let contactName = newData.name;
+
+  // should only be true when called via generateChangeOfAddress
+  if (
+    user.role === ROLES.privatePractitioner ||
+    user.role === ROLES.irsPractitioner
+  ) {
+    changeOfAddressPdfName = changeOfAddressPdfName + ` (${user.barNumber})`;
+    contactName = newData.name;
+  }
 
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
@@ -31,7 +57,7 @@ const createDocketEntryForChange = async ({
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
         documentType,
-        name: contactName,
+        name: changeOfAddressPdfName,
         newData,
         oldData,
       },
@@ -53,10 +79,10 @@ const createDocketEntryForChange = async ({
       isOnDocketRecord: true,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       userId: user.userId,
+      ...docketMeta,
     },
     { applicationContext },
   );
-  changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
     applicationContext,
@@ -73,14 +99,25 @@ const createDocketEntryForChange = async ({
     });
 
   caseEntity.addDocketEntry(changeOfAddressDocketEntry);
-
+  changeOfAddressDocketEntry.setAsServed(servedParties.all);
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: changeOfAddressPdfWithCover,
     key: newDocketEntryId,
   });
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key: newDocketEntryId,
+    });
 
-  return { changeOfAddressDocketEntry, changeOfAddressPdfWithCover };
+  return {
+    changeOfAddressDocketEntry,
+    changeOfAddressPdfWithCover,
+    servedParties,
+    url,
+  };
 };
 
 const createWorkItemForChange = async ({
@@ -118,45 +155,74 @@ const createWorkItemForChange = async ({
   });
 };
 
-const createDocketEntryAndWorkItem = async ({
+const generateAndServeDocketEntry = async ({
   applicationContext,
+  barNumber,
   caseEntity,
-  change,
-  editableFields,
-  oldCaseContact,
-  partyWithPaperService,
-  privatePractitionersRepresentingContact,
+  contactName,
+  docketMeta,
+  documentType,
+  isContactRepresented,
+  newData,
+  oldData,
   servedParties,
   user,
 }) => {
-  const changeDocs = await createDocketEntryForChange({
+  const partyWithPaperService = caseEntity.petitioners.some(
+    p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+  );
+
+  const paperServiceRequested =
+    partyWithPaperService ||
+    user.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+  let shouldCreateWorkItem;
+
+  if (
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.privatePractitioner
+  ) {
+    shouldCreateWorkItem = paperServiceRequested;
+  } else {
+    if (paperServiceRequested || !isContactRepresented) {
+      shouldCreateWorkItem = true;
+    }
+  }
+
+  let changeOfAddressDocketEntry;
+  let url;
+  ({ changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
+    barNumber,
     caseEntity,
-    contactName: editableFields.name,
-    documentType: change,
-    newData: editableFields,
-    oldData: oldCaseContact,
+    contactName,
+    docketMeta,
+    documentType,
+    newData,
+    oldData,
     servedParties,
     user,
-  });
+  }));
 
-  if (!privatePractitionersRepresentingContact || partyWithPaperService) {
+  if (shouldCreateWorkItem) {
     await createWorkItemForChange({
       applicationContext,
       caseEntity,
-      changeOfAddressDocketEntry: changeDocs.changeOfAddressDocketEntry,
+      changeOfAddressDocketEntry,
       user,
     });
   }
-  return changeDocs;
-};
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+    servedParties,
+  });
 
-const generateAndServeDocketEntry = () => {
-  /* TODO */
+  return { caseEntity, changeOfAddressDocketEntry, url };
 };
 
 module.exports = {
-  createDocketEntryAndWorkItem,
   createDocketEntryForChange,
   createWorkItemForChange,
   generateAndServeDocketEntry,

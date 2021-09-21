@@ -13,7 +13,9 @@ const renderTable = ({ data, label, options }) => {
       </thead>
       <tbody>
         <tr>
-          {options.isEmailChange && <td>{data.email}</td>}
+          {options.isEmailChange && (
+            <td>{data.email || 'No email provided'}</td>
+          )}
           {options.isPhoneChangeOnly && <td>{data.phone}</td>}
           {options.isAddressChange && (
             <td>

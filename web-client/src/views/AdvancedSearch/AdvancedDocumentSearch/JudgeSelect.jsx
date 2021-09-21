@@ -5,16 +5,17 @@ import React from 'react';
 
 export const JudgeSelect = connect(
   {
+    formValue: props.formValue,
     judges: props.judges,
   },
-  function JudgeSelect({ judges }) {
+  function JudgeSelect({ formValue, judges }) {
     return (
       <>
         <label className="usa-label" htmlFor="order-date-range">
           Judge
         </label>
         <BindedSelect
-          bind={'advancedSearchForm.orderSearch.judge'}
+          bind={formValue}
           className="usa-input"
           id="order-judge"
           name="judge"

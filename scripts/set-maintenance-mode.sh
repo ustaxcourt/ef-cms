@@ -27,3 +27,4 @@ aws lambda invoke --region us-west-1 \
   --payload '{ "maintenanceMode": '${1}' }' \
   --cli-binary-format raw-in-base64-out \
   /dev/null
+  

@@ -66,6 +66,7 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
 
   return {
     documentTypes,
+    eventCodeIsUnservable,
     formattedDocumentTitle,
     serviceParties,
     showDocumentTypeDropdown,

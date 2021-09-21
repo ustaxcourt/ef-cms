@@ -1,5 +1,7 @@
+/* eslint-disable max-lines */
+import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDB, S3 } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
@@ -11,15 +13,31 @@ import {
   router,
 } from '../src/router';
 import {
+  calculateDifferenceInDays,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
+import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
+import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
+import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
+import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
+import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getUniqueId } from '../../shared/src/sharedAppContext.js';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
   image1,
@@ -27,11 +45,16 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
+import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
+import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -39,8 +62,11 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+const pdfLib = require('pdf-lib');
+import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
+import sass from 'sass';
 
 const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -75,30 +101,115 @@ export const fakeFile1 = (() => {
   return getFakeFile(false, true);
 })();
 
+let s3Cache;
+
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
+  const environment = {
+    s3Endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
+  };
   const apiApplicationContext = {
+    getCaseTitle: Case.getCaseTitle,
+    getChromiumBrowser,
+    getConstants: () => ({ MAX_SES_RETRIES: 6 }),
     getCurrentUser: () => ({}),
+    getDispatchers: () => ({
+      sendBulkTemplatedEmail,
+    }),
     getDocumentClient: () => {
       return new DynamoDB.DocumentClient({
         endpoint: 'http://localhost:8000',
         region: 'us-east-1',
       });
     },
+    getDocumentGenerators: () => ({ changeOfAddress, coverSheet }),
+    getDocumentsBucketName: () => {
+      return (
+        process.env.DOCUMENTS_BUCKET_NAME || 'noop-documents-local-us-east-1'
+      );
+    },
+    getEmailClient: () => {
+      return {
+        getSendStatistics: () => {
+          // mock this out so the health checks pass on smoke tests
+          return {
+            promise: () => ({
+              SendDataPoints: [
+                {
+                  Rejects: 0,
+                },
+              ],
+            }),
+          };
+        },
+        sendBulkTemplatedEmail: () => {
+          return {
+            promise: () => {
+              return { Status: [] };
+            },
+          };
+        },
+      };
+    },
     getEnvironment: () => ({
       dynamoDbTableName: 'efcms-local',
       stage: process.env.STAGE,
     }),
+    getIrsSuperuserEmail: () =>
+      process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
+    getNodeSass: () => {
+      return sass;
+    },
+    getPdfLib: () => {
+      return pdfLib;
+    },
     getPersistenceGateway: () => ({
       getCaseByDocketNumber,
       getDocketNumbersByUser,
+      getDownloadPolicyUrl: () => {
+        return {
+          url: 'http://example.com',
+        };
+      },
       getUserById,
+      saveDocumentFromLambda,
+      saveWorkItem,
       updateCase,
+      updateDocketEntry,
       updateUser,
     }),
+    getPug: () => {
+      return pug;
+    },
+    getStorageClient: () => {
+      if (!s3Cache) {
+        s3Cache = new S3({
+          endpoint: environment.s3Endpoint,
+          region: 'us-east-1',
+          s3ForcePathStyle: true,
+        });
+      }
+      return s3Cache;
+    },
+    getTempDocumentsBucketName: () => {
+      return process.env.DOCUMENTS_BUCKET_NAME || '';
+    },
+    getUniqueId,
     getUseCaseHelpers: () => ({
-      generateAndServeDocketEntry: () => {},
+      countPagesInDocument,
+      generateAndServeDocketEntry,
+      sendServedPartiesEmails,
       updateCaseAndAssociations,
+    }),
+    getUseCases: () => ({ generatePdfFromHtmlInteractor }),
+    getUtilities: () => ({
+      calculateDifferenceInDays,
+      calculateISODate,
+      createISODateString,
+      formatDateString,
+      formatNow,
+      getDocumentTypeForAddressChange,
+      prepareDateFromString,
     }),
     logger: {
       debug: () => {},
