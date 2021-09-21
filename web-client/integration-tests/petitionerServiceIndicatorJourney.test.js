@@ -68,12 +68,12 @@ describe('Petitioner Service Indicator Journey', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.updatedEmail',
-      value: 'petitioner@example.com',
+      value: 'petitioner4@example.com',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.confirmEmail',
-      value: 'petitioner@example.com',
+      value: 'petitioner4@example.com',
     });
 
     await cerebralTest.runSequence('submitEditPetitionerSequence');

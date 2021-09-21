@@ -6,7 +6,7 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } = require('../EntityConstants');
-const { TrialSession } = require('./TrialSession');
+const { isStandaloneRemoteSession, TrialSession } = require('./TrialSession');
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
@@ -27,11 +27,29 @@ describe('TrialSession entity', () => {
       expect(() => new TrialSession({}, {})).toThrow();
     });
 
-    it('creates a valid trial session', () => {
+    it('creates a valid trial session with a location', () => {
       const trialSession = new TrialSession(VALID_TRIAL_SESSION, {
         applicationContext,
       });
       expect(trialSession.isValid()).toBeTruthy();
+    });
+
+    it('creates a valid trial session with a trialLocation of "Standalone Remote" when sessionScope is standalone remote', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+      expect(trialSession.trialLocation).toBe(
+        TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      );
     });
 
     it('creates a valid trial session with startDate in the past', () => {
@@ -169,6 +187,29 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.isValid()).toBeTruthy();
+    });
+
+    it(`should set proceedingType to remote when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: undefined,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+      expect(trialSession.proceedingType).toBe(
+        TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      );
     });
 
     it('should be invalid with no proceedingType', () => {
@@ -398,6 +439,20 @@ describe('TrialSession entity', () => {
 
         expect(trialSession.getFormattedValidationErrors()).toEqual(null);
       });
+    });
+  });
+
+  describe('isStandaloneRemoteSession', () => {
+    it(`returns false when the sessionScope passed in is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      expect(
+        isStandaloneRemoteSession(TRIAL_SESSION_SCOPE_TYPES.locationBased),
+      ).toEqual(false);
+    });
+
+    it(`returns true when the sessionScope passed in is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      expect(
+        isStandaloneRemoteSession(TRIAL_SESSION_SCOPE_TYPES.standaloneRemote),
+      ).toEqual(true);
     });
   });
 });
