@@ -86,24 +86,25 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   # These can not use null_data_source.locals due to circular dep
   environment {
     variables = {
-      S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
-      DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-      TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
-      QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
-      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
-      MASTER_REGION                      = "us-east-1"
-      STAGE                              = var.environment
-      NODE_ENV                           = "production"
+      AWS_ACCOUNT_ID                     = data.aws_caller_identity.current.account_id
       BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
-      EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
+      CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
+      DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
+      DYNAMODB_TABLE_NAME                = var.destination_table
+      EFCMS_DOMAIN                       = var.dns_domain
       EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
       EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
       EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
-      EFCMS_DOMAIN                       = var.dns_domain
-      CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
+      EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
       IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
-      DYNAMODB_TABLE_NAME                = var.destination_table
+      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_REGION                      = "us-east-1"
+      NODE_ENV                           = "production"
+      QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
+      S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
+      STAGE                              = var.environment
+      TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
     }
   }
 }
