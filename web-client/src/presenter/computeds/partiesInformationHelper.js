@@ -110,14 +110,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
         practitioner.representing.includes(petitioner.contactId),
     );
 
-    const petitionIsServed = !!applicationContext
+    const canAllowDocumentServiceForCase = !!applicationContext
       .getUtilities()
-      .caseHasServedPetition(caseDetail);
+      .canAllowDocumentServiceForCase(caseDetail);
 
     const canEditPetitioner = getCanEditPetitioner({
       applicationContext,
       permissions,
-      petitionIsServed,
+      petitionIsServed: canAllowDocumentServiceForCase,
       petitioner,
       user,
       userAssociatedWithCase,
