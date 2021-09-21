@@ -205,7 +205,7 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionTypes: ['Summary Opinion'],
+      opinionTypes: ['SOP'],
     });
 
     const expectation = [
@@ -219,7 +219,7 @@ describe('advancedDocumentSearch', () => {
       filter: expect.arrayContaining([
         {
           term: {
-            'documentType.S': 'Summary Opinion',
+            'eventCode.S': 'SOP',
           },
         },
       ]),
@@ -238,7 +238,7 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      opinionTypes: ['Summary Opinion', 'Bench'],
+      opinionTypes: ['SOP', 'OST'],
     });
 
     expect(
@@ -250,12 +250,12 @@ describe('advancedDocumentSearch', () => {
             should: [
               {
                 term: {
-                  'documentType.S': 'Summary Opinion',
+                  'eventCode.S': 'SOP',
                 },
               },
               {
                 term: {
-                  'documentType.S': 'Bench',
+                  'eventCode.S': 'OST',
                 },
               },
             ],

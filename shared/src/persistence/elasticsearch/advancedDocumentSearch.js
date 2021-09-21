@@ -133,13 +133,13 @@ exports.advancedDocumentSearch = async ({
   if (opinionTypes && opinionTypes.length) {
     if (opinionTypes.length === 1) {
       documentQueryFilter.push({
-        term: { 'documentType.S': opinionTypes[0] },
+        term: { 'eventCode.S': opinionTypes[0] },
       });
     } else {
       documentQueryFilter.push({
         bool: {
           should: opinionTypes.map(opinionType => ({
-            term: { 'documentType.S': opinionType },
+            term: { 'eventCode.S': opinionType },
           })),
         },
       });
