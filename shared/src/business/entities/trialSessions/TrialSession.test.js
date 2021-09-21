@@ -189,6 +189,29 @@ describe('TrialSession entity', () => {
       expect(trialSession.isValid()).toBeTruthy();
     });
 
+    it(`should set proceedingType to remote when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          address1: '123 Flavor Ave',
+          city: 'Flavortown',
+          judge: {},
+          postalCode: '12345',
+          proceedingType: undefined,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          state: 'TN',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+      expect(trialSession.proceedingType).toBe(
+        TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      );
+    });
+
     it('should be invalid with no proceedingType', () => {
       const trialSession = new TrialSession(
         {
