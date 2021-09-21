@@ -35,6 +35,9 @@ const {
   getCaseByDocketNumber,
 } = require('../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
 const {
+  getCasesForUser,
+} = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
+const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
@@ -238,6 +241,7 @@ const applicationContext = {
   },
   getPersistenceGateway: () => ({
     getCaseByDocketNumber,
+    getCasesForUser,
     getDocketNumbersByUser,
     getDownloadPolicyUrl,
     getUserById,
@@ -279,6 +283,7 @@ const applicationContext = {
     createPetitionerAccountInteractor,
     generatePdfFromHtmlInteractor,
     setUserEmailFromPendingEmailInteractor,
+    updatePetitionerCasesInteractor,
   }),
   getUtilities: () => ({
     calculateDifferenceInDays,
