@@ -24,8 +24,8 @@ export const formatDateIfToday = (date, applicationContext) => {
       applicationContext
         .getUtilities()
         .prepareDateFromString()
-        .add(-1, 'days')
-        .toDate(),
+        .plus(-1, 'day')
+        .toJSDate(),
       'MMDDYY',
     );
 

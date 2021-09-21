@@ -91,6 +91,7 @@
     "lint-staged": "^11.1.2",
     "lodash": "^4.17.21",
     "logform": "^2.2.0",
+    "luxon": "^2.0.2",
     "moize": "^6.1.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
@@ -284,6 +285,5 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
     "underscore": "^1.13.1"
-  },
-  "devDependencies": {}
+  }
 }
