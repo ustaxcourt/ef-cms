@@ -129,6 +129,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
+      status: CASE_STATUS_TYPES.new,
     });
   });
 
@@ -174,6 +175,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
+      status: CASE_STATUS_TYPES.calendared,
     });
   });
 
@@ -532,4 +534,5 @@ describe('PublicCase', () => {
       expect(entity.privatePractitioners).toBeUndefined();
     });
   });
+  // eslint-disable-next-line max-lines
 });
