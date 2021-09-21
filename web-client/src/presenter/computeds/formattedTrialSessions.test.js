@@ -22,7 +22,7 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 const getStartOfWeek = date => {
-  return prepareDateFromString(date).startOf('isoWeek').format('MMMM D, YYYY');
+  return prepareDateFromString(date).startOf('week').toFormat('DDD');
 };
 
 let nextYear;
@@ -47,7 +47,7 @@ let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions', () => {
   beforeAll(() => {
-    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+    nextYear = (parseInt(formatNow('yyyy')) + 1).toString();
   });
 
   beforeEach(() => {
