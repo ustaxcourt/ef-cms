@@ -73,7 +73,9 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.trialLocation = isStandaloneRemoteSession(rawSession.sessionScope)
     ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
     : rawSession.trialLocation;
-  this.proceedingType = rawSession.proceedingType;
+  this.proceedingType = isStandaloneRemoteSession(rawSession.sessionScope)
+    ? TRIAL_SESSION_PROCEEDING_TYPES.remote
+    : rawSession.proceedingType;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
 
