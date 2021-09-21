@@ -44,28 +44,36 @@ describe('documentGenerators', () => {
   describe('compute display options', () => {
     const displayOptions = {
       NCA: {
-        h3: 'Notice of Change of Address',
+        h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+          ({ eventCode }) => eventCode === 'NCA',
+        ).title,
         isAddressAndPhoneChange: false,
         isAddressChange: true,
         isEmailChange: false,
         isPhoneChangeOnly: false,
       },
       NCAP: {
-        h3: 'Notice of Change of Address and Telephone Number',
+        h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+          ({ eventCode }) => eventCode === 'NCAP',
+        ).title,
         isAddressAndPhoneChange: true,
         isAddressChange: true,
         isEmailChange: false,
         isPhoneChangeOnly: false,
       },
       NCP: {
-        h3: 'Notice of Change of Telephone Number',
+        h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+          ({ eventCode }) => eventCode === 'NCP',
+        ).title,
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: false,
         isPhoneChangeOnly: true,
       },
       NOCE: {
-        h3: 'Notice of Change of Email Address',
+        h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
+          ({ eventCode }) => eventCode === 'NOCE',
+        ).title,
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: true,
@@ -73,11 +81,12 @@ describe('documentGenerators', () => {
       },
     };
 
-    NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.forEach(documentType =>
-      it(`computes options based on document type with event code ${documentType.eventCode}`, () => {
-        const result = computeChangeOptions({ documentType });
-        console.log('result', result);
-        expect(result).toEqual(displayOptions[documentType.eventCode]);
+    Object.keys(displayOptions).forEach(eventCode =>
+      it(`computes options based on document type with event code ${eventCode}`, () => {
+        const result = computeChangeOptions({
+          documentType: { eventCode, title: displayOptions[eventCode].h3 },
+        });
+        expect(result).toEqual(displayOptions[eventCode]);
       }),
     );
   });
