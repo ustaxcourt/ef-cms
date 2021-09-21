@@ -1,19 +1,19 @@
-const moment = require('moment-timezone');
-const momentPackage = require('moment');
+const { DateTime } = require('luxon');
 
 const FORMATS = {
-  DATE_TIME: 'MM/DD/YY hh:mm a',
-  DATE_TIME_TZ: 'MM/DD/YY h:mm a [ET]',
-  ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
-  MMDDYY: 'MM/DD/YY',
-  MMDDYYYY: 'MM/DD/YYYY',
-  MONTH_DAY_YEAR: 'MMMM D, YYYY',
-  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, YYYY',
-  SORTABLE_CALENDAR: 'YYYY/MM/DD',
+  DATE_TIME: 'MM/dd/yy hh:mm a',
+  DATE_TIME_TZ: 'MM/dd/yy h:mm a ZZZZ',
+  ISO: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+  MMDDYY: 'MM/dd/yy',
+  MMDDYYYY: 'MM/dd/yyyy',
+  MONTH_DAY_YEAR: 'MMMM D, yyyy',
+  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, yyyy',
+  SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
-  TIME_TZ: 'h:mm a [ET]',
-  YEAR: 'YYYY',
-  YYYYMMDD: 'YYYY-MM-DD',
+  TIME_TZ: 'h:mm a ZZZZ',
+  VALIDATE_ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  YEAR: 'yyyy',
+  YYYYMMDD: 'yyyy-MM-dd',
 };
 
 const PATTERNS = {
@@ -24,7 +24,7 @@ const PATTERNS = {
 const USTC_TZ = 'America/New_York';
 
 const isStringISOFormatted = dateString => {
-  return moment.utc(dateString, FORMATS.ISO, true).isValid();
+  return DateTime.fromISO(dateString).isValid;
 };
 
 /**
@@ -37,15 +37,22 @@ const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
-  return moment.tz(dateString, inputFormat, USTC_TZ);
+  if (inputFormat !== undefined) {
+    return DateTime.fromFormat(dateString, inputFormat, {
+      zone: USTC_TZ,
+    }).setZone('utc');
+  }
+  return DateTime.fromISO(dateString, {
+    zone: USTC_TZ,
+  }).setZone('utc');
 };
 
 const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
   if (!howMuch) return dateString;
 
-  return prepareDateFromString(dateString || createISODateString(), FORMATS.ISO)
-    .add(howMuch, units)
-    .toISOString();
+  return prepareDateFromString(dateString)
+    .plus({ [units]: howMuch })
+    .toISO();
 };
 
 /**
@@ -57,30 +64,38 @@ const createISODateString = (dateString, inputFormat) => {
   let result;
 
   if (!dateString) {
-    result = moment.tz(USTC_TZ);
+    result = DateTime.now().setZone(USTC_TZ);
   } else {
-    result = prepareDateFromString(dateString, inputFormat);
+    result = prepareDateFromString(dateString, inputFormat, { zone: USTC_TZ });
   }
 
-  return result && result.toISOString();
+  return result && result.setZone('utc').toISO();
 };
 
 const createISODateAtStartOfDayEST = dateString => {
-  const startOfDay = moment.tz(dateString, undefined, USTC_TZ);
-  startOfDay.startOf('day'); // adjustment is according to USTC_TZ
-  return startOfDay.toISOString(); // will reflect UTC offset.
+  const dtObj = dateString
+    ? DateTime.fromISO(dateString, { zone: USTC_TZ })
+    : DateTime.now().setZone(USTC_TZ);
+
+  const iso = dtObj.startOf('day').setZone('utc').toISO();
+
+  console.log('le iso', iso);
+
+  return iso;
 };
 
 const createEndOfDayISO = ({ day, month, year }) => {
-  const composedDate = `${year}-${month}-${day}T23:59:59.999`;
-  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
-  return prepareDateFromString(composedDate, composedFormat).toISOString();
+  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
+    .set({ hour: 23, millisecond: 999, minute: 59, second: 59 })
+    .setZone('utc')
+    .toISO();
 };
 
 const createStartOfDayISO = ({ day, month, year }) => {
-  const composedDate = `${year}-${month}-${day}T00:00:00.000`;
-  const composedFormat = 'YYYY-M-DTHH:mm:ss.SSS';
-  return prepareDateFromString(composedDate, composedFormat).toISOString();
+  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
+    .startOf('day')
+    .setZone('utc')
+    .toISO();
 };
 
 /**
@@ -88,10 +103,7 @@ const createStartOfDayISO = ({ day, month, year }) => {
  * @returns {string} a formatted ISO date string
  */
 const createISODateStringFromObject = options => {
-  return createISODateString(
-    `${options.year}-${options.month}-${options.day}`,
-    FORMATS.ISO,
-  );
+  return DateTime.fromObject(options, { zone: USTC_TZ }).setZone('utc').toISO();
 };
 
 /**
@@ -102,7 +114,9 @@ const createISODateStringFromObject = options => {
 const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
-  return prepareDateFromString(dateString).format(formatString);
+  return prepareDateFromString(dateString)
+    .setZone(USTC_TZ)
+    .toFormat(formatString);
 };
 
 const formatNow = formatStr => {
@@ -134,9 +148,9 @@ const dateStringsCompared = (a, b) => {
 
   const millisecondsDifferenceThreshold = 30 * 1000;
 
-  const moment1 = prepareDateFromString(a);
-  const moment2 = prepareDateFromString(b);
-  const differenceInMillis = moment1.diff(moment2, 'millisecond', true);
+  const dt1 = prepareDateFromString(a);
+  const dt2 = prepareDateFromString(b);
+  const differenceInMillis = dt1.diff(dt2, 'millisecond').milliseconds;
 
   if (Math.abs(differenceInMillis) < millisecondsDifferenceThreshold) {
     // treat as equal time stamps
@@ -150,24 +164,25 @@ const dateStringsCompared = (a, b) => {
  * @returns {object} deconstructed date object
  */
 const deconstructDate = dateString => {
-  const momentObj = dateString && prepareDateFromString(dateString);
+  const dtObj = DateTime.fromISO(dateString, { zone: 'utc' }).setZone(USTC_TZ);
   let result;
-  if (momentObj && momentObj.toDate() instanceof Date && momentObj.isValid()) {
+  if (dtObj && dtObj.toJSDate() instanceof Date && dtObj.isValid) {
     result = {
-      day: momentObj.format('D'),
-      month: momentObj.format('M'),
-      year: momentObj.format('YYYY'),
+      day: dtObj.toFormat('d'),
+      month: dtObj.toFormat('M'),
+      year: dtObj.toFormat(FORMATS.YEAR),
     };
   }
   return result;
 };
 
-const getMonthDayYearObj = momentRef => {
-  const momentObj = momentRef || prepareDateFromString(createISODateString());
+const getMonthDayYearObj = dtRef => {
+  const dtObj = dtRef || DateTime.now();
+  console.log(dtObj.toFormat('d'));
   const result = {
-    day: momentObj.format('D'),
-    month: momentObj.format('M'),
-    year: momentObj.format('YYYY'),
+    day: dtObj.toFormat('d'),
+    month: dtObj.toFormat('M'),
+    year: dtObj.toFormat(FORMATS.YEAR),
   };
   return result;
 };
@@ -177,8 +192,17 @@ const getMonthDayYearObj = momentRef => {
  * @param {string} formats the format to check against
  * @returns {boolean} if the date string is valid
  */
-const isValidDateString = (dateString, formats = ['M-D-YYYY', 'M/D/YYYY']) => {
-  return moment(dateString, formats, true).isValid();
+const isValidDateString = (
+  dateString,
+  formats = ['MM-dd-yyyy', 'MM/dd/yyyy', 'M-d-yyyy', 'M/d/yyyy'],
+) => {
+  if (Array.isArray(formats)) {
+    return formats.some(format => {
+      return DateTime.fromFormat(dateString, format).isValid;
+    });
+  }
+
+  return DateTime.fromFormat(dateString, formats).isValid;
 };
 
 /**
@@ -192,13 +216,19 @@ const isValidDateString = (dateString, formats = ['M-D-YYYY', 'M/D/YYYY']) => {
  * @returns {number} the difference between two days, rounded to the nearest integer
  */
 const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
-  const moment1 = prepareDateFromString(timeStamp1).set({
-    hours: 12,
-  });
-  const moment2 = prepareDateFromString(timeStamp2).set({
-    hours: 12,
-  });
-  const differenceInDays = Math.round(moment1.diff(moment2, 'day', true));
+  const dt1 = DateTime.fromISO(timeStamp1, { zone: USTC_TZ })
+    .set({
+      hours: 12,
+    })
+    .setZone('utc');
+
+  const dt2 = DateTime.fromISO(timeStamp2, { zone: USTC_TZ })
+    .set({
+      hours: 12,
+    })
+    .setZone('utc');
+
+  const differenceInDays = Math.round(dt1.diff(dt2, 'days').days);
   return differenceInDays;
 };
 
@@ -216,20 +246,20 @@ const castToISO = dateString => {
     return null;
   }
 
-  const formatDate = ds => createISODateString(ds, FORMATS.YYYYMMDD);
-
   dateString = dateString
     .split('-')
     .map(segment => segment.padStart(2, '0'))
     .join('-');
-  if (
-    momentPackage.utc(`${dateString}-01-01`, FORMATS.YYYYMMDD, true).isValid()
-  ) {
-    return formatDate(`${dateString}-01-01`);
-  } else if (momentPackage.utc(dateString, FORMATS.YYYYMMDD, true).isValid()) {
-    return formatDate(dateString);
-  } else if (isStringISOFormatted(dateString)) {
-    return dateString;
+  if (DateTime.fromFormat(`${dateString}-01-01`, 'yyyy-MM-dd').isValid) {
+    return DateTime.fromFormat(`${dateString}-01-01`, 'yyyy-MM-dd', {
+      zone: USTC_TZ,
+    })
+      .setZone('utc')
+      .toISO();
+  } else if (DateTime.fromISO(dateString).isValid) {
+    return DateTime.fromISO(dateString, { zone: USTC_TZ })
+      .setZone('utc')
+      .toISO();
   } else {
     return '-1';
   }
@@ -294,7 +324,9 @@ const computeDate = ({ day, month, year }) => {
   if (!PATTERNS.YYYYMMDD.test(dateToParse)) {
     return undefined;
   }
-  return prepareDateFromString(dateToParse, FORMATS.ISO).toISOString();
+  return DateTime.fromISO(dateToParse, { zone: USTC_TZ })
+    .setZone('utc')
+    .toISO();
 };
 
 /**

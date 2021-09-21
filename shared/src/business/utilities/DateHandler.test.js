@@ -23,21 +23,21 @@ describe('DateHandler', () => {
   });
 
   describe('prepareDateFromString', () => {
-    it("Creates a new moment object for 'now' when given no inputs", () => {
-      const myMoment = DateHandler.prepareDateFromString();
-      expect(myMoment).toBeDefined();
+    it("Creates a new datetime object for 'now' when given no inputs", () => {
+      const myDatetime = DateHandler.prepareDateFromString();
+      expect(myDatetime).toBeDefined();
     });
 
-    it('Creates a new moment object for a given YYYY-MM-DD', () => {
-      const myMoment = DateHandler.prepareDateFromString('2021-03-21');
-      const isoString = myMoment.toISOString();
+    it('Creates a new datetime object for a given YYYY-MM-DD', () => {
+      const myDatetime = DateHandler.prepareDateFromString('2021-03-21');
+      const isoString = myDatetime.toISO();
       expect(isoString).toEqual('2021-03-21T04:00:00.000Z');
     });
 
-    it('Creates a new moment object for a given strict ISO timestamp with unchanged timezone', () => {
+    it('Creates a new datetime object for a given strict ISO timestamp with unchanged timezone', () => {
       const strictIsoStamp = '2021-03-21T01:00:00.000Z';
-      const myMoment = DateHandler.prepareDateFromString(strictIsoStamp);
-      const isoString = myMoment.toISOString();
+      const myDatetime = DateHandler.prepareDateFromString(strictIsoStamp);
+      const isoString = myDatetime.toISO();
       expect(isoString).toEqual(strictIsoStamp);
     });
   });
@@ -178,7 +178,7 @@ describe('DateHandler', () => {
         startOfDay,
         FORMATS.DATE_TIME,
       );
-      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
+      expect(formattedInEastern).toEqual('04/07/20 12:00 AM'); // the stroke of midnight
     });
   });
 
@@ -196,7 +196,7 @@ describe('DateHandler', () => {
         endOfDay,
         FORMATS.DATE_TIME,
       );
-      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+      expect(formattedInEastern).toEqual('04/07/20 11:59 PM'); // the moment before midnight the next day
     });
   });
   describe('createISODateAtStartOfDayEST', () => {
@@ -231,12 +231,12 @@ describe('DateHandler', () => {
     });
 
     it('creates a date from a year', () => {
-      const myDate = DateHandler.createISODateString('2000', 'YYYY');
+      const myDate = DateHandler.createISODateString('2000', 'yyyy');
       expect(myDate).toBe('2000-01-01T05:00:00.000Z');
     });
 
     it('creates a date from a two-digit year', () => {
-      const myDate = DateHandler.createISODateString('89', 'YYYY');
+      const myDate = DateHandler.createISODateString('89', 'yy');
       expect(myDate).toBe('1989-01-01T05:00:00.000Z');
     });
 
@@ -254,6 +254,7 @@ describe('DateHandler', () => {
 
     it('creates timestamps that strictly adhere to Joi formatting rules', () => {
       const thisDate = DateHandler.createISODateString();
+      console.log('tihs date', thisDate);
       expect(
         JoiValidationConstants.ISO_DATE.validate(thisDate).error,
       ).toBeUndefined();
@@ -283,7 +284,7 @@ describe('DateHandler', () => {
       const dateRetrievedFromStorage = '2001-01-01';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,
-        'YYYY-MM-DD',
+        'yyyy-MM-dd',
       ); // stored literally as EST
       expect(result).toBe('2001-01-01');
     });
@@ -292,9 +293,9 @@ describe('DateHandler', () => {
       const dateRetrievedFromStorage = '2019-03-02T04:40:46.415Z';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,
-        'YYYY-MM-DD hh:mm a',
+        'yyyy-MM-dd hh:mm a',
       );
-      expect(result).toBe('2019-03-01 11:40 pm');
+      expect(result).toBe('2019-03-01 11:40 PM');
     });
 
     it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
@@ -303,7 +304,7 @@ describe('DateHandler', () => {
         dateRetrievedFromStorage,
         'TIME_TZ',
       );
-      expect(result).toBe('8:40 pm ET');
+      expect(result).toBe('8:40 PM EST');
     });
   });
 
@@ -319,7 +320,7 @@ describe('DateHandler', () => {
     });
 
     it('formats current time stamp using requested format', () => {
-      const result = DateHandler.formatNow('YY');
+      const result = DateHandler.formatNow('yy');
       expect(result).toEqual('96');
     });
   });
@@ -479,11 +480,11 @@ describe('DateHandler', () => {
       });
     });
     it('takes a moment object as a parameter to create an object with keys month, day, and year with numeric values', () => {
-      const momentInstance = DateHandler.prepareDateFromString(
+      const dtInstance = DateHandler.prepareDateFromString(
         '2001-02-03',
         DateHandler.FORMATS.YYYYMMDD,
       );
-      const result = DateHandler.getMonthDayYearObj(momentInstance);
+      const result = DateHandler.getMonthDayYearObj(dtInstance);
       expect(result).toEqual({
         day: '3',
         month: '2',
@@ -491,8 +492,8 @@ describe('DateHandler', () => {
       });
     });
     it('creates a moment object representing today/now and returns an object with keys month, day, and year', () => {
-      const momentInstance = DateHandler.prepareDateFromString();
-      const result = DateHandler.getMonthDayYearObj(momentInstance);
+      const dtInstance = DateHandler.prepareDateFromString();
+      const result = DateHandler.getMonthDayYearObj(dtInstance);
       expect(result).toEqual({
         day: expect.toBeWithinRange(1, 31),
         month: expect.toBeWithinRange(1, 12),
