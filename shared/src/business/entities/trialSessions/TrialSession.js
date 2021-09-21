@@ -285,7 +285,13 @@ TrialSession.prototype.generateSortKeyPrefix = function () {
       Small: 'S',
     }[sessionType] || 'H';
 
-  const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+  let formattedTrialCity;
+  if (trialLocation) {
+    formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+  } else {
+    formattedTrialCity = 'Standalone';
+  }
+
   const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
   return skPrefix;

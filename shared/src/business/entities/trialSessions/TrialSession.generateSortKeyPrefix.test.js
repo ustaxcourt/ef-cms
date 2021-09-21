@@ -50,5 +50,19 @@ describe('TrialSession entity', () => {
         'BirminghamAlabama-H',
       );
     });
+
+    it('should set the formattedTrialCity to "Standalone" if there is not trialLocation', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionType: 'Regular',
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+      expect(trialSession.generateSortKeyPrefix()).toEqual('Standalone-R');
+    });
   });
 });
