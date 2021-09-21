@@ -68,11 +68,6 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
-    route('/maintenance', () => {
-      setPageTitle('Maintenance');
-      return app.getSequence('gotoMaintenanceSequence')();
-    });
-
     route('/email-verification-success', () => {
       setPageTitle('Email Verification Success');
       return app.getSequence('gotoPublicEmailVerificationSuccessSequence')();
