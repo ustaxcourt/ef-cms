@@ -33,6 +33,7 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
@@ -177,6 +178,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getPersistenceGateway: () => ({
       getCaseByDocketNumber,
+      getCasesForUser,
       getDocketNumbersByUser,
       getDownloadPolicyUrl: () => {
         return {
