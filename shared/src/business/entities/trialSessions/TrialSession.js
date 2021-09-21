@@ -70,10 +70,9 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
-  this.trialLocation =
-    rawSession.sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-      ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-      : rawSession.trialLocation;
+  this.trialLocation = isStandaloneRemoteSession(rawSession.sessionScope)
+    ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+    : rawSession.trialLocation;
   this.proceedingType = rawSession.proceedingType;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
@@ -440,4 +439,17 @@ TrialSession.prototype.setNoticesIssued = function () {
   return this;
 };
 
-module.exports = { TrialSession: validEntityDecorator(TrialSession) };
+/**
+ * Determines if the scope of the trial session is standalone remote
+ *
+ * @param {object} arguments.sessionScope the session scope
+ * @returns {Boolean} if the scope is a standalone remote session
+ */
+const isStandaloneRemoteSession = function (sessionScope) {
+  return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+};
+
+module.exports = {
+  TrialSession: validEntityDecorator(TrialSession),
+  isStandaloneRemoteSession,
+};
