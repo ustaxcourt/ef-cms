@@ -1,5 +1,9 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ROLES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../shared/src/business/entities/User';
+import { isStandaloneRemoteSession } from '../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { runCompute } from 'cerebral/test';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -14,6 +18,7 @@ const trialSessionHeaderHelper = withAppContextDecorator(
   trialSessionHeaderHelperComputed,
   {
     getConstants: () => ({
+      TRIAL_SESSION_SCOPE_TYPES,
       USER_ROLES: ROLES,
     }),
     getCurrentUser: () => currentUser,
@@ -23,6 +28,9 @@ const trialSessionHeaderHelper = withAppContextDecorator(
         formattedJudge:
           (trialSession.judge && trialSession.judge.name) || 'Not assigned',
       }),
+      isStandaloneRemoteSession: jest
+        .fn()
+        .mockImplementation(isStandaloneRemoteSession),
     }),
   },
 );
@@ -191,5 +199,37 @@ describe('trial session helper computed', () => {
     expect(result).toMatchObject({
       nameToDisplay: 'Trial Clerk',
     });
+  });
+
+  it(`returns false for isStandaloneSession when the trial sessions scope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+    currentUser = trialClerkUser;
+    const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
+      state: {
+        ...baseState,
+        currentPage: 'TrialSessionDetail',
+        trialSession: {
+          // current user is "Trial Judge"
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+          trialClerk: trialClerkUser,
+        },
+      },
+    });
+    expect(isStandaloneSession).toEqual(false);
+  });
+
+  it(`returns true for isStandaloneSession when the trial sessions scope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+    currentUser = trialClerkUser;
+    const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
+      state: {
+        ...baseState,
+        currentPage: 'TrialSessionDetail',
+        trialSession: {
+          // current user is "Trial Judge"
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          trialClerk: trialClerkUser,
+        },
+      },
+    });
+    expect(isStandaloneSession).toEqual(true);
   });
 });
