@@ -16092,5 +16092,10 @@
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "email": "floater@example.com"
+  },
+  {
+    "pk": "maintenance-mode",
+    "sk": "maintenance-mode",
+    "current": false
   }
 ]

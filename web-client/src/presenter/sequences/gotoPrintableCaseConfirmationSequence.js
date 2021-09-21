@@ -2,12 +2,15 @@ import { generateCaseConfirmationPdfUrlAction } from '../actions/CaseConfirmatio
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoPrintableCaseConfirmationSequence =
-  showProgressSequenceDecorator([
-    getCaseAction,
-    setCaseAction,
-    generateCaseConfirmationPdfUrlAction,
-    setCurrentPageAction('PrintableDocketRecord'),
-  ]);
+  startWebSocketConnectionSequenceDecorator(
+    showProgressSequenceDecorator([
+      getCaseAction,
+      setCaseAction,
+      generateCaseConfirmationPdfUrlAction,
+      setCurrentPageAction('PrintableDocketRecord'),
+    ]),
+  );

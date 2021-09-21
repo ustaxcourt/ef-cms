@@ -16,7 +16,7 @@ exports.advancedDocumentSearch = async ({
   judgeType,
   keyword,
   omitSealed,
-  opinionType,
+  opinionTypes,
   overrideResultSize,
   sortOrder: sortField,
   startDate,
@@ -130,10 +130,20 @@ exports.advancedDocumentSearch = async ({
     }
   }
 
-  if (opinionType) {
-    documentQueryFilter.push({
-      term: { 'documentType.S': opinionType },
-    });
+  if (opinionTypes && opinionTypes.length) {
+    if (opinionTypes.length === 1) {
+      documentQueryFilter.push({
+        term: { 'documentType.S': opinionTypes[0] },
+      });
+    } else {
+      documentQueryFilter.push({
+        bool: {
+          should: opinionTypes.map(opinionType => ({
+            term: { 'documentType.S': opinionType },
+          })),
+        },
+      });
+    }
   }
 
   if (endDate && startDate) {

@@ -13,3 +13,7 @@ After adding the subscription, you will need to confirm it to be subscribed — 
 ## Monitoring alert status
 
 You can also view the current state of all system health alerts in CloudWatch. Head to the AWS Console and select CloudWatch to access the console, and then head to the **Alarms** section.
+
+# What to do if you receive a system health alert
+
+In the event of a health alarm that impacts the system, follow [DAWSON’s Contingency Plan](https://github.com/ustaxcourt/ato/blob/master/Operating-Plan.md#contingency-plan-outline).

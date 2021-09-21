@@ -17,44 +17,46 @@ const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-describe('Petitioner creates case to search for', () => {
+describe('unauthed user searches for sealed case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
-  loginAs(testClient, 'petitioner@example.com');
+  describe('Petitioner creates case to search for', () => {
+    loginAs(testClient, 'petitioner@example.com');
 
-  it('Create case', async () => {
-    const caseDetail = await uploadPetition(testClient, {
-      contactSecondary: {
-        address1: '734 Cowley Parkway',
-        city: 'Somewhere',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'NOTAREALNAMEFORTESTINGPUBLIC',
-        phone: '+1 (884) 358-9729',
-        postalCode: '77546',
-        state: 'CT',
-      },
-      partyType: PARTY_TYPES.petitionerSpouse,
+    it('Create case', async () => {
+      const caseDetail = await uploadPetition(testClient, {
+        contactSecondary: {
+          address1: '734 Cowley Parkway',
+          city: 'Somewhere',
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'NOTAREALNAMEFORTESTINGPUBLIC',
+          phone: '+1 (884) 358-9729',
+          postalCode: '77546',
+          state: 'CT',
+        },
+        partyType: PARTY_TYPES.petitionerSpouse,
+      });
+      expect(caseDetail.docketNumber).toBeDefined();
+      cerebralTest.docketNumber = caseDetail.docketNumber;
+      testClient.docketNumber = caseDetail.docketNumber;
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    testClient.docketNumber = caseDetail.docketNumber;
   });
-});
 
-describe('Petitions clerk serves case to IRS', () => {
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
-});
+  describe('Petitions clerk serves case to IRS', () => {
+    loginAs(testClient, 'petitionsclerk@example.com');
+    petitionsClerkServesElectronicCaseToIrs(testClient);
+  });
 
-describe('Docket clerk seals the case (should not be viewable to the public)', () => {
-  loginAs(testClient, 'docketclerk@example.com');
-  docketClerkSealsCase(testClient);
+  describe('Docket clerk seals the case (should not be viewable to the public)', () => {
+    loginAs(testClient, 'docketclerk@example.com');
+    docketClerkSealsCase(testClient);
+  });
 });
 
 describe('Unauthed user searches for a sealed case by docket number', () => {

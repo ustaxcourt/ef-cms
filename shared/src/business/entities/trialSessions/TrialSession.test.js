@@ -4,6 +4,7 @@ const {
 const {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
 } = require('../EntityConstants');
 const { TrialSession } = require('./TrialSession');
 
@@ -188,6 +189,87 @@ describe('TrialSession entity', () => {
 
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
         proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+      });
+    });
+  });
+
+  describe('sessionScope', () => {
+    it(`should default to ${TRIAL_SESSION_SCOPE_TYPES.locationBased} when sessionScope is undefined`, () => {
+      const trialSession = new TrialSession(
+        { ...VALID_TRIAL_SESSION, sessionScope: undefined },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.sessionScope).toEqual(
+        TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      );
+    });
+
+    it(`should make maxCases optional when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          maxCases: undefined,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(true);
+    });
+
+    it(`should require maxCases when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          maxCases: undefined,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        maxCases: 'Enter a valid number of maximum cases',
+      });
+    });
+
+    it(`should make trialLocation optional when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(true);
+    });
+
+    it(`should require trialLocation when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        trialLocation: 'Select a trial session location',
       });
     });
   });

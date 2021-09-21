@@ -9,7 +9,7 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,

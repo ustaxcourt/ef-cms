@@ -6,7 +6,7 @@ import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailActio
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,

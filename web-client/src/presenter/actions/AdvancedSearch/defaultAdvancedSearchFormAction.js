@@ -36,7 +36,14 @@ export const defaultAdvancedSearchFormAction = ({
     store.set(state.advancedSearchForm.orderSearch, {});
   }
   if (!advancedSearchForm.opinionSearch) {
-    store.set(state.advancedSearchForm.opinionSearch, {});
+    store.set(state.advancedSearchForm.opinionSearch, {
+      opinionTypes: {
+        Bench: true,
+        Memorandum: true,
+        Summary: true,
+        TC: true,
+      },
+    });
     store.set(state.opinionDocumentTypes, []);
   }
   store.set(state.advancedSearchForm.currentPage, 1);

@@ -12,9 +12,10 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoFileDocument = [
+const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -34,7 +35,7 @@ const gotoFileDocument = [
       setShowModalFactoryAction('CheckConsolidatedCasesModal'),
     ],
   },
-];
+]);
 
 export const gotoFileDocumentSequence = [
   isLoggedInAction,

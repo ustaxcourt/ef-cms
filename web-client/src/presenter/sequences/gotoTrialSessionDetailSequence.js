@@ -16,8 +16,9 @@ import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/se
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoTrialSessionDetails = [
+const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   setDefaultTrialSessionDetailTabAction,
   clearErrorAlertsAction,
@@ -43,7 +44,7 @@ const gotoTrialSessionDetails = [
     [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
   ]),
   setCurrentPageAction('TrialSessionDetail'),
-];
+]);
 
 export const gotoTrialSessionDetailSequence = [
   isLoggedInAction,
