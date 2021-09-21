@@ -107,6 +107,55 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
     }
   }
 }
+
+
+resource "aws_lambda_function" "update_petitioner_cases_lambda" {
+  filename         = data.archive_file.zip_triggers.output_path
+  function_name    = "update_petitioner_cases_lambda_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
+  handler          = "cognito-triggers.updatePetitionerCases"
+  source_code_hash = data.archive_file.zip_triggers.output_base64sha256
+  timeout          = "29"
+  memory_size      = "3008"
+  runtime          = "nodejs14.x"
+
+  layers = [
+    module.api-east-blue.puppeteer_layer_arn
+  ]
+
+  # These can not use null_data_source.locals due to circular dep
+  environment {
+    variables = {
+      S3_ENDPOINT                        = "s3.us-east-1.amazonaws.com"
+      DOCUMENTS_BUCKET_NAME              = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+      TEMP_DOCUMENTS_BUCKET_NAME         = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
+      QUARANTINE_BUCKET_NAME             = "${var.dns_domain}-quarantine-${var.environment}-us-east-1"
+      DYNAMODB_ENDPOINT                  = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_DYNAMODB_ENDPOINT           = "dynamodb.us-east-1.amazonaws.com"
+      MASTER_REGION                      = "us-east-1"
+      STAGE                              = var.environment
+      NODE_ENV                           = "production"
+      BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
+      EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
+      EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
+      EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
+      EMAIL_SERVED_PETITION_TEMPLATE     = "petition_served_${var.environment}"
+      EFCMS_DOMAIN                       = var.dns_domain
+      CLAMAV_DEF_DIR                     = "/opt/var/lib/clamav"
+      IRS_SUPERUSER_EMAIL                = var.irs_superuser_email
+      DYNAMODB_TABLE_NAME                = var.destination_table
+    }
+  }
+}
+
+
 resource "aws_sqs_queue" "update_petitioner_cases_queue" {
   name = "update_petitioner_cases_queue_${var.environment}"
 }
+
+resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
+  event_source_arn = aws_sqs_queue.update_petitioner_cases_queue.arn
+  function_name    = aws_lambda_function.update_petitioner_cases_lambda.arn
+  batch_size       = 1
+}
+
