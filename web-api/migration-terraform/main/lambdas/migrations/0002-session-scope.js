@@ -1,11 +1,11 @@
 const createApplicationContext = require('../../../../src/applicationContext');
+const applicationContext = createApplicationContext({});
 const {
   TRIAL_SESSION_SCOPE_TYPES,
 } = require('../../../../../shared/src/business/entities/EntityConstants');
 const {
   TrialSession,
 } = require('../../../../../shared/src/business/entities/trialSessions/TrialSession');
-const applicationContext = createApplicationContext({});
 
 const migrateItems = items => {
   const itemsAfter = [];
