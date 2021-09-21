@@ -6,6 +6,9 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
+const {
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
+} = require('../../entities/EntityConstants');
 const { changeOfAddress, computeChangeOptions } = require('./changeOfAddress');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 
@@ -41,24 +44,28 @@ describe('documentGenerators', () => {
   describe('compute display options', () => {
     const displayOptions = {
       NCA: {
+        h3: 'Notice of Change of Address',
         isAddressAndPhoneChange: false,
         isAddressChange: true,
         isEmailChange: false,
         isPhoneChangeOnly: false,
       },
       NCAP: {
+        h3: 'Notice of Change of Address and Telephone Number',
         isAddressAndPhoneChange: true,
         isAddressChange: true,
         isEmailChange: false,
         isPhoneChangeOnly: false,
       },
       NCP: {
+        h3: 'Notice of Change of Telephone Number',
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: false,
         isPhoneChangeOnly: true,
       },
       NOCE: {
+        h3: 'Notice of Change of Email Address',
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: true,
@@ -66,10 +73,11 @@ describe('documentGenerators', () => {
       },
     };
 
-    Object.keys(displayOptions).forEach(eventCode =>
-      it(`computes options based on document type with event code ${eventCode}`, () => {
-        const result = computeChangeOptions({ documentType: { eventCode } });
-        expect(result).toEqual(displayOptions[eventCode]);
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.forEach(documentType =>
+      it(`computes options based on document type with event code ${documentType.eventCode}`, () => {
+        const result = computeChangeOptions({ documentType });
+        console.log('result', result);
+        expect(result).toEqual(displayOptions[documentType.eventCode]);
       }),
     );
   });
