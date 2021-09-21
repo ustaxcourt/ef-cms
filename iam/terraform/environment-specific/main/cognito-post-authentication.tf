@@ -79,6 +79,13 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
                 "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "sqs:SendMessage"
+            ],
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}",
+            "Effect": "Allow"
         }
     ]
 }

@@ -107,3 +107,6 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
     }
   }
 }
+resource "aws_sqs_queue" "update_petitioner_cases_queue" {
+  name = "update_petitioner_cases_queue_${var.environment}"
+}
