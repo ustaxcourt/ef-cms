@@ -5,13 +5,13 @@ export const formatSession = (session, applicationContext) => {
   session.startOfWeek = applicationContext
     .getUtilities()
     .prepareDateFromString(session.startDate)
-    .startOf('isoWeek')
-    .format('MMMM D, YYYY');
+    .startOf('week')
+    .toFormat('DDD');
   session.startOfWeekSortable = applicationContext
     .getUtilities()
     .prepareDateFromString(session.startDate)
-    .startOf('isoWeek')
-    .format('YYYYMMDD');
+    .startOf('week')
+    .toFormat('yyyyMMdd');
   session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, 'MMDDYY');
