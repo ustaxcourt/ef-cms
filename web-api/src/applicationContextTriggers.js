@@ -279,6 +279,7 @@ const applicationContext = {
     createPetitionerAccountInteractor,
     generatePdfFromHtmlInteractor,
     setUserEmailFromPendingEmailInteractor,
+    updatePetitionerCasesInteractor,
   }),
   getUtilities: () => ({
     calculateDifferenceInDays,
