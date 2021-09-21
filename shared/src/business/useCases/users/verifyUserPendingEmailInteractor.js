@@ -232,6 +232,10 @@ exports.updatePractitionerCases = updatePractitionerCases;
 /**
  * verifyUserPendingEmailInteractor
  *
+ * this interactor is invoked when a petitioner logs into DAWSON
+ * and changes their email to a different email address and clicks the
+ * verify link that was sent to their new email address.
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
@@ -293,16 +297,10 @@ exports.verifyUserPendingEmailInteractor = async (
 
   try {
     if (userEntity.role === ROLES.petitioner) {
-      // await updatePetitionerCases({
-      //   applicationContext,
-      //   user: updatedRawUser,
-      // });
-      await applicationContext
-        .getMessageGateway()
-        .sendUpdatePetitionerCasesMessage({
-          applicationContext,
-          user: updatedRawUser,
-        });
+      await updatePetitionerCases({
+        applicationContext,
+        user: updatedRawUser,
+      });
     } else if (userEntity.role === ROLES.privatePractitioner) {
       await updatePractitionerCases({
         applicationContext,
