@@ -20,13 +20,13 @@ exports.createTrialSessionInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  const trialSessionToAdd = new TrialSession(trialSession, {
-    applicationContext,
-  });
-
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  const trialSessionToAdd = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   if (
     ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||
