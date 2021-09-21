@@ -417,6 +417,14 @@ module.exports = [
   },
   {
     actions: [
+      'wait for #standaloneRemote-session-scope-label to be visible',
+      'click element #standaloneRemote-session-scope-label',
+    ],
+    notes: 'checks a11y of standalone remote trial session add form',
+    url: 'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
+  },
+  {
+    actions: [
       'wait for #start-date-date to be visible',
       'click element #inPerson-proceeding-label',
       'wait for #address1 to be visible',
