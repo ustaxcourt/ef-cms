@@ -3,9 +3,7 @@ const {
 } = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
-const computeChangeOptions = content => {
-  const { documentType } = content;
-
+const computeChangeOptions = ({ documentType }) => {
   const options = {
     h3: documentType.title,
     isAddressAndPhoneChange: documentType.eventCode === 'NCAP',
