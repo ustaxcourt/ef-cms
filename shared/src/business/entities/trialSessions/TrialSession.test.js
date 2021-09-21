@@ -27,11 +27,29 @@ describe('TrialSession entity', () => {
       expect(() => new TrialSession({}, {})).toThrow();
     });
 
-    it('creates a valid trial session', () => {
+    it('creates a valid trial session with a location', () => {
       const trialSession = new TrialSession(VALID_TRIAL_SESSION, {
         applicationContext,
       });
       expect(trialSession.isValid()).toBeTruthy();
+    });
+
+    it('creates a valid trial session with a trialLocation of "Standalone Remote" when sessionScope is standalone remote', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          trialLocation: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBeTruthy();
+      expect(trialSession.trialLocation).toBe(
+        TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      );
     });
 
     it('creates a valid trial session with startDate in the past', () => {
