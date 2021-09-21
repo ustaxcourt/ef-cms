@@ -66,7 +66,7 @@ const createISODateString = (dateString, inputFormat) => {
   if (!dateString) {
     result = DateTime.now().setZone(USTC_TZ);
   } else {
-    result = prepareDateFromString(dateString, inputFormat, { zone: USTC_TZ });
+    result = prepareDateFromString(dateString, inputFormat);
   }
 
   return result && result.setZone('utc').toISO();
