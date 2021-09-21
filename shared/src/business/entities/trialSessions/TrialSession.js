@@ -70,7 +70,10 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
-  this.trialLocation = rawSession.trialLocation;
+  this.trialLocation =
+    rawSession.sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+      : rawSession.trialLocation;
   this.proceedingType = rawSession.proceedingType;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
