@@ -35,7 +35,12 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
   const showSwitchToWorkingCopy =
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
 
+  const isStandaloneSession = applicationContext
+    .getUtilities()
+    .isStandaloneRemoteSession(formattedTrialSession.sessionScope);
+
   return {
+    isStandaloneSession,
     nameToDisplay,
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,

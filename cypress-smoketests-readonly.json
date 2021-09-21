@@ -1,5 +1,5 @@
 {
-  "browser": "chrome",
+  "browser": "edge",
   "reporter": "spec",
   "reporterOptions": {
     "toConsole": true

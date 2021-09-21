@@ -81,6 +81,9 @@ const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
+  generateAndServeDocketEntry,
+} = require('../useCaseHelper/service/createChangeItems');
+const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
@@ -132,6 +135,9 @@ const {
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
+const {
+  isStandaloneRemoteSession,
+} = require('../entities/trialSessions/TrialSession');
 const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -328,6 +334,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
+    isStandaloneRemoteSession: jest
+      .fn()
+      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -366,6 +375,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    generateAndServeDocketEntry: jest
+      .fn()
+      .mockImplementation(generateAndServeDocketEntry),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -456,7 +468,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDownloadPolicyUrl: jest.fn(),
+    getDownloadPolicyUrl: jest
+      .fn()
+      .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
