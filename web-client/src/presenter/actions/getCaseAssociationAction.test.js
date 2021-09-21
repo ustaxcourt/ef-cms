@@ -273,7 +273,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser service is not allowed on the case', async () => {
+  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
