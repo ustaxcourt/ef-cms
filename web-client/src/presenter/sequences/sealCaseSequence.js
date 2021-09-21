@@ -3,7 +3,7 @@ import { sealCaseAction } from '../actions/CaseDetail/sealCaseAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const sealCaseSequence = showProgressSequenceDecorator([
   sealCaseAction,

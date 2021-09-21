@@ -11,7 +11,6 @@ import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
 import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpdateCompleteSequence';
-import { adminContactUpdateErrorSequence } from './sequences/adminContactUpdateErrorSequence';
 import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
 import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
@@ -86,6 +85,7 @@ import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequen
 import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
+import { disengageAppMaintenanceSequence } from './sequences/disengageAppMaintenanceSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
@@ -494,7 +494,6 @@ export const presenter = {
     addStatisticToFormSequence,
     addSupportingDocumentToFormSequence,
     adminContactUpdateCompleteSequence,
-    adminContactUpdateErrorSequence,
     adminContactUpdateInitialUpdateCompleteSequence,
     adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,
@@ -569,6 +568,7 @@ export const presenter = {
     deleteUploadedPdfSequence,
     deleteUserCaseNoteFromWorkingCopySequence,
     deleteWorkingCopySessionNoteSequence,
+    disengageAppMaintenanceSequence,
     dismissAlertSequence,
     dismissCreateMessageModalSequence,
     dismissModalSequence,

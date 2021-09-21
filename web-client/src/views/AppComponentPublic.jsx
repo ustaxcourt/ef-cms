@@ -62,6 +62,8 @@ export const AppComponentPublic = connect(
       }
     });
 
+    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+
     if (!process.env.CI) {
       useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');
     }
@@ -70,22 +72,26 @@ export const AppComponentPublic = connect(
 
     return (
       <React.Fragment>
-        <a
-          className="usa-skipnav"
-          href="#main-content"
-          tabIndex="0"
-          onClick={focusMain}
-        >
-          Skip to main content
-        </a>
-        <UsaBanner />
-        <HeaderPublic />
+        {showHeaderAndFooter && (
+          <>
+            <a
+              className="usa-skipnav"
+              href="#main-content"
+              tabIndex="0"
+              onClick={focusMain}
+            >
+              Skip to main content
+            </a>
+            <UsaBanner />
+            <HeaderPublic />
+          </>
+        )}
         <main id="main-content" role="main">
           <CurrentPage />
         </main>
         <Loading />
 
-        <Footer />
+        {showHeaderAndFooter && <Footer />}
       </React.Fragment>
     );
   },

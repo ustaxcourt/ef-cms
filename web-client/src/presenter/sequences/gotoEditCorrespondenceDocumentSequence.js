@@ -8,25 +8,27 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdFromCorrespondenceAction } from '../actions/setDocketEntryIdFromCorrespondenceAction';
 import { setDocumentToFormFromCorrespondenceAction } from '../actions/EditUploadCourtIssuedDocument/setDocumentToFormFromCorrespondenceAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoEditCorrespondenceDocument = [
-  setCurrentPageAction('Interstitial'),
-  stopShowValidationAction,
-  clearFormAction,
-  clearScreenMetadataAction,
-  getCaseAction,
-  setCaseAction,
-  setDocketEntryIdFromCorrespondenceAction,
-  setDocumentToFormFromCorrespondenceAction,
-  setRedirectUrlAction,
-  setCurrentPageAction('EditCorrespondenceDocument'),
-];
+const gotoEditCorrespondenceDocument =
+  startWebSocketConnectionSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    stopShowValidationAction,
+    clearFormAction,
+    clearScreenMetadataAction,
+    getCaseAction,
+    setCaseAction,
+    setDocketEntryIdFromCorrespondenceAction,
+    setDocumentToFormFromCorrespondenceAction,
+    setRedirectUrlAction,
+    setCurrentPageAction('EditCorrespondenceDocument'),
+  ]);
 
 export const gotoEditCorrespondenceDocumentSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: [gotoEditCorrespondenceDocument],
+    isLoggedIn: gotoEditCorrespondenceDocument,
     unauthorized: [redirectToCognitoAction],
   },
 ];

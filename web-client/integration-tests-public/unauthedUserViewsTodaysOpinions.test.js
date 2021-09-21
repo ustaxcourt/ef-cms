@@ -27,7 +27,7 @@ describe('Unauthed user views todays opinions', () => {
   });
 
   afterAll(() => {
-    cerebralTest.closeSocket();
+    testClient.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');

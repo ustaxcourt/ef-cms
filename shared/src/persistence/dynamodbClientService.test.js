@@ -8,6 +8,7 @@ const {
   describeDeployTable,
   describeTable,
   get,
+  getDeployTableName,
   put,
   query,
   queryFull,
@@ -157,6 +158,37 @@ describe('dynamodbClientService', function () {
         applicationContext,
       });
       expect(result).toEqual(MOCK_ITEM);
+    });
+  });
+
+  describe('getDeployTable', () => {
+    it('should return the deploy table name when the environment is NOT local', async () => {
+      const mockEnvironment = 'exp99';
+      applicationContext.environment = {
+        stage: mockEnvironment,
+      };
+      applicationContext.getEnvironment.mockReturnValue({
+        stage: mockEnvironment,
+      });
+
+      const result = await getDeployTableName({
+        applicationContext,
+      });
+
+      expect(result).toEqual('efcms-deploy-exp99');
+    });
+
+    it('should return the regular dynamo table name when the environment is local', async () => {
+      applicationContext.environment = {
+        dynamoDbTableName: 'efcms-local',
+        stage: 'local',
+      };
+
+      const result = await getDeployTableName({
+        applicationContext,
+      });
+
+      expect(result).toEqual('efcms-local');
     });
   });
 
@@ -398,6 +430,11 @@ describe('dynamodbClientService', function () {
 
   describe('describeDeployTable', () => {
     it("should return information on the environment's table", async () => {
+      applicationContext.environment = {
+        dynamoDbTableName: 'efcms-local',
+        stage: 'local',
+      };
+
       await describeDeployTable({
         applicationContext,
       });
@@ -405,7 +442,7 @@ describe('dynamodbClientService', function () {
       expect(
         applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
       ).toEqual({
-        TableName: 'efcms-deploy-local',
+        TableName: 'efcms-local',
       });
     });
   });

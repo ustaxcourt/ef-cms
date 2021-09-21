@@ -7,23 +7,23 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoBlockedCasesReport = [
+const gotoBlockedCasesReport = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
   setCurrentPageAction('BlockedCasesReport'),
-];
+]);
 
 export const gotoBlockedCasesReportSequence = [
   isLoggedInAction,
   {
-    isLoggedIn: parallel([
-      fetchUserNotificationsSequence,
-      gotoBlockedCasesReport,
-    ]),
+    isLoggedIn: [
+      parallel([fetchUserNotificationsSequence, gotoBlockedCasesReport]),
+    ],
     unauthorized: [redirectToCognitoAction],
   },
 ];

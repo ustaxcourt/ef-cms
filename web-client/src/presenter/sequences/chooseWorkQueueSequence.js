@@ -11,7 +11,7 @@ import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setWorkItemsAction } from '../actions/setWorkItemsAction';
 import { setWorkItemsCountAction } from '../actions/setWorkItemsCountAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   clearWorkQueueAction,
