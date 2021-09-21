@@ -1,14 +1,12 @@
-const {
-  prepareDateFromString,
-} = require('../../../business/utilities/DateHandler');
+const { DateTime } = require('luxon');
 const { queryFull } = require('../../dynamodbClientService');
 
 exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
-  const afterDate = prepareDateFromString()
-    .startOf('day')
-    .subtract(7, 'd')
-    .utc()
-    .format();
+  const afterDate = DateTime.now()
+    .setZone('America/New_York')
+    .minus(7, 'days')
+    .setZone('utc')
+    .toISO();
 
   return queryFull({
     ExpressionAttributeNames: {
