@@ -175,17 +175,20 @@ export const TrialSessionInformation = connect(
                             {formattedTrialSessionDetails.formattedStartTime}
                           </p>
                         </div>
-                        <div className="grid-col-6">
-                          <p className="label">Max # of cases</p>
-                          <p
-                            className={classNames(
-                              !formattedTrialSessionDetails.showSwingSession &&
-                                'margin-bottom-0',
-                            )}
-                          >
-                            {formattedTrialSessionDetails.maxCases}
-                          </p>
-                        </div>
+
+                        {!trialSessionHeaderHelper.isStandaloneSession && (
+                          <div className="grid-col-6">
+                            <p className="label">Max # of cases</p>
+                            <p
+                              className={classNames(
+                                !formattedTrialSessionDetails.showSwingSession &&
+                                  'margin-bottom-0',
+                              )}
+                            >
+                              {formattedTrialSessionDetails.maxCases}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       {formattedTrialSessionDetails.showSwingSession && (
