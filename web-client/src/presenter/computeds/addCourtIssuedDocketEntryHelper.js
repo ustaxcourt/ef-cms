@@ -53,12 +53,13 @@ export const addCourtIssuedDocketEntryHelper = (get, applicationContext) => {
     form.eventCode,
   );
 
-  const isPetitionServed = applicationContext
+  const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
-    .caseHasServedPetition(caseDetail);
-  const showServiceWarning = !isPetitionServed;
+    .canAllowDocumentServiceForCase(caseDetail);
+  const showServiceWarning = !canAllowDocumentServiceForCase;
   const showReceivedDate = eventCodeIsUnservable;
-  const showSaveAndServeButton = !eventCodeIsUnservable && isPetitionServed;
+  const showSaveAndServeButton =
+    !eventCodeIsUnservable && canAllowDocumentServiceForCase;
 
   const showDocumentTypeDropdown =
     form.eventCode !==
