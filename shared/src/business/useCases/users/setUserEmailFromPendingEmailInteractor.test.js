@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
@@ -14,6 +15,7 @@ const {
 const {
   setUserEmailFromPendingEmailInteractor,
 } = require('./setUserEmailFromPendingEmailInteractor');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
 
@@ -153,6 +155,29 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       },
     ];
 
+    applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry.mockReturnValue({
+        changeOfAddressDocketEntry: new DocketEntry(
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            docketNumber: '101-18',
+            documentTitle: 'Petition',
+            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+            eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
+            filedBy: 'Test Petitioner',
+            filingDate: '2018-03-01T05:00:00.000Z',
+            index: 1,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            processingStatus: 'complete',
+            receivedAt: '2018-03-01T05:00:00.000Z',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+          { applicationContext },
+        ),
+      });
     mockUser.role = ROLES.petitioner;
 
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
