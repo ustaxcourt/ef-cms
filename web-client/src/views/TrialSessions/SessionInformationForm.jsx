@@ -57,6 +57,7 @@ export const SessionInformationForm = connect(
                   aria-label={value}
                   className="smaller-padding-right usa-radio__label"
                   htmlFor={`${key}-sessionScope`}
+                  id={`${key}-session-scope-label`}
                 >
                   {value}
                 </label>
