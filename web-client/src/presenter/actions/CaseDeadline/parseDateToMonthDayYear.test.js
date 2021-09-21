@@ -1,6 +1,6 @@
+import { DateTime } from 'luxon';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { parseDateToMonthDayYear } from './parseDateToMonthDayYear';
-import moment from 'moment';
 
 describe('parseDateToMonthDayYear', () => {
   const USTC_TZ = 'America/New_York';
@@ -22,7 +22,7 @@ describe('parseDateToMonthDayYear', () => {
     applicationContext
       .getUtilities()
       .prepareDateFromString.mockReturnValue(
-        moment.tz('2019-03-01T22:54:06.000Z', USTC_TZ),
+        DateTime.fromISO('2019-03-01T22:54:06.000Z', { zone: USTC_TZ }),
       );
 
     const result = parseDateToMonthDayYear({
