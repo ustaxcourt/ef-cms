@@ -2289,7 +2289,7 @@ const canAllowDocumentServiceForCase = rawCase => {
     rawCase.closedDate &&
     dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
 
-  return isOpen || isRecent;
+  return Boolean(isOpen || isRecent);
 };
 
 module.exports = {
