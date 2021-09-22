@@ -99,14 +99,12 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const parsedResponse = JSON.parse(response.body);
     expect(parsedResponse).toHaveProperty('caseCaption', expect.any(String));
     expect(parsedResponse.assignedJudge).toBeUndefined();
-    expect(parsedResponse.contactPrimary).toMatchObject({
-      name: 'Test Petitioner',
-      state: 'TN',
-    });
     expect(parsedResponse.noticeOfTrialDate).toBeUndefined();
-    expect(parsedResponse.status).toBe('Calendared');
     expect(parsedResponse.trialLocation).toBeUndefined();
     expect(parsedResponse.userId).toBeUndefined();
+    // contact and status is unavailable for user unassociated with the case
+    expect(parsedResponse.contactPrimary).toBeDefined();
+    expect(parsedResponse.status).toBeDefined();
   });
 
   it('returns 404 when the docket number isn’t found', async () => {
