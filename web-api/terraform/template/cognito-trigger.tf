@@ -114,7 +114,7 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   filename         = data.archive_file.zip_triggers.output_path
   function_name    = "update_petitioner_cases_lambda_${var.environment}"
   # TODO: create a separate role for this
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
   handler          = "cognito-triggers.updatePetitionerCases"
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
