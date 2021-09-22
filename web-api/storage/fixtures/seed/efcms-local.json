@@ -8019,6 +8019,42 @@
     "status": "served"
   },
   {
+    "isStricken": false,
+    "documentType": "Order of Dismissal for Lack of Jurisdiction",
+    "filingDate": "2019-10-07T14:29:30.288Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": true,
+    "receivedAt": "2019-10-07T14:29:30.288Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2019-10-07T14:29:30.288Z",
+    "signedJudgeName": "Ronald L. Buch",
+    "numberOfPages": 1,
+    "entityName": "DocketEntry",
+    "filedBy": "Test Docketclerk",
+    "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "sk": "docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+    "relationship": "primaryDocument",
+    "draftOrderState": {
+      "eventCode": "ODJ",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "richText": "<p>Testing</p>",
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "docketNumber": "107-19"
+    },
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "ODJ",
+    "processingStatus": "complete",
+    "filers": [],
+    "signedAt": "2019-10-07T14:29:30.288Z",
+    "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|107-19",
+    "docketNumber": "107-19"
+  },
+  {
     "servedParties": [
       {
         "name": "Test Private Practitioner",

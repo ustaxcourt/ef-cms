@@ -1,4 +1,7 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import {
@@ -429,7 +432,7 @@ describe('case detail computed', () => {
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the case contains a served docket entry', () => {
+  it('should not show petition processing alert if user is an external user and the case allows service', () => {
     const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
@@ -439,27 +442,14 @@ describe('case detail computed', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       },
     });
     expect(result.showPetitionProcessingAlert).toEqual(false);
   });
 
-  it('should not show petition processing alert if user is an external user and the case contains an isLegacyServed docket entry', () => {
-    const user = petitionerUser;
-
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(user),
-        caseDetail: {
-          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
-        },
-      },
-    });
-    expect(result.showPetitionProcessingAlert).toEqual(false);
-  });
-
-  it('should show petition processing alert if user is an external user and the case does not contain any served docket entries', () => {
+  it('should show petition processing alert if user is an external user and the case does not allow service', () => {
     const user = petitionerUser;
 
     const result = runCompute(caseDetailHelper, {
@@ -467,6 +457,7 @@ describe('case detail computed', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
+          status: CASE_STATUS_TYPES.new,
         },
       },
     });
