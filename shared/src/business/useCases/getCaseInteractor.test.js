@@ -290,9 +290,10 @@ describe('getCaseInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: true,
-        isStatusNew: false,
+        isStatusNew: true,
         partyType: undefined,
         receivedAt: undefined,
+        status: MOCK_CASE.status,
       });
     });
 
