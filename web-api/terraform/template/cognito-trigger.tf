@@ -115,7 +115,7 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   function_name    = "update_petitioner_cases_lambda_${var.environment}"
   # TODO: create a separate role for this
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_update_petitioner_cases_lambda_role_${var.environment}"
-  handler          = "cognito-triggers.updatePetitionerCases"
+  handler          = "cognito-triggers.updatePetitionerCasesLambda"
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
   memory_size      = "3008"
@@ -154,6 +154,10 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
 
 resource "aws_sqs_queue" "update_petitioner_cases_queue" {
   name = "update_petitioner_cases_queue_${var.environment}"
+  redrive_policy = jsonencode({
+    deadLetterTargetArn = aws_sqs_queue.update_petitioner_cases_dl_queue.arn
+    maxReceiveCount     = 1
+  })
 }
 
 resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
@@ -162,3 +166,6 @@ resource "aws_lambda_event_source_mapping" "update_petitioner_cases_mapping" {
   batch_size       = 1
 }
 
+resource "aws_sqs_queue" "update_petitioner_cases_dl_queue" {
+  name = "update_petitioner_cases_dl_queue_${var.environment}"
+}
