@@ -20,6 +20,7 @@ const VALID_TRIAL_SESSION = {
   trialLocation: 'Birmingham, Alabama',
 };
 
+// TODO: rename to VALID_LOCATION_BASED_TRIAL_SESSION?
 exports.VALID_TRIAL_SESSION = VALID_TRIAL_SESSION;
 
 describe('TrialSession entity', () => {
