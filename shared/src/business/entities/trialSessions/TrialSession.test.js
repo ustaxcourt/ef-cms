@@ -368,6 +368,7 @@ describe('TrialSession entity', () => {
               meetingId: undefined,
               password: undefined,
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+              sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
             },
             {
               applicationContext,
@@ -392,6 +393,7 @@ describe('TrialSession entity', () => {
               meetingId: '33333',
               password: '44444',
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+              sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
             },
             {
               applicationContext,
@@ -411,6 +413,7 @@ describe('TrialSession entity', () => {
               meetingId: undefined,
               password: undefined,
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+              sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
               sessionType: SESSION_TYPES.special,
             },
             {
@@ -431,6 +434,7 @@ describe('TrialSession entity', () => {
               meetingId: undefined,
               password: undefined,
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+              sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
               sessionType: SESSION_TYPES.motionHearing,
             },
             {
@@ -453,18 +457,14 @@ describe('TrialSession entity', () => {
               meetingId: undefined,
               password: undefined,
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+              sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
             },
             {
               applicationContext,
             },
           );
 
-          expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-            chambersPhoneNumber: expect.anything(),
-            joinPhoneNumber: expect.anything(),
-            meetingId: expect.anything(),
-            password: expect.anything(),
-          });
+          expect(trialSession.getFormattedValidationErrors()).toEqual(null);
         });
       });
     });

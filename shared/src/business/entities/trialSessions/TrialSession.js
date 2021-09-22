@@ -144,10 +144,14 @@ const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   then: joi.when('proceedingType', {
     is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     otherwise: joi.allow('').optional(),
-    then: joi.when('sessionType', {
-      is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-      otherwise: joi.required(),
-      then: joi.allow('').optional(),
+    then: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      otherwise: joi.optional(),
+      then: joi.when('sessionType', {
+        is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+        otherwise: joi.required(),
+        then: joi.allow('').optional(),
+      }),
     }),
   }),
 });
