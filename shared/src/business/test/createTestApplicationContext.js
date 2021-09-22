@@ -586,6 +586,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
     }),
+    getMessageGateway: appContextProxy({
+      sendUpdatePetitionerCasesMessage: jest.fn(),
+    }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
