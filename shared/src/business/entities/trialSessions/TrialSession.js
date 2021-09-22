@@ -64,7 +64,11 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
     rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
   this.startDate = rawSession.startDate;
-  this.startTime = rawSession.startTime || '10:00';
+  if (isStandaloneRemoteSession(rawSession.sessionScope)) {
+    this.startTime = '13:00';
+  } else {
+    this.startTime = rawSession.startTime || '10:00';
+  }
   this.state = rawSession.state;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;

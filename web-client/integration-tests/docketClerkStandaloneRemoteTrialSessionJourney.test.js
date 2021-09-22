@@ -1,5 +1,5 @@
 import { docketClerkCreatesAStandaloneRemoteTrialSession } from './journey/docketClerkCreatesAStandaloneRemoteTrialSession';
-import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
+import { docketClerkViewsOpenStandaloneRemoteTrialSession } from './journey/docketClerkViewsOpenStandaloneRemoteTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest } from './helpers';
 
@@ -17,7 +17,7 @@ describe('Docket clerk standalone remote trial session journey', () => {
   describe('Create a standalone remote trial session with Small session type', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkCreatesAStandaloneRemoteTrialSession(cerebralTest);
-    // docketClerkViewsTrialSessionList(cerebralTest);
-    // docketClerkViewsNewTrialSession(cerebralTest);
+    docketClerkViewsTrialSessionList(cerebralTest);
+    docketClerkViewsOpenStandaloneRemoteTrialSession(cerebralTest);
   });
 });
