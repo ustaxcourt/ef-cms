@@ -40,14 +40,6 @@ export const docketClerkCreatesAStandaloneRemoteTrialSession = cerebralTest => {
       });
     }
 
-    // await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-    //   key: 'judge',
-    //   value: overrides.judge || {
-    //     name: 'Cohen',
-    //     userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
-    //   },
-    // });
-
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -58,11 +50,11 @@ export const docketClerkCreatesAStandaloneRemoteTrialSession = cerebralTest => {
       message: 'Trial session added.',
     });
 
-    // const lastCreatedTrialSessionId = cerebralTest.getState(
-    //   'lastCreatedTrialSessionId',
-    // );
-    // expect(lastCreatedTrialSessionId).toBeDefined();
+    const lastCreatedTrialSessionId = cerebralTest.getState(
+      'lastCreatedTrialSessionId',
+    );
+    expect(lastCreatedTrialSessionId).toBeDefined();
 
-    // cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
   });
 };

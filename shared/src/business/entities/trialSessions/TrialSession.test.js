@@ -12,6 +12,7 @@ const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
   sessionType: 'Regular',
   startDate: '2025-03-01T00:00:00.000Z',
   term: 'Fall',
@@ -468,6 +469,57 @@ describe('TrialSession entity', () => {
       expect(trialSession.sessionScope).toEqual(
         TRIAL_SESSION_SCOPE_TYPES.locationBased,
       );
+    });
+  });
+
+  describe('startTime', () => {
+    it(`should default to "10:00" when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased} and startTime is not provided`, () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+          startTime: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.startTime).toEqual('10:00');
+    });
+
+    it(`should be set to the provided value when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
+      const mockStartTime = '12:00';
+
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+          startTime: mockStartTime,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.startTime).toEqual(mockStartTime);
+    });
+
+    it(`should be set to "13:00" (1:00PM) when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
+      const mockStartTime = '12:00';
+
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          startTime: mockStartTime,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.startTime).toEqual('13:00');
     });
   });
 
