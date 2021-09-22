@@ -2,20 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-  INITIAL_DOCUMENT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../../entities/cases/Case');
-const {
   setUserEmailFromPendingEmailInteractor,
 } = require('./setUserEmailFromPendingEmailInteractor');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
 
@@ -116,170 +109,14 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     });
   });
 
-  it('should update the user cases with the new email and electronic service for the contact primary', async () => {
+  it('should attempt to send a message to update the petitioner cases via the message gateway', async () => {
     await setUserEmailFromPendingEmailInteractor(applicationContext, {
       user: mockUser,
     });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
-
-    expect(applicationContext.logger.error).not.toBeCalled();
-    expect(getContactPrimary(caseToUpdate)).toMatchObject({
-      email: UPDATED_EMAIL,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-  });
-
-  it('should update the user cases with the new email and electronic service for the contact secondary', async () => {
-    userCases = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            contactType: CONTACT_TYPES.petitioner,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-          {
-            ...getContactPrimary(MOCK_CASE),
-            contactId: USER_ID,
-            contactType: CONTACT_TYPES.petitioner,
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        status: CASE_STATUS_TYPES.generalDocket,
-      },
-    ];
-
-    applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry.mockReturnValue({
-        changeOfAddressDocketEntry: new DocketEntry(
-          {
-            createdAt: '2018-11-21T20:49:28.192Z',
-            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-            docketNumber: '101-18',
-            documentTitle: 'Petition',
-            documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-            eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
-            filedBy: 'Test Petitioner',
-            filingDate: '2018-03-01T05:00:00.000Z',
-            index: 1,
-            isFileAttached: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            receivedAt: '2018-03-01T05:00:00.000Z',
-            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-          },
-          { applicationContext },
-        ),
-      });
-    mockUser.role = ROLES.petitioner;
-
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: mockUser,
-    });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
-
-    expect(applicationContext.logger.error).not.toBeCalled();
-    expect(getContactSecondary(caseToUpdate)).toMatchObject({
-      email: UPDATED_EMAIL,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-  });
-
-  it('should throw an error when the user does not match the contactPrimary on the case', async () => {
-    userCases = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-    ];
-
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: mockUser,
-    });
-
-    expect(applicationContext.logger.error.mock.calls[0][0]).toBe(
-      `Could not find user|${USER_ID} on 101-21`,
-    );
-  });
-
-  it('should continue updating other cases when one of the cases contact primary does not match the user', async () => {
-    userCases = [
-      {
-        ...MOCK_CASE,
-        docketNumber: '101-21',
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            contactId: USER_ID,
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      {
-        ...MOCK_CASE,
-        docketNumber: '105-21',
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue([
-        userCases[0].docketNumber,
-        userCases[1].docketNumber,
-      ]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(userCases[1]);
-
-    await setUserEmailFromPendingEmailInteractor(applicationContext, {
-      user: mockUser,
-    });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(getContactPrimary(caseToUpdate)).toMatchObject({
-      email: UPDATED_EMAIL,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
-    expect(caseToUpdate).toMatchObject({
-      docketNumber: '101-21',
-    });
+      applicationContext.getMessageGateway().sendUpdatePetitionerCasesMessage,
+    ).toHaveBeenCalled();
   });
 
   it('should update the user cases with the new email and electronic service for a practitioner', async () => {
