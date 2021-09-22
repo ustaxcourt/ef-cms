@@ -96,16 +96,17 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
     expect(response.statusCode).toBe('200');
     expect(response.headers['Content-Type']).toBe('application/json');
-    expect(JSON.parse(response.body)).toHaveProperty(
-      'caseCaption',
-      expect.any(String),
-    );
-    expect(JSON.parse(response.body).assignedJudge).toBeUndefined();
-    expect(JSON.parse(response.body).contactPrimary).toBeUndefined();
-    expect(JSON.parse(response.body).noticeOfTrialDate).toBeUndefined();
-    expect(JSON.parse(response.body).status).toBeUndefined();
-    expect(JSON.parse(response.body).trialLocation).toBeUndefined();
-    expect(JSON.parse(response.body).userId).toBeUndefined();
+    const parsedResponse = JSON.parse(response.body);
+    expect(parsedResponse).toHaveProperty('caseCaption', expect.any(String));
+    expect(parsedResponse.assignedJudge).toBeUndefined();
+    expect(parsedResponse.contactPrimary).toMatchObject({
+      name: 'Test Petitioner',
+      state: 'TN',
+    });
+    expect(parsedResponse.noticeOfTrialDate).toBeUndefined();
+    expect(parsedResponse.status).toBe('Calendared');
+    expect(parsedResponse.trialLocation).toBeUndefined();
+    expect(parsedResponse.userId).toBeUndefined();
   });
 
   it('returns 404 when the docket number isn’t found', async () => {
