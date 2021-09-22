@@ -26,7 +26,9 @@ const {
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
+  calculateISODate,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
@@ -2275,7 +2277,19 @@ const caseHasServedDocketEntries = rawCase => {
  */
 
 const canAllowDocumentServiceForCase = rawCase => {
-  return rawCase.status !== CASE_STATUS_TYPES.new;
+  // return rawCase.status !== CASE_STATUS_TYPES.new;
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  return isOpen || isRecent;
 };
 
 module.exports = {
