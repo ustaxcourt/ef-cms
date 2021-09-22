@@ -17,6 +17,6 @@ export const docketClerkViewsOpenStandaloneRemoteTrialSession =
       );
 
       expect(trialSessionFormatted.computedStatus).toEqual('Open');
-      expect(trialSessionFormatted.startTime).toEqual('1:00');
+      expect(trialSessionFormatted.startTime).toEqual('13:00');
     });
   };
