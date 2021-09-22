@@ -1,5 +1,5 @@
-resource "aws_iam_role" "iam_cognito_post_authentication_lambda_role" {
-  name = "iam_cognito_post_authentication_lambda_role_${var.environment}"
+resource "aws_iam_role" "iam_update_petitioner_cases_lambda_role" {
+  name = "iam_update_petitioner_cases_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -19,9 +19,9 @@ EOF
 }
 
 
-resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
-  name = "iam_cognito_post_authentication_lambda_policy_${var.environment}"
-  role = aws_iam_role.iam_cognito_post_authentication_lambda_role.id
+resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
+  name = "iam_update_petitioner_cases_lambda_policy_${var.environment}"
+  role = aws_iam_role.iam_update_petitioner_cases_lambda_role.id
 
   policy = <<EOF
 {
@@ -68,7 +68,29 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
         },
         {
             "Action": [
-                "sqs:SendMessage"
+                "s3:DeleteObject",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:PutObject",
+                "s3:PutObjectTagging"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${var.dns_domain}-documents-*",
+                "arn:aws:s3:::${var.dns_domain}-temp-documents-*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "sqs:GetQueueAttributes",
+                "sqs:ListQueueTags",
+                "sqs:CreateQueue",
+                "sqs:SetQueueAttributes",
+                "sqs:SendMessageBatch",
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:DeleteQueue"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}",
             "Effect": "Allow"

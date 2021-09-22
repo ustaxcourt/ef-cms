@@ -33,6 +33,7 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
@@ -55,6 +56,7 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
+import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -157,6 +159,17 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getIrsSuperuserEmail: () =>
       process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
+    getMessageGateway: () => ({
+      sendUpdatePetitionerCasesMessage: ({
+        applicationContext: appContext,
+        user,
+      }) => {
+        return updatePetitionerCasesInteractor({
+          applicationContext: appContext,
+          user,
+        });
+      },
+    }),
     getNodeSass: () => {
       return sass;
     },
@@ -165,6 +178,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getPersistenceGateway: () => ({
       getCaseByDocketNumber,
+      getCasesForUser,
       getDocketNumbersByUser,
       getDownloadPolicyUrl: () => {
         return {
