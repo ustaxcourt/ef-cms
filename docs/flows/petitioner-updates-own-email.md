@@ -17,4 +17,4 @@ UI (Petitioner)->Cognito: redirect to cognito
 Cognito->UI (Petitioner): login with new email address
 ```
 
-![Flow](docs/flows/petitioner-updates-own-email.png)
+![Flow](petitioner-updates-own-email.png)

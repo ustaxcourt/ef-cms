@@ -17,4 +17,4 @@ note over Update Cases Lambda: create work item if needed
 Update Cases Lambda->Dynamo: persist work items, update case info
 ```
 
-![Flow](docs/flows/admissions-clerk-sets-party-email.png)
+![Flow](admissions-clerk-sets-party-email.png)
