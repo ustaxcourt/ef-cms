@@ -50,11 +50,13 @@ exports.handler = async event => {
   return event;
 };
 
-exports.updatePetitionerCases = async event => {
+exports.updatePetitionerCasesLambda = async event => {
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const user = JSON.parse(body);
   const address = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/update_petitioner_cases_queue_${process.env.STAGE}`;
+
+  applicationContext.logger.info('updatePetitionerCasesLambda', event);
 
   await applicationContext.getUseCases().updatePetitionerCasesInteractor({
     applicationContext,
