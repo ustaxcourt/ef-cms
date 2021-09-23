@@ -44,6 +44,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
+  this.status = rawCase.status;
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
@@ -104,6 +105,12 @@ const publicCaseSchema = {
     .description('Party type of the case petitioner.'),
   petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  status: JoiValidationConstants.STRING.valid(
+    ...Object.values(CASE_STATUS_TYPES),
+  )
+    .optional()
+    .meta({ tags: ['Restricted'] })
+    .description('Status of the case.'),
 };
 
 const sealedCaseSchemaRestricted = {

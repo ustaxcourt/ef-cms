@@ -4,7 +4,7 @@ const {
 
 describe('Filing an Answer', function () {
   before(() => {
-    cy.login('irsPractitioner', '/case-detail/104-20');
+    cy.login('irsPractitioner', '/case-detail/104-18');
   });
 
   it('should have a file first IRS document button', () => {
@@ -40,14 +40,13 @@ describe('Filing an Answer', function () {
     cy.get('table.ustc-table').find('button').should('contain', 'Answer');
   });
 
-  it('reflects changes to 104-20 by showing it in irsPractitioner case list', () => {
+  it('reflects changes to 104-18 by showing it in irsPractitioner case list', () => {
     // wait for elasticsearch to refresh
     const SLEEP = 1000;
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(SLEEP);
 
     navigateToDashboard('irsPractitioner');
-    cy.get('button#tab-closed').click();
-    cy.get('table#case-list').find('a').should('contain', '104-20');
+    cy.get('table#case-list').find('a').should('contain', '104-18');
   });
 });

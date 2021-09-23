@@ -1,4 +1,9 @@
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkAddsMiscellaneousPaperFiling = (
   cerebralTest,
@@ -13,33 +18,24 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 4,
-    });
+    const docketEntryFormValues = {
+      dateReceivedDay: 30,
+      dateReceivedMonth: 4,
+      dateReceivedYear: 2001,
+      eventCode: 'MISC',
+      freeText: 'A title',
+      primaryDocumentFile: fakeFile,
+      primaryDocumentFileSize: 100,
+    };
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 30,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2001,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
+    for (const [key, value] of Object.entries(docketEntryFormValues)) {
+      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+        key,
+        value,
+      });
+    }
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -48,17 +44,11 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
       },
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: 'MISC',
+    await cerebralTest.runSequence('submitPaperFilingSequence', {
+      isSavingForLater: true,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'freeText',
-      value: 'A title',
-    });
-
-    await cerebralTest.runSequence('submitPaperFilingSequence');
+    await refreshElasticsearchIndex();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
@@ -75,5 +65,22 @@ export const docketClerkAddsMiscellaneousPaperFiling = (
 
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
+
+    await cerebralTest.runSequence('gotoWorkQueueSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
+    await cerebralTest.runSequence('chooseWorkQueueSequence', {
+      box: 'inProgress',
+      queue: 'my',
+    });
+
+    const formattedQueue = runCompute(formattedWorkQueue, {
+      state: cerebralTest.getState(),
+    });
+
+    const miscellaneousWorkItem = formattedQueue.find(
+      workItem => workItem.docketNumber === cerebralTest.docketNumber,
+    );
+
+    expect(miscellaneousWorkItem.editLink).toContain('/complete');
   });
 };

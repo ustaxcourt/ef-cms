@@ -1,4 +1,7 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseAssociationAction } from './getCaseAssociationAction';
 import { presenter } from '../presenter-mock';
@@ -270,7 +273,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and no docket entry on the case is served', async () => {
+  it('should return false for isAssociated and pendingAssociation if the user is an irsSuperuser and service is not allowed on the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -284,6 +287,7 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
+          status: CASE_STATUS_TYPES.new,
         },
       },
     });
@@ -294,7 +298,7 @@ describe('getCaseAssociation', () => {
     });
   });
 
-  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and a single docket entry on the case is served', async () => {
+  it('should return true for isAssociated and false for pendingAssociation if the user is an irsSuperuser and service is allowed for the case', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.irsSuperuser,
       userId: '123',
@@ -313,6 +317,7 @@ describe('getCaseAssociation', () => {
               servedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       },
     });
