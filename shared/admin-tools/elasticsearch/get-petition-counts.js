@@ -100,14 +100,27 @@ const getPetitions = async ({ gte, lte }) => {
   return results.hits.hits;
 };
 
-const getCounts = async ({ isPaper, month }) => {
+const getCounts = async ({ isPaper, month, showCases = false }) => {
   const gte = computeDate({ day: 1, month, year: 2021 });
   const lte = computeDate({ day: 1, month: month + 1, year: 2021 });
 
   if (isPaper) {
     const petitions = await getPetitions({ gte, lte });
-    return petitions.filter(p => p['_source']?.isPaper?.BOOL === isPaper)
-      .length;
+    const paperPetitions = petitions.filter(
+      p => p['_source']?.isPaper?.BOOL === isPaper,
+    );
+
+    if (showCases) {
+      paperPetitions.forEach(p => {
+        console.log({
+          docketNumber: p['_source'].docketNumber,
+          filedBy: p['_source'].filedBy,
+          receivedAt: p['_source'].receivedAt,
+        });
+      });
+    }
+
+    return paperPetitions.length;
   } else {
     allPetitions = await getAllItems();
     console.log(`allPetitions.length: ${allPetitions.length};`);
@@ -123,11 +136,12 @@ const getCounts = async ({ isPaper, month }) => {
 (async () => {
   const results = {};
 
-  for (let month = 1; month <= 12; month++) {
-    results[month] = {
-      isElectronic: await getCounts({ isPaper: false, month }),
-      isPaper: await getCounts({ isPaper: true, month }),
-    };
-  }
+  // for (let month = 1; month <= 12; month++) {
+  //   results[month] = {
+  //     isElectronic: await getCounts({ isPaper: false, month }),
+  //     isPaper: await getCounts({ isPaper: true, month }),
+  //   };
+  // }
+  await getCounts({ isPaper: true, month: 7, showCases: true });
   console.log(results);
 })();
