@@ -29,6 +29,7 @@ export const docketClerkQCsNoticeOfChange = ({
     const workQueueFormatted = runCompute(formattedWorkQueue, {
       state: cerebralTest.getState(),
     });
+    console.log('docket number', cerebralTest.docketNumber);
     const noticeOfChangeQCItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
