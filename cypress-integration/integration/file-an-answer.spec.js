@@ -47,7 +47,6 @@ describe('Filing an Answer', function () {
     cy.wait(SLEEP);
 
     navigateToDashboard('irsPractitioner');
-    // cy.get('button#tab-closed').click();
     cy.get('table#case-list').find('a').should('contain', '104-18');
   });
 });
