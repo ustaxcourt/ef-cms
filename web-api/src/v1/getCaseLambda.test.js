@@ -102,7 +102,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     expect(parsedResponse.noticeOfTrialDate).toBeUndefined();
     expect(parsedResponse.trialLocation).toBeUndefined();
     expect(parsedResponse.userId).toBeUndefined();
-    // contact and status is unavailable for user unassociated with the case
     expect(parsedResponse.contactPrimary).toBeDefined();
     expect(parsedResponse.status).toBeDefined();
   });
