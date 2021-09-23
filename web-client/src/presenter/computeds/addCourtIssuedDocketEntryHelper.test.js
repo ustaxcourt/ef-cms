@@ -343,32 +343,4 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
     expect(result.showReceivedDate).toBeTruthy();
   });
-
-  it('should set eventCodeIsUnservable to true if document is servable', () => {
-    const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: {
-        ...state,
-        docketEntryId: '123',
-        form: {
-          eventCode: UNSERVABLE_EVENT_CODES[0],
-        },
-      },
-    });
-
-    expect(result.eventCodeIsUnservable).toBeTruthy();
-  });
-
-  it('should set eventCodeIsUnservable to false if document is servable', () => {
-    const result = runCompute(addCourtIssuedDocketEntryHelper, {
-      state: {
-        ...state,
-        docketEntryId: '123',
-        form: {
-          eventCode: 'O',
-        },
-      },
-    });
-
-    expect(result.eventCodeIsUnservable).toBeFalsy();
-  });
 });
