@@ -20,12 +20,11 @@ export const formattedDashboardTrialSessions = (get, applicationContext) => {
   const judgeFilterFn = session =>
     session.judge && session.judge.userId === judgeUserId;
   const formatSessionFn = session => formatSession(session, applicationContext);
-  // TODO
   const partitionFn = session =>
     applicationContext
       .getUtilities()
       .prepareDateFromString(session.startDate)
-      .isBefore(/* now? */);
+      .isBefore();
 
   const trialSessions = get(state.trialSessions).filter(session => {
     return (

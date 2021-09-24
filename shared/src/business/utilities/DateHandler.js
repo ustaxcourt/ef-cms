@@ -51,7 +51,8 @@ const prepareDateFromString = (dateString, inputFormat) => {
   result.isSame = (a, b) => result.hasSame(a, b);
   result.isBefore = (b, unit) => {
     if (!b && !unit) {
-      return null; //TODO
+      const now = DateTime.now();
+      return result < now;
     }
     return result.startOf(unit) < b.startOf(unit);
   };
