@@ -713,19 +713,19 @@ jobs:
                 -e "ENV=${ENV}" \
                 --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
-      - run:
-          name: Wait for Reindex to Finish
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "./wait-for-reindex-to-finish.sh"
-            fi
+      # - run:
+      #     name: Wait for Reindex to Finish
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #           -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #           -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #           -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #           -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+      #           -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+      #           -e "ENV=${ENV}" \
+      #           --rm efcms /bin/sh -c "./wait-for-reindex-to-finish.sh"
+      #       fi
 
   smoketests:
     docker:
@@ -895,6 +895,7 @@ workflows:
           requires:
             - deploy
       - reindex:
+          type: approval
           requires:
             - migrate
       - smoketests:
@@ -963,6 +964,7 @@ workflows:
                 - experimental4
                 - experimental5
       - reindex:
+          type: approval
           requires:
             - migrate
           filters:
@@ -1049,6 +1051,7 @@ workflows:
             - deploy
       - reindex:
           <<: *build-and-deploy-without-smoketests-defaults
+          type: approval
           requires:
             - migrate
       - switch-colors:
@@ -1085,6 +1088,7 @@ workflows:
             - deploy
       - reindex:
           <<: *build-and-deploy-with-context-defaults
+          type: approval
           requires:
             - migrate
       - smoketests-readonly:
