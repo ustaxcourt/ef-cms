@@ -254,7 +254,6 @@ describe('DateHandler', () => {
 
     it('creates timestamps that strictly adhere to Joi formatting rules', () => {
       const thisDate = DateHandler.createISODateString();
-      console.log('tihs date', thisDate);
       expect(
         JoiValidationConstants.ISO_DATE.validate(thisDate).error,
       ).toBeUndefined();

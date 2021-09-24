@@ -38,7 +38,10 @@ const prepareDateFromString = (dateString, inputFormat) => {
     dateString = createISODateString();
   }
   let result;
-  if (inputFormat !== undefined) {
+
+  if (inputFormat === FORMATS.ISO) {
+    result = DateTime.fromISO(dateString, { zone: 0 });
+  } else if (inputFormat) {
     result = DateTime.fromFormat(dateString, inputFormat, {
       zone: USTC_TZ,
     }).setZone('utc');
@@ -55,6 +58,10 @@ const prepareDateFromString = (dateString, inputFormat) => {
       return result < now;
     }
     return result.startOf(unit) < b.startOf(unit);
+  };
+  result.setDateForISO = args => {
+    const updatedDate = result.set(args);
+    return updatedDate.toISO();
   };
   return result;
 };
