@@ -30,7 +30,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx', '.sh'],
+    extensions: ['.js', '.jsx'],
   },
   target: 'node',
 };
