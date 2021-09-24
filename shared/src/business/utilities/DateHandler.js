@@ -6,7 +6,7 @@ const FORMATS = {
   ISO: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
-  MONTH_DAY_YEAR: 'MMMM D, yyyy',
+  MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
@@ -37,14 +37,25 @@ const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
+  let result;
   if (inputFormat !== undefined) {
-    return DateTime.fromFormat(dateString, inputFormat, {
+    result = DateTime.fromFormat(dateString, inputFormat, {
+      zone: USTC_TZ,
+    }).setZone('utc');
+  } else {
+    result = DateTime.fromISO(dateString, {
       zone: USTC_TZ,
     }).setZone('utc');
   }
-  return DateTime.fromISO(dateString, {
-    zone: USTC_TZ,
-  }).setZone('utc');
+  result.toISOString = () => result.toISO();
+  result.isSame = (a, b) => result.hasSame(a, b);
+  result.isBefore = (b, unit) => {
+    if (!b && !unit) {
+      return null; //TODO
+    }
+    return result.startOf(unit) < b.startOf(unit);
+  };
+  return result;
 };
 
 const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
@@ -78,8 +89,6 @@ const createISODateAtStartOfDayEST = dateString => {
     : DateTime.now().setZone(USTC_TZ);
 
   const iso = dtObj.startOf('day').setZone('utc').toISO();
-
-  console.log('le iso', iso);
 
   return iso;
 };
@@ -178,7 +187,6 @@ const deconstructDate = dateString => {
 
 const getMonthDayYearObj = dtRef => {
   const dtObj = dtRef || DateTime.now();
-  console.log(dtObj.toFormat('d'));
   const result = {
     day: dtObj.toFormat('d'),
     month: dtObj.toFormat('M'),

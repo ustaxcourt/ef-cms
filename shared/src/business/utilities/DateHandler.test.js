@@ -37,7 +37,7 @@ describe('DateHandler', () => {
     it('Creates a new datetime object for a given strict ISO timestamp with unchanged timezone', () => {
       const strictIsoStamp = '2021-03-21T01:00:00.000Z';
       const myDatetime = DateHandler.prepareDateFromString(strictIsoStamp);
-      const isoString = myDatetime.toISO();
+      const isoString = myDatetime.toISOString();
       expect(isoString).toEqual(strictIsoStamp);
     });
   });
