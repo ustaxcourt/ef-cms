@@ -27,13 +27,11 @@ export const computeFilingFormDateAction = ({
       let momentFilingDate = applicationContext
         .getUtilities()
         .prepareDateFromString(filingDate, DATE_FORMATS.ISO);
-
-      // TODO concern...
-      formDate = momentFilingDate
-        .year(formYear)
-        .month(formMonth - 1)
-        .date(formDay)
-        .toISOString();
+      formDate = momentFilingDate.setDateForISO({
+        days: formDay,
+        months: formMonth,
+        years: formYear,
+      });
     } else {
       formDate = applicationContext
         .getUtilities()
