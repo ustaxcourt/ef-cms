@@ -2,6 +2,9 @@ const {
   calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
+  formatDateString,
+  FORMATS,
+  prepareDateFromEST,
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
@@ -62,8 +65,6 @@ const computeIsNotServedDocument = ({ formattedEntry }) => {
 
 const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
-
-  const { formatDateString } = applicationContext.getUtilities();
 
   formattedEntry.servedAtFormatted = formatDateString(
     formattedEntry.servedAt,
@@ -197,7 +198,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
  */
 
 const formattedTrialSessionDetails = ({
-  applicationContext,
   judgeName,
   trialDate,
   trialLocation,
@@ -213,17 +213,15 @@ const formattedTrialSessionDetails = ({
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
   } else if (trialTime) {
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(trialDate, 'YYYY-MM-DD');
-    formattedTrialDate += `T${trialTime}:00`;
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedTrialDate, 'DATE_TIME');
+    const inputDateString = `${trialDate} ${trialTime}:00`; // "2011-11-11 11:00"
+    const dateStringGMT = prepareDateFromEST(
+      inputDateString,
+      FORMATS.TRIAL_TIME,
+    );
+    formattedTrialDate = formatDateString(dateStringGMT, FORMATS.DATE_TIME); // '11/11/11 11:00 am',
   } else {
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(trialDate, 'MMDDYY');
+    const dateStringGMT = prepareDateFromEST(trialDate, FORMATS.YYYYMMDD);
+    formattedTrialDate = formatDateString(dateStringGMT, FORMATS.MMDDYY);
   }
 
   return {

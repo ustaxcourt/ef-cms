@@ -1,5 +1,6 @@
 const DateHandler = require('./DateHandler');
-const { createISODateString, formatDateString, FORMATS } = DateHandler;
+const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
+  DateHandler;
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -16,11 +17,14 @@ describe('DateHandler', () => {
       ISO: '2018-07-02T03:56:47.007-04:00',
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
+      MMDDYYYY_DASHED: '07-02-2018',
       MONTH_DAY_YEAR: 'July 2, 2018',
       MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'Monday, July 2, 2018',
       SORTABLE_CALENDAR: '2018/07/02',
       TIME: '03:56 am',
       TIME_TZ: '3:56 am ET',
+      TRIAL_SORT_TAG: '20180702035647',
+      TRIAL_TIME: '2018-07-02 3:56',
       YEAR: '2018',
       YEAR_TWO_DIGIT: '18',
       YYYYMMDD: '2018-07-02',
@@ -45,10 +49,9 @@ describe('DateHandler', () => {
     });
 
     it('converts EST to GMT', () => {
-      const dateString = '11/11/11';
-      const result = formatDateString(dateString, FORMATS.MMDDYY, true);
-      console.log('result', result);
-      expect(result).toEqual('11/11/11');
+      const dateString = '2011-09-08 14:00'; // 2pm on Sept 9th
+      const result = prepareDateFromEST(dateString, FORMATS.TRIAL_TIME);
+      expect(result).toEqual('2011-09-08T18:00:00.000Z');
     });
   });
 

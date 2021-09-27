@@ -39,7 +39,7 @@ CourtIssuedDocumentTypeD.prototype.init = function init(rawProps) {
 CourtIssuedDocumentTypeD.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    formatDateString(this.date, 'MM-DD-YYYY'),
+    formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
     this.freeText,
   );
 };

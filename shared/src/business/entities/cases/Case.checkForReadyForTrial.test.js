@@ -6,8 +6,11 @@ const {
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  calculateISODate,
+  prepareDateFromString,
+} = require('../../utilities/DateHandler');
 const { Case } = require('./Case');
-const { prepareDateFromString } = require('../../utilities/DateHandler');
 
 describe('checkForReadyForTrial', () => {
   it('should not change the status if no answer docketEntries have been filed', () => {
@@ -46,9 +49,7 @@ describe('checkForReadyForTrial', () => {
       {
         docketEntries: [
           {
-            createdAt: prepareDateFromString()
-              .subtract(1, 'year')
-              .toISOString(),
+            createdAt: calculateISODate({ howMuch: 1, units: 'years' }),
             eventCode: 'ZZZs',
           },
         ],
@@ -72,9 +73,10 @@ describe('checkForReadyForTrial', () => {
       {
         docketEntries: [
           {
-            createdAt: prepareDateFromString()
-              .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS, ANSWER_CUTOFF_UNIT)
-              .toISOString(),
+            createdAt: calculateISODate({
+              howMuch: ANSWER_CUTOFF_AMOUNT_IN_DAYS,
+              units: ANSWER_CUTOFF_UNIT,
+            }),
             eventCode: 'A',
           },
         ],
@@ -91,9 +93,10 @@ describe('checkForReadyForTrial', () => {
   });
 
   it("should not change the status to 'Ready for Trial' when an answer document has been filed before the cutoff but case is not 'Not at issue'", () => {
-    const createdAt = prepareDateFromString()
-      .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
-      .toISOString();
+    const createdAt = calculateISODate({
+      howMuch: -1 * (ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10),
+      units: ANSWER_CUTOFF_UNIT,
+    });
 
     const caseToCheck = new Case(
       {
@@ -114,9 +117,10 @@ describe('checkForReadyForTrial', () => {
   });
 
   it("should change the status to 'Ready for Trial' when an answer document has been filed before the cutoff", () => {
-    const createdAt = prepareDateFromString()
-      .subtract(ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10, ANSWER_CUTOFF_UNIT)
-      .toISOString();
+    const createdAt = calculateISODate({
+      howMuch: -1 * (ANSWER_CUTOFF_AMOUNT_IN_DAYS + 10),
+      units: ANSWER_CUTOFF_UNIT,
+    });
 
     const caseToCheck = new Case(
       {
