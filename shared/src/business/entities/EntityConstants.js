@@ -3,8 +3,8 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { DateTime } = require('luxon');
 const { flatten, sortBy, union, without } = require('lodash');
+const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 const ENABLE_8684 = false;
 
@@ -24,7 +24,7 @@ filter8684CategoryMap(DOCUMENT_INTERNAL_CATEGORIES_MAP, ENABLE_8684);
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
-const CURRENT_YEAR = +DateTime.local().year;
+const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 

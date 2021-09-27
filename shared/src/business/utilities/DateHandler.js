@@ -2,17 +2,17 @@ const { DateTime } = require('luxon');
 
 const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
-  DATE_TIME_TZ: 'MM/dd/yy h:mm a ZZZZ',
-  ISO: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+  DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
+  ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
-  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'dddd, MMMM D, yyyy',
+  MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
-  TIME_TZ: 'h:mm a ZZZZ',
-  VALIDATE_ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
+  TIME_TZ: "h:mm a 'ET'",
   YEAR: 'yyyy',
+  YEAR_TWO_DIGIT: 'yy',
   YYYYMMDD: 'yyyy-MM-dd',
 };
 
@@ -25,6 +25,14 @@ const USTC_TZ = 'America/New_York';
 
 const isStringISOFormatted = dateString => {
   return DateTime.fromISO(dateString).isValid;
+};
+
+const prepareDateFromEST = (dateString, inputFormat) => {
+  const result = DateTime.fromFormat(dateString, inputFormat, {
+    zone: USTC_TZ,
+  }).setZone('utc');
+
+  return result;
 };
 
 /**
@@ -128,12 +136,30 @@ const createISODateStringFromObject = options => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
+const formatDateString = (
+  dateString,
+  formatStr = FORMATS.ISO,
+  // isEST = false,
+) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
-  return prepareDateFromString(dateString)
+  let result = prepareDateFromString(dateString)
     .setZone(USTC_TZ)
     .toFormat(formatString);
+
+  const formatWithAMPM = [
+    FORMATS.DATE_TIME,
+    FORMATS.DATE_TIME_TZ,
+    FORMATS.TIME,
+    FORMATS.TIME_TZ,
+  ];
+
+  if (formatWithAMPM.includes(formatStr)) {
+    result = result.replace(/AM/, 'am');
+    result = result.replace(/PM/, 'pm');
+  }
+
+  return result;
 };
 
 const formatNow = formatStr => {
@@ -381,6 +407,7 @@ module.exports = {
   getMonthDayYearObj,
   isStringISOFormatted,
   isValidDateString,
+  prepareDateFromEST,
   prepareDateFromString,
   validateDateAndCreateISO,
 };
