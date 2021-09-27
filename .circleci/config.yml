@@ -625,6 +625,7 @@ jobs:
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
                -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -667,6 +668,29 @@ jobs:
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
+
+  reindex:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)
+            echo "export EFCMS_DOMAIN=$EFCMS_DOMAIN" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Track successful migrations
           command: |
@@ -690,6 +714,19 @@ jobs:
                 -e "ENV=${ENV}" \
                 --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
+      # - run:
+      #     name: Wait for Reindex to Finish
+      #     command: |
+      #       if [ "$MIGRATE_FLAG" == "true" ]; then
+      #         docker run \
+      #           -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+      #           -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+      #           -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+      #           -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+      #           -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+      #           -e "ENV=${ENV}" \
+      #           --rm efcms /bin/sh -c "./wait-for-reindex-to-finish.sh"
+      #       fi
 
   smoketests:
     docker:
@@ -718,6 +755,9 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: 'Disable Maintenance Mode'
+          command: npm run maintenance:disengage $ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
@@ -855,9 +895,13 @@ workflows:
       - migrate:
           requires:
             - deploy
-      - smoketests:
+      - reindex:
+          type: approval
           requires:
             - migrate
+      - smoketests:
+          requires:
+            - reindex
       - smoketests-readonly:
           requires:
             - smoketests
@@ -906,20 +950,20 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
-      # - migrate:
-      #     requires:
-      #       - deploy
-      #     filters:
-      #       branches:
-      #         only:
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
+      - migrate:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only:
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
       # - smoketests:
       #     requires:
       #       - migrate
@@ -991,10 +1035,15 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - deploy
+      - reindex:
+          <<: *build-and-deploy-without-smoketests-defaults
+          type: approval
+          requires:
+            - migrate
       - switch-colors:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - migrate
+            - reindex
 
   build-and-deploy-with-context:
     jobs:
@@ -1023,7 +1072,16 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - migrate
       - smoketests-readonly:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - migrate
+            - reindex
+      - switch-colors:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - smoketests-readonly
