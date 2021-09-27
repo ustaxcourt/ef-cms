@@ -21,7 +21,7 @@ resource "aws_lambda_permission" "allow_trigger" {
 }
 
 resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
-  function_name    = "cognito_post_confirmation_lambda_${var.environment}"
+  function_name    = "cognito_post_confirmation_lambda_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_confirmation_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
   timeout          = "29"
