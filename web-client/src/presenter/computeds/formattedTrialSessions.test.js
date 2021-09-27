@@ -1,8 +1,9 @@
-import { applicationContext } from '../../applicationContext';
 import {
+  FORMATS,
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
+import { applicationContext } from '../../applicationContext';
 import {
   formatSession,
   formattedTrialSessions as formattedTrialSessionsComputed,
@@ -47,7 +48,7 @@ let TRIAL_SESSIONS_LIST = [];
 
 describe('formattedTrialSessions', () => {
   beforeAll(() => {
-    nextYear = (parseInt(formatNow('yyyy')) + 1).toString();
+    nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
   });
 
   beforeEach(() => {

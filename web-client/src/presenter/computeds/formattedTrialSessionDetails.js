@@ -9,7 +9,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     });
 
   if (formattedTrialSession) {
-    const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
+    const { DATE_FORMATS, SESSION_STATUS_GROUPS } =
+      applicationContext.getConstants();
 
     formattedTrialSession.showOpenCases =
       formattedTrialSession.computedStatus === SESSION_STATUS_GROUPS.open;
@@ -28,7 +29,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         .formatDateString(formattedTrialSession.startDate);
       const nowDateFormatted = applicationContext
         .getUtilities()
-        .formatNow('YYYYMMDD');
+        .formatNow(DATE_FORMATS.YYYYMMDD);
       const trialDateInFuture = trialDateFormatted > nowDateFormatted;
       formattedTrialSession.canDelete =
         trialDateInFuture && !formattedTrialSession.isCalendared;

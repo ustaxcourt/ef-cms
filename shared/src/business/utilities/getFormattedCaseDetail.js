@@ -404,12 +404,12 @@ const formatCase = (applicationContext, caseDetail) => {
   if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     paymentDate = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+      .formatDateString(caseDetail.petitionPaymentDate, 'MMDDYY');
     paymentMethod = caseDetail.petitionPaymentMethod;
   } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     paymentDate = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MMDDYY');
   }
   result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 

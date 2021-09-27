@@ -2,6 +2,7 @@ import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
+  const { DATE_FORMATS } = applicationContext.getConstants();
   session.startOfWeek = applicationContext
     .getUtilities()
     .prepareDateFromString(session.startDate)
@@ -14,10 +15,10 @@ export const formatSession = (session, applicationContext) => {
     .toFormat('yyyyMMdd');
   session.formattedStartDate = applicationContext
     .getUtilities()
-    .formatDateString(session.startDate, 'MMDDYY');
+    .formatDateString(session.startDate, DATE_FORMATS.MMDDYY);
   session.formattedNoticeIssuedDate = applicationContext
     .getUtilities()
-    .formatDateString(session.noticeIssuedDate, 'MMDDYYYY');
+    .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
   return session;
 };
 
