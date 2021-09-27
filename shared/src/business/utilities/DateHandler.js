@@ -6,11 +6,14 @@ const FORMATS = {
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
+  MMDDYYYY_DASHED: 'MM-dd-yyyy',
   MONTH_DAY_YEAR: 'MMMM d, yyyy',
   MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'DDDD',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
   TIME_TZ: "h:mm a 'ET'",
+  TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
+  TRIAL_TIME: 'yyyy-MM-dd H:mm',
   YEAR: 'yyyy',
   YEAR_TWO_DIGIT: 'yy',
   YYYYMMDD: 'yyyy-MM-dd',
@@ -27,10 +30,19 @@ const isStringISOFormatted = dateString => {
   return DateTime.fromISO(dateString).isValid;
 };
 
+/**
+ * convert a given date or time provided in Eastern Time to a GMT luxon object
+ *
+ * @param {string} dateString a string representing a date/time in EST
+ * @param {string} inputFormat the format matching the incoming dateString
+ * @returns {string} an ISO-8601 timestamp with GMT+0
+ */
 const prepareDateFromEST = (dateString, inputFormat) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
-  }).setZone('utc');
+  })
+    .setZone(0)
+    .toISO();
 
   return result;
 };

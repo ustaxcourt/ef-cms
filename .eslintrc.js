@@ -319,6 +319,7 @@ module.exports = {
           'listitem',
           'localhost',
           'lodash',
+          'luxon',
           'marshall',
           'maxw',
           'memoranda',

@@ -49,25 +49,29 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
   this.docketNumber = rawProps.docketNumber;
 
   if (rawProps.startDate) {
-    const [month, day, year] = rawProps.startDate.split('/');
-    this.startDate = createStartOfDayISO({
-      day,
-      month,
-      year,
-    });
+    const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
+    if (month && day && year) {
+      this.startDate = createStartOfDayISO({
+        day,
+        month,
+        year,
+      });
+    }
   }
 
   if (rawProps.endDate) {
     const [month, day, year] = rawProps.endDate.split('/');
-    this.endDate = createEndOfDayISO({
-      day,
-      month,
-      year,
-    });
-    this.tomorrow = calculateISODate({
-      howMuch: +1,
-      units: 'days',
-    });
+    if (month && day && year) {
+      this.endDate = createEndOfDayISO({
+        day,
+        month,
+        year,
+      });
+      this.tomorrow = calculateISODate({
+        howMuch: +1,
+        units: 'days',
+      });
+    }
   }
 
   this.dateRange = rawProps.dateRange;
