@@ -36,15 +36,15 @@ resource "aws_cloudwatch_event_rule" "check_reindex_status_cron_rule" {
 }
 
 resource "aws_cloudwatch_event_target" "check_reindex_status_cron_target" {
-  rule      = aws_cloudwatch_event_rule.check_reindex_status_cron_rule[0].name
-  target_id = aws_lambda_function.reindex_status_lambda[0].function_name
-  arn       = aws_lambda_function.reindex_status_lambda[0].arn
+  rule      = aws_cloudwatch_event_rule.check_reindex_status_cron_rule.name
+  target_id = aws_lambda_function.reindex_status_lambda.function_name
+  arn       = aws_lambda_function.reindex_status_lambda.arn
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda" {
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.reindex_status_lambda[0].function_name
+  function_name = aws_lambda_function.reindex_status_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.check_reindex_status_cron_rule[0].arn
+  source_arn    = aws_cloudwatch_event_rule.check_reindex_status_cron_rule.arn
 }
