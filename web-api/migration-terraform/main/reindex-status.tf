@@ -29,3 +29,22 @@ resource "aws_lambda_function" "reindex_status_lambda" {
     }
   }
 }
+
+resource "aws_cloudwatch_event_rule" "check_reindex_status_cron_rule" {
+  name                = "check_reindex_status_cron_${var.environment}_${var.deploying_color}"
+  schedule_expression = "rate(10 minutes)"
+}
+
+resource "aws_cloudwatch_event_target" "check_reindex_status_cron_target" {
+  rule      = aws_cloudwatch_event_rule.check_reindex_status_cron_rule[0].name
+  target_id = aws_lambda_function.reindex_status_lambda[0].function_name
+  arn       = aws_lambda_function.reindex_status_lambda[0].arn
+}
+
+resource "aws_lambda_permission" "allow_cloudwatch_to_call_reindex_status_lambda" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.reindex_status_lambda[0].function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.check_reindex_status_cron_rule[0].arn
+}
