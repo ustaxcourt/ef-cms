@@ -16,10 +16,4 @@ RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm awscliv2.zip
 
-#RUN wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311-linux.zip
-#RUN unzip sonar-scanner-cli-4.6.0.2311-linux.zip
-#RUN rm sonar-scanner-cli-4.6.0.2311-linux.zip
-#RUN mkdir /home/app/sonar_home && \
-#  mv sonar-scanner-4.6.0.2311-linux/* /home/app/sonar_home
-
 RUN apt-get install -yq less=487-0.1+b1 python python-dev python-pip jq=1.5+dfsg-2+b1
