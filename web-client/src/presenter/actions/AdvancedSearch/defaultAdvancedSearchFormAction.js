@@ -1,5 +1,4 @@
 import { state } from 'cerebral';
-
 /**
  * sets the default countryType on the advanced search form
  *
@@ -12,7 +11,8 @@ export const defaultAdvancedSearchFormAction = ({
   get,
   store,
 }) => {
-  const { COUNTRY_TYPES } = applicationContext.getConstants();
+  const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
+    applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);
   // do not overwrite existing state so the form is still filled in when returning to the page
   if (!advancedSearchForm.caseSearchByDocketNumber) {
@@ -36,7 +36,14 @@ export const defaultAdvancedSearchFormAction = ({
     store.set(state.advancedSearchForm.orderSearch, {});
   }
   if (!advancedSearchForm.opinionSearch) {
-    store.set(state.advancedSearchForm.opinionSearch, {});
+    store.set(state.advancedSearchForm.opinionSearch, {
+      opinionTypes: {
+        [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
+      },
+    });
     store.set(state.opinionDocumentTypes, []);
   }
   store.set(state.advancedSearchForm.currentPage, 1);

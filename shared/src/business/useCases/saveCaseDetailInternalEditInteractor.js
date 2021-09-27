@@ -76,6 +76,10 @@ exports.saveCaseDetailInternalEditInteractor = async (
     statistics: caseToUpdate.statistics,
   };
 
+  if (!originalCaseEntity.isPaper) {
+    editableFields.receivedAt = originalCaseEntity.receivedAt;
+  }
+
   const caseWithFormEdits = {
     ...caseRecord,
     ...editableFields,

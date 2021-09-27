@@ -200,12 +200,12 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search by opinion type when an opinion document type is provided', async () => {
+  it('does a search by a single opinion type when an opinion document type is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionType: 'Summary Opinion',
+      opinionTypes: ['SOP'],
     });
 
     const expectation = [
@@ -219,7 +219,7 @@ describe('advancedDocumentSearch', () => {
       filter: expect.arrayContaining([
         {
           term: {
-            'documentType.S': 'Summary Opinion',
+            'eventCode.S': 'SOP',
           },
         },
       ]),
@@ -234,12 +234,42 @@ describe('advancedDocumentSearch', () => {
     });
   });
 
+  it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: orderEventCodes,
+      opinionTypes: ['SOP', 'OST'],
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toEqual(
+      expect.arrayContaining([
+        {
+          bool: {
+            should: [
+              {
+                term: {
+                  'eventCode.S': 'SOP',
+                },
+              },
+              {
+                term: {
+                  'eventCode.S': 'OST',
+                },
+              },
+            ],
+          },
+        },
+      ]),
+    );
+  });
+
   it('should not include sealed documents in the search results', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionType: 'Summary Opinion',
     });
 
     const expectation = [
@@ -251,13 +281,6 @@ describe('advancedDocumentSearch', () => {
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool,
     ).toMatchObject({
-      filter: expect.arrayContaining([
-        {
-          term: {
-            'documentType.S': 'Summary Opinion',
-          },
-        },
-      ]),
       must: expectation,
     });
   });

@@ -23,7 +23,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getIndexedCasesForUser.mockImplementation(() => mockFoundCasesList);
+      .getCasesForUser.mockImplementation(() => mockFoundCasesList);
     applicationContext
       .getUseCaseHelpers()
       .processUserAssociatedCases.mockReturnValue({
@@ -49,7 +49,7 @@ describe('getOpenConsolidatedCasesInteractor', () => {
     await getOpenConsolidatedCasesInteractor(applicationContext);
 
     expect(
-      applicationContext.getPersistenceGateway().getIndexedCasesForUser,
+      applicationContext.getPersistenceGateway().getCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
       statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
