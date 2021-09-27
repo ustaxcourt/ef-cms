@@ -48,7 +48,7 @@ describe('getEligibleCasesForTrialSession', () => {
     ]);
   });
 
-  it('should remove any duplicate cases it receives the list of cases it receives from the mapping records query', async () => {
+  it('should remove duplicate docketNumbers returned by the eligible-for-trial-case-catalog query', async () => {
     client.query = jest.fn().mockReturnValue([
       {
         docketNumber: MOCK_CASE.docketNumber,
