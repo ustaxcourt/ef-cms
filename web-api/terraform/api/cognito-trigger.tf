@@ -83,7 +83,7 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 
-    environment {
+  environment {
     variables = var.lambda_environment
   }
 }
