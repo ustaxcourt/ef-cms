@@ -929,6 +929,7 @@ workflows:
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
       - deploy:
+          type: approval
           # requires:
           #   - build-client-integration
           #   - e2e-pa11y
