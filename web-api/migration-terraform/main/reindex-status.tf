@@ -26,6 +26,7 @@ resource "aws_lambda_function" "reindex_status_lambda" {
       ACCOUNT_ID            = data.aws_caller_identity.current.account_id
       DOCUMENTS_BUCKET_NAME = var.documents_bucket_name
       S3_ENDPOINT           = "s3.us-east-1.amazonaws.com"
+      CIRCLE_WORKFLOW_ID    = var.circle_workflow_id
     }
   }
 }

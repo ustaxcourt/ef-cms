@@ -609,6 +609,7 @@ jobs:
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
+            echo $CIRCLE_WORKFLOW_ID >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -626,6 +627,7 @@ jobs:
                -e "ZONE_NAME=${ZONE_NAME}" \
                -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -891,6 +893,8 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
+          type:
+
       - migrate:
           requires:
             - deploy
