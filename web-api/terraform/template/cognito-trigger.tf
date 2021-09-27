@@ -1,7 +1,7 @@
 data "archive_file" "zip_triggers_old" {
   type        = "zip"
   source_file = "${path.module}/lambdas/dist/cognito-triggers.js"
-  output_path = "${path.module}/lambdas/cognito-triggers.js.zip"
+  output_path = "${path.module}/lambdas/cognito-triggers-old.js.zip"
 }
 
 resource "aws_lambda_permission" "allow_trigger" {
@@ -28,9 +28,6 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   source_code_hash = data.archive_file.zip_triggers_old.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
-  # lifecycle {
-  #   ignore_changes = [source_code_hash, filename]
-  # }
 
   # These can not use null_data_source.locals due to circular dep
   environment {
@@ -65,10 +62,6 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   source_code_hash = data.archive_file.zip_triggers_old.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
-
-  # lifecycle {
-  #   ignore_changes = [source_code_hash, filename]
-  # }
 
   # These can not use null_data_source.locals due to circular dep
   environment {
