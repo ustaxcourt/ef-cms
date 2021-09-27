@@ -230,6 +230,23 @@ describe('DateHandler', () => {
       expect(myDate).toBeDefined();
     });
 
+    it('creates a known timestamp', () => {
+      // mock the date implementation and returning original value upon test completion
+
+      const mockTimeValue = 1530518207007;
+      const expectedReturnValue = '2018-07-02T07:56:47.007Z';
+
+      const realDateNow = Date.now.bind(global.Date);
+      const dateNowStub = jest.fn().mockReturnValue(mockTimeValue);
+      global.Date.now = dateNowStub;
+
+      const myDate = DateHandler.createISODateString();
+      expect(myDate).toBe(expectedReturnValue);
+      expect(dateNowStub).toHaveBeenCalled();
+
+      global.Date.now = realDateNow;
+    });
+
     it('creates a date from a year', () => {
       const myDate = DateHandler.createISODateString('2000', 'yyyy');
       expect(myDate).toBe('2000-01-01T05:00:00.000Z');
