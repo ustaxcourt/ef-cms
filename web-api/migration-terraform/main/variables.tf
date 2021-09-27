@@ -25,3 +25,7 @@ variable "documents_bucket_name" {
 variable "deploying_color" {
   type = string
 }
+
+variable "circle_workflow_id" {
+  type = string
+}
