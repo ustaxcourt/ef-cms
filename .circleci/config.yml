@@ -669,6 +669,18 @@ jobs:
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
+            fi
 
   reindex:
     machine:
@@ -715,19 +727,6 @@ jobs:
                 -e "ENV=${ENV}" \
                 --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
-      # - run:
-      #     name: Wait for Reindex to Finish
-      #     command: |
-      #       if [ "$MIGRATE_FLAG" == "true" ]; then
-      #         docker run \
-      #           -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-      #           -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-      #           -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-      #           -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-      #           -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-      #           -e "ENV=${ENV}" \
-      #           --rm efcms /bin/sh -c "./wait-for-reindex-to-finish.sh"
-      #       fi
 
   smoketests:
     docker:
@@ -965,52 +964,37 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
-      - reindex:
-          type: approval
-          requires:
-            - migrate
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests:
-          requires:
-            - reindex
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-      - smoketests-readonly:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
+      # - smoketests:
+      #     requires:
+      #       - migrate
+      #     filters:
+      #       branches:
+      #         only:
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      # - smoketests-readonly:
+      # requires:
+      #   - smoketests
+      # filters:
+      #   branches:
+      #     only:
+      #       - irs
+      #       - staging
+      #       - test
+      #       - experimental1
+      #       - experimental2
+      #       - experimental3
+      #       - experimental4
+      #       - experimental5
       - switch-colors:
           requires:
-            - smoketests-readonly
+            - migrate
           filters:
             branches:
               only:
