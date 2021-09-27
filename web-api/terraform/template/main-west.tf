@@ -287,8 +287,8 @@ module "api-west-green" {
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  triggers_object                = ""
+  triggers_object_hash           = ""
   create_triggers                = 0
 }
 
@@ -333,7 +333,7 @@ module "api-west-blue" {
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
-  triggers_object                = null_resource.triggers_east_object
-  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  triggers_object                = ""
+  triggers_object_hash           = ""
   create_triggers                = 0
 }
