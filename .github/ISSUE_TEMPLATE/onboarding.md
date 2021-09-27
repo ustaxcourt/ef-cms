@@ -1,7 +1,11 @@
 ---
 name: Onboard a new team member
-about: Used for new hires within the U.S. Tax Court and vendor teams to grant access to all relevant accounts and tools.
+about: Used for new hires within the U.S. Tax Court and vendor teams to grant access
+  to all relevant accounts and tools.
 title: Onboard [Person]
+labels: ''
+assignees: ''
+
 ---
 
 Welcome to the team! 🎉 😎

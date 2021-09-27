@@ -8,6 +8,9 @@ const {
   migrateItems: migration0001,
 } = require('./migrations/0001-update-websockets-gsi1pk');
 const {
+  migrateItems: migration0002,
+} = require('./migrations/0002-session-scope');
+const {
   migrateItems: migration0040,
 } = require('./migrations/bug-0040-case-received-at');
 const {
@@ -41,6 +44,11 @@ const migrateRecords = async ({
   if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
     applicationContext.logger.debug('about to run migration 0001');
     items = migration0001(items);
+  }
+
+  if (!ranMigrations['0002-session-scope.js']) {
+    applicationContext.logger.debug('about to run migration 0002');
+    items = migration0002(items);
   }
 
   if (!ranMigrations['bug-0040-case-received-at.js']) {
@@ -155,6 +163,7 @@ exports.handler = async event => {
 
   const ranMigrations = {
     ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
+    ...(await hasMigrationRan('0002-session-scope.js')),
     ...(await hasMigrationRan('bug-0039-notice-of-trial-date.js')),
     ...(await hasMigrationRan('bug-0040-case-received-at.js')),
   };
