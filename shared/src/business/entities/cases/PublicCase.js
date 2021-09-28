@@ -34,6 +34,7 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.entityName = 'PublicCase';
+  this.canAllowDocumentService = rawCase.canAllowDocumentService;
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -44,7 +45,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
-  this.status = rawCase.status;
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
@@ -80,6 +80,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 };
 
 const publicCaseSchema = {
+  canAllowDocumentService: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
@@ -105,12 +106,6 @@ const publicCaseSchema = {
     .description('Party type of the case petitioner.'),
   petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-  status: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  )
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('Status of the case.'),
 };
 
 const sealedCaseSchemaRestricted = {
