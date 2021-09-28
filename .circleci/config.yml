@@ -896,10 +896,6 @@ workflows:
       - migrate:
           requires:
             - deploy
-      - reindex:
-          type: approval
-          requires:
-            - migrate
       - smoketests:
           requires:
             - reindex
