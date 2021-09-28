@@ -898,7 +898,7 @@ workflows:
             - deploy
       - smoketests:
           requires:
-            - reindex
+            - migrate
       - smoketests-readonly:
           requires:
             - smoketests
@@ -1032,15 +1032,10 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - deploy
-      - reindex:
-          <<: *build-and-deploy-without-smoketests-defaults
-          type: approval
-          requires:
-            - migrate
       - switch-colors:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - reindex
+            - migrate
 
   build-and-deploy-with-context:
     jobs:
