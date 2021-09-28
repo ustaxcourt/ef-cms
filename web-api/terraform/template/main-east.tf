@@ -22,10 +22,37 @@ data "archive_file" "zip_api" {
     "report.html" ]
 }
 
+data "archive_file" "zip_triggers" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/cognito-triggers.js.zip"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
+  excludes = [
+    "api.js",
+    "api-public.js",
+    "websockets.js",
+    "maintenance-notify.js",
+    "cron.js",
+    "streams.js",
+    "cognito-authorizer.js",
+    "report.html"
+  ]
+}
+
 resource "null_resource" "api_east_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
   provisioner "local-exec" {
     command = "aws s3 cp ${data.archive_file.zip_api.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/api_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+resource "null_resource" "triggers_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_triggers.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/triggers_${var.deploying_color}.js.zip"
   }
 
   triggers = {
@@ -227,6 +254,18 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
   key        = "streams_green.js.zip"
 }
 
+data "aws_s3_bucket_object" "triggers_green_east_object" {
+  depends_on = [null_resource.triggers_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "triggers_green.js.zip"
+}
+
+data "aws_s3_bucket_object" "triggers_blue_east_object" {
+  depends_on = [null_resource.triggers_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "triggers_blue.js.zip"
+}
+
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
     module.elasticsearch_alpha,
@@ -336,6 +375,7 @@ module "api-east-green" {
   authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
+  pool_arn                  = aws_cognito_user_pool.pool.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
@@ -361,6 +401,8 @@ module "api-east-green" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
+  triggers_object                = null_resource.triggers_east_object
+  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
 }
 
 module "api-east-blue" {
@@ -372,6 +414,7 @@ module "api-east-blue" {
   create_maintenance_notify = 1
   cron_object               = null_resource.cron_east_object
   streams_object            = null_resource.streams_east_object
+  pool_arn                  = aws_cognito_user_pool.pool.arn
   source                    = "../api/"
   environment               = var.environment
   dns_domain                = var.dns_domain
@@ -403,4 +446,6 @@ module "api-east-blue" {
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
+  triggers_object                = null_resource.triggers_east_object
+  triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
 }
