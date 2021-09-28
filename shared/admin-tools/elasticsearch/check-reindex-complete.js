@@ -22,7 +22,7 @@ const getClusterStats = async ({ version }) => {
 
 const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
-(async () => {
+exports.isReindexComplete = async () => {
   let diffTotal = 0;
   const currentInfo = await getClusterStats({ version: currentVersion });
   let destinationInfo = await getClusterStats({ version: destinationVersion });
@@ -43,7 +43,7 @@ const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
   if (diffTotal > 0) {
     console.log('Indexes are not in sync, exiting with 1');
-    process.exit(1);
+    return false;
   }
 
   for (const indexName of [
@@ -57,7 +57,9 @@ const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
       console.log(
         `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,
       );
-      process.exit(1);
+      return false;
     }
   }
-})();
+
+  return true;
+};

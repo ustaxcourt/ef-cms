@@ -20,7 +20,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: './wait-for-reindex-to-finish.sh',
+          from: './shared/admin-tools/elasticsearch/check-reindex-complete.js',
           to: '.',
         },
       ],

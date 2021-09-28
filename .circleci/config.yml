@@ -626,6 +626,8 @@ jobs:
                -e "ZONE_NAME=${ZONE_NAME}" \
                -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
+               -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -894,13 +896,9 @@ workflows:
       - migrate:
           requires:
             - deploy
-      - reindex:
-          type: approval
-          requires:
-            - migrate
       - smoketests:
           requires:
-            - reindex
+            - migrate
       - smoketests-readonly:
           requires:
             - smoketests
@@ -929,7 +927,6 @@ workflows:
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
       - deploy:
-          type: approval
           # requires:
           #   - build-client-integration
           #   - e2e-pa11y
@@ -1035,15 +1032,10 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - deploy
-      - reindex:
-          <<: *build-and-deploy-without-smoketests-defaults
-          type: approval
-          requires:
-            - migrate
       - switch-colors:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - reindex
+            - migrate
 
   build-and-deploy-with-context:
     jobs:
