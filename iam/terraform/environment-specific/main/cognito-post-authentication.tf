@@ -70,7 +70,7 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
             "Action": [
                 "sqs:SendMessage"
             ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}",
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}_*",
             "Effect": "Allow"
         }
     ]
