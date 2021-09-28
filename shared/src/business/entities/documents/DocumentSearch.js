@@ -18,7 +18,7 @@ const {
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
+DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS = [
   'YYYY/MM/DD',
   'YYYY/MM/D',
   'YYYY/M/DD',
@@ -111,7 +111,7 @@ DocumentSearch.schema = joi
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .less(joi.ref('tomorrow'))
         .optional()
@@ -119,7 +119,7 @@ DocumentSearch.schema = joi
           'The end date search filter is not required if there is no start date',
         ),
       then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .less(joi.ref('tomorrow'))
         .min(joi.ref('startDate'))
@@ -157,7 +157,7 @@ DocumentSearch.schema = joi
       is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       otherwise: joi.forbidden(),
       then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .max('now')
         .required()
