@@ -55,7 +55,7 @@ describe('docket clerk opinion advanced search', () => {
       await updateOpinionForm({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'osteodontolignikeratic',
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -73,7 +73,7 @@ describe('docket clerk opinion advanced search', () => {
         opinionTypes: {
           [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
         },
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -109,7 +109,7 @@ describe('docket clerk opinion advanced search', () => {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'sunglasses',
         opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -132,7 +132,7 @@ describe('docket clerk opinion advanced search', () => {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         docketNumber: '105-20',
         keyword: 'sunglasses',
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -154,7 +154,7 @@ describe('docket clerk opinion advanced search', () => {
       await updateOpinionForm({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'sunglasses',
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -175,7 +175,7 @@ describe('docket clerk opinion advanced search', () => {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'opinion',
         opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
-        startDate: '1995-08-03',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
