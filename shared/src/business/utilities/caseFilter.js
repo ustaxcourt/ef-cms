@@ -10,7 +10,6 @@ const CASE_ATTRIBUTE_WHITELIST = [
   'isPaper',
   'isSealed',
   'sealedDate',
-  'status',
 ];
 
 const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
