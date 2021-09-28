@@ -6,12 +6,6 @@ removed this file now, it would delete the trigger lambda and no one would be ab
 the reindexing and color switch finishes.
 */
 
-data "archive_file" "zip_triggers_old" {
-  type        = "zip"
-  source_file = "${path.module}/lambdas/dist/cognito-triggers.js"
-  output_path = "${path.module}/lambdas/cognito-triggers-old.js.zip"
-}
-
 resource "aws_lambda_permission" "allow_trigger" {
   statement_id  = "AllowPostConfirmationExecutionFromCognito"
   action        = "lambda:InvokeFunction"
@@ -29,11 +23,11 @@ resource "aws_lambda_permission" "allow_post_auth_trigger" {
 }
 
 resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
-  filename         = data.archive_file.zip_triggers_old.output_path
+  filename         = data.archive_file.zip_triggers.output_path
   function_name    = "cognito_post_confirmation_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_confirmation_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
-  source_code_hash = data.archive_file.zip_triggers_old.output_base64sha256
+  source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
 
@@ -67,11 +61,11 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
 }
 
 resource "aws_lambda_function" "cognito_post_authentication_lambda" {
-  filename         = data.archive_file.zip_triggers_old.output_path
+  filename         = data.archive_file.zip_triggers.output_path
   function_name    = "cognito_post_authentication_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
-  source_code_hash = data.archive_file.zip_triggers_old.output_base64sha256
+  source_code_hash = data.archive_file.zip_triggers.output_base64sha256
   timeout          = "29"
   runtime          = "nodejs14.x"
 
