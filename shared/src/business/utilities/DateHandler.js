@@ -3,7 +3,9 @@ const { DateTime } = require('luxon');
 const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
+  FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
+  LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
@@ -148,13 +150,14 @@ const createISODateStringFromObject = options => {
  * @param {string} formatStr the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (
-  dateString,
-  formatStr = FORMATS.ISO,
-  // isEST = false,
-) => {
+const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
   if (!dateString) return;
   let formatString = FORMATS[formatStr] || formatStr;
+
+  if (!Object.values(FORMATS).includes(formatString)) {
+    throw new Error(`Must use a formatting constant: "${formatString}"`); // TODO: test coverage
+  }
+
   let result = prepareDateFromString(dateString)
     .setZone(USTC_TZ)
     .toFormat(formatString);

@@ -267,7 +267,7 @@ describe('getFormattedCaseDetail', () => {
         trialDate: '2011-11-11',
         trialLocation: 'Boise, Idaho',
         trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-        trialTime: '2',
+        trialTime: '2:00',
       });
 
       expect(result).toMatchObject({
