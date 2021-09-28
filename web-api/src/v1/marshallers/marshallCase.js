@@ -38,7 +38,6 @@ exports.marshallCase = caseObject => {
     preferredTrialCity: caseObject.preferredTrialCity,
     respondents: (caseObject.irsPractitioners || []).map(marshallPractitioner),
     sortableDocketNumber: caseObject.sortableDocketNumber,
-    status: caseObject.status,
     trialLocation: caseObject.trialLocation,
   };
 };

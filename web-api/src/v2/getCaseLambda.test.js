@@ -122,8 +122,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const parsedResponse = JSON.parse(response.body);
     expect(parsedResponse).toHaveProperty('caseCaption', expect.any(String));
     expect(parsedResponse.assignedJudge).toBeUndefined();
-    expect(parsedResponse.contactPrimary).toBeDefined();
-    expect(parsedResponse.status).toBeDefined();
+    expect(parsedResponse.contactPrimary).toBeUndefined();
+    expect(parsedResponse.status).toBeUndefined();
     expect(parsedResponse.trialDate).toBeUndefined();
     expect(parsedResponse.trialLocation).toBeUndefined();
     expect(parsedResponse.userId).toBeUndefined();
@@ -259,7 +259,6 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
         },
       ],
       sortableDocketNumber: 18000101,
-      status: 'Calendared',
       trialDate: '2020-03-01T00:00:00.000Z',
       trialLocation: 'Washington, District of Columbia',
     });
