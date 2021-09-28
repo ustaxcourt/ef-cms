@@ -2279,17 +2279,21 @@ const caseHasServedDocketEntries = rawCase => {
 const canAllowDocumentServiceForCase = rawCase => {
   const isOpen =
     rawCase.showPrintableDocketRecord === true || // PublicCase does not expose status
-    ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(rawCase.status);
+    (rawCase.status &&
+      ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+        rawCase.status,
+      ));
 
   const MAX_CLOSED_DATE = calculateISODate({
     howMuch: -6,
     units: 'months',
   });
-  const isRecent =
+  const isRecentlyClosed =
+    rawCase.status === CASE_STATUS_TYPES.closed &&
     rawCase.closedDate &&
     dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
 
-  return Boolean(isOpen || isRecent);
+  return Boolean(isOpen || isRecentlyClosed);
 };
 
 module.exports = {

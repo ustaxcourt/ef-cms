@@ -287,7 +287,7 @@ describe('getCaseAssociation', () => {
       state: {
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
-          status: CASE_STATUS_TYPES.new,
+          showPrintableDocketRecord: false,
         },
       },
     });
