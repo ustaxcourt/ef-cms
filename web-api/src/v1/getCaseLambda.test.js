@@ -102,8 +102,8 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     expect(parsedResponse.noticeOfTrialDate).toBeUndefined();
     expect(parsedResponse.trialLocation).toBeUndefined();
     expect(parsedResponse.userId).toBeUndefined();
-    expect(parsedResponse.contactPrimary).toBeDefined();
-    expect(parsedResponse.status).toBeDefined();
+    expect(parsedResponse.contactPrimary).toBeUndefined();
+    expect(parsedResponse.status).toBeUndefined();
   });
 
   it('returns 404 when the docket number isn’t found', async () => {
