@@ -67,7 +67,6 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
       'preferredTrialCity',
       'respondents',
       'sortableDocketNumber',
-      'status',
       'trialDate',
       'trialLocation',
     ]);
@@ -104,9 +103,11 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
     expect(marshalled.partyType).toEqual(mock.partyType);
     expect(marshalled.preferredTrialCity).toEqual(mock.preferredTrialCity);
     expect(marshalled.sortableDocketNumber).toEqual(mock.sortableDocketNumber);
-    expect(marshalled.status).toEqual(mock.status);
     expect(marshalled.trialDate).toEqual(mock.trialDate);
     expect(marshalled.trialLocation).toEqual(mock.trialLocation);
+
+    // We intentionally not include status
+    expect(marshalled.status).toBeUndefined();
 
     // Exact format asserted in other tests.
     expect(marshalled.contactPrimary).toBeDefined();
