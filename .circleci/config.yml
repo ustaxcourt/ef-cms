@@ -893,8 +893,6 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
-          type:
-
       - migrate:
           requires:
             - deploy
