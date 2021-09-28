@@ -51,7 +51,7 @@ const prepareDateFromEST = (dateString, inputFormat) => {
  *
  * @param {string} dateString a string representing a date
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
- * @returns {moment} a moment-timezone object
+ * @returns {luxon} a luxon object
  */
 const prepareDateFromString = (dateString, inputFormat) => {
   if (dateString === undefined) {

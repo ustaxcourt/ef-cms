@@ -22,7 +22,7 @@ describe('DateHandler', () => {
   describe('prepareDateFromEST', () => {
     it('converts calendar date to ISO', () => {
       const result = DateHandler.prepareDateFromEST('11/11/11', FORMATS.MMDDYY);
-      expect(result).toBe('11/11/11');
+      expect(result).toBe('2011-11-11T05:00:00.000Z');
     });
   });
 
@@ -182,7 +182,7 @@ describe('DateHandler', () => {
         startOfDay,
         FORMATS.DATE_TIME,
       );
-      expect(formattedInEastern).toEqual('04/07/20 12:00 AM'); // the stroke of midnight
+      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
     });
   });
 
@@ -200,7 +200,7 @@ describe('DateHandler', () => {
         endOfDay,
         FORMATS.DATE_TIME,
       );
-      expect(formattedInEastern).toEqual('04/07/20 11:59 PM'); // the moment before midnight the next day
+      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
     });
   });
   describe('createISODateAtStartOfDayEST', () => {
@@ -247,31 +247,31 @@ describe('DateHandler', () => {
   });
 
   describe('formatDateString', () => {
-    it('accepts YYYY-MM-DD as EST and displays same as EST', () => {
+    it('accepts YYYY-MM-DD as ET and displays same as ET', () => {
       const dateRetrievedFromStorage = '2001-01-01';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,
         'yyyy-MM-dd',
-      ); // stored literally as EST
+      ); // stored literally as ET
       expect(result).toBe('2001-01-01');
     });
 
-    it('creates a formatted EST time from a database iso string', () => {
+    it('creates a formatted ET time from a database iso string', () => {
       const dateRetrievedFromStorage = '2019-03-02T04:40:46.415Z';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,
-        'yyyy-MM-dd hh:mm a',
+        FORMATS.DATE_TIME_TZ,
       );
-      expect(result).toBe('2019-03-01 11:40 PM');
+      expect(result).toBe('03/01/19 11:40 pm ET');
     });
 
     it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
       const dateRetrievedFromStorage = '2019-03-02T01:40:46.415Z';
       const result = DateHandler.formatDateString(
         dateRetrievedFromStorage,
-        'TIME_TZ',
+        FORMATS.TIME_TZ,
       );
-      expect(result).toBe('8:40 PM EST');
+      expect(result).toBe('8:40 pm ET');
     });
   });
 
@@ -289,6 +289,12 @@ describe('DateHandler', () => {
     it('formats current time stamp using requested format', () => {
       const result = DateHandler.formatNow('yy');
       expect(result).toEqual('96');
+    });
+    it('formats current time stamp using requested format', () => {
+      const result = DateHandler.formatNow(FORMATS.YEAR);
+      const numericType = +result;
+      expect(result).toEqual('1996');
+      expect(numericType).toEqual(1996);
     });
   });
 
