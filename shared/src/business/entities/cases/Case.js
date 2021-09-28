@@ -2277,6 +2277,10 @@ const caseHasServedDocketEntries = rawCase => {
  */
 
 const canAllowDocumentServiceForCase = rawCase => {
+  if (typeof rawCase.canAllowDocumentService !== 'undefined') {
+    return rawCase.canAllowDocumentService;
+  }
+
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
