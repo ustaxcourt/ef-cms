@@ -683,52 +683,6 @@ jobs:
                --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
             fi
 
-  reindex:
-    machine:
-      docker_layer_caching: true
-    steps:
-      - checkout
-      - run:
-          name: Setup Env
-          command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)
-            echo "export EFCMS_DOMAIN=$EFCMS_DOMAIN" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
-      - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
-          name: Track successful migrations
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
-            fi
-      - run:
-          name: Enable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
-            fi
-
   smoketests:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -961,9 +915,13 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
-      - smoketests:
+      - wait-for-reindex:
+          type: approval
           requires:
             - migrate
+      - smoketests:
+          requires:
+            - wait-for-reindex
           filters:
             branches:
               only:
@@ -1064,15 +1022,10 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
-      - reindex:
-          <<: *build-and-deploy-with-context-defaults
-          type: approval
-          requires:
-            - migrate
       - smoketests-readonly:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - reindex
+            - migrate
       - switch-colors:
           <<: *build-and-deploy-with-context-defaults
           requires:
