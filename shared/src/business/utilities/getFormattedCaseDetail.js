@@ -213,7 +213,7 @@ const formattedTrialSessionDetails = ({
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
   } else if (trialTime) {
-    const inputDateString = `${trialDate} ${trialTime}:00`; // "2011-11-11 11:00"
+    const inputDateString = `${trialDate} ${trialTime}`; // "2011-11-11 11:00"
     const dateStringGMT = prepareDateFromEST(
       inputDateString,
       FORMATS.TRIAL_TIME,

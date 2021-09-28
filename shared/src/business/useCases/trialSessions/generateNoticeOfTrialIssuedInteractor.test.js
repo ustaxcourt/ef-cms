@@ -79,7 +79,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         docketNumberWithSuffix: '123-45',
         trialInfo: {
           formattedStartDate: 'Sunday, August 25, 2019',
-          formattedStartTime: '10:00 AM',
+          formattedStartTime: '10:00 am',
           joinPhoneNumber: '3333',
           meetingId: '1111',
           password: '2222',

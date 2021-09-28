@@ -40,7 +40,7 @@ describe('orderPublicSearchInteractor', () => {
     const result = await orderPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(
@@ -87,7 +87,7 @@ describe('orderPublicSearchInteractor', () => {
     const results = await orderPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
@@ -113,7 +113,7 @@ describe('orderPublicSearchInteractor', () => {
       orderPublicSearchInteractor(applicationContext, {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'fish',
-        startDate: '2001-01-01',
+        startDate: '01/01/2001',
       }),
     ).rejects.toThrow('entity was invalid');
   });
@@ -126,7 +126,7 @@ describe('orderPublicSearchInteractor', () => {
     const results = await orderPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(results.length).toBe(0);

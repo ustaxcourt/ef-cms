@@ -9,12 +9,13 @@ describe('DateHandler', () => {
   describe('Date Formats', () => {
     let realDateNow;
     const mockTimeValue = 1530518207007; // '2018-07-02T07:56:47.007Z'
-    // const expectedReturnValue = '2018-07-02T07:56:47.007Z';
 
     const FORMATS_EXPECTED_OUTPUT = {
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
+      FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
+      LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
       MMDDYYYY_DASHED: '07-02-2018',
