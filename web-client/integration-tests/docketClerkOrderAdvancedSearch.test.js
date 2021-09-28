@@ -233,7 +233,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           endDate: '2005-01-03',
           keyword: 'dismissal',
-          startDate: '2005-01-01',
+          startDate: '01/01/2005',
         },
       });
 
@@ -252,7 +252,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           judge: invalidJudge,
           keyword: 'dismissal',
-          startDate: '2005-01-01',
+          startDate: '01/01/2005',
         },
       });
 
@@ -283,7 +283,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -316,7 +316,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
-          startDate: '1995-01-01',
+          startDate: '01/01/1995',
         },
       });
 
@@ -348,7 +348,7 @@ describe('docket clerk order advanced search', () => {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -442,7 +442,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           judge: signedByJudge,
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -471,7 +471,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'Order of Dismissal Entered',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
