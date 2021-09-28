@@ -128,7 +128,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      showPrintableDocketRecord: true,
+      showPrintableDocketRecord: false,
     });
   });
 
@@ -173,7 +173,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      showPrintableDocketRecord: false,
+      showPrintableDocketRecord: true,
     });
   });
 
