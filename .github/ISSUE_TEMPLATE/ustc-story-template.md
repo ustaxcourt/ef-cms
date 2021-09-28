@@ -31,7 +31,7 @@ The user story must:
 - [ ]  Include user-centric testing scenarios
 - [ ]  Include preconditions (story dependencies)
 - [ ]  Not include design or technical solutions
-- [ ]  Include non-standard testing, deployment, documentation, browser, mobile or security requirements are documented, as well as any requirements for 3rd-party integrations
+- [ ]  Include non-standard testing, deployment, documentation, browser, mobile or security requirements, as well as any requirements for 3rd-party integrations
 
 Process: Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
 
