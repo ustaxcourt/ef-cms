@@ -1,12 +1,16 @@
-const { DateTime } = require('luxon');
+const {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} = require('../../../business/utilities/DateHandler');
 const { queryFull } = require('../../dynamodbClientService');
 
 exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
-  const afterDate = DateTime.now()
-    .setZone('America/New_York')
-    .minus(7, 'days')
-    .setZone('utc')
-    .toISO();
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: -7,
+    unit: 'days',
+  });
 
   return queryFull({
     ExpressionAttributeNames: {

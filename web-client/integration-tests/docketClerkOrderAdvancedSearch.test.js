@@ -135,7 +135,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -177,7 +177,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'osteodontolignikeratic',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -197,7 +197,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: docketNumberNoOrders,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -216,7 +216,7 @@ describe('docket clerk order advanced search', () => {
           caseTitleOrPetitioner: caseCaptionNoOrders,
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
