@@ -3,7 +3,7 @@
 # Sets up the s3 lambda bucket with blue and green files for triggers code
 
 # Usage
-#   ./setup-s3-maintenance-file.sh dev
+#   ./setup-s3-triggers-file.sh dev
 
 # Arguments
 #   - $1 - the environment to check
