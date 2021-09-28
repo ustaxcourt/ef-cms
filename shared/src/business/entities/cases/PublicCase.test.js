@@ -129,7 +129,6 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      status: CASE_STATUS_TYPES.new,
     });
   });
 
@@ -175,7 +174,6 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      status: CASE_STATUS_TYPES.calendared,
     });
   });
 

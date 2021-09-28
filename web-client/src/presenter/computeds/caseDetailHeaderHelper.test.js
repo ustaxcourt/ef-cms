@@ -51,7 +51,7 @@ describe('caseDetailHeaderHelper', () => {
         ...getBaseState(petitionerUser),
         caseDetail: {
           docketEntries: [],
-          status: CASE_STATUS_TYPES.new,
+          isStatusNew: true,
         },
       },
     });
@@ -66,7 +66,7 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
-          status: CASE_STATUS_TYPES.generalDocket,
+          isStatusNew: false,
         },
       },
     });

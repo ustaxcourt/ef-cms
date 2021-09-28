@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import {
@@ -440,9 +437,12 @@ describe('case detail computed', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [
-            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
+            {
+              documentType: 'Petition',
+              servedAt: '2019-03-01T21:40:46.415Z',
+            },
           ],
-          status: CASE_STATUS_TYPES.generalDocket,
+          isStatusNew: false,
         },
       },
     });
@@ -457,7 +457,7 @@ describe('case detail computed', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
-          status: CASE_STATUS_TYPES.new,
+          isStatusNew: true,
         },
       },
     });
