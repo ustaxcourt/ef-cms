@@ -112,7 +112,6 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isPaper: true,
       isSealed: false,
-      isStatusNew: true,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -129,6 +128,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
+      showPrintableDocketRecord: true,
     });
   });
 
@@ -164,7 +164,6 @@ describe('PublicCase', () => {
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
       isSealed: false,
-      isStatusNew: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -174,6 +173,7 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
+      showPrintableDocketRecord: false,
     });
   });
 

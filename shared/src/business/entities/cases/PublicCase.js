@@ -48,7 +48,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
-  this.isStatusNew = rawCase.status === CASE_STATUS_TYPES.new;
+  this.showPrintableDocketRecord = rawCase.status !== CASE_STATUS_TYPES.new;
 
   const currentUser = applicationContext.getCurrentUser();
 
@@ -98,18 +98,12 @@ const publicCaseSchema = {
   hasIrsPractitioner: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
-  isStatusNew: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
   petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-  status: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  )
-    .optional()
-    .meta({ tags: ['Restricted'] })
-    .description('Status of the case.'),
+  showPrintableDocketRecord: joi.boolean(),
 };
 
 const sealedCaseSchemaRestricted = {

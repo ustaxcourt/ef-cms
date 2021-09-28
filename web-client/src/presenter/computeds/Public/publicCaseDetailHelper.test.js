@@ -47,7 +47,7 @@ describe('publicCaseDetailHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [],
-            isStatusNew: false,
+            showPrintableDocketRecord: true,
           },
         },
       });
@@ -59,7 +59,7 @@ describe('publicCaseDetailHelper', () => {
         state: {
           caseDetail: {
             docketEntries: [],
-            isStatusNew: true,
+            showPrintableDocketRecord: false,
           },
         },
       });

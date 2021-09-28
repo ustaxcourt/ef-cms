@@ -42,6 +42,7 @@ describe('casePublicSearchInteractor', () => {
           partyType: PARTY_TYPES.petitioner,
           petitioners: [getContactPrimary(MOCK_CASE)],
           receivedAt: '2019-03-01T21:40:46.415Z',
+          status: 'Calendared',
         },
       ]);
 
@@ -61,7 +62,6 @@ describe('casePublicSearchInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: false,
-        isStatusNew: false,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
           {
@@ -73,6 +73,7 @@ describe('casePublicSearchInteractor', () => {
           },
         ],
         receivedAt: '2019-03-01T21:40:46.415Z',
+        showPrintableDocketRecord: true,
       },
     ]);
   });

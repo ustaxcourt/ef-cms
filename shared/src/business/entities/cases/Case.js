@@ -2278,11 +2278,8 @@ const caseHasServedDocketEntries = rawCase => {
 
 const canAllowDocumentServiceForCase = rawCase => {
   const isOpen =
-    rawCase.isStatusNew === false || // PublicCase does not expose status
-    (!rawCase.isStatusNew &&
-      ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
-        rawCase.status,
-      ));
+    rawCase.showPrintableDocketRecord === true || // PublicCase does not expose status
+    ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(rawCase.status);
 
   const MAX_CLOSED_DATE = calculateISODate({
     howMuch: -6,

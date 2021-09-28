@@ -442,7 +442,7 @@ describe('case detail computed', () => {
               servedAt: '2019-03-01T21:40:46.415Z',
             },
           ],
-          isStatusNew: false,
+          showPrintableDocketRecord: true,
         },
       },
     });
@@ -457,7 +457,7 @@ describe('case detail computed', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [{ documentType: 'Petition' }],
-          isStatusNew: true,
+          showPrintableDocketRecord: false,
         },
       },
     });
