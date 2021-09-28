@@ -976,19 +976,19 @@ workflows:
                 - experimental4
                 - experimental5
       - smoketests-readonly:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
+      requires:
+        - smoketests
+      filters:
+        branches:
+          only:
+            - irs
+            - staging
+            - test
+            - experimental1
+            - experimental2
+            - experimental3
+            - experimental4
+            - experimental5
       - switch-colors:
           requires:
             - migrate
