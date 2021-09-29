@@ -231,7 +231,7 @@ describe('docket clerk opinion advanced search', () => {
       'updateAdvancedOpinionSearchFormValueSequence',
       {
         key: 'startDate',
-        value: '2995-08-03',
+        value: '08/03/2995',
       },
     );
 

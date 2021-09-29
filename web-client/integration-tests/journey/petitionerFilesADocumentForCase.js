@@ -5,9 +5,9 @@ export const petitionerFilesADocumentForCase = (cerebralTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Petitioner files a document for case', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
+    // await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    //   docketNumber: cerebralTest.docketNumber,
+    // });
 
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
