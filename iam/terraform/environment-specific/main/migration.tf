@@ -200,6 +200,14 @@ resource "aws_iam_role_policy" "reindex_status_policy" {
             "Resource": [
                 "arn:aws:logs:*:*:*"
             ]
+        },
+        {
+          "Sid": "Other",
+          "Effect": "Allow",
+          "Action": [
+            "es:*"
+          ],
+          "Resource": "*"
         }
     ]
 }

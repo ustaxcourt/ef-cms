@@ -1,5 +1,3 @@
-const axios = require('axios');
-const { find } = require('lodash');
 /**
  * check that a subset of ES indexes counts on alpha and beta match.
  */
@@ -7,11 +5,9 @@ const { find } = require('lodash');
 // @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
-const environmentName = process.argv[2] || 'exp1';
-
 const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
 
-const getClusterStats = async ({ version }) => {
+const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
   const info = await esClient.indices.stats({
     index: '_all',
@@ -22,10 +18,16 @@ const getClusterStats = async ({ version }) => {
 
 const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
-const isReindexComplete = async () => {
+exports.isReindexComplete = async environmentName => {
   let diffTotal = 0;
-  const currentInfo = await getClusterStats({ version: currentVersion });
-  let destinationInfo = await getClusterStats({ version: destinationVersion });
+  const currentInfo = await getClusterStats({
+    environmentName,
+    version: currentVersion,
+  });
+  let destinationInfo = await getClusterStats({
+    environmentName,
+    version: destinationVersion,
+  });
 
   for (const indexName of [
     'efcms-case',
@@ -62,35 +64,4 @@ const isReindexComplete = async () => {
   }
 
   return true;
-};
-
-exports.handler = async () => {
-  const isReindexFinished = await isReindexComplete();
-
-  if (isReindexFinished) {
-    const personalApiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
-    const workflowId = process.env.CIRCLE_WORKFLOW_ID;
-
-    const get_all_jobs = {
-      headers: { 'Circle-Token': personalApiToken },
-      method: 'GET',
-      url: `https://circleci.com/api/v2/workflow/${workflowId}/job`,
-    };
-
-    const allJobsInWorkflow = await axios.get(get_all_jobs.url, get_all_jobs);
-
-    const jobWithApprovalNeeded = find(
-      allJobsInWorkflow.data.items,
-      function (o) {
-        return o.approval_request_id !== undefined;
-      },
-    );
-
-    const approve_job = {
-      headers: { 'Circle-Token': personalApiToken },
-      method: 'POST',
-      url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${jobWithApprovalNeeded.approval_request_id}`,
-    };
-    return await axios.post(approve_job.url, {}, approve_job);
-  }
 };

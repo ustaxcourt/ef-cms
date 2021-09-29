@@ -1,0 +1,52 @@
+const axios = require('axios');
+const createApplicationContext = require('../../../src/applicationContext');
+const {
+  isReindexComplete,
+} = require('../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
+const { find } = require('lodash');
+
+exports.handler = async () => {
+  const environmentName = process.env.ENVIRONMENT;
+  const isReindexFinished = await isReindexComplete(environmentName);
+  const ifMigrateFlag = process.env.MIGRATE_FLAG;
+
+  const applicationContext = createApplicationContext({});
+
+  applicationContext.logger.debug(`ifMigrateFlag: ${ifMigrateFlag}`);
+
+  if (ifMigrateFlag === 'false' || isReindexFinished) {
+    const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
+    const workflowId = process.env.CIRCLE_WORKFLOW_ID;
+
+    const get_all_jobs = {
+      headers: { 'Circle-Token': apiToken },
+      method: 'GET',
+      url: `https://circleci.com/api/v2/workflow/${workflowId}/job`,
+    };
+
+    const allJobsInWorkflow = await axios.get(get_all_jobs.url, get_all_jobs);
+    applicationContext.logger.debug(`allJobsInWorkflow: ${allJobsInWorkflow}`);
+
+    const jobWithApprovalNeeded = find(
+      allJobsInWorkflow.data.items,
+      function (o) {
+        return o.approval_request_id !== undefined;
+      },
+    );
+
+    applicationContext.logger.debug(
+      `jobWithApprovalNeeded: ${jobWithApprovalNeeded}`,
+    );
+
+    const approveJob = {
+      headers: { 'Circle-Token': apiToken },
+      method: 'POST',
+      url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${jobWithApprovalNeeded.approval_request_id}`,
+    };
+
+    const approveJobResponse = await axios.post(approveJob.url, {}, approveJob);
+    applicationContext.logger.debug(
+      `approveJobResponse: ${approveJobResponse}`,
+    );
+  }
+};
