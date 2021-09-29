@@ -222,6 +222,10 @@ const dateStringsCompared = (a, b) => {
  * @returns {object} deconstructed date object
  */
 const deconstructDate = dateString => {
+  if (PATTERNS.YYYYMMDD.test(dateString)) {
+    const [year, month, day] = dateString.split('-').map(Number).map(String);
+    return { day, month, year };
+  }
   const dtObj = DateTime.fromISO(dateString, { zone: 'utc' }).setZone(USTC_TZ);
   let result;
   if (dtObj && dtObj.toJSDate() instanceof Date && dtObj.isValid) {
