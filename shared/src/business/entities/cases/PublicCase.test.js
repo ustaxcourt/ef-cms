@@ -76,6 +76,7 @@ describe('PublicCase', () => {
   it('should only have expected fields', () => {
     const entity = new PublicCase(
       {
+        canAllowDocumentService: true,
         caseCaption: 'testing',
         createdAt: 'testing',
         docketEntries: [],
@@ -103,6 +104,7 @@ describe('PublicCase', () => {
     );
 
     expect(entity.toRawObject()).toEqual({
+      canAllowDocumentService: true,
       caseCaption: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
@@ -129,7 +131,6 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      status: CASE_STATUS_TYPES.new,
     });
   });
 
@@ -175,7 +176,6 @@ describe('PublicCase', () => {
         },
       ],
       receivedAt: 'testing',
-      status: CASE_STATUS_TYPES.calendared,
     });
   });
 
