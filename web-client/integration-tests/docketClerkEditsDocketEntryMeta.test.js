@@ -22,6 +22,7 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { irsSuperuserGetsReconciliationReport } from './journey/irsSuperuserGetsReconciliationReport';
 import { petitionerFilesADocumentForCase } from './journey/petitionerFilesADocumentForCase';
 import { petitionerFilesApplicationToTakeDeposition } from './journey/petitionerFilesApplicationToTakeDeposition';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
@@ -38,9 +39,15 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
     const caseDetail = await uploadPetition(cerebralTest);
+    console.log('I created details.docketNumber', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner@example.com');
   petitionerFilesADocumentForCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
