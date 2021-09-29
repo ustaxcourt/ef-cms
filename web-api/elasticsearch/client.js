@@ -19,14 +19,11 @@ const getHost = async DomainName => {
       })
       .promise();
 
+    console.log('result', JSON.stringify(result, null, 2));
     return result.DomainStatus.Endpoint;
   } catch (err) {
     console.error(`could not find resource for ${DomainName}`, err);
   }
-};
-
-const cache = {
-  hosts: {},
 };
 
 /**
@@ -40,7 +37,7 @@ const cache = {
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
-  const host = cache.hosts[domainName] || (await getHost(domainName));
+  const host = await getHost(domainName);
   console.log('domainName', domainName);
   console.log('host', host);
   console.log('version', version);
