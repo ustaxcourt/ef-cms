@@ -32,7 +32,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   runtime          = "nodejs14.x"
 
   lifecycle {
-    ignore_changes = ["source_code_hash"]
+    ignore_changes = all
   }
 
   # These can not use null_data_source.locals due to circular dep
@@ -70,7 +70,7 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   runtime          = "nodejs14.x"
 
   lifecycle {
-    ignore_changes = ["source_code_hash"]
+    ignore_changes = all
   }
 
   # These can not use null_data_source.locals due to circular dep
