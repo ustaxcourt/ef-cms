@@ -87,7 +87,6 @@ describe('caseDeadlineReportHelper', () => {
       applicationContext.getUtilities().getJudgeLastName,
     ).toHaveBeenCalled();
     expect(result.caseDeadlines[0].associatedJudgeFormatted).toEqual('Hale');
-    expect(result.caseDeadlines[0].formattedDeadline).toEqual('???');
     expect(result.caseDeadlines[1].associatedJudgeFormatted).toEqual(
       'Brandeis',
     );

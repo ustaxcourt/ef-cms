@@ -49,6 +49,12 @@ describe('DateHandler', () => {
       });
     });
 
+    it('formats a date using pm (lowercase)', () => {
+      const dateStringFormat = '2011-09-08T18:00:00.000Z';
+      const result = formatDateString(dateStringFormat, 'DATE_TIME_TZ');
+      expect(result).toEqual('09/08/11 2:00 pm ET');
+    });
+
     it('converts EST to GMT', () => {
       const dateString = '2011-09-08 14:00'; // 2pm on Sept 9th
       const result = prepareDateFromEST(dateString, FORMATS.TRIAL_TIME);
