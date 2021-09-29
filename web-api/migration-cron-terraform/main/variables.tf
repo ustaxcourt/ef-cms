@@ -33,3 +33,7 @@ variable "circle_workflow_id" {
 variable "migrate_flag" {
   type = string
 }
+
+variable "circle_machine_user_token" {
+  type = string
+}

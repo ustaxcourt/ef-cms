@@ -6,8 +6,9 @@ const { find } = require('lodash');
 
 exports.handler = async () => {
   const isReindexFinished = await isReindexComplete();
+  const ifMigrateFlag = process.env.MIGRATE_FLAG;
 
-  if (isReindexFinished) {
+  if (isReindexFinished || ifMigrateFlag === 'false') {
     const personalApiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
     const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 
