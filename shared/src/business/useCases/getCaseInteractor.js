@@ -88,9 +88,6 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
       docketNumber: Case.formatDocketNumber(docketNumber),
     });
 
-  // TODO: CHECK THE DOCKET ENTRY GOING TO PERSISTENCE
-  console.log(JSON.stringify(caseRecord, null, 2));
-
   if (!caseRecord.docketNumber && !caseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
