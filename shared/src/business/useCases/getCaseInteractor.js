@@ -73,7 +73,7 @@ const getCaseForExternalUser = ({
   }
 };
 
-export const decorateForCaseStatus = caseRecord => {
+const decorateForCaseStatus = caseRecord => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
@@ -82,6 +82,8 @@ export const decorateForCaseStatus = caseRecord => {
 
   return caseRecord;
 };
+
+exports.decorateForCaseStatus = decorateForCaseStatus;
 
 /**
  * getCaseInteractor
