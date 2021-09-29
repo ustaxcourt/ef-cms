@@ -980,7 +980,7 @@ workflows:
                 - experimental5
       - switch-colors:
           requires:
-            - migrate
+            - smoketests-readonly
           filters:
             branches:
               only:
