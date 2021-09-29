@@ -6,8 +6,10 @@ const {
 const { find } = require('lodash');
 
 exports.handler = async () => {
-  const isReindexFinished = await isReindexComplete();
+  const environmentName = process.env.ENVIRONMENT;
+  const isReindexFinished = await isReindexComplete(environmentName);
   const ifMigrateFlag = process.env.MIGRATE_FLAG;
+
   const applicationContext = createApplicationContext({});
 
   applicationContext.logger.debug(`ifMigrateFlag: ${ifMigrateFlag}`);
