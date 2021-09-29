@@ -684,6 +684,33 @@ jobs:
                --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
             fi
 
+  disable-reindex-cron:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t efcms -f Dockerfile .
+      - run:
+          name: Disable Check Reindex Status Cron
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
+            fi
+
   smoketests:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -920,9 +947,11 @@ workflows:
           type: approval
           requires:
             - migrate
+      - disable-reindex-cron:
+          requires: wait-for-reindex
       - smoketests:
           requires:
-            - wait-for-reindex
+            - disable-reindex-cron
           filters:
             branches:
               only:
