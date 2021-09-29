@@ -948,7 +948,8 @@ workflows:
           requires:
             - migrate
       - disable-reindex-cron:
-          requires: wait-for-reindex
+          requires:
+            - wait-for-reindex
       - smoketests:
           requires:
             - disable-reindex-cron
