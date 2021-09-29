@@ -41,6 +41,9 @@ const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
   const host = cache.hosts[domainName] || (await getHost(domainName));
+  console.log('domainName', domainName);
+  console.log('host', host);
+  console.log('version', version);
   const credentials = new EnvironmentCredentials('AWS');
   return new elasticsearch.Client({
     amazonES: {
