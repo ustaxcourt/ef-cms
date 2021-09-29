@@ -34,7 +34,7 @@ resource "aws_lambda_function" "reindex_status_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "check_reindex_status_cron_rule" {
-  name                = "check_reindex_status_cron_${var.environment}_${var.deploying_color}"
+  name                = "check_reindex_status_cron_${var.environment}"
   schedule_expression = "rate(1 minute)"
   is_enabled          = "false"
 }
