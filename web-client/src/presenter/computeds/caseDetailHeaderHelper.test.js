@@ -45,17 +45,20 @@ describe('caseDetailHeaderHelper', () => {
     expect(result.showExternalButtons).toEqual(false);
   });
 
-  it('should set showExternalButtons false if user is an external user and the case does not have any served docket entries', () => {
+  it('should set showExternalButtons false if user is an external user and service is not allowed for the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
+        caseDetail: {
+          docketEntries: [],
+          status: CASE_STATUS_TYPES.new,
+        },
       },
     });
     expect(result.showExternalButtons).toEqual(false);
   });
 
-  it('should set showExternalButtons true if user is an external user and the case has served docket entries', () => {
+  it('should set showExternalButtons true if user is an external user and service is allowed for the case', () => {
     const result = runCompute(caseDetailHeaderHelper, {
       state: {
         ...getBaseState(petitionerUser),
@@ -63,18 +66,7 @@ describe('caseDetailHeaderHelper', () => {
           docketEntries: [
             { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
           ],
-        },
-      },
-    });
-    expect(result.showExternalButtons).toEqual(true);
-  });
-
-  it('should set showExternalButtons true if user is an external user and the case has isLegacyServed docket entries', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [{ documentType: 'Answer', isLegacyServed: true }],
+          status: CASE_STATUS_TYPES.generalDocket,
         },
       },
     });
