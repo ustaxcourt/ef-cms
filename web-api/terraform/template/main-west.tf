@@ -281,11 +281,15 @@ module "api-west-green" {
   cron_object_hash               = ""
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
+  pool_arn                       = aws_cognito_user_pool.pool.arn
   create_cron                    = 0
   create_streams                 = 0
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
+  triggers_object                = ""
+  triggers_object_hash           = ""
+  create_triggers                = 0
 }
 
 module "api-west-blue" {
@@ -325,7 +329,11 @@ module "api-west-blue" {
   streams_object_hash            = ""
   create_cron                    = 0
   create_streams                 = 0
+  pool_arn                       = aws_cognito_user_pool.pool.arn
   create_maintenance_notify      = 1
   stream_arn                     = ""
   web_acl_arn                    = module.api-west-waf.web_acl_arn
+  triggers_object                = ""
+  triggers_object_hash           = ""
+  create_triggers                = 0
 }
