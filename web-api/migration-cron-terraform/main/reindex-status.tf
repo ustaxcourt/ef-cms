@@ -10,7 +10,7 @@ resource "aws_lambda_function" "reindex_status_lambda" {
   filename         = data.archive_file.reindex_status_zip.output_path
   function_name    = "reindex_status_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_role_${var.environment}"
-  handler          = "reindex_status.handler"
+  handler          = "reindex-status.handler"
   source_code_hash = data.archive_file.reindex_status_zip.output_base64sha256
 
   runtime     = "nodejs14.x"
