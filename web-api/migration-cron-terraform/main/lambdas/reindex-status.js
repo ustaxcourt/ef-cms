@@ -8,13 +8,13 @@ const { find } = require('lodash');
 exports.handler = async () => {
   const environmentName = process.env.ENVIRONMENT;
   const isReindexFinished = await isReindexComplete(environmentName);
-  const ifMigrateFlag = process.env.MIGRATE_FLAG;
+  const needsMigration = process.env.MIGRATE_FLAG;
 
   const applicationContext = createApplicationContext({});
 
-  applicationContext.logger.debug(`ifMigrateFlag: ${ifMigrateFlag}`);
+  applicationContext.logger.debug(`ifMigrateFlag: ${needsMigration}`);
 
-  if (ifMigrateFlag === 'false' || isReindexFinished) {
+  if (needsMigration === 'false' || isReindexFinished) {
     const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
     const workflowId = process.env.CIRCLE_WORKFLOW_ID;
 
