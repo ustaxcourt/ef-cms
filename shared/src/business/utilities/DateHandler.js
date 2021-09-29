@@ -147,12 +147,12 @@ const createISODateStringFromObject = options => {
 
 /**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
- * @param {string} formatStr the desired formatting as specified by the moment library
+ * @param {string} formatArg the desired formatting as specified by the moment library
  * @returns {string} a formatted date string
  */
-const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
+const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   if (!dateString) return;
-  let formatString = FORMATS[formatStr] || formatStr;
+  let formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {
     throw new Error(`Must use a formatting constant: "${formatString}"`); // TODO: test coverage
@@ -169,7 +169,7 @@ const formatDateString = (dateString, formatStr = FORMATS.ISO) => {
     FORMATS.TIME_TZ,
   ];
 
-  if (formatWithAMPM.includes(formatStr)) {
+  if (formatWithAMPM.includes(formatString)) {
     result = result.replace(/AM/, 'am');
     result = result.replace(/PM/, 'pm');
   }

@@ -18,16 +18,12 @@ export const formatDateIfToday = (date, applicationContext) => {
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
-  const yesterday = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString()
-        .plus(-1, 'day')
-        .toJSDate(),
-      'MMDDYY',
-    );
+  const yesterday = applicationContext.getUtilities().formatDateString(
+    applicationContext.getUtilities().calculateISODate({
+      howMuch: -1,
+    }),
+    'MMDDYY',
+  );
 
   let formattedDate;
   if (now == then) {

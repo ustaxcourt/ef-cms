@@ -242,7 +242,7 @@ describe('DateHandler', () => {
     it('can deconstruct dates formatted as YYYY-MM-DD', () => {
       const input = '2038-07-31';
       const result = DateHandler.deconstructDate(input);
-      expect(result).toMatchObject({ day: '31', month: '07', year: '2038' });
+      expect(result).toMatchObject({ day: '31', month: '7', year: '2038' });
     });
     it('returns undefined if given a value not representative of an ISO timestamp', () => {
       const input = '';
