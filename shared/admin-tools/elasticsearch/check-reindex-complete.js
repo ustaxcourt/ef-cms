@@ -1,5 +1,3 @@
-// arguments: env
-
 /**
  * check that a subset of ES indexes counts on alpha and beta match.
  */
@@ -7,11 +5,9 @@
 // @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
-const environmentName = process.argv[2] || 'exp1';
-
 const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
 
-const getClusterStats = async ({ version }) => {
+const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
   const info = await esClient.indices.stats({
     index: '_all',
@@ -22,10 +18,16 @@ const getClusterStats = async ({ version }) => {
 
 const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
-exports.isReindexComplete = async () => {
+exports.isReindexComplete = async environmentName => {
   let diffTotal = 0;
-  const currentInfo = await getClusterStats({ version: currentVersion });
-  let destinationInfo = await getClusterStats({ version: destinationVersion });
+  const currentInfo = await getClusterStats({
+    environmentName,
+    version: currentVersion,
+  });
+  let destinationInfo = await getClusterStats({
+    environmentName,
+    version: destinationVersion,
+  });
 
   for (const indexName of [
     'efcms-case',
