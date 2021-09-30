@@ -19,7 +19,9 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const docketNumbers = mappings.map(metadata => metadata.docketNumber);
+  const docketNumbers = [
+    ...new Set(mappings.map(metadata => metadata.docketNumber)),
+  ];
 
   const results = await client.batchGet({
     applicationContext,

@@ -8,7 +8,7 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('formatted work queue computed', () => {
+describe('formattedWorkQueue', () => {
   const { CHIEF_JUDGE, DOCKET_NUMBER_SUFFIXES, DOCKET_SECTION, STATUS_TYPES } =
     applicationContext.getConstants();
 
