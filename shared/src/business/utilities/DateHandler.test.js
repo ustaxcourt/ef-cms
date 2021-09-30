@@ -457,7 +457,7 @@ describe('DateHandler', () => {
         },
       });
     });
-    it('takes a moment object as a parameter to create an object with keys month, day, and year with numeric values', () => {
+    it('takes a luxon object as a parameter to create an object with keys month, day, and year with numeric values', () => {
       const dtInstance = DateHandler.prepareDateFromString(
         '2001-02-03',
         DateHandler.FORMATS.YYYYMMDD,
@@ -469,7 +469,7 @@ describe('DateHandler', () => {
         year: '2001',
       });
     });
-    it('creates a moment object representing today/now and returns an object with keys month, day, and year', () => {
+    it('creates a luxon object representing today/now and returns an object with keys month, day, and year', () => {
       const dtInstance = DateHandler.prepareDateFromString();
       const result = DateHandler.getMonthDayYearObj(dtInstance);
       expect(result).toEqual({
