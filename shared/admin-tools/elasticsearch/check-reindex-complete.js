@@ -16,8 +16,8 @@ const getClusterStats = async ({ environmentName, version }) => {
 };
 
 exports.isReindexComplete = async environmentName => {
-  const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
   const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
+  const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
   let diffTotal = 0;
   const currentInfo = await getClusterStats({
