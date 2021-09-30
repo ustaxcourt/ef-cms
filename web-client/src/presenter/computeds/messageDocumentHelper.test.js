@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   clerkOfCourtUser,
@@ -606,7 +609,7 @@ describe('messageDocumentHelper', () => {
   });
 
   describe('serving documents', () => {
-    it('should set showServiceWarning to true if the petition is unserved and we are viewing a servable (non-petition) document', () => {
+    it('should set showServiceWarning to true if case disallows service and we are viewing a servable (non-petition) document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -621,6 +624,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.new,
           },
         },
       });
@@ -643,6 +647,7 @@ describe('messageDocumentHelper', () => {
                   eventCode: 'PMT',
                 },
               ],
+              status: CASE_STATUS_TYPES.generalDocket,
             },
           },
         },
@@ -666,6 +671,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocket,
           },
         },
       });
@@ -688,6 +694,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocument,
           },
         },
       });
@@ -710,6 +717,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocket,
           },
         },
       });
@@ -717,7 +725,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePaperFiledDocumentButton).toBe(true);
     });
 
-    it('should set showServePaperFiledDocumentButton to true when the document is a servable paper filed document but the petition is unserved', () => {
+    it('should set showServePaperFiledDocumentButton to true when the document is a servable paper filed document but the case disallows service', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -732,6 +740,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.new,
           },
         },
       });
@@ -739,7 +748,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePaperFiledDocumentButton).toBe(false);
     });
 
-    it('should set showServeCourtIssuedDocumentButton to false when the document is  a servable paper filed document that is unserved, and not a draft document', () => {
+    it('should set showServeCourtIssuedDocumentButton to false when the document is a servable paper filed document that is unserved, and not a draft document', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -754,6 +763,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocket,
           },
         },
       });
@@ -776,6 +786,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.generalDocket,
           },
           permissions: { SERVE_DOCUMENT: false },
         },
@@ -785,7 +796,7 @@ describe('messageDocumentHelper', () => {
       expect(result.showServePaperFiledDocumentButton).toBe(false);
     });
 
-    it('should set showServeCourtIssuedDocumentButton to false when petition on the case is not served', () => {
+    it('should set showServeCourtIssuedDocumentButton to false when the case disallows service', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -800,6 +811,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
+            status: CASE_STATUS_TYPES.new,
           },
           permissions: { SERVE_DOCUMENT: true },
         },

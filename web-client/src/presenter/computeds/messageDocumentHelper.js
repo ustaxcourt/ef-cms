@@ -25,9 +25,9 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
 
-  const isPetitionServed = applicationContext
+  const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
-    .caseHasServedPetition(caseDetail);
+    .canAllowDocumentServiceForCase(caseDetail);
 
   const { docketEntries } = caseDetail;
 
@@ -112,13 +112,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
   ).includes(caseDocument.eventCode);
 
   const showServeCourtIssuedDocumentButton =
-    isPetitionServed &&
+    canAllowDocumentServiceForCase &&
     showNotServed &&
     isCourtIssuedDocument &&
     permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
-    isPetitionServed &&
+    canAllowDocumentServiceForCase &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !isPetitionDocument &&
@@ -126,7 +126,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showServiceWarning =
     !isPetitionDocument &&
-    !isPetitionServed &&
+    !canAllowDocumentServiceForCase &&
     showNotServed &&
     permissions.SERVE_DOCUMENT;
 
