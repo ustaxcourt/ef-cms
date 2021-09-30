@@ -21,11 +21,3 @@ variable "source_table" {
 variable "documents_bucket_name" {
   type = string
 }
-
-variable "deploying_color" {
-  type = string
-}
-
-variable "circle_workflow_id" {
-  type = string
-}
