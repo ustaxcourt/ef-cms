@@ -9,6 +9,8 @@ const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
 
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
+
+  console.log('after getclient', esClient);
   const info = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
@@ -24,6 +26,7 @@ exports.isReindexComplete = async environmentName => {
     environmentName,
     version: currentVersion,
   });
+  console.log('currentInfo', currentInfo);
   let destinationInfo = await getClusterStats({
     environmentName,
     version: destinationVersion,
