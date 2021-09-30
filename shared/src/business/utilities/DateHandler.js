@@ -147,7 +147,7 @@ const createISODateStringFromObject = options => {
 
 /**
  * @param {string} dateString a date string like YYYY-MM-DD or an ISO date retrieved from persistence
- * @param {string} formatArg the desired formatting as specified by the moment library
+ * @param {string} formatArg the desired formatting as specified by the luxon library
  * @returns {string} a formatted date string
  */
 const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
@@ -295,7 +295,7 @@ const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
 
 /**
  * properly casts a variety of inputs to a UTC ISOString
- * directly using the moment library to inspect the formatting of the input
+ * directly using the luxon library to inspect the formatting of the input
  * before sending to application context functions to be transformed
  *
  * @param {object} applicationContext the application context
