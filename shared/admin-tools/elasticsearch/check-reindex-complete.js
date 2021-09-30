@@ -5,8 +5,6 @@
 // @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
-const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
-
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
 
@@ -17,9 +15,10 @@ const getClusterStats = async ({ environmentName, version }) => {
   return info;
 };
 
-const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
-
 exports.isReindexComplete = async environmentName => {
+  const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
+  const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
+
   let diffTotal = 0;
   const currentInfo = await getClusterStats({
     environmentName,
