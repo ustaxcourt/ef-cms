@@ -1,4 +1,7 @@
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import {
   adcUser,
   docketClerkUser,
@@ -101,6 +104,7 @@ describe('documentViewerHelper', () => {
                     },
                     { ...baseDocketEntry, ...docketEntryOverrides },
                   ],
+                  status: CASE_STATUS_TYPES.generalDocket,
                 },
               },
             },
@@ -110,7 +114,7 @@ describe('documentViewerHelper', () => {
         });
       },
     );
-    it('does not show "Serve" button if petition on case is not yet served', () => {
+    it('does not show "Serve" button if service is NOT allowed on the case', () => {
       const { showServeCourtIssuedDocumentButton } = runCompute(
         documentViewerHelper,
         {
@@ -125,6 +129,7 @@ describe('documentViewerHelper', () => {
                 },
                 { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
               ],
+              status: CASE_STATUS_TYPES.new,
             },
           },
         },
@@ -133,7 +138,7 @@ describe('documentViewerHelper', () => {
       expect(showServeCourtIssuedDocumentButton).toBe(false);
     });
 
-    it('shows "Serve" button if petition on case has been served', () => {
+    it('shows "Serve" button if service is allowed on the case', () => {
       const { showServeCourtIssuedDocumentButton } = runCompute(
         documentViewerHelper,
         {
@@ -148,6 +153,7 @@ describe('documentViewerHelper', () => {
                 },
                 { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
               ],
+              status: CASE_STATUS_TYPES.generalDocket,
             },
           },
         },
@@ -203,10 +209,27 @@ describe('documentViewerHelper', () => {
         expectation: false,
         user: adcUser,
       },
+      {
+        caseStatus: CASE_STATUS_TYPES.new,
+        description:
+          'should be false if the document type is an external document without servedAt but case is not in a state that allows service',
+        docketEntryOverrides: {
+          documentType: 'Answer',
+          eventCode: 'A',
+        },
+        expectation: false,
+        user: adcUser,
+      },
     ];
 
     showServePaperFiledDocumentButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
+      ({
+        caseStatus,
+        description,
+        docketEntryOverrides,
+        expectation,
+        user,
+      }) => {
         it(`${description}`, () => {
           const { showServePaperFiledDocumentButton } = runCompute(
             documentViewerHelper,
@@ -218,6 +241,7 @@ describe('documentViewerHelper', () => {
                     petitionDocketEntry,
                     { ...baseDocketEntry, ...docketEntryOverrides },
                   ],
+                  status: caseStatus || CASE_STATUS_TYPES.generalDocket,
                 },
               },
             },
@@ -228,7 +252,7 @@ describe('documentViewerHelper', () => {
       },
     );
 
-    it('should be false if petition on the case is not yet served', () => {
+    it('should be false if document service is not allowed on the case', () => {
       const { showServePaperFiledDocumentButton } = runCompute(
         documentViewerHelper,
         {
@@ -246,6 +270,7 @@ describe('documentViewerHelper', () => {
                   eventCode: 'A',
                 },
               ],
+              status: CASE_STATUS_TYPES.new,
             },
           },
         },
@@ -453,6 +478,7 @@ describe('documentViewerHelper', () => {
                 docketEntries: [
                   { ...baseDocketEntry, ...docketEntryOverrides },
                 ],
+                status: CASE_STATUS_TYPES.generalDocket,
               },
             },
           });
