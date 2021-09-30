@@ -38,6 +38,8 @@ exports.isReindexComplete = async environmentName => {
     const countCurrent = currentInfo.indices[indexName].total.docs.count;
     const countDestination =
       destinationInfo.indices[indexName].total.docs.count;
+
+    console.log('countCurrent', countCurrent);
     const diff = Math.abs(countCurrent - countDestination);
     diffTotal += diff;
     console.log(`${indexName} has a diff of ${diff}`);
