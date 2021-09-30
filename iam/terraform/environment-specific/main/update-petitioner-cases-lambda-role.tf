@@ -92,7 +92,7 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
                 "sqs:DeleteMessage",
                 "sqs:DeleteQueue"
             ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}",
+            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}_*",
             "Effect": "Allow"
         }
     ]

@@ -6,6 +6,7 @@ const reduce = ImageBlobReduce({
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
+  canAllowDocumentServiceForCase,
   caseHasServedDocketEntries,
   caseHasServedPetition,
   getContactPrimary,
@@ -652,6 +653,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,
       caseHasServedPetition,
       checkDate,

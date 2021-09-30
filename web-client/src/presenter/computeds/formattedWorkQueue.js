@@ -134,6 +134,7 @@ const getDocketEntryEditLink = ({
   let editLink;
   if (
     formattedDocument.isCourtIssuedDocument &&
+    !formattedDocument.isPaper &&
     !applicationContext.getUtilities().isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
