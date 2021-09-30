@@ -6,7 +6,7 @@ describe('docket record helper', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {
-          isStatusNew: false,
+          canAllowPrintableDocketRecord: true,
         },
         form: {},
         permissions: {
@@ -21,7 +21,7 @@ describe('docket record helper', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {
-          isStatusNew: false,
+          canAllowPrintableDocketRecord: true,
         },
         form: {},
         permissions: {
@@ -32,11 +32,11 @@ describe('docket record helper', () => {
     expect(result.showEditDocketRecordEntry).toBe(false);
   });
 
-  it('should show printable docket record button if the case status is not new', () => {
+  it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {
-          isStatusNew: false,
+          canAllowPrintableDocketRecord: true,
         },
         form: {},
         permissions: {
@@ -47,11 +47,11 @@ describe('docket record helper', () => {
     expect(result.showPrintableDocketRecord).toBe(true);
   });
 
-  it('should not show printable docket record button if the case status is new', () => {
+  it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
     const result = runCompute(docketRecordHelper, {
       state: {
         caseDetail: {
-          isStatusNew: true,
+          canAllowPrintableDocketRecord: false,
         },
         form: {},
         permissions: {
