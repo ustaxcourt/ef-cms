@@ -5,8 +5,6 @@ import {
 import {
   FORMATS,
   calculateISODate,
-  createISODateString,
-  deconstructDate,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -152,7 +150,7 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          startDate: '3001-01-01',
+          startDate: '01/01/3001',
         },
       });
 
@@ -231,7 +229,7 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          endDate: '2005-01-03',
+          endDate: '01/03/2005',
           keyword: 'dismissal',
           startDate: '01/01/2005',
         },
@@ -375,46 +373,36 @@ describe('docket clerk order advanced search', () => {
     });
 
     it('search for a date range that contains served orders', async () => {
-      const endOrderCreationMoment = calculateISODate({
-        howMuch: 1,
-        unit: 'months',
-      });
-      const startOrderCreationMoment = calculateISODate({
-        howMuch: -1,
-        unit: 'months',
-      });
-
-      const {
-        day: endDateDay,
-        month: endDateMonth,
-        year: endDateYear,
-      } = deconstructDate(
-        formatDateString(
-          createISODateString(endOrderCreationMoment),
-          FORMATS.MMDDYYYY,
-        ),
+      const endDate = formatDateString(
+        calculateISODate({
+          howMuch: 1,
+          unit: 'months',
+        }),
+        FORMATS.MMDDYYYY,
       );
-      const {
-        day: startDateDay,
-        month: startDateMonth,
-        year: startDateYear,
-      } = deconstructDate(
-        formatDateString(
-          createISODateString(startOrderCreationMoment),
-          FORMATS.MMDDYYYY,
-        ),
+
+      console.log('endDate', endDate);
+
+      const startDate = formatDateString(
+        calculateISODate({
+          howMuch: -1,
+          unit: 'months',
+        }),
+        FORMATS.MMDDYYYY,
       );
 
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          endDate: `${endDateYear}-${endDateMonth}-${endDateDay}`,
-          startDate: `${startDateYear}-${startDateMonth}-${startDateDay}`,
+          endDate,
+          startDate,
         },
       });
 
       await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+      expect(cerebralTest.getState('alertError')).not.toBeDefined();
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
       await refreshElasticsearchIndex();
 
       expect(
