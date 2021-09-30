@@ -72,9 +72,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
 
-  const caseHasServedDocketEntries = applicationContext
+  const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
-    .caseHasServedDocketEntries(caseDetail);
+    .canAllowDocumentServiceForCase(caseDetail);
 
   const showCreateMessageButton = user.role !== USER_ROLES.general;
 
@@ -92,7 +92,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     showConsolidatedCaseIcon,
     showCreateMessageButton,
     showCreateOrderButton,
-    showExternalButtons: isExternalUser && caseHasServedDocketEntries,
+    showExternalButtons: isExternalUser && canAllowDocumentServiceForCase,
     showFileDocumentButton,
     showFileFirstDocumentButton,
     showNewTabLink,

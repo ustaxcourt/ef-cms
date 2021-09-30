@@ -41,11 +41,11 @@ export const getCaseAssociationAction = async ({ applicationContext, get }) => {
       .getPetitionerById(caseDetail, user.userId);
   } else if (user.role === USER_ROLES.irsSuperuser) {
     const caseDetail = get(state.caseDetail);
-    const caseHasServedDocketEntries = applicationContext
+    const canAllowDocumentServiceForCase = applicationContext
       .getUtilities()
-      .caseHasServedDocketEntries(caseDetail);
+      .canAllowDocumentServiceForCase(caseDetail);
 
-    isAssociated = caseHasServedDocketEntries;
+    isAssociated = canAllowDocumentServiceForCase;
   } else if (applicationContext.getUtilities().isInternalUser(user.role)) {
     isAssociated = true;
   }

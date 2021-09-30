@@ -47,4 +47,32 @@ describe('getEligibleCasesForTrialSession', () => {
       },
     ]);
   });
+
+  it('should remove duplicate docketNumbers returned by the eligible-for-trial-case-catalog query', async () => {
+    client.query = jest.fn().mockReturnValue([
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        pk: 'eligible-for-trial-case-catalog',
+        sk: 'WashingtonDistrictofColumbia-R-D-20181212654321-101-18',
+      },
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+        pk: 'eligible-for-trial-case-catalog',
+        sk: 'WashingtonDistrictofColumbia-R-D-20181212000000-101-18',
+      },
+    ]);
+
+    await getEligibleCasesForTrialSession({
+      applicationContext,
+    });
+    expect(client.batchGet).toHaveBeenCalledWith({
+      applicationContext,
+      keys: [
+        {
+          pk: `case|${MOCK_CASE.docketNumber}`,
+          sk: `case|${MOCK_CASE.docketNumber}`,
+        },
+      ],
+    });
+  });
 });
