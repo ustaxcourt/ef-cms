@@ -1029,10 +1029,19 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - deploy
+      - wait-for-reindex:
+          <<: *build-and-deploy-without-smoketests-defaults
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          <<: *build-and-deploy-without-smoketests-defaults
+          requires:
+            - wait-for-reindex
       - switch-colors:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - migrate
+            - disable-reindex-cron
 
   build-and-deploy-with-context:
     jobs:
@@ -1061,10 +1070,19 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - wait-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-reindex
       - smoketests-readonly:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - migrate
+            - disable-reindex-cron
       - switch-colors:
           <<: *build-and-deploy-with-context-defaults
           requires:
