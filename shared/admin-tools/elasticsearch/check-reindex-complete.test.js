@@ -14,75 +14,150 @@ describe('isReindexComplete', () => {
     getClient.mockReturnValue(mockIndices);
   });
 
-  it('should call getClient with the correct environment and current/destination table versions', async () => {
-    // stats.mockReturnValueOnce({
-    //   indices: {
-    //     'efcms-case': {
-    //       total: {
-    //         docs: {
-    //           count: 3,
-    //         },
-    //       },
-    //     },
-    //     'efcms-docket-entry': {
-    //       total: {
-    //         docs: {
-    //           count: 3,
-    //         },
-    //       },
-    //     },
-    //     'efcms-user': {
-    //       total: {
-    //         docs: {
-    //           count: 3,
-    //         },
-    //       },
-    //     },
-    //     'efcms-user-case': {
-    //       total: {
-    //         docs: {
-    //           count: 3,
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
-    // stats.mockReturnValueOnce({
-    //   indices: {
-    //     'efcms-case': {
-    //       total: {
-    //         docs: {
-    //           count: 9,
-    //         },
-    //       },
-    //     },
-    //     'efcms-docket-entry': {
-    //       total: {
-    //         docs: {
-    //           count: 8,
-    //         },
-    //       },
-    //     },
-    //     'efcms-user': {
-    //       total: {
-    //         docs: {
-    //           count: 5,
-    //         },
-    //       },
-    //     },
-    //     'efcms-user-case': {
-    //       total: {
-    //         docs: {
-    //           count: 0,
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
+  it('should call getClient with the correct environment and table versions when destination table is alpha', async () => {
+    stats.mockReturnValueOnce({
+      indices: {
+        'efcms-case': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-user': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-user-case': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+      },
+    });
+    stats.mockReturnValueOnce({
+      indices: {
+        'efcms-case': {
+          total: {
+            docs: {
+              count: 9,
+            },
+          },
+        },
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 8,
+            },
+          },
+        },
+        'efcms-user': {
+          total: {
+            docs: {
+              count: 5,
+            },
+          },
+        },
+        'efcms-user-case': {
+          total: {
+            docs: {
+              count: 0,
+            },
+          },
+        },
+      },
+    });
 
-    const result = await isReindexComplete(mockEnvName);
+    process.env.DESTINATION_TABLE = 'efcms-exp100-alpha';
+    await isReindexComplete(mockEnvName);
 
-    expect(getClient.mock.calls[0][1]).toBe(false);
+    expect(getClient.mock.calls[0][0]).toMatchObject({ version: 'beta' });
+    expect(getClient.mock.calls[1][0]).toMatchObject({ version: 'alpha' });
+  });
+
+  it('should call getClient with the correct environment and table versions when destination table is beta', async () => {
+    stats.mockReturnValueOnce({
+      indices: {
+        'efcms-case': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-user': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+        'efcms-user-case': {
+          total: {
+            docs: {
+              count: 3,
+            },
+          },
+        },
+      },
+    });
+    stats.mockReturnValueOnce({
+      indices: {
+        'efcms-case': {
+          total: {
+            docs: {
+              count: 9,
+            },
+          },
+        },
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 8,
+            },
+          },
+        },
+        'efcms-user': {
+          total: {
+            docs: {
+              count: 5,
+            },
+          },
+        },
+        'efcms-user-case': {
+          total: {
+            docs: {
+              count: 0,
+            },
+          },
+        },
+      },
+    });
+
+    process.env.DESTINATION_TABLE = 'efcms-exp100-beta';
+    await isReindexComplete(mockEnvName);
+
+    expect(getClient.mock.calls[0][0]).toMatchObject({ version: 'alpha' });
+    expect(getClient.mock.calls[1][0]).toMatchObject({ version: 'beta' });
   });
 
   it('should return false when there is a difference in the current and destination index count', async () => {
