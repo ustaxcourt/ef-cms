@@ -67,11 +67,12 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
         value: '4',
       },
     );
+
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
         key: 'year',
-        value: '2020',
+        value: '2050',
       },
     );
 
@@ -80,22 +81,6 @@ export const docketClerkEditsDocketEntryMetaCourtIssued = (
       {
         key: 'pending',
         value: true,
-      },
-    );
-
-    await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[0].message,
-    });
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
       },
     );
 

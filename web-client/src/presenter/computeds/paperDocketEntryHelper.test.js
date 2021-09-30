@@ -1,4 +1,7 @@
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { paperDocketEntryHelper as paperDocketEntryHelperComputed } from './paperDocketEntryHelper';
 import { runCompute } from 'cerebral/test';
@@ -75,7 +78,7 @@ describe('paperDocketEntryHelper', () => {
     expect(result.showAddDocumentWarning).toBeTruthy();
   });
 
-  it('should set showSaveAndServeButton to true and showServiceWarning to false if the petition has been served', () => {
+  it('should set showSaveAndServeButton to true and showServiceWarning to false if the case can allow service', () => {
     const result = runCompute(paperDocketEntryHelper, {
       state: {
         caseDetail: {
@@ -87,6 +90,7 @@ describe('paperDocketEntryHelper', () => {
             },
             { docketEntryId: 'document-id-123', isFileAttached: false },
           ],
+          stattus: CASE_STATUS_TYPES.generalDocket,
         },
         currentViewMetadata: {
           documentUploadMode: 'scan',
@@ -100,7 +104,7 @@ describe('paperDocketEntryHelper', () => {
     expect(result.showServiceWarning).toBeFalsy();
   });
 
-  it('should set showSaveAndServeButton to false and showServiceWarning to true if the petition has NOT been served', () => {
+  it('should set showSaveAndServeButton to false and showServiceWarning to true if the case can NOT allow service', () => {
     const result = runCompute(paperDocketEntryHelper, {
       state: {
         caseDetail: {
@@ -112,6 +116,7 @@ describe('paperDocketEntryHelper', () => {
             },
             { docketEntryId: 'document-id-123', isFileAttached: false },
           ],
+          status: CASE_STATUS_TYPES.new,
         },
         currentViewMetadata: {
           documentUploadMode: 'scan',
