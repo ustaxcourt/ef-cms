@@ -9,7 +9,7 @@ exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
   const afterDate = calculateISODate({
     dateString: startOfDay,
     howMuch: -7,
-    unit: 'days',
+    units: 'days',
   });
 
   return queryFull({
