@@ -10,7 +10,6 @@ const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
 
-  console.log('after getclient', esClient);
   const info = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
@@ -26,7 +25,6 @@ exports.isReindexComplete = async environmentName => {
     environmentName,
     version: currentVersion,
   });
-  console.log('currentInfo', currentInfo);
   let destinationInfo = await getClusterStats({
     environmentName,
     version: destinationVersion,
@@ -42,14 +40,13 @@ exports.isReindexComplete = async environmentName => {
     const countDestination =
       destinationInfo.indices[indexName].total.docs.count;
 
-    console.log('countCurrent', countCurrent);
     const diff = Math.abs(countCurrent - countDestination);
     diffTotal += diff;
     console.log(`${indexName} has a diff of ${diff}`);
   }
 
   if (diffTotal > 0) {
-    console.log('Indexes are not in sync, exiting with 1');
+    console.log('Indexes are not in sync, returning false');
     return false;
   }
 
