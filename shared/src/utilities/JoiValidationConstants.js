@@ -6,7 +6,7 @@ const {
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
 } = require('../business/entities/EntityConstants');
-// const { FORMATS } = require('../business/utilities/DateHandler');
+
 const DATE_FORMATS = {
   ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
   YYYYMMDD: 'YYYY-MM-DD',
