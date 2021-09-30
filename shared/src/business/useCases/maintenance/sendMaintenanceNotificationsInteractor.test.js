@@ -44,6 +44,11 @@ describe('sendMaintenanceNotificationsInteractor', () => {
       applicationContext.getNotificationGateway()
         .retrySendNotificationToConnections.mock.calls[0][0].messageStringified,
     ).toBe(JSON.stringify(mockMessage));
+    expect(
+      applicationContext.getNotificationGateway()
+        .retrySendNotificationToConnections.mock.calls[0][0]
+        .deleteGoneConnections,
+    ).toBe(false);
   });
 
   it('should sendNotificationToConnection for each connection for maintenanceMode false', async () => {

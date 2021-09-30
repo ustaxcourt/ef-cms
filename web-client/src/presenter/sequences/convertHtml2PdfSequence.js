@@ -7,7 +7,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setMetadataAsPristineAction } from '../actions/setMetadataAsPristineAction';
 import { setPdfFileAction } from '../actions/CourtIssuedOrder/setPdfFileAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const convertHtml2PdfSequence = showProgressSequenceDecorator([
   createOrderAction,

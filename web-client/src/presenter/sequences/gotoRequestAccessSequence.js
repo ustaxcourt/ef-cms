@@ -13,9 +13,10 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
 import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
-const gotoRequestAccess = [
+const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
@@ -44,7 +45,7 @@ const gotoRequestAccess = [
     ],
     unauthorized: [navigateToCaseDetailAction],
   },
-];
+]);
 
 export const gotoRequestAccessSequence = [
   isLoggedInAction,

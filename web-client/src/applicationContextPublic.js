@@ -1,4 +1,5 @@
 import {
+  ADVANCED_SEARCH_OPINION_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -44,6 +45,7 @@ import {
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
+import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
@@ -69,6 +71,7 @@ const allUseCases = {
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
   getHealthCheckInteractor,
+  getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
@@ -81,6 +84,7 @@ const allUseCases = {
 tryCatchDecorator(allUseCases);
 
 const frozenConstants = deepFreeze({
+  ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,

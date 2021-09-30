@@ -1,4 +1,7 @@
-export const docketClerkViewsNoticeOfChangeOfAddress = cerebralTest => {
+export const docketClerkViewsNoticeOfChangeOfAddress = ({
+  cerebralTest,
+  documentTitle = 'Notice of Change of Address',
+}) => {
   return it('Docket clerk views Notice of Change of Address on the docket record', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -8,7 +11,7 @@ export const docketClerkViewsNoticeOfChangeOfAddress = cerebralTest => {
 
     const noticeDocument = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.documentTitle === 'Notice of Change of Address');
+      .find(d => d.documentTitle === documentTitle);
 
     expect(noticeDocument.servedAt).toBeDefined();
   });

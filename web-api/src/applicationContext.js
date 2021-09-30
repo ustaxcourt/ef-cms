@@ -79,6 +79,7 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   formatDateString,
@@ -328,6 +329,9 @@ const {
   forwardMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardMessageInteractor');
 const {
+  generateAndServeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
+const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -425,6 +429,9 @@ const {
 const {
   getCasesByUserId,
 } = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
+const {
+  getCasesForUser,
+} = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
@@ -530,9 +537,6 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
 const {
-  getIndexedCasesForUser,
-} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
-const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -547,6 +551,12 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
+const {
+  getMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode');
+const {
+  getMaintenanceModeInteractor,
+} = require('../../shared/src/business/useCases/getMaintenanceModeInteractor');
 const {
   getMessageById,
 } = require('../../shared/src/persistence/dynamo/messages/getMessageById');
@@ -1358,6 +1368,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getMaintenanceMode,
     getSesStatus,
     incrementCounter,
     incrementKeyCount,
@@ -1421,6 +1432,7 @@ const gatewayMethods = {
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
+  getCasesForUser,
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
@@ -1437,7 +1449,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
-  getIndexedCasesForUser,
   getInternalUsers,
   getMessageById,
   getMessageThreadByParentId,
@@ -1747,6 +1758,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
+        generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
@@ -1853,6 +1865,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
+        getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
@@ -1954,6 +1967,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateDifferenceInDays,
         calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,

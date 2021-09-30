@@ -29,10 +29,16 @@ export const AppMaintenanceModal = connect(
           Your work may not be saved. Check back later for updates.
         </p>
         <p className="margin-top-5">
-          <Button onClick={() => signOutSequence()}>Log Out</Button>
+          <Button id="maintenance-logout-btn" onClick={() => signOutSequence()}>
+            Log Out
+          </Button>
         </p>
         <p className="text-center margin-top-0">
-          <Button link onClick={() => cancelSequence({ path: '/maintenance' })}>
+          <Button
+            link
+            id="maintenance-cancel-btn"
+            onClick={() => cancelSequence({ path: '/maintenance' })}
+          >
             Cancel
           </Button>
         </p>

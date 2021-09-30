@@ -81,6 +81,9 @@ const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
+  generateAndServeDocketEntry,
+} = require('../useCaseHelper/service/createChangeItems');
+const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
@@ -366,6 +369,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    generateAndServeDocketEntry: jest
+      .fn()
+      .mockImplementation(generateAndServeDocketEntry),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -456,13 +462,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDownloadPolicyUrl: jest.fn(),
+    getDownloadPolicyUrl: jest
+      .fn()
+      .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getOrderSearchEnabled: jest.fn(),
     getReconciliationReport: jest.fn(),
@@ -576,6 +585,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getIrsSuperuserEmail: jest.fn(),
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
+    }),
+    getMessageGateway: appContextProxy({
+      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
