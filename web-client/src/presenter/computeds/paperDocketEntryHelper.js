@@ -5,9 +5,10 @@ export const paperDocketEntryHelper = (get, applicationContext) => {
   const isEditingDocketEntry = get(state.isEditingDocketEntry);
   const caseDetail = get(state.caseDetail);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
-  const isPetitionServed = applicationContext
+
+  const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
-    .caseHasServedPetition(caseDetail);
+    .canAllowDocumentServiceForCase(caseDetail);
 
   const allCaseDocuments = [
     ...(caseDetail.docketEntries || []),
@@ -20,8 +21,8 @@ export const paperDocketEntryHelper = (get, applicationContext) => {
   const docketEntryHasDocument =
     doc && doc.isFileAttached && documentUploadMode === 'preview';
 
-  const showServiceWarning = !isPetitionServed;
-  const showSaveAndServeButton = isPetitionServed;
+  const showServiceWarning = !canAllowDocumentServiceForCase;
+  const showSaveAndServeButton = canAllowDocumentServiceForCase;
 
   return {
     docketEntryHasDocument,
