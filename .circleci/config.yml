@@ -405,7 +405,6 @@ jobs:
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
             echo "export BOUNCED_EMAIL_RECIPIENT=$(./scripts/get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -719,6 +718,7 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
@@ -758,7 +758,7 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS=$DEFAULT_ACCOUNT_PASS" >> $BASH_ENV
+            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export USTC_ADMIN_PASS=$USTC_ADMIN_PASS" >> $BASH_ENV
             echo "export USTC_ADMIN_USER=$USTC_ADMIN_USER" >> $BASH_ENV
       - run:
