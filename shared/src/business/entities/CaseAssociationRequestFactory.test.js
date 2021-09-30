@@ -85,7 +85,7 @@ describe('CaseAssociationRequestFactory', () => {
         rawEntity.certificateOfServiceDate = calculateISODate({
           dateString: createISODateString(),
           howMuch: 1,
-          unit: 'days',
+          units: 'days',
         });
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,

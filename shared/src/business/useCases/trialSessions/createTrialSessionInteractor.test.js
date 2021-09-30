@@ -91,7 +91,8 @@ describe('createTrialSessionInteractor', () => {
     const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
-        sessionType: 'Motion/Hearing',
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        sessionType: 'Something Else',
       },
     });
 
