@@ -15,19 +15,23 @@ describe('isReindexComplete', () => {
 
   it('is false when there is a difference in the current and destination index count', async () => {
     stats.mockReturnValueOnce({
-      'efcms-docket-entry': {
-        total: {
-          docs: {
-            count: 3,
+      indices: {
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 3,
+            },
           },
         },
       },
     });
     stats.mockReturnValueOnce({
-      'efcms-docket-entry': {
-        total: {
-          docs: {
-            count: 8,
+      indices: {
+        'efcms-docket-entry': {
+          total: {
+            docs: {
+              count: 8,
+            },
           },
         },
       },
