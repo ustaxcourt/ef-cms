@@ -14,7 +14,78 @@ describe('isReindexComplete', () => {
     getClient.mockReturnValue(mockIndices);
   });
 
-  it('is false when there is a difference in the current and destination index count', async () => {
+  it('should call getClient with the correct environment and current/destination table versions', async () => {
+    // stats.mockReturnValueOnce({
+    //   indices: {
+    //     'efcms-case': {
+    //       total: {
+    //         docs: {
+    //           count: 3,
+    //         },
+    //       },
+    //     },
+    //     'efcms-docket-entry': {
+    //       total: {
+    //         docs: {
+    //           count: 3,
+    //         },
+    //       },
+    //     },
+    //     'efcms-user': {
+    //       total: {
+    //         docs: {
+    //           count: 3,
+    //         },
+    //       },
+    //     },
+    //     'efcms-user-case': {
+    //       total: {
+    //         docs: {
+    //           count: 3,
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+    // stats.mockReturnValueOnce({
+    //   indices: {
+    //     'efcms-case': {
+    //       total: {
+    //         docs: {
+    //           count: 9,
+    //         },
+    //       },
+    //     },
+    //     'efcms-docket-entry': {
+    //       total: {
+    //         docs: {
+    //           count: 8,
+    //         },
+    //       },
+    //     },
+    //     'efcms-user': {
+    //       total: {
+    //         docs: {
+    //           count: 5,
+    //         },
+    //       },
+    //     },
+    //     'efcms-user-case': {
+    //       total: {
+    //         docs: {
+    //           count: 0,
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
+
+    const result = await isReindexComplete(mockEnvName);
+
+    expect(getClient.mock.calls[0][1]).toBe(false);
+  });
+
+  it('should return false when there is a difference in the current and destination index count', async () => {
     stats.mockReturnValueOnce({
       indices: {
         'efcms-case': {
@@ -85,7 +156,7 @@ describe('isReindexComplete', () => {
     expect(result).toBe(false);
   });
 
-  it('is false when there is no difference in the current and destination index count and elasticsearch is still reindexing', async () => {
+  it('should return false when there is no difference in the current and destination index count and elasticsearch is still reindexing', async () => {
     stats
       .mockReturnValueOnce({
         indices: {
@@ -131,6 +202,67 @@ describe('isReindexComplete', () => {
               },
             },
           },
+          'efcms-case-deadline': {
+            total: {
+              translog: {
+                operations: 3,
+              },
+            },
+          },
+          'efcms-docket-entry': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-message': {
+            total: {
+              translog: {
+                operations: 3,
+              },
+            },
+          },
+          'efcms-user': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-user-case': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-work-item': {
+            total: {
+              translog: {
+                operations: 3,
+              },
+            },
+          },
+        },
+      });
+
+    const result = await isReindexComplete(mockEnvName);
+
+    expect(result).toBe(false);
+  });
+
+  it('should return true when there is no difference in the current and destination index count and elasticsearch is finished reindexing', async () => {
+    stats
+      .mockReturnValueOnce({
+        indices: {
+          'efcms-case': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
           'efcms-docket-entry': {
             total: {
               docs: {
@@ -150,6 +282,62 @@ describe('isReindexComplete', () => {
               docs: {
                 count: 3,
               },
+              translog: {
+                operations: 9,
+              },
+            },
+          },
+        },
+      })
+      .mockReturnValueOnce({
+        indices: {
+          'efcms-case': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-case-deadline': {
+            total: {
+              translog: {
+                operations: 0,
+              },
+            },
+          },
+          'efcms-docket-entry': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-message': {
+            total: {
+              translog: {
+                operations: 0,
+              },
+            },
+          },
+          'efcms-user': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-user-case': {
+            total: {
+              docs: {
+                count: 3,
+              },
+            },
+          },
+          'efcms-work-item': {
+            total: {
+              translog: {
+                operations: 0,
+              },
             },
           },
         },
@@ -157,6 +345,6 @@ describe('isReindexComplete', () => {
 
     const result = await isReindexComplete(mockEnvName);
 
-    expect(result).toBe(false);
+    expect(result).toBe(true);
   });
 });
