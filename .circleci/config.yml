@@ -623,7 +623,6 @@ jobs:
               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
               -e "ZONE_NAME=${ZONE_NAME}" \
-              -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
               -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
               -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
@@ -694,7 +693,6 @@ jobs:
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                --rm efcms /bin/sh -c "./enable-reindex-cron.sh "
 
   disable-reindex-cron:
@@ -719,7 +717,6 @@ jobs:
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
 
   smoketests:

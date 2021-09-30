@@ -46,7 +46,6 @@ export TF_VAR_stream_arn=$STREAM_ARN
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
-export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
