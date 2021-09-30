@@ -30,6 +30,7 @@ const {
   createISODateString,
   dateStringsCompared,
   formatDateString,
+  FORMATS,
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -1504,7 +1505,10 @@ Case.prototype.generateTrialSortTags = function () {
     casePrioritySymbol = 'C';
   }
 
-  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
+  const formattedFiledTime = formatDateString(
+    receivedAt,
+    FORMATS.TRIAL_SORT_TAG,
+  );
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [

@@ -28,7 +28,7 @@ export const practitionerDetailHelper = (get, applicationContext) => {
     additionalPhone: practitionerDetail.additionalPhone || 'Not provided',
     admissionsDateFormatted: applicationContext
       .getUtilities()
-      .formatDateString(practitionerDetail.admissionsDate, 'MM/DD/YYYY'),
+      .formatDateString(practitionerDetail.admissionsDate, 'MMDDYYYY'),
     emailFormatted,
     firmNameFormatted: practitionerDetail.firmName || 'None',
     pendingEmailFormatted,

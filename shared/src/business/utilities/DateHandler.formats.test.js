@@ -1,5 +1,6 @@
 const DateHandler = require('./DateHandler');
-const { createISODateString, formatDateString, FORMATS } = DateHandler;
+const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
+  DateHandler;
 const {
   JoiValidationConstants,
 } = require('../../utilities/JoiValidationConstants');
@@ -8,20 +9,25 @@ describe('DateHandler', () => {
   describe('Date Formats', () => {
     let realDateNow;
     const mockTimeValue = 1530518207007; // '2018-07-02T07:56:47.007Z'
-    // const expectedReturnValue = '2018-07-02T07:56:47.007Z';
 
     const FORMATS_EXPECTED_OUTPUT = {
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
+      FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
+      LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
+      MMDDYYYY_DASHED: '07-02-2018',
       MONTH_DAY_YEAR: 'July 2, 2018',
       MONTH_DAY_YEAR_WITH_DAY_OF_WEEK: 'Monday, July 2, 2018',
       SORTABLE_CALENDAR: '2018/07/02',
       TIME: '03:56 am',
       TIME_TZ: '3:56 am ET',
+      TRIAL_SORT_TAG: '20180702035647',
+      TRIAL_TIME: '2018-07-02 3:56',
       YEAR: '2018',
+      YEAR_TWO_DIGIT: '18',
       YYYYMMDD: '2018-07-02',
     };
 
@@ -41,6 +47,18 @@ describe('DateHandler', () => {
         const result = formatDateString(dateString, FORMATS[format]);
         expect(result).toEqual(FORMATS_EXPECTED_OUTPUT[format]);
       });
+    });
+
+    it('formats a date using pm (lowercase)', () => {
+      const dateStringFormat = '2011-09-08T18:00:00.000Z';
+      const result = formatDateString(dateStringFormat, 'DATE_TIME_TZ');
+      expect(result).toEqual('09/08/11 2:00 pm ET');
+    });
+
+    it('converts EST to GMT', () => {
+      const dateString = '2011-09-08 14:00'; // 2pm on Sept 9th
+      const result = prepareDateFromEST(dateString, FORMATS.TRIAL_TIME);
+      expect(result).toEqual('2011-09-08T18:00:00.000Z');
     });
   });
 
@@ -68,12 +86,15 @@ describe('DateHandler', () => {
     });
 
     it('creates a date from a year', () => {
-      const myDate = DateHandler.createISODateString('2000', 'YYYY');
+      const myDate = DateHandler.createISODateString('2000', FORMATS.YEAR);
       expect(myDate).toBe('2000-01-01T05:00:00.000Z');
     });
 
     it('creates a date from a two-digit year', () => {
-      const myDate = DateHandler.createISODateString('89', 'YYYY');
+      const myDate = DateHandler.createISODateString(
+        '89',
+        FORMATS.YEAR_TWO_DIGIT,
+      );
       expect(myDate).toBe('1989-01-01T05:00:00.000Z');
     });
 
