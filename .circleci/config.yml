@@ -715,14 +715,12 @@ jobs:
       - run:
           name: Disable Check Reindex Status Cron
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
+            docker run \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
                --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
-            fi
 
   smoketests:
     docker:
