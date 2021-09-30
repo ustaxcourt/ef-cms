@@ -3,7 +3,7 @@ import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/nav
 import { removePetitionerCounselFromCaseAction } from '../actions/CaseAssociation/removePetitionerCounselFromCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const removePetitionerCounselFromCaseSequence =
   showProgressSequenceDecorator([

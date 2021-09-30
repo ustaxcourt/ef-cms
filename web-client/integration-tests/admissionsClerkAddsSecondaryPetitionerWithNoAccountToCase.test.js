@@ -125,4 +125,15 @@ describe('admissions clerk adds secondary petitioner without existing cognito ac
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
   });
+
+  it('admissions clerk verifies new NOCE docket entry on case', () => {
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+    const lastDocketEntry = docketEntries.pop();
+
+    expect(lastDocketEntry).toMatchObject({
+      documentType: 'Notice of Change of Email Address',
+      eventCode: 'NOCE',
+    });
+    expect(lastDocketEntry.additionalInfo).not.toMatch('for undefined');
+  });
 });

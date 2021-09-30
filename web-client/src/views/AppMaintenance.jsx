@@ -3,6 +3,7 @@ import { connect } from '@cerebral/react';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
 
+// eslint-disable-next-line @miovision/disallow-date/no-new-date
 const updateTime = `${new Date().toLocaleString('en-US', {
   day: 'numeric',
   hour: 'numeric',
@@ -34,7 +35,7 @@ export const AppMaintenance = connect(function AppMaintenance() {
         <div className="text-center">
           <p className="captioned">Check for real-time status updates.</p>
           <Button
-            className="usa-button--outline"
+            className="usa-button--outline ustc-button--mobile-inline margin-bottom-2"
             href="https://status.ustaxcourt.gov/"
           >
             View System Status

@@ -108,6 +108,7 @@ exports.updateContactInteractor = async (
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentTitle: documentType.title,
+          documentType,
           name: contactInfo.name,
           newData: contactInfo,
           oldData: oldCaseContact,
@@ -140,7 +141,7 @@ exports.updateContactInteractor = async (
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const privatePractitionersRepresentingContact =
+    const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         contactInfo.contactId,
       );
@@ -149,7 +150,7 @@ exports.updateContactInteractor = async (
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
 
-    if (!privatePractitionersRepresentingContact || partyWithPaperService) {
+    if (!isContactRepresented || partyWithPaperService) {
       const workItem = new WorkItem(
         {
           assigneeId: null,

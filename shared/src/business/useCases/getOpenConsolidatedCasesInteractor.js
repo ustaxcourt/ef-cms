@@ -1,3 +1,4 @@
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -11,13 +12,16 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
 
   let openUserCases = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getCasesForUser({
       applicationContext,
-      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
       userId,
     });
 
-  openUserCases = UserCase.validateRawCollection(openUserCases, {
+  const filteredOpenCases = openUserCases.filter(
+    ({ status }) => status !== CASE_STATUS_TYPES.closed,
+  );
+
+  openUserCases = UserCase.validateRawCollection(filteredOpenCases, {
     applicationContext,
   });
 

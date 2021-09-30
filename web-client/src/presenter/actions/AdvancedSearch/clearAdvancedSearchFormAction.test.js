@@ -6,7 +6,8 @@ import { runAction } from 'cerebral/test';
 describe('clearAdvancedSearchFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const { COUNTRY_TYPES } = applicationContext.getConstants();
+  const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
+    applicationContext.getConstants();
 
   it('should clear the advanced search form ONLY for the props.formType', async () => {
     const result = await runAction(clearAdvancedSearchFormAction, {
@@ -91,6 +92,30 @@ describe('clearAdvancedSearchFormAction', () => {
 
     expect(result.state.advancedSearchForm).toEqual({
       orderSearch: { keyword: '' },
+    });
+  });
+
+  it('should clear the advanced search form for an opinionSearch and include default opinionTypes', async () => {
+    const result = await runAction(clearAdvancedSearchFormAction, {
+      modules: { presenter },
+      props: { formType: 'opinionSearch' },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: { keyword: 'blah' },
+        },
+      },
+    });
+
+    expect(result.state.advancedSearchForm).toEqual({
+      opinionSearch: {
+        keyword: '',
+        opinionTypes: {
+          [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
+          [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
+          [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
+          [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
+        },
+      },
     });
   });
 });

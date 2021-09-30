@@ -4,6 +4,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAndChecksVerifiedEmailAddress';
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesEmailAddressToOneAlreadyInUse';
@@ -24,18 +25,22 @@ describe('Modify Petitioner Email', () => {
   let caseDetail;
   cerebralTest.createdDocketNumbers = [];
 
-  loginAs(cerebralTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner4@example.com');
   it('petitioner creates a case', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'petitioner@example.com',
+      'petitioner4@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
-
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     await refreshElasticsearchIndex();
   });
 
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner4@example.com');
   userUpdatesEmailAddressToOneAlreadyInUse(cerebralTest, 'petitioner');
 
   const mockUpdatedEmail = `${faker.internet.userName()}_no_error@example.com`;
@@ -47,7 +52,7 @@ describe('Modify Petitioner Email', () => {
 
   userVerifiesUpdatedEmailAddress(cerebralTest, 'petitioner');
 
-  loginAs(cerebralTest, 'petitioner@example.com');
+  loginAs(cerebralTest, 'petitioner4@example.com');
   userLogsInAndChecksVerifiedEmailAddress(
     cerebralTest,
     'petitioner',
