@@ -18,7 +18,7 @@ const {
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
-const yesterdayISO = calculateISODate({ howMuch: -1, unit: 'days' });
+const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
 const yesterdayFormatted = formatDateString(
   createISODateString(yesterdayISO),
   FORMATS.MMDDYYYY,

@@ -5,6 +5,10 @@ export const addTrialSessionInformationHelper = (get, applicationContext) => {
 
   const { proceedingType, sessionScope } = get(state.form);
 
+  // FEATURE FLAG: standalone_remote_session
+  const FEATURE_canDisplayStandaloneRemote =
+    applicationContext.isFeatureEnabled('standalone_remote_session');
+
   const isStandaloneSession = applicationContext
     .getUtilities()
     .isStandaloneRemoteSession(sessionScope);
@@ -24,6 +28,7 @@ export const addTrialSessionInformationHelper = (get, applicationContext) => {
   }
 
   return {
+    FEATURE_canDisplayStandaloneRemote,
     displayRemoteProceedingForm,
     isStandaloneSession,
     sessionTypes,

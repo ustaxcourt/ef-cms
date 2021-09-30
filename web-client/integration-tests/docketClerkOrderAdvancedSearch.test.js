@@ -5,6 +5,7 @@ import {
 import {
   FORMATS,
   calculateISODate,
+  createISODateString,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -373,23 +374,14 @@ describe('docket clerk order advanced search', () => {
     });
 
     it('search for a date range that contains served orders', async () => {
-      const endDate = formatDateString(
-        calculateISODate({
-          howMuch: 1,
-          unit: 'months',
-        }),
-        FORMATS.MMDDYYYY,
-      );
+      const endDateISO = createISODateString(); // right now
+      const endDate = formatDateString(endDateISO, FORMATS.MMDDYYYY);
 
-      console.log('endDate', endDate);
-
-      const startDate = formatDateString(
-        calculateISODate({
-          howMuch: -1,
-          unit: 'months',
-        }),
-        FORMATS.MMDDYYYY,
-      );
+      const startDateISO = calculateISODate({
+        howMuch: -1,
+        units: 'months',
+      });
+      const startDate = formatDateString(startDateISO, FORMATS.MMDDYYYY);
 
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
