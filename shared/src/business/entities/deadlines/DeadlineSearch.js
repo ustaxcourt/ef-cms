@@ -4,7 +4,7 @@ const {
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
 
-DeadlineSearch.VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
+DeadlineSearch.JOI_VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
 
 /**
  * Deadline Search entity
@@ -47,7 +47,7 @@ DeadlineSearch.schema = joi.object().keys({
   endDate: joi
     .date()
     .iso()
-    .format(DeadlineSearch.VALID_DATE_SEARCH_FORMATS)
+    .format(DeadlineSearch.JOI_VALID_DATE_SEARCH_FORMATS)
     .min(joi.ref('startDate'))
     .required()
     .description(
@@ -56,7 +56,7 @@ DeadlineSearch.schema = joi.object().keys({
   startDate: joi
     .date()
     .iso()
-    .format(DeadlineSearch.VALID_DATE_SEARCH_FORMATS)
+    .format(DeadlineSearch.JOI_VALID_DATE_SEARCH_FORMATS)
     .required()
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',

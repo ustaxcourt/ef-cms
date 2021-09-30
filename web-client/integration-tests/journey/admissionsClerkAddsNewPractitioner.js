@@ -1,6 +1,8 @@
+import faker from 'faker';
+
 export const admissionsClerkAddsNewPractitioner = cerebralTest => {
   return it('admissions clerk adds a new practitioner', async () => {
-    cerebralTest.currentTimestamp = Date.now();
+    cerebralTest.fakeName = faker.name.findName();
 
     await cerebralTest.runSequence('gotoCreatePractitionerUserSequence');
 
@@ -57,7 +59,7 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'firstName',
-      value: `joe ${cerebralTest.currentTimestamp}`,
+      value: `joe ${cerebralTest.fakeName}`,
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'lastName',
@@ -94,6 +96,7 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
     await cerebralTest.runSequence('submitAddPractitionerSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('alertError')).not.toBeDefined();
 
     cerebralTest.barNumber = cerebralTest.getState(
       'practitionerDetail.barNumber',

@@ -53,7 +53,7 @@ const addServedStampToDocument = async ({
   pdfData,
   serviceStampText = `SERVED ${applicationContext
     .getUtilities()
-    .formatNow('MM/DD/YY')}`,
+    .formatNow('MMDDYY')}`,
 }) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 

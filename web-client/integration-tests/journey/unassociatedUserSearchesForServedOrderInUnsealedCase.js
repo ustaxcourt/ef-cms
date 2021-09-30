@@ -14,7 +14,7 @@ export const unassociatedUserSearchesForServedOrderInUnsealedCase = (
       orderSearch: {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: options.keyword,
-        startDate: '1000-01-01',
+        startDate: '01/01/1000',
       },
     });
 

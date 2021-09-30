@@ -92,7 +92,7 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
       key: 'practitionerName',
-      value: `Joe ${cerebralTest.currentTimestamp} Exotic Tiger King`,
+      value: `Joe ${cerebralTest.fakeName} Exotic Tiger King`,
     });
 
     await cerebralTest.runSequence('submitPractitionerNameSearchSequence');
@@ -106,8 +106,8 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
       cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.name`,
       ),
-    ).toEqual(`joe ${cerebralTest.currentTimestamp} exotic tiger king`);
-    const currentTwoDigitYear = formatNow('YY');
+    ).toEqual(`joe ${cerebralTest.fakeName} exotic tiger king`);
+    const currentTwoDigitYear = formatNow('YEAR_TWO_DIGIT');
     expect(
       cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}.0.barNumber`,

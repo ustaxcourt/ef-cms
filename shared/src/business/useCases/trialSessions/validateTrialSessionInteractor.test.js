@@ -7,7 +7,7 @@ const {
 const {
   validateTrialSessionInteractor,
 } = require('./validateTrialSessionInteractor');
-const { formatNow } = require('../../utilities/DateHandler');
+const { formatNow, FORMATS } = require('../../utilities/DateHandler');
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {
@@ -19,7 +19,7 @@ describe('validateTrialSessionInteractor', () => {
   });
 
   it('returns null for a valid trial session', () => {
-    const nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+    const nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
     const MOCK_TRIAL = {
       maxCases: 100,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,

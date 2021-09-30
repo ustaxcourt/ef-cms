@@ -1,12 +1,15 @@
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { applicationContext } from '../../applicationContext';
 import { filterFormattedSessionsByStatus } from './formattedTrialSessions';
-import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
 
 let nextYear;
 
 describe('formattedTrialSessions filterFormattedSessionsByStatus', () => {
   beforeAll(() => {
-    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+    nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
   });
 
   let TRIAL_SESSIONS_LIST = [];

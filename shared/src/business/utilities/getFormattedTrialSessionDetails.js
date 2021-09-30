@@ -89,7 +89,7 @@ exports.formattedTrialSessionDetails = ({
 
   trialSession.formattedStartDateFull = applicationContext
     .getUtilities()
-    .formatDateString(trialSession.startDate, 'MMMM DD, YYYY');
+    .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
   let [hour, min] = trialSession.startTime.split(':');
   let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
@@ -130,7 +130,7 @@ exports.formattedTrialSessionDetails = ({
 
   const trialDate = applicationContext
     .getUtilities()
-    .formatDateString(trialSession.startDate, 'MMMM_D_YYYY');
+    .formatDateString(trialSession.startDate, 'FILENAME_DATE');
   const { trialLocation } = trialSession;
   trialSession.zipName = `${trialDate}-${trialLocation}.zip`
     .replace(/\s/g, '_')
