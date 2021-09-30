@@ -405,6 +405,7 @@ jobs:
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
             echo "export BOUNCED_EMAIL_RECIPIENT=$(./scripts/get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
