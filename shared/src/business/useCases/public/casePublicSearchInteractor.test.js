@@ -61,7 +61,6 @@ describe('casePublicSearchInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: false,
-        isStatusNew: false,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
           {
