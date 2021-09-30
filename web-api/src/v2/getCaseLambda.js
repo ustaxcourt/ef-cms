@@ -9,11 +9,11 @@ const { v2ApiWrapper } = require('./v2ApiWrapper');
  * @param {object} options options to optionally pass to the genericHandler
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getCaseLambda = (event, options = {}) =>
+exports.getCaseLambda = (event, options) =>
   genericHandler(
     event,
-    ({ applicationContext }) => {
-      return v2ApiWrapper(async () => {
+    ({ applicationContext }) =>
+      v2ApiWrapper(async () => {
         const caseObject = await applicationContext
           .getUseCases()
           .getCaseInteractor(applicationContext, {
@@ -21,7 +21,6 @@ exports.getCaseLambda = (event, options = {}) =>
           });
 
         return marshallCase(caseObject);
-      });
-    },
+      }),
     options,
   );

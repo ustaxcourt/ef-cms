@@ -26,7 +26,9 @@ const {
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
+  calculateISODate,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
@@ -2267,8 +2269,35 @@ const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
+/**
+ * determines if the case is in a state where documents can be served
+ *
+ * @param {string} caseCaption the original case caption
+ * @returns {string} caseTitle the case caption with the postfix removed
+ */
+
+const canAllowDocumentServiceForCase = rawCase => {
+  if (typeof rawCase.canAllowDocumentService !== 'undefined') {
+    return rawCase.canAllowDocumentService;
+  }
+
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  return Boolean(isOpen || isRecent);
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
+  canAllowDocumentServiceForCase,
   caseDecorator,
   caseHasServedDocketEntries,
   caseHasServedPetition,

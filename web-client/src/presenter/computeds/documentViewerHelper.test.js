@@ -1,4 +1,7 @@
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
@@ -187,7 +190,7 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showUnservedPetitionWarning', () => {
-    it('should be true if an otherwise servable document is selected but the petition on the case is not served', () => {
+    it('should be false if a servable document is selected and the case is eligible for service', () => {
       const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -200,6 +203,28 @@ describe('documentViewerHelper', () => {
               },
               { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
             ],
+            status: CASE_STATUS_TYPES.calendared,
+          },
+        },
+      });
+
+      expect(showUnservedPetitionWarning).toBe(false);
+    });
+
+    it('should be true if an otherwise servable document is selected but the case is new', () => {
+      const { showUnservedPetitionWarning } = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDocketEntry, // the petition
+                docketEntryId: '77747b11-19b3-4c96-b7a1-fa6a5654e2d5',
+                servedAt: undefined,
+              },
+              { ...baseDocketEntry, documentType: 'Order', eventCode: 'O' },
+            ],
+            status: CASE_STATUS_TYPES.new,
           },
         },
       });
