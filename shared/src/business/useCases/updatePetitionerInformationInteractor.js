@@ -2,6 +2,7 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
+  canAllowDocumentServiceForCase,
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
@@ -304,7 +305,11 @@ const updatePetitionerInformationInteractor = async (
     updatedPetitionerData.contactId,
   );
 
-  if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
+  if (
+    petitionerInfoChange &&
+    !updatedCaseContact.isAddressSealed &&
+    canAllowDocumentServiceForCase(caseEntity)
+  ) {
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
