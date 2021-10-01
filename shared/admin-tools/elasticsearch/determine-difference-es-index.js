@@ -1,25 +1,33 @@
-// get all of the user-case records from alpha, and see which ones are missing from beta
+/**
+ * Get all of the ES records from an index on a given environment, alpha and beta.
+ *
+ * Then compare one with the other to see which records are missing
+ */
 
 const { getClient } = require('../../../web-api/elasticsearch/client');
-const { getVersion } = require('..//util');
 
-if (process.argv.length < 3) {
+if (process.argv.length < 5) {
   console.log(`
   Determine the delta between alpha and beta Elasticsearch clusters for a given environment and index
   
   Usage: 
 
-    $ node determine-difference-es-index.js <ENVIRONMENT> <INDEX>
+    $ node determine-difference-es-index.js <ENVIRONMENT> <SOURCE> <INDEX>
+
+  Example: 
+
+    $ node determine-difference-es-index.js mig alpha efcms-user
 `);
   process.exit(1);
 }
 
-const environmentName = process.argv[2] || 'prod';
-const indexName = process.argv[3] || 'efcms-user-case';
+const environmentName = process.argv[2]; // Example: 'stg'
+const sourceVersion = process.argv[3]; // Example: 'alpha'
+const indexName = process.argv[4]; // Example: 'efcms-user-case'
 const separator = '___';
 const lookup = {};
 
-const getAllRecords = async ({ currentVersion, version }) => {
+const getAllRecords = async ({ destinationVersion, version }) => {
   const esClient = await getClient({ environmentName, version });
 
   const allRecords = [];
@@ -47,7 +55,7 @@ const getAllRecords = async ({ currentVersion, version }) => {
       const k = `${hit['_source'].pk.S}${separator}${hit['_source'].sk.S}`;
 
       // build our lookup object
-      if (version === currentVersion) {
+      if (version === destinationVersion) {
         lookup[k] = true;
       }
       allRecords.push(k);
@@ -69,23 +77,31 @@ const getAllRecords = async ({ currentVersion, version }) => {
 };
 
 (async () => {
-  const records = {};
-  const currentVersion = await getVersion();
-  const previousVersion = currentVersion === 'alpha' ? 'beta' : 'alpha';
+  // Build object of records
+  const records = {
+    alpha: [],
+    beta: [],
+  };
+
+  const destinationVersion = sourceVersion === 'alpha' ? 'beta' : 'alpha';
 
   for (const version of ['alpha', 'beta']) {
-    records[version] = await getAllRecords({ currentVersion, version });
+    records[version] = await getAllRecords({ destinationVersion, version });
   }
   console.log(`alpha: ${records.alpha.length} | beta: ${records.beta.length}`);
-  let count = 0;
+  // let count = 0;
 
-  for (const rec of records[previousVersion]) {
+  console.log(
+    `The following records are on '${sourceVersion}', but not on '${destinationVersion}'`,
+  );
+
+  for (const rec of records[sourceVersion]) {
     if (!lookup[rec]) {
       console.log(rec.split(separator));
     }
-    count++; // show progress
-    if (count % 10000 === 0) {
-      console.log(`==== ${count}`);
-    }
+    // count++; // show progress
+    // if (count % 10000 === 0) {
+    //   console.log(`==== ${count}`);
+    // }
   }
 })();
