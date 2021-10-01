@@ -2272,10 +2272,9 @@ const caseHasServedDocketEntries = rawCase => {
 /**
  * determines if the case is in a state where documents can be served
  *
- * @param {string} caseCaption the original case caption
- * @returns {string} caseTitle the case caption with the postfix removed
+ * @param {Object} rawCase The Case we are using to determine whether we can allow document service
+ * @returns {Boolean} whether or not documents can be served on the case
  */
-
 const canAllowDocumentServiceForCase = rawCase => {
   if (typeof rawCase.canAllowDocumentService !== 'undefined') {
     return rawCase.canAllowDocumentService;
@@ -2295,9 +2294,23 @@ const canAllowDocumentServiceForCase = rawCase => {
   return Boolean(isOpen || isRecent);
 };
 
+/**
+ *  determines whether or not we should show the printable docket record
+ *
+ * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @returns {Boolean} whether or not we should show the printable docket record
+ */
+const canAllowPrintableDocketRecord = rawCase => {
+  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+    return rawCase.canAllowPrintableDocketRecord;
+  }
+  return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
   canAllowDocumentServiceForCase,
+  canAllowPrintableDocketRecord,
   caseDecorator,
   caseHasServedDocketEntries,
   caseHasServedPetition,
