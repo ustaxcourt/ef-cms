@@ -5,10 +5,9 @@
 // @path
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
-const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
-
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
+
   const info = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
@@ -16,9 +15,10 @@ const getClusterStats = async ({ environmentName, version }) => {
   return info;
 };
 
-const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
-
 exports.isReindexComplete = async environmentName => {
+  const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
+  const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
+
   let diffTotal = 0;
   const currentInfo = await getClusterStats({
     environmentName,
@@ -38,13 +38,14 @@ exports.isReindexComplete = async environmentName => {
     const countCurrent = currentInfo.indices[indexName].total.docs.count;
     const countDestination =
       destinationInfo.indices[indexName].total.docs.count;
+
     const diff = Math.abs(countCurrent - countDestination);
     diffTotal += diff;
     console.log(`${indexName} has a diff of ${diff}`);
   }
 
   if (diffTotal > 0) {
-    console.log('Indexes are not in sync, exiting with 1');
+    console.log('Indexes are not in sync, returning false');
     return false;
   }
 

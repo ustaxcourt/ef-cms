@@ -686,6 +686,29 @@ jobs:
                --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
             fi
       - run:
+          name: Track successful migrations
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "ENV=${ENV}" \
+                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
+            fi
+      - run:
+          name: Enable Destination Table Stream
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              docker run \
+                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+                -e "ENV=${ENV}" \
+                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
+            fi
+      - run:
           name: Enable Check Reindex Status Cron
           command: |
             docker run \
