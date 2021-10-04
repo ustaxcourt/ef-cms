@@ -1,10 +1,13 @@
 const {
+  BENCH_OPINION_EVENT_CODE,
   DOCUMENT_SEARCH_SORT,
   MAX_SEARCH_CLIENT_RESULTS,
+  OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
+// eslint-disable-next-line complexity
 exports.advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
@@ -101,10 +104,34 @@ exports.advancedDocumentSearch = async ({
 
   docketEntryQueryParams.push(caseQueryParams);
 
+  console.log('1111 judgge', judge);
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
+    console.log('2222 judgeType', judgeType);
+    console.log('333 judgeField', judgeField);
+    console.log('44 judgeName', judgeName);
+    console.log('~~~~~', opinionTypes);
+    // if judgeType is judge, this is an opinion, since thats what opinion interactor sends
+    // query for both 'signedJudgeName' and 'judge'
+    // if opinion event code = OST, search for signedJudge
+    // if all other opinion types, search for judge
     if (judgeType === 'judge') {
+      if (opinionTypes.includes(BENCH_OPINION_EVENT_CODE)) {
+        docketEntryQueryParams.push({
+          bool: {
+            should: {
+              match: {
+                [`${ORDER_JUDGE_FIELD}.S`]: {
+                  operator: 'and',
+                  query: judgeName,
+                },
+              },
+            },
+          },
+        });
+      }
+
       docketEntryQueryParams.push({
         bool: {
           should: {
@@ -114,20 +141,7 @@ exports.advancedDocumentSearch = async ({
           },
         },
       });
-      docketEntryQueryParams.push({
-        bool: {
-          should: {
-            match: {
-              [`${ORDER_JUDGE_FIELD}.S`]: {
-                operator: 'and',
-                query: judgeName,
-              },
-            },
-          },
-        },
-      });
-
-      console.log('33333docketEntryQueryParams', docketEntryQueryParams);
+      console.log('paraaaaams!!!!', { docketEntryQueryParams });
     } else if (judgeType === ORDER_JUDGE_FIELD) {
       docketEntryQueryParams.push({
         bool: {

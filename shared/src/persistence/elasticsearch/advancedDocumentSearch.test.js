@@ -345,6 +345,18 @@ describe('advancedDocumentSearch', () => {
             },
           },
         },
+        {
+          bool: {
+            should: {
+              match: {
+                'signedJudgeName.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
+              },
+            },
+          },
+        },
       ],
       must_not: expect.anything(),
     });
