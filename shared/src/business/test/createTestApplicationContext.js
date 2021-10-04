@@ -14,6 +14,7 @@ const {
   bulkIndexRecords,
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
+  canAllowDocumentServiceForCase,
   Case,
   caseHasServedDocketEntries,
   caseHasServedPetition,
@@ -242,6 +243,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    canAllowDocumentServiceForCase: jest
+      .fn()
+      .mockImplementation(canAllowDocumentServiceForCase),
     caseHasServedDocketEntries: jest
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
