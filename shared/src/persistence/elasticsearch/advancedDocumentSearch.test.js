@@ -160,7 +160,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it.only('does a search for a signed judge when searching for bench opinions', async () => {
+  it('does a search for a signed judge when searching for bench opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: [BENCH_OPINION_EVENT_CODE],
@@ -180,19 +180,15 @@ describe('advancedDocumentSearch', () => {
                 'judge.S': 'Guy Fieri',
               },
             },
-          ],
-        },
-      },
-      {
-        bool: {
-          should: {
-            match: {
-              'signedJudgeName.S': {
-                operator: 'and',
-                query: 'Guy Fieri',
+            {
+              match: {
+                'signedJudgeName.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
               },
             },
-          },
+          ],
         },
       },
     ]);
@@ -341,23 +337,21 @@ describe('advancedDocumentSearch', () => {
         getCaseMappingQueryParams(null), // match all parents
         {
           bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-          },
-        },
-        {
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
+            should: [
+              {
+                match: {
+                  'judge.S': 'Guy Fieri',
                 },
               },
-            },
+              {
+                match: {
+                  'signedJudgeName.S': {
+                    operator: 'and',
+                    query: 'Guy Fieri',
+                  },
+                },
+              },
+            ],
           },
         },
       ],
