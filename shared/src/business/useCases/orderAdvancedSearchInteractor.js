@@ -11,7 +11,6 @@ const {
 const {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
 const { formatNow, FORMATS } = require('../../business/utilities/DateHandler');
@@ -73,7 +72,7 @@ exports.orderAdvancedSearchInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: ORDER_JUDGE_FIELD,
+      isOpinionSearch: false,
       omitSealed,
       ...rawSearch,
     });

@@ -14,7 +14,9 @@ export const docketClerkAddsOSTDocketEntryFromOrder = (
       },
     );
 
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
+    const docketEntryId = cerebralTest.draftOrders
+      ? cerebralTest.draftOrders[draftOrderIndex].docketEntryId
+      : cerebralTest.docketEntryId;
 
     const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
       doc => doc.docketEntryId === docketEntryId,

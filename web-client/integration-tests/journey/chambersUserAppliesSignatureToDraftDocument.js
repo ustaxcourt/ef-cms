@@ -1,7 +1,10 @@
-export const chambersUserAppliesSignatureToDraftDocument = cerebralTest => {
+export const chambersUserAppliesSignatureToDraftDocument = (
+  cerebralTest,
+  expectedSignedJudgeName,
+) => {
   return it('Chambers user applies signature to a draft document', async () => {
     expect(cerebralTest.getState('pdfForSigning.nameForSigning')).toEqual(
-      'John O. Colvin',
+      expectedSignedJudgeName,
     );
     expect(cerebralTest.getState('pdfForSigning.nameForSigningLine2')).toEqual(
       'Judge',
