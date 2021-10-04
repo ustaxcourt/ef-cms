@@ -8,7 +8,7 @@ const {
   US_STATES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { formatNow } = require('./DateHandler');
+const { formatNow, FORMATS } = require('./DateHandler');
 
 describe('aggregateCommonQueryParams', () => {
   describe('removeAdvancedSyntaxSymbols', () => {
@@ -219,7 +219,7 @@ describe('aggregateCommonQueryParams', () => {
             'receivedAt.S': {
               format: 'yyyy',
               gte: '2018||/y',
-              lte: `${formatNow('YYYY')}||/y`,
+              lte: `${formatNow(FORMATS.YEAR)}||/y`,
             },
           },
         },

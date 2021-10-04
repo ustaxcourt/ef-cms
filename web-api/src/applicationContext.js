@@ -79,6 +79,7 @@ const {
   bulkIndexRecords,
 } = require('../../shared/src/persistence/elasticsearch/bulkIndexRecords');
 const {
+  calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   formatDateString,
@@ -328,6 +329,9 @@ const {
   forwardMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardMessageInteractor');
 const {
+  generateAndServeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
+const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
 const {
@@ -367,6 +371,9 @@ const {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } = require('../../shared/src/business/utilities/generateChangeOfAddressTemplate');
+const {
+  getAllWebSocketConnections,
+} = require('../../shared/src/persistence/dynamo/notifications/getAllWebSocketConnections');
 const {
   getBlockedCases,
 } = require('../../shared/src/persistence/elasticsearch/getBlockedCases');
@@ -422,6 +429,9 @@ const {
 const {
   getCasesByUserId,
 } = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
+const {
+  getCasesForUser,
+} = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
@@ -527,9 +537,6 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
 const {
-  getIndexedCasesForUser,
-} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
-const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -544,6 +551,12 @@ const {
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
+const {
+  getMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/getMaintenanceMode');
+const {
+  getMaintenanceModeInteractor,
+} = require('../../shared/src/business/useCases/getMaintenanceModeInteractor');
 const {
   getMessageById,
 } = require('../../shared/src/persistence/dynamo/messages/getMessageById');
@@ -855,6 +868,9 @@ const {
   replyToMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/replyToMessageInteractor');
 const {
+  retrySendNotificationToConnections,
+} = require('../../shared/src/notifications/retrySendNotificationToConnections');
+const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
@@ -902,6 +918,12 @@ const {
 const {
   sendIrsSuperuserPetitionEmail,
 } = require('../../shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail');
+const {
+  sendMaintenanceNotificationsInteractor,
+} = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationToConnection,
+} = require('../../shared/src/notifications/sendNotificationToConnection');
 const {
   sendNotificationToUser,
 } = require('../../shared/src/notifications/sendNotificationToUser');
@@ -1065,6 +1087,9 @@ const {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } = require('../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
+const {
+  updateMaintenanceMode,
+} = require('../../shared/src/persistence/dynamo/deployTable/updateMaintenanceMode');
 const {
   updateMessage,
 } = require('../../shared/src/persistence/dynamo/messages/updateMessage');
@@ -1343,6 +1368,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getMaintenanceMode,
     getSesStatus,
     incrementCounter,
     incrementKeyCount,
@@ -1364,6 +1390,7 @@ const gatewayMethods = {
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateIrsPractitionerOnCase,
+    updateMaintenanceMode,
     updateMessage,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
@@ -1393,6 +1420,7 @@ const gatewayMethods = {
   deleteUserFromCase,
   deleteUserOutboxRecord,
   deleteWorkItem,
+  getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
   getCaseByDocketNumber,
@@ -1404,6 +1432,7 @@ const gatewayMethods = {
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
+  getCasesForUser,
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
@@ -1420,7 +1449,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
-  getIndexedCasesForUser,
   getInternalUsers,
   getMessageById,
   getMessageThreadByParentId,
@@ -1652,6 +1680,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
       });
     },
     getNotificationGateway: () => ({
+      retrySendNotificationToConnections,
+      sendNotificationToConnection,
       sendNotificationToUser,
     }),
     getPdfJs: () => {
@@ -1728,6 +1758,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
+        generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
@@ -1834,6 +1865,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
         getJudgesForPublicSearchInteractor,
+        getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
@@ -1888,6 +1920,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
         serveExternallyFiledDocumentInteractor,
@@ -1934,6 +1967,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        calculateDifferenceInDays,
         calculateISODate,
         compareCasesByDocketNumber,
         compareISODateStrings,

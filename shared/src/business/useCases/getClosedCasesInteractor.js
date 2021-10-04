@@ -1,4 +1,5 @@
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
+const { compareISODateStrings } = require('../utilities/sortFunctions');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -8,22 +9,21 @@ const { UserCase } = require('../entities/UserCase');
  * @returns {object} the closed cases data
  */
 exports.getClosedCasesInteractor = async applicationContext => {
-  let closedCases;
-  let foundCases = [];
-
   const { userId } = await applicationContext.getCurrentUser();
 
-  closedCases = await applicationContext
+  const closedCases = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getCasesForUser({
       applicationContext,
-      statuses: [CASE_STATUS_TYPES.closed],
       userId,
     });
 
-  foundCases = UserCase.validateRawCollection(closedCases, {
+  const sortedClosedCases = closedCases
+    .filter(({ status }) => status === CASE_STATUS_TYPES.closed)
+    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
+    .reverse();
+
+  return UserCase.validateRawCollection(sortedClosedCases, {
     applicationContext,
   });
-
-  return foundCases;
 };

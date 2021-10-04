@@ -972,6 +972,9 @@ header.usa-header {
     background: $color-white;
     color: color($theme-color-primary-darker);
   }
+  .space-between {
+    justify-content: space-between;
+  }
   #case-title {
     span {
       margin-right: 15px;
@@ -1850,6 +1853,19 @@ button.change-scanner-button {
   color: color($theme-color-primary-darker);
 }
 
+.wrench-icon {
+  margin-top: 7px;
+  color: color($theme-color-warning);
+}
+
+.maintenance-circle {
+  width: 100px;
+  height: 95px;
+  border: 7px solid color($theme-color-warning);
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
 .text-middle-margin {
   margin-top: auto;
   margin-bottom: auto;
@@ -1865,4 +1881,47 @@ button.change-scanner-button {
 
 #document-advanced .advanced-search-full-width {
   max-width: 100%;
+}
+
+.maintenance-content {
+  display: flex;
+  height: 90vh;
+  align-items: center; /* align vertical */
+  justify-content: center; /* align horizontal */
+  background-color: color($theme-color-primary-dark);
+  color: $color-white;
+
+  img {
+    width: 145px;
+    height: 150px;
+  }
+
+  .maintenance-text {
+    width: 360px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+}
+
+.maintenance-footer {
+  display: flex;
+  height: 10vh;
+  align-items: center;
+  justify-content: center;
+  background-color: color($theme-color-primary-darker);
+  color: $color-white;
+
+  button:hover {
+    color: $color-primary-alt;
+  }
+
+  .usa-button--outline {
+    background-color: $color-white;
+    color: color($theme-color-primary);
+    &:hover {
+      color: color($theme-color-primary-dark);
+    }
+  }
 }

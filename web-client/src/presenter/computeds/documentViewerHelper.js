@@ -17,6 +17,10 @@ export const documentViewerHelper = (get, applicationContext) => {
       caseDetail,
     });
 
+  const canAllowDocumentServiceForCase = !!applicationContext
+    .getUtilities()
+    .canAllowDocumentServiceForCase(caseDetail);
+
   const permissions = get(state.permissions);
 
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
@@ -50,9 +54,19 @@ export const documentViewerHelper = (get, applicationContext) => {
   ).includes(formattedDocumentToDisplay.eventCode);
 
   const showServeCourtIssuedDocumentButton =
-    showNotServed && isCourtIssuedDocument && permissions.SERVE_DOCUMENT;
+    canAllowDocumentServiceForCase &&
+    showNotServed &&
+    isCourtIssuedDocument &&
+    permissions.SERVE_DOCUMENT;
+
+  const showUnservedPetitionWarning =
+    !canAllowDocumentServiceForCase &&
+    showNotServed &&
+    !formattedDocumentToDisplay.isPetition &&
+    permissions.SERVE_DOCUMENT;
 
   const showServePaperFiledDocumentButton =
+    canAllowDocumentServiceForCase &&
     showNotServed &&
     !isCourtIssuedDocument &&
     !formattedDocumentToDisplay.isPetition &&
@@ -86,5 +100,6 @@ export const documentViewerHelper = (get, applicationContext) => {
     showServePetitionButton,
     showSignStipulatedDecisionButton,
     showStricken: !!formattedDocumentToDisplay.isStricken,
+    showUnservedPetitionWarning,
   };
 };

@@ -2,14 +2,17 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
+const { calculateISODate } = require('../../utilities/DateHandler');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { validUser } = require('../../../test/mockUsers');
 
 describe('verifyUserPendingEmailInteractor', () => {
@@ -250,6 +253,44 @@ describe('verifyUserPendingEmailInteractor', () => {
     ).not.toBeCalled();
   });
 
+  it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValueOnce({
+      ...getContactPrimary(MOCK_CASE),
+      email: 'test@example.com',
+      pendingEmail: 'other@example.com',
+      pendingEmailVerificationToken: TOKEN,
+      role: ROLES.petitioner,
+      userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockReturnValueOnce([
+        { docketNumber: MOCK_CASE.docketNumber },
+      ]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockImplementationOnce(() => {
+        return userCases.map(c => c.docketNumber);
+      });
+
+    await verifyUserPendingEmailInteractor(applicationContext, {
+      token: TOKEN,
+    });
+
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-21',
+    );
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).not.toBeCalled();
+  });
+
   describe('update cases', () => {
     beforeEach(() => {
       userCases = [
@@ -351,6 +392,123 @@ describe('verifyUserPendingEmailInteractor', () => {
 
       expect(
         applicationContext.getNotificationGateway().sendNotificationToUser,
+      ).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('generating a docket entry', () => {
+    beforeAll(() => {
+      applicationContext
+        .getUseCaseHelpers()
+        .generateAndServeDocketEntry.mockReturnValue({
+          changeOfAddressDocketEntry: {
+            ...MOCK_DOCUMENTS[0],
+            entityName: 'DocketEntry',
+            isMinuteEntry: 'false',
+          },
+        });
+    });
+
+    it('should call generateAndServeDocketEntry if case is open', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockReturnValue([
+          { docketNumber: MOCK_CASE.docketNumber },
+        ]);
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValueOnce({
+          ...validUser,
+          pendingEmailVerificationToken: TOKEN,
+          userId: MOCK_CASE.petitioners[0].contactId,
+        });
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          status: CASE_STATUS_TYPES.generalDocket,
+        });
+
+      await expect(
+        verifyUserPendingEmailInteractor(applicationContext, {
+          token: TOKEN,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).toHaveBeenCalled();
+    });
+
+    it('should call generateAndServeDocketEntry if case was closed recently', async () => {
+      const closedDate = calculateISODate({
+        howMuch: -3,
+        units: 'months',
+      });
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockReturnValue([
+          { docketNumber: MOCK_CASE.docketNumber },
+        ]);
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValueOnce({
+          ...validUser,
+          pendingEmailVerificationToken: TOKEN,
+          userId: MOCK_CASE.petitioners[0].contactId,
+        });
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          closedDate,
+          status: CASE_STATUS_TYPES.closed,
+        });
+
+      await expect(
+        verifyUserPendingEmailInteractor(applicationContext, {
+          token: TOKEN,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).toHaveBeenCalled();
+    });
+
+    it('should not call generateAndServeDocketEntry if case has been closed longer than six months', async () => {
+      const closedDate = calculateISODate({
+        howMuch: -7,
+        units: 'months',
+      });
+      applicationContext
+        .getPersistenceGateway()
+        .getCasesForUser.mockReturnValue([
+          { docketNumber: MOCK_CASE.docketNumber },
+        ]);
+      applicationContext
+        .getPersistenceGateway()
+        .getUserById.mockReturnValueOnce({
+          ...validUser,
+          pendingEmailVerificationToken: TOKEN,
+          userId: MOCK_CASE.petitioners[0].contactId,
+        });
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          closedDate,
+          status: CASE_STATUS_TYPES.closed,
+        });
+
+      await expect(
+        verifyUserPendingEmailInteractor(applicationContext, {
+          token: TOKEN,
+        }),
+      ).resolves.toBeUndefined(); // has no return value
+
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
       ).not.toHaveBeenCalled();
     });
   });

@@ -55,7 +55,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     const result = await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(result).toMatchObject([
@@ -108,7 +108,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(

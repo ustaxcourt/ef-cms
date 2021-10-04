@@ -267,13 +267,13 @@ describe('getFormattedCaseDetail', () => {
         trialDate: '2011-11-11',
         trialLocation: 'Boise, Idaho',
         trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-        trialTime: '11',
+        trialTime: '2:00',
       });
 
       expect(result).toMatchObject({
         formattedAssociatedJudge: 'Not assigned',
         formattedTrialCity: 'Boise, Idaho',
-        formattedTrialDate: '11/11/11 11:00 am',
+        formattedTrialDate: '11/11/11 02:00 am',
         showScheduled: true,
       });
       expect(result).not.toHaveProperty('showTrialCalendared');

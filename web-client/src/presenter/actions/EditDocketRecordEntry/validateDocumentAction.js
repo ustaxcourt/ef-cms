@@ -43,7 +43,7 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
             entryMetadata: formMetadata,
           }),
       },
-      ['dateReceived'],
+      ['dateReceived', 'filers'],
     );
 
     errorDisplayOrder = [

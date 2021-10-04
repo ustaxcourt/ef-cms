@@ -10,7 +10,7 @@ describe('generateTrialSortTags', () => {
     const myCase = new Case(
       {
         ...MOCK_CASE,
-        receivedAt: '2018-12-12T05:00:00Z',
+        receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
         applicationContext,
@@ -27,7 +27,7 @@ describe('generateTrialSortTags', () => {
       {
         ...MOCK_CASE,
         procedureType: 'Small',
-        receivedAt: '2018-12-12T05:00:00Z',
+        receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
         applicationContext,
@@ -44,7 +44,7 @@ describe('generateTrialSortTags', () => {
       {
         ...MOCK_CASE,
         caseType: CASE_TYPES_MAP.passport,
-        receivedAt: '2018-12-12T05:00:00Z',
+        receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
         applicationContext,
@@ -61,7 +61,7 @@ describe('generateTrialSortTags', () => {
       {
         ...MOCK_CASE,
         caseType: CASE_TYPES_MAP.cdp,
-        receivedAt: '2018-12-12T05:00:00Z',
+        receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
         applicationContext,
@@ -79,7 +79,7 @@ describe('generateTrialSortTags', () => {
         ...MOCK_CASE,
         highPriority: true,
         procedureType: 'Small',
-        receivedAt: '2018-12-12T05:00:00Z',
+        receivedAt: '2018-12-12T05:00:00.000Z',
       },
       {
         applicationContext,

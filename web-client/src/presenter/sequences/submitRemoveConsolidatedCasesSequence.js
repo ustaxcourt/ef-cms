@@ -7,7 +7,7 @@ import { removeConsolidatedCasesAction } from '../actions/CaseConsolidation/remo
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const submitRemoveConsolidatedCasesSequence = [
   canUnconsolidateAction,

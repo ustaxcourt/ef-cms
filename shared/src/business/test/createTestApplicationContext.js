@@ -14,8 +14,10 @@ const {
   bulkIndexRecords,
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
+  canAllowDocumentServiceForCase,
   Case,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -80,8 +82,14 @@ const {
   formattedTrialSessionDetails,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
+  generateAndServeDocketEntry,
+} = require('../useCaseHelper/service/createChangeItems');
+const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
+const {
+  getAllWebSocketConnections,
+} = require('../../persistence/dynamo/notifications/getAllWebSocketConnections');
 const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
@@ -128,6 +136,9 @@ const {
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
+const {
+  isStandaloneRemoteSession,
+} = require('../entities/trialSessions/TrialSession');
 const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -235,9 +246,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    canAllowDocumentServiceForCase: jest
+      .fn()
+      .mockImplementation(canAllowDocumentServiceForCase),
     caseHasServedDocketEntries: jest
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
+    caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
@@ -323,6 +338,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
+    isStandaloneRemoteSession: jest
+      .fn()
+      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -361,6 +379,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
+    generateAndServeDocketEntry: jest
+      .fn()
+      .mockImplementation(generateAndServeDocketEntry),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -429,6 +450,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
+    getAllWebSocketConnections: jest
+      .fn()
+      .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByDateRange: jest.fn(),
@@ -448,13 +472,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentQCServedForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
-    getDownloadPolicyUrl: jest.fn(),
+    getDownloadPolicyUrl: jest
+      .fn()
+      .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getOrderSearchEnabled: jest.fn(),
     getReconciliationReport: jest.fn(),
@@ -568,6 +595,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getIrsSuperuserEmail: jest.fn(),
     getLogger: jest.fn().mockReturnValue({
       error: jest.fn(),
+    }),
+    getMessageGateway: appContextProxy({
+      sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(require('sass')),

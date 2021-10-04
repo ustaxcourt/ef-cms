@@ -8,12 +8,11 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.trialSessionId the trial session id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.deleteTrialSession = async ({ applicationContext, trialSessionId }) => {
-  return await client.delete({
+exports.deleteTrialSession = ({ applicationContext, trialSessionId }) =>
+  client.delete({
     applicationContext,
     key: {
       pk: `trial-session|${trialSessionId}`,
       sk: `trial-session|${trialSessionId}`,
     },
   });
-};

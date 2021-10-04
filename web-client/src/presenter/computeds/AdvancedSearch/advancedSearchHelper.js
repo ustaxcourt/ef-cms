@@ -22,23 +22,25 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 };
 
 export const advancedSearchHelper = (get, applicationContext) => {
+  const user = applicationContext.getCurrentUser();
   const permissions = get(state.permissions) || {};
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
-  const dateRangeType = get(state.advancedSearchForm.orderSearch.dateRange);
-  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES, DATE_RANGE_SEARCH_OPTIONS } =
+  const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
     applicationContext.getConstants();
 
   const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
 
-  const showDateRangePicker =
-    dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
+  const showFeedbackButton = applicationContext
+    .getUtilities()
+    .isInternalUser(user.role);
 
   const result = {
-    showDateRangePicker,
+    feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
+    showFeedbackButton,
     showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };

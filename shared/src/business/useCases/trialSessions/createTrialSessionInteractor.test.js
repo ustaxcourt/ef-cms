@@ -4,7 +4,10 @@ const {
 const {
   createTrialSessionInteractor,
 } = require('./createTrialSessionInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+const {
+  ROLES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 const MOCK_TRIAL = {
@@ -36,7 +39,7 @@ describe('createTrialSessionInteractor', () => {
       );
   });
 
-  it('throws error if user is unauthorized', async () => {
+  it('should throw an error when user is unauthorized', async () => {
     user = new User({
       role: ROLES.petitioner,
       userId: 'petitioner',
@@ -49,27 +52,21 @@ describe('createTrialSessionInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('throws an exception when it fails to create a trial session', async () => {
+  it('should throw an exception when an error is thrown while creating a trial session', async () => {
     applicationContext
       .getUseCaseHelpers()
       .createTrialSessionAndWorkingCopy.mockImplementation(() => {
         throw new Error('Error!');
       });
 
-    let error;
-
-    try {
-      await createTrialSessionInteractor(applicationContext, {
+    await expect(
+      createTrialSessionInteractor(applicationContext, {
         trialSession: MOCK_TRIAL,
-      });
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeDefined();
+      }),
+    ).rejects.toThrow('');
   });
 
-  it('creates a trial session successfully', async () => {
+  it('should successfully create a trial session', async () => {
     await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });
@@ -79,7 +76,7 @@ describe('createTrialSessionInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('sets the trial session as calendared if it is a Motion/Hearing session type', async () => {
+  it('should set the trial session as calendared when it is a Motion/Hearing session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
@@ -90,7 +87,19 @@ describe('createTrialSessionInteractor', () => {
     expect(result.isCalendared).toEqual(true);
   });
 
-  it('sets the trial session as calendared if it is a Special session type', async () => {
+  it(`should set the trial session as calendared when the sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, async () => {
+    const result = await createTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        sessionType: 'Something Else',
+      },
+    });
+
+    expect(result.isCalendared).toEqual(true);
+  });
+
+  it('should set the trial session as calendared when it is a Special session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: {
         ...MOCK_TRIAL,
@@ -101,7 +110,7 @@ describe('createTrialSessionInteractor', () => {
     expect(result.isCalendared).toEqual(true);
   });
 
-  it('does not set the trial session as calendared if it is a Regular session type', async () => {
+  it('shoud not set the trial session as calendared when it is a Regular session type', async () => {
     const result = await createTrialSessionInteractor(applicationContext, {
       trialSession: MOCK_TRIAL,
     });

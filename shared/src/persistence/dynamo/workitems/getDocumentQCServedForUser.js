@@ -1,16 +1,18 @@
 const {
-  prepareDateFromString,
+  calculateISODate,
+  createISODateAtStartOfDayEST,
 } = require('../../../business/utilities/DateHandler');
 const { queryFull } = require('../../dynamodbClientService');
 
-exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
-  const afterDate = prepareDateFromString()
-    .startOf('day')
-    .subtract(7, 'd')
-    .utc()
-    .format();
+exports.getDocumentQCServedForUser = ({ applicationContext, userId }) => {
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: -7,
+    units: 'days',
+  });
 
-  const workItems = await queryFull({
+  return queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
@@ -22,6 +24,4 @@ exports.getDocumentQCServedForUser = async ({ applicationContext, userId }) => {
     KeyConditionExpression: '#pk = :pk AND #sk >= :afterDate',
     applicationContext,
   });
-
-  return workItems;
 };

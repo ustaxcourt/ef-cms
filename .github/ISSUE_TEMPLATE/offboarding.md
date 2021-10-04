@@ -1,10 +1,14 @@
 ---
 name: Offboard a team member
-about: Used for employees of the U.S. Tax Court and vendor teams to revoke access to all relevant accounts and tools when an employee departs.
+about: Used for employees of the U.S. Tax Court and vendor teams to revoke access
+  to all relevant accounts and tools when an employee departs.
 title: Offboard [Person]
+labels: ''
+assignees: ''
+
 ---
 
-- [ ] All access is revoked to tools listed in [the onboarding template](.github/ISSUE_TEMPLATE/onboarding.md) (copy the relevant accounts to checklist items below).
+- [ ] All access is revoked to tools listed in [the onboarding template](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/onboarding.md) (copy the relevant accounts to checklist items below).
 
 Verify the offboarding person:
 
@@ -18,4 +22,3 @@ Verify the offboarding person:
 - [ ] Does not have access to Slack.
 - [ ] Does not have access to Trello boards.
 - [ ] All sensitive secrets the person had access to are rotated.
-

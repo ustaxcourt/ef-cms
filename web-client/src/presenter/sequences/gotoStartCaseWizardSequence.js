@@ -9,6 +9,7 @@ import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInter
 import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -27,29 +28,30 @@ const gotoStartCaseExternal = [
   setCurrentPageAction('StartCaseWizard'),
 ];
 
-export const gotoStartCaseWizardSequence = [
-  clearFormAction,
-  clearScreenMetadataAction,
-  prepareFormAction,
-  stopShowValidationAction,
-  runPathForUserRoleAction,
-  {
-    ...takePathForRoles(
-      [
-        USER_ROLES.adc,
-        USER_ROLES.admissionsClerk,
-        USER_ROLES.chambers,
-        USER_ROLES.clerkOfCourt,
-        USER_ROLES.docketClerk,
-        USER_ROLES.judge,
-        USER_ROLES.petitionsClerk,
-        USER_ROLES.trialClerk,
-      ],
-      gotoStartCaseInternal,
-    ),
-    ...takePathForRoles(
-      [USER_ROLES.petitioner, USER_ROLES.privatePractitioner],
-      gotoStartCaseExternal,
-    ),
-  },
-];
+export const gotoStartCaseWizardSequence =
+  startWebSocketConnectionSequenceDecorator([
+    clearFormAction,
+    clearScreenMetadataAction,
+    prepareFormAction,
+    stopShowValidationAction,
+    runPathForUserRoleAction,
+    {
+      ...takePathForRoles(
+        [
+          USER_ROLES.adc,
+          USER_ROLES.admissionsClerk,
+          USER_ROLES.chambers,
+          USER_ROLES.clerkOfCourt,
+          USER_ROLES.docketClerk,
+          USER_ROLES.judge,
+          USER_ROLES.petitionsClerk,
+          USER_ROLES.trialClerk,
+        ],
+        gotoStartCaseInternal,
+      ),
+      ...takePathForRoles(
+        [USER_ROLES.petitioner, USER_ROLES.privatePractitioner],
+        gotoStartCaseExternal,
+      ),
+    },
+  ]);

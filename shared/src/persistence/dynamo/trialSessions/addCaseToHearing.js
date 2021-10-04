@@ -10,12 +10,12 @@ const { updateTrialSession } = require('./updateTrialSession');
  * @param {object} providers.trialSession trial session to add as a hearing
  * @returns {Promise} the promise of the call to persistence
  */
-exports.addCaseToHearing = async ({
+exports.addCaseToHearing = ({
   applicationContext,
   docketNumber,
   trialSession,
-}) => {
-  return await Promise.all([
+}) =>
+  Promise.all([
     // Create mapping record
     put({
       Item: {
@@ -31,4 +31,3 @@ exports.addCaseToHearing = async ({
       trialSessionToUpdate: trialSession,
     }),
   ]);
-};

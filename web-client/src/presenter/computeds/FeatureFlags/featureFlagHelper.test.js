@@ -62,4 +62,44 @@ describe('featureFlagHelper', () => {
       });
     });
   });
+
+  describe('isOpinionSearchEnabled', () => {
+    it('returns isOpinionSearchEnabled true when the advanced_opinion_search feature is enabled', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(true);
+
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const result = runCompute(featureFlagHelper, {
+        state: {},
+      });
+
+      expect(result).toMatchObject({
+        isOpinionSearchEnabled: true,
+      });
+    });
+
+    it('returns isOpinionSearchEnabled false when the advanced_opinion_search feature is NOT enabled', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(false);
+
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const result = runCompute(featureFlagHelper, {
+        state: {},
+      });
+
+      expect(result).toMatchObject({
+        isOpinionSearchEnabled: false,
+      });
+    });
+  });
 });

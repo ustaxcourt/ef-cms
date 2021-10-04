@@ -34,6 +34,7 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.entityName = 'PublicCase';
+  this.canAllowDocumentService = rawCase.canAllowDocumentService;
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -79,6 +80,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 };
 
 const publicCaseSchema = {
+  canAllowDocumentService: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi

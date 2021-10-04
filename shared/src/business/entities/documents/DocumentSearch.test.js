@@ -70,11 +70,22 @@ describe('Document Search entity', () => {
     expect(validationErrors).toBeNull();
   });
 
+  it('should pass validation with multiple opinionTypes', () => {
+    const documentSearch = new DocumentSearch({
+      opinionTypes: ['OST', 'TCOP'],
+    });
+
+    const validationErrors = documentSearch.getFormattedValidationErrors();
+
+    expect(documentSearch.opinionTypes).toBeDefined();
+    expect(validationErrors).toBeNull();
+  });
+
   describe('date search validation', () => {
     it('should not validate end date date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        startDate: '2002-10-01',
+        startDate: '10/01/2002',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -85,8 +96,8 @@ describe('Document Search entity', () => {
     it('should fail validation when the start date is greater than the end date', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        endDate: '2002-10-01',
-        startDate: '2003-10-01',
+        endDate: '10/01/2002', // 10/01/2002
+        startDate: '10/01/2003', // 10/01/2003
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -97,7 +108,7 @@ describe('Document Search entity', () => {
     it('should pass validation when a start date is provided without an end date', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        startDate: '2003-10-01',
+        startDate: '10/01/2003',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -108,7 +119,7 @@ describe('Document Search entity', () => {
     it('should fail validation when an end date is provided without a start date', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        endDate: '2003-10-01',
+        endDate: '10/01/2003',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
@@ -119,6 +130,7 @@ describe('Document Search entity', () => {
     it('should fail validation when the start date year is not provided', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        endDate: '9/20',
         startDate: '10/10',
       });
 
@@ -143,8 +155,8 @@ describe('Document Search entity', () => {
     it('should fail validation when the end date is in the future', () => {
       const documentSearch = new DocumentSearch({
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        endDate: '2030-10-10',
-        startDate: '2009-10-10',
+        endDate: '10/10/2030',
+        startDate: '10/10/2009',
       });
 
       const validationErrors = documentSearch.getFormattedValidationErrors();

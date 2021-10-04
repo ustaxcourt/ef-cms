@@ -18,6 +18,10 @@ variable "zone_id" {
   type = string
 }
 
+variable "pool_arn" {
+  type = string
+}
+
 variable "lambda_environment" {
   type = map(any)
 }
@@ -54,6 +58,10 @@ variable "websockets_object" {
   type = any
 }
 
+variable "maintenance_notify_object" {
+  type = any
+}
+
 variable "puppeteer_layer_object" {
   type = any
 }
@@ -78,6 +86,10 @@ variable "websockets_object_hash" {
   type = string
 }
 
+variable "maintenance_notify_object_hash" {
+  type = string
+}
+
 variable "puppeteer_object_hash" {
   type = string
 }
@@ -98,10 +110,27 @@ variable "create_streams" {
   type = number
 }
 
+variable "create_maintenance_notify" {
+  type = number
+}
+
 variable "stream_arn" {
   type = string
 }
 
+variable "create_triggers" {
+  type = number  
+  default = 1
+}
+
 variable "web_acl_arn" {
+  type = string
+}
+
+variable "triggers_object" {
+  type = any
+}
+
+variable "triggers_object_hash" {
   type = string
 }

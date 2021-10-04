@@ -31,7 +31,7 @@ describe('CourtIssuedDocumentTypeH', () => {
     });
 
     it('should have error message for future date', () => {
-      const date = calculateISODate({ howMuch: 5, unit: 'days' });
+      const date = calculateISODate({ howMuch: 5, units: 'days' });
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date,
