@@ -52,13 +52,15 @@ exports.opinionAdvancedSearchInteractor = async (
     startDate,
   });
 
+  console.log(judge, '----');
+
   const rawSearch = opinionSearch.validate().toRawObject();
 
   const results = (
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      judgeType: 'signedJudgeName',
+      judgeType: 'judge',
       ...rawSearch,
     })
   ).results.slice(0, MAX_SEARCH_RESULTS);
