@@ -30,7 +30,7 @@ describe('getServedPartiesCode', () => {
     expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
   });
 
-  it('returns the servedParties code for both if the the given servedParties array contains multiple servedParties', () => {
+  it('returns the servedParties code for both if the given servedParties array contains multiple servedParties', () => {
     const servedPartiesCode = getServedPartiesCode([
       {
         role: ROLES.irsSuperuser,
