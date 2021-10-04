@@ -1,8 +1,7 @@
 const {
-  BENCH_OPINION_EVENT_CODE,
   DOCUMENT_SEARCH_SORT,
   MAX_SEARCH_CLIENT_RESULTS,
-  OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
+  OPINION_JUDGE_FIELD,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
@@ -15,8 +14,8 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  isOpinionSearch,
   judge,
-  judgeType,
   keyword,
   omitSealed,
   opinionTypes,
@@ -106,18 +105,18 @@ exports.advancedDocumentSearch = async ({
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    const judgeField = `${judgeType}.S`;
+    // const judgeField = `${judgeType}.S`;
     // if judgeType is judge, this is an opinion, since thats what opinion interactor sends
     // query for both 'signedJudgeName' and 'judge'
     // if opinion event code = OST, search for signedJudge
     // if all other opinion types, search for judge
-    if (judgeType === 'judge') {
+    if (isOpinionSearch) {
       docketEntryQueryParams.push({
         bool: {
           should: [
             {
               match: {
-                [judgeField]: judgeName,
+                [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
               },
             },
             {
@@ -131,7 +130,7 @@ exports.advancedDocumentSearch = async ({
           ],
         },
       });
-    } else if (judgeType === ORDER_JUDGE_FIELD) {
+    } else {
       docketEntryQueryParams.push({
         bool: {
           should: {
