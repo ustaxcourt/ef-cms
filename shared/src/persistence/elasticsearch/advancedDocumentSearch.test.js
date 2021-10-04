@@ -3,6 +3,7 @@ const {
   applicationContextForClient,
 } = require('../../business/test/createTestApplicationContext');
 const {
+  BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
   ORDER_JUDGE_FIELD,
   TODAYS_ORDERS_SORTS,
@@ -155,6 +156,33 @@ describe('advancedDocumentSearch', () => {
     ).toEqual([
       getKeywordQueryParams('Guy Fieri'),
       getCaseMappingQueryParams(), // match all parents
+    ]);
+  });
+
+  it.only('does a search for a signed judge when searching for bench opinions', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: [BENCH_OPINION_EVENT_CODE],
+      judge: 'Judge Guy Fieri',
+      judgeType: 'judge',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must,
+    ).toEqual([
+      getCaseMappingQueryParams(null), // match all parents
+      {
+        bool: {
+          should: {
+            match: {
+              'signedJudgeName.S': {
+                operator: 'and',
+                query: 'Guy Fieri',
+              },
+            },
+          },
+        },
+      },
     ]);
   });
 

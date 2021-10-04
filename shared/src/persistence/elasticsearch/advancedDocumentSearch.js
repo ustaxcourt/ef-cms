@@ -114,6 +114,15 @@ exports.advancedDocumentSearch = async ({
           },
         },
       });
+      // docketEntryQueryParams.push({
+      //   bool: {
+      //     should: {
+      //       match: {
+      //         [`${ORDER_JUDGE_FIELD}.S`]: judgeName,
+      //       },
+      //     },
+      //   },
+      // });
     } else if (judgeType === ORDER_JUDGE_FIELD) {
       docketEntryQueryParams.push({
         bool: {
