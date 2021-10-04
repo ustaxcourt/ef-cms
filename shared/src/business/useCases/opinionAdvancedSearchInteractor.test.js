@@ -51,7 +51,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should return results the the current user has permission to perform advanced opinion searches (petitionsclerk)', async () => {
+  it('should return results when the current user has permission to perform advanced opinion searches (petitionsclerk)', async () => {
     const result = await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',

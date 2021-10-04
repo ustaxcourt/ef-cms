@@ -6,7 +6,6 @@ const {
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
-// eslint-disable-next-line complexity
 exports.advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
