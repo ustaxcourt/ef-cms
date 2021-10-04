@@ -200,6 +200,25 @@ const ADVANCED_SEARCH_OPINION_TYPES = {
   'T.C.': 'TCOP',
 };
 
+const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES['T.C.'],
+    label: 'T.C.',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Memorandum,
+    label: 'Memorandum',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Summary,
+    label: 'Summary',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Bench,
+    label: 'Bench Opinion (Order of Service of Transcript)',
+  },
+];
+
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
@@ -1066,6 +1085,7 @@ module.exports = deepFreeze({
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
   ADVANCED_SEARCH_OPINION_TYPES,
+  ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
   ALL_DOCUMENT_TYPES,
   ALL_DOCUMENT_TYPES_MAP,
