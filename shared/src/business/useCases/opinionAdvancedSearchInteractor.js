@@ -53,6 +53,7 @@ exports.opinionAdvancedSearchInteractor = async (
   });
 
   console.log(judge, '----');
+  console.log(opinionTypes, '----12341234');
 
   const rawSearch = opinionSearch.validate().toRawObject();
 

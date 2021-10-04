@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
   applicationContextForClient,
@@ -159,7 +160,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when searching for bench opinions', async () => {
+  it.only('does a search for a signed judge when searching for bench opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: [BENCH_OPINION_EVENT_CODE],
@@ -173,11 +174,13 @@ describe('advancedDocumentSearch', () => {
       getCaseMappingQueryParams(null), // match all parents
       {
         bool: {
-          should: {
-            match: {
-              'judge.S': 'Guy Fieri',
+          should: [
+            {
+              match: {
+                'judge.S': 'Guy Fieri',
+              },
             },
-          },
+          ],
         },
       },
       {
@@ -566,7 +569,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
-          .should.match,
+          .should[0].match,
       ).toEqual({
         'judge.S': 'Guy Fieri',
       });
@@ -601,7 +604,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
-          .should.match,
+          .should[0].match,
       ).toEqual({ 'judge.S': 'Guy Fieri' });
     });
   });
