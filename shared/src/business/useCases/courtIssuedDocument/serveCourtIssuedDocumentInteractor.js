@@ -255,6 +255,10 @@ exports.serveCourtIssuedDocumentInteractor = async (
         status: false,
       });
 
+    applicationContext.logger.error(
+      'Error attempting to serve a Court Issued Document',
+      { err: e },
+    );
     throw e;
   }
 };
