@@ -2272,13 +2272,26 @@ const caseHasServedDocketEntries = rawCase => {
 /**
  * determines if the case is in a state where documents can be served
  *
- * @param {string} caseCaption the original case caption
- * @returns {string} caseTitle the case caption with the postfix removed
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we can file documents on the rawCase passed in
  */
-
 const canAllowDocumentServiceForCase = rawCase => {
   if (typeof rawCase.canAllowDocumentService !== 'undefined') {
     return rawCase.canAllowDocumentService;
+  }
+
+  return CASE_STATUS_TYPES.new !== rawCase.status;
+};
+
+/**
+ * determines whether or not to file automatically generated notices for notice of change of address
+ *
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we should automatically generate notices for a change of address
+ */
+const shouldGenerateNoticesForCase = rawCase => {
+  if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
+    return rawCase.shouldGenerateNotices;
   }
 
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
@@ -2311,5 +2324,6 @@ module.exports = {
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  shouldGenerateNoticesForCase,
   updatePetitioner,
 };
