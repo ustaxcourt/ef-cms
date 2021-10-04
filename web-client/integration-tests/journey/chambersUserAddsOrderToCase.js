@@ -2,9 +2,9 @@ import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/O
 import { applicationContext } from '../../src/applicationContext';
 import { first } from 'lodash';
 
-const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
-
 export const chambersUserAddsOrderToCase = cerebralTest => {
+  const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
+
   return it('Chambers user adds order to case', async () => {
     await cerebralTest.runSequence('openCreateOrderChooseTypeModalSequence');
 

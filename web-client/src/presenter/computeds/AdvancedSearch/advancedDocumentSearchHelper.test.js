@@ -1,4 +1,7 @@
-import { DATE_RANGE_SEARCH_OPTIONS } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  BENCH_OPINION_EVENT_CODE,
+  DATE_RANGE_SEARCH_OPTIONS,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
   formatDocumentSearchResultRecord,
@@ -471,7 +474,21 @@ describe('advancedDocumentSearchHelper', () => {
       expect(result.formattedJudgeName).toEqual('Scott');
     });
 
-    it('sets formattedSignedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
+    it('sets formattedJudgeName to signedJudgeName when the search result is a bench opinion', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: BENCH_OPINION_EVENT_CODE,
+        signedJudgeName: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('Scott');
+    });
+
+    it('sets formattedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
       const mockResult = {
         eventCode: ORDER_EVENT_CODES[0],
         signedJudgeName: undefined,
@@ -481,10 +498,10 @@ describe('advancedDocumentSearchHelper', () => {
         applicationContext,
       });
 
-      expect(result.formattedSignedJudgeName).toEqual('');
+      expect(result.formattedJudgeName).toEqual('');
     });
 
-    it('sets formattedSignedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
+    it('sets formattedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
       const mockJudgeName = 'Michael G. Scott';
       const mockResult = {
         eventCode: ORDER_EVENT_CODES[0],
@@ -495,7 +512,7 @@ describe('advancedDocumentSearchHelper', () => {
         applicationContext,
       });
 
-      expect(result.formattedSignedJudgeName).toEqual('Scott');
+      expect(result.formattedJudgeName).toEqual('Scott');
     });
 
     it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {

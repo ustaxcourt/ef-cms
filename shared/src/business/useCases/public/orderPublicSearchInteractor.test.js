@@ -131,4 +131,15 @@ describe('orderPublicSearchInteractor', () => {
 
     expect(results.length).toBe(0);
   });
+
+  it('should set isOpinionSearch as false', async () => {
+    await orderPublicSearchInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: false,
+    });
+  });
 });
