@@ -250,7 +250,7 @@ exports.generateValidDocketEntryFilename = ({
   filingDate,
   index,
 }) => {
-  const MAX_OVERALL_FILE_LENGTH = 28;
+  const MAX_OVERALL_FILE_LENGTH = 26;
   const EXTENSION = '.pdf';
   const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
 
