@@ -29,8 +29,8 @@ export const docketClerkAddsOSTDocketEntryFromOrder = (
 
     const updateKeyValues = {
       documentTitle:
-        'Order of Service of Transcript (Bench Opinion) [Anything]',
-      documentType: 'Order of Service of Transcript (Bench Opinion)',
+        'Bench Opinion (Order of Service of Transcript) [Anything]',
+      documentType: 'Bench Opinion (Order of Service of Transcript)',
       eventCode: 'OST',
       scenario: 'Type A',
     };
