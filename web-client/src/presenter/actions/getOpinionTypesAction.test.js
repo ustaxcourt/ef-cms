@@ -7,7 +7,7 @@ describe('getOpinionTypesAction', () => {
 
     expect(result.output).toEqual({
       opinionDocumentTypes: [
-        'Bench Opinion (Order of Service of Transcript)',
+        'Order of Service of Transcript (Bench Opinion)',
         'Memorandum Opinion',
         'Summary Opinion',
         'T.C. Opinion',

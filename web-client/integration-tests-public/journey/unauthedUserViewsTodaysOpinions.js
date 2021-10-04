@@ -16,7 +16,7 @@ export const unauthedUserViewsTodaysOpinions = cerebralTest => {
           numberOfPages: 1,
         }),
         expect.objectContaining({
-          documentType: 'Bench Opinion (Order of Service of Transcript)',
+          documentType: 'Order of Service of Transcript (Bench Opinion)',
           signedJudgeName: 'Maurice B. Foley',
         }),
       ]),
