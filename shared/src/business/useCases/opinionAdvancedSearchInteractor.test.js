@@ -119,14 +119,14 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('should search for opinions using "signedJudgeName" as the judgeType', async () => {
+  it('should set isOpinionSearch as true', async () => {
     await opinionAdvancedSearchInteractor(applicationContext, {});
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      judgeType: 'signedJudgeName',
+      isOpinionSearch: true,
     });
   });
 });
