@@ -23,5 +23,6 @@ data "null_data_source" "locals" {
     DISABLE_EMAILS                     = var.disable_emails
     LOG_LEVEL                          = var.log_level
     SCANNER_RESOURCE_URI               = var.scanner_resource_uri
+    AWS_ACCOUNT_ID                     = data.aws_caller_identity.current.account_id
   }
 }
