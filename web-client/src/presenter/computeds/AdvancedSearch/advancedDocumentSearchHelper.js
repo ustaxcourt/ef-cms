@@ -89,7 +89,7 @@ export const formatDocumentSearchResultRecord = (
     ORDER_EVENT_CODES.includes(result.eventCode) ||
     result.eventCode === BENCH_OPINION_EVENT_CODE
   ) {
-    result.formattedSignedJudgeName = result.signedJudgeName
+    result.formattedJudgeName = result.signedJudgeName
       ? applicationContext
           .getUtilities()
           .getJudgeLastName(result.signedJudgeName)
