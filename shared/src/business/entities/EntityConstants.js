@@ -35,6 +35,8 @@ const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
+const OPINION_JUDGE_FIELD = 'judge';
+
 const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
@@ -1155,6 +1157,7 @@ module.exports = deepFreeze({
   OTHER_FILER_TYPES,
   OTHER_TYPES,
   ORDER_JUDGE_FIELD,
+  OPINION_JUDGE_FIELD,
   PARTY_TYPES,
   PARTY_VIEW_TABS,
   PAYMENT_STATUS,
