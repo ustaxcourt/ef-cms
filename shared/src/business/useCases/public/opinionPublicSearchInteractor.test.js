@@ -95,4 +95,15 @@ describe('opinionPublicSearchInteractor', () => {
 
     expect(results.length).toBe(1);
   });
+
+  it('should set isOpinionSearch as true', async () => {
+    await opinionPublicSearchInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: true,
+    });
+  });
 });
