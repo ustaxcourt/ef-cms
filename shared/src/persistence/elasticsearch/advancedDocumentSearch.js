@@ -116,11 +116,36 @@ exports.advancedDocumentSearch = async ({
     // query for both 'signedJudgeName' and 'judge'
     // if opinion event code = OST, search for signedJudge
     // if all other opinion types, search for judge
-    if (judgeType === 'judge') {
-      if (opinionTypes.includes(BENCH_OPINION_EVENT_CODE)) {
-        docketEntryQueryParams.push({
-          bool: {
-            should: {
+    if (
+      opinionTypes[0] === BENCH_OPINION_EVENT_CODE ||
+      judgeType === ORDER_JUDGE_FIELD
+    ) {
+      console.log('bench type');
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [`${ORDER_JUDGE_FIELD}.S`]: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+        },
+      });
+    } else {
+      // if opinion type
+      // search signedJudge for judgeName
+      // OR search judge for judgename
+      docketEntryQueryParams.push({
+        bool: {
+          should: [
+            {
+              match: {
+                [judgeField]: judgeName,
+              },
+            },
+            {
               match: {
                 [`${ORDER_JUDGE_FIELD}.S`]: {
                   operator: 'and',
@@ -128,31 +153,7 @@ exports.advancedDocumentSearch = async ({
                 },
               },
             },
-          },
-        });
-      }
-
-      docketEntryQueryParams.push({
-        bool: {
-          should: {
-            match: {
-              [judgeField]: judgeName,
-            },
-          },
-        },
-      });
-      console.log('paraaaaams!!!!', { docketEntryQueryParams });
-    } else if (judgeType === ORDER_JUDGE_FIELD) {
-      docketEntryQueryParams.push({
-        bool: {
-          should: {
-            match: {
-              [judgeField]: {
-                operator: 'and',
-                query: judgeName,
-              },
-            },
-          },
+          ],
         },
       });
     }
