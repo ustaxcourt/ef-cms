@@ -31,7 +31,6 @@ describe('Bench opinion advanced search journey', () => {
       const caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail.docketNumber).toBeDefined();
 
-      console.log(caseDetail.docketNumber, '8888888');
       cerebralTest.docketNumber = caseDetail.docketNumber;
     });
 

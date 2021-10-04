@@ -119,7 +119,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('should set isOpinionSearch as true', async () => {
+  it('should search for opinions with isOpinionSearch set to true', async () => {
     await opinionAdvancedSearchInteractor(applicationContext, {});
 
     expect(
