@@ -159,7 +159,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it.only('does a search for a signed judge when searching for bench opinions', async () => {
+  it('does a search for a signed judge when searching for bench opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: [BENCH_OPINION_EVENT_CODE],
@@ -171,6 +171,15 @@ describe('advancedDocumentSearch', () => {
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toEqual([
       getCaseMappingQueryParams(null), // match all parents
+      {
+        bool: {
+          should: {
+            match: {
+              'judge.S': 'Guy Fieri',
+            },
+          },
+        },
+      },
       {
         bool: {
           should: {
