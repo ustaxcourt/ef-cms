@@ -104,39 +104,14 @@ exports.advancedDocumentSearch = async ({
 
   docketEntryQueryParams.push(caseQueryParams);
 
-  console.log('1111 judgge', judge);
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     const judgeField = `${judgeType}.S`;
-    console.log('2222 judgeType', judgeType);
-    console.log('333 judgeField', judgeField);
-    console.log('44 judgeName', judgeName);
-    console.log('~~~~~', opinionTypes);
     // if judgeType is judge, this is an opinion, since thats what opinion interactor sends
     // query for both 'signedJudgeName' and 'judge'
     // if opinion event code = OST, search for signedJudge
     // if all other opinion types, search for judge
-    if (
-      opinionTypes[0] === BENCH_OPINION_EVENT_CODE ||
-      judgeType === ORDER_JUDGE_FIELD
-    ) {
-      console.log('bench type');
-      docketEntryQueryParams.push({
-        bool: {
-          should: {
-            match: {
-              [`${ORDER_JUDGE_FIELD}.S`]: {
-                operator: 'and',
-                query: judgeName,
-              },
-            },
-          },
-        },
-      });
-    } else {
-      // if opinion type
-      // search signedJudge for judgeName
-      // OR search judge for judgename
+    if (judgeType === 'judge') {
       docketEntryQueryParams.push({
         bool: {
           should: [
@@ -154,6 +129,19 @@ exports.advancedDocumentSearch = async ({
               },
             },
           ],
+        },
+      });
+    } else if (judgeType === ORDER_JUDGE_FIELD) {
+      docketEntryQueryParams.push({
+        bool: {
+          should: {
+            match: {
+              [`${ORDER_JUDGE_FIELD}.S`]: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
         },
       });
     }
