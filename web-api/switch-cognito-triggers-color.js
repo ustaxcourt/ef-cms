@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { omit } = require('lodash');
 
 const check = (value, message) => {
   if (!value) {
@@ -30,37 +31,29 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-const getIrsUserPoolId = async () => {
-  const results = await cognito
-    .listUserPools({
-      MaxResults: 50,
-    })
-    .promise();
-  const userPoolId = results.UserPools.find(
-    pool => pool.Name === `efcms-irs-${ENV}`,
-  ).Id;
-  return userPoolId;
-};
-
 const run = async () => {
   const userPoolId = await getUserPoolId();
+  const poolSettings = await cognito
+    .describeUserPool({ UserPoolId: userPoolId })
+    .promise();
+
   await cognito
     .updateUserPool({
+      AccountRecoverySetting: poolSettings.UserPool.AccountRecoverySetting,
+      AdminCreateUserConfig: omit(
+        poolSettings.UserPool.AdminCreateUserConfig,
+        'UnusedAccountValidityDays',
+      ),
+      EmailConfiguration: poolSettings.UserPool.EmailConfiguration,
       LambdaConfig: {
         PostAuthentication: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:cognito_post_authentication_lambda_${ENV}_${DEPLOYING_COLOR}`,
         PostConfirmation: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:cognito_post_confirmation_lambda_${ENV}_${DEPLOYING_COLOR}`,
       },
+      Policies: poolSettings.UserPool.Policies,
       UserPoolId: userPoolId,
-    })
-    .promise();
-
-  const irsUserPoolId = await getIrsUserPoolId();
-  await cognito
-    .updateUserPool({
-      LambdaConfig: {
-        PostConfirmation: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:cognito_post_confirmation_lambda_${ENV}_${DEPLOYING_COLOR}`,
-      },
-      UserPoolId: irsUserPoolId,
+      UserPoolTags: poolSettings.UserPool.UserPoolTags,
+      VerificationMessageTemplate:
+        poolSettings.UserPool.VerificationMessageTemplate,
     })
     .promise();
 };
