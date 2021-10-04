@@ -443,6 +443,28 @@ describe('updatePetitionerInformationInteractor', () => {
     });
   });
 
+  it('should not generated a docket entry if case older than 6 months', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => ({
+        ...mockCase,
+        closedDate: '2018-01-01T05:00:00.000Z',
+        status: 'Closed',
+      }));
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'changed address',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+    ).not.toHaveBeenCalled();
+  });
+
   describe('admissions clerk adds a verified petitioner email', () => {
     const mockUpdatedEmail = 'changed-email@example.com';
     const foundMockVerifiedPetitioner = {
