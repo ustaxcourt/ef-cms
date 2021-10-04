@@ -84,7 +84,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   describe('file name generation', () => {
-    it('truncates filenames if long eventCode causes them to exceed 24 characters', () => {
+    it('truncates filenames if long eventCode causes them to exceed 26 characters', () => {
       const docketEntry = {
         documentTitle:
           'Harrell slipped the cool bulk of the thought-helmet over his head and signalled to the scientist, who pulled the actuator switch. Harrell shuddered as psionic current surged through him; he stiffened, wriggled, and felt himself glide out of his body, hover incorporeally in the air between his now soulless shell and the alien bound opposite.',
@@ -97,7 +97,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       expect(filename.length).toBe(26);
       expect(filename).toBe(expectedName);
     });
-    it('generates a filename without any truncation when overall length is 24 characters or less', () => {
+    it('generates a filename without any truncation when overall length is 26 characters or less', () => {
       const docketEntry = {
         documentTitle:
           "Harrell met the downcrashing blow of the alien's broad-sword fully; the shock of impact sent numbing shivers up his arm as far as his shoulder but he held on and turned aside the b",
