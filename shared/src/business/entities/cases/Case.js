@@ -473,6 +473,8 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
+  canAllowDocumentService: joi.boolean().optional(),
+  canAllowPrintableDocketRecord: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
