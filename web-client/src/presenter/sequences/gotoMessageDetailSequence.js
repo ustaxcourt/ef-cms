@@ -15,29 +15,32 @@ import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const gotoMessageDetail = showProgressSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
-  closeMobileMenuAction,
-  clearErrorAlertsAction,
-  getCaseAction,
-  setCaseAction,
-  setParentMessageIdAction,
-  getMessageThreadAction,
-  setMessageAction,
-  getMostRecentMessageInThreadAction,
-  getDefaultAttachmentViewerDocumentToDisplayAction,
-  setMessageDetailViewerDocumentToDisplayAction,
-  setDefaultIsExpandedAction,
-  setCaseDetailPageTabActionGenerator('messages'),
-  setCurrentPageAction('MessageDetail'),
-  getShouldMarkMessageAsReadAction,
-  {
-    markRead: [setMessageAsReadAction],
-    noAction: [],
-  },
-]);
+const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
+  showProgressSequenceDecorator([
+    setCurrentPageAction('Interstitial'),
+    closeMobileMenuAction,
+    clearErrorAlertsAction,
+    getCaseAction,
+    setCaseAction,
+    setParentMessageIdAction,
+    getMessageThreadAction,
+    setMessageAction,
+    getMostRecentMessageInThreadAction,
+    getDefaultAttachmentViewerDocumentToDisplayAction,
+    setMessageDetailViewerDocumentToDisplayAction,
+    setDefaultIsExpandedAction,
+    setCaseDetailPageTabActionGenerator('messages'),
+    setCurrentPageAction('MessageDetail'),
+    getShouldMarkMessageAsReadAction,
+    {
+      markRead: [setMessageAsReadAction],
+      noAction: [],
+    },
+  ]),
+);
 
 export const gotoMessageDetailSequence = [
   isLoggedInAction,

@@ -82,20 +82,6 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[0].message,
-    });
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
-      },
-    );
-
-    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
-
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
@@ -106,8 +92,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2050-01-01T05:00:00.000Z',
-      documentTitle: 'Order for Filing Fee on 01-01-2050',
+      date: '2002-01-01T05:00:00.000Z',
+      documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
     });
@@ -118,14 +104,14 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2050-01-01T05:00:00.000Z',
+      date: '2002-01-01T05:00:00.000Z',
       day: '1',
-      documentTitle: 'Order for Filing Fee on 01-01-2050',
+      documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
-      generatedDocumentTitle: 'Order for Filing Fee on 01-01-2050',
+      generatedDocumentTitle: 'Order for Filing Fee on 01-01-2002',
       month: '1',
-      year: '2050',
+      year: '2002',
     });
   });
 };

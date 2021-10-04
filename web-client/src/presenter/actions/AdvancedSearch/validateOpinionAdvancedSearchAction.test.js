@@ -3,8 +3,6 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateOpinionAdvancedSearchAction } from './validateOpinionAdvancedSearchAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('validateOpinionAdvancedSearchAction', () => {
   let successStub;
   let errorStub;
@@ -19,6 +17,8 @@ describe('validateOpinionAdvancedSearchAction', () => {
     };
   });
 
+  presenter.providers.applicationContext = applicationContext;
+
   it('validates advanced opinion search successfully', async () => {
     applicationContext
       .getUseCases()
@@ -28,7 +28,14 @@ describe('validateOpinionAdvancedSearchAction', () => {
       modules: {
         presenter,
       },
-      state: { form: {} },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {},
+          },
+        },
+        form: {},
+      },
     });
 
     expect(
@@ -47,7 +54,14 @@ describe('validateOpinionAdvancedSearchAction', () => {
       modules: {
         presenter,
       },
-      state: { form: {} },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {},
+          },
+        },
+        form: {},
+      },
     });
 
     expect(
@@ -55,5 +69,35 @@ describe('validateOpinionAdvancedSearchAction', () => {
         .mock.calls.length,
     ).toEqual(1);
     expect(errorStub.mock.calls.length).toEqual(1);
+  });
+
+  it('should filter out opinion types that are not selected for search', async () => {
+    applicationContext
+      .getUseCases()
+      .validateOpinionAdvancedSearchInteractor.mockReturnValue({ foo: 'bar' });
+
+    await runAction(validateOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {
+              Avocado: false,
+              Banana: false,
+              Cucumber: true,
+              Mango: true,
+            },
+          },
+        },
+        form: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateOpinionAdvancedSearchInteractor
+        .mock.calls[0][1].opinionSearch,
+    ).toMatchObject({ opinionTypes: ['Cucumber', 'Mango'] });
   });
 });

@@ -20,11 +20,6 @@ resource "aws_cognito_user_pool" "pool" {
 
   sms_authentication_message = "{####}"
 
-  lambda_config {
-    post_confirmation = aws_lambda_function.cognito_post_confirmation_lambda.arn
-    post_authentication = aws_lambda_function.cognito_post_authentication_lambda.arn
-  }
-
   admin_create_user_config {
     allow_admin_create_user_only = false
     invite_message_template {
@@ -169,10 +164,6 @@ resource "aws_cognito_user_pool" "irs_pool" {
   }
 
   sms_authentication_message = "{####}"
-
-  lambda_config {
-    post_confirmation = aws_lambda_function.cognito_post_confirmation_lambda.arn
-  }
 
   admin_create_user_config {
     allow_admin_create_user_only = true

@@ -11,7 +11,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'osteodontolignikeratic',
-        startDate: '1000-01-01',
+        startDate: '01/01/1000',
       },
     });
 
@@ -25,7 +25,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         keyword: 'dismissed',
-        startDate: '1000-01-01',
+        startDate: '01/01/1000',
       },
     });
 

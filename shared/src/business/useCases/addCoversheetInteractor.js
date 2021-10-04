@@ -2,18 +2,13 @@ const {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
+const { formatDateString, FORMATS } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
 
-const formatDateReceived = ({
-  applicationContext,
-  docketEntryEntity,
-  isPaper,
-}) => {
-  const formatString = isPaper ? 'MMDDYY' : 'MM/DD/YY hh:mm a';
+const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
+  const formatString = isPaper ? FORMATS.MMDDYY : FORMATS.DATE_TIME;
   return docketEntryEntity.createdAt
-    ? applicationContext
-        .getUtilities()
-        .formatDateString(docketEntryEntity.createdAt, formatString)
+    ? formatDateString(docketEntryEntity.createdAt, formatString)
     : '';
 };
 
@@ -36,10 +31,9 @@ exports.generateCoverSheetData = ({
 }) => {
   const isLodged = docketEntryEntity.lodged;
   const { certificateOfService, isPaper } = docketEntryEntity;
-  const { formatDateString } = applicationContext.getUtilities();
 
   const dateServedFormatted = docketEntryEntity.servedAt
-    ? formatDateString(docketEntryEntity.servedAt, 'MMDDYY')
+    ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
 
   let dateReceivedFormatted = formatDateReceived({
@@ -49,7 +43,7 @@ exports.generateCoverSheetData = ({
   });
 
   const dateFiledFormatted = docketEntryEntity.filingDate
-    ? formatDateString(docketEntryEntity.filingDate, 'MMDDYY')
+    ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
 
   const caseCaption = useInitialData

@@ -1,4 +1,5 @@
 import {
+  ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   DATE_RANGE_SEARCH_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -15,6 +16,18 @@ describe('docket clerk opinion advanced search', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  const updateOpinionForm = async formValues => {
+    for (let [key, value] of Object.entries(formValues)) {
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key,
+          value,
+        },
+      );
+    }
+  };
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -39,12 +52,10 @@ describe('docket clerk opinion advanced search', () => {
 
   describe('search for things that should not be found', () => {
     it('search for a keyword that is not present in any served opinion', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          keyword: 'osteodontolignikeratic',
-          startDate: '1995-08-03',
-        },
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'osteodontolignikeratic',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -56,13 +67,31 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('search for an opinion type that is not present in any served opinion', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          keyword: 'opinion',
-          opinionType: 'Memorandum Opinion',
-          startDate: '1995-08-03',
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'opinion',
+        opinionTypes: {
+          [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
         },
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+
+    it('search without selecting any opinionTypes', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm({
+        keyword: 'opinion',
+        opinionTypes: {},
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -76,12 +105,11 @@ describe('docket clerk opinion advanced search', () => {
 
   describe('search for things that should be found', () => {
     it('search for a keyword that is present in a served opinion', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          keyword: 'sunglasses',
-          startDate: '1995-08-03',
-        },
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'sunglasses',
+        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -100,13 +128,11 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('search for a keyword and docket number that is present in a served opinion', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          docketNumber: '105-20',
-          keyword: 'sunglasses',
-          startDate: '1995-08-03',
-        },
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        docketNumber: '105-20',
+        keyword: 'sunglasses',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -125,12 +151,10 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('includes the number of pages present in each document in the search results', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          keyword: 'sunglasses',
-          startDate: '1995-08-03',
-        },
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'sunglasses',
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -147,13 +171,11 @@ describe('docket clerk opinion advanced search', () => {
     });
 
     it('search for an opinion type that is present in any served opinion', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        opinionSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          keyword: 'opinion',
-          opinionType: 'T.C. Opinion',
-          startDate: '1995-08-03',
-        },
+      await updateOpinionForm({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'opinion',
+        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
+        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
@@ -173,11 +195,13 @@ describe('docket clerk opinion advanced search', () => {
   });
 
   it('clears search fields', async () => {
-    cerebralTest.setState('advancedSearchForm', {
-      opinionSearch: {
-        keyword: 'sunglasses',
+    await cerebralTest.runSequence(
+      'updateAdvancedOpinionSearchFormValueSequence',
+      {
+        key: 'keyword',
+        value: 'sunglasses',
       },
-    });
+    );
 
     await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'opinionSearch',
@@ -185,16 +209,31 @@ describe('docket clerk opinion advanced search', () => {
 
     expect(cerebralTest.getState('advancedSearchForm.opinionSearch')).toEqual({
       keyword: '',
+      opinionTypes: {
+        [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
+        [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
+      },
     });
   });
 
   it('clears validation errors when switching tabs', async () => {
-    cerebralTest.setState('advancedSearchForm', {
-      opinionSearch: {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        startDate: '2995-08-03',
+    await cerebralTest.runSequence(
+      'updateAdvancedOpinionSearchFormValueSequence',
+      {
+        key: 'dateRange',
+        value: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       },
-    });
+    );
+
+    await cerebralTest.runSequence(
+      'updateAdvancedOpinionSearchFormValueSequence',
+      {
+        key: 'startDate',
+        value: '08/03/2995',
+      },
+    );
 
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 

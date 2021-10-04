@@ -4,7 +4,7 @@ import { navigateToTrialSessionPlanningReportAction } from '../actions/navigateT
 import { runTrialSessionPlanningReportAction } from '../actions/TrialSession/runTrialSessionPlanningReportAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateTrialSessionPlanningAction } from '../actions/validateTrialSessionPlanningAction';
 

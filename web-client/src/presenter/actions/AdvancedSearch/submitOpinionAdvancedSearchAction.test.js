@@ -6,6 +6,12 @@ import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearch
 describe('submitOpinionAdvancedSearchAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .opinionAdvancedSearchInteractor.mockReturnValue(true);
+  });
+
   it('should call opinionAdvancedSearchInteractor with the state.advancedSearchForm as searchParams', async () => {
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: {
@@ -15,6 +21,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
         advancedSearchForm: {
           opinionSearch: {
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -44,6 +51,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -82,6 +90,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -112,10 +121,37 @@ describe('submitOpinionAdvancedSearchAction', () => {
             opinionSearch: {
               docketNumber: '105-20L',
               keyword: 'a',
+              opinionTypes: {},
             },
           },
         },
       }),
     ).rejects.toThrow();
+  });
+
+  it('should filter out opinion types that are not selected for search', async () => {
+    await runAction(submitOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {
+              Avocado: false,
+              Banana: false,
+              Cucumber: true,
+              Mango: true,
+            },
+          },
+        },
+        form: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().opinionAdvancedSearchInteractor.mock
+        .calls[0][1].searchParams.opinionTypes,
+    ).toEqual(['Cucumber', 'Mango']);
   });
 });

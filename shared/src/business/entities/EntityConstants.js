@@ -4,7 +4,7 @@ const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
 const { flatten, sortBy, union, without } = require('lodash');
-const { formatNow } = require('../utilities/DateHandler');
+const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 const ENABLE_8684 = false;
 
@@ -24,7 +24,7 @@ filter8684CategoryMap(DOCUMENT_INTERNAL_CATEGORIES_MAP, ENABLE_8684);
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
-const CURRENT_YEAR = +formatNow('YYYY');
+const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
@@ -38,6 +38,11 @@ const ORDER_JUDGE_FIELD = 'signedJudgeName';
 const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
+};
+
+const TRIAL_SESSION_SCOPE_TYPES = {
+  locationBased: 'Location-based',
+  standaloneRemote: 'Standalone Remote',
 };
 
 const PARTY_VIEW_TABS = {
@@ -60,12 +65,26 @@ const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
 };
 
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
-  { documentType: 'Notice of Change of Address', eventCode: 'NCA' },
+  {
+    documentType: 'Notice of Change of Address',
+    eventCode: 'NCA',
+    title: 'Notice of Change of Address',
+  },
   {
     documentType: 'Notice of Change of Address and Telephone Number',
     eventCode: 'NCAP',
+    title: 'Notice of Change of Address and Telephone Number',
   },
-  { documentType: 'Notice of Change of Telephone Number', eventCode: 'NCP' },
+  {
+    documentType: 'Notice of Change of Telephone Number',
+    eventCode: 'NCP',
+    title: 'Notice of Change of Telephone Number',
+  },
+  {
+    documentType: 'Notice of Change of Email Address',
+    eventCode: 'NOCE',
+    title: 'Notice of Change of Email Address',
+  },
 ];
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
@@ -173,6 +192,32 @@ const ORDER_TYPES = [
 ];
 
 const BENCH_OPINION_EVENT_CODE = 'OST';
+
+const ADVANCED_SEARCH_OPINION_TYPES = {
+  Bench: BENCH_OPINION_EVENT_CODE,
+  Memorandum: 'MOP',
+  Summary: 'SOP',
+  'T.C.': 'TCOP',
+};
+
+const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES['T.C.'],
+    label: 'T.C.',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Memorandum,
+    label: 'Memorandum',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Summary,
+    label: 'Summary',
+  },
+  {
+    eventCode: ADVANCED_SEARCH_OPINION_TYPES.Bench,
+    label: 'Bench Opinion (Order of Service of Transcript)',
+  },
+];
 
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
@@ -1039,6 +1084,8 @@ module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
+  ADVANCED_SEARCH_OPINION_TYPES,
+  ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
   ALL_DOCUMENT_TYPES,
   ALL_DOCUMENT_TYPES_MAP,
@@ -1157,6 +1204,7 @@ module.exports = deepFreeze({
   TRIAL_CITIES,
   TRIAL_CITY_STRINGS,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   TRIAL_CLERKS_SECTION,
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,

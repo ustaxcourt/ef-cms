@@ -18,16 +18,12 @@ export const formatDateIfToday = (date, applicationContext) => {
   const then = applicationContext
     .getUtilities()
     .formatDateString(date, 'MMDDYY');
-  const yesterday = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString()
-        .add(-1, 'days')
-        .toDate(),
-      'MMDDYY',
-    );
+  const yesterday = applicationContext.getUtilities().formatDateString(
+    applicationContext.getUtilities().calculateISODate({
+      howMuch: -1,
+    }),
+    'MMDDYY',
+  );
 
   let formattedDate;
   if (now == then) {
@@ -134,6 +130,7 @@ const getDocketEntryEditLink = ({
   let editLink;
   if (
     formattedDocument.isCourtIssuedDocument &&
+    !formattedDocument.isPaper &&
     !applicationContext.getUtilities().isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {

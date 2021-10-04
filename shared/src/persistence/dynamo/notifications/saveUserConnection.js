@@ -22,7 +22,7 @@ exports.saveUserConnection = ({
     Item: {
       connectionId,
       endpoint,
-      gsi1pk: `connection|${connectionId}`,
+      gsi1pk: 'connection',
       pk: `user|${userId}`,
       sk: `connection|${connectionId}`,
       ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,

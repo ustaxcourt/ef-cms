@@ -6,7 +6,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
         key: 'filingDate',
-        value: '2020-01-04',
+        value: '2020-01-01T05:00:00.000Z',
       },
     );
 

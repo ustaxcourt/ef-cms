@@ -614,6 +614,21 @@ jobs:
           command: |
             docker build -t efcms -f Dockerfile .
       - run:
+          name: Deploy Migration Cron Lambda
+          command: |
+            docker run \
+              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+              -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+              -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+              -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
+              -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
+              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
+              --rm efcms /bin/sh -c "npm run deploy:migration-cron -- ${ENV}"
+      - run:
           name: Setup Migration Infrastructure
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -625,6 +640,9 @@ jobs:
                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
                -e "ZONE_NAME=${ZONE_NAME}" \
                -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
+               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+               -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
+               -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
                --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
             fi
       - run:
@@ -690,6 +708,39 @@ jobs:
                 -e "ENV=${ENV}" \
                 --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
             fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               --rm efcms /bin/sh -c "./enable-reindex-cron.sh "
+
+  disable-reindex-cron:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          name: Setup Env
+          command: |
+            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
+            echo "export ENV=$ENV" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t efcms -f Dockerfile .
+      - run:
+          name: Disable Check Reindex Status Cron
+          command: |
+            docker run \
+               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+               -e "ENV=${ENV}" \
+               --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
 
   smoketests:
     docker:
@@ -718,6 +769,9 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+      - run:
+          name: 'Disable Maintenance Mode'
+          command: npm run maintenance:disengage $ENV
       - run:
           name: 'Cypress Smoke Tests'
           command: npm run cypress:smoketests
@@ -816,7 +870,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run the related develop workflow below
         - prod # run with context workflow below
         - migration # run without smoketests workflow
 
@@ -836,41 +889,7 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
 
 workflows:
   version: 2
-  hourly:
-    jobs:
-      - build-client-integration
-      - e2e-pa11y
-      - e2e-pa11y-public
-      - e2e-cypress
-      - e2e-cypress-smoketests-local
-      - e2e-cypress-public
-      - deploy:
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-      - migrate:
-          requires:
-            - deploy
-      - smoketests:
-          requires:
-            - migrate
-      - smoketests-readonly:
-          requires:
-            - smoketests
-      - switch-colors:
-          requires:
-            - smoketests-readonly
-    triggers:
-      - schedule:
-          cron: '0 13-22 * * 1-5'
-          filters:
-            branches:
-              only:
-                - develop
+
   build-and-deploy:
     jobs:
       - build-client-integration:
@@ -896,6 +915,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -912,6 +932,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -920,12 +941,20 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
-      - smoketests:
+      - wait-for-reindex:
+          type: approval
           requires:
             - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -940,6 +969,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -954,6 +984,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - irs
                 - staging
                 - test
@@ -991,10 +1022,19 @@ workflows:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
             - deploy
+      - wait-for-reindex:
+          <<: *build-and-deploy-without-smoketests-defaults
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          <<: *build-and-deploy-without-smoketests-defaults
+          requires:
+            - wait-for-reindex
       - switch-colors:
           <<: *build-and-deploy-without-smoketests-defaults
           requires:
-            - migrate
+            - disable-reindex-cron
 
   build-and-deploy-with-context:
     jobs:
@@ -1023,7 +1063,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - wait-for-reindex:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-reindex
       - smoketests-readonly:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - migrate
+            - disable-reindex-cron
+      - switch-colors:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - smoketests-readonly

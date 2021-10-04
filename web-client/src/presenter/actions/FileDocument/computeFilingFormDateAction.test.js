@@ -38,10 +38,10 @@ describe('computeFilingFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.filingDate).toBeNull();
+    expect(result.state.form.filingDate).toBeUndefined();
   });
 
-  it('reconstructs the date with the time if the original filingDate has a time and is accesible', async () => {
+  it('leaves leaves original state of filing date unchanged if some filing date input value is not present', async () => {
     const result = await runAction(computeFilingFormDateAction, {
       modules: {
         presenter,
@@ -49,14 +49,14 @@ describe('computeFilingFormDateAction', () => {
       state: {
         form: {
           documentType: 'Proposed Stipulated Decision',
-          filingDate: '2019-03-01T05:01:00.000Z',
+          filingDate: '2019-03-01T02:01:00.000Z',
           filingDateDay: '5',
           filingDateMonth: '1',
-          filingDateYear: '2019',
+          filingDateYear: undefined,
         },
       },
     });
 
-    expect(result.state.form.filingDate).toEqual('2019-01-05T05:01:00.000Z');
+    expect(result.state.form.filingDate).toEqual('2019-03-01T02:01:00.000Z');
   });
 });

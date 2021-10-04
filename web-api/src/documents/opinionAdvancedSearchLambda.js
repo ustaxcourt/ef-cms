@@ -8,10 +8,13 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.opinionAdvancedSearchLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const opinionTypes =
+      event.queryStringParameters.opinionTypes?.split(',') || [];
+
     return await applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor(
-        applicationContext,
-        event.queryStringParameters,
-      );
+      .opinionAdvancedSearchInteractor(applicationContext, {
+        ...event.queryStringParameters,
+        opinionTypes,
+      });
   });

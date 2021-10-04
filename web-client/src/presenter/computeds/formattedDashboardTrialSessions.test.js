@@ -1,6 +1,9 @@
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../shared/src/business/utilities/DateHandler';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
 import {
   formatSession,
   formattedDashboardTrialSessions as formattedDashboardTrialSessionsComputed,
@@ -19,7 +22,7 @@ let TRIAL_SESSIONS_LIST;
 
 describe('formattedDashboardTrialSessions', () => {
   beforeEach(() => {
-    nextYear = (parseInt(formatNow('YYYY')) + 1).toString();
+    nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
 
     TRIAL_SESSIONS_LIST = [
       {

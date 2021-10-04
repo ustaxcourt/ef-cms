@@ -10,7 +10,7 @@ describe('validateOpinionAdvancedSearchInteractor', () => {
       opinionSearch: {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'Joe Exotic',
-        startDate: '2001-10-10',
+        startDate: '10/10/2001',
       },
     });
 
