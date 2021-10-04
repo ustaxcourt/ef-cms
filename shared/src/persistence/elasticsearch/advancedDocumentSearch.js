@@ -105,11 +105,6 @@ exports.advancedDocumentSearch = async ({
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    // const judgeField = `${judgeType}.S`;
-    // if judgeType is judge, this is an opinion, since thats what opinion interactor sends
-    // query for both 'signedJudgeName' and 'judge'
-    // if opinion event code = OST, search for signedJudge
-    // if all other opinion types, search for judge
     if (isOpinionSearch) {
       docketEntryQueryParams.push({
         bool: {
