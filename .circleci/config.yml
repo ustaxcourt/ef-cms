@@ -870,7 +870,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
       ignore:
-        - develop # run the related develop workflow below
         - prod # run with context workflow below
         - migration # run without smoketests workflow
 
