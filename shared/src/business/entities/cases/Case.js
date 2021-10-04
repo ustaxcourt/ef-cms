@@ -267,6 +267,9 @@ const assignFieldsForAllUsers = ({ obj, rawCase }) => {
 
   obj.docketNumberWithSuffix =
     obj.docketNumber + (obj.docketNumberSuffix || '');
+
+  obj.canAllowDocumentService = rawCase.canAllowDocumentService;
+  obj.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
 };
 
 const assignDocketEntries = ({
