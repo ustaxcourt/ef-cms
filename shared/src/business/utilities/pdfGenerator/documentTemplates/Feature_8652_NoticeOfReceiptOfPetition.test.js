@@ -74,7 +74,7 @@ describe('Feature_8652_NoticeOfReceiptOfPetition', () => {
     expect(textContent).not.toContain('Request for Place of Trial');
   });
 
-  it('renders the the petitioner mailing address', () => {
+  it('renders the petitioner mailing address', () => {
     const wrapper = mount(
       <Feature_8652_NoticeOfReceiptOfPetition
         address={address}

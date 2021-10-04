@@ -139,7 +139,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
     });
   });
 
-  it('should log an error when the the user is not found on one of their associated cases by userId', async () => {
+  it('should log an error when the user is not found on one of their associated cases by userId', async () => {
     const mockErrorMessage = 'updateCaseAndAssociations failure';
 
     applicationContext
