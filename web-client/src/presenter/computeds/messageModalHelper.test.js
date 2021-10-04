@@ -343,7 +343,7 @@ describe('messageModalHelper', () => {
     expect(result.showAddMoreDocumentsButton).toEqual(false);
   });
 
-  it('returns showMessageAttachments true when the the form has message attachments', () => {
+  it('returns showMessageAttachments true when the form has message attachments', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,
@@ -361,7 +361,7 @@ describe('messageModalHelper', () => {
     expect(result.showMessageAttachments).toEqual(true);
   });
 
-  it('returns showMessageAttachments false when the the form has NO message attachments', () => {
+  it('returns showMessageAttachments false when the form has NO message attachments', () => {
     const result = runCompute(messageModalHelper, {
       state: {
         caseDetail,

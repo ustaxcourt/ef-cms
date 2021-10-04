@@ -494,7 +494,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
   });
 
-  it('should include `Entered and Served` in the the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
+  it('should include `Entered and Served` in the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       documentMeta: {
         ...caseRecord.docketEntries[0],

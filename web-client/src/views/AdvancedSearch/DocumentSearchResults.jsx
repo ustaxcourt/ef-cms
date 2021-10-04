@@ -97,10 +97,7 @@ export const DocumentSearchResults = connect(
                         </Button>
                       </td>
                       <td>{result.caseTitle}</td>
-                      <td>
-                        {result.formattedSignedJudgeName ||
-                          result.formattedJudgeName}
-                      </td>
+                      <td>{result.formattedJudgeName}</td>
                       <td>{result.numberOfPagesFormatted}</td>
                       <td>
                         <CaseLink
