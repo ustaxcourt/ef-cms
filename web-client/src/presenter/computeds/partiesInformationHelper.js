@@ -1,4 +1,3 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { capitalize } from 'lodash';
 import { state } from 'cerebral';
 
@@ -111,10 +110,14 @@ export const partiesInformationHelper = (get, applicationContext) => {
         practitioner.representing.includes(petitioner.contactId),
     );
 
+    const canAllowDocumentServiceForCase = !!applicationContext
+      .getUtilities()
+      .canAllowDocumentServiceForCase(caseDetail);
+
     const canEditPetitioner = getCanEditPetitioner({
       applicationContext,
       permissions,
-      petitionIsServed: caseDetail.status !== CASE_STATUS_TYPES.new,
+      petitionIsServed: canAllowDocumentServiceForCase,
       petitioner,
       user,
       userAssociatedWithCase,
