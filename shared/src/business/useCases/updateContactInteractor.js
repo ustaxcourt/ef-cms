@@ -95,7 +95,11 @@ exports.updateContactInteractor = async (
       oldData: oldCaseContact,
     });
 
-  if (!oldCaseContact.isAddressSealed && documentType) {
+  if (
+    !oldCaseContact.isAddressSealed &&
+    documentType &&
+    caseEntity.shouldGenerateNoticesForCase()
+  ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
     const changeOfAddressPdf = await applicationContext

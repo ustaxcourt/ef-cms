@@ -6,7 +6,7 @@ const { Case } = require('./Case');
 const { CASE_STATUS_TYPES } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-describe('isCaseEligibleForService', () => {
+describe('shouldGenerateNoticesForCase', () => {
   it('checks if the case is eligible for service (true)', () => {
     const caseEntity = new Case(
       {
@@ -18,7 +18,7 @@ describe('isCaseEligibleForService', () => {
       },
     );
 
-    expect(caseEntity.isCaseEligibleForService()).toBeTruthy();
+    expect(caseEntity.shouldGenerateNoticesForCase()).toBeTruthy();
   });
 
   it('checks if the case is eligible for service (false)', () => {
@@ -32,7 +32,7 @@ describe('isCaseEligibleForService', () => {
       },
     );
 
-    expect(caseEntity.isCaseEligibleForService()).toBeFalsy();
+    expect(caseEntity.shouldGenerateNoticesForCase()).toBeFalsy();
   });
 
   it('verifies that the case is NOT eligible because the case was closed over 6 months ago (false)', () => {
@@ -47,7 +47,7 @@ describe('isCaseEligibleForService', () => {
       },
     );
 
-    expect(caseEntity.isCaseEligibleForService()).toBeFalsy();
+    expect(caseEntity.shouldGenerateNoticesForCase()).toBeFalsy();
   });
 
   it('verifies that the case is eligible because the case was closed under 6 months ago (false)', () => {
@@ -65,6 +65,6 @@ describe('isCaseEligibleForService', () => {
       },
     );
 
-    expect(caseEntity.isCaseEligibleForService()).toBeTruthy();
+    expect(caseEntity.shouldGenerateNoticesForCase()).toBeTruthy();
   });
 });
