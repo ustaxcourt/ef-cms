@@ -1,0 +1,120 @@
+import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { petitionsClerkSubmitsPaperCaseToIrs } from './journey/petitionsClerkSubmitsPaperCaseToIrs';
+import { userMap } from '../../shared/src/test/mockUserTokenMap';
+import axios from 'axios';
+import jwt from 'jsonwebtoken';
+
+const cerebralTest = setupTest();
+
+describe('View and manage the deadlines of a case', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
+  describe('Create a case', () => {
+    loginAs(cerebralTest, 'petitionsclerk1@example.com');
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, false);
+    petitionsClerkSubmitsPaperCaseToIrs(cerebralTest);
+  });
+
+  it('gets a v2 case', async () => {
+    const loginUsername = 'irsSuperuser@example.com';
+    if (!userMap[loginUsername]) {
+      throw new Error(`Unable to log into test as ${loginUsername}`);
+    }
+    const user = {
+      ...userMap[loginUsername],
+      sub: userMap[loginUsername].userId,
+    };
+
+    const userToken = jwt.sign(user, 'secret');
+
+    const { data: response } = await axios.get(
+      `http://localhost:4000/v2/cases/${cerebralTest.docketNumber}`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    );
+
+    expect(response).toMatchObject({
+      caseCaption:
+        'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
+      caseType: 'Deficiency',
+      contactPrimary: {
+        address1: '123 Abc Ln',
+        city: 'Cityville',
+        name: 'Daenerys Stormborn',
+        phone: '123-456-7890',
+        postalCode: '23-skidoo',
+        serviceIndicator: 'Paper',
+      },
+      docketEntries: expect.arrayContaining([
+        expect.objectContaining({
+          docketEntryId: expect.anything(),
+          eventCode: 'RQT',
+          eventCodeDescription: 'Request for Place of Trial',
+          filedBy: 'Petr. Daenerys Stormborn',
+          filingDate: expect.anything(),
+          index: 4,
+          isFileAttached: true,
+          servedAt: expect.anything(),
+        }),
+        expect.objectContaining({
+          docketEntryId: expect.anything(),
+          eventCode: 'P',
+          eventCodeDescription: 'Petition',
+          filedBy: 'Petr. Daenerys Stormborn',
+          filingDate: expect.anything(),
+          index: 1,
+          isFileAttached: true,
+          servedAt: expect.anything(),
+        }),
+        expect.objectContaining({
+          docketEntryId: expect.anything(),
+          eventCode: 'APW',
+          eventCodeDescription: 'Application for Waiver of Filing Fee',
+          filedBy: 'Petr. Daenerys Stormborn',
+          filingDate: expect.anything(),
+          index: 2,
+          isFileAttached: true,
+          servedAt: expect.anything(),
+        }),
+        expect.objectContaining({
+          docketEntryId: expect.anything(),
+          eventCode: 'DISC',
+          eventCodeDescription: 'Ownership Disclosure Statement',
+          filedBy: 'Petr. Daenerys Stormborn',
+          filingDate: expect.anything(),
+          index: 3,
+          isFileAttached: true,
+          servedAt: expect.anything(),
+        }),
+        expect.objectContaining({
+          docketEntryId: expect.anything(),
+          eventCode: 'STIN',
+          eventCodeDescription: 'Statement of Taxpayer Identification',
+          filedBy: 'Petr. Daenerys Stormborn',
+          filingDate: expect.anything(),
+          index: 0,
+          isFileAttached: true,
+          servedAt: expect.anything(),
+        }),
+      ]),
+      docketNumber: cerebralTest.docketNumber,
+      docketNumberSuffix: 'S',
+      partyType: 'Petitioner',
+      practitioners: [],
+      preferredTrialCity: 'Birmingham, Alabama',
+      respondents: [],
+      sortableDocketNumber: expect.anything(),
+      status: 'General Docket - Not at Issue',
+    });
+  });
+});
