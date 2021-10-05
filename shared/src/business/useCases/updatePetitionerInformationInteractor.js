@@ -238,7 +238,11 @@ const updatePetitionerInformationInteractor = async (
 
   let serviceUrl;
 
-  if (documentType && !oldCaseContact.isAddressSealed) {
+  if (
+    documentType &&
+    !oldCaseContact.isAddressSealed &&
+    caseEntity.isCaseEligibleForService()
+  ) {
     const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         oldCaseContact.contactId,

@@ -2321,8 +2321,23 @@ const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
+/**
+ * determines if the case is in a state where documents can be served
+ *
+ * @param {string} caseCaption the original case caption
+ * @returns {string} caseTitle the case caption with the postfix removed
+ */
+
+const canAllowDocumentServiceForCase = rawCase => {
+  if (typeof rawCase.canAllowDocumentService !== 'undefined') {
+    return rawCase.canAllowDocumentService;
+  }
+  return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
+  canAllowDocumentServiceForCase,
   caseDecorator,
   caseHasServedDocketEntries,
   caseHasServedPetition,
