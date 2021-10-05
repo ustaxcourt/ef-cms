@@ -44,6 +44,10 @@ describe('View and manage the deadlines of a case', () => {
       },
     );
 
+    cerebralTest.docketEntryId = response.docketEntries.find(
+      entry => entry.eventCode === 'RQT',
+    ).docketEntryId;
+
     expect(response).toMatchObject({
       caseCaption:
         'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
@@ -120,15 +124,17 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   it('gets the document-download-url for a v1 case', async () => {
-    const key = 'something';
-
     const { data: response } = await axios.get(
-      `http://localhost:4000/v1/cases/${cerebralTest.docketNumber}/entries/${key}/document-download-url`,
+      `http://localhost:4000/v1/cases/${cerebralTest.docketNumber}/entries/${cerebralTest.docketEntryId}/document-download-url`,
       {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
       },
+    );
+
+    expect(response.url).toContain(
+      `http://localhost:9000/noop-documents-local-us-east-1/${cerebralTest.docketEntryId}`,
     );
   });
 });
