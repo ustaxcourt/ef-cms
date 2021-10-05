@@ -125,7 +125,7 @@ describe('View and manage the deadlines of a case', () => {
 
   it('gets the document-download-url for a v2 case', async () => {
     const { data: response } = await axios.get(
-      `http://localhost:4000/v1/cases/${cerebralTest.docketNumber}/entries/${cerebralTest.docketEntryId}/document-download-url`,
+      `http://localhost:4000/v2/cases/${cerebralTest.docketNumber}/entries/${cerebralTest.docketEntryId}/document-download-url`,
       {
         headers: {
           Authorization: `Bearer ${userToken}`,
@@ -136,5 +136,23 @@ describe('View and manage the deadlines of a case', () => {
     expect(response.url).toContain(
       `http://localhost:9000/noop-documents-local-us-east-1/${cerebralTest.docketEntryId}`,
     );
+  });
+
+  it('gets the v2 reconciliation report for the provided date', async () => {
+    const { data: response } = await axios.get(
+      'http://localhost:4000/v2/reconciliation-report/today',
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    );
+
+    expect(response).toMatchObject({
+      docketEntries: expect.arrayContaining([]),
+      reconciliationDate: expect.anything(),
+      reportTitle: 'Reconciliation Report',
+      totalDocketEntries: expect.any(Number),
+    });
   });
 });
