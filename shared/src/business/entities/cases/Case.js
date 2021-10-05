@@ -1190,7 +1190,7 @@ const getPetitionerByEmail = function (rawCase, userEmail) {
  *
  * @returns {boolean} if the case is eligible or not
  */
-const isCaseEligibleForService = function (rawCase) {
+const shouldGenerateNoticesForCase = function (rawCase) {
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
@@ -1201,7 +1201,6 @@ const isCaseEligibleForService = function (rawCase) {
   const isRecent =
     rawCase.closedDate &&
     dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
-
   return isOpen || isRecent;
 };
 
@@ -1210,8 +1209,8 @@ const isCaseEligibleForService = function (rawCase) {
  *
  * @returns {boolean} if the case is eligible or not
  */
-Case.prototype.isCaseEligibleForService = function () {
-  return isCaseEligibleForService(this);
+Case.prototype.shouldGenerateNoticesForCase = function () {
+  return shouldGenerateNoticesForCase(this);
 };
 
 /**
@@ -2349,8 +2348,8 @@ module.exports = {
   getPractitionersRepresenting,
   hasPartyWithServiceType,
   isAssociatedUser,
-  isCaseEligibleForService,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  shouldGenerateNoticesForCase,
   updatePetitioner,
 };
