@@ -26,7 +26,7 @@ export const todaysOrdersHelper = (get, applicationContext) => {
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext
     .getUtilities()
-    .formatDateString(currentDate, 'MMMM D, YYYY');
+    .formatDateString(currentDate, 'MONTH_DAY_YEAR');
 
   const formattedOrders = todaysOrders.map(order => ({
     ...order,

@@ -56,7 +56,11 @@ export const FilingPartiesForm = connect(
               {caseDetail.petitioners.map(petitioner => (
                 <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
-                    checked={form.filersMap[petitioner.contactId] || false}
+                    checked={
+                      (form.filersMap &&
+                        form.filersMap[petitioner.contactId]) ||
+                      false
+                    }
                     className="usa-checkbox__input"
                     id={`filing-${petitioner.contactId}`}
                     name={`filersMap.${petitioner.contactId}`}

@@ -1,4 +1,5 @@
 const {
+  canAllowDocumentServiceForCase,
   Case,
   getPetitionerById,
   isAssociatedUser,
@@ -72,6 +73,18 @@ const getCaseForExternalUser = ({
   }
 };
 
+const decorateForCaseStatus = caseRecord => {
+  // allow document service
+  caseRecord.canAllowDocumentService =
+    canAllowDocumentServiceForCase(caseRecord);
+
+  // TODO: allow printable docket record
+
+  return caseRecord;
+};
+
+exports.decorateForCaseStatus = decorateForCaseStatus;
+
 /**
  * getCaseInteractor
  *
@@ -81,12 +94,14 @@ const getCaseForExternalUser = ({
  * @returns {object} the case data
  */
 exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
+  const caseRecord = decorateForCaseStatus(
+    await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
-    });
+    }),
+  );
+
+  //caseRecord = decorateForCaseStatus(caseRecord);
 
   if (!caseRecord.docketNumber && !caseRecord.entityName) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);

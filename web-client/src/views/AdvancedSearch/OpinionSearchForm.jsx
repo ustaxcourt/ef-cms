@@ -15,6 +15,8 @@ import classNames from 'classnames';
 
 export const OpinionSearchForm = connect(
   {
+    ADVANCED_SEARCH_OPINION_TYPES_LIST:
+      state.constants.ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -25,6 +27,7 @@ export const OpinionSearchForm = connect(
     validationErrors: state.validationErrors,
   },
   function OpinionSearchForm({
+    ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper,
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
@@ -90,7 +93,10 @@ export const OpinionSearchForm = connect(
               </div>
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
-                  <JudgeSelect judges={judges} />
+                  <JudgeSelect
+                    formValue={'advancedSearchForm.opinionSearch.judge'}
+                    judges={judges}
+                  />
                 </div>
                 <div className="margin-top-4">
                   <DateRangeSelect
@@ -105,7 +111,7 @@ export const OpinionSearchForm = connect(
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <SearchDateRangePickerComponent
-                      formType="orderSearch"
+                      formType="opinionSearch"
                       updateSequence={
                         updateAdvancedOpinionSearchFormValueSequence
                       }
@@ -119,34 +125,36 @@ export const OpinionSearchForm = connect(
                     Include types:
                   </legend>
 
-                  {['Bench', 'Memorandum', 'Summary', 'TC'].map(opinionType => (
-                    <div className="usa-checkbox width-full" key={opinionType}>
-                      <input
-                        checked={
-                          advancedSearchForm.opinionSearch.opinionTypes &&
-                          !!advancedSearchForm.opinionSearch.opinionTypes[
-                            opinionType
-                          ]
-                        }
-                        className="usa-checkbox__input include-types"
-                        id={`opinionTypes.${opinionType}`}
-                        name={`opinionTypes.${opinionType}`}
-                        type="checkbox"
-                        onChange={e => {
-                          updateAdvancedOpinionSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                      <label
-                        className="margin-top-0 usa-checkbox__label"
-                        htmlFor={`opinionTypes.${opinionType}`}
-                      >
-                        {opinionType}
-                      </label>
-                    </div>
-                  ))}
+                  {ADVANCED_SEARCH_OPINION_TYPES_LIST.map(
+                    ({ eventCode, label }) => (
+                      <div className="usa-checkbox width-full" key={eventCode}>
+                        <input
+                          checked={
+                            advancedSearchForm.opinionSearch.opinionTypes &&
+                            !!advancedSearchForm.opinionSearch.opinionTypes[
+                              eventCode
+                            ]
+                          }
+                          className="usa-checkbox__input include-types"
+                          id={`opinionTypes.${eventCode}`}
+                          name={`opinionTypes.${eventCode}`}
+                          type="checkbox"
+                          onChange={e => {
+                            updateAdvancedOpinionSearchFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="margin-top-0 usa-checkbox__label"
+                          htmlFor={`opinionTypes.${eventCode}`}
+                        >
+                          {label}
+                        </label>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
@@ -207,7 +215,10 @@ export const OpinionSearchForm = connect(
                 <div className="grid-row grid-gap-3 margin-top-2">
                   <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
                     <div className="width-card-lg">
-                      <JudgeSelect judges={judges} />
+                      <JudgeSelect
+                        formValue={'advancedSearchForm.opinionSearch.judge'}
+                        judges={judges}
+                      />
                     </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
                       <DateRangeSelect
@@ -225,7 +236,7 @@ export const OpinionSearchForm = connect(
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <SearchDateRangePickerComponent
-                            formType="orderSearch"
+                            formType="opinionSearch"
                             updateSequence={
                               updateAdvancedOpinionSearchFormValueSequence
                             }
@@ -242,34 +253,36 @@ export const OpinionSearchForm = connect(
                     Include types:
                   </legend>
 
-                  {['Bench', 'Memorandum', 'Summary', 'TC'].map(opinionType => (
-                    <div className="usa-checkbox" key={opinionType}>
-                      <input
-                        checked={
-                          advancedSearchForm.opinionSearch.opinionTypes &&
-                          !!advancedSearchForm.opinionSearch.opinionTypes[
-                            opinionType
-                          ]
-                        }
-                        className="usa-checkbox__input include-types"
-                        id={`opinionTypes.${opinionType}`}
-                        name={`opinionTypes.${opinionType}`}
-                        type="checkbox"
-                        onChange={e => {
-                          updateAdvancedOpinionSearchFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                      <label
-                        className="margin-top-0 usa-checkbox__label"
-                        htmlFor={`opinionTypes.${opinionType}`}
-                      >
-                        {opinionType}
-                      </label>
-                    </div>
-                  ))}
+                  {ADVANCED_SEARCH_OPINION_TYPES_LIST.map(
+                    ({ eventCode, label }) => (
+                      <div className="usa-checkbox" key={eventCode}>
+                        <input
+                          checked={
+                            advancedSearchForm.opinionSearch.opinionTypes &&
+                            !!advancedSearchForm.opinionSearch.opinionTypes[
+                              eventCode
+                            ]
+                          }
+                          className="usa-checkbox__input include-types"
+                          id={`opinionTypes.${eventCode}`}
+                          name={`opinionTypes.${eventCode}`}
+                          type="checkbox"
+                          onChange={e => {
+                            updateAdvancedOpinionSearchFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="margin-top-0 usa-checkbox__label"
+                          htmlFor={`opinionTypes.${eventCode}`}
+                        >
+                          {label}
+                        </label>
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -293,7 +306,7 @@ export const OpinionSearchForm = connect(
               onClick={e => {
                 e.preventDefault();
                 clearAdvancedSearchFormSequence({
-                  formType: 'orderSearch',
+                  formType: 'opinionSearch',
                 });
               }}
             >
@@ -301,60 +314,6 @@ export const OpinionSearchForm = connect(
             </Button>
           </div>
         </form>
-        {/* <div
-          className="header-with-blue-background grid-row"
-          id="opinion-search-form"
-        >
-          <h3>Search Opinions</h3>
-        </div>
-        <div className="blue-container opinion-search-container">
-          <form
-            className="grid-container grid-row"
-            onSubmit={e => {
-              e.preventDefault();
-              submitAdvancedSearchSequence();
-            }}
-          >
-            <div className="grid-col" id="opinion-basic">
-              <OpinionSearchByKeyword />
-
-              <NonMobile>
-                <div className="grid-row margin-top-10">
-                  <div className="tablet:grid-col-12">
-                    <Button
-                      aria-describedby="opinion-search-form"
-                      className="margin-bottom-0"
-                      id="advanced-search-button"
-                      type="submit"
-                    >
-                      Search
-                    </Button>
-                    <Button
-                      link
-                      aria-describedby="opinion-search-form"
-                      className="padding-0 ustc-button--mobile-inline"
-                      onClick={e => {
-                        e.preventDefault();
-                        clearAdvancedSearchFormSequence({
-                          formType: 'opinionSearch',
-                        });
-                      }}
-                    >
-                      Clear Search
-                    </Button>
-                  </div>
-                </div>
-              </NonMobile>
-            </div>
-            <AdvancedDocumentSearch
-              formType="opinionSearch"
-              judges={judges}
-              updateSequence={updateAdvancedOpinionSearchFormValueSequence}
-              validateSequence={validateOpinionSearchSequence}
-              validationErrors={validationErrors}
-            />
-          </form>
-        </div> */}
       </>
     );
   },

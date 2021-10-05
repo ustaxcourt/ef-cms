@@ -1,4 +1,9 @@
 const {
+  formatDateString,
+  formatNow,
+  FORMATS,
+} = require('../../utilities/DateHandler');
+const {
   reactTemplateGenerator,
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { Case } = require('../../entities/cases/Case');
@@ -40,13 +45,9 @@ exports.sendIrsSuperuserPetitionEmail = async ({
     practitioner.representingFormatted = representingFormatted.join(', ');
   });
 
-  const currentDate = applicationContext
-    .getUtilities()
-    .formatNow('MMMM D, YYYY');
+  const currentDate = formatNow(FORMATS.MONTH_DAY_YEAR);
 
-  const filingDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(filingDate, 'MM/DD/YY');
+  const filingDateFormatted = formatDateString(filingDate, FORMATS.MMDDYY);
 
   const formattedMailingDate =
     mailingDate || `Electronically Filed ${filingDateFormatted}`;
@@ -70,9 +71,7 @@ exports.sendIrsSuperuserPetitionEmail = async ({
         eventCode,
         filingDate: filingDateFormatted,
         formattedMailingDate,
-        servedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(servedAt, 'DATE_TIME_TZ'),
+        servedAtFormatted: formatDateString(servedAt, FORMATS.DATE_TIME_TZ),
       },
       practitioners: privatePractitioners,
       taxCourtLoginUrl: `https://app.${process.env.EFCMS_DOMAIN}`,

@@ -51,7 +51,7 @@ export const caseDetailEditHelper = (get, applicationContext) => {
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
-    .formatDateString(caseDetail.receivedAt, 'MM/DD/YYYY');
+    .formatDateString(caseDetail.receivedAt, 'MMDDYYYY');
 
   return {
     ownershipDisclosureStatementDocumentId,

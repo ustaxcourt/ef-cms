@@ -132,10 +132,10 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
         preferredTrialCity,
         receivedAtFormatted: applicationContext
           .getUtilities()
-          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+          .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
         servedDate: applicationContext
           .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+          .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
       },
     });
 
@@ -253,10 +253,10 @@ const generatePaperNoticeForContactSecondary = async ({
         preferredTrialCity,
         receivedAtFormatted: applicationContext
           .getUtilities()
-          .formatDateString(receivedAt, 'MMMM D, YYYY'),
+          .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
         servedDate: applicationContext
           .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MMMM D, YYYY'),
+          .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
       },
     });
 

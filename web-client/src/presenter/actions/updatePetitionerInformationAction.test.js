@@ -39,9 +39,6 @@ describe('updatePetitionerInformationAction', () => {
       },
       caseDetail: { docketNumber: '123-20' },
       docketNumber: '123-20',
-      paperServiceParties: { paper: [{ name: 'abc' }] },
-      pdfUrl: 'www.example.com',
-      tab: 'caseInfo',
     });
   });
 });

@@ -83,20 +83,6 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[0].message,
-    });
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
-      },
-    );
-
-    await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
-
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     ({ formattedDocketEntriesOnDocketRecord } =
@@ -107,9 +93,9 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2050-01-01T05:00:00.000Z',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle:
-        'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
+        'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
       eventCode: 'OFFX',
     });
@@ -120,16 +106,16 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2050-01-01T05:00:00.000Z',
+      date: '2002-01-01T05:00:00.000Z',
       day: '1',
       documentTitle:
-        'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
+        'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
       eventCode: 'OFFX',
       generatedDocumentTitle:
-        'Order time is extended to 01-01-2050 for petr(s) to pay the filing fee',
+        'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       month: '1',
-      year: '2050',
+      year: '2002',
     });
   });
 };

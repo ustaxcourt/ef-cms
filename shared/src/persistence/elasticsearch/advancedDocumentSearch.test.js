@@ -1,10 +1,11 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
   applicationContextForClient,
 } = require('../../business/test/createTestApplicationContext');
 const {
+  BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
-  ORDER_JUDGE_FIELD,
   TODAYS_ORDERS_SORTS,
 } = require('../../business/entities/EntityConstants');
 const { advancedDocumentSearch } = require('./advancedDocumentSearch');
@@ -158,12 +159,46 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when the judgeType is signed judge', async () => {
+  it('does a search for a signed judge when searching for bench opinions', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: [BENCH_OPINION_EVENT_CODE],
+      isOpinionSearch: true,
+      judge: 'Judge Guy Fieri',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must,
+    ).toEqual([
+      getCaseMappingQueryParams(null), // match all parents
+      {
+        bool: {
+          should: [
+            {
+              match: {
+                'judge.S': 'Guy Fieri',
+              },
+            },
+            {
+              match: {
+                'signedJudgeName.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
+              },
+            },
+          ],
+        },
+      },
+    ]);
+  });
+
+  it('does a search for a signed judge when searching for orders, not opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
+      isOpinionSearch: false,
       judge: 'Judge Guy Fieri',
-      judgeType: ORDER_JUDGE_FIELD,
     });
 
     expect(
@@ -185,27 +220,12 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does not search for a judge when the judgeType is neither `judge` nor a signed judge', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      judge: 'Judge Guy Fieri',
-      judgeType: 'something else',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must,
-    ).toEqual([
-      getCaseMappingQueryParams(null), // match all parents
-    ]);
-  });
-
   it('does a search by a single opinion type when an opinion document type is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
       omitSealed: true,
-      opinionTypes: ['Summary Opinion'],
+      opinionTypes: ['SOP'],
     });
 
     const expectation = [
@@ -219,7 +239,7 @@ describe('advancedDocumentSearch', () => {
       filter: expect.arrayContaining([
         {
           term: {
-            'documentType.S': 'Summary Opinion',
+            'eventCode.S': 'SOP',
           },
         },
       ]),
@@ -238,7 +258,7 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      opinionTypes: ['Summary Opinion', 'Bench'],
+      opinionTypes: ['SOP', 'OST'],
     });
 
     expect(
@@ -250,12 +270,12 @@ describe('advancedDocumentSearch', () => {
             should: [
               {
                 term: {
-                  'documentType.S': 'Summary Opinion',
+                  'eventCode.S': 'SOP',
                 },
               },
               {
                 term: {
-                  'documentType.S': 'Bench',
+                  'eventCode.S': 'OST',
                 },
               },
             ],
@@ -285,12 +305,12 @@ describe('advancedDocumentSearch', () => {
     });
   });
 
-  it('does a search for a judge when the judgeType is judge', async () => {
+  it('does a search for a judge when searching for opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
+      isOpinionSearch: true,
       judge: 'Judge Guy Fieri',
-      judgeType: 'judge',
     });
 
     expect(
@@ -301,11 +321,21 @@ describe('advancedDocumentSearch', () => {
         getCaseMappingQueryParams(null), // match all parents
         {
           bool: {
-            should: {
-              match: {
-                'judge.S': 'Guy Fieri',
+            should: [
+              {
+                match: {
+                  'judge.S': 'Guy Fieri',
+                },
               },
-            },
+              {
+                match: {
+                  'signedJudgeName.S': {
+                    operator: 'and',
+                    query: 'Guy Fieri',
+                  },
+                },
+              },
+            ],
           },
         },
       ],
@@ -318,7 +348,7 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       docketNumber: '101-20',
       documentEventCodes: orderEventCodes,
-      judgeType: ORDER_JUDGE_FIELD,
+      isOpinionSearch: false,
     });
 
     expect(
@@ -511,13 +541,13 @@ describe('advancedDocumentSearch', () => {
       await advancedDocumentSearch({
         applicationContext,
         documentEventCodes: opinionEventCodes,
+        isOpinionSearch: true,
         judge: 'Chief Guy Fieri',
-        judgeType: 'judge',
       });
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
-          .should.match,
+          .should[0].match,
       ).toEqual({
         'judge.S': 'Guy Fieri',
       });
@@ -527,8 +557,8 @@ describe('advancedDocumentSearch', () => {
       await advancedDocumentSearch({
         applicationContext,
         documentEventCodes: opinionEventCodes,
+        isOpinionSearch: false,
         judge: 'Legacy Guy Fieri',
-        judgeType: ORDER_JUDGE_FIELD,
       });
 
       expect(
@@ -546,13 +576,13 @@ describe('advancedDocumentSearch', () => {
       await advancedDocumentSearch({
         applicationContext,
         documentEventCodes: opinionEventCodes,
+        isOpinionSearch: true,
         judge: 'Legacy Judge Guy Fieri',
-        judgeType: 'judge',
       });
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
-          .should.match,
+          .should[0].match,
       ).toEqual({ 'judge.S': 'Guy Fieri' });
     });
   });

@@ -9,7 +9,7 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { formatDateString } = require('../../utilities/DateHandler');
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -28,7 +28,7 @@ CourtIssuedDocumentTypeG.prototype.init = function init(rawProps) {
 CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    formatDateString(this.date, 'MM-DD-YYYY'),
+    formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
     this.trialLocation,
   );
 };

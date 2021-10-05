@@ -1,3 +1,4 @@
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 /**
@@ -20,15 +21,16 @@ export const setPractitionerDetailOnFormAction = ({
     .getUtilities()
     .prepareDateFromString(
       props.practitionerDetail.admissionsDate,
-      'YYYY/MM/DD',
+      FORMATS.YYYYMMDD,
     );
-  if (
-    admissionsDate &&
-    admissionsDate.toDate() instanceof Date &&
-    !isNaN(admissionsDate.toDate())
-  ) {
-    store.set(state.form.month, admissionsDate.format('M'));
-    store.set(state.form.day, admissionsDate.format('D'));
-    store.set(state.form.year, admissionsDate.format('YYYY'));
+
+  const deconstructedDate = applicationContext
+    .getUtilities()
+    .deconstructDate(admissionsDate);
+
+  if (deconstructedDate) {
+    store.set(state.form.month, deconstructedDate.month);
+    store.set(state.form.day, deconstructedDate.day);
+    store.set(state.form.year, deconstructedDate.year);
   }
 };

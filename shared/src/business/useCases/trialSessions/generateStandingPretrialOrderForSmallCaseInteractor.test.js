@@ -117,7 +117,7 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
     expect(data.trialInfo.formattedStartDateWithDayOfWeek).toEqual(
       'Sunday, August 25, 2019',
     );
-    expect(data.trialInfo.formattedStartTime).toEqual('10:00 AM');
+    expect(data.trialInfo.formattedStartTime).toEqual('10:00 am');
   });
 
   it('should add a served stamp to the document', async () => {

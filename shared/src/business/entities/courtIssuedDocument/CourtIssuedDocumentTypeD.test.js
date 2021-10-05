@@ -36,11 +36,11 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
     });
 
-    it('should have error message for past date', () => {
+    it('should have error message for past date if it is a new document', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
         howMuch: -5,
-        unit: 'days',
+        units: 'days',
       });
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
@@ -55,6 +55,26 @@ describe('CourtIssuedDocumentTypeD', () => {
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         date: VALIDATION_ERROR_MESSAGES.date[0].message,
       });
+    });
+
+    it('should NOT have error message for past date if it is NOT a new document', () => {
+      const date = calculateISODate({
+        dateString: createISODateString(),
+        howMuch: -5,
+        unit: 'days',
+      });
+      const extDoc = CourtIssuedDocumentFactory({
+        attachments: false,
+        createdAt: createISODateString(),
+        date,
+        documentTitle:
+          'Order for Amended Petition and Filing Fee on [Date] [Anything]',
+        documentType: 'Order for Amended Petition and Filing Fee',
+        freeText: 'Some free text',
+        scenario: 'Type D',
+      });
+
+      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be valid when all fields are present', () => {

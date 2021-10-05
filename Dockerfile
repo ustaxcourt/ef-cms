@@ -17,16 +17,10 @@ RUN rm awscliv2.zip
 
 RUN pip install --upgrade pip
 
-RUN wget -q -O terraform_1.0.4_linux_amd64.zip https://releases.hashicorp.com/terraform/1.0.4/terraform_1.0.4_linux_amd64.zip && \
-  unzip -o terraform_1.0.4_linux_amd64.zip terraform && \
+RUN wget -q -O terraform_1.0.7_linux_amd64.zip https://releases.hashicorp.com/terraform/1.0.7/terraform_1.0.7_linux_amd64.zip && \
+  unzip -o terraform_1.0.7_linux_amd64.zip terraform && \
   cp terraform /usr/local/bin/ && \
-  curl -OL 'https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.2.0.1227-linux.zip' && \
-  mkdir sonar_scanner && \
-  unzip -d sonar_scanner sonar-scanner-cli-3.2.0.1227-linux.zip && \
-  mv sonar_scanner/* sonar_home && \
-  rm -rf sonar_scanner sonar-scanner-cli-3.2.0.1227-linux.zip && \
-  CI=true npm install cypress && \
-  sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' sonar_home/bin/sonar-scanner
+  CI=true npm install cypress
 
 COPY package.json /home/app/package.json
 COPY package-lock.json /home/app/package-lock.json
