@@ -361,6 +361,30 @@ describe('updates the contact on a case', () => {
     });
   });
 
+  it('should NOT generate a notice if the case was closed over 6 months ago', async () => {
+    const mockClosedCase = {
+      ...mockCase,
+      closedDate: '2015-01-01T21:22:23.456Z',
+      status: CASE_STATUS_TYPES.closed,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => mockClosedCase);
+
+    await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+        address1: '453 Electric Ave',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should NOT update the case when the contact information has not changed', async () => {
     applicationContext.getUtilities().getAddressPhoneDiff.mockReturnValue(null);
 
