@@ -22,7 +22,7 @@ describe('shouldGenerateNoticesForCase', () => {
     ).toEqual(false);
   });
 
-  it('returns true if the case is not in NEW status', () => {
+  it('returns true if the case is in Open (neither New nor Closed) status', () => {
     expect(
       shouldGenerateNoticesForCase({
         ...MOCK_CASE,
