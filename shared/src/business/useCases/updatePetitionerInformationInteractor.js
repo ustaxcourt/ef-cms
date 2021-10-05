@@ -74,7 +74,7 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
-  if (caseEntity.isCaseEligibleForService()) {
+  if (caseEntity.shouldGenerateNoticesForCase()) {
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
@@ -241,7 +241,7 @@ const updatePetitionerInformationInteractor = async (
   if (
     documentType &&
     !oldCaseContact.isAddressSealed &&
-    caseEntity.isCaseEligibleForService()
+    caseEntity.shouldGenerateNoticesForCase()
   ) {
     const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
