@@ -2285,6 +2285,20 @@ const canAllowDocumentServiceForCase = rawCase => {
     return rawCase.canAllowDocumentService;
   }
 
+  return CASE_STATUS_TYPES.new !== rawCase.status;
+};
+
+/**
+ * determines whether or not to file automatically generated notices for notice of change of address
+ *
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we should automatically generate notices for a change of address
+ */
+const shouldGenerateNoticesForCase = rawCase => {
+  if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
+    return rawCase.shouldGenerateNotices;
+  }
+
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
@@ -2329,5 +2343,6 @@ module.exports = {
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  shouldGenerateNoticesForCase,
   updatePetitioner,
 };
