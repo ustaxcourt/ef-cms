@@ -220,6 +220,7 @@ import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDelete
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
+import { openConfirmModalSequence } from './sequences/openConfirmModalSequence';
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRemoveSignatureModalSequence } from './sequences/openConfirmRemoveSignatureModalSequence';
@@ -702,6 +703,7 @@ export const presenter = {
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
     openConfirmInitiateServiceModalSequence,
+    openConfirmModalSequence,
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRemoveSignatureModalSequence,
