@@ -59,7 +59,7 @@ const updateCaseEntityAndGenerateChange = async ({
       petitionerObject.contactId,
     );
 
-  if (caseEntity.isCaseEligibleForService()) {
+  if (caseEntity.shouldGenerateNoticesForCase()) {
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
