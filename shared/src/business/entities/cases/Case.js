@@ -1201,7 +1201,6 @@ const isCaseEligibleForService = function (rawCase) {
   const isRecent =
     rawCase.closedDate &&
     dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
-
   return isOpen || isRecent;
 };
 
