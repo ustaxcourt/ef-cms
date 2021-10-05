@@ -4,8 +4,8 @@ import { runAction } from 'cerebral/test';
 import { updateDateRangeForDeadlinesAction } from './updateDateRangeForDeadlinesAction';
 
 describe('updateDateRangeForDeadlinesAction', () => {
-  const mockStartDate = '2019-04-20';
-  const mockEndDate = '2021-02-05';
+  const mockStartDate = '04/20/2019';
+  const mockEndDate = '02/05/2021';
 
   presenter.providers.applicationContext = applicationContextForClient;
 

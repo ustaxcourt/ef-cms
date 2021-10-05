@@ -37,7 +37,7 @@ describe('opinionPublicSearchInteractor', () => {
     await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     const searchArgs =
@@ -66,7 +66,7 @@ describe('opinionPublicSearchInteractor', () => {
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
@@ -76,7 +76,7 @@ describe('opinionPublicSearchInteractor', () => {
     const result = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'memorandum',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(result).toEqual(mockOpinionSearchResult);
@@ -90,9 +90,20 @@ describe('opinionPublicSearchInteractor', () => {
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(results.length).toBe(1);
+  });
+
+  it('should set isOpinionSearch as true', async () => {
+    await opinionPublicSearchInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: true,
+    });
   });
 });

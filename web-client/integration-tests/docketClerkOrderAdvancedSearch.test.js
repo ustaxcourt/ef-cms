@@ -6,7 +6,6 @@ import {
   FORMATS,
   calculateISODate,
   createISODateString,
-  deconstructDate,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -135,7 +134,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -152,7 +151,7 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          startDate: '3001-01-01',
+          startDate: '01/01/3001',
         },
       });
 
@@ -177,7 +176,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'osteodontolignikeratic',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -197,7 +196,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: docketNumberNoOrders,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -216,7 +215,7 @@ describe('docket clerk order advanced search', () => {
           caseTitleOrPetitioner: caseCaptionNoOrders,
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '2001-01-01',
+          startDate: '01/01/2001',
         },
       });
 
@@ -231,9 +230,9 @@ describe('docket clerk order advanced search', () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          endDate: '2005-01-03',
+          endDate: '01/03/2005',
           keyword: 'dismissal',
-          startDate: '2005-01-01',
+          startDate: '01/01/2005',
         },
       });
 
@@ -252,7 +251,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           judge: invalidJudge,
           keyword: 'dismissal',
-          startDate: '2005-01-01',
+          startDate: '01/01/2005',
         },
       });
 
@@ -283,7 +282,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -316,7 +315,7 @@ describe('docket clerk order advanced search', () => {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: caseDetail.docketNumber,
           keyword: 'dismissal',
-          startDate: '1995-01-01',
+          startDate: '01/01/1995',
         },
       });
 
@@ -348,7 +347,7 @@ describe('docket clerk order advanced search', () => {
           caseTitleOrPetitioner: caseDetail.caseCaption,
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'dismissal',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -375,46 +374,27 @@ describe('docket clerk order advanced search', () => {
     });
 
     it('search for a date range that contains served orders', async () => {
-      const endOrderCreationMoment = calculateISODate({
-        howMuch: 1,
-        unit: 'months',
-      });
-      const startOrderCreationMoment = calculateISODate({
-        howMuch: -1,
-        unit: 'months',
-      });
+      const endDateISO = createISODateString(); // right now
+      const endDate = formatDateString(endDateISO, FORMATS.MMDDYYYY);
 
-      const {
-        day: endDateDay,
-        month: endDateMonth,
-        year: endDateYear,
-      } = deconstructDate(
-        formatDateString(
-          createISODateString(endOrderCreationMoment),
-          FORMATS.MMDDYYYY,
-        ),
-      );
-      const {
-        day: startDateDay,
-        month: startDateMonth,
-        year: startDateYear,
-      } = deconstructDate(
-        formatDateString(
-          createISODateString(startOrderCreationMoment),
-          FORMATS.MMDDYYYY,
-        ),
-      );
+      const startDateISO = calculateISODate({
+        howMuch: -1,
+        units: 'months',
+      });
+      const startDate = formatDateString(startDateISO, FORMATS.MMDDYYYY);
 
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          endDate: `${endDateYear}-${endDateMonth}-${endDateDay}`,
-          startDate: `${startDateYear}-${startDateMonth}-${startDateDay}`,
+          endDate,
+          startDate,
         },
       });
 
       await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+      expect(cerebralTest.getState('alertError')).not.toBeDefined();
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
       await refreshElasticsearchIndex();
 
       expect(
@@ -442,7 +422,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           judge: signedByJudge,
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 
@@ -471,7 +451,7 @@ describe('docket clerk order advanced search', () => {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           keyword: 'Order of Dismissal Entered',
-          startDate: '1000-01-01',
+          startDate: '01/01/1000',
         },
       });
 

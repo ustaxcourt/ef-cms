@@ -6,7 +6,6 @@ const {
 } = require('../../utilities/DateHandler');
 const {
   ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
   TODAYS_ORDERS_PAGE_SIZE,
 } = require('../../entities/EntityConstants');
 
@@ -35,7 +34,7 @@ exports.getTodaysOrdersInteractor = async (
       documentEventCodes: ORDER_EVENT_CODES,
       endDate: currentDateEnd,
       from,
-      judgeType: ORDER_JUDGE_FIELD,
+      isOpinionSearch: false,
       omitSealed: true,
       overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
       sortOrder: todaysOrdersSort,

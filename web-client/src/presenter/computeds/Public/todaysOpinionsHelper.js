@@ -6,7 +6,7 @@ export const todaysOpinionsHelper = (get, applicationContext) => {
   const currentDate = applicationContext.getUtilities().createISODateString();
   const formattedCurrentDate = applicationContext
     .getUtilities()
-    .formatDateString(currentDate, 'MMMM D, YYYY');
+    .formatDateString(currentDate, 'MONTH_DAY_YEAR');
 
   const formattedOpinions = todaysOpinions.map(opinion => ({
     ...opinion,

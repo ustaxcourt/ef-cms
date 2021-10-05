@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 export const caseDeadlineReportHelper = (get, applicationContext) => {
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
+  const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
   let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
   const totalCount = get(state.caseDeadlineReport.totalCount) || 0;
@@ -22,10 +22,13 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     .getUtilities()
     .prepareDateFromString(filterStartDate);
 
+  filterEndDate = applicationContext
+    .getUtilities()
+    .prepareDateFromString(filterEndDate);
+
   let formattedFilterDateHeader = applicationContext
     .getUtilities()
-    .formatDateString(filterStartDate, 'MMMM D, YYYY');
-
+    .formatDateString(filterStartDate, DATE_FORMATS.MONTH_DAY_YEAR);
   if (filterEndDate && !filterStartDate.isSame(filterEndDate, 'day')) {
     filterEndDate = applicationContext
       .getUtilities()
@@ -35,7 +38,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
       ' – ' +
       applicationContext
         .getUtilities()
-        .formatDateString(filterEndDate, 'MMMM D, YYYY');
+        .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
   }
 
   caseDeadlines = caseDeadlines.map(d => ({
@@ -46,7 +49,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
     formattedDeadline: applicationContext
       .getUtilities()
-      .formatDateString(d.deadlineDate, 'MMDDYY'),
+      .formatDateString(d.deadlineDate, 'MMDDYY'), // TODO replace with DATE_FORMATS constant
   }));
 
   return {

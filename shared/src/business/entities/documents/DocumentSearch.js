@@ -1,5 +1,9 @@
 const joi = require('joi');
 const {
+  ADVANCED_SEARCH_OPINION_TYPES,
+  DATE_RANGE_SEARCH_OPTIONS,
+} = require('../EntityConstants');
+const {
   calculateISODate,
   createEndOfDayISO,
   createStartOfDayISO,
@@ -11,11 +15,10 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../../../utilities/JoiValidationDecorator');
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
-DocumentSearch.VALID_DATE_SEARCH_FORMATS = [
+DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS = [
   'YYYY/MM/DD',
   'YYYY/MM/D',
   'YYYY/M/DD',
@@ -46,25 +49,29 @@ DocumentSearch.prototype.init = function init(rawProps = {}) {
   this.docketNumber = rawProps.docketNumber;
 
   if (rawProps.startDate) {
-    const [month, day, year] = rawProps.startDate.split('/');
-    this.startDate = createStartOfDayISO({
-      day,
-      month,
-      year,
-    });
+    const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
+    if (month && day && year) {
+      this.startDate = createStartOfDayISO({
+        day,
+        month,
+        year,
+      });
+    }
   }
 
   if (rawProps.endDate) {
     const [month, day, year] = rawProps.endDate.split('/');
-    this.endDate = createEndOfDayISO({
-      day,
-      month,
-      year,
-    });
-    this.tomorrow = calculateISODate({
-      howMuch: +1,
-      units: 'days',
-    });
+    if (month && day && year) {
+      this.endDate = createEndOfDayISO({
+        day,
+        month,
+        year,
+      });
+      this.tomorrow = calculateISODate({
+        howMuch: +1,
+        units: 'days',
+      });
+    }
   }
 
   this.dateRange = rawProps.dateRange;
@@ -104,7 +111,7 @@ DocumentSearch.schema = joi
     endDate: joi.alternatives().conditional('startDate', {
       is: joi.exist().not(null),
       otherwise: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .less(joi.ref('tomorrow'))
         .optional()
@@ -112,7 +119,7 @@ DocumentSearch.schema = joi
           'The end date search filter is not required if there is no start date',
         ),
       then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .less(joi.ref('tomorrow'))
         .min(joi.ref('startDate'))
@@ -137,7 +144,11 @@ DocumentSearch.schema = joi
       .description('The keyword to search by'),
     opinionTypes: joi
       .array()
-      .items(JoiValidationConstants.STRING.allow(''))
+      .items(
+        JoiValidationConstants.STRING.valid(
+          ...Object.values(ADVANCED_SEARCH_OPINION_TYPES),
+        ).allow(''),
+      )
       .optional()
       .description(
         'The opinion document types to filter the search results by',
@@ -146,7 +157,7 @@ DocumentSearch.schema = joi
       is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       otherwise: joi.forbidden(),
       then: JoiValidationConstants.ISO_DATE.format(
-        DocumentSearch.VALID_DATE_SEARCH_FORMATS,
+        DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
       )
         .max('now')
         .required()

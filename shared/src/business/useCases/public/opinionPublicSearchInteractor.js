@@ -52,7 +52,7 @@ exports.opinionPublicSearchInteractor = async (
       applicationContext,
       ...rawSearch,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      judgeType: 'judge',
+      isOpinionSearch: true,
     })
   ).results.slice(0, MAX_SEARCH_RESULTS);
 
