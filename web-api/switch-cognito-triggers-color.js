@@ -44,6 +44,7 @@ const run = async () => {
         poolSettings.UserPool.AdminCreateUserConfig,
         'UnusedAccountValidityDays',
       ),
+      AutoVerifiedAttributes: poolSettings.UserPool.AutoVerifiedAttributes,
       EmailConfiguration: poolSettings.UserPool.EmailConfiguration,
       LambdaConfig: {
         PostAuthentication: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:cognito_post_authentication_lambda_${ENV}_${DEPLOYING_COLOR}`,
