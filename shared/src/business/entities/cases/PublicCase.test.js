@@ -77,6 +77,7 @@ describe('PublicCase', () => {
     const entity = new PublicCase(
       {
         canAllowDocumentService: true,
+        canAllowPrintableDocketRecord: false,
         caseCaption: 'testing',
         createdAt: 'testing',
         docketEntries: [],
@@ -105,6 +106,7 @@ describe('PublicCase', () => {
 
     expect(entity.toRawObject()).toEqual({
       canAllowDocumentService: true,
+      canAllowPrintableDocketRecord: false,
       caseCaption: 'testing',
       docketEntries: [],
       docketNumber: 'testing',
@@ -114,7 +116,6 @@ describe('PublicCase', () => {
       hasIrsPractitioner: false,
       isPaper: true,
       isSealed: false,
-      isStatusNew: true,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -166,7 +167,6 @@ describe('PublicCase', () => {
       entityName: 'PublicCase',
       hasIrsPractitioner: false,
       isSealed: false,
-      isStatusNew: false,
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
