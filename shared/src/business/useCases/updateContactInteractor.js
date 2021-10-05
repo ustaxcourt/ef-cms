@@ -98,7 +98,7 @@ exports.updateContactInteractor = async (
   if (
     !oldCaseContact.isAddressSealed &&
     documentType &&
-    caseEntity.isCaseEligibleForService()
+    caseEntity.shouldGenerateNoticesForCase()
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
