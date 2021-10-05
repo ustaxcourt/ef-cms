@@ -101,9 +101,9 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
     }),
   );
 
-  //caseRecord = decorateForCaseStatus(caseRecord);
+  const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);
 
-  if (!caseRecord.docketNumber && !caseRecord.entityName) {
+  if (!isValidCase) {
     const error = new NotFoundError(`Case ${docketNumber} was not found.`);
     error.skipLogging = true;
     throw error;

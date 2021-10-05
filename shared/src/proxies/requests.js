@@ -2,6 +2,29 @@ const moize = require('moize').default;
 
 /**
  *
+ * head
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.endpoint the endpoint to call
+ * @param {object} providers.params the params to send to the endpoint
+ * @returns {Promise<*>} the response data
+ */
+exports.head = async ({ applicationContext, endpoint, params }) => {
+  const token = applicationContext.getCurrentUserToken();
+  return await applicationContext
+    .getHttpClient()
+    .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      params,
+    })
+    .then(response => response.data);
+};
+
+/**
+ *
  * get
  *
  * @param {object} providers the providers object
