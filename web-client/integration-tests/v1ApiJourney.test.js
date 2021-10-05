@@ -6,10 +6,22 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
 const cerebralTest = setupTest();
+let userToken;
 
 describe('View and manage the deadlines of a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+
+    const loginUsername = 'irsSuperuser@example.com';
+    if (!userMap[loginUsername]) {
+      throw new Error(`Unable to log into test as ${loginUsername}`);
+    }
+    const user = {
+      ...userMap[loginUsername],
+      sub: userMap[loginUsername].userId,
+    };
+
+    userToken = jwt.sign(user, 'secret');
   });
 
   afterAll(() => {
@@ -23,17 +35,6 @@ describe('View and manage the deadlines of a case', () => {
   });
 
   it('gets a v1 case', async () => {
-    const loginUsername = 'irsSuperuser@example.com';
-    if (!userMap[loginUsername]) {
-      throw new Error(`Unable to log into test as ${loginUsername}`);
-    }
-    const user = {
-      ...userMap[loginUsername],
-      sub: userMap[loginUsername].userId,
-    };
-
-    const userToken = jwt.sign(user, 'secret');
-
     const { data: response } = await axios.get(
       `http://localhost:4000/v1/cases/${cerebralTest.docketNumber}`,
       {
@@ -116,5 +117,18 @@ describe('View and manage the deadlines of a case', () => {
       sortableDocketNumber: expect.anything(),
       status: 'General Docket - Not at Issue',
     });
+  });
+
+  it('gets the document-download-url for a v1 case', async () => {
+    const key = 'something';
+
+    const { data: response } = await axios.get(
+      `http://localhost:4000/v1/cases/${cerebralTest.docketNumber}/entries/${key}/document-download-url`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      },
+    );
   });
 });
