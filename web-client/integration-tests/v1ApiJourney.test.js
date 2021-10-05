@@ -55,8 +55,8 @@ describe('View and manage the deadlines of a case', () => {
         phone: '123-456-7890',
         postalCode: '23-skidoo',
       },
-      docketEntries: [
-        {
+      docketEntries: expect.arrayContaining([
+        expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'RQT',
           eventCodeDescription: 'Request for Place of Trial',
@@ -65,8 +65,8 @@ describe('View and manage the deadlines of a case', () => {
           index: 4,
           isFileAttached: true,
           servedAt: expect.anything(),
-        },
-        {
+        }),
+        expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'P',
           eventCodeDescription: 'Petition',
@@ -75,8 +75,8 @@ describe('View and manage the deadlines of a case', () => {
           index: 1,
           isFileAttached: true,
           servedAt: expect.anything(),
-        },
-        {
+        }),
+        expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'APW',
           eventCodeDescription: 'Application for Waiver of Filing Fee',
@@ -85,8 +85,8 @@ describe('View and manage the deadlines of a case', () => {
           index: 2,
           isFileAttached: true,
           servedAt: expect.anything(),
-        },
-        {
+        }),
+        expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'DISC',
           eventCodeDescription: 'Ownership Disclosure Statement',
@@ -94,9 +94,9 @@ describe('View and manage the deadlines of a case', () => {
           filingDate: expect.anything(),
           index: 3,
           isFileAttached: true,
-          servedAt: '2021-08-23T16:06:19.602Z',
-        },
-        {
+          servedAt: expect.anything(),
+        }),
+        expect.objectContaining({
           docketEntryId: expect.anything(),
           eventCode: 'STIN',
           eventCodeDescription: 'Statement of Taxpayer Identification',
@@ -105,9 +105,9 @@ describe('View and manage the deadlines of a case', () => {
           index: 0,
           isFileAttached: true,
           servedAt: expect.anything(),
-        },
-      ],
-      docketNumber: cerebralTest.docketNumbers,
+        }),
+      ]),
+      docketNumber: cerebralTest.docketNumber,
       docketNumberSuffix: 'S',
       partyType: 'Petitioner',
       practitioners: [],
