@@ -1,5 +1,6 @@
 const {
   canAllowDocumentServiceForCase,
+  canAllowPrintableDocketRecord,
   Case,
   getPetitionerById,
   isAssociatedUser,
@@ -73,12 +74,20 @@ const getCaseForExternalUser = ({
   }
 };
 
+/**
+ * Decorate a case with some calculations based on the attributes of the case that may be
+ * obfuscated to the client
+ *
+ * @param {Object} caseRecord the original caseRecord
+ * @returns {Object} decorated caseRecord
+ */
 const decorateForCaseStatus = caseRecord => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
 
-  // TODO: allow printable docket record
+  caseRecord.canAllowPrintableDocketRecord =
+    canAllowPrintableDocketRecord(caseRecord);
 
   return caseRecord;
 };
