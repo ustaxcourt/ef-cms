@@ -59,6 +59,10 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       DYNAMODB_TABLE_NAME                = var.cognito_table_name
     }
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_lambda_function" "cognito_post_authentication_lambda" {
@@ -98,4 +102,8 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
       DYNAMODB_TABLE_NAME                = var.destination_table
     }
   }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
