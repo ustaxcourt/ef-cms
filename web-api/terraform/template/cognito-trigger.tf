@@ -66,7 +66,7 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
   source_code_hash = data.archive_file.zip_triggers.output_base64sha256
-  timeout          = "29"  
+  timeout          = "29"
   runtime          = "nodejs14.x"
 
   lifecycle {
