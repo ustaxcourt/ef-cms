@@ -95,7 +95,7 @@ describe('closeTrialSessionInteractor', () => {
     ).rejects.toThrow('Trial session cannot be closed with open cases');
   });
 
-  it.skip('does not throw an error when there are no cases on the trial session', async () => {
+  it('does not throw an error when there are no cases on the trial session', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -112,10 +112,10 @@ describe('closeTrialSessionInteractor', () => {
       closeTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
-    ).not.toThrow({});
+    ).rejects.not.toThrow('Trial session cannot be closed with open cases');
   });
 
-  it('closes the trial session and invokes expected persistence methods', async () => {
+  it('should not close the trial session and throws an error instead', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -130,10 +130,39 @@ describe('closeTrialSessionInteractor', () => {
       ],
       startDate: '2100-12-01T00:00:00.000Z',
     };
+
     await expect(
       closeTrialSessionInteractor(applicationContext, {
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Trial session cannot be closed with open cases');
+  });
+
+  it.skip('closes the trial session and invokes expected persistence methods', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [
+        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
+        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
+      ],
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+
+    await expect(
+      closeTrialSessionInteractor(applicationContext, {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.not.toThrow('Trial session cannot be closed with open cases');
+
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate.isClosed,
+    ).toBe(true);
   });
 });
