@@ -147,7 +147,10 @@ exports.getTrialSessionStatus = ({ applicationContext, session }) => {
     sessionCase => sessionCase.removedFromTrial === true,
   );
 
-  if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
+  if (
+    (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) ||
+    session.isClosed === true
+  ) {
     return SESSION_STATUS_GROUPS.closed;
   } else if (session.isCalendared) {
     return SESSION_STATUS_GROUPS.open;

@@ -71,14 +71,16 @@ export const TrialSessionDetail = connect(
                 bind="trialSessionDetailsTab.calendaredCaseList"
                 defaultActiveTab="OpenCases"
               >
-                <Button
-                  link
-                  className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning"
-                  id="close-session-button"
-                  onClick={() => openConfirmModalSequence()}
-                >
-                  Close Session
-                </Button>
+                {formattedTrialSessionDetails.canClose && (
+                  <Button
+                    link
+                    className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning"
+                    id="close-session-button"
+                    onClick={() => openConfirmModalSequence()}
+                  >
+                    Close Session
+                  </Button>
+                )}
                 <Tab id="open-cases-tab" tabName="OpenCases" title="Open Cases">
                   <div id="open-cases-tab-content">
                     <OpenCases />
@@ -101,19 +103,25 @@ export const TrialSessionDetail = connect(
               </Tabs>
             </div>
           )}
+          {console.log(
+            'formattedTrialSessionDetails!!!',
+            formattedTrialSessionDetails,
+          )}
           {formattedTrialSessionDetails.showOnlyClosedCases && (
             <Tabs
               bind="trialSessionDetailsTab.calendaredCaseList"
               defaultActiveTab="InactiveCases"
             >
-              <Button
-                link
-                className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning"
-                id="close-session-button"
-                onClick={() => openConfirmModalSequence()}
-              >
-                Close Session
-              </Button>
+              {formattedTrialSessionDetails.canClose && (
+                <Button
+                  link
+                  className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning"
+                  id="close-session-button"
+                  onClick={() => openConfirmModalSequence()}
+                >
+                  Close Session
+                </Button>
+              )}
               <Tab
                 id="inactive-cases-tab"
                 tabName="InactiveCases"
@@ -136,7 +144,7 @@ export const TrialSessionDetail = connect(
             onConfirmSequence={'closeTrialSessionSequence'}
           >
             {' '}
-            You will not be able to reopen this session
+            You will not be able to reopen this session.
           </ConfirmModal>
         )}
       </>
