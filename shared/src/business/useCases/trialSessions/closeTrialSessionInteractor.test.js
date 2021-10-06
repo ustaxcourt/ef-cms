@@ -73,7 +73,7 @@ describe('closeTrialSessionInteractor', () => {
     );
   });
 
-  it.skip('closes the trial session and invokes expected persistence methods', async () => {
+  it('throws an error when there are active cases on the trial session', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -82,15 +82,58 @@ describe('closeTrialSessionInteractor', () => {
 
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      startDate: '2100-12-01T00:00:00.000Z',
+      caseOrder: [
+        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: false },
+      ],
+      startDate: '2025-03-01T00:00:00.000Z',
     };
 
-    await closeTrialSessionInteractor(applicationContext, {
-      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    await expect(
+      closeTrialSessionInteractor(applicationContext, {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Trial session cannot be closed with open cases');
+  });
+
+  it.skip('does not throw an error when there are no cases on the trial session', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toBeCalled();
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [],
+      startDate: '2025-03-01T00:00:00.000Z',
+    };
+
+    await expect(
+      closeTrialSessionInteractor(applicationContext, {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).not.toThrow({});
+  });
+
+  it('closes the trial session and invokes expected persistence methods', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      caseOrder: [
+        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
+        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: false },
+      ],
+      startDate: '2100-12-01T00:00:00.000Z',
+    };
+    await expect(
+      closeTrialSessionInteractor(applicationContext, {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow('Trial session cannot be closed with open cases');
   });
 });
