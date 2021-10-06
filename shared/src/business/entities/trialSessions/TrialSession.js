@@ -63,6 +63,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.sessionScope =
     rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
+  this.isClosed = rawSession.isClosed || false;
   this.startDate = rawSession.startDate;
   if (isStandaloneRemoteSession(rawSession.sessionScope)) {
     this.startTime = '13:00';
@@ -457,6 +458,16 @@ TrialSession.prototype.setNoticesIssued = function () {
  */
 const isStandaloneRemoteSession = function (sessionScope) {
   return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+};
+
+/**
+ * set as closed
+ *
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.setAsClosed = function () {
+  this.isCLosed = true;
+  return this;
 };
 
 module.exports = {
