@@ -9,13 +9,13 @@
  */
 export const caseExistsAction = async ({ applicationContext, path, props }) => {
   try {
-    const caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
-      .getCaseInteractor(applicationContext, {
+      .getCaseExistsInteractor(applicationContext, {
         docketNumber: props.docketNumber,
       });
 
-    return path.success({ caseDetail });
+    return path.success({ docketNumber: props.docketNumber });
   } catch (e) {
     return path.error();
   }
