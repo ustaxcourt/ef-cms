@@ -103,10 +103,7 @@ export const TrialSessionDetail = connect(
               </Tabs>
             </div>
           )}
-          {console.log(
-            'formattedTrialSessionDetails!!!',
-            formattedTrialSessionDetails,
-          )}
+
           {formattedTrialSessionDetails.showOnlyClosedCases && (
             <Tabs
               bind="trialSessionDetailsTab.calendaredCaseList"

@@ -30,6 +30,7 @@ exports.closeTrialSessionInteractor = async (
       trialSessionId,
     });
 
+  console.log(trialSession, '------');
   if (
     trialSession.startDate <
     applicationContext.getUtilities().createISODateString()
