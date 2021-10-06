@@ -1,8 +1,7 @@
 const createApplicationContext = require('../../../src/applicationContext');
+const applicationContext = createApplicationContext({});
 
 exports.handler = async event => {
-  const applicationContext = createApplicationContext({});
-
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
 
@@ -51,8 +50,6 @@ exports.handler = async event => {
 };
 
 exports.updatePetitionerCasesLambda = async event => {
-  const applicationContext = createApplicationContext({});
-
   const { Records } = event;
   const { body, receiptHandle } = Records[0];
   const user = JSON.parse(body);
