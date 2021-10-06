@@ -12,7 +12,7 @@ export const closeTrialSessionAction = async ({ applicationContext, get }) => {
 
   const trialSession = await applicationContext
     .getUseCases()
-    .setTrialSessionCalendarInteractor(applicationContext, {
+    .closeTrialSessionInteractor(applicationContext, {
       trialSessionId,
     });
 
