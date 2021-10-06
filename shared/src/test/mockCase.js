@@ -247,7 +247,6 @@ exports.MOCK_ELIGIBLE_CASE = {
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
-  entityName: 'Case',
   highPriority: true,
   irsPractitioners: [],
   privatePractitioners: [],
@@ -258,7 +257,6 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
-  entityName: 'Case',
   highPriority: true,
   irsPractitioners: [
     {
