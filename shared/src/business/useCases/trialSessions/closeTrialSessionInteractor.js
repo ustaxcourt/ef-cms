@@ -30,7 +30,10 @@ exports.closeTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  console.log(trialSession, '------');
+  if (!trialSession) {
+    throw new Error('trial session not found');
+  }
+
   if (
     trialSession.startDate <
     applicationContext.getUtilities().createISODateString()
@@ -45,6 +48,7 @@ exports.closeTrialSessionInteractor = async (
     sessionCase => sessionCase.removedFromTrial === true,
   );
 
+  // no open cases on the session
   if (!isEmpty(allCases) || !isEqual(allCases, inactiveCases)) {
     throw new Error('Trial session cannot be closed with open cases');
   }

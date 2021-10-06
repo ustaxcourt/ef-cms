@@ -25,13 +25,15 @@ export const closeTrialSessionAction = async ({
     return path.error({
       alertError: {
         message: 'Please try again.',
-        title: 'Unable to close trial session',
+        title: 'Unable to close trial session.',
       },
     });
   }
 
   return path.success({
-    alertSuccess: 'Trial Session Closed.',
+    alertSuccess: {
+      message: 'Trial session closed.',
+    },
     trialSessionId: trialSession.trialSessionId,
   });
 };
