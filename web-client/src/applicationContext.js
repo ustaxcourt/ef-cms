@@ -32,6 +32,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
+import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareISODateStrings,
   compareStrings,
@@ -349,6 +350,7 @@ const allUseCases = {
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
   checkEmailAvailabilityInteractor,
+  closeTrialSessionInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
