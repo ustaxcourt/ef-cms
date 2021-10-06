@@ -17,7 +17,6 @@ import React from 'react';
 
 export const TrialSessionDetail = connect(
   {
-    closeTrialSessionSequence: state.closeTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmModalSequence: sequences.openConfirmModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
@@ -25,7 +24,6 @@ export const TrialSessionDetail = connect(
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   function TrialSessionDetail({
-    closeTrialSessionSequence,
     formattedTrialSessionDetails,
     openConfirmModalSequence,
     openSetCalendarModalSequence,
@@ -143,7 +141,7 @@ export const TrialSessionDetail = connect(
             confirmLabel="Yes, Close Session"
             title="Are you sure you want to close this session?"
             onCancelSequence="clearModalSequence"
-            onConfirmSequence={closeTrialSessionSequence}
+            onConfirmSequence="closeTrialSessionSequence"
           >
             {' '}
             You will not be able to reopen this session.

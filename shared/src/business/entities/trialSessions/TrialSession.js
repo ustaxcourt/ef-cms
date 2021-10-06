@@ -466,7 +466,7 @@ const isStandaloneRemoteSession = function (sessionScope) {
  * @returns {TrialSession} the trial session entity
  */
 TrialSession.prototype.setAsClosed = function () {
-  this.isCLosed = true;
+  this.isClosed = true;
   return this;
 };
 
