@@ -402,6 +402,9 @@ const {
   getCaseDeadlinesInteractor,
 } = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
 const {
+  getCaseExistsInteractor,
+} = require('../../shared/src/business/useCases/getCaseExistsInteractor');
+const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
@@ -1844,6 +1847,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseDeadlinesInteractor,
+        getCaseExistsInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,

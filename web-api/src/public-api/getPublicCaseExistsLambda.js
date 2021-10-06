@@ -1,18 +1,18 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for fetching a single case
+ * used for fetching existence of a single case
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getPublicCaseLambda = event =>
+exports.getPublicCaseExistsLambda = event =>
   genericHandler(
     event,
     ({ applicationContext }) =>
       applicationContext
         .getUseCases()
-        .getPublicCaseInteractor(applicationContext, {
+        .getCaseExistsInteractor(applicationContext, {
           docketNumber: event.pathParameters.docketNumber,
         }),
     { user: {} },
