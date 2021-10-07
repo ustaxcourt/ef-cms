@@ -48,6 +48,7 @@ const updateCaseEntityAndGenerateChange = async ({
   petitionerOnCase,
   rawCaseData,
   user,
+  userHasAnEmail,
 }) => {
   const caseEntity = new Case(rawCaseData, {
     applicationContext,
@@ -74,7 +75,7 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
-  if (caseEntity.shouldGenerateNoticesForCase()) {
+  if (userHasAnEmail && caseEntity.shouldGenerateNoticesForCase()) {
     const { changeOfAddressDocketEntry } = await applicationContext
       .getUseCaseHelpers()
       .generateAndServeDocketEntry({
@@ -98,6 +99,7 @@ const updateCasesForPetitioner = async ({
   petitionerCases,
   petitionerOnCase,
   user,
+  userHasAnEmail,
 }) => {
   const rawCasesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
@@ -116,6 +118,7 @@ const updateCasesForPetitioner = async ({
         petitionerOnCase,
         rawCaseData,
         user,
+        userHasAnEmail,
       }),
     );
   }
@@ -134,6 +137,8 @@ const updateCasesForPetitioner = async ({
 
 /**
  * updatePetitionerInformationInteractor
+ *
+ * this interactor is invoked when an internal user updates the petitioner information from the parties tab.
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -287,7 +292,7 @@ const updatePetitionerInformationInteractor = async (
           name: oldCaseContact.name,
         });
     } else {
-      caseEntity = await applicationContext
+      const contactId = await applicationContext
         .getUseCaseHelpers()
         .addExistingUserToCase({
           applicationContext,
@@ -301,19 +306,23 @@ const updatePetitionerInformationInteractor = async (
         applicationContext,
         caseToUpdate: caseEntity,
       });
-      const existingPetitioner = caseEntity.getPetitionerByEmail(
-        updatedPetitionerData.updatedEmail,
-      );
 
       oldCaseContact.oldEmail = oldCaseContact.email;
       oldCaseContact.newEmail = updatedPetitionerData.updatedEmail;
-      oldCaseContact.contactId = existingPetitioner.contactId;
+      oldCaseContact.contactId = contactId;
 
       const petitionerCases = await applicationContext
         .getPersistenceGateway()
         .getCasesForUser({
           applicationContext,
-          userId: existingPetitioner.contactId,
+          userId: contactId,
+        });
+
+      const userToUpdate = await applicationContext
+        .getPersistenceGateway()
+        .getUserById({
+          applicationContext,
+          userId: oldCaseContact.contactId,
         });
 
       await updateCasesForPetitioner({
@@ -321,6 +330,7 @@ const updatePetitionerInformationInteractor = async (
         petitionerCases,
         petitionerOnCase: oldCaseContact,
         user,
+        userHasAnEmail: userToUpdate.email,
       });
     }
   }
