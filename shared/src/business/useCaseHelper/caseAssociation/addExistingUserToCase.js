@@ -15,7 +15,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {string} options.contactId the contactId of the user to add to the case
  * @param {string} options.email the email address for the user we are attaching to the case
  * @param {string} options.name the name of the user to update the case with
- * @returns {Case} the updated case entity
+ * @returns {string} the contactId of the cognito user who matches the provided email
  */
 exports.addExistingUserToCase = async ({
   applicationContext,
