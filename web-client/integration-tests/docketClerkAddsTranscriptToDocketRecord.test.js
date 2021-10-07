@@ -51,7 +51,7 @@ describe('Docket Clerk Adds Transcript to Docket Record', () => {
   });
   docketClerkViewsDraftOrder(cerebralTest, 1);
   // new transcript that should NOT be available to the user
-  const today = applicationContext.getUtilities().getMonthDayYearObj();
+  const today = applicationContext.getUtilities().getMonthDayYearInETObj();
   docketClerkAddsTranscriptDocketEntryFromOrder(cerebralTest, 1, {
     day: today.day,
     month: today.month,

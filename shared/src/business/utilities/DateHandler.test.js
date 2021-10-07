@@ -436,7 +436,7 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('getMonthDayYearObj', () => {
+  describe('getMonthDayYearInETObj', () => {
     beforeAll(() => {
       expect.extend({
         toBeWithinRange(received, floor, ceiling) {
@@ -457,25 +457,23 @@ describe('DateHandler', () => {
         },
       });
     });
-    it('takes a luxon object as a parameter to create an object with keys month, day, and year with numeric values', () => {
-      const dtInstance = DateHandler.prepareDateFromString(
-        '2001-02-03',
-        DateHandler.FORMATS.YYYYMMDD,
-      );
-      const result = DateHandler.getMonthDayYearObj(dtInstance);
+    it('takes no arguments to create an object with keys month, day, and year according to Eastern Time with numeric strings', () => {
+      // mock the date implementation and returning original value upon test completion
+      const mockTimeValue = 1633566711621; // Thu, 07 Oct 2021 00:31:51 GMT
+
+      const realDateNow = Date.now.bind(global.Date);
+      const dateNowStub = jest.fn().mockReturnValue(mockTimeValue);
+      global.Date.now = dateNowStub;
+
+      const result = DateHandler.getMonthDayYearInETObj();
+      expect(dateNowStub).toHaveBeenCalled();
+
+      global.Date.now = realDateNow;
+
       expect(result).toEqual({
-        day: '3',
-        month: '2',
-        year: '2001',
-      });
-    });
-    it('creates a luxon object representing today/now and returns an object with keys month, day, and year', () => {
-      const dtInstance = DateHandler.prepareDateFromString();
-      const result = DateHandler.getMonthDayYearObj(dtInstance);
-      expect(result).toEqual({
-        day: expect.toBeWithinRange(1, 31),
-        month: expect.toBeWithinRange(1, 12),
-        year: expect.toBeWithinRange(1900, 2500),
+        day: '6',
+        month: '10',
+        year: '2021',
       });
     });
   });
