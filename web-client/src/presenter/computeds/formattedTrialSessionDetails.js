@@ -48,7 +48,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       // TODO: Extract this
       if (
         (isEmpty(allCases) || isEqual(allCases, inactiveCases)) &&
-        trialDateInFuture &&
+        !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       ) {

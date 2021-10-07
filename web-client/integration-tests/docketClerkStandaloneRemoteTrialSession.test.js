@@ -3,13 +3,11 @@ import {
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { MOCK_TRIAL_STANDALONE_REMOTE } from '../../shared/src/test/mockTrial';
-import { docketClerkCreatesAStandaloneRemoteTrialSession } from './journey/docketClerkCreatesAStandaloneRemoteTrialSession';
+import { docketClerkClosesStandaloneRemoteTrialSession } from './journey/docketClerkClosesStandaloneRemoteTrialSession';
 import { docketClerkManuallyAddsCaseToTrialSessionWithoutNote } from './journey/docketClerkManuallyAddsCaseToTrialSessionWithoutNote';
 import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
 import { docketClerkVerifiesSessionIsNotClosed } from './journey/docketClerkVerifiesSessionIsNotClosed';
-import { docketClerkViewsOpenStandaloneRemoteTrialSession } from './journey/docketClerkViewsOpenStandaloneRemoteTrialSession';
-import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
+import { docketClerkViewsStandaloneRemoteTrialSession } from './journey/docketClerkViewsStandaloneRemoteTrialSession';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -29,7 +27,6 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-//todo : try osting a trial session whose date is in rthe past, otherwise cannot close
 describe('Docket clerk standalone remote trial session journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -40,7 +37,6 @@ describe('Docket clerk standalone remote trial session journey', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  // docketClerkCreatesAStandaloneRemoteTrialSession(cerebralTest);
   it('Create a standalone remote trial session with Small session type', async () => {
     await axiosInstance.post(
       'http://localhost:4000/trial-sessions',
@@ -52,9 +48,8 @@ describe('Docket clerk standalone remote trial session journey', () => {
 
     await refreshElasticsearchIndex();
   });
-  
-  docketClerkViewsTrialSessionList(cerebralTest);
-  docketClerkViewsOpenStandaloneRemoteTrialSession(cerebralTest);
+
+  docketClerkViewsStandaloneRemoteTrialSession(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
@@ -82,7 +77,7 @@ describe('Docket clerk standalone remote trial session journey', () => {
   docketClerkVerifiesSessionIsNotClosed(cerebralTest);
 
   describe('Close the trial session', () => {
-    // should be able to close the session
-    // docket clerk views the trial session
+    docketClerkClosesStandaloneRemoteTrialSession(cerebralTest);
+    docketClerkViewsStandaloneRemoteTrialSession(cerebralTest, 'Closed');
   });
 });
