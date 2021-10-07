@@ -13,6 +13,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 
 const cerebralTest = setupTest();
 
+//todo : try osting a trial session whose date is in rthe past, otherwise cannot close
 describe('Docket clerk standalone remote trial session journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -51,14 +52,11 @@ describe('Docket clerk standalone remote trial session journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkManuallyAddsCaseToTrialSessionWithoutNote(cerebralTest);
 
-  // describe('Remove cases from standalone remote trial session', () => {
   docketClerkRemovesCaseFromTrial(cerebralTest);
-  //verify its not in the closed cases tab
   docketClerkVerifiesSessionIsNotClosed(cerebralTest);
-  // });
 
   describe('Close the trial session', () => {
-    //Update trial start date to before today
     // should be able to close the session
+    // docket clerk views the trial session
   });
 });
