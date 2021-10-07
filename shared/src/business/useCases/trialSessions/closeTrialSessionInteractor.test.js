@@ -10,11 +10,15 @@ const {
 } = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('closeTrialSessionInteractor', () => {
   let user;
   let mockTrialSession;
+
+  const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
+  const PAST_DATE = '2000-11-25T15:00:00.000Z';
 
   beforeEach(() => {
     mockTrialSession = MOCK_TRIAL_REGULAR;
@@ -56,7 +60,7 @@ describe('closeTrialSessionInteractor', () => {
     ).rejects.toThrow('trial session not found');
   });
 
-  it('throws error when trial session start date is in the past', async () => {
+  it('throws error when trial session is not standalone remote', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -65,6 +69,30 @@ describe('closeTrialSessionInteractor', () => {
 
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      startDate: FUTURE_DATE,
+    };
+
+    await expect(
+      closeTrialSessionInteractor(applicationContext, {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    ).rejects.toThrow(
+      'Only standalone remote trial sessions can be closed manually',
+    );
+  });
+
+  it('throws error when trial session start date is in the future', async () => {
+    user = new User({
+      name: 'Docket Clerk',
+      role: ROLES.docketClerk,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    mockTrialSession = {
+      ...MOCK_TRIAL_REGULAR,
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      startDate: FUTURE_DATE,
     };
 
     await expect(
@@ -88,7 +116,8 @@ describe('closeTrialSessionInteractor', () => {
       caseOrder: [
         { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: false },
       ],
-      startDate: '2025-03-01T00:00:00.000Z',
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      startDate: PAST_DATE,
     };
 
     await expect(
@@ -108,6 +137,7 @@ describe('closeTrialSessionInteractor', () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
       caseOrder: undefined,
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       startDate: '2025-03-01T00:00:00.000Z',
     };
 
@@ -131,7 +161,8 @@ describe('closeTrialSessionInteractor', () => {
         { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
         { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: false },
       ],
-      startDate: '2100-12-01T00:00:00.000Z',
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      startDate: PAST_DATE,
     };
 
     await expect(
@@ -165,7 +196,8 @@ describe('closeTrialSessionInteractor', () => {
         },
       ],
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-      startDate: '2100-12-01T00:00:00.000Z',
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      startDate: PAST_DATE,
     };
 
     await closeTrialSessionInteractor(applicationContext, {
