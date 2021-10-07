@@ -211,26 +211,23 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
 
 resource "aws_api_gateway_deployment" "api_deployment" {
-  depends_on = [
-    aws_api_gateway_method.api_method_get,
-    aws_api_gateway_method.api_method_post,
-    aws_api_gateway_method.api_method_put,
-    aws_api_gateway_method.api_method_delete,
-    aws_api_gateway_method.api_method_options,
-    aws_api_gateway_method.api_method_head,
-    aws_api_gateway_integration.api_integration_get,
-    aws_api_gateway_integration.api_integration_head,
-    aws_api_gateway_integration.api_integration_post,
-    aws_api_gateway_integration.api_integration_put,
-    aws_api_gateway_integration.api_integration_delete,
-    aws_api_gateway_integration.api_integration_options,
-    aws_api_gateway_authorizer.custom_authorizer
-  ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
 
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_api_gateway_rest_api.gateway_for_api,
+      aws_api_gateway_method.api_method_get,
+      aws_api_gateway_method.api_method_post,
+      aws_api_gateway_method.api_method_put,
+      aws_api_gateway_method.api_method_delete,
+      aws_api_gateway_method.api_method_options,
+      aws_api_gateway_method.api_method_head,
+      aws_api_gateway_integration.api_integration_get,
+      aws_api_gateway_integration.api_integration_head,
+      aws_api_gateway_integration.api_integration_post,
+      aws_api_gateway_integration.api_integration_put,
+      aws_api_gateway_integration.api_integration_delete,
+      aws_api_gateway_integration.api_integration_options,
+      aws_api_gateway_authorizer.custom_authorizer
     ]))
   }
 
