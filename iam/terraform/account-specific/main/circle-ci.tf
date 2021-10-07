@@ -98,6 +98,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "apigateway:UpdateRestApiPolicy",
         "apigateway:PATCH",
         "apigateway:GET",
+        "apigateway:HEAD",
         "apigateway:PUT",
         "apigateway:POST",
         "apigateway:SetWebACL"
