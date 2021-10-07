@@ -2,6 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { MOCK_TRIAL_STANDALONE_REMOTE } from '../../shared/src/test/mockTrial';
 import { docketClerkCreatesAStandaloneRemoteTrialSession } from './journey/docketClerkCreatesAStandaloneRemoteTrialSession';
 import { docketClerkManuallyAddsCaseToTrialSessionWithoutNote } from './journey/docketClerkManuallyAddsCaseToTrialSessionWithoutNote';
 import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
@@ -9,9 +10,24 @@ import { docketClerkVerifiesSessionIsNotClosed } from './journey/docketClerkVeri
 import { docketClerkViewsOpenStandaloneRemoteTrialSession } from './journey/docketClerkViewsOpenStandaloneRemoteTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
+import axios from 'axios';
 
 const cerebralTest = setupTest();
+const axiosInstance = axios.create({
+  headers: {
+    Authorization:
+      // mocked admissions clerk user
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
+    'Content-Type': 'application/json',
+  },
+  timeout: 2000,
+});
 
 //todo : try osting a trial session whose date is in rthe past, otherwise cannot close
 describe('Docket clerk standalone remote trial session journey', () => {
@@ -23,12 +39,22 @@ describe('Docket clerk standalone remote trial session journey', () => {
     cerebralTest.closeSocket();
   });
 
-  describe('Create a standalone remote trial session with Small session type', () => {
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkCreatesAStandaloneRemoteTrialSession(cerebralTest);
-    docketClerkViewsTrialSessionList(cerebralTest);
-    docketClerkViewsOpenStandaloneRemoteTrialSession(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkCreatesAStandaloneRemoteTrialSession(cerebralTest);
+  it('Create a standalone remote trial session with Small session type', async () => {
+    await axiosInstance.post(
+      'http://localhost:4000/trial-sessions',
+      MOCK_TRIAL_STANDALONE_REMOTE,
+    );
+
+    cerebralTest.lastCreatedTrialSessionId =
+      MOCK_TRIAL_STANDALONE_REMOTE.trialSessionId;
+
+    await refreshElasticsearchIndex();
   });
+  
+  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsOpenStandaloneRemoteTrialSession(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
