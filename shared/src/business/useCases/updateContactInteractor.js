@@ -18,6 +18,8 @@ const { WorkItem } = require('../entities/WorkItem');
 /**
  * updateContactInteractor
  *
+ * this interactor is invoked when a petitioner updates a case they are associated with from the parties tab.
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update the primary contact
