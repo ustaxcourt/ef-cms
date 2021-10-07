@@ -4,9 +4,12 @@ const {
 const {
   closeTrialSessionInteractor,
 } = require('./closeTrialSessionInteractor');
+const {
+  ROLES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
 describe('closeTrialSessionInteractor', () => {
@@ -104,7 +107,7 @@ describe('closeTrialSessionInteractor', () => {
 
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      caseOrder: [],
+      caseOrder: undefined,
       startDate: '2025-03-01T00:00:00.000Z',
     };
 
@@ -138,7 +141,7 @@ describe('closeTrialSessionInteractor', () => {
     ).rejects.toThrow('Trial session cannot be closed with open cases');
   });
 
-  it.skip('closes the trial session and invokes expected persistence methods', async () => {
+  it('closes the trial session and invokes expected persistence methods', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -148,17 +151,26 @@ describe('closeTrialSessionInteractor', () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
       caseOrder: [
-        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
-        { docketNumber: MOCK_CASE.docketNumber, removedFromTrial: true },
+        {
+          disposition: 'things happen',
+          docketNumber: MOCK_CASE.docketNumber,
+          removedFromTrial: true,
+          removedFromTrialDate: '2100-12-01T00:00:00.000Z',
+        },
+        {
+          disposition: 'things happen',
+          docketNumber: '999-99',
+          removedFromTrial: true,
+          removedFromTrialDate: '2100-12-01T00:00:00.000Z',
+        },
       ],
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
       startDate: '2100-12-01T00:00:00.000Z',
     };
 
-    await expect(
-      closeTrialSessionInteractor(applicationContext, {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    ).rejects.not.toThrow('Trial session cannot be closed with open cases');
+    await closeTrialSessionInteractor(applicationContext, {
+      trialSessionId: mockTrialSession.trialSessionId,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock

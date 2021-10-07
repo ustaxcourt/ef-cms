@@ -48,7 +48,7 @@ exports.closeTrialSessionInteractor = async (
     sessionCase => sessionCase.removedFromTrial === true,
   );
 
-  if (!isEmpty(allCases) || !isEqual(allCases, inactiveCases)) {
+  if (!isEmpty(allCases) && !isEqual(allCases, inactiveCases)) {
     throw new Error('Trial session cannot be closed with open cases');
   }
 
