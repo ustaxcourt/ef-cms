@@ -7,8 +7,14 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getUserLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getUserInteractor(applicationContext);
-  });
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      return await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+    },
+    {
+      bypassMaintenanceCheck: true,
+    },
+  );

@@ -14,8 +14,10 @@ const {
   bulkIndexRecords,
 } = require('../../persistence/elasticsearch/bulkIndexRecords');
 const {
+  canAllowDocumentServiceForCase,
   Case,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,
@@ -82,6 +84,9 @@ const {
 const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
+const {
+  getAllWebSocketConnections,
+} = require('../../persistence/dynamo/notifications/getAllWebSocketConnections');
 const {
   getCaseByDocketNumber,
 } = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
@@ -235,9 +240,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
+    canAllowDocumentServiceForCase: jest
+      .fn()
+      .mockImplementation(canAllowDocumentServiceForCase),
     caseHasServedDocketEntries: jest
       .fn()
       .mockImplementation(caseHasServedDocketEntries),
+    caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
     compareCasesByDocketNumber: jest
       .fn()
@@ -429,6 +438,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
+    getAllWebSocketConnections: jest
+      .fn()
+      .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCaseDeadlinesByDateRange: jest.fn(),
@@ -455,6 +467,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getOrderSearchEnabled: jest.fn(),
     getReconciliationReport: jest.fn(),

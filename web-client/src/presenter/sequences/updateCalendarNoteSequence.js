@@ -4,7 +4,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { saveCalendarNoteAction } from '../actions/TrialSession/saveCalendarNoteAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { updateTrialSessionInTrialSessionsAction } from '../actions/updateTrialSessionInTrialSessionsAction';
 import { validateCalendarNoteAction } from '../actions/validateCalendarNoteAction';
 

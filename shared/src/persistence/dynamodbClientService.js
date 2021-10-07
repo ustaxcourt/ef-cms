@@ -46,11 +46,17 @@ const getTableName = ({ applicationContext }) =>
     applicationContext.getEnvironment().dynamoDbTableName);
 
 const getDeployTableName = ({ applicationContext }) => {
-  return `efcms-deploy-${
-    (applicationContext.environment || applicationContext.getEnvironment())
-      .stage
-  }`;
+  const env =
+    applicationContext.environment || applicationContext.getEnvironment();
+
+  if (env.stage === 'local') {
+    return env.dynamoDbTableName;
+  }
+
+  return `efcms-deploy-${env.stage}`;
 };
+
+exports.getDeployTableName = getDeployTableName;
 
 exports.describeTable = async ({ applicationContext }) => {
   const dynamoClient = applicationContext.getDynamoClient();
@@ -104,6 +110,27 @@ exports.update = params => {
     .getDocumentClient()
     .update({
       TableName: getTableName({
+        applicationContext: params.applicationContext,
+      }),
+      ...filteredParams,
+    })
+    .promise()
+    .then(() => params.Item);
+};
+
+/**
+ *
+ * @param {object} params the params to update
+ * @returns {object} the item that was updated
+ */
+exports.updateToDeployTable = params => {
+  const filteredParams = filterEmptyStrings(params);
+  return params.applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .update({
+      TableName: getDeployTableName({
         applicationContext: params.applicationContext,
       }),
       ...filteredParams,

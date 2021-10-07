@@ -5,7 +5,7 @@ import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJud
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
-import { showProgressSequenceDecorator } from '../utilities/sequenceHelpers';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const openUpdateCaseModalSequence = showProgressSequenceDecorator([

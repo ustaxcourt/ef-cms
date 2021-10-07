@@ -23,4 +23,4 @@ docker run --rm -e AWS_ACCESS_KEY_ID=S3RVER -e AWS_SECRET_ACCESS_KEY=S3RVER efcm
   '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run test:pa11y --prefix=web-client/pa11y/'
 
 docker run --rm -e AWS_ACCESS_KEY_ID=S3RVER -e AWS_SECRET_ACCESS_KEY=S3RVER efcms /bin/sh -c \
-  '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress'
+  '(npx run-p start:api start:client:ci &) && ./wait-until.sh http://localhost:4000/api/swagger && ./wait-until.sh http://localhost:1234 && npm run cypress:integration'

@@ -26,7 +26,9 @@ const {
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
+  calculateISODate,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
   PATTERNS,
   prepareDateFromString,
@@ -265,6 +267,9 @@ const assignFieldsForAllUsers = ({ obj, rawCase }) => {
 
   obj.docketNumberWithSuffix =
     obj.docketNumber + (obj.docketNumberSuffix || '');
+
+  obj.canAllowDocumentService = rawCase.canAllowDocumentService;
+  obj.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
 };
 
 const assignDocketEntries = ({
@@ -471,6 +476,8 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
+  canAllowDocumentService: joi.boolean().optional(),
+  canAllowPrintableDocketRecord: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
@@ -1313,6 +1320,11 @@ const getPetitionDocketEntry = function (rawCase) {
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
+};
+
+const caseHasServedPetition = rawCase => {
+  const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+  return petitionDocketEntry && isServed(petitionDocketEntry);
 };
 
 Case.prototype.getIrsSendDate = function () {
@@ -2262,10 +2274,51 @@ const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
+/**
+ * determines if the case is in a state where documents can be served
+ *
+ * @param {Object} rawCase The Case we are using to determine whether we can allow document service
+ * @returns {Boolean} whether or not documents can be served on the case
+ */
+const canAllowDocumentServiceForCase = rawCase => {
+  if (typeof rawCase.canAllowDocumentService !== 'undefined') {
+    return rawCase.canAllowDocumentService;
+  }
+
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+
+  return Boolean(isOpen || isRecent);
+};
+
+/**
+ *  determines whether or not we should show the printable docket record
+ *
+ * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @returns {Boolean} whether or not we should show the printable docket record
+ */
+const canAllowPrintableDocketRecord = rawCase => {
+  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+    return rawCase.canAllowPrintableDocketRecord;
+  }
+  return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
+  canAllowDocumentServiceForCase,
+  canAllowPrintableDocketRecord,
   caseDecorator,
   caseHasServedDocketEntries,
+  caseHasServedPetition,
   getContactPrimary,
   getContactSecondary,
   getOtherFilers,

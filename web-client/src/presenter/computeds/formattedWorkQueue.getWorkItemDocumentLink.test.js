@@ -171,6 +171,29 @@ describe('getWorkItemDocumentLink', () => {
     expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
   });
 
+  it('should return /complete when the eventCode MISC and the isPaper is false', () => {
+    const { permissions } = getBaseState(docketClerkUser);
+
+    const result = getWorkItemDocumentLink({
+      applicationContext,
+      permissions,
+      workItem: {
+        ...baseWorkItem,
+        docketEntry: {
+          ...baseDocketEntry,
+          isPaper: false,
+        },
+        inProgress: true,
+      },
+      workQueueToDisplay: {
+        box: 'inProgress',
+        queue: 'section',
+      },
+    });
+
+    expect(result).toEqual(`${baseWorkItemEditLink}/complete`);
+  });
+
   it('should return case detail link if document is processed and user is docketclerk', () => {
     const { permissions } = getBaseState(docketClerkUser);
 

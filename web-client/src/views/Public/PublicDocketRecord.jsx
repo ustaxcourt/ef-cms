@@ -16,6 +16,7 @@ export const PublicDocketRecord = connect(
         <table
           aria-label="docket record"
           className="usa-table case-detail ustc-table responsive-table"
+          id="docket-record-table"
         >
           <thead>
             <tr>

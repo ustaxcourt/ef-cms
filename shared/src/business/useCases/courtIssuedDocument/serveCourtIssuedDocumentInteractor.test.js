@@ -20,54 +20,36 @@ const {
   serveCourtIssuedDocumentInteractor,
 } = require('./serveCourtIssuedDocumentInteractor');
 const { createISODateString } = require('../../utilities/DateHandler');
+const { docketClerkUser } = require('../../../test/mockUsers');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
+  let mockTrialSession;
 
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockServedDocketEntryId = '736a68f4-d08d-4ba1-8185-117359f46804';
 
-  const mockUser = {
-    name: 'Docket Clerk',
-    role: ROLES.docketClerk,
-    userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-  };
+  const mockPdfUrl = 'www.example.com';
 
   const mockWorkItem = {
-    docketNumber: '101-20',
+    docketNumber: MOCK_CASE.docketNumber,
     section: DOCKET_SECTION,
-    sentBy: mockUser.name,
-    sentByUserId: mockUser.userId,
+    sentBy: docketClerkUser.name,
+    sentByUserId: docketClerkUser.userId,
     workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
   };
 
-  const dynamicallyGeneratedDocketEntries = [];
   const docketEntriesWithCaseClosingEventCodes =
     ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
-      const docketEntryId = uuidv4();
-      const docketRecordId = uuidv4();
-
-      const index = dynamicallyGeneratedDocketEntries.length + 2; // 2 statically set docket records per case;
-
-      dynamicallyGeneratedDocketEntries.push({
-        docketEntryId,
-        docketNumber: '101-20',
-        docketRecordId,
-        documentTitle: `Docket Record ${index}`,
-        eventCode: 'O',
-        filingDate: createISODateString(),
-        index,
-      });
-
       const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
         entry => entry.eventCode === eventCode,
       );
 
       return {
-        docketEntryId,
-        docketNumber: '101-20',
+        docketEntryId: uuidv4(),
+        docketNumber: MOCK_CASE.docketNumber,
         documentType: eventCodeMap.documentType,
         eventCode,
         signedAt: createISODateString(),
@@ -84,7 +66,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          docketNumber: '101-20',
+          docketNumber: MOCK_CASE.docketNumber,
           documentType: 'Order',
           eventCode: 'O',
           serviceStamp: 'Served',
@@ -96,7 +78,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockDocketEntryId,
-          docketNumber: '101-20',
+          docketNumber: MOCK_CASE.docketNumber,
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           signedAt: createISODateString(),
@@ -107,7 +89,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         {
           docketEntryId: mockServedDocketEntryId,
-          docketNumber: '101-20',
+          docketNumber: MOCK_CASE.docketNumber,
           documentType: 'Order that case is assigned',
           eventCode: 'OAJ',
           servedAt: createISODateString(),
@@ -124,7 +106,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         },
         ...docketEntriesWithCaseClosingEventCodes,
       ],
-      docketNumber: '101-20',
     },
     {
       ...MOCK_CASE,
@@ -173,10 +154,43 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     },
   ];
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .saveDocumentFromLambda.mockImplementation(() => {});
+
+    applicationContext
+      .getPersistenceGateway()
+      .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
+
+    applicationContext.logger.error.mockImplementation(() => {});
+
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockResolvedValue(1);
+
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: () => ({
+        Body: testPdfDoc,
+      }),
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .putWorkItemInOutbox.mockImplementation(() => {});
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
+  });
+
   beforeEach(() => {
     extendCase = {};
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -190,60 +204,49 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           };
         }
       });
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(1);
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        caseOrder: [
-          {
-            docketNumber: '101-20',
-          },
-        ],
-        createdAt: '2019-10-27T05:00:00.000Z',
-        gsi1pk: 'trial-session-catalog',
-        isCalendared: true,
-        judge: {
-          name: 'Judge Colvin',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+
+    mockTrialSession = {
+      caseOrder: [
+        {
+          docketNumber: mockCases[0].docketNumber,
         },
-        maxCases: 100,
-        pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        sessionType: 'Regular',
-        sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        startDate: '2019-11-27T05:00:00.000Z',
-        startTime: '10:00',
-        swingSession: true,
-        swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-        term: 'Fall',
-        termYear: '2019',
-        trialLocation: 'Houston, Texas',
-        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      });
+      ],
+      createdAt: '2019-10-27T05:00:00.000Z',
+      gsi1pk: 'trial-session-catalog',
+      isCalendared: true,
+      judge: {
+        name: 'Judge Colvin',
+        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      },
+      maxCases: 100,
+      pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType: 'Regular',
+      sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      startDate: '2019-11-27T05:00:00.000Z',
+      startTime: '10:00',
+      swingSession: true,
+      swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
+      term: 'Fall',
+      termYear: '2019',
+      trialLocation: 'Houston, Texas',
+      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    };
+
     applicationContext
       .getPersistenceGateway()
-      .putWorkItemInOutbox.mockImplementation(() => {});
+      .getTrialSessionById.mockReturnValue(mockTrialSession);
   });
 
   it('should throw an Unauthorized error if the user role does not have the SERVE_DOCUMENT permission', async () => {
     // petitioner role does NOT have the SERVE_DOCUMENT permission
-    const user = { ...mockUser, role: ROLES.petitioner };
+    const user = { ...docketClerkUser, role: ROLES.petitioner };
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
-        docketNumber: '101-20',
+        docketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -265,7 +268,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
-        docketNumber: '101-20',
+        docketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry 000 was not found');
   });
@@ -274,7 +277,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: mockServedDocketEntryId,
-        docketNumber: '101-20',
+        docketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry has already been served');
   });
@@ -282,7 +285,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '101-20',
+      docketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -309,7 +312,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the number of pages present in the document to be served', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
-      docketNumber: '101-20',
+      docketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -327,13 +330,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .saveDocumentFromLambda.mockImplementation(() => {});
-
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
-      docketNumber: '101-20',
+      docketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -356,17 +355,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-        pdfUrl: 'localhost:1234',
-      });
-
     const result = await serveCourtIssuedDocumentInteractor(
       applicationContext,
       {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        docketNumber: '101-20',
+        docketNumber: mockCases[0].docketNumber,
       },
     );
 
@@ -374,14 +367,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
     expect(result).toEqual({
-      pdfUrl: 'localhost:1234',
+      pdfUrl: mockPdfUrl,
     });
   });
 
   it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: '102-20',
+      docketNumber: mockCases[1].docketNumber,
     });
 
     expect(
@@ -402,42 +395,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        caseOrder: [
-          {
-            docketNumber: '101-20',
-          },
-        ],
-        createdAt: '2019-10-27T05:00:00.000Z',
-        gsi1pk: 'trial-session-catalog',
-        isCalendared: true,
-        judge: {
-          name: 'Judge Colvin',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-        maxCases: 100,
-        pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        sessionType: 'Regular',
-        sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        startDate: '2019-11-27T05:00:00.000Z',
-        startTime: '10:00',
-        swingSession: true,
-        swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-        term: 'Fall',
-        termYear: '2019',
-        trialLocation: 'Houston, Texas',
-        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      });
-
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     extendCase.trialDate = '2019-11-27T05:00:00.000Z';
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumber: '101-20',
+      docketNumber: mockCases[0].docketNumber,
     });
 
     expect(
@@ -453,42 +416,14 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should delete the case from the trial session if the case has a trialSessionId and trialSession is not calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        caseOrder: [
-          {
-            docketNumber: '101-20',
-          },
-        ],
-        createdAt: '2019-10-27T05:00:00.000Z',
-        gsi1pk: 'trial-session-catalog',
-        isCalendared: false,
-        judge: {
-          name: 'Judge Colvin',
-          userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-        },
-        maxCases: 100,
-        pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        sessionType: 'Regular',
-        sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-        startDate: '2019-11-27T05:00:00.000Z',
-        startTime: '10:00',
-        swingSession: true,
-        swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-        term: 'Fall',
-        termYear: '2019',
-        trialLocation: 'Houston, Texas',
-        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      });
+    mockTrialSession.isCalendared = false;
 
     extendCase.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
     extendCase.trialDate = '2019-11-27T05:00:00.000Z';
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumber: '101-20',
+      docketNumber: mockCases[0].docketNumber,
     });
 
     expect(
@@ -505,7 +440,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
-        docketNumber: '101-20',
+        docketNumber: mockCases[0].docketNumber,
       });
 
       const updatedCase =
@@ -601,5 +536,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: mockCases[0].docketNumber,
       status: false,
     });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Error attempting to serve a Court Issued Document',
+      {
+        err: new Error('whoops, that is an error!'),
+      },
+    );
   });
 });
