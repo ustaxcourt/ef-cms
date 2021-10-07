@@ -8,18 +8,14 @@ const formattedTrialSessions = withAppContextDecorator(
 
 const status = 'Closed';
 
-export const docketClerkVerifiesSessionIsNotClosed = cerebralTest => {
-  return it('Docket Clerk verifies session is not closed', async () => {
-    await cerebralTest.runSequence('gotoTrialSessionsSequence', {
-      query: {
-        status,
-      },
+export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
+  return it('Docket Clerk closes the trial session', async () => {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.lastCreatedTrialSessionId,
     });
+    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
-    expect(
-      cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
-    ).toEqual(status);
+    await cerebralTest.runSequence('closeTrialSessionSequence');
 
     const formatted = runCompute(formattedTrialSessions, {
       state: cerebralTest.getState(),
@@ -40,6 +36,6 @@ export const docketClerkVerifiesSessionIsNotClosed = cerebralTest => {
       }
     });
 
-    expect(foundSession).toBeFalsy();
+    expect(foundSession).toBeTruthy();
   });
 };
