@@ -60,10 +60,13 @@ exports.addExistingUserToCase = async ({
   });
 
   if (contact.name === name) {
-    contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-    contact.email = email;
     contact.contactId = userToAdd.userId;
-    contact.hasEAccess = true;
+
+    if (!userToAdd.pendingEmail) {
+      contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      contact.email = email;
+      contact.hasEAccess = true;
+    }
   } else {
     throw new Error(`no contact found with that user name of ${name}`);
   }
@@ -78,5 +81,5 @@ exports.addExistingUserToCase = async ({
     userId: userToAdd.userId,
   });
 
-  return caseEntity.validate();
+  return userToAdd.userId;
 };

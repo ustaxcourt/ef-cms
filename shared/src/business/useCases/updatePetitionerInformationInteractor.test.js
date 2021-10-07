@@ -54,7 +54,11 @@ describe('updatePetitionerInformationInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .addExistingUserToCase.mockImplementation(({ caseEntity }) => caseEntity);
+      .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockReturnValue([MOCK_CASE]);
 
     applicationContext
       .getUseCaseHelpers()
@@ -457,6 +461,30 @@ describe('updatePetitionerInformationInteractor', () => {
       updatedPetitionerData: {
         ...mockPetitioners[0],
         address1: 'changed address',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not generated a notice if user is missing an email (aka, they are a new unverified user)', async () => {
+    const unverifiedNewPetitioner = {
+      email: undefined,
+      userId: applicationContext.getUniqueId(),
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(unverifiedNewPetitioner);
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        email: undefined,
+        updatedEmail: 'testing@example.com',
       },
     });
 
