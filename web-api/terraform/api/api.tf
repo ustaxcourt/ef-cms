@@ -219,6 +219,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_method.api_method_options,
     aws_api_gateway_method.api_method_head,
     aws_api_gateway_integration.api_integration_get,
+    aws_api_gateway_integration.api_integration_head,
     aws_api_gateway_integration.api_integration_post,
     aws_api_gateway_integration.api_integration_put,
     aws_api_gateway_integration.api_integration_delete,
