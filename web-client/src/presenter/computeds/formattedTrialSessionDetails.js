@@ -45,12 +45,12 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         sessionCase => sessionCase.removedFromTrial === true,
       );
 
-      // TODO: Extract this
       if (
         (isEmpty(allCases) || isEqual(allCases, inactiveCases)) &&
-        trialDateInFuture &&
+        !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
-          TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+          TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
+        formattedTrialSession.isClosed !== SESSION_STATUS_GROUPS.closed
       ) {
         formattedTrialSession.canClose = true;
       }

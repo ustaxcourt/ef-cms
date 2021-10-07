@@ -3,17 +3,17 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { isEmpty, isEqual } = require('lodash');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-// /**
-//  * closeTrialSessionInteractor
-//  *
-//  * @param {object} applicationContext the application context
-//  * @param {object} providers the providers object
-//  * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
-//  * @returns {Promise} the promise of the updateTrialSession call
-//  */
+/**
+ * closeTrialSessionInteractor
+ *
+ * @param {object} applicationContext the application context
+ * @param {string} providers.trialSessionId the id of the trial session to be closed
+ * @returns {Promise} the promise of the updateTrialSession call
+ */
 exports.closeTrialSessionInteractor = async (
   applicationContext,
   { trialSessionId },
@@ -35,7 +35,15 @@ exports.closeTrialSessionInteractor = async (
   }
 
   if (
-    trialSession.startDate <
+    trialSession.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+  ) {
+    throw new Error(
+      'Only standalone remote trial sessions can be closed manually',
+    );
+  }
+
+  if (
+    trialSession.startDate >
     applicationContext.getUtilities().createISODateString()
   ) {
     throw new Error(
