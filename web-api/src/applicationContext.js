@@ -1554,10 +1554,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
                   pk.startsWith('user|') && sk.startsWith('user|'),
               );
 
-              const foundUser = users.find(
-                ({ email, pendingEmail }) =>
-                  email === Username || pendingEmail === Username,
-              );
+              const foundUser = users.find(({ email }) => email === Username);
 
               if (foundUser) {
                 return {
