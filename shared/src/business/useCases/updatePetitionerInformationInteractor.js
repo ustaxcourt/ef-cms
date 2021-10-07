@@ -271,7 +271,6 @@ const updatePetitionerInformationInteractor = async (
     serviceUrl = url;
   }
 
-  console.log({ updatedPetitionerData });
   if (
     updatedPetitionerData.updatedEmail &&
     updatedPetitionerData.updatedEmail !== oldCaseContact.email
