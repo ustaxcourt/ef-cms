@@ -35,7 +35,7 @@ exports.closeTrialSessionInteractor = async (
   }
 
   if (
-    trialSession.startDate <
+    trialSession.startDate >
     applicationContext.getUtilities().createISODateString()
   ) {
     throw new Error(
