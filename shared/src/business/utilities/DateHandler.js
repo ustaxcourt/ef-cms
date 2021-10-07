@@ -238,8 +238,14 @@ const deconstructDate = dateString => {
   return result;
 };
 
-const getMonthDayYearObj = dtRef => {
-  const dtObj = dtRef || DateTime.now();
+/**
+ * Creates an object representing the current calendar day
+ * according to USTC_TZ timezone
+ *
+ * @returns {object} with date, month, and year
+ */
+const getMonthDayYearInETObj = () => {
+  const dtObj = DateTime.now().setZone(USTC_TZ);
   const result = {
     day: dtObj.toFormat('d'),
     month: dtObj.toFormat('M'),
@@ -423,7 +429,7 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
-  getMonthDayYearObj,
+  getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromEST,

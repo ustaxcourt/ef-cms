@@ -318,9 +318,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getMonthDayYearObj: jest
+    getMonthDayYearInETObj: jest
       .fn()
-      .mockImplementation(DateHandler.getMonthDayYearObj),
+      .mockImplementation(DateHandler.getMonthDayYearInETObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
     getPetitionDocketEntry: jest
       .fn()
