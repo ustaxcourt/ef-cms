@@ -23,7 +23,7 @@ const getIsFeatureEnabled = (featureName, user, env) => {
       return !isProduction && isInternalUser;
     })(),
     // FEATURE FLAG: standalone_remote_session
-    standalone_remote_session: false,
+    standalone_remote_session: true,
   };
 
   return !!features[featureName];
