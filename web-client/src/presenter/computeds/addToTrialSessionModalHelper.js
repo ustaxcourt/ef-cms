@@ -77,12 +77,17 @@ export const trialSessionsModalHelper = ({
     }
 
     if (showAllLocations) {
-      trialSessionsFormatted.forEach(trialSession =>
-        trialSession.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-          ? (trialSession.trialLocationState =
-              trialSession.trialLocation.split(', ')[1])
-          : (trialSession.trialLocationState = 'Remote'),
-      );
+      trialSessionsFormatted.forEach(trialSession => {
+        if (
+          trialSession.sessionScope !==
+          TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+        ) {
+          trialSession.trialLocationState =
+            trialSession.trialLocation.split(', ')[1];
+        } else {
+          trialSession.trialLocationState = 'Remote';
+        }
+      });
 
       trialSessionsFormattedByState = {};
       trialSessionsFormatted.forEach(
