@@ -10,15 +10,13 @@ const {
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { compareStrings } = require('../../utilities/sortFunctions');
 const { IrsPractitioner } = require('../IrsPractitioner');
 const { isSealedCase } = require('./Case');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { map } = require('lodash');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { PublicContact } = require('./PublicContact');

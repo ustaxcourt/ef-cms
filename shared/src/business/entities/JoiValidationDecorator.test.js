@@ -1,11 +1,9 @@
 const joi = require('joi');
 const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { Case } = require('../business/entities/cases/Case');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { MOCK_CASE } = require('../test/mockCase');

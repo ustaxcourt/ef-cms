@@ -1,14 +1,12 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../entities/EntityConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { pick } = require('lodash');
 
 PublicDocumentSearchResult.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
