@@ -4,9 +4,9 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../business/entities/cases/Case');
+const { Case } = require('./cases/Case');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { MOCK_CASE } = require('../test/mockCase');
+const { MOCK_CASE } = require('../../test/mockCase');
 
 /**
  * fake entity constructor
