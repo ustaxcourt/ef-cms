@@ -823,12 +823,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
         - develop # run the related develop workflow below
         - prod # run with context workflow below
 
-build-and-deploy-without-smoketests-defaults:
-  &build-and-deploy-without-smoketests-defaults
-  filters:
-    branches:
-      only:
-
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -971,38 +965,6 @@ workflows:
                 - experimental5
                 - dawson
                 - migration
-  build-and-deploy-without-smoketests:
-    jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - deploy:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-      - migrate:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - deploy
-      - switch-colors:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - migrate
-
   build-and-deploy-with-context:
     jobs:
       - build-client-integration:
