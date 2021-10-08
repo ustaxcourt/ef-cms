@@ -1,6 +1,5 @@
 .elasticsearch
 .git
-.serverless
 docs
 management/management/.terraform
 node_modules
@@ -9,7 +8,6 @@ shared/node_modules
 web-api/.cache
 web-api/.dynamodb
 web-api/.nyc_output
-web-api/.serverless
 web-api/coverage
 web-api/dist
 web-api/node_modules
