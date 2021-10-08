@@ -73,11 +73,11 @@ If this is the first time running a blue/green deployment on the environment:
    -  `./setup-s3-deploy-files.sh <ENV>`
    -  `./setup-s3-maintenance-file.sh <ENV>`
 7. Run the following command to set the environment's migrate flag to **true**:
-    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"true"}}'```
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'```
 8. Run the following command to set the environment's initial version (`${VERSION}` being the current version of the migrations, which you can tell in [this terraform file](web-api/terraform/template/main.tf)):
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"${VERSION}"}}'```
 9. Run the following command to set the environment's migrate flag to **false** (for next time):
-    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'```
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'```
 10. Run the following command to set the environment's maintenance-mode flag to **false**:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'```
 11. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
@@ -89,7 +89,7 @@ If this is the first time running a blue/green deployment on the environment:
 ## If a Migration is not necessary
 
 1. Run the following command to set the environment's migrate flag to **false**:
-    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'```
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'```
 
 ## If a new DynamoDB table and Elasticsearch domain is necessary
 

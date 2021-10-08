@@ -27,7 +27,7 @@ variable "circle_workflow_id" {
 }
 
 variable "migrate_flag" {
-  type = string
+  type = boolean
 }
 
 variable "circle_machine_user_token" {
