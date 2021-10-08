@@ -1,4 +1,4 @@
-const { getDynamoEndpoints } = require('.getDynamoEndpoints');
+const { getDynamoEndpoints } = require('./getDynamoEndpoints');
 
 const fallbackHandler = ({
   fallbackRegion,
