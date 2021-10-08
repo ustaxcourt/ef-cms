@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
   SESSION_STATUS_GROUPS,
