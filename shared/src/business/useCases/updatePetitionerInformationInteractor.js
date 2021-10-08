@@ -45,15 +45,11 @@ const getIsUserAuthorized = ({ oldCase, updatedPetitionerData, user }) => {
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
+  caseEntity,
   petitionerOnCase,
-  rawCaseData,
   user,
   userHasAnEmail,
 }) => {
-  const caseEntity = new Case(rawCaseData, {
-    applicationContext,
-  });
-
   const newData = {
     email: petitionerOnCase.newEmail,
     name: petitionerOnCase.name,
@@ -92,47 +88,6 @@ const updateCaseEntityAndGenerateChange = async ({
   }
 
   return caseEntity.validate();
-};
-
-const updateCasesForPetitioner = async ({
-  applicationContext,
-  petitionerCases,
-  petitionerOnCase,
-  user,
-  userHasAnEmail,
-}) => {
-  const rawCasesToUpdate = await Promise.all(
-    petitionerCases.map(({ docketNumber }) =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
-
-  const validatedCasesToUpdateInPersistence = [];
-  for (let rawCaseData of rawCasesToUpdate) {
-    validatedCasesToUpdateInPersistence.push(
-      await updateCaseEntityAndGenerateChange({
-        applicationContext,
-        petitionerOnCase,
-        rawCaseData,
-        user,
-        userHasAnEmail,
-      }),
-    );
-  }
-  const filteredCasesToUpdateInPersistence =
-    validatedCasesToUpdateInPersistence.filter(Boolean);
-
-  return Promise.all(
-    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate,
-      }),
-    ),
-  );
 };
 
 /**
@@ -243,11 +198,12 @@ const updatePetitionerInformationInteractor = async (
 
   let serviceUrl;
 
-  if (
+  const updateAddressOrPhone =
     documentType &&
     !oldCaseContact.isAddressSealed &&
-    caseEntity.shouldGenerateNoticesForCase()
-  ) {
+    caseEntity.shouldGenerateNoticesForCase();
+
+  if (updateAddressOrPhone) {
     const isContactRepresented =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         oldCaseContact.contactId,
@@ -271,10 +227,11 @@ const updatePetitionerInformationInteractor = async (
     serviceUrl = url;
   }
 
-  if (
+  const shouldUpdateEmailAddress =
     updatedPetitionerData.updatedEmail &&
-    updatedPetitionerData.updatedEmail !== oldCaseContact.email
-  ) {
+    updatedPetitionerData.updatedEmail !== oldCaseContact.email;
+
+  if (shouldUpdateEmailAddress) {
     const isEmailAvailable = await applicationContext
       .getPersistenceGateway()
       .isEmailAvailable({
@@ -302,21 +259,9 @@ const updatePetitionerInformationInteractor = async (
           name: oldCaseContact.name,
         });
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity,
-      });
-
       oldCaseContact.oldEmail = oldCaseContact.email;
       oldCaseContact.newEmail = updatedPetitionerData.updatedEmail;
       oldCaseContact.contactId = contactId;
-
-      const petitionerCases = await applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser({
-          applicationContext,
-          userId: contactId,
-        });
 
       const userToUpdate = await applicationContext
         .getPersistenceGateway()
@@ -325,9 +270,9 @@ const updatePetitionerInformationInteractor = async (
           userId: oldCaseContact.contactId,
         });
 
-      await updateCasesForPetitioner({
+      await updateCaseEntityAndGenerateChange({
         applicationContext,
-        petitionerCases,
+        caseEntity,
         petitionerOnCase: oldCaseContact,
         user,
         userHasAnEmail: userToUpdate.email,

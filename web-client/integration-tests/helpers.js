@@ -615,7 +615,6 @@ export const uploadPetition = async (
   });
 
   cerebralTest.setState('caseDetail', response.data);
-
   return response.data;
 };
 
