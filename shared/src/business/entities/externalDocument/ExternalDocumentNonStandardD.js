@@ -4,16 +4,14 @@ const {
   externalDocumentDecorator,
 } = require('./ExternalDocumentBase');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**

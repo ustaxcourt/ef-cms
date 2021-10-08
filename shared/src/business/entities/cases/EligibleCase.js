@@ -1,13 +1,11 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { CASE_TYPES, DOCKET_NUMBER_SUFFIXES } = require('../EntityConstants');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 
 /**

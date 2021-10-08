@@ -1,9 +1,7 @@
 const DateHandler = require('./DateHandler');
 const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
   DateHandler;
-const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 describe('DateHandler', () => {
   describe('Date Formats', () => {

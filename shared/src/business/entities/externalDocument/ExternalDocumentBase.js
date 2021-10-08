@@ -1,6 +1,4 @@
-const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const externalDocumentDecorator = (obj, rawObj) => {
   obj.category = rawObj.category;
