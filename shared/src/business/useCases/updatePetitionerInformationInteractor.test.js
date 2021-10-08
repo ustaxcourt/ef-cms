@@ -57,10 +57,6 @@ describe('updatePetitionerInformationInteractor', () => {
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
 
     applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([MOCK_CASE]);
-
-    applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
   });
@@ -522,10 +518,6 @@ describe('updatePetitionerInformationInteractor', () => {
         .getUserById.mockReturnValue(foundMockVerifiedPetitioner);
 
       applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockReturnValue([MOCK_CASE]);
-
-      applicationContext
         .getUseCaseHelpers()
         .addExistingUserToCase.mockImplementation(addExistingUserToCase); // the real implementation, but inside, it is using the mocks above
     });
@@ -569,7 +561,10 @@ describe('updatePetitionerInformationInteractor', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalled();
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('should not call the update addExistingUserToCase use case helper when the petitioner is unchanged', async () => {
