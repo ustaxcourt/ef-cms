@@ -7,10 +7,6 @@ We utilize a package called `pa11y-ci` which runs tests found in the `pa11y/` di
 
 ### AWS-related
 
-#### ServerlessError
-> ```deploy failed with ServerlessError: An error occurred: YourLambdaFunction - The role defined for the function cannot be assumed by Lambda. (Service: AWSLambdaInternal; Status Code: 400; Error Code: InvalidParameterValueException; Request ID: ae81b07e-8a75-4f98-9473-2096a5da63f9).```
-If you're standing up a new environment, it is critical that you run the scripts (mentioned above and found in SETUP.md) to create Lambda roles & policies.
-
 #### repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 not found
 
 > ```Error response from daemon: repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1 not found```
@@ -107,4 +103,3 @@ Found these references of this being an open and unsolved issue, with the only s
 
 * https://github.com/aws/chalice/issues/1103
 * https://github.com/terraform-providers/terraform-provider-aws/issues/6352
-* https://github.com/serverless/examples/issues/279
