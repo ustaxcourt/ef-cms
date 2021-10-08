@@ -22,7 +22,7 @@ cd ../main
 
 export AWS_PAGER="" # Don’t show `less` on AWS CLI responses
 
-MIGRATE_FLAG=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"migrate"},"sk":{"S":"migrate"}}' | jq -r ".Item.current.S")
+MIGRATE_FLAG=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"migrate"},"sk":{"S":"migrate"}}' | jq -r ".Item.current.BOOL")
 [ -z "$MIGRATE_FLAG" ] && MIGRATE_FLAG="false"
 
 CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
