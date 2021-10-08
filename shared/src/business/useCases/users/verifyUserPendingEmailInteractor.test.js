@@ -7,6 +7,7 @@ const {
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  updatePetitionerCases,
   verifyUserPendingEmailInteractor,
 } = require('./verifyUserPendingEmailInteractor');
 const { calculateISODate } = require('../../utilities/DateHandler');
@@ -510,6 +511,50 @@ describe('verifyUserPendingEmailInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
       ).not.toHaveBeenCalled();
+    });
+
+    describe('updatePetitionerCases', () => {
+      it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
+        applicationContext
+          .getPersistenceGateway()
+          .getCasesForUser.mockReturnValue([
+            { docketNumber: MOCK_CASE.docketNumber },
+          ]);
+        applicationContext
+          .getPersistenceGateway()
+          .getUserById.mockReturnValueOnce({
+            ...validUser,
+            pendingEmailVerificationToken: TOKEN,
+            userId: MOCK_CASE.petitioners[0].contactId,
+          });
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValueOnce({
+            ...MOCK_CASE,
+            petitioners: [
+              {
+                ...MOCK_CASE.petitioners[0],
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+              },
+            ],
+            status: CASE_STATUS_TYPES.generalDocket,
+          });
+
+        await updatePetitionerCases({
+          applicationContext,
+          user: {
+            email: 'test@example.com',
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+        });
+
+        const { servedParties } =
+          applicationContext.getUseCaseHelpers().generateAndServeDocketEntry
+            .mock.calls[0][0];
+        expect(servedParties.electronic).toEqual([
+          { email: 'test@example.com', name: 'Test Petitioner' },
+        ]);
+      });
     });
   });
 });
