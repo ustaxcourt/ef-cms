@@ -971,7 +971,6 @@ workflows:
                 - migration
       - wait-for-reindex:
           type: approval
-      - smoketests:
           requires:
             - migrate
       - disable-reindex-cron:
