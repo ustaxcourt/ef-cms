@@ -873,14 +873,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
       ignore:
         - develop # run the related develop workflow below
         - prod # run with context workflow below
-        - migration # run without smoketests workflow
-
-build-and-deploy-without-smoketests-defaults:
-  &build-and-deploy-without-smoketests-defaults
-  filters:
-    branches:
-      only:
-        - migration
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -961,6 +953,7 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
+                - migration
       - migrate:
           requires:
             - deploy
@@ -975,8 +968,10 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - wait-for-reindex:
           type: approval
+      - smoketests:
           requires:
             - migrate
       - disable-reindex-cron:
@@ -996,6 +991,7 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - smoketests-readonly:
           requires:
             - smoketests
@@ -1010,6 +1006,7 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - switch-colors:
           requires:
             - smoketests-readonly
@@ -1026,47 +1023,7 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
-  build-and-deploy-without-smoketests:
-    jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - deploy:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-      - migrate:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - deploy
-      - wait-for-reindex:
-          <<: *build-and-deploy-without-smoketests-defaults
-          type: approval
-          requires:
-            - migrate
-      - disable-reindex-cron:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - wait-for-reindex
-      - switch-colors:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - disable-reindex-cron
-
+                - migration
   build-and-deploy-with-context:
     jobs:
       - build-client-integration:
