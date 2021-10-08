@@ -5,28 +5,37 @@ const {
   ROLES,
 } = require('../entities/EntityConstants');
 const {
+  decorateForCaseStatus,
+  getCaseInteractor,
+} = require('./getCaseInteractor');
+const {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseInteractor } = require('./getCaseInteractor');
 const { getOtherFilers } = require('../entities/cases/Case');
 const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
 
 describe('getCaseInteractor', () => {
+  let testCase;
+  let mockCaseContactPrimary;
+
+  beforeEach(() => {
+    testCase = { ...MOCK_CASE };
+    mockCaseContactPrimary = testCase.petitioners[0];
+  });
+
   const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
   const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
-  const mockCaseContactPrimary = MOCK_CASE.petitioners[0];
-
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(testCase);
 
     await getCaseInteractor(applicationContext, {
       docketNumber: '000123-19S',
@@ -77,7 +86,7 @@ describe('getCaseInteractor', () => {
       role: ROLES.petitionsClerk,
       userId: petitionsclerkId,
     });
-    const mockInvalidCase = { ...MOCK_CASE, caseCaption: undefined };
+    const mockInvalidCase = { ...testCase, caseCaption: undefined };
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockInvalidCase);
@@ -99,7 +108,7 @@ describe('getCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
-        ...MOCK_CASE,
+        ...testCase,
         docketNumber: '101-00',
         petitioners: [
           {
@@ -125,7 +134,7 @@ describe('getCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(
         Promise.resolve({
-          ...MOCK_CASE,
+          ...testCase,
           docketNumber: '101-00',
           petitioners: [
             {
@@ -153,7 +162,7 @@ describe('getCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({
-        ...MOCK_CASE,
+        ...testCase,
         docketNumber: '101-00',
         partyType: PARTY_TYPES.petitionerSpouse,
         petitioners: [
@@ -241,7 +250,7 @@ describe('getCaseInteractor', () => {
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
-            ...MOCK_CASE,
+            ...testCase,
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
             createdAt: applicationContext.getUtilities().createISODateString(),
@@ -290,7 +299,6 @@ describe('getCaseInteractor', () => {
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
         isSealed: true,
-        isStatusNew: false,
         partyType: undefined,
         receivedAt: undefined,
       });
@@ -335,7 +343,7 @@ describe('getCaseInteractor', () => {
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(
           Promise.resolve({
-            ...MOCK_CASE,
+            ...testCase,
             privatePractitioners: [
               {
                 barNumber: 'BN1234',
@@ -378,6 +386,7 @@ describe('getCaseInteractor', () => {
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeUndefined();
       expect(contactPrimary.phone).toBeUndefined();
+      expect(result.canAllowDocumentService).toEqual(false);
     });
 
     it('should return a Case entity when the current user is associated with the case', async () => {
@@ -394,6 +403,15 @@ describe('getCaseInteractor', () => {
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
       expect(contactPrimary.phone).toBeDefined();
+    });
+  });
+
+  describe('decorateForCaseStatus', () => {
+    it('sets the canAllowDocumentService on the given case record', () => {
+      expect(MOCK_CASE.canAllowDocumentService).not.toBeDefined();
+      expect(
+        decorateForCaseStatus(MOCK_CASE).canAllowDocumentService,
+      ).toBeDefined();
     });
   });
 });

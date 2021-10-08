@@ -49,9 +49,9 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   const hasConsolidatedCases = !isEmpty(caseDetail.consolidatedCases);
 
-  const caseHasServedDocketEntries = applicationContext
+  const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
-    .caseHasServedDocketEntries(caseDetail);
+    .canAllowDocumentServiceForCase(caseDetail);
 
   const hasPrivatePractitioners =
     !!caseDetail.privatePractitioners &&
@@ -79,7 +79,8 @@ export const caseDetailHelper = (get, applicationContext) => {
       user.role !== USER_ROLES.irsPractitioner &&
       user.role !== USER_ROLES.irsSuperuser,
     showJudgesNotes,
-    showPetitionProcessingAlert: isExternalUser && !caseHasServedDocketEntries,
+    showPetitionProcessingAlert:
+      isExternalUser && !canAllowDocumentServiceForCase,
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,

@@ -1,6 +1,5 @@
 const joi = require('joi');
 const {
-  CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
@@ -34,6 +33,8 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 function PublicCase() {}
 PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.entityName = 'PublicCase';
+  this.canAllowDocumentService = rawCase.canAllowDocumentService;
+  this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
@@ -48,7 +49,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
-  this.isStatusNew = rawCase.status === CASE_STATUS_TYPES.new;
 
   const currentUser = applicationContext.getCurrentUser();
 
@@ -79,6 +79,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 };
 
 const publicCaseSchema = {
+  canAllowDocumentService: joi.boolean().optional(),
+  canAllowPrintableDocketRecord: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
   createdAt: JoiValidationConstants.ISO_DATE.optional(),
   docketEntries: joi
@@ -98,7 +100,6 @@ const publicCaseSchema = {
   hasIrsPractitioner: joi.boolean().required(),
   isPaper: joi.boolean().optional(),
   isSealed: joi.boolean(),
-  isStatusNew: joi.boolean(),
   partyType: JoiValidationConstants.STRING.valid(...Object.values(PARTY_TYPES))
     .required()
     .description('Party type of the case petitioner.'),
