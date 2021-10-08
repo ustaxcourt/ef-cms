@@ -5,7 +5,7 @@ const {
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
-} = require('../business/entities/EntityConstants');
+} = require('./EntityConstants');
 
 const DATE_FORMATS = {
   ISO: 'YYYY-MM-DDTHH:mm:ss.SSSZ',
