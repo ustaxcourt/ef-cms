@@ -364,6 +364,7 @@ module.exports = {
           'scss',
           'semibold',
           'seriatim',
+          'serverless',
           'servoss',
           'sisqo',
           'skipnav',
