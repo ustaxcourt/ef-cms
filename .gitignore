@@ -6,7 +6,6 @@
 .idea/
 .nova/
 .scannerwork/
-.serverless/
 .terraform.lock.hcl
 .terraform/
 .vscode
