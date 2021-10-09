@@ -30,7 +30,6 @@ describe('generateAndServeDocketEntry', () => {
         documentId: '123',
       },
       documentType: 'Petition',
-      isContactRepresented: false,
       newData: {
         contactPrimary: {
           address1: '123 Main St',
@@ -49,6 +48,7 @@ describe('generateAndServeDocketEntry', () => {
           city: 'Somewhere',
         },
       },
+      privatePractitionersRepresentingContact: false,
       servedParties: [
         {
           name: 'Test Petitioner',
@@ -61,7 +61,7 @@ describe('generateAndServeDocketEntry', () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: testCaseEntity,
-      isContactRepresented: true,
+      privatePractitionersRepresentingContact: true,
       user: testUser,
     });
     expect(
@@ -73,7 +73,7 @@ describe('generateAndServeDocketEntry', () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: testCaseEntity,
-      isContactRepresented: true,
+      privatePractitionersRepresentingContact: true,
       user: testUser,
     });
     expect(
@@ -85,7 +85,7 @@ describe('generateAndServeDocketEntry', () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: testCaseEntity,
-      isContactRepresented: false,
+      privatePractitionersRepresentingContact: false,
       user: testUser,
     });
     expect(
@@ -108,7 +108,7 @@ describe('generateAndServeDocketEntry', () => {
         },
         { applicationContext },
       ),
-      isContactRepresented: true,
+      privatePractitionersRepresentingContact: true,
       user: testUser,
     });
     expect(
@@ -131,7 +131,7 @@ describe('generateAndServeDocketEntry', () => {
         },
         { applicationContext },
       ),
-      isContactRepresented: true,
+      privatePractitionersRepresentingContact: true,
       user: testUser,
     });
     expect(
