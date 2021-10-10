@@ -57,6 +57,7 @@ export const trialSessionsModalHelper = ({
   let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
   let trialSessionStatesSorted = null;
+  let trialSessionRemote = 'Remote';
 
   if (trialSessionsFormatted) {
     trialSessionsFormatted = formatTrialSessionsForHelper(
@@ -85,7 +86,7 @@ export const trialSessionsModalHelper = ({
           trialSession.trialLocationState =
             trialSession.trialLocation.split(', ')[1];
         } else {
-          trialSession.trialLocationState = 'Remote';
+          trialSession.trialLocationState = trialSessionRemote;
         }
       });
 
@@ -103,7 +104,7 @@ export const trialSessionsModalHelper = ({
       trialSessionStatesSorted = Object.keys(
         trialSessionsFormattedByState,
       ).sort((a, b) => {
-        if (a === 'Remote') {
+        if (a === trialSessionRemote) {
           return -1;
         }
         if (a < b) {

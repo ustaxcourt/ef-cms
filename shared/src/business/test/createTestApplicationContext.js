@@ -179,6 +179,7 @@ const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
+const { getIsFeatureEnabled } = require('../utilities/getIsFeatureEnabled');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
@@ -618,7 +619,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: emptyAppContextProxy,
     getUtilities: mockGetUtilities,
-    isFeatureEnabled: jest.fn(),
+    isFeatureEnabled: jest.fn().mockImplementation(getIsFeatureEnabled),
     logger: {
       debug: jest.fn(),
       error: jest.fn(),
