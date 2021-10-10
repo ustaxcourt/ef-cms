@@ -718,6 +718,7 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
+            echo "export DEFAULT_ACCOUNT_PASS_TO_USE=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
@@ -757,7 +758,7 @@ jobs:
             echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS=$DEFAULT_ACCOUNT_PASS" >> $BASH_ENV
+            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export USTC_ADMIN_PASS=$USTC_ADMIN_PASS" >> $BASH_ENV
             echo "export USTC_ADMIN_USER=$USTC_ADMIN_USER" >> $BASH_ENV
       - run:
@@ -821,14 +822,6 @@ build-and-deploy-defaults: &build-and-deploy-defaults
       ignore:
         - develop # run the related develop workflow below
         - prod # run with context workflow below
-        - migration # run without smoketests workflow
-
-build-and-deploy-without-smoketests-defaults:
-  &build-and-deploy-without-smoketests-defaults
-  filters:
-    branches:
-      only:
-        - migration
 
 build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   context: efcms-<< pipeline.git.branch >>
@@ -909,6 +902,7 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
+                - migration
       - migrate:
           requires:
             - deploy
@@ -923,6 +917,7 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - smoketests:
           requires:
             - migrate
@@ -937,6 +932,7 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - smoketests-readonly:
           requires:
             - smoketests
@@ -951,6 +947,7 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
+                - migration
       - switch-colors:
           requires:
             - smoketests-readonly
@@ -967,38 +964,7 @@ workflows:
                 - experimental4
                 - experimental5
                 - dawson
-  build-and-deploy-without-smoketests:
-    jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-without-smoketests-defaults
-      - deploy:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-      - migrate:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - deploy
-      - switch-colors:
-          <<: *build-and-deploy-without-smoketests-defaults
-          requires:
-            - migrate
-
+                - migration
   build-and-deploy-with-context:
     jobs:
       - build-client-integration:
