@@ -1,7 +1,10 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const {
+  createSectionOutboxRecord,
+  TIME_TO_EXIST,
+} = require('./createSectionOutboxRecord');
 
 describe('createSectionOutboxRecord', () => {
   let mockWorkItem;
@@ -23,12 +26,26 @@ describe('createSectionOutboxRecord', () => {
       workItem: mockWorkItem,
     });
 
+    const now = Math.floor(Date.now() / 1000);
+    const ttl = now - (now % 86400) + TIME_TO_EXIST;
+
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0],
     ).toMatchObject({
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
         pk: 'section-outbox|flavortown',
+        sk: mockWorkItem.completedAt,
+        ttl,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
+    ).toMatchObject({
+      Item: {
+        gsi1pk: 'work-item|work-item-id-123',
+        pk: 'section-outbox|flavortown|2019_04',
         sk: mockWorkItem.completedAt,
       },
     });
@@ -45,6 +62,16 @@ describe('createSectionOutboxRecord', () => {
       applicationContext,
       section: 'flavortown',
       workItem: mockWorkItem,
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
+      Item: {
+        gsi1pk: 'work-item|work-item-id-123',
+        pk: 'section-outbox|flavortown',
+        sk: mockWorkItem.updatedAt,
+      },
     });
 
     expect(
