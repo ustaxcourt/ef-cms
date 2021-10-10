@@ -44,9 +44,11 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       const inactiveCases = allCases.filter(
         sessionCase => sessionCase.removedFromTrial === true,
       );
+      const hasNoActiveCases =
+        isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
       if (
-        (isEmpty(allCases) || isEqual(allCases, inactiveCases)) &&
+        hasNoActiveCases &&
         !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&

@@ -37,6 +37,7 @@ import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCa
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext.js';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
@@ -225,6 +226,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       getDocumentTypeForAddressChange,
       prepareDateFromString,
     }),
+    isFeatureEnabled: featureName => getIsFeatureEnabled(featureName),
     logger: {
       debug: () => {},
       error: () => {},
