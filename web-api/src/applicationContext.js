@@ -248,9 +248,6 @@ const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
-  deleteSectionOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
   deleteTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
 const {
@@ -271,9 +268,6 @@ const {
 const {
   deleteUserFromCase,
 } = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
-const {
-  deleteUserOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
   deleteWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
@@ -1409,13 +1403,11 @@ const gatewayMethods = {
   deleteDocumentFromS3,
   deleteMessage,
   deleteRecord,
-  deleteSectionOutboxRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserCaseNote,
   deleteUserConnection,
   deleteUserFromCase,
-  deleteUserOutboxRecord,
   deleteWorkItem,
   getAllWebSocketConnections,
   getBlockedCases,
