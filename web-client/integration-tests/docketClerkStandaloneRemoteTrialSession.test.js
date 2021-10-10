@@ -4,7 +4,6 @@ import {
   ROLES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { MOCK_TRIAL_STANDALONE_REMOTE } from '../../shared/src/test/mockTrial';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkClosesStandaloneRemoteTrialSession } from './journey/docketClerkClosesStandaloneRemoteTrialSession';
 import { docketClerkManuallyAddsCaseToTrialSessionWithoutNote } from './journey/docketClerkManuallyAddsCaseToTrialSessionWithoutNote';
 import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
@@ -16,6 +15,9 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+const {
+  getIsFeatureEnabled,
+} = require('../../shared/src/business/utilities/getIsFeatureEnabled');
 import axios from 'axios';
 
 const cerebralTest = setupTest();
@@ -25,7 +27,8 @@ const mockUser = {
 };
 const mockEnv = 'test';
 // FEATURE FLAG: standalone_remote_session
-const FEATURE_canDisplayStandaloneRemote = applicationContext.isFeatureEnabled(
+const isFeatureEnabledMock = jest.fn().mockImplementation(getIsFeatureEnabled);
+const FEATURE_canDisplayStandaloneRemote = isFeatureEnabledMock(
   'standalone_remote_session',
   mockUser,
   mockEnv,
