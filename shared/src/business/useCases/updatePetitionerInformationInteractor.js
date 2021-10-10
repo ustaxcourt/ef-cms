@@ -5,6 +5,7 @@ const {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
+  shouldGenerateNoticesForCase,
 } = require('../entities/cases/Case');
 const {
   CASE_STATUS_TYPES,
@@ -304,7 +305,11 @@ const updatePetitionerInformationInteractor = async (
     updatedPetitionerData.contactId,
   );
 
-  if (petitionerInfoChange && !updatedCaseContact.isAddressSealed) {
+  if (
+    petitionerInfoChange &&
+    !updatedCaseContact.isAddressSealed &&
+    shouldGenerateNoticesForCase(caseEntity)
+  ) {
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
