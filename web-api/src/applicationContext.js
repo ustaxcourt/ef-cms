@@ -1193,7 +1193,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { createLogger } = require('../../shared/src/utilities/createLogger');
+const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');

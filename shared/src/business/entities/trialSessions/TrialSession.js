@@ -1,11 +1,8 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   SESSION_TERMS,
   SESSION_TYPES,
@@ -18,6 +15,7 @@ const {
 } = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * constructor

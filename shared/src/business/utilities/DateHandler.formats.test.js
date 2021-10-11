@@ -3,7 +3,7 @@ const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
   DateHandler;
 const {
   JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+} = require('../entities/JoiValidationConstants');
 
 describe('DateHandler', () => {
   describe('Date Formats', () => {

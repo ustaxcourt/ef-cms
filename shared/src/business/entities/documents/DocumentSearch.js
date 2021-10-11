@@ -9,12 +9,10 @@ const {
   createStartOfDayISO,
 } = require('../../utilities/DateHandler');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 DocumentSearch.DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 

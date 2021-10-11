@@ -2,7 +2,7 @@ const joi = require('joi').extend(require('@hapi/joi-date'));
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 
 DeadlineSearch.JOI_VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'];
 

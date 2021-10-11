@@ -1,5 +1,5 @@
 const joi = require('joi');
-const { InvalidEntityError } = require('../errors/errors');
+const { InvalidEntityError } = require('../../errors/errors');
 const { isEmpty } = require('lodash');
 
 const setIsValidated = obj => {

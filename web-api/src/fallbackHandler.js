@@ -1,6 +1,4 @@
-const {
-  getDynamoEndpoints,
-} = require('../../shared/src/utilities/getDynamoEndpoints');
+const { getDynamoEndpoints } = require('./getDynamoEndpoints');
 
 const fallbackHandler = ({
   fallbackRegion,
