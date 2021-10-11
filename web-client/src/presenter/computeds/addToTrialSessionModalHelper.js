@@ -1,4 +1,3 @@
-import { getTrialSessionStatus } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -22,10 +21,12 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
     }
     trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
 
-    trialSession.computedStatus = getTrialSessionStatus({
-      applicationContext,
-      session: trialSession,
-    });
+    trialSession.computedStatus = applicationContext
+      .getUtilities()
+      .getTrialSessionStatus({
+        applicationContext,
+        session: trialSession,
+      });
 
     return trialSession;
   });
