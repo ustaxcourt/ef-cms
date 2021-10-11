@@ -60,6 +60,9 @@ const {
   checkEmailAvailabilityLambda,
 } = require('./users/checkEmailAvailabilityLambda');
 const {
+  closeTrialSessionLambda,
+} = require('./trialSessions/closeTrialSessionLambda');
+const {
   completeDocketEntryQCLambda,
 } = require('./documents/completeDocketEntryQCLambda');
 const {
@@ -950,6 +953,10 @@ app.get(
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
     lambdaWrapper(setForHearingLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/close',
+    lambdaWrapper(closeTrialSessionLambda),
   );
 }
 

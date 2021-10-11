@@ -728,6 +728,7 @@ Case.VALIDATION_RULES = {
     .try(
       JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid('Standalone Remote'),
     )
     .optional()
     .description(
