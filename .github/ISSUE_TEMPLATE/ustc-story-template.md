@@ -20,6 +20,8 @@ As a _______, so that ________, I need ________.
 
 ## Tasks
 
+## Test Cases
+
 
 ## Story Definition of Ready (Created on 9/26/21)
 The following criteria must be met in order for the user story to be picked up by the Flexion development team.
@@ -35,13 +37,13 @@ The user story must:
 
 Process: Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
 
-## Definition of Done (Updated 4-14-21)
+## Definition of Done (Updated 10-6-21)
 **Product Owner**
  - [ ]  Acceptance criteria have been met and validated on the Court's migration environment
  - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
 
 **UX**
- - [ ] Business test scenarios to meet all acceptance criteria have been written
+ - [ ] Business test scenarios have been refined to meet all acceptance criteria 
  - [ ] Usability has been validated
  - [ ] Wiki has been updated (if applicable) 
  - [ ] Story has been tested on a mobile device (for external users only)
@@ -57,5 +59,6 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Interactors should validate entities before calling persistence methods
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Acceptance criteria for the story has been met
+ - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
  - [ ] Deployed to any Flexion environment for UX Review
  - [ ] Deployed to the Court's migration environment

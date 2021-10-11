@@ -21,7 +21,7 @@ const testClient = setupTestClient();
 testClient.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-// Temporarily disabled for story 7387
+// To be enabled once public has permission to search for orders
 describe.skip('Petitioner creates case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
