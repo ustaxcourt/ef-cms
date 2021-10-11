@@ -8,7 +8,8 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
 );
 
 describe('add to trial session modal helper', () => {
-  const { US_STATES } = applicationContext.getConstants();
+  const { TRIAL_SESSION_SCOPE_TYPES, US_STATES } =
+    applicationContext.getConstants();
 
   const trialSessions = [
     {
@@ -24,12 +25,21 @@ describe('add to trial session modal helper', () => {
       trialSessionId: '1',
     },
     {
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      sessionType: 'Regular',
+      startDate: '2022-03-01T21:40:46.415Z',
+      trialLocation: 'Standalone Remote',
+      trialSessionId: '7',
+    },
+    {
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
       sessionType: 'Hybrid',
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
     },
     {
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
       sessionType: 'Special',
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
@@ -102,6 +112,11 @@ describe('add to trial session modal helper', () => {
           trialSessionId: '4',
         },
       ],
+      Remote: [
+        {
+          trialSessionId: '7',
+        },
+      ],
     });
 
     expect(result.trialSessionStatesSorted.includes('Tennessee')).toBeFalsy();
@@ -147,6 +162,11 @@ describe('add to trial session modal helper', () => {
           trialSessionId: '4',
         },
       ],
+      Remote: [
+        {
+          trialSessionId: '7',
+        },
+      ],
     });
   });
 
@@ -171,7 +191,7 @@ describe('add to trial session modal helper', () => {
     ]);
   });
 
-  it('should format optionText for each trial session and group by state, then sort by location and then by date when showAllLocations is true', () => {
+  it('should format optionText for each trial session and group by state (or "Remote"), then sort by location and then by date when showAllLocations is true', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
         caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
@@ -211,8 +231,28 @@ describe('add to trial session modal helper', () => {
           trialSessionId: '4',
         },
       ],
+      Remote: [
+        {
+          optionText: 'Standalone Remote 03/01/22 (R)',
+          trialSessionId: '7',
+        },
+      ],
+    });
+  });
+
+  it('should sort states alphabetically, "Remote" at the top', () => {
+    const result = runCompute(addToTrialSessionModalHelper, {
+      state: {
+        caseDetail: { preferredTrialCity: 'Juneau, Alaska' },
+        form: {},
+        modal: {
+          showAllLocations: true,
+          trialSessions,
+        },
+      },
     });
     expect(result.trialSessionStatesSorted).toEqual([
+      'Remote',
       US_STATES.AL,
       US_STATES.ID,
     ]);

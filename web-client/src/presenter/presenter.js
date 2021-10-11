@@ -59,6 +59,7 @@ import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequenc
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
 import { closeModalAndReturnToTrialSessionsSequence } from './sequences/closeModalAndReturnToTrialSessionsSequence';
+import { closeTrialSessionSequence } from './sequences/closeTrialSessionSequence';
 import { closeVerifyEmailModalAndNavigateToMyAccountSequence } from './sequences/closeVerifyEmailModalAndNavigateToMyAccountSequence';
 import { closeVerifyEmailModalAndNavigateToPractitionerDetailSequence } from './sequences/closeVerifyEmailModalAndNavigateToPractitionerDetailSequence';
 import { completeDocketEntryQCAndSendMessageSequence } from './sequences/completeDocketEntryQCAndSendMessageSequence';
@@ -220,6 +221,7 @@ import { openConfirmDeletePDFModalSequence } from './sequences/openConfirmDelete
 import { openConfirmDeleteTrialSessionModalSequence } from './sequences/openConfirmDeleteTrialSessionModalSequence';
 import { openConfirmEditModalSequence } from './sequences/openConfirmEditModalSequence';
 import { openConfirmInitiateServiceModalSequence } from './sequences/openConfirmInitiateServiceModalSequence';
+import { openConfirmModalSequence } from './sequences/openConfirmModalSequence';
 import { openConfirmPaperServiceModalSequence } from './sequences/openConfirmPaperServiceModalSequence';
 import { openConfirmRemoveCaseDetailPendingItemModalSequence } from './sequences/openConfirmRemoveCaseDetailPendingItemModalSequence';
 import { openConfirmRemoveSignatureModalSequence } from './sequences/openConfirmRemoveSignatureModalSequence';
@@ -542,6 +544,7 @@ export const presenter = {
     closeModalAndReturnToCaseDetailSequence,
     closeModalAndReturnToDashboardSequence,
     closeModalAndReturnToTrialSessionsSequence,
+    closeTrialSessionSequence,
     closeVerifyEmailModalAndNavigateToMyAccountSequence,
     closeVerifyEmailModalAndNavigateToPractitionerDetailSequence,
     completeDocketEntryQCAndSendMessageSequence,
@@ -702,6 +705,7 @@ export const presenter = {
     openConfirmDeleteTrialSessionModalSequence,
     openConfirmEditModalSequence,
     openConfirmInitiateServiceModalSequence,
+    openConfirmModalSequence,
     openConfirmPaperServiceModalSequence,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     openConfirmRemoveSignatureModalSequence,

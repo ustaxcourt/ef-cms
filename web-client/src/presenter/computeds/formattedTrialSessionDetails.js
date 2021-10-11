@@ -1,3 +1,6 @@
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { isEmpty, isEqual } from 'lodash';
+
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
@@ -36,6 +39,23 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       formattedTrialSession.canEdit =
         trialDateInFuture &&
         formattedTrialSession.computedStatus !== SESSION_STATUS_GROUPS.closed;
+
+      const allCases = formattedTrialSession.caseOrder || [];
+      const inactiveCases = allCases.filter(
+        sessionCase => sessionCase.removedFromTrial === true,
+      );
+      const hasNoActiveCases =
+        isEmpty(allCases) || isEqual(allCases, inactiveCases);
+
+      if (
+        hasNoActiveCases &&
+        !trialDateInFuture &&
+        formattedTrialSession.sessionScope ===
+          TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
+        formattedTrialSession.isClosed !== SESSION_STATUS_GROUPS.closed
+      ) {
+        formattedTrialSession.canClose = true;
+      }
     }
   }
 

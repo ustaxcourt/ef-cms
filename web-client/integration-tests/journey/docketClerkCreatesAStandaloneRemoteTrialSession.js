@@ -30,7 +30,7 @@ export const docketClerkCreatesAStandaloneRemoteTrialSession = cerebralTest => {
       day: '5',
       month: '5',
       sessionType: SESSION_TYPES.small,
-      year: '2150',
+      year: '2021',
     };
 
     for (let [key, value] of Object.entries(fieldsToUpdate)) {
