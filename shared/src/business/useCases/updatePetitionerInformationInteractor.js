@@ -161,7 +161,7 @@ const updatePetitionerInformationInteractor = async (
     ],
   );
 
-  const documentType = applicationContext
+  const documentTypeToGenerate = applicationContext
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
@@ -198,13 +198,20 @@ const updatePetitionerInformationInteractor = async (
 
   let serviceUrl;
 
+  const updatedCaseContact = caseEntity.getPetitionerById(
+    updatedPetitionerData.contactId,
+  );
+
+  const hasPetitionerInfoChanged = !!documentTypeToGenerate;
+
   const updateAddressOrPhone =
-    documentType &&
-    !oldCaseContact.isAddressSealed &&
+    hasPetitionerInfoChanged &&
+    !updatedCaseContact.isAddressSealed &&
     caseEntity.shouldGenerateNoticesForCase();
 
+  // shouldGenerateNoticesForCase(caseEntity)
   if (updateAddressOrPhone) {
-    const isContactRepresented =
+    const privatePractitionersRepresentingContact =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
         oldCaseContact.contactId,
       );
@@ -217,10 +224,10 @@ const updatePetitionerInformationInteractor = async (
       .generateAndServeDocketEntry({
         applicationContext,
         caseEntity,
-        documentType,
-        isContactRepresented,
+        documentType: documentTypeToGenerate,
         newData,
         oldData,
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });

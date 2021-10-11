@@ -17,13 +17,14 @@ const {
   updatePetitionerInformationInteractor,
 } = require('./updatePetitionerInformationInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { Case, getOtherFilers } = require('../entities/cases/Case');
 const { docketClerkUser } = require('../../test/mockUsers');
-const { getOtherFilers } = require('../entities/cases/Case');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 const { UserCase } = require('../entities/UserCase');
 jest.mock('./addCoversheetInteractor');
 const { addCoverToPdf } = require('./addCoversheetInteractor');
+const { calculateISODate } = require('../utilities/DateHandler');
 const { DocketEntry } = require('../entities/DocketEntry');
 
 describe('updatePetitionerInformationInteractor', () => {
@@ -451,7 +452,6 @@ describe('updatePetitionerInformationInteractor', () => {
         closedDate: '2018-01-01T05:00:00.000Z',
         status: 'Closed',
       }));
-
     await updatePetitionerInformationInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       updatedPetitionerData: {
@@ -465,12 +465,48 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('should update the petitioner contact information, but not file and serve a docket entry if the case has been closed for MORE than 6 months', async () => {
+    const dateFromTwoYearsAgo = calculateISODate({
+      howMuch: -2,
+      units: 'years',
+    });
+    const updatePetitionerSpy = jest.spyOn(Case.prototype, 'updatePetitioner');
+    const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+
+    mockCase = {
+      ...MOCK_CASE,
+      closedDate: dateFromTwoYearsAgo,
+      petitioners: mockPetitioners,
+      privatePractitioners: [],
+      status: CASE_STATUS_TYPES.closed,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'changed address',
+        contactId: mockPetitioners[0].contactId,
+        name: 'Test Person22222',
+      },
+    });
+
+    expect(updatePetitionerSpy).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toBeCalled();
+    expect(addDocketEntrySpy).not.toBeCalled();
+  });
+
   it('should not generated a notice if user is missing an email (aka, they are a new unverified user)', async () => {
     const unverifiedNewPetitioner = {
       email: undefined,
       userId: applicationContext.getUniqueId(),
     };
-
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(unverifiedNewPetitioner);
@@ -487,6 +523,43 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should update the petitioner contact information and file and serve a docket entry if the case has been closed for LESS than 6 months', async () => {
+    const dateFromTwoMonthsAgo = calculateISODate({
+      howMuch: -2,
+      units: 'months',
+    });
+    const updatePetitionerSpy = jest.spyOn(Case.prototype, 'updatePetitioner');
+    const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+
+    mockCase = {
+      ...MOCK_CASE,
+      closedDate: dateFromTwoMonthsAgo,
+      petitioners: mockPetitioners,
+      privatePractitioners: [],
+      status: CASE_STATUS_TYPES.closed,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+
+    await updatePetitionerInformationInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      updatedPetitionerData: {
+        ...mockPetitioners[0],
+        address1: 'changed address',
+        contactId: mockPetitioners[0].contactId,
+        name: 'Test Person22222',
+      },
+    });
+
+    expect(updatePetitionerSpy).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
+    ).toBeCalled();
+    expect(addDocketEntrySpy).toBeCalled();
   });
 
   describe('admissions clerk adds a verified petitioner email', () => {
