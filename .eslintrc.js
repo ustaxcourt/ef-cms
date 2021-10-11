@@ -372,6 +372,7 @@ module.exports = {
           'stanton',
           'stin',
           'stip',
+          'stringified',
           'submenu',
           'tabbable',
           'tabindex',

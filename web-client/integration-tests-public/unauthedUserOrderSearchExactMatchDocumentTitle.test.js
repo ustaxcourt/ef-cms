@@ -23,7 +23,7 @@ const createdDocketNumbers = [];
 const documentTitleKeyword = `Sunglasses_${new Date().getTime()}`;
 const nonExactDocumentTitleKeyword = `${documentTitleKeyword}y`;
 
-// Temporarily disabled for story 7387
+// To be enabled once public has permission to search for orders
 describe.skip(`Create and serve a case with an order with exact keyword (${documentTitleKeyword})`, () => {
   beforeAll(() => {
     jest.setTimeout(30000);
