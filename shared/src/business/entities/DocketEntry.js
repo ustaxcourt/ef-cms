@@ -20,7 +20,7 @@ const {
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const { User } = require('./User');
 const { WorkItem } = require('./WorkItem');
 

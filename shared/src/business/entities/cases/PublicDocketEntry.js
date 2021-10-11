@@ -3,13 +3,11 @@ const {
   DOCKET_ENTRY_VALIDATION_RULE_KEYS,
 } = require('../EntityValidationConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { ALL_EVENT_CODES } = require('../EntityConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * PublicDocketEntry

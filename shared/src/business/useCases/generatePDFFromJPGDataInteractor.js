@@ -1,4 +1,4 @@
-const { generatePDFFromJPGs } = require('../../utilities/generatePDFFromJPGs');
+const { generatePDFFromJPGs } = require('../utilities/generatePDFFromJPGs');
 
 /**
  * generatePDFFromJPGDataInteractor
