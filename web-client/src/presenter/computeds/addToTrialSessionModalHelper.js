@@ -1,9 +1,8 @@
-import { isEmpty, isEqual, sortBy } from 'lodash';
+import { getTrialSessionStatus } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
-  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-
   return trialSessions.map(trialSession => {
     trialSession.startDateFormatted = applicationContext
       .getUtilities()
@@ -23,18 +22,10 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
     }
     trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
 
-    const allCases = trialSession.caseOrder || [];
-    const inactiveCases = allCases.filter(
-      sessionCase => sessionCase.removedFromTrial === true,
-    );
-
-    if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.closed;
-    } else if (trialSession.isCalendared) {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.open;
-    } else {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.new;
-    }
+    trialSession.computedStatus = getTrialSessionStatus({
+      applicationContext,
+      session: trialSession,
+    });
 
     return trialSession;
   });
