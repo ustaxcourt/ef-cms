@@ -74,7 +74,7 @@ export const TrialSessionDetail = connect(
                 {formattedTrialSessionDetails.canClose && (
                   <Button
                     link
-                    className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning"
+                    className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-0 red-warning ustc-button--mobile-inline"
                     id="close-session-button"
                     onClick={() => openConfirmModalSequence()}
                   >
