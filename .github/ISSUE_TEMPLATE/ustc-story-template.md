@@ -20,6 +20,8 @@ As a _______, so that ________, I need ________.
 
 ## Tasks
 
+## Test Cases
+
 
 ## Story Definition of Ready (Created on 9/26/21)
 The following criteria must be met in order for the user story to be picked up by the Flexion development team.
