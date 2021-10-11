@@ -1195,25 +1195,6 @@ const getPetitionerByEmail = function (rawCase, userEmail) {
  *
  * @returns {boolean} if the case is eligible or not
  */
-const shouldGenerateNoticesForCase = function (rawCase) {
-  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
-    rawCase.status,
-  );
-  const MAX_CLOSED_DATE = calculateISODate({
-    howMuch: -6,
-    units: 'months',
-  });
-  const isRecent =
-    rawCase.closedDate &&
-    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
-  return isOpen || isRecent;
-};
-
-/**
- * checks if the case is eligible for service.
- *
- * @returns {boolean} if the case is eligible or not
- */
 Case.prototype.shouldGenerateNoticesForCase = function () {
   return shouldGenerateNoticesForCase(this);
 };
@@ -2335,7 +2316,30 @@ const canAllowDocumentServiceForCase = rawCase => {
   if (typeof rawCase.canAllowDocumentService !== 'undefined') {
     return rawCase.canAllowDocumentService;
   }
-  return rawCase.status !== CASE_STATUS_TYPES.new;
+  return CASE_STATUS_TYPES.new !== rawCase.status;
+};
+
+/**
+ * determines whether or not to file automatically generated notices for notice of change of address
+ *
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we should automatically generate notices for a change of address
+ */
+const shouldGenerateNoticesForCase = rawCase => {
+  if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
+    return rawCase.shouldGenerateNotices;
+  }
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+  return Boolean(isOpen || isRecent);
 };
 
 /**
