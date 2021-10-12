@@ -10,10 +10,14 @@ To remove an environment, make sure your local development environment is config
 npm run destroy:[ENV]
 ```
 
-If the script is not available to destroy the named environment you need, look at `package.json` and determine the appropriate command to run.
+The cognito user pools have `lifecycle.prevent_destroy` set to true, so you have to manually delete them via the AWS console. You will have to delete both `efcms-<ENV>` and `efcms-irs-<ENV>` pools.
+  - Go to Cognito
+  - Select the user pool 
+  - Click on App Integration > Domain Name
+  - Click 'Delete Domain'
+  - Go back to 'General Settings' for the cognito pool 
+  - Click 'Delete Pool'
 
 ## Known issues
-
-- When an S3 bucket has more than 1000 items, the delete script will fail to remove it as it will not be emptied before the delete command is run.
 
 - The teardown scripts match environment names using a regular expression which may match resources in other environments.

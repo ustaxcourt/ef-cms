@@ -1,4 +1,4 @@
-const { deleteS3Buckets } = require('./deleteS3Buckets');
+const { clearS3Buckets } = require('./clearS3Buckets');
 const { getS3Buckets } = require('./getS3Buckets');
 jest.mock('./getS3Buckets', () => ({
   getS3Buckets: jest.fn(),
@@ -8,13 +8,13 @@ jest.mock('./getS3', () => ({
   getS3: jest.fn(),
 }));
 
-describe('deleteS3Buckets', () => {
+describe('clearS3Buckets', () => {
   const mockEnv = { region: 'test' };
 
   it('should retrieve all s3 buckets for the specified env', async () => {
     getS3Buckets.mockResolvedValue([]);
 
-    await deleteS3Buckets({ environment: mockEnv });
+    await clearS3Buckets({ environment: mockEnv });
 
     expect(getS3Buckets.mock.calls[0][0]).toMatchObject({
       environment: mockEnv,
@@ -57,7 +57,7 @@ describe('deleteS3Buckets', () => {
     });
     getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
 
-    await deleteS3Buckets({ environment: mockEnv });
+    await clearS3Buckets({ environment: mockEnv });
 
     expect(mockDeleteObjects).toHaveBeenCalledTimes(3);
   });
@@ -98,7 +98,7 @@ describe('deleteS3Buckets', () => {
     });
     getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
 
-    await deleteS3Buckets({ environment: mockEnv });
+    await clearS3Buckets({ environment: mockEnv });
 
     expect(mockDeleteObjects).toHaveBeenCalledTimes(3);
   });
@@ -122,7 +122,7 @@ describe('deleteS3Buckets', () => {
     });
     getS3Buckets.mockResolvedValue([{ Name: 'First Bucket' }]);
 
-    await deleteS3Buckets({ environment: mockEnv });
+    await clearS3Buckets({ environment: mockEnv });
 
     expect(mockDeleteObjects).not.toHaveBeenCalled();
   });
