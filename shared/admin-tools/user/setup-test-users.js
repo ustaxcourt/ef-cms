@@ -58,6 +58,7 @@ const setupCourtUsers = async () => {
     [5, 'chambers', 'ashfordsChambers'],
     [5, 'chambers', 'buchsChambers'],
     [5, 'chambers', 'cohensChambers'],
+    [5, 'terminal', 'terminal'],
   ];
 
   const promises = userSet.map(createManyAccounts);

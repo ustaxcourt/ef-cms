@@ -33,6 +33,8 @@ const getToken = event => {
     return event.queryStringParameters.token;
   } else if (event.authorizationToken) {
     return event.authorizationToken.substring(7);
+  } else if (event.headers?.authorization) {
+    return event.headers.authorization.substring(7);
   }
 };
 
@@ -84,7 +86,7 @@ exports.handler = async (event, context) => {
   const { iss, kid, role } = decodeToken(token);
 
   if (role === 'terminal') {
-    const ip = event.requestContext.identity.sourceIp;
+    const ip = context.requestContext.identity.sourceIp;
 
     const { Item: whiteListIp } = await docClient
       .get({
