@@ -51,4 +51,23 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
       isUserIdRepresentedByPrivatePractitioner(caseEntity.toRawObject(), '789'),
     ).toEqual(false);
   });
+
+  it('returns false if there are no private practitioners defined on a case', () => {
+    const newCaseEntityWithoutPractitioners = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: undefined,
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    expect(
+      isUserIdRepresentedByPrivatePractitioner(
+        newCaseEntityWithoutPractitioners.toRawObject(),
+        '789',
+      ),
+    ).toEqual(false);
+  });
 });
