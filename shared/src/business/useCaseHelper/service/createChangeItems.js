@@ -162,14 +162,14 @@ const generateAndServeDocketEntry = async ({
   contactName,
   docketMeta,
   documentType,
-  isContactRepresented,
   newData,
   oldData,
+  privatePractitionersRepresentingContact,
   servedParties,
   user,
 }) => {
-  const partyWithPaperService = caseEntity.petitioners.some(
-    p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+  const partyWithPaperService = caseEntity.hasPartyWithServiceType(
+    SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
   const paperServiceRequested =
@@ -184,7 +184,7 @@ const generateAndServeDocketEntry = async ({
   ) {
     shouldCreateWorkItem = paperServiceRequested;
   } else {
-    if (paperServiceRequested || !isContactRepresented) {
+    if (paperServiceRequested || !privatePractitionersRepresentingContact) {
       shouldCreateWorkItem = true;
     }
   }
