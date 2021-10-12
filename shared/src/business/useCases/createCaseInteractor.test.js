@@ -5,6 +5,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } = require('../entities/EntityConstants');
 const {
   getContactPrimary,
@@ -332,6 +333,50 @@ describe('createCaseInteractor', () => {
 
     result.petitioners.forEach(p => {
       expect(p.serviceIndicator).not.toBeUndefined();
+    });
+  });
+
+  it('should set serviceIndicator to none for petitioner when case is created by a private petitioner', async () => {
+    user = new PrivatePractitioner({
+      barNumber: 'BN1234',
+      name: 'Carole Baskin',
+      role: ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    const result = await createCaseInteractor(applicationContext, {
+      petitionFileId: '6722d660-d241-45ad-b7b2-0326cbfee40d',
+      petitionMetadata: {
+        caseType: 'Deficiency',
+        contactPrimary: {
+          address1: '25 Second Lane',
+          address2: 'Adipisci qui et est ',
+          address3: 'Cumque reprehenderit',
+          city: 'Consequatur Iusto e',
+          countryType: 'domestic',
+          email: 'privatePractitioner@example.com',
+          name: 'Inez Martinez',
+          phone: '+1 (756) 271-3574',
+          postalCode: '68964',
+          state: 'VA',
+        },
+        contactSecondary: {},
+        filingType: 'Individual petitioner',
+        hasIrsNotice: true,
+        partyType: 'Petitioner',
+        petitionFile: new File([], 'test.pdf'),
+        petitionFileSize: 13264,
+        preferredTrialCity: 'Birmingham, Alabama',
+        procedureType: 'Regular',
+        stinFile: new File([], 'test.pdf'),
+        stinFileSize: 13264,
+        wizardStep: '5',
+      },
+      stinFileId: 'e8bd0522-84ec-41fb-b490-0f4b8aa8a430',
+    });
+
+    result.petitioners.forEach(p => {
+      expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);
     });
   });
 });
