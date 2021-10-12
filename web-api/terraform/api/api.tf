@@ -123,6 +123,7 @@ resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id
   authorizer_uri         = var.authorizer_uri
+  type                   = "REQUEST"
   authorizer_credentials = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
 
