@@ -396,36 +396,16 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export CIRCLE_BRANCH=$CIRCLE_BRANCH" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export IRS_SUPERUSER_EMAIL=$(./scripts/get-irs-superuser-email.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
-            echo "export BOUNCED_EMAIL_RECIPIENT=$(./scripts/get-bounced-email-recipient.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
             cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
-      - run:
-          name: Setup Dynamsoft Keys
-          command: echo "export DYNAMSOFT_PRODUCT_KEYS='$(./scripts/get-keys.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-      - run:
-          name: Setup ES Instance Count
-          command: echo "export ES_INSTANCE_COUNT='$(./scripts/get-es-instance-count.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-      - run:
-          name: Setup ES Instance Type
-          command: echo "export ES_INSTANCE_TYPE='$(./scripts/get-es-instance-type.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-      - run:
-          name: Setup Disable Emails
-          command: echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-      - run:
-          name: Setup ES Volume Size
-          command: echo "export ES_VOLUME_SIZE='$(./scripts/get-es-volume-size.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
       - run:
           name: Setup Blue Green Migration If Needed
           command: |
@@ -599,16 +579,12 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)
-            echo "export EFCMS_DOMAIN=$EFCMS_DOMAIN" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export DOCUMENTS_BUCKET_NAME=$(./scripts/get-documents-bucket-name.sh $EFCMS_DOMAIN $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -726,8 +702,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
@@ -763,12 +739,9 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
             echo "export DEFAULT_ACCOUNT_PASS_TO_USE=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
@@ -803,15 +776,9 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export USTC_ADMIN_PASS=$USTC_ADMIN_PASS" >> $BASH_ENV
-            echo "export USTC_ADMIN_USER=$USTC_ADMIN_USER" >> $BASH_ENV
       - run:
           name: Create and Enable Test User
           command: node ./scripts/create-and-enable-smoketest-user.js
@@ -855,14 +822,11 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            ENV=$(./scripts/get-env.sh $CIRCLE_BRANCH)
-            echo "export ENV=$ENV" >> $BASH_ENV
+            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export EFCMS_DOMAIN=$(./scripts/get-efcms-domain.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export ZONE_NAME=$(./scripts/get-zone-name.sh $CIRCLE_BRANCH)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
-            echo "export AWS_ACCOUNT_ID=$AWS_ACCOUNT_ID >> $BASH_ENV"
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
