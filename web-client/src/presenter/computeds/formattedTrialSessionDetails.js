@@ -52,7 +52,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         !trialDateInFuture &&
         formattedTrialSession.sessionScope ===
           TRIAL_SESSION_SCOPE_TYPES.standaloneRemote &&
-        formattedTrialSession.isClosed !== SESSION_STATUS_GROUPS.closed
+        formattedTrialSession.isClosed !== true
       ) {
         formattedTrialSession.canClose = true;
       }
