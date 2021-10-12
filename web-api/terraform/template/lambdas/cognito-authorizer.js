@@ -73,6 +73,20 @@ const docClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
+const getWhiteListIp = async () => {
+  const { Item: whiteListIp } = await docClient
+    .get({
+      Key: {
+        pk: 'allowed-terminal-ip',
+        sk: 'allowed-terminal-ip',
+      },
+      TableName: `efcms-deploy-${process.env.STAGE}`,
+    })
+    .promise();
+  return whiteListIp?.ip;
+};
+exports.getWhiteListIp = getWhiteListIp;
+
 exports.handler = async (event, context) => {
   const logger = getLogger(context);
   const token = getToken(event);
@@ -86,19 +100,9 @@ exports.handler = async (event, context) => {
   const { iss, kid, role } = decodeToken(token);
 
   if (role === 'terminal') {
-    const ip = context.requestContext.identity.sourceIp;
-
-    const { Item: whiteListIp } = await docClient
-      .get({
-        Key: {
-          pk: 'allowed-terminal-ip',
-          sk: 'allowed-terminal-ip',
-        },
-        TableName: `efcms-deploy-${process.env.STAGE}`,
-      })
-      .promise();
-
-    if (ip !== whiteListIp?.ip) {
+    const ip = event.requestContext.identity.sourceIp;
+    const whiteListIp = await exports.getWhiteListIp(); // we use exports. for mocking in testing
+    if (ip !== whiteListIp) {
       throw new Error('Unauthorized'); // Magic string to return 401
     }
   }

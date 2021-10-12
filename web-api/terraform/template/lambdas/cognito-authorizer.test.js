@@ -5,12 +5,13 @@ jest.mock('../../../src/createLogger', () => {
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
+const authorizer = require('./cognito-authorizer');
 const axios = require('axios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const { createLogger } = require('../../../src/createLogger');
-const { handler } = require('./cognito-authorizer');
+const { handler } = authorizer;
 const { transports } = require('winston');
 
 describe('cognito-authorizer', () => {
@@ -303,5 +304,26 @@ describe('cognito-authorizer', () => {
 
     // Second call is cached
     expect(axios.get).toHaveBeenCalledTimes(1);
+  });
+
+  it('should return 401 if terminal user ip is not white listed', async () => {
+    authorizer.getWhiteListIp = jest.fn().mockImplementation(() => null);
+
+    jest.spyOn(jwk, 'decode').mockImplementation(() => {
+      return {
+        header: { kid: 'identifier-to-cache' },
+        payload: { 'custom:role': 'terminal', iss: 'issuer-url' },
+      };
+    });
+
+    await expect(() =>
+      handler(
+        {
+          ...event,
+          requestContext: { identity: { sourceIp: '111.111.111.111' } },
+        },
+        context,
+      ),
+    ).rejects.toThrow('Unauthorized');
   });
 });
