@@ -742,11 +742,7 @@ jobs:
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-<<<<<<< HEAD
-=======
-            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
             echo "export DEFAULT_ACCOUNT_PASS_TO_USE=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
->>>>>>> develop
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
@@ -783,13 +779,6 @@ jobs:
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-<<<<<<< HEAD
-=======
-            echo "export DISABLE_EMAILS='$(./scripts/get-disable-emails.sh $CIRCLE_BRANCH)'" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
-            echo "export USTC_ADMIN_PASS=$USTC_ADMIN_PASS" >> $BASH_ENV
-            echo "export USTC_ADMIN_USER=$USTC_ADMIN_USER" >> $BASH_ENV
->>>>>>> develop
       - run:
           name: Create and Enable Test User
           command: node ./scripts/create-and-enable-smoketest-user.js
