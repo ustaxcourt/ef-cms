@@ -3,6 +3,7 @@ const {
   fakeData,
 } = require('../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -18,10 +19,16 @@ const { User } = require('../entities/User');
 describe('updates the contact on a case', () => {
   let mockCase;
   let mockUser;
-  const mockCaseContactPrimary = MOCK_CASE.petitioners[0];
+  let mockCaseContactPrimary;
 
   beforeEach(() => {
-    mockCase = MOCK_CASE;
+    mockCase = {
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+    mockCaseContactPrimary = mockCase.petitioners[0];
+    mockCaseContactPrimary.contactType = 'petitioner';
+
     mockUser = new User({
       name: 'bob',
       role: ROLES.petitioner,
@@ -79,7 +86,7 @@ describe('updates the contact on a case', () => {
         postalCode: '99999',
         state: 'PA',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     const updatedCase =
@@ -121,7 +128,7 @@ describe('updates the contact on a case', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
+        ...mockCase,
         petitioners: [
           {
             ...mockCaseContactPrimary,
@@ -135,7 +142,7 @@ describe('updates the contact on a case', () => {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -147,7 +154,7 @@ describe('updates the contact on a case', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
+        ...mockCase,
         petitioners: [
           {
             ...mockCaseContactPrimary,
@@ -171,7 +178,7 @@ describe('updates the contact on a case', () => {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -183,7 +190,7 @@ describe('updates the contact on a case', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
+        ...mockCase,
         petitioners: [
           {
             ...mockCaseContactPrimary,
@@ -207,7 +214,7 @@ describe('updates the contact on a case', () => {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -223,7 +230,7 @@ describe('updates the contact on a case', () => {
     await expect(
       updateContactInteractor(applicationContext, {
         contactInfo: {},
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('Case 101-18 was not found.');
   });
@@ -237,7 +244,7 @@ describe('updates the contact on a case', () => {
     await expect(
       updateContactInteractor(applicationContext, {
         contactInfo: mockCaseContactPrimary,
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized for update case contact');
   });
@@ -248,7 +255,7 @@ describe('updates the contact on a case', () => {
     await expect(
       updateContactInteractor(applicationContext, {
         contactInfo: mockCaseContactPrimary,
-        docketNumber: MOCK_CASE.docketNumber,
+        docketNumber: mockCase.docketNumber,
       }),
     ).rejects.toThrow('Error: Petitioner was not found on case 109-19.');
   });
@@ -260,7 +267,7 @@ describe('updates the contact on a case', () => {
 
     await updateContactInteractor(applicationContext, {
       contactInfo: mockCaseContactPrimary,
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -287,7 +294,7 @@ describe('updates the contact on a case', () => {
         email: 'hello123@example.com',
         name: 'Secondary Party Name Changed',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     const contactPrimary = getContactPrimary(caseDetail);
@@ -303,7 +310,7 @@ describe('updates the contact on a case', () => {
       ...mockCase,
       petitioners: [
         {
-          ...getContactPrimary(MOCK_CASE),
+          ...getContactPrimary(mockCase),
           isAddressSealed: true,
         },
       ],
@@ -320,7 +327,7 @@ describe('updates the contact on a case', () => {
         ...mockCaseContactPrimary,
         address1: 'nothing 1',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -343,7 +350,7 @@ describe('updates the contact on a case', () => {
         ...mockCaseContactPrimary,
         address1: '453 Electric Ave',
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
@@ -352,6 +359,30 @@ describe('updates the contact on a case', () => {
     ).toMatchObject({
       caseTitle: 'Test Petitioner',
     });
+  });
+
+  it('should NOT generate a notice if the case was closed over 6 months ago', async () => {
+    const mockClosedCase = {
+      ...mockCase,
+      closedDate: '2015-01-01T21:22:23.456Z',
+      status: CASE_STATUS_TYPES.closed,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(() => mockClosedCase);
+
+    await updateContactInteractor(applicationContext, {
+      contactInfo: {
+        ...mockCaseContactPrimary,
+        address1: '453 Electric Ave',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
   });
 
   it('should NOT update the case when the contact information has not changed', async () => {
@@ -365,7 +396,7 @@ describe('updates the contact on a case', () => {
       contactInfo: {
         ...mockCaseContactPrimary,
       },
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
     });
 
     expect(
