@@ -89,17 +89,15 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 1. Choose a name for the branch which will be used for deployments (henceforth `$BRANCH`). Examples are 'prod', 'develop', 'staging'.
 2. Choose a name for this environment (henceforth `$ENVIRONMENT`). Examples are 'prod', 'dev', 'stg'.
 3. Add CircleCI badge link to the README.md according to `$BRANCH`
-4. Edit `get-es-instance-count.sh`, adding a new `elif` statement for your `$BRANCH` which returns the appropriate number of ElasticSearch instances.
-5. Edit `get-keys.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the `$ENVIRONMENT`-specific Dynamsoft licensing keys; licensing requires that each environment use their own unique keys.
-6. Edit `get-env.sh`, adding a new `elif` statement for your `$BRANCH` which echoes the environment name.
-7. Add mention of your environment, if appropriate, to `SETUP.md`
+4. Create a new .sh in the `./env-for-circle` directory and follow the other file structures
+5. Add mention of your environment, if appropriate, to `SETUP.md`
     - to create Lambda roles & policies:
       - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
     - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
-8. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
-9. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
-10. Update CircleCI to have all the new environment variables needed.
-11. Setting up Users
+6. Run the `deploy-app.sh` command that you just added to `SETUP.md`.
+7. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
+8. Update CircleCI to have all the new environment variables needed.
+9. Setting up Users
 
     1. The new environment will require an Admin account for creating users. Run the following command to create the admin account. NOTE: this script also deactivates this user.
 
