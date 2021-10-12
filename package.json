@@ -195,6 +195,8 @@
     "destroy:exp1": "node env-destroy-utils/destroyEnvironment.js exp1",
     "destroy:exp2": "node env-destroy-utils/destroyEnvironment.js exp2",
     "destroy:exp3": "node env-destroy-utils/destroyEnvironment.js exp3",
+    "destroy:exp4": "node env-destroy-utils/destroyEnvironment.js exp4",
+    "destroy:exp5": "node env-destroy-utils/destroyEnvironment.js exp5",
     "destroy:migration": "cd web-api/migration-terraform/main && ../bin/destroy-app.sh",
     "destroy:prod": "node env-destroy-utils/destroyEnvironment.js prod",
     "destroy:stg": "node env-destroy-utils/destroyEnvironment.js stg",
