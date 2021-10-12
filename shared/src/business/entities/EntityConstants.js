@@ -660,6 +660,7 @@ const ROLES = {
   petitionsClerk: 'petitionsclerk',
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
+  terminal: 'terminal',
   trialClerk: 'trialclerk',
 };
 
