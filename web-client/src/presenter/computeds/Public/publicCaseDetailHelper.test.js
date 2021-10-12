@@ -42,24 +42,24 @@ describe('publicCaseDetailHelper', () => {
   });
 
   describe('printableDocketRecord', () => {
-    it('should show printable docket record button if the case status is not new', () => {
+    it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
       const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
+            canAllowPrintableDocketRecord: true,
             docketEntries: [],
-            isStatusNew: false,
           },
         },
       });
       expect(result.showPrintableDocketRecord).toBeTruthy();
     });
 
-    it('should not show printable docket record button if the case status is new', () => {
+    it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
       const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
+            canAllowPrintableDocketRecord: false,
             docketEntries: [],
-            isStatusNew: true,
           },
         },
       });
