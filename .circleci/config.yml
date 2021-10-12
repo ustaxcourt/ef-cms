@@ -397,6 +397,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
       - run:
@@ -579,6 +580,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -701,6 +703,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
@@ -737,6 +740,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
@@ -772,6 +776,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Create and Enable Test User
@@ -817,6 +822,7 @@ jobs:
           name: Setup Env
           command: |
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
