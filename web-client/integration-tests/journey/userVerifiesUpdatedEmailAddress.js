@@ -7,6 +7,10 @@ export const userVerifiesUpdatedEmailAddress = (cerebralTest, user) =>
     const emailVerificationToken =
       userFromPersistence.pendingEmailVerificationToken;
 
+    console.log('userFromState', userFromState);
+    console.log('userFromPersistence', userFromPersistence);
+    console.log('emailVerificationToken', emailVerificationToken);
+
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: `/verify-email?token=${emailVerificationToken}`,
     });
