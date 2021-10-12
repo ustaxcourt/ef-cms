@@ -6,8 +6,6 @@ import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEm
 
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 
-// import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesEmailAddressToOneAlreadyInUse';
-
 const cerebralTest = setupTest();
 
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
