@@ -1,3 +1,4 @@
+const DateHandler = require('./DateHandler');
 const {
   applicationContext,
 } = require('../../../../web-client/src/applicationContext');
@@ -245,7 +246,7 @@ describe('getFormattedCaseDetail', () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2011-11-11',
+        trialDate: '2011-11-11T05:00:00.000Z',
         trialLocation: 'Boise, Idaho',
         trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
       });
@@ -262,9 +263,11 @@ describe('getFormattedCaseDetail', () => {
     });
 
     it('should format trial details if case status is not calendared but the case has a trialSessionId', () => {
+      const trialDate = DateHandler.createISODateString('2011-11-11');
+
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
-        trialDate: '2011-11-11',
+        trialDate,
         trialLocation: 'Boise, Idaho',
         trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
         trialTime: '2:00',
@@ -289,13 +292,13 @@ describe('getFormattedCaseDetail', () => {
             judge: {
               name: 'Judge Dredd',
             },
-            startDate: '2011-11-11',
+            startDate: '2011-11-11T05:00:00.000Z',
             startTime: '10:00',
             trialLocation: 'Megacity One',
           },
         ],
         status: CASE_STATUS_TYPES.calendared,
-        trialDate: '2011-11-11',
+        trialDate: '2011-11-11T05:00:00.000Z',
         trialLocation: 'Boise, Idaho',
         trialSessionId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
       });
@@ -312,7 +315,7 @@ describe('getFormattedCaseDetail', () => {
             judge: {
               name: 'Judge Dredd',
             },
-            startDate: '2011-11-11',
+            startDate: '2011-11-11T05:00:00.000Z',
             startTime: '10:00',
             trialLocation: 'Megacity One',
           },
