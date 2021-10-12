@@ -10,9 +10,8 @@ exports.deleteS3Buckets = async ({ environment }) => {
   });
 
   for (const bucket of buckets) {
-    let numItems;
-    const objects = await s3
-      .listObjects({
+    let objects = await s3
+      .listObjectsV2({
         Bucket: bucket.Name,
         MaxKeys: 1000,
       })
@@ -20,65 +19,77 @@ exports.deleteS3Buckets = async ({ environment }) => {
 
     if (objects.Contents.length > 0) {
       do {
-        console.log(
-          'Deleting items from S3 Bucket:',
-          environment.region,
-          bucket.Name,
-        );
+        console.log('Deleting items from S3 Bucket:', bucket.Name);
 
-        await s3
-          .deleteObjects({
-            Bucket: bucket.Name,
-            Delete: {
-              Objects: objects.Contents.map(object => {
-                return { Key: object.Key };
-              }),
-            },
-          })
-          .promise();
+        try {
+          await s3
+            .deleteObjects({
+              Bucket: bucket.Name,
+              Delete: {
+                Objects: objects.Contents.map(object => {
+                  return { Key: object.Key };
+                }),
+              },
+            })
+            .promise();
+        } catch (e) {
+          console.log('Failed to delete items from S3 Bucket:', bucket.Name, e);
+        }
 
-        const moreObjects = await s3
-          .listObjects({
+        objects = await s3
+          .listObjectsV2({
             Bucket: bucket.Name,
+            ContinuationToken: objects.NextContinuationToken
+              ? objects.NextContinuationToken
+              : undefined,
             MaxKeys: 1000,
           })
           .promise();
-        numItems = moreObjects.Contents.length;
-      } while (numItems > 0);
+      } while (objects.Contents.length > 0);
     }
 
-    let numVersionItems;
-    const objectVersions = await s3
+    let objectVersions = await s3
       .listObjectVersions({ Bucket: bucket.Name, MaxKeys: 1000 })
       .promise();
 
     if (objectVersions.Versions.length > 0) {
       do {
-        console.log(
-          'Deleting version items from S3 Bucket:',
-          environment.region,
-          bucket.Name,
-        );
+        console.log('Deleting version items from S3 Bucket:', bucket.Name);
 
-        await s3
-          .deleteObjects({
+        try {
+          await s3
+            .deleteObjects({
+              Bucket: bucket.Name,
+              Delete: {
+                Objects: objectVersions.Versions.map(objectVersion => {
+                  return {
+                    Key: objectVersion.Key,
+                    VersionId: objectVersion.VersionId,
+                  };
+                }),
+              },
+              Quiet: false,
+            })
+            .promise();
+        } catch (e) {
+          console.log(
+            'Failed to delete version items from S3 Bucket:',
+            bucket.Name,
+            e,
+          );
+        }
+
+        objectVersions = await s3
+          .listObjectVersions({
             Bucket: bucket.Name,
-            Delete: {
-              Objects: objectVersions.Versions.map(objectVersion => {
-                return {
-                  Key: objectVersion.Key,
-                  VersionId: objectVersion.VersionId,
-                };
-              }),
-            },
+            KeyMarker: objectVersions.NextKeyMarker
+              ? objectVersions.NextKeyMarker
+              : undefined,
+
+            MaxKeys: 1000,
           })
           .promise();
-
-        const moreObjectVersions = await s3
-          .listObjectVersions({ Bucket: bucket.Name, MaxKeys: 1000 })
-          .promise();
-        numVersionItems = moreObjectVersions.Versions.length;
-      } while (numVersionItems > 0);
+      } while (objectVersions.Versions.length > 0);
     }
   }
 };

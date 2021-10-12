@@ -1,6 +1,5 @@
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { deleteS3Buckets } = require('./deleteS3Buckets');
-const { deleteStacks } = require('./deleteStacks');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
 
@@ -47,7 +46,7 @@ const addMissingIndexFiles = () => {
 
 const teardownEnvironment = async () => {
   addMissingIndexFiles();
-  // todo remove these method calls once the envs that use these resources are dealt with
+
   try {
     await Promise.all([
       deleteCustomDomains({ environment: environmentEast }),
@@ -57,17 +56,6 @@ const teardownEnvironment = async () => {
     console.error('Error while deleting custom domains: ', e);
   }
 
-  // todo remove these method calls once the envs that use these resources are dealt with
-  try {
-    await Promise.all([
-      deleteStacks({ environment: environmentEast }),
-      deleteStacks({ environment: environmentWest }),
-    ]);
-  } catch (e) {
-    console.error('Error while deleting stacks: ', e);
-  }
-
-  // todo remove these method calls once the envs that use these resources are dealt with
   try {
     await Promise.all([
       deleteS3Buckets({ environment: environmentEast }),
