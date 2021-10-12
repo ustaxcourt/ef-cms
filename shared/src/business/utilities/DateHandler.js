@@ -50,6 +50,25 @@ const prepareDateFromEST = (dateString, inputFormat) => {
 };
 
 /**
+ * combines a ISO-formatted date stamp in UTC with a HH:mm time string in EST
+ *
+ * @param {string} dateString ISO-formatted date stamp in UT
+ * @param {string} timeString a HH:mm time string in EST
+ * @returns {string} an ISO-8601 timestamp with GMT+0
+ */
+const combineISOandEasternTime = (dateString, timeString) => {
+  const [hour, minute] = timeString.split(':');
+  const result = DateTime.fromISO(dateString, {
+    zone: USTC_TZ,
+  })
+    .set({ hour, minute })
+    .setZone('utc')
+    .toISO();
+
+  return result;
+};
+
+/**
  *
  * @param {string} dateString a string representing a date
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
@@ -419,6 +438,7 @@ module.exports = {
   calculateISODate,
   castToISO,
   checkDate,
+  combineISOandEasternTime,
   computeDate,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
