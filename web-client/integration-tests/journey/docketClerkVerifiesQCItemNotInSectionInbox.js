@@ -17,16 +17,12 @@ export const docketClerkVerifiesQCItemNotInSectionInbox = (
       state: cerebralTest.getState(),
     });
 
-    console.log('workQueueFormatted:', workQueueFormatted);
-
     const qcItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === cerebralTest.docketNumber,
+      workItem =>
+        workItem.docketNumber === cerebralTest.docketNumber &&
+        workItem.docketEntry.documentType === documentType,
     );
 
-    expect(qcItem).toMatchObject({
-      docketEntry: {
-        documentType,
-      },
-    });
+    expect(qcItem).toBeUndefined();
   });
 };
