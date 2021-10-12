@@ -1,5 +1,5 @@
+const { clearS3Buckets } = require('./clearS3Buckets');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
-const { deleteS3Buckets } = require('./deleteS3Buckets');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
 
@@ -47,59 +47,60 @@ const addMissingIndexFiles = () => {
 const teardownEnvironment = async () => {
   addMissingIndexFiles();
 
-  try {
-    await Promise.all([
-      deleteCustomDomains({ environment: environmentEast }),
-      deleteCustomDomains({ environment: environmentWest }),
-    ]);
-  } catch (e) {
-    console.error('Error while deleting custom domains: ', e);
-  }
+  // try {
+  //   await Promise.all([
+  //     deleteCustomDomains({ environment: environmentEast }),
+  //     deleteCustomDomains({ environment: environmentWest }),
+  //   ]);
+  // } catch (e) {
+  //   console.error('Error while deleting custom domains: ', e);
+  // }
 
   try {
-    await Promise.all([
-      deleteS3Buckets({ environment: environmentEast }),
-      deleteS3Buckets({ environment: environmentWest }),
-    ]);
+    // await Promise.all([
+    await clearS3Buckets({ environment: environmentEast });
+    await clearS3Buckets({ environment: environmentWest });
+    // ]);
   } catch (e) {
     console.error('Error while deleting s3 bucket: ', e);
   }
 
-  const webClientTerraformDestroy = exec(
-    `cd web-client/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
-  );
+  // const webClientTerraformDestroy = exec(
+  //   `cd web-client/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
+  // );
 
-  webClientTerraformDestroy.stdout.on('data', function (data) {
-    console.log('Web Client Terraform stdout: ', data.toString());
-  });
+  // webClientTerraformDestroy.stdout.on('data', function (data) {
+  //   console.log('Web Client Terraform stdout: ', data.toString());
+  // });
 
-  webClientTerraformDestroy.stderr.on('data', function (data) {
-    console.log('Web Client Terraform stderr: ', data.toString());
-  });
+  // webClientTerraformDestroy.stderr.on('data', function (data) {
+  //   console.log('Web Client Terraform stderr: ', data.toString());
+  // });
 
-  webClientTerraformDestroy.on('exit', function (code) {
-    console.log(
-      'Web Client Terraform child process exited with code ',
-      code.toString(),
-    );
-  });
+  // webClientTerraformDestroy.on('exit', function (code) {
+  //   console.log(
+  //     'Web Client Terraform child process exited with code ',
+  //     code.toString(),
+  //   );
+  // });
 
-  const webApiTerraformDestroy = exec(
+  const webApiTerraformDestroy = await exec(
     `cd web-api/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
   );
 
-  webApiTerraformDestroy.stdout.on('data', function (data) {
+  webApiTerraformDestroy.stdout.on('data', data => {
     console.log('Web API Terraform stdout: ', data.toString());
   });
 
-  webApiTerraformDestroy.stderr.on('data', function (data) {
+  webApiTerraformDestroy.stderr.on('data', data => {
     console.log('Web API Terraform stderr: ', data.toString());
   });
 
-  webApiTerraformDestroy.on('exit', function (code) {
+  webApiTerraformDestroy.on('exit', (code, signal) => {
     console.log(
-      'Web Client API child process exited with code ',
-      code.toString(),
+      'Web Client API child process exited with code/signal: ',
+      code,
+      signal,
     );
   });
 };
