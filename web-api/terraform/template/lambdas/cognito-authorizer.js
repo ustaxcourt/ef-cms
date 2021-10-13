@@ -1,4 +1,3 @@
-const AWS = require('aws-sdk');
 const axios = require('axios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
@@ -40,7 +39,7 @@ const getToken = event => {
 
 const decodeToken = requestToken => {
   const { header, payload } = jwk.decode(requestToken, { complete: true });
-  return { iss: payload.iss, kid: header.kid, role: payload['custom:role'] };
+  return { iss: payload.iss, kid: header.kid };
 };
 
 let keyCache = {};
@@ -68,25 +67,6 @@ const verify = (key, token) =>
     });
   });
 
-const docClient = new AWS.DynamoDB.DocumentClient({
-  endpoint: 'dynamodb.us-east-1.amazonaws.com',
-  region: 'us-east-1',
-});
-
-const getWhiteListIp = async () => {
-  const { Item: whiteListIp } = await docClient
-    .get({
-      Key: {
-        pk: 'allowed-terminal-ip',
-        sk: 'allowed-terminal-ip',
-      },
-      TableName: `efcms-deploy-${process.env.STAGE}`,
-    })
-    .promise();
-  return whiteListIp?.ip;
-};
-exports.getWhiteListIp = getWhiteListIp;
-
 exports.handler = async (event, context) => {
   const logger = getLogger(context);
   const token = getToken(event);
@@ -97,15 +77,7 @@ exports.handler = async (event, context) => {
     throw new Error('Unauthorized'); // Magic string to return 401
   }
 
-  const { iss, kid, role } = decodeToken(token);
-
-  if (role === 'terminal') {
-    const ip = event.requestContext.identity.sourceIp;
-    const whiteListIp = await exports.getWhiteListIp(); // we use exports. for mocking in testing
-    if (ip !== whiteListIp) {
-      throw new Error('Unauthorized'); // Magic string to return 401
-    }
-  }
+  const { iss, kid } = decodeToken(token);
 
   let keys;
   try {

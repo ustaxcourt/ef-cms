@@ -305,25 +305,4 @@ describe('cognito-authorizer', () => {
     // Second call is cached
     expect(axios.get).toHaveBeenCalledTimes(1);
   });
-
-  it('should return 401 if terminal user ip is not white listed', async () => {
-    authorizer.getWhiteListIp = jest.fn().mockImplementation(() => null);
-
-    jest.spyOn(jwk, 'decode').mockImplementation(() => {
-      return {
-        header: { kid: 'identifier-to-cache' },
-        payload: { 'custom:role': 'terminal', iss: 'issuer-url' },
-      };
-    });
-
-    await expect(() =>
-      handler(
-        {
-          ...event,
-          requestContext: { identity: { sourceIp: '111.111.111.111' } },
-        },
-        context,
-      ),
-    ).rejects.toThrow('Unauthorized');
-  });
 });
