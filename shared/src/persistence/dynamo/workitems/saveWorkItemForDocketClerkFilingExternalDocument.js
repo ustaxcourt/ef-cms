@@ -1,4 +1,4 @@
-const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const { createSectionOutboxRecords } = require('./createSectionOutboxRecords');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 const { put } = require('../../dynamodbClientService');
 /**
@@ -14,7 +14,7 @@ exports.saveWorkItemForDocketClerkFilingExternalDocument = ({
   workItem,
 }) =>
   Promise.all([
-    createSectionOutboxRecord({
+    createSectionOutboxRecords({
       applicationContext,
       section: workItem.section,
       workItem,

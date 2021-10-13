@@ -2,11 +2,11 @@ const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
 const {
-  createSectionOutboxRecord,
+  createSectionOutboxRecords,
   TIME_TO_EXIST,
-} = require('./createSectionOutboxRecord');
+} = require('./createSectionOutboxRecords');
 
-describe('createSectionOutboxRecord', () => {
+describe('createSectionOutboxRecords', () => {
   let mockWorkItem;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('createSectionOutboxRecord', () => {
   });
 
   it('creates a section outbox record with the completed datetime', async () => {
-    await createSectionOutboxRecord({
+    await createSectionOutboxRecords({
       applicationContext,
       section: 'flavortown',
       workItem: mockWorkItem,
@@ -45,7 +45,7 @@ describe('createSectionOutboxRecord', () => {
     ).toMatchObject({
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
-        pk: 'section-outbox|flavortown|2019_04',
+        pk: 'section-outbox|flavortown|2019-04',
         sk: mockWorkItem.completedAt,
       },
     });
@@ -58,7 +58,7 @@ describe('createSectionOutboxRecord', () => {
       completedMessage: undefined,
     };
 
-    await createSectionOutboxRecord({
+    await createSectionOutboxRecords({
       applicationContext,
       section: 'flavortown',
       workItem: mockWorkItem,
