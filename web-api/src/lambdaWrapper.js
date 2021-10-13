@@ -1,7 +1,12 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
+    console.log(req.apiGateway.context);
+
+    const { isTerminalUser } = req.apiGateway.context;
+
     const event = {
       headers: req.headers,
+      isTerminalUser,
       path: req.path,
       pathParameters: req.params,
       queryStringParameters: req.query,
@@ -25,6 +30,7 @@ export const lambdaWrapper = lambda => {
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
+      'X-Terminal-User': isTerminalUser,
     });
 
     if (
