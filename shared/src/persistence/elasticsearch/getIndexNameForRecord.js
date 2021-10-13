@@ -17,7 +17,12 @@ const isRecordOfType = (record, type) => {
   }
 
   if (entityName) {
-    if (type === 'User' && userEntityNames.includes(entityName)) {
+    if (
+      type === 'User' &&
+      userEntityNames.includes(entityName) &&
+      record.pk.S.startsWith('user|') &&
+      record.sk.S.startsWith('user|')
+    ) {
       return true;
     }
 
