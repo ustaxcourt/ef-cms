@@ -33,7 +33,7 @@ const pendingReport = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
-      datePrinted: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+      datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
     },
   });
 

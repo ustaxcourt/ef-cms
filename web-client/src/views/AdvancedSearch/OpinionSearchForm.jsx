@@ -15,8 +15,8 @@ import classNames from 'classnames';
 
 export const OpinionSearchForm = connect(
   {
-    ADVANCED_SEARCH_OPINION_TYPES:
-      state.constants.ADVANCED_SEARCH_OPINION_TYPES,
+    ADVANCED_SEARCH_OPINION_TYPES_LIST:
+      state.constants.ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -27,7 +27,7 @@ export const OpinionSearchForm = connect(
     validationErrors: state.validationErrors,
   },
   function OpinionSearchForm({
-    ADVANCED_SEARCH_OPINION_TYPES,
+    ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper,
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
@@ -125,22 +125,19 @@ export const OpinionSearchForm = connect(
                     Include types:
                   </legend>
 
-                  {Object.keys(ADVANCED_SEARCH_OPINION_TYPES).map(
-                    opinionType => (
-                      <div
-                        className="usa-checkbox width-full"
-                        key={opinionType}
-                      >
+                  {ADVANCED_SEARCH_OPINION_TYPES_LIST.map(
+                    ({ eventCode, label }) => (
+                      <div className="usa-checkbox width-full" key={eventCode}>
                         <input
                           checked={
                             advancedSearchForm.opinionSearch.opinionTypes &&
                             !!advancedSearchForm.opinionSearch.opinionTypes[
-                              ADVANCED_SEARCH_OPINION_TYPES[opinionType]
+                              eventCode
                             ]
                           }
                           className="usa-checkbox__input include-types"
-                          id={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
-                          name={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
+                          id={`opinionTypes.${eventCode}`}
+                          name={`opinionTypes.${eventCode}`}
                           type="checkbox"
                           onChange={e => {
                             updateAdvancedOpinionSearchFormValueSequence({
@@ -151,9 +148,9 @@ export const OpinionSearchForm = connect(
                         />
                         <label
                           className="margin-top-0 usa-checkbox__label"
-                          htmlFor={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
+                          htmlFor={`opinionTypes.${eventCode}`}
                         >
-                          {opinionType}
+                          {label}
                         </label>
                       </div>
                     ),
@@ -256,19 +253,19 @@ export const OpinionSearchForm = connect(
                     Include types:
                   </legend>
 
-                  {Object.keys(ADVANCED_SEARCH_OPINION_TYPES).map(
-                    opinionType => (
-                      <div className="usa-checkbox" key={opinionType}>
+                  {ADVANCED_SEARCH_OPINION_TYPES_LIST.map(
+                    ({ eventCode, label }) => (
+                      <div className="usa-checkbox" key={eventCode}>
                         <input
                           checked={
                             advancedSearchForm.opinionSearch.opinionTypes &&
                             !!advancedSearchForm.opinionSearch.opinionTypes[
-                              ADVANCED_SEARCH_OPINION_TYPES[opinionType]
+                              eventCode
                             ]
                           }
                           className="usa-checkbox__input include-types"
-                          id={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
-                          name={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
+                          id={`opinionTypes.${eventCode}`}
+                          name={`opinionTypes.${eventCode}`}
                           type="checkbox"
                           onChange={e => {
                             updateAdvancedOpinionSearchFormValueSequence({
@@ -279,9 +276,9 @@ export const OpinionSearchForm = connect(
                         />
                         <label
                           className="margin-top-0 usa-checkbox__label"
-                          htmlFor={`opinionTypes.${ADVANCED_SEARCH_OPINION_TYPES[opinionType]}`}
+                          htmlFor={`opinionTypes.${eventCode}`}
                         >
-                          {opinionType}
+                          {label}
                         </label>
                       </div>
                     ),

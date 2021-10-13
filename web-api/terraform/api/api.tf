@@ -109,6 +109,16 @@ resource "aws_api_gateway_method" "api_method_options" {
   authorization = "NONE"
 }
 
+resource "aws_api_gateway_method" "api_method_head" {
+  depends_on = [
+    aws_api_gateway_method.api_method_options
+  ]
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_resource.id
+  http_method   = "HEAD"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
+}
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id
@@ -178,6 +188,19 @@ resource "aws_api_gateway_integration" "api_integration_options" {
   uri                     = aws_lambda_function.api_lambda.invoke_arn
 }
 
+resource "aws_api_gateway_integration" "api_integration_head" {
+  depends_on = [
+    aws_api_gateway_integration.api_integration_options
+  ]
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id = aws_api_gateway_method.api_method_head.resource_id
+  http_method = aws_api_gateway_method.api_method_head.http_method
+
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = aws_lambda_function.api_lambda.invoke_arn
+}
+
 resource "aws_lambda_permission" "apigw_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -188,24 +211,23 @@ resource "aws_lambda_permission" "apigw_lambda" {
 
 
 resource "aws_api_gateway_deployment" "api_deployment" {
-  depends_on = [
-    aws_api_gateway_method.api_method_get,
-    aws_api_gateway_method.api_method_post,
-    aws_api_gateway_method.api_method_put,
-    aws_api_gateway_method.api_method_delete,
-    aws_api_gateway_method.api_method_options,
-    aws_api_gateway_integration.api_integration_get,
-    aws_api_gateway_integration.api_integration_post,
-    aws_api_gateway_integration.api_integration_put,
-    aws_api_gateway_integration.api_integration_delete,
-    aws_api_gateway_integration.api_integration_options,
-    aws_api_gateway_authorizer.custom_authorizer
-  ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
 
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_api_gateway_rest_api.gateway_for_api,
+      aws_api_gateway_method.api_method_get,
+      aws_api_gateway_method.api_method_post,
+      aws_api_gateway_method.api_method_put,
+      aws_api_gateway_method.api_method_delete,
+      aws_api_gateway_method.api_method_options,
+      aws_api_gateway_method.api_method_head,
+      aws_api_gateway_integration.api_integration_get,
+      aws_api_gateway_integration.api_integration_head,
+      aws_api_gateway_integration.api_integration_post,
+      aws_api_gateway_integration.api_integration_put,
+      aws_api_gateway_integration.api_integration_delete,
+      aws_api_gateway_integration.api_integration_options,
+      aws_api_gateway_authorizer.custom_authorizer
     ]))
   }
 

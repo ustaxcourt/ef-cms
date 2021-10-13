@@ -3,18 +3,18 @@ import { state } from 'cerebral';
 const computeAdmissionsDate = ({ applicationContext, day, month, year }) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
 
-  const inputProvided = day || month || year;
+  const inputProvided = day && month && year;
   if (!inputProvided) {
     return null;
   }
-  const yyyyPadded = `${year}`.padStart(4, '0');
-  const mmPadded = `${month}`.padStart(2, '0');
-  const ddPadded = `${day}`.padStart(2, '0');
-  const dateToParse = `${yyyyPadded}-${mmPadded}-${ddPadded}`;
 
   const preparedDateISO = applicationContext
     .getUtilities()
-    .prepareDateFromString(dateToParse, DATE_FORMATS.YYYYMMDD);
+    .createStartOfDayISO({
+      day,
+      month,
+      year,
+    });
 
   const yyyymmdd = applicationContext
     .getUtilities()

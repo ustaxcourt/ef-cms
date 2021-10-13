@@ -62,7 +62,7 @@ describe('orderAdvancedSearchInteractor', () => {
     await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(
@@ -75,7 +75,7 @@ describe('orderAdvancedSearchInteractor', () => {
     const result = await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(result).toMatchObject([
@@ -105,7 +105,7 @@ describe('orderAdvancedSearchInteractor', () => {
     const result = await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
@@ -144,7 +144,7 @@ describe('orderAdvancedSearchInteractor', () => {
     await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(
@@ -152,6 +152,17 @@ describe('orderAdvancedSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: ORDER_EVENT_CODES,
+    });
+  });
+
+  it('should set isOpinionSearch as false', async () => {
+    await orderAdvancedSearchInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: false,
     });
   });
 });

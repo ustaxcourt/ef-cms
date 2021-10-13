@@ -4,7 +4,6 @@ CLEAN_ONLY=$1
 
 # removes ONLY artifacts from previous runs
 rm -rf \
-  ~/.serverless \
   .cache/ \
   .dynamodb \
   .elasticsearch \

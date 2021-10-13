@@ -4,7 +4,7 @@ const {
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const { pick } = require('lodash');
 
 /**

@@ -1,9 +1,7 @@
-import { isEmpty, isEqual, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
-  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-
   return trialSessions.map(trialSession => {
     trialSession.startDateFormatted = applicationContext
       .getUtilities()
@@ -23,18 +21,12 @@ const formatTrialSessionsForHelper = (trialSessions, applicationContext) => {
     }
     trialSession.optionText = `${trialSession.trialLocation} ${trialSession.startDateFormatted} (${trialSession.sessionTypeFormatted})`;
 
-    const allCases = trialSession.caseOrder || [];
-    const inactiveCases = allCases.filter(
-      sessionCase => sessionCase.removedFromTrial === true,
-    );
-
-    if (!isEmpty(allCases) && isEqual(allCases, inactiveCases)) {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.closed;
-    } else if (trialSession.isCalendared) {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.open;
-    } else {
-      trialSession.computedStatus = SESSION_STATUS_GROUPS.new;
-    }
+    trialSession.computedStatus = applicationContext
+      .getUtilities()
+      .getTrialSessionStatus({
+        applicationContext,
+        session: trialSession,
+      });
 
     return trialSession;
   });
@@ -48,6 +40,7 @@ export const trialSessionsModalHelper = ({
 }) => {
   const caseDetail = get(state.caseDetail);
   const { showAllLocations, trialSessionId, trialSessions } = get(state.modal);
+  const { TRIAL_SESSION_SCOPE_TYPES } = applicationContext.getConstants();
 
   const selectedTrialSession =
     trialSessions &&
@@ -56,6 +49,8 @@ export const trialSessionsModalHelper = ({
   let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
   let trialSessionStatesSorted = null;
+  const trialSessionRemote = 'Remote';
+
   if (trialSessionsFormatted) {
     trialSessionsFormatted = formatTrialSessionsForHelper(
       trialSessionsFormatted,
@@ -75,11 +70,17 @@ export const trialSessionsModalHelper = ({
     }
 
     if (showAllLocations) {
-      trialSessionsFormatted.forEach(
-        trialSession =>
-          (trialSession.trialLocationState =
-            trialSession.trialLocation.split(', ')[1]),
-      );
+      trialSessionsFormatted.forEach(trialSession => {
+        if (
+          trialSession.sessionScope !==
+          TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+        ) {
+          trialSession.trialLocationState =
+            trialSession.trialLocation.split(', ')[1];
+        } else {
+          trialSession.trialLocationState = trialSessionRemote;
+        }
+      });
 
       trialSessionsFormattedByState = {};
       trialSessionsFormatted.forEach(
@@ -94,7 +95,18 @@ export const trialSessionsModalHelper = ({
 
       trialSessionStatesSorted = Object.keys(
         trialSessionsFormattedByState,
-      ).sort();
+      ).sort((a, b) => {
+        if (a === trialSessionRemote) {
+          return -1;
+        }
+        if (a < b) {
+          return -1;
+        }
+        if (a > b) {
+          return 1;
+        }
+        return 0;
+      });
 
       trialSessionStatesSorted.forEach(stateName => {
         trialSessionsFormattedByState[stateName] = sortBy(

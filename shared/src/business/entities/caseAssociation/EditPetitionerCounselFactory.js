@@ -3,12 +3,10 @@ const {
   AddPrivatePractitionerFactory,
 } = require('./AddPrivatePractitionerFactory');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * Edit Petitioner Counsel Factory entity
