@@ -313,19 +313,12 @@ const processMessageEntries = async ({
   }
 };
 
-const processOtherEntries = ({ applicationContext, otherRecords }) => {
-  otherRecords = otherRecords.filter(
-    record =>
-      record.dynamodb.NewImage.entityName &&
-      record.dynamodb.NewImage.entityName.S !== 'UserCase',
-  );
-
-  return processEntries({
+const processOtherEntries = ({ applicationContext, otherRecords }) =>
+  processEntries({
     applicationContext,
     recordType: 'otherRecords',
     records: otherRecords,
   });
-};
 
 const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (!removeRecords.length) return;
