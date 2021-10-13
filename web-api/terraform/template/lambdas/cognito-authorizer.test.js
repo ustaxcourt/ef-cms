@@ -1,17 +1,15 @@
 jest.mock('jwk-to-pem', () => jest.fn());
-jest.mock('../../../../shared/src/utilities/createLogger', () => {
+jest.mock('../../../src/createLogger', () => {
   return { createLogger: jest.fn() };
 });
 const { createLogger: actualCreateLogger } = jest.requireActual(
-  '../../../../shared/src/utilities/createLogger',
+  '../../../src/createLogger',
 );
 const axios = require('axios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
-const {
-  createLogger,
-} = require('../../../../shared/src/utilities/createLogger');
+const { createLogger } = require('../../../src/createLogger');
 const { handler } = require('./cognito-authorizer');
 const { transports } = require('winston');
 

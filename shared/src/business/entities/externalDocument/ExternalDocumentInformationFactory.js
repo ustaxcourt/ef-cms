@@ -11,12 +11,9 @@ const {
   MAX_FILE_SIZE_MB,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   SecondaryDocumentInformationFactory,
 } = require('./SecondaryDocumentInformationFactory');
@@ -24,6 +21,7 @@ const {
   SupportingDocumentInformationFactory,
 } = require('./SupportingDocumentInformationFactory');
 const { includes, isEqual, reduce, some, sortBy, values } = require('lodash');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const VALIDATION_ERROR_MESSAGES = {
   additionalInfo: [

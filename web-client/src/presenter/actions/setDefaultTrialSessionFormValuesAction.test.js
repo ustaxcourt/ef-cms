@@ -4,6 +4,9 @@ import { runAction } from 'cerebral/test';
 import { setDefaultTrialSessionFormValuesAction } from './setDefaultTrialSessionFormValuesAction';
 
 describe('setDefaultTrialSessionFormValuesAction', () => {
+  const { TRIAL_SESSION_PROCEEDING_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -32,7 +35,20 @@ describe('setDefaultTrialSessionFormValuesAction', () => {
     });
 
     expect(state.form).toMatchObject({
-      proceedingType: 'Remote',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    });
+  });
+
+  it('sets state.form.sessionScope to locationBased', async () => {
+    const { state } = await runAction(setDefaultTrialSessionFormValuesAction, {
+      modules: { presenter },
+      state: {
+        form: {},
+      },
+    });
+
+    expect(state.form).toMatchObject({
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
     });
   });
 });

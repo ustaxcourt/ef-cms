@@ -137,6 +137,9 @@ const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
 const {
+  isStandaloneRemoteSession,
+} = require('../entities/trialSessions/TrialSession');
+const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
 const {
@@ -315,9 +318,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getMonthDayYearObj: jest
+    getMonthDayYearInETObj: jest
       .fn()
-      .mockImplementation(DateHandler.getMonthDayYearObj),
+      .mockImplementation(DateHandler.getMonthDayYearInETObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
     getPetitionDocketEntry: jest
       .fn()
@@ -335,6 +338,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
+    isStandaloneRemoteSession: jest
+      .fn()
+      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),

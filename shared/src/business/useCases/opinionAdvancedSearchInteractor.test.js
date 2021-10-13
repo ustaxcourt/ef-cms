@@ -41,7 +41,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       });
   });
 
-  it('returns an unauthorized error on petitioner user role', async () => {
+  it('should return an unauthorized error when the currentUser is a petitioner', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
     });
@@ -51,11 +51,11 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('returns results with an authorized user role (petitionsclerk)', async () => {
+  it('should return results when the current user has permission to perform advanced opinion searches (petitionsclerk)', async () => {
     const result = await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(result).toMatchObject([
@@ -80,7 +80,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     ]);
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+  it('should return no more than MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -102,13 +102,13 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
-  it('searches for documents that are of type opinions', async () => {
+  it('should search for documents that are of type opinions', async () => {
     const keyword = 'keyword';
 
     await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
-      startDate: '2001-01-01',
+      startDate: '01/01/2001',
     });
 
     expect(
@@ -116,6 +116,17 @@ describe('opinionAdvancedSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+    });
+  });
+
+  it('should search for opinions with isOpinionSearch set to true', async () => {
+    await opinionAdvancedSearchInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: true,
     });
   });
 });

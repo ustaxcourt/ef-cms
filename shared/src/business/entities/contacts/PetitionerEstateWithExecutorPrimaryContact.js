@@ -1,7 +1,5 @@
-const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
 const { ContactFactory } = require('./ContactFactory');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * returns the constructor used for creating the PetitionerEstateWithExecutorPrimaryContact entity

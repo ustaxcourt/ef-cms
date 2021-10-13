@@ -17,9 +17,7 @@ const {
   SCENARIOS,
   SERVED_PARTIES_CODES,
 } = require('./EntityConstants');
-const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 // TODO: when 6217 is done, enable the commented validators
 

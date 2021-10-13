@@ -33,8 +33,8 @@ echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"1.0.4"* ]]; then
-  echo "Please set your terraform version to 1.0.4 before deploying."
+if [[ ${tf_version} != *"1.0.7"* ]]; then
+  echo "Please set your terraform version to 1.0.7 before deploying."
   exit 1
 fi
 

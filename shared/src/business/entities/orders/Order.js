@@ -1,12 +1,10 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } = require('../EntityConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * @param {object} rawOrder the raw order data
