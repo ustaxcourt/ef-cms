@@ -13,7 +13,7 @@ const getAllItemsForCode = async eventCode => {
   const responseQueue = [];
 
   const res = await esClient.search({
-    _source: ['createdAt.S', 'isPaper.BOOL'],
+    _source: ['docketNumber.S', 'createdAt.S', 'isPaper.BOOL'],
     body: {
       query: {
         bool: {
@@ -65,8 +65,6 @@ const getAllItemsForCode = async eventCode => {
 };
 
 const getDocketEntriesForCode = async ({ eventCode, gte, lte }) => {
-  console.log({ gte, lte });
-
   const esClient = await getClient({ environmentName });
   const query = {
     body: {
@@ -94,7 +92,7 @@ const getDocketEntriesForCode = async ({ eventCode, gte, lte }) => {
     size: 10000,
   };
   const results = await esClient.search(query);
-  console.log(`Total: ${results.hits.total.value}`);
+  // console.log(`Total: ${results.hits.total.value}`);
   return results.hits.hits;
 };
 
@@ -110,35 +108,45 @@ const getCounts = async ({ eventCode, isPaper, month, showCases = false }) => {
 
     if (showCases) {
       paperPetitions.forEach(p => {
-        console.log({
-          docketNumber: p['_source'].docketNumber,
-          filedBy: p['_source'].filedBy,
-          receivedAt: p['_source'].receivedAt,
-        });
+        console.log(
+          `${p['_source'].receivedAt.S},${p['_source'].docketNumber.S}`,
+        );
       });
     }
 
     return paperPetitions.length;
   } else {
     allPetitions = await getAllItemsForCode(eventCode);
-    console.log(`allPetitions.length: ${allPetitions.length};`);
     allPetitions = allPetitions.filter(p => !p.isPaper?.BOOL);
-    return allPetitions.filter(
+    const filteredPetitions = allPetitions.filter(
       p =>
         dateStringsCompared(p.createdAt.S, gte) >= 0 &&
         dateStringsCompared(p.createdAt.S, lte) < 0,
-    ).length;
+    );
+
+    if (showCases) {
+      filteredPetitions.forEach(p => {
+        console.log(`${p.createdAt?.S},${p.docketNumber?.S}`);
+      });
+    }
+    return filteredPetitions.length;
   }
 };
 
 (async () => {
   const results = {};
   const eventCode = process.argv[3] || 'LEA';
+  const showCases = process.argv[4] === 'true';
 
   for (let month = 1; month <= 12; month++) {
     results[month] = {
-      isElectronic: await getCounts({ eventCode, isPaper: false, month }),
-      isPaper: await getCounts({ eventCode, isPaper: true, month }),
+      isElectronic: await getCounts({
+        eventCode,
+        isPaper: false,
+        month,
+        showCases,
+      }),
+      isPaper: await getCounts({ eventCode, isPaper: true, month, showCases }),
     };
   }
   console.log(results);
