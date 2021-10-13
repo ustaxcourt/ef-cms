@@ -21,10 +21,13 @@ resource "aws_lambda_function" "api_public_lambda" {
 }
 
 resource "aws_api_gateway_authorizer" "public_authorizer" {
-  name                   = "public_authorizer_${var.environment}_${var.current_color}"
-  rest_api_id            = aws_api_gateway_rest_api.gateway_for_api_public.id
-  authorizer_uri         = var.public_authorizer_uri
-  authorizer_credentials = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
+  name                             = "public_authorizer_${var.environment}_${var.current_color}"
+  rest_api_id                      = aws_api_gateway_rest_api.gateway_for_api_public.id
+  authorizer_uri                   = var.public_authorizer_uri
+  type                             = "REQUEST"
+  identity_source                  = []
+  authorizer_result_ttl_in_seconds = 0
+  authorizer_credentials           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
 
 resource "aws_api_gateway_rest_api" "gateway_for_api_public" {
@@ -69,7 +72,7 @@ resource "aws_api_gateway_method" "api_public_method" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
   resource_id   = aws_api_gateway_resource.api_public_resource.id
   http_method   = "ANY"
-  authorization = "NONE"
+  authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.public_authorizer.id
 }
 
