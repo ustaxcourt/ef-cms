@@ -20,10 +20,24 @@ const userId = process.argv[3];
               },
             },
             {
-              match: {
-                'pk.S': `user|${userId}`,
+              match_phrase_prefix: {
+                'pk.S': 'user|',
               },
             },
+            // {
+            //   match: {
+            //     'sk.S': `case|`,
+            //   },
+            // },
+            //   {
+            //     "query": {
+            //         "match_phrase_prefix": {
+            //             "title": {
+            //                 "query": "a"
+            //             }
+            //         }
+            //     }
+            // }
           ],
         },
       },
@@ -31,7 +45,10 @@ const userId = process.argv[3];
     index: 'efcms-user',
   };
 
-  const results = await esClient.count(query);
+  const results = await esClient.search(query);
 
-  console.log(results);
+  // console.log(results.hits.hits);
+  results.hits.hits.forEach(hit => {
+    console.log(hit['_source']);
+  });
 })();
