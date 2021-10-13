@@ -2,7 +2,7 @@ const { getClient } = require('../../../web-api/elasticsearch/client');
 const { getVersion } = require('..//util');
 
 const environmentName = process.argv[2] || 'exp1';
-const userId = process.argv[3];
+// const userId = process.argv[3];
 
 (async () => {
   const version = await getVersion();
@@ -20,24 +20,15 @@ const userId = process.argv[3];
               },
             },
             {
-              match_phrase_prefix: {
-                'pk.S': 'user|',
+              regexp: {
+                'pk.S': 'user|.*',
               },
             },
-            // {
-            //   match: {
-            //     'sk.S': `case|`,
-            //   },
-            // },
-            //   {
-            //     "query": {
-            //         "match_phrase_prefix": {
-            //             "title": {
-            //                 "query": "a"
-            //             }
-            //         }
-            //     }
-            // }
+            {
+              regexp: {
+                'sk.S': 'case|.*',
+              },
+            },
           ],
         },
       },
@@ -46,8 +37,9 @@ const userId = process.argv[3];
   };
 
   const results = await esClient.search(query);
+  // const count = await esClient.count(query);
+  console.log('count!!!', results.hits.hits.length);
 
-  // console.log(results.hits.hits);
   results.hits.hits.forEach(hit => {
     console.log(hit['_source']);
   });
