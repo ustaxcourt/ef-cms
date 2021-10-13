@@ -21,7 +21,7 @@
 # allow ES to backup & restore into an s3 bucket
 
 curl -XPOST 'http://localhost:9200/_snapshot/snapshot-repository/main-snapshot/_restore' -H "Content-Type: application/json" -d'{
-  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-user-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
+  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
   "ignore_unavailable": false,
   "include_global_state": false
 }'
