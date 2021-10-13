@@ -37,7 +37,5 @@ exports.handler = async event => {
     },
   };
 
-  console.log('policy', policy);
-
   return policy;
 };
