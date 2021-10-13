@@ -21,7 +21,7 @@ describe('canAllowDocumentServiceForCase', () => {
     ).toEqual(false);
   });
 
-  it('returns true if the case is not in NEW status', () => {
+  it('returns true if the case is NOT in NEW status', () => {
     expect(
       canAllowDocumentServiceForCase({
         ...MOCK_CASE,
@@ -39,7 +39,7 @@ describe('canAllowDocumentServiceForCase', () => {
     ).toEqual(false);
   });
 
-  it('returns true if the case is closed more than six months ago', () => {
+  it('returns true if the case is in CLOSED status', () => {
     expect(
       canAllowDocumentServiceForCase({
         ...MOCK_CASE,

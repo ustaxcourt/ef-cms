@@ -3,6 +3,7 @@ const {
   caseSealedFormatter,
 } = require('../../utilities/caseFilter');
 const { Case, isSealedCase } = require('../../entities/cases/Case');
+const { decorateForCaseStatus } = require('../getCaseInteractor');
 const { NotFoundError } = require('../../../errors/errors');
 const { PublicCase } = require('../../entities/cases/PublicCase');
 
@@ -36,6 +37,7 @@ exports.getPublicCaseInteractor = async (
   }
 
   rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
+  rawCaseRecord = decorateForCaseStatus(rawCaseRecord);
 
   const publicCaseDetail = new PublicCase(rawCaseRecord, {
     applicationContext,
