@@ -742,7 +742,6 @@ jobs:
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DEFAULT_ACCOUNT_PASS_TO_USE=$(./scripts/get-default-account-pass.sh $CIRCLE_BRANCH)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
