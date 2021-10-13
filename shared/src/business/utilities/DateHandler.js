@@ -13,7 +13,7 @@ const FORMATS = {
   TIME: 'hh:mm a',
   TIME_TZ: 'h:mm a [ET]',
   YEAR: 'YYYY',
-  YYYY_MM: 'YYYY_MM',
+  YYYYMM: 'YYYY-MM',
   YYYYMMDD: 'YYYY-MM-DD',
 };
 
