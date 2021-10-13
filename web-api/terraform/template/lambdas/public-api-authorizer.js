@@ -15,7 +15,7 @@ const getWhiteListIps = async () => {
       TableName: `efcms-deploy-${process.env.STAGE}`,
     })
     .promise();
-  return whiteListIps?.ips;
+  return whiteListIps?.ips ?? [];
 };
 
 exports.handler = async event => {
@@ -36,6 +36,8 @@ exports.handler = async event => {
       Version: '2012-10-17',
     },
   };
+
+  console.log('policy', policy);
 
   return policy;
 };

@@ -1,6 +1,7 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
-    console.log(req.apiGateway.context);
+    console.log('context', req.apiGateway.context);
+    console.log('event', req.apiGateway.event);
 
     const { isTerminalUser } = req.apiGateway.context;
 
