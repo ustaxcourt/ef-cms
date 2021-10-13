@@ -10,7 +10,7 @@ describe('validateOrderAdvancedSearchInteractor', () => {
       orderSearch: {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'Joe Exotic',
-        startDate: '2001-01-01',
+        startDate: '01/01/2001',
       },
     });
 

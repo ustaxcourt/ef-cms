@@ -10,18 +10,16 @@ const {
   CourtIssuedDocumentDefault,
 } = require('./CourtIssuedDocumentDefault');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
-const yesterdayMoment = calculateISODate({ howMuch: -1, unit: 'days' });
+const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
 const yesterdayFormatted = formatDateString(
-  createISODateString(yesterdayMoment),
+  createISODateString(yesterdayISO),
   FORMATS.MMDDYYYY,
 );
 
@@ -41,7 +39,7 @@ CourtIssuedDocumentTypeD.prototype.init = function init(rawProps) {
 CourtIssuedDocumentTypeD.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    formatDateString(this.date, 'MM-DD-YYYY'),
+    formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
     this.freeText,
   );
 };

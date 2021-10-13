@@ -1,5 +1,5 @@
 const { CASE_SEARCH_MIN_YEAR } = require('../entities/EntityConstants');
-
+const { formatNow, FORMATS } = require('./DateHandler');
 const removeAdvancedSyntaxSymbols = text => {
   const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
@@ -18,7 +18,6 @@ const removeAdvancedSyntaxSymbols = text => {
  * @returns {object} the case data
  */
 const aggregateCommonQueryParams = ({
-  applicationContext,
   countryType,
   petitionerName,
   petitionerState,
@@ -98,7 +97,7 @@ const aggregateCommonQueryParams = ({
     const yearMin = yearFiledMin ? yearFiledMin.trim() : CASE_SEARCH_MIN_YEAR;
     const yearMax = yearFiledMax
       ? yearFiledMax.trim()
-      : applicationContext.getUtilities().formatNow('YYYY');
+      : formatNow(FORMATS.YEAR);
 
     commonQuery.push({
       range: {

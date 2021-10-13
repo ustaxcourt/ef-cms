@@ -14,13 +14,17 @@ export const docketClerkManuallyAddsCaseToTrialSessionWithoutNote =
 
       await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'trialSessionId',
-        value: cerebralTest.createdTrialSessions[0],
+        value:
+          cerebralTest.lastCreatedTrialSessionId ||
+          cerebralTest.createdTrialSessions[0],
       });
 
       await cerebralTest.runSequence('addCaseToTrialSessionSequence');
 
       await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: cerebralTest.createdTrialSessions[0],
+        trialSessionId:
+          cerebralTest.lastCreatedTrialSessionId ||
+          cerebralTest.createdTrialSessions[0],
       });
 
       const caseOrder = cerebralTest.getState('trialSession.caseOrder');

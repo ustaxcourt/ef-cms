@@ -10,17 +10,15 @@ const {
   US_STATES_OTHER,
 } = require('./EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const {
   userDecorator,
   userValidation,
   VALIDATION_ERROR_MESSAGES: USER_VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 const entityName = 'Practitioner';
 

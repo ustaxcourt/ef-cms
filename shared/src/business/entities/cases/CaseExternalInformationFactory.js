@@ -1,13 +1,11 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { Case } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * CaseExternalInformationFactory Entity

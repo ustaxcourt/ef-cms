@@ -1,6 +1,7 @@
 const {
   DOCUMENT_SEARCH_SORT,
   MAX_SEARCH_CLIENT_RESULTS,
+  OPINION_JUDGE_FIELD,
   ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
@@ -12,8 +13,8 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  isOpinionSearch,
   judge,
-  judgeType,
   keyword,
   omitSealed,
   opinionTypes,
@@ -103,23 +104,32 @@ exports.advancedDocumentSearch = async ({
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    const judgeField = `${judgeType}.S`;
-    if (judgeType === 'judge') {
+    if (isOpinionSearch) {
       docketEntryQueryParams.push({
         bool: {
-          should: {
-            match: {
-              [judgeField]: judgeName,
+          should: [
+            {
+              match: {
+                [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
+              },
             },
-          },
+            {
+              match: {
+                [`${ORDER_JUDGE_FIELD}.S`]: {
+                  operator: 'and',
+                  query: judgeName,
+                },
+              },
+            },
+          ],
         },
       });
-    } else if (judgeType === ORDER_JUDGE_FIELD) {
+    } else {
       docketEntryQueryParams.push({
         bool: {
           should: {
             match: {
-              [judgeField]: {
+              [`${ORDER_JUDGE_FIELD}.S`]: {
                 operator: 'and',
                 query: judgeName,
               },

@@ -48,7 +48,7 @@ exports.generateNoticeOfTrialIssuedInteractor = async (
     trialSession.startTime,
     'HH:mm',
   );
-  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
     applicationContext,

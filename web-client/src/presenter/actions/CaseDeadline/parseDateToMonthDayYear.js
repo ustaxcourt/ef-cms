@@ -7,26 +7,12 @@
  * @returns {object} the parsed date
  */
 export const parseDateToMonthDayYear = ({ applicationContext, dateString }) => {
-  const momentedDate = applicationContext
+  const dtDate = applicationContext
     .getUtilities()
     .prepareDateFromString(dateString);
-  let month;
-  let day;
-  let year;
 
-  if (
-    momentedDate &&
-    momentedDate.toDate() instanceof Date &&
-    !isNaN(momentedDate.toDate())
-  ) {
-    month = momentedDate.format('M');
-    day = momentedDate.format('D');
-    year = momentedDate.format('YYYY');
-  }
+  const result =
+    applicationContext.getUtilities().deconstructDate(dtDate) || {};
 
-  return {
-    day,
-    month,
-    year,
-  };
+  return result;
 };

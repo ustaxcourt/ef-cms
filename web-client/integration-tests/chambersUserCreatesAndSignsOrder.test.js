@@ -33,6 +33,6 @@ describe('Chambers dashboard', () => {
   chambersUserViewsCaseDetailAfterAddingOrder(cerebralTest, 3);
   chambersUserViewsDraftDocuments(cerebralTest, 1);
   chambersUserViewsSignDraftDocument(cerebralTest);
-  chambersUserAppliesSignatureToDraftDocument(cerebralTest);
+  chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'John O. Colvin');
   chambersUserSavesSignatureForDraftDocument(cerebralTest);
 });

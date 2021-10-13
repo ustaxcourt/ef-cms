@@ -9,15 +9,13 @@ const {
   ExternalDocumentFactory,
 } = require('../externalDocument/ExternalDocumentFactory');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('../externalDocument/ExternalDocumentInformationFactory');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 DocketEntryFactory.VALIDATION_ERROR_MESSAGES = {
   ...VALIDATION_ERROR_MESSAGES,

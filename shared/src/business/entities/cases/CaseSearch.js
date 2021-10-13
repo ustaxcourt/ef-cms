@@ -6,12 +6,10 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * Case Search entity

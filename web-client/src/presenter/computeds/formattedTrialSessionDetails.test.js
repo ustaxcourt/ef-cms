@@ -1,3 +1,4 @@
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -51,7 +52,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toBeUndefined();
   });
 
-  it('should NOT set canDelete and canEdit when the trial session does NOT have a start date', () => {
+  it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
     const result = runCompute(formattedTrialSessionDetails, {
@@ -60,6 +61,7 @@ describe('formattedTrialSessionDetails', () => {
 
     expect(result.canEdit).toBeUndefined();
     expect(result.canDelete).toBeUndefined();
+    expect(result.canClose).toBeUndefined();
   });
 
   describe('canDelete', () => {
@@ -201,6 +203,75 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toMatchObject({
         canEdit: false,
       });
+    });
+  });
+
+  describe('canClose', () => {
+    it('should be true if the session has no open cases, is standalone remote, and the trial date is in the past', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        caseOrder: [{ removedFromTrial: true }],
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result.canClose).toBe(true);
+    });
+
+    it('should not set canClose if the trial date is in the future', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        caseOrder: [{ removedFromTrial: true }],
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        startDate: FUTURE_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result.canClose).toBeUndefined();
+    });
+
+    it('should not set canClose if the session has open cases', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        caseOrder: [{ removedFromTrial: false }],
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+      expect(result.canClose).toBeUndefined();
+    });
+
+    it('should not set canClose if the session is not standalone remote', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        caseOrder: [],
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+        startDate: PAST_DATE,
+      };
+
+      const result = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {},
+        },
+      });
+
+      expect(result.canClose).toBeUndefined();
     });
   });
 

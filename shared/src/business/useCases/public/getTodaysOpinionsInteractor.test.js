@@ -80,4 +80,15 @@ describe('getTodaysOpinionsInteractor', () => {
     const results = await getTodaysOpinionsInteractor(applicationContext);
     expect(results.length).toBe(1);
   });
+
+  it('should set isOpinionSearch as true', async () => {
+    await getTodaysOpinionsInteractor(applicationContext, {});
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: true,
+    });
+  });
 });
