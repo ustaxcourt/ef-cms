@@ -1,10 +1,11 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
+    // TODO: what are we doing with this? should we default the user to terminal user?
+    // process.env.NODE_ENV !== 'production' ||
+
     let isTerminalUser =
-      process.env.NODE_ENV !== 'production' ||
-      (req.apiGateway.event &&
-        req.apiGateway.event.requestContext.authorizer.isTerminalUser ===
-          'true');
+      req.apiGateway.event &&
+      req.apiGateway.event.requestContext.authorizer.isTerminalUser === 'true';
 
     const event = {
       headers: req.headers,
