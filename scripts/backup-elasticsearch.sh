@@ -34,7 +34,7 @@ curl -XPUT 'http://localhost:9200/_snapshot/snapshot-repository' -H "Content-Typ
 
 # Backup the index
 curl -XPUT "http://localhost:9200/_snapshot/snapshot-repository/main-snapshot" -H "Content-Type: application/json" -d'{
-  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-user-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
+  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
   "ignore_unavailable": true,
   "include_global_state": false
 }'
