@@ -35,18 +35,21 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
       }
 
       const isServedDocument = !record.isNotServedDocument;
-      let canDisplayDocumentLink = record.isFileAttached && isServedDocument;
 
-      if (!isTerminalUser) {
-        canDisplayDocumentLink =
-          record.isCourtIssuedDocument &&
-          record.isFileAttached &&
-          isServedDocument &&
-          !record.isStricken &&
-          !record.isTranscript &&
-          !record.isStipDecision &&
-          EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
-      }
+      const canTerminalUserSeeLink = record.isFileAttached && isServedDocument;
+
+      const canPublicUserSeeLink =
+        record.isCourtIssuedDocument &&
+        record.isFileAttached &&
+        isServedDocument &&
+        !record.isStricken &&
+        !record.isTranscript &&
+        !record.isStipDecision &&
+        EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+
+      const canDisplayDocumentLink = isTerminalUser
+        ? canTerminalUserSeeLink
+        : canPublicUserSeeLink;
 
       const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
       const showLinkToDocument =
