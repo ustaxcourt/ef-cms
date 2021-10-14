@@ -61,7 +61,7 @@ OUTPUT:
 {"acknowledged":true}
 BACK UP AN INDEX:
 > curl -XPUT 'http://localhost:9200/_snapshot/snapshot-repository/snapshot_1' -H "Content-Type: application/json" -d'{
-  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
+  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-user-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
   "ignore_unavailable": true,
   "include_global_state": false
 }'
@@ -86,6 +86,7 @@ OUTPUT:
             "efcms-case",
             "efcms-message",
             "efcms-user",
+            "efcms-user-case"
          ],
          "include_global_state":false,
          "state":"SUCCESS",
@@ -113,7 +114,7 @@ experimental domain name: snapshot-test-domain
 Then restore a domain:
 Restore indices to the same cluster:
 > curl -XPOST 'http://localhost:9200/_snapshot/snapshot-repository/snapshot_1/_restore' -H "Content-Type: application/json" -d'{
-  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
+  "indices": ["efcms-work-item", "efcms-user", "efcms-case", "efcms-user-case", "efcms-docket-entry", "efcms-case-deadline", "efcms-message"],
   "ignore_unavailable": false,
   "include_global_state": false
 }'
