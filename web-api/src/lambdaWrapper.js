@@ -1,8 +1,10 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
     let isTerminalUser =
-      req.apiGateway.event &&
-      req.apiGateway.event.requestContext.authorizer.isTerminalUser === 'true';
+      process.env.NODE_ENV !== 'production' ||
+      (req.apiGateway.event &&
+        req.apiGateway.event.requestContext.authorizer.isTerminalUser ===
+          'true');
 
     const event = {
       headers: req.headers,

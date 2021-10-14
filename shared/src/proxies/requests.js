@@ -31,20 +31,36 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
  * @param {object} providers.params the params to send to the endpoint
- * @returns {Promise<*>} the response data
+ * @returns {Promise<*>} the response body data
  */
 const get = async ({ applicationContext, endpoint, params }) => {
+  const response = await getResponse({ applicationContext, endpoint, params });
+  return response.data;
+};
+
+/**
+ *
+ * getResponse
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.endpoint the endpoint to call
+ * @param {object} providers.params the params to send to the endpoint
+ * @returns {Promise<*>} the complete http response
+ */
+const getResponse = ({ applicationContext, endpoint, params }) => {
   const token = applicationContext.getCurrentUserToken();
-  return await applicationContext
+  return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
       params,
-    })
-    .then(response => response.data);
+    });
 };
+
+exports.getResponse = getResponse;
 
 const getMemoized = moize({
   equals(cacheKeyArgument, keyArgument) {
