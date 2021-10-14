@@ -16,7 +16,7 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getPublicDownloadPolicyUrlInteractor = async (
   applicationContext,
-  { docketNumber, key },
+  { docketNumber, isTerminalUser, key },
 ) => {
   const caseToCheck = await applicationContext
     .getPersistenceGateway()
@@ -46,7 +46,7 @@ exports.getPublicDownloadPolicyUrlInteractor = async (
 
   const isPrivate = isPrivateDocument(docketEntryEntity);
 
-  if (isPrivate) {
+  if (!isTerminalUser && isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');
   }
 
