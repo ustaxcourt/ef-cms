@@ -1,8 +1,6 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
-    // TODO: what are we doing with this? should we default the user to terminal user?
-    // process.env.NODE_ENV !== 'production' ||
-
+    // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
       req.apiGateway.event &&
       req.apiGateway.event.requestContext.authorizer.isTerminalUser === 'true';
