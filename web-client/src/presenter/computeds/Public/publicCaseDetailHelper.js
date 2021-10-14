@@ -5,6 +5,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
     applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
+  const isTerminalUser = get(state.isTerminalUser);
 
   const formatCaseDetail = caseToFormat => ({
     ...caseToFormat,
@@ -33,14 +34,19 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
         filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
       }
 
-      const canDisplayDocumentLink =
-        record.isCourtIssuedDocument &&
-        record.isFileAttached &&
-        !record.isNotServedDocument &&
-        !record.isStricken &&
-        !record.isTranscript &&
-        !record.isStipDecision &&
-        EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+      const isServedDocument = !record.isNotServedDocument;
+      let canDisplayDocumentLink = record.isFileAttached && isServedDocument;
+
+      if (!isTerminalUser) {
+        canDisplayDocumentLink =
+          record.isCourtIssuedDocument &&
+          record.isFileAttached &&
+          isServedDocument &&
+          !record.isStricken &&
+          !record.isTranscript &&
+          !record.isStipDecision &&
+          EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+      }
 
       const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
       const showLinkToDocument =
