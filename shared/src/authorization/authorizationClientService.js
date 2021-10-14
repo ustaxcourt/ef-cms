@@ -223,7 +223,6 @@ const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.VIEW_DOCUMENTS,
   ],
   reportersOffice: allInternalUserPermissions,
-  terminal: [ROLE_PERMISSIONS.ADVANCED_SEARCH, ROLE_PERMISSIONS.GET_JUDGES],
   trialclerk: [
     ...allInternalUserPermissions,
     ROLE_PERMISSIONS.BATCH_DOWNLOAD_TRIAL_SESSION,
