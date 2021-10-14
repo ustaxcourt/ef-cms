@@ -1,4 +1,4 @@
 const { deleteByGsi } = require('../helpers/deleteByGsi');
 
-exports.deleteWorkItem = async ({ applicationContext, workItem }) =>
+exports.deleteWorkItem = ({ applicationContext, workItem }) =>
   deleteByGsi({ applicationContext, gsi: workItem.workItemId });
