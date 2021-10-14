@@ -12,7 +12,7 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case containing the document
  * @param {string} providers.key the key of the document to get
- * @returns {string} the document download url
+ * @returns {Promise<string>} the document download url
  */
 exports.getPublicDownloadPolicyUrlInteractor = async (
   applicationContext,

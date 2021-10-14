@@ -26,9 +26,34 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     await expect(
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
+        isTerminalUser: false,
         key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       }),
     ).rejects.toThrow('Unauthorized to access private document');
+  });
+
+  it('should return a URL for a document accessible by terminal users', async () => {
+    const result = await getPublicDownloadPolicyUrlInteractor(
+      applicationContext,
+      {
+        docketNumber: '123-20',
+        isTerminalUser: true,
+        key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      },
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getPublicDownloadPolicyUrl,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getPublicDownloadPolicyUrl.mock
+        .calls[0][0],
+    ).toMatchObject({
+      key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    });
+
+    expect(result).toEqual('localhost');
   });
 
   it('should throw an error for a case that is not found', async () => {
