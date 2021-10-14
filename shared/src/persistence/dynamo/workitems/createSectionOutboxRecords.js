@@ -73,7 +73,7 @@ const createSectionOutboxRecentRecord = ({
  * @param {object} providers.workItem the work item data
  * @returns {Promise} resolves upon completion of persistence requests
  */
-const createSectionOutboxRecords = async ({
+const createSectionOutboxRecords = ({
   applicationContext,
   section,
   workItem,
@@ -84,13 +84,13 @@ const createSectionOutboxRecords = async ({
     sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
   };
 
-  await Promise.all([
-    await createSectionOutboxRecentRecord({
+  return Promise.all([
+    createSectionOutboxRecentRecord({
       Item,
       applicationContext,
       section,
     }),
-    await createSectionOutboxArchiveRecord({
+    createSectionOutboxArchiveRecord({
       Item,
       applicationContext,
       section,
