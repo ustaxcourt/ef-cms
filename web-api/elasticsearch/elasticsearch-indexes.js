@@ -4,5 +4,6 @@ exports.elasticsearchIndexes = [
   'efcms-docket-entry',
   'efcms-user',
   'efcms-message',
+  'efcms-user-case',
   'efcms-work-item',
 ];
