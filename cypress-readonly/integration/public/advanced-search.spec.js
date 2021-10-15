@@ -29,12 +29,16 @@ describe('Case Search Public UI Smoketests', () => {
   it('should display "No Matches Found" when case search yields no results', () => {
     navigateToDashboard();
     searchForCaseByDocketNumber('99-21');
-    expect(noSearchResultsContainer()).to.exist;
+    noSearchResultsContainer().should('exist');
   });
 
   it('should route to case detail when a case search by docket number match is found', () => {
     navigateToDashboard();
-    searchForCaseByDocketNumber('101-21');
-    expect(docketRecordTable()).to.exist;
+    searchForCaseByDocketNumber('104-20');
+    const docketRecord = docketRecordTable();
+    docketRecord.should('exist');
+    const petitionRow = docketRecord.get('tr').contains('Petition');
+    petitionRow.should('exist');
+    petitionRow.find('button').should('not.exist');
   });
 });

@@ -32,6 +32,8 @@ const getToken = event => {
     return event.queryStringParameters.token;
   } else if (event.authorizationToken) {
     return event.authorizationToken.substring(7);
+  } else if (event.headers?.authorization) {
+    return event.headers.authorization.substring(7);
   }
 };
 
