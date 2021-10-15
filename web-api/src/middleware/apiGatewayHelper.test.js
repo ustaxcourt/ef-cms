@@ -15,6 +15,7 @@ const {
 
 const EXPECTED_HEADERS = {
   'Access-Control-Allow-Origin': '*',
+  'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
