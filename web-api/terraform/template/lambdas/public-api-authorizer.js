@@ -35,6 +35,7 @@ exports.handler = async event => {
       ],
       Version: '2012-10-17',
     },
+    principalId: event.requestContext.identity.sourceIp,
   };
 
   return policy;
