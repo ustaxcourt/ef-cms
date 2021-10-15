@@ -43,6 +43,7 @@ describe('canAllowDocumentServiceForCase', () => {
     expect(
       canAllowDocumentServiceForCase({
         ...MOCK_CASE,
+        closedDate: '2019-03-01T21:40:48.000Z',
         status: CASE_STATUS_TYPES.closed,
       }),
     ).toEqual(true);

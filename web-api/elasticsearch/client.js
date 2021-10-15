@@ -12,22 +12,16 @@ const {
 } = require('../elasticsearch/elasticsearch-settings');
 
 const getHost = async DomainName => {
-  console.log(DomainName);
   try {
     const result = await es
       .describeElasticsearchDomain({
         DomainName,
       })
       .promise();
-
     return result.DomainStatus.Endpoint;
   } catch (err) {
     console.error(`could not find resource for ${DomainName}`, err);
   }
-};
-
-const cache = {
-  hosts: {},
 };
 
 /**
@@ -41,7 +35,7 @@ const cache = {
 const getClient = async ({ environmentName, version }) => {
   version = version || (await getVersion());
   const domainName = `efcms-search-${environmentName}-${version}`;
-  const host = cache.hosts[domainName] || (await getHost(domainName));
+  const host = await getHost(domainName);
   const credentials = new EnvironmentCredentials('AWS');
   return new elasticsearch.Client({
     amazonES: {

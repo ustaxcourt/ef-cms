@@ -23,12 +23,6 @@ When a deploy fails due to a permissions error with AWS, it’s likely that the 
 ```
 cd iam/terraform/account-specific/main && ../bin/deploy-app.sh && cd ../../environment-specific/main && ../bin/deploy-app.sh stg
 ```
-
-### Jest and babel-jest version 25.x
-
-These libaries are locked to version 24.x because upgrading them causes Sonarcloud to report 0% coverage.
-
-
 ### Issues with terraform deploy - first time
 
 ```

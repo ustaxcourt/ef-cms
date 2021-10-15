@@ -52,7 +52,7 @@ fi
 
 node -r esm web-api/streams-local.js &
 nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node -r esm web-api/websockets-local.js" &
-nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node -r esm web-api/src/app-local.js" &
+nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node -r esm --inspect web-api/src/app-local.js" &
 nodemon -e js --ignore web-client/ --ignore dist/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node -r esm web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then

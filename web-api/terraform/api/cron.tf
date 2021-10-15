@@ -42,3 +42,4 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_check_case_lambda" {
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.check_case_cron_rule[0].arn
 }
+
