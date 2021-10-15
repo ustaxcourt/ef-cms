@@ -1,7 +1,13 @@
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
+    // If you'd like to test the terminal user functionality locally, make this boolean true
+    let isTerminalUser =
+      req.apiGateway.event &&
+      req.apiGateway.event.requestContext.authorizer.isTerminalUser === 'true';
+
     const event = {
       headers: req.headers,
+      isTerminalUser,
       path: req.path,
       pathParameters: req.params,
       queryStringParameters: req.query,
@@ -25,6 +31,7 @@ export const lambdaWrapper = lambda => {
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
+      'X-Terminal-User': isTerminalUser,
     });
 
     if (

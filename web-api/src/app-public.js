@@ -88,8 +88,10 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
+
 app.get(
   '/public-api/maintenance-mode',
+  cors({ exposedHeaders: ['X-Terminal-User'] }),
   lambdaWrapper(getMaintenanceModeLambda),
 );
 

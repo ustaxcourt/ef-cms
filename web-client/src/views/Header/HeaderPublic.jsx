@@ -35,11 +35,13 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
+    isTerminalUser: state.isTerminalUser,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
+    isTerminalUser,
     navigateToCognitoSequence,
     showBetaBar,
     toggleBetaBarSequence,
@@ -59,7 +61,10 @@ export const HeaderPublic = connect(
                     <img alt="USTC Seal" src={seal} />
                   </a>
                 </div>
-                <h1 className="header-welcome-public">Welcome to DAWSON</h1>
+                <h1 className="header-welcome-public">
+                  Welcome to DAWSON{' '}
+                  {isTerminalUser && ': US Tax Court Terminal'}
+                </h1>
                 <div className="login-container">
                   <Button
                     className="usa-button--unstyled"

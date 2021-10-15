@@ -13,10 +13,11 @@ export const getMaintenanceModeForPublicAction = async ({
   path,
   store,
 }) => {
-  const maintenanceMode = await applicationContext
+  const { data: maintenanceMode, headers } = await applicationContext
     .getUseCases()
     .getMaintenanceModePublicInteractor(applicationContext);
 
+  store.set(state.isTerminalUser, headers['x-terminal-user'] === 'true');
   store.set(state.maintenanceMode, maintenanceMode);
 
   return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
