@@ -49,6 +49,13 @@ describe('generateChangeOfAddress', () => {
     );
   };
 
+  beforeAll(() => {
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockImplementation(
+        ({ caseToUpdate }) => caseToUpdate,
+      );
+  });
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
@@ -211,7 +218,7 @@ describe('generateChangeOfAddress', () => {
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
@@ -243,7 +250,7 @@ describe('generateChangeOfAddress', () => {
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
@@ -284,7 +291,7 @@ describe('generateChangeOfAddress', () => {
       expect.objectContaining({ docketNumber: MOCK_CASE.docketNumber }),
     ]);
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
@@ -346,8 +353,8 @@ describe('generateChangeOfAddress', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.privatePractitioners[0],
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.privatePractitioners[0],
     ).toMatchObject({
       email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
