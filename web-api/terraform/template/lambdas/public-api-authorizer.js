@@ -18,25 +18,32 @@ const getWhiteListIps = async () => {
   return whiteListIps?.ips ?? [];
 };
 
-exports.handler = async event => {
-  const ips = await getWhiteListIps();
+const createAuthorizer = ({ getWhiteListIpsFunction }) => {
+  return async event => {
+    const ips = await getWhiteListIpsFunction();
 
-  const policy = {
-    context: {
-      isTerminalUser: ips.includes(event.requestContext.identity.sourceIp),
-    },
-    policyDocument: {
-      Statement: [
-        {
-          Action: 'execute-api:Invoke',
-          Effect: 'Allow',
-          Resource: event.methodArn.split('/').slice(0, 2).join('/') + '/*',
-        },
-      ],
-      Version: '2012-10-17',
-    },
-    principalId: event.requestContext.identity.sourceIp,
+    const policy = {
+      context: {
+        isTerminalUser: ips.includes(event.requestContext.identity.sourceIp),
+      },
+      policyDocument: {
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Allow',
+            Resource: event.methodArn.split('/').slice(0, 2).join('/') + '/*',
+          },
+        ],
+        Version: '2012-10-17',
+      },
+      principalId: event.requestContext.identity.sourceIp,
+    };
+
+    return policy;
   };
-
-  return policy;
 };
+
+exports.handler = createAuthorizer({
+  getWhiteListIpsFunction: getWhiteListIps,
+});
+exports.createAuthorizer = createAuthorizer;
