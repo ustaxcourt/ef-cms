@@ -1,7 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { petitionsClerkAssignsWorkItemToSelf } from './journey/petitionsClerkAssignsWorkItemToSelf';
 import { petitionsClerkSelectsFirstPetitionOnMyDocumentQC } from './journey/petitionsClerkSelectsFirstPetitionOnMyDocumentQC';
@@ -21,9 +18,11 @@ describe('INDIVIDUAL DOC QC: Petition Gets Served', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest);
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
   petitionerViewsDashboard(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

@@ -1,9 +1,8 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { irsSuperuserAdvancedSearchForCase } from './journey/irsSuperuserAdvancedSearchForCase';
 import { irsSuperuserAdvancedSearchForCaseDocketNumber } from './journey/irsSuperuserAdvancedSearchForCaseDocketNumber';
 import { irsSuperuserSearchForCase } from './journey/irsSuperuserSearchForCase';
 import { irsSuperuserSearchForUnservedCase } from './journey/irsSuperuserSearchForUnservedCase';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 const cerebralTest = setupTest();
@@ -26,7 +25,11 @@ describe('irsSuperuser case search', () => {
   irsSuperuserAdvancedSearchForCaseDocketNumber(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'irsSuperuser@example.com');
   irsSuperuserSearchForUnservedCase(cerebralTest);
