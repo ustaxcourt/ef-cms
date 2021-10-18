@@ -209,7 +209,6 @@ const updatePetitionerInformationInteractor = async (
     !updatedCaseContact.isAddressSealed &&
     caseEntity.shouldGenerateNoticesForCase();
 
-  // shouldGenerateNoticesForCase(caseEntity)
   if (updateAddressOrPhone) {
     const privatePractitionersRepresentingContact =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(
