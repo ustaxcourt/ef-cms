@@ -8,10 +8,8 @@ import {
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
+  uploadPetition,
 } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -30,9 +28,13 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest, { procedureType: 'Regular' });
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      procedureType: 'Regular',
+    });
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);

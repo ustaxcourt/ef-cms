@@ -1,4 +1,5 @@
-import { applicationContext, handler } from './cognito-triggers';
+import { applicationContext } from '../../../src/applicationContextTriggers';
+import { handler } from './cognito-triggers';
 import { setUserEmailFromPendingEmailInteractor } from '../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
 
