@@ -1357,6 +1357,12 @@ const isValidatedDecorator = persistenceGatewayMethods => {
   return persistenceGatewayMethods;
 };
 
+// TODO: Delete temporary mock
+const getLimiterByKey = () => ({
+  maxInvocations: 5,
+  windowTime: 1000,
+});
+
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
@@ -1456,6 +1462,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
   getInternalUsers,
+  getLimiterByKey,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
