@@ -1,4 +1,5 @@
 import {
+  ADVANCED_SEARCH_OPINION_TYPES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -83,6 +84,7 @@ const allUseCases = {
 tryCatchDecorator(allUseCases);
 
 const frozenConstants = deepFreeze({
+  ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_TABS,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,

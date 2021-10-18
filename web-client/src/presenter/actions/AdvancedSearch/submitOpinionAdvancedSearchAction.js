@@ -24,11 +24,18 @@ export const submitOpinionAdvancedSearchAction = async ({
     );
   }
 
+  const opinionTypes = Object.keys(searchParams.opinionTypes).filter(
+    opinionType => searchParams.opinionTypes[opinionType] === true,
+  );
+
   try {
     const searchResults = await applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor(applicationContext, {
-        searchParams,
+        searchParams: {
+          ...searchParams,
+          opinionTypes,
+        },
       });
 
     return { searchResults };
