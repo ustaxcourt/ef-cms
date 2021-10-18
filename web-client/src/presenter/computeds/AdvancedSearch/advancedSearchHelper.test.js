@@ -1,4 +1,3 @@
-import { DATE_RANGE_SEARCH_OPTIONS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedSearchHelper as advancedSearchHelperComputed,
   paginationHelper,
@@ -65,7 +64,6 @@ describe('advancedSearchHelper', () => {
     });
     expect(result).toEqual({
       feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
-      showDateRangePicker: false,
       showFeedbackButton: true,
       showPractitionerSearch: undefined,
       showStateSelect: false,
@@ -81,7 +79,6 @@ describe('advancedSearchHelper', () => {
     });
     expect(result).toEqual({
       feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
-      showDateRangePicker: false,
       showFeedbackButton: true,
       showPractitionerSearch: true,
       showStateSelect: false,
@@ -480,34 +477,6 @@ describe('advancedSearchHelper', () => {
       const result = paginationHelper(undefined, 1, 25);
 
       expect(result).toEqual({});
-    });
-  });
-
-  describe('showDateRangePicker', () => {
-    it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {
-      const result = runCompute(advancedSearchHelper, {
-        state: {
-          ...getBaseState(globalUser),
-          advancedSearchForm: {
-            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
-          },
-        },
-      });
-
-      expect(result.showDateRangePicker).toBeFalsy();
-    });
-
-    it('should be true when state.advancedSearchForm.orderSearch.dateRange is customDates', () => {
-      const result = runCompute(advancedSearchHelper, {
-        state: {
-          ...getBaseState(globalUser),
-          advancedSearchForm: {
-            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES },
-          },
-        },
-      });
-
-      expect(result.showDateRangePicker).toBeTruthy();
     });
   });
 });
