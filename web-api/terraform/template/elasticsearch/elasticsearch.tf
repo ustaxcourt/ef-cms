@@ -2,6 +2,14 @@ resource "aws_cloudwatch_log_group" "elasticsearch_application_logs" {
   name = "/aws/aes/debug_${var.domain_name}"
 }
 
+resource "aws_cloudwatch_log_group" "elasticsearch_index_slow_logs" {
+  name = "/aws/aes/${var.domain_name}_index_slow_queries"
+}
+
+resource "aws_cloudwatch_log_group" "elasticsearch_search_slow_logs" {
+  name = "/aws/aes/${var.domain_name}_search_slow_queries"
+}
+
 resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
   policy_name = "allow_elasticsearch_to_write_logs"
 
@@ -45,6 +53,19 @@ resource "aws_elasticsearch_domain" "efcms-search" {
   }
 
   log_publishing_options {
+    enabled                  = true
+    log_type                 = "INDEX_SLOW_LOGS"
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_index_slow_logs.arn
+  }
+  
+  log_publishing_options {
+    enabled                  = true
+    log_type                 = "SEARCH_SLOW_LOGS"
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_search_slow_logs.arn
+  }
+  
+  log_publishing_options {
+    enabled                  = true
     cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_application_logs.arn
     log_type                 = "ES_APPLICATION_LOGS"
   }
