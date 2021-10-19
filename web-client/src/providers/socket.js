@@ -40,10 +40,12 @@ export const socketProvider = ({ socketRouter }) => {
           };
           socket.onclose = e => {
             socket = null;
-            console.log(
-              'Socket is closed. Reconnect will be attempted in 1 second.',
-              e.reason,
-            );
+            if (!process.env.CI) {
+              console.log(
+                'Socket is closed. Reconnect will be attempted in 1 second.',
+                e.reason,
+              );
+            }
             setTimeout(() => {
               start();
             }, 1000);
