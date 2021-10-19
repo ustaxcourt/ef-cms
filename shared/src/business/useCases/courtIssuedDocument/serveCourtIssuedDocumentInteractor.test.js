@@ -163,6 +163,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
 
+    applicationContext.logger.error.mockImplementation(() => {});
+
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockResolvedValue(1);
@@ -534,5 +536,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: mockCases[0].docketNumber,
       status: false,
     });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      'Error attempting to serve a Court Issued Document',
+      {
+        err: new Error('whoops, that is an error!'),
+      },
+    );
   });
 });

@@ -303,4 +303,25 @@ describe('setServiceIndicatorsForCases', () => {
       getPetitionerById(result, OTHER_CONTACT_ID).serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_NONE);
   });
+
+  it(`should return ${SERVICE_INDICATOR_TYPES.SI_PAPER} for a petitioner with no private practitioners`, () => {
+    const caseDetail = {
+      ...baseCaseDetail,
+      petitioners: [
+        ...baseCaseDetail.petitioners,
+        {
+          contactId: OTHER_CONTACT_ID,
+          contactType: CONTACT_TYPES.otherPetitioner,
+          name: 'Test Petitioner2',
+        },
+      ],
+      privatePractitioners: undefined,
+    };
+
+    const result = setServiceIndicatorsForCase(caseDetail);
+
+    expect(
+      getPetitionerById(result, OTHER_CONTACT_ID).serviceIndicator,
+    ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
+  });
 });

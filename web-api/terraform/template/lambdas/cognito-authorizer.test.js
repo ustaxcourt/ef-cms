@@ -5,12 +5,13 @@ jest.mock('../../../src/createLogger', () => {
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
+const authorizer = require('./cognito-authorizer');
 const axios = require('axios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const { createLogger } = require('../../../src/createLogger');
-const { handler } = require('./cognito-authorizer');
+const { handler } = authorizer;
 const { transports } = require('winston');
 
 describe('cognito-authorizer', () => {

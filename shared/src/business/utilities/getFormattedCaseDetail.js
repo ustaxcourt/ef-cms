@@ -1,10 +1,10 @@
 const {
   calculateDifferenceInDays,
   calculateISODate,
+  combineISOandEasternTime,
   createISODateString,
   formatDateString,
   FORMATS,
-  prepareDateFromEST,
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
@@ -194,6 +194,10 @@ const getFilingsAndProceedings = formattedDocketEntry => {
 /**
  * formats trial session fields for display
  *
+ * @param {string} judgeName the name of the judge
+ * @param {string} trialDate ISO-8601 GMT timestamp
+ * @param {string} trialLocation location of the trial
+ * @param {string} trialTime eastern time zone string representing hours and minutes HH:mm
  * @returns formatted trial session fields
  */
 
@@ -213,15 +217,10 @@ const formattedTrialSessionDetails = ({
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
   } else if (trialTime) {
-    const inputDateString = `${trialDate} ${trialTime}`; // "2011-11-11 11:00"
-    const dateStringGMT = prepareDateFromEST(
-      inputDateString,
-      FORMATS.TRIAL_TIME,
-    );
-    formattedTrialDate = formatDateString(dateStringGMT, FORMATS.DATE_TIME); // '11/11/11 11:00 am',
+    const combinedDateTime = combineISOandEasternTime(trialDate, trialTime);
+    formattedTrialDate = formatDateString(combinedDateTime, FORMATS.DATE_TIME);
   } else {
-    const dateStringGMT = prepareDateFromEST(trialDate, FORMATS.YYYYMMDD);
-    formattedTrialDate = formatDateString(dateStringGMT, FORMATS.MMDDYY);
+    formattedTrialDate = formatDateString(trialDate, FORMATS.MMDDYY);
   }
 
   return {

@@ -2,6 +2,20 @@ const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
 
 describe('DateHandler', () => {
+  describe('combine ISO date and EST time', () => {
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time', () => {
+      const inputISO = '2021-11-11T05:00:00.000Z';
+      const inputTimeInEst = '14:00'; //2:00 pm
+
+      const outputString = '2021-11-11T19:00:00.000Z';
+
+      const result = DateHandler.combineISOandEasternTime(
+        inputISO,
+        inputTimeInEst,
+      );
+      expect(result).toEqual(outputString);
+    });
+  });
   describe('pattern matcher', () => {
     describe('H:MM', () => {
       it('matches valid times', () => {

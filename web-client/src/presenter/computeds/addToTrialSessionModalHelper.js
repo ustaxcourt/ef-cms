@@ -49,7 +49,7 @@ export const trialSessionsModalHelper = ({
   let trialSessionsFormatted = trialSessions;
   let trialSessionsFormattedByState = null;
   let trialSessionStatesSorted = null;
-  let trialSessionRemote = 'Remote';
+  const trialSessionRemote = 'Remote';
 
   if (trialSessionsFormatted) {
     trialSessionsFormatted = formatTrialSessionsForHelper(
