@@ -276,19 +276,6 @@ export const getCaseMessagesForCase = async cerebralTest => {
 
 const client = require('../../shared/src/persistence/dynamodbClientService');
 
-export const getEmailsForAddress = address => {
-  return client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `email-${address}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  });
-};
-
 export const getUserRecordById = userId => {
   return client.get({
     Key: {
@@ -299,18 +286,15 @@ export const getUserRecordById = userId => {
   });
 };
 
-export const deleteEmails = emails => {
-  return Promise.all(
-    emails.map(email =>
-      client.delete({
-        applicationContext,
-        key: {
-          pk: email.pk,
-          sk: email.sk,
-        },
-      }),
-    ),
-  );
+export const setWhitelistIps = ips => {
+  return client.put({
+    Item: {
+      ips,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
+    },
+    applicationContext,
+  });
 };
 
 export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
@@ -615,7 +599,6 @@ export const uploadPetition = async (
   });
 
   cerebralTest.setState('caseDetail', response.data);
-
   return response.data;
 };
 

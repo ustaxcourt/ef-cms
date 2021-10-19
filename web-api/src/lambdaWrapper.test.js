@@ -8,6 +8,7 @@ describe('lambdaWrapper', () => {
 
   beforeEach(() => {
     req = {
+      apiGateway: {},
       body: 'blank',
       headers: {},
       locals: {},
@@ -42,6 +43,7 @@ describe('lambdaWrapper', () => {
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
+      'X-Terminal-User': undefined,
     });
   });
 
@@ -134,5 +136,30 @@ describe('lambdaWrapper', () => {
 
     expect(req.setTimeout).toHaveBeenCalled();
     expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
+  });
+
+  it('sets X-Terminal-User if it was set in api gateway event context', async () => {
+    req.apiGateway = {
+      event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
+    };
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      };
+    })(req, res);
+
+    expect(res.set).toHaveBeenCalledWith({
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control':
+        'max-age=0, private, no-cache, no-store, must-revalidate',
+      'Content-Type': 'application/json',
+      Pragma: 'no-cache',
+      Vary: 'Authorization',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Terminal-User': true,
+    });
   });
 });

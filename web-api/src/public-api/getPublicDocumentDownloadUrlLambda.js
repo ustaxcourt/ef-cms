@@ -14,6 +14,7 @@ exports.getPublicDocumentDownloadUrlLambda = event =>
         .getUseCases()
         .getPublicDownloadPolicyUrlInteractor(applicationContext, {
           ...event.pathParameters,
+          isTerminalUser: event.isTerminalUser,
         });
     },
     { user: {} },

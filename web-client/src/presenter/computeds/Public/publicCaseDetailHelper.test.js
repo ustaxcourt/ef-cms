@@ -42,24 +42,24 @@ describe('publicCaseDetailHelper', () => {
   });
 
   describe('printableDocketRecord', () => {
-    it('should show printable docket record button if the case status is not new', () => {
+    it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
       const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
+            canAllowPrintableDocketRecord: true,
             docketEntries: [],
-            isStatusNew: false,
           },
         },
       });
       expect(result.showPrintableDocketRecord).toBeTruthy();
     });
 
-    it('should not show printable docket record button if the case status is new', () => {
+    it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
       const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
+            canAllowPrintableDocketRecord: false,
             docketEntries: [],
-            isStatusNew: true,
           },
         },
       });
@@ -205,6 +205,120 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
           index: 4,
           showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: 'a456c942-9d19-491a-b764-e2eac34205b0',
+          eventCode: 'SPTO',
+          index: 5,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 6,
+          showLinkToDocument: false,
+        },
+      ]);
+    });
+
+    it('should show a link for documents requested by a terminal user', () => {
+      state.caseDetail.docketEntries = [
+        {
+          ...baseDocketEntry,
+          docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
+          documentTitle: 'Petition',
+          documentType: 'Petition',
+          eventCode: 'P',
+          index: 1,
+          isLegacyServed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: 'af6f67db-3160-4562-ac36-5481ab091952',
+          documentTitle:
+            'Request for Place of Trial at San Francisco, California',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+          index: 2,
+          isLegacyServed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+          documentType: 'Order of Dismissal and Decision',
+          eventCode: 'ODD',
+          index: 3,
+          isLegacyServed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
+          documentTitle:
+            'Notice of Trial on 12/30/2019 at San Francisco, California',
+          documentType: 'Notice of Trial',
+          eventCode: 'NTD',
+          index: 4,
+          isLegacyServed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: 'a456c942-9d19-491a-b764-e2eac34205b0',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 5,
+          isLegacyServed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 6,
+          isFileAttached: false,
+          isLegacyServed: true,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, {
+        state: { ...state, isTerminalUser: true },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay: 'Petition',
+          docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
+          eventCode: 'P',
+          index: 1,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay:
+            'Request for Place of Trial at San Francisco, California',
+          docketEntryId: 'af6f67db-3160-4562-ac36-5481ab091952',
+          eventCode: 'RQT',
+          index: 2,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay:
+            'Order of Dismissal and Decision Entered, Judge Buch',
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          eventCode: 'ODD',
+          index: 3,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay:
+            'Notice of Trial on 12/30/2019 at San Francisco, California',
+          docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
+          eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
+          index: 4,
+          showLinkToDocument: true,
         },
         {
           descriptionDisplay: 'Standing Pretrial Order',
