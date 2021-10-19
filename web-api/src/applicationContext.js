@@ -241,6 +241,7 @@ const {
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
   deleteKeyCount,
+  getLimiterByKey,
   incrementKeyCount,
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
@@ -1356,12 +1357,6 @@ const isValidatedDecorator = persistenceGatewayMethods => {
   });
   return persistenceGatewayMethods;
 };
-
-// TODO: Delete temporary mock
-const getLimiterByKey = () => ({
-  maxInvocations: 5,
-  windowTime: 1000,
-});
 
 const gatewayMethods = {
   ...isValidatedDecorator({
