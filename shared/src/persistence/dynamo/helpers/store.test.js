@@ -66,7 +66,7 @@ describe('getLimiterByKey', () => {
       .mockReturnValue({ maxInvocations: 5, windowTime: 1000 });
   });
 
-  it('should set expiresAt to the value passed in and reset the id back to 1', async () => {
+  it('should call getFromDeployTable with the correct key', async () => {
     const result = await getLimiterByKey({
       applicationContext,
       key: 'advanced-document-search',
