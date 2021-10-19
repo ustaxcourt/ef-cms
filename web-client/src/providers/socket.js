@@ -46,6 +46,9 @@ export const socketProvider = ({ socketRouter }) => {
                 e.reason,
               );
             }
+            if (e && e.reason === 'Normal connection closure') {
+              return;
+            }
             setTimeout(() => {
               start();
             }, 1000);
