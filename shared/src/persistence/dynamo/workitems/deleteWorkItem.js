@@ -1,10 +1,4 @@
-const client = require('../../dynamodbClientService');
+const { deleteByGsi } = require('../helpers/deleteByGsi');
 
 exports.deleteWorkItem = ({ applicationContext, workItem }) =>
-  client.delete({
-    applicationContext,
-    key: {
-      pk: `case|${workItem.docketNumber}`,
-      sk: `work-item|${workItem.workItemId}`,
-    },
-  });
+  deleteByGsi({ applicationContext, gsi: `work-item|${workItem.workItemId}` });

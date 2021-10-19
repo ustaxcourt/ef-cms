@@ -42,22 +42,10 @@ exports.archiveDraftDocumentInteractor = async (
   const { workItem } = docketEntryToArchive;
 
   if (workItem) {
-    await Promise.all([
-      applicationContext.getPersistenceGateway().deleteWorkItem({
-        applicationContext,
-        workItem,
-      }),
-      applicationContext.getPersistenceGateway().deleteSectionOutboxRecord({
-        applicationContext,
-        createdAt: workItem.createdAt,
-        section: workItem.sentBySection,
-      }),
-      applicationContext.getPersistenceGateway().deleteUserOutboxRecord({
-        applicationContext,
-        createdAt: workItem.createdAt,
-        userId: workItem.sentByUserId,
-      }),
-    ]);
+    await applicationContext.getPersistenceGateway().deleteWorkItem({
+      applicationContext,
+      workItem,
+    });
   }
 
   const updatedCase = await applicationContext
