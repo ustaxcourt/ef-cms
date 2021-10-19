@@ -99,12 +99,18 @@ app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 // Temporarily disabled for story 7387
 app.get(
   '/public-api/order-search',
-  advancedQueryLimiter({ applicationContext, key: 'document-search-limiter' }),
+  advancedQueryLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+  }),
   lambdaWrapper(orderPublicSearchLambda),
 );
 app.get(
   '/public-api/opinion-search',
-  advancedQueryLimiter({ applicationContext, key: 'document-search-limiter' }),
+  advancedQueryLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+  }),
   lambdaWrapper(opinionPublicSearchLambda),
 );
 
