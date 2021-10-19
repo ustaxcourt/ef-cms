@@ -191,7 +191,7 @@
     "deploy:migration-cron": "cd web-api/migration-cron-terraform/main && ../bin/deploy-app.sh",
     "deploy:ui": "cd web-client/terraform/main && ../bin/deploy-app.sh",
     "destroy:env": "node env-destroy-utils/destroyEnvironment.js $ENVIRONMENT",
-    "destroy:migration": "cd web-api/migration-terraform/main && ../bin/destroy-app.sh",
+    "destroy:migration": "cd web-api/migration-terraform/main && ../bin/destroy-app.sh $ENVIRONMENT",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh $ENVIRONMENT",
     "destroy:api": "cd web-api/terraform/main && ../bin/destroy-app.sh $ENVIRONMENT",
     "dynamo:admin": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
