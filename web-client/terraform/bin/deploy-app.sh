@@ -2,10 +2,11 @@
 
 ENVIRONMENT=$1
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="ui-${ENVIRONMENT}.tfstate"
-LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+
+echo "Running terraform with the following environment configs:"
+echo "  - ENVIRONMENT=${ENVIRONMENT}"
+
 
 tf_version=$(terraform --version)
 
@@ -14,7 +15,13 @@ if [[ ${tf_version} != *"1.0.7"* ]]; then
   exit 1
 fi
 
+BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="ui-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
 rm -rf .terraform
+
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
@@ -28,10 +35,9 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-# exit on any failure
 set -eo pipefail
 
-DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
+DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then
