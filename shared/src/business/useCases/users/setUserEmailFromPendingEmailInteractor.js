@@ -43,6 +43,9 @@ exports.updatePetitionerCases = updatePetitionerCases;
 /**
  * setUserEmailFromPendingEmailInteractor
  *
+ * this is invoked when logging in as a admissionsclerk and setting
+ * a party's email to a new petitioner who doesn't exist in cognito yet.
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.user the user
@@ -80,10 +83,12 @@ exports.setUserEmailFromPendingEmailInteractor = async (
 
   try {
     if (userEntity.role === ROLES.petitioner) {
-      await updatePetitionerCases({
-        applicationContext,
-        user: rawUser,
-      });
+      await applicationContext
+        .getMessageGateway()
+        .sendUpdatePetitionerCasesMessage({
+          applicationContext,
+          user: rawUser,
+        });
     } else {
       await updatePractitionerCases({
         applicationContext,
