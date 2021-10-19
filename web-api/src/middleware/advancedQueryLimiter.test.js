@@ -1,35 +1,19 @@
 const { advancedQueryLimiter } = require('./advancedQueryLimiter');
 
-let mockPersistenceGateway = {};
-
-jest.mock('../applicationContext', () => () => ({
-  getPersistenceGateway: () => mockPersistenceGateway,
-}));
+const {
+  applicationContext,
+} = require('../../../shared/src/business/test/createTestApplicationContext');
 
 describe('advancedQueryLimiter', () => {
-  let incrementKeyCountMock = jest.fn();
-  const deleteKeyCountMock = jest.fn();
-  const getLimiterByKeyMock = jest.fn().mockReturnValue({
-    maxInvocations: 5,
-    windowTime: 1000,
-  });
-  const applicationContextMock = {
-    getPersistenceGateway: () => ({
-      deleteKeyCount: jest.fn(),
-      getLimiterByKey: getLimiterByKeyMock,
-      incrementKeyCount: incrementKeyCountMock,
-      setExpiresAt: jest.fn(),
-    }),
-  };
-
   let statusMock;
   let res;
+  const MAX_INVOCATIONS = 5;
 
   beforeEach(() => {
-    mockPersistenceGateway.deleteKeyCount = deleteKeyCountMock;
-    mockPersistenceGateway.getLimiterByKey = getLimiterByKeyMock;
-    mockPersistenceGateway.incrementKeyCount = incrementKeyCountMock;
-    mockPersistenceGateway.setExpiresAt = jest.fn();
+    applicationContext.getPersistenceGateway().getLimiterByKey.mockReturnValue({
+      maxInvocations: MAX_INVOCATIONS,
+      windowTime: 1000,
+    });
 
     statusMock = jest.fn(() => ({
       json: () => jest.fn(),
@@ -42,87 +26,88 @@ describe('advancedQueryLimiter', () => {
     };
   });
 
-  it('should return a 429 response', async () => {
+  it('should return a 429 response when the total requests have exceeded the maxInvocations setup in the limiter configurations', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() + 1e6,
-      id: 20,
-    });
-    await advancedQueryLimiter('advanced-document-search')(
-      {
-        applicationContext: applicationContextMock,
-      },
-      res,
-      next,
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() + 1e6,
+        id: 20,
+      });
+    await advancedQueryLimiter({
+      applicationContext,
+      key: 'advanced-document-search',
+    })(null, res, next);
     expect(statusMock).toBeCalledWith(429);
     expect(next).not.toBeCalled();
   });
 
   it('should call next if limit is not reached', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() + 1e6,
-      id: 0,
-    });
-    await advancedQueryLimiter('advanced-document-search')(
-      {
-        applicationContext: applicationContextMock,
-      },
-      res,
-      next,
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() + 1e6,
+        id: 0,
+      });
+    await advancedQueryLimiter({
+      applicationContext,
+      key: 'advanced-document-search',
+    })(null, res, next);
     expect(next).toBeCalled();
   });
 
   it('should reset the limiter counter if the current time is greater than expiresAt', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() - 1e6,
-      id: 30,
-    });
-    await advancedQueryLimiter('advanced-document-search')(
-      {
-        applicationContext: applicationContextMock,
-      },
-      res,
-      next,
-    );
-    expect(deleteKeyCountMock).toBeCalled();
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() - 1e6,
+        id: 30,
+      });
+    await advancedQueryLimiter({
+      applicationContext,
+      key: 'advanced-document-search',
+    })(null, res, next);
+    expect(
+      applicationContext.getPersistenceGateway().deleteKeyCount,
+    ).toBeCalled();
     expect(next).toBeCalled();
   });
 
-  it('should be able to be invoked exactly 5 times before reaching next if limit is not reached', async () => {
+  it(`should be able to be invoked exactly ${MAX_INVOCATIONS} times before reaching next if limit is not reached`, async () => {
     const next = jest.fn();
     let count = 0;
-    incrementKeyCountMock.mockImplementation(() => {
-      return {
-        expiresAt: Date.now() + 1e6,
-        id: ++count,
-      };
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockImplementation(() => {
+        return {
+          expiresAt: Date.now() + 1e6,
+          id: ++count,
+        };
+      });
 
     for (let i = 0; i < 5; i++) {
-      await advancedQueryLimiter('advanced-document-search')(
+      await advancedQueryLimiter({
+        applicationContext,
+        key: 'advanced-document-search',
+      })(
         {
-          applicationContext: applicationContextMock,
+          applicationContext,
         },
         res,
         next,
       );
     }
 
-    await advancedQueryLimiter('advanced-document-search')(
-      {
-        applicationContext: applicationContextMock,
-      },
-      res,
-      next,
-    );
+    await advancedQueryLimiter({
+      applicationContext,
+      key: 'advanced-document-search',
+    })(null, res, next);
 
-    expect(next).toBeCalledTimes(5);
+    expect(next).toBeCalledTimes(MAX_INVOCATIONS);
     // the 6th call should have failed and not invoked next
-    expect(next.mock.calls[5]).toBeUndefined();
+    expect(next.mock.calls[MAX_INVOCATIONS]).toBeUndefined();
     expect(statusMock.mock.calls[0]).toBeDefined();
   });
 });
