@@ -6,7 +6,6 @@ provider "aws" {
   alias = "us-west-1"
 }
 
-
 module "ui-public-certificate" {
   source = "../../../iam/terraform/shared/certificates"
 

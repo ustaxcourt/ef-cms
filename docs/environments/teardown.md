@@ -7,7 +7,10 @@ This document covers what to do when an environment is no longer needed and shou
 To remove an environment, make sure your local development environment is configured as you would need to [setup an environment](./setup.md), ensuring that you are targeting the desired environment.
 
 ```bash
-npm run destroy:[ENV]
+npm run destroy:env <ENV>
+npm run destroy:api <ENV>
+npm run destroy:client <ENV>
+npm run destroy:migration <ENV>
 ```
 
 The cognito user pools have `lifecycle.prevent_destroy` set to true, so you have to manually delete them via the AWS console. You will have to delete both `efcms-<ENV>` and `efcms-irs-<ENV>` pools.
