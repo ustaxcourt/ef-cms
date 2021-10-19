@@ -5,6 +5,9 @@ const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 
+const createApplicationContext = require('./applicationContext');
+const applicationContext = createApplicationContext();
+
 const app = express();
 
 app.use(cors());
@@ -491,13 +494,19 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.get(
     '/case-documents/opinion-search',
     userIdLimiter('opinion-search'),
-    advancedQueryLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: 'document-search-limiter',
+    }),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
     userIdLimiter('order-search'),
-    advancedQueryLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: 'document-search-limiter',
+    }),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
