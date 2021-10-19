@@ -43,7 +43,7 @@ describe('lambdaWrapper', () => {
       Pragma: 'no-cache',
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
-      'X-Terminal-User': undefined,
+      'X-Terminal-User': false,
     });
   });
 
