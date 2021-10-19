@@ -5,6 +5,7 @@ const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { set } = require('lodash');
 
 app.use(cors());
@@ -77,12 +78,12 @@ const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
 // Temporarily disabled for story 7387
-// const {
-//   opinionPublicSearchLambda,
-// } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
+const {
+  opinionPublicSearchLambda,
+} = require('./public-api/opinionPublicSearchLambda');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
 
 /**
  * public-api
@@ -95,8 +96,16 @@ app.head(
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
 // Temporarily disabled for story 7387
-// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+app.get(
+  '/public-api/order-search',
+  advancedQueryLimiter('document-search-limiter'),
+  lambdaWrapper(orderPublicSearchLambda),
+);
+app.get(
+  '/public-api/opinion-search',
+  advancedQueryLimiter('document-search-limiter'),
+  lambdaWrapper(opinionPublicSearchLambda),
+);
 
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 

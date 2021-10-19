@@ -241,6 +241,7 @@ const {
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
   deleteKeyCount,
+  getLimiterByKey,
   incrementKeyCount,
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
@@ -1456,6 +1457,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
   getInternalUsers,
+  getLimiterByKey,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
