@@ -496,7 +496,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     userIdLimiter('opinion-search'),
     advancedQueryLimiter({
       applicationContext,
-      key: 'document-search-limiter',
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
     }),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
@@ -505,7 +505,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     userIdLimiter('order-search'),
     advancedQueryLimiter({
       applicationContext,
-      key: 'document-search-limiter',
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
     }),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
