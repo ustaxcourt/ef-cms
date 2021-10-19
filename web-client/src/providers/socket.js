@@ -38,6 +38,16 @@ export const socketProvider = ({ socketRouter }) => {
               resolve();
             }, 300);
           };
+          socket.onclose = e => {
+            socket = null;
+            console.log(
+              'Socket is closed. Reconnect will be attempted in 1 second.',
+              e.reason,
+            );
+            setTimeout(() => {
+              start();
+            }, 1000);
+          };
         } catch (e) {
           if (applicationContext) {
             console.error(e);
