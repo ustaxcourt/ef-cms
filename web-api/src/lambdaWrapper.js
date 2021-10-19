@@ -1,9 +1,11 @@
+const { get } = require('lodash');
+
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
-      req.apiGateway.event &&
-      req.apiGateway.event.requestContext.authorizer.isTerminalUser === 'true';
+      get(req, 'apiGateway.event.requestContext.authorizer.isTerminalUser') ===
+      'true';
 
     const event = {
       headers: req.headers,
