@@ -3,16 +3,27 @@ const {
 } = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
+const computeChangeOptions = ({ documentType }) => {
+  const options = {
+    h3: documentType.title,
+    isAddressAndPhoneChange: documentType.eventCode === 'NCAP',
+    isAddressChange: ['NCA', 'NCAP'].includes(documentType.eventCode),
+    isEmailChange: documentType.eventCode === 'NOCE',
+    isPhoneChangeOnly: documentType.eventCode === 'NCP',
+  };
+  return options;
+};
+
 const changeOfAddress = async ({ applicationContext, content }) => {
   const {
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
-    documentTitle,
     name,
     newData,
     oldData,
   } = content;
+  const options = computeChangeOptions(content);
 
   const changeOfAddressTemplate = reactTemplateGenerator({
     componentName: 'ChangeOfAddress',
@@ -24,11 +35,7 @@ const changeOfAddress = async ({ applicationContext, content }) => {
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
-        h3: documentTitle,
-        showAddressAndPhoneChange:
-          documentTitle === 'Notice of Change of Address and Telephone Number',
-        showOnlyPhoneChange:
-          documentTitle === 'Notice of Change of Telephone Number',
+        ...options,
       },
     },
   });
@@ -38,7 +45,7 @@ const changeOfAddress = async ({ applicationContext, content }) => {
     content: changeOfAddressTemplate,
     options: {
       overwriteMain: true,
-      title: documentTitle,
+      title: content.documentType.title,
     },
   });
 
@@ -66,4 +73,5 @@ const changeOfAddress = async ({ applicationContext, content }) => {
 
 module.exports = {
   changeOfAddress,
+  computeChangeOptions,
 };
