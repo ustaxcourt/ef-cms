@@ -5,7 +5,7 @@ exports.advancedQueryLimiter = key => async (req, res, next) => {
 
   const maxRequests = await applicationContext
     .getPersistenceGateway()
-    .getLimiterByKey({ applicationContext, key });
+    .getLimiterByKey({ applicationContext, key: `${key}-configuration` });
 
   const { maxInvocations, windowTime } = maxRequests;
 

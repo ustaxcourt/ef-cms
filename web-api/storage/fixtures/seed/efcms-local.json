@@ -1,5 +1,11 @@
 [
   {
+    "pk": "document-search-limiter-configuration",
+    "sk": "document-search-limiter-configuration",
+    "windowTime": 1000,
+    "maxInvocations": 9999
+  },
+  {
     "pk": "allowed-terminal-ips",
     "sk": "allowed-terminal-ips",
     "ips": []
