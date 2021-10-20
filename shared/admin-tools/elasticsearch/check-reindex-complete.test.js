@@ -38,13 +38,6 @@ describe('isReindexComplete', () => {
             },
           },
         },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 3,
-            },
-          },
-        },
       },
     });
     stats.mockReturnValueOnce({
@@ -67,13 +60,6 @@ describe('isReindexComplete', () => {
           total: {
             docs: {
               count: 5,
-            },
-          },
-        },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 0,
             },
           },
         },
@@ -111,13 +97,6 @@ describe('isReindexComplete', () => {
             },
           },
         },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 3,
-            },
-          },
-        },
       },
     });
     stats.mockReturnValueOnce({
@@ -140,13 +119,6 @@ describe('isReindexComplete', () => {
           total: {
             docs: {
               count: 5,
-            },
-          },
-        },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 0,
             },
           },
         },
@@ -184,13 +156,6 @@ describe('isReindexComplete', () => {
             },
           },
         },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 3,
-            },
-          },
-        },
       },
     });
     stats.mockReturnValueOnce({
@@ -213,13 +178,6 @@ describe('isReindexComplete', () => {
           total: {
             docs: {
               count: 5,
-            },
-          },
-        },
-        'efcms-user-case': {
-          total: {
-            docs: {
-              count: 0,
             },
           },
         },
@@ -256,16 +214,6 @@ describe('isReindexComplete', () => {
               },
             },
           },
-          'efcms-user-case': {
-            total: {
-              docs: {
-                count: 3,
-              },
-              translog: {
-                operations: 9,
-              },
-            },
-          },
         },
       })
       .mockReturnValueOnce({
@@ -299,13 +247,6 @@ describe('isReindexComplete', () => {
             },
           },
           'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
-              },
-            },
-          },
-          'efcms-user-case': {
             total: {
               docs: {
                 count: 3,
@@ -352,16 +293,6 @@ describe('isReindexComplete', () => {
               },
             },
           },
-          'efcms-user-case': {
-            total: {
-              docs: {
-                count: 3,
-              },
-              translog: {
-                operations: 9,
-              },
-            },
-          },
         },
       })
       .mockReturnValueOnce({
@@ -395,13 +326,6 @@ describe('isReindexComplete', () => {
             },
           },
           'efcms-user': {
-            total: {
-              docs: {
-                count: 3,
-              },
-            },
-          },
-          'efcms-user-case': {
             total: {
               docs: {
                 count: 3,
