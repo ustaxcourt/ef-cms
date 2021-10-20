@@ -1,4 +1,5 @@
 const { clearS3Buckets } = require('./clearS3Buckets');
+const { deleteCloudWatchLogs } = require('./deleteCloudWatchLogs');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
@@ -61,7 +62,8 @@ const teardownEnvironment = async () => {
     console.error('Error while deleting s3 bucket: ', e);
   }
 
-  // TODO - delete cloudwatch logs
+  await deleteCloudWatchLogs({ environment: environmentEast });
+  await deleteCloudWatchLogs({ environment: environmentWest });
 };
 
 teardownEnvironment();
