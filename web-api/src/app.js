@@ -5,6 +5,9 @@ const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 
+const createApplicationContext = require('./applicationContext');
+const applicationContext = createApplicationContext();
+
 const app = express();
 
 app.use(cors());
@@ -378,6 +381,7 @@ const {
 } = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
@@ -408,7 +412,6 @@ const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
-const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -491,13 +494,19 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.get(
     '/case-documents/opinion-search',
     userIdLimiter('opinion-search'),
-    slowDownLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
     userIdLimiter('order-search'),
-    slowDownLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
