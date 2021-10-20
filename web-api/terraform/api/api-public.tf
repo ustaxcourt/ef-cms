@@ -25,9 +25,8 @@ resource "aws_api_gateway_authorizer" "public_authorizer" {
   rest_api_id                      = aws_api_gateway_rest_api.gateway_for_api_public.id
   authorizer_uri                   = var.public_authorizer_uri
   type                             = "REQUEST"
-  # we can't leave this empty, so let's set it to something that will always exist
-  identity_source                  = "method.request.header.Host"
-  authorizer_result_ttl_in_seconds = 0
+  identity_source                  = "context.identity.sourceIp"
+  authorizer_result_ttl_in_seconds = 300
   authorizer_credentials           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
 }
 
