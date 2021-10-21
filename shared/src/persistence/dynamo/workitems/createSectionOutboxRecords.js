@@ -30,7 +30,7 @@ const createSectionOutboxArchiveRecord = async ({
   Item,
   section,
 }) => {
-  const skMonth = prepareDateFromString(Item.sk).format(FORMATS.YYYYMM);
+  const skMonth = prepareDateFromString(Item.sk).toFormat(FORMATS.YYYYMM);
 
   await put({
     Item: {
