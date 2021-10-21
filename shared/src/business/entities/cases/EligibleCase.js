@@ -23,6 +23,8 @@ EligibleCase.prototype.init = function init(rawCase) {
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
+  this.docketNumberWithSuffix =
+    rawCase.docketNumber + (rawCase.docketNumberSuffix || '');
   this.highPriority = rawCase.highPriority;
   this.caseType = rawCase.caseType;
   this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
@@ -53,6 +55,9 @@ const eligibleCaseSchema = {
   docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
     .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
     .optional(),
+  docketNumberWithSuffix: JoiValidationConstants.STRING.optional().description(
+    'Auto-generated from docket number and the suffix.',
+  ),
   highPriority: joi
     .boolean()
     .optional()
