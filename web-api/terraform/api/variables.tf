@@ -10,6 +10,10 @@ variable "authorizer_uri" {
   type = string
 }
 
+variable "public_authorizer_uri" {
+  type = string
+}
+
 variable "account_id" {
   type = string
 }

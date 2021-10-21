@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { IRSNotice } from '../CaseDetailEdit/IRSNotice';
+import { IRSNotice } from '../IRSNotice';
 import { PetitionPaymentForm } from './PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
 import { TrialCityOptions } from '../TrialCityOptions';
