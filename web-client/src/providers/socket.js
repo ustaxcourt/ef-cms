@@ -35,6 +35,11 @@ export const socketProvider = ({ socketRouter }) => {
             return reject(error);
           };
 
+          // TODO: remove this, Mike already added logic, I just need to log something
+          socket.onclose = event => {
+            console.log('WebSocket is closed now.', event);
+          };
+
           socket.onopen = () => {
             // the socket needs to be open for a short period or it could miss the first message
             setTimeout(() => {
