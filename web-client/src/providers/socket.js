@@ -13,7 +13,7 @@ export const socketProvider = ({ socketRouter }) => {
   let applicationContext;
   let socket;
   let pingInterval;
-  const PING_INTERVAL = 1000 * 60;
+  const PING_INTERVAL = 1000 * 2;
 
   const stopSocket = () => {
     if (socket) {
