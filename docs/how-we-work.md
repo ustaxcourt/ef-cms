@@ -65,7 +65,7 @@ Acceptance of work happens through the sprint as work is completed.
 1.  Development team completes work starting from the `staging` environment — see _Definition of Done_ above
 2.  The product team verifies the functionality against acceptance criteria in the Court's `migration` environment
 3.  Development team creates pull request to the Court's `staging` environment
-4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/CODE_REVIEW.md)
+4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/code-review.md)
 5.  The development team responds to the Court’s code review feedback
 6.  Pull request merged to staging branch and deployed to the staging environment by the Court
 7.  User testing is performed
@@ -76,7 +76,7 @@ Acceptance of work happens through the sprint as work is completed.
 1.  Development team completes work starting from the `staging` environment — see _Definition of Done_ above
 2.  The product team verifies the functionality against acceptance criteria in the Court's `test` environment
 3.  Development team creates pull request to the Court's `staging` environment
-4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/CODE_REVIEW.md)
+4.  The code is reviewed by the Court for compliance with the contract's [performance and deliverable standards](https://github.com/ustaxcourt/case-management-rfq/blob/master/02_SOW.md#deliverables-and-performance-standards), and for general technical quality — see [Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/code-review.md)
 5.  The development team responds to the Court’s code review feedback
 6.  Pull request merged and deployed to the `staging` environment by the Court
 7.  User testing is performed
@@ -88,7 +88,7 @@ The testing strategy is documented in [./docs](./docs).
 
 ### Code Review Process
 
-Documented in [our Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/CODE_REVIEW.md).
+Documented in [our Code Review Process](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/code-review.md).
 
 
 ## Principles

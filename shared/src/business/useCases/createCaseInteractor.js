@@ -74,15 +74,9 @@ exports.createCaseInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const petitionEntity = new CaseExternalIncomplete(petitionMetadata, {
     applicationContext,
   }).validate();
-
-  const updatedCaseWithServiceIndicators =
-    setServiceIndicatorsForCase(petitionEntity);
-
-  petitionEntity.petitioners = updatedCaseWithServiceIndicators.petitioners;
 
   const docketNumber =
     await applicationContext.docketNumberGenerator.createDocketNumber({
@@ -113,6 +107,7 @@ exports.createCaseInteractor = async (
 
     // remove the email from contactPrimary since the practitioners array should have a service email
     delete petitionEntity.getContactPrimary().email;
+    delete petitionEntity.getContactPrimary().serviceIndicator;
 
     privatePractitioners = [practitionerUser];
   }
@@ -129,6 +124,8 @@ exports.createCaseInteractor = async (
       applicationContext,
     },
   );
+
+  setServiceIndicatorsForCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;

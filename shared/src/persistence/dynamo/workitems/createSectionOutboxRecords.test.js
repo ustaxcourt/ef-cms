@@ -1,9 +1,12 @@
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const {
+  createSectionOutboxRecords,
+  TIME_TO_EXIST,
+} = require('./createSectionOutboxRecords');
 
-describe('createSectionOutboxRecord', () => {
+describe('createSectionOutboxRecords', () => {
   let mockWorkItem;
 
   beforeEach(() => {
@@ -17,11 +20,14 @@ describe('createSectionOutboxRecord', () => {
   });
 
   it('creates a section outbox record with the completed datetime', async () => {
-    await createSectionOutboxRecord({
+    await createSectionOutboxRecords({
       applicationContext,
       section: 'flavortown',
       workItem: mockWorkItem,
     });
+
+    const now = Math.floor(Date.now() / 1000);
+    const ttl = now - (now % 86400) + TIME_TO_EXIST;
 
     expect(
       applicationContext.getDocumentClient().put.mock.calls[0][0],
@@ -29,6 +35,17 @@ describe('createSectionOutboxRecord', () => {
       Item: {
         gsi1pk: 'work-item|work-item-id-123',
         pk: 'section-outbox|flavortown',
+        sk: mockWorkItem.completedAt,
+        ttl,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[1][0],
+    ).toMatchObject({
+      Item: {
+        gsi1pk: 'work-item|work-item-id-123',
+        pk: 'section-outbox|flavortown|2019-04',
         sk: mockWorkItem.completedAt,
       },
     });
@@ -41,10 +58,20 @@ describe('createSectionOutboxRecord', () => {
       completedMessage: undefined,
     };
 
-    await createSectionOutboxRecord({
+    await createSectionOutboxRecords({
       applicationContext,
       section: 'flavortown',
       workItem: mockWorkItem,
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0],
+    ).toMatchObject({
+      Item: {
+        gsi1pk: 'work-item|work-item-id-123',
+        pk: 'section-outbox|flavortown',
+        sk: mockWorkItem.updatedAt,
+      },
     });
 
     expect(

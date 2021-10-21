@@ -29,6 +29,7 @@ describe('Modify Practitioner Email', () => {
   it('practitioner creates a case', async () => {
     caseDetail = await uploadPetition(cerebralTest, {}, practitionerEmail);
     expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
     await refreshElasticsearchIndex();
   });
 

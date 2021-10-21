@@ -8,6 +8,7 @@ import { petitionerEditsCasePrimaryContactPhone } from './journey/petitionerEdit
 import { petitionerNavigatesToEditContact } from './journey/petitionerNavigatesToEditContact';
 import { petitionerViewsCaseDetail } from './journey/petitionerViewsCaseDetail';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, PARTY_TYPES } =
@@ -48,6 +49,11 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerViewsCaseDetail(cerebralTest, {
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
   });
+
+  loginAs(cerebralTest, 'petitionsclerk1@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
+
+  loginAs(cerebralTest, 'petitioner@example.com');
   petitionerNavigatesToEditContact(cerebralTest);
   petitionerEditsCasePrimaryContactAddress(cerebralTest);
   petitionerNavigatesToEditContact(cerebralTest);
@@ -56,6 +62,6 @@ describe('Modify Petitioner Contact Information', () => {
   petitionerEditsCasePrimaryContactAddressAndPhone(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsNoticeOfChangeOfAddress(cerebralTest);
+  docketClerkViewsNoticeOfChangeOfAddress({ cerebralTest });
   docketClerkViewsQCItemForNCAForUnrepresentedPetitioner(cerebralTest);
 });

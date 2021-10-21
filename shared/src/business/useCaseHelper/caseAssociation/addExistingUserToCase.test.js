@@ -14,12 +14,11 @@ describe('addExistingUserToCase', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
   const mockContactId = '60dd21b3-5abb-447f-b036-9794962252a0';
   const UPDATED_EMAIL = 'testing@example.com';
+  const mockUser = {
+    userId: USER_ID,
+  };
 
   beforeEach(() => {
-    const mockUser = {
-      userId: USER_ID,
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getCognitoUserIdByEmail.mockReturnValue(mockUser);
@@ -107,7 +106,7 @@ describe('addExistingUserToCase', () => {
       { applicationContext },
     );
 
-    const updatedCase = await addExistingUserToCase({
+    await addExistingUserToCase({
       applicationContext,
       caseEntity,
       contactId: mockContactId,
@@ -121,7 +120,7 @@ describe('addExistingUserToCase', () => {
     ).toMatchObject({
       userId: USER_ID,
     });
-    expect(getContactPrimary(updatedCase)).toMatchObject({
+    expect(getContactPrimary(caseEntity)).toMatchObject({
       contactId: USER_ID, // contactId was updated to new userId
       email: UPDATED_EMAIL,
       hasEAccess: true,
@@ -129,7 +128,7 @@ describe('addExistingUserToCase', () => {
     });
   });
 
-  it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
+  it('should call associateUserWithCase and update the representing arrays entries with the expect contactId', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admissionsClerk,
     });
@@ -173,7 +172,7 @@ describe('addExistingUserToCase', () => {
       { applicationContext },
     );
 
-    const updatedCase = await addExistingUserToCase({
+    await addExistingUserToCase({
       applicationContext,
       caseEntity,
       contactId: mockContactId,
@@ -181,7 +180,7 @@ describe('addExistingUserToCase', () => {
       name: 'Bob Ross',
     });
 
-    expect(updatedCase.privatePractitioners[0].representing).toEqual([USER_ID]);
+    expect(caseEntity.privatePractitioners[0].representing).toEqual([USER_ID]);
   });
 
   it("should not update the practitioner's representing array if the cognito user's ID already exists", async () => {
@@ -228,7 +227,7 @@ describe('addExistingUserToCase', () => {
       { applicationContext },
     );
 
-    const updatedCase = await addExistingUserToCase({
+    await addExistingUserToCase({
       applicationContext,
       caseEntity,
       contactId: mockContactId,
@@ -236,6 +235,49 @@ describe('addExistingUserToCase', () => {
       name: 'Bob Ross',
     });
 
-    expect(updatedCase.privatePractitioners[0].representing).toEqual([USER_ID]);
+    expect(caseEntity.privatePractitioners[0].representing).toEqual([USER_ID]);
+  });
+
+  it('should not change the service indicator to electronic if the user has a pendingEmail', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...mockUser,
+      pendingEmail: 'testing@example.com',
+    });
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.admissionsClerk,
+    });
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            contactId: mockContactId,
+            email: undefined,
+            hasEAccess: false,
+            name: 'Bob Ross',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    await addExistingUserToCase({
+      applicationContext,
+      caseEntity,
+      contactId: mockContactId,
+      email: UPDATED_EMAIL,
+      name: 'Bob Ross',
+    });
+
+    expect(getContactPrimary(caseEntity)).toMatchObject({
+      contactId: USER_ID, // contactId was updated to new userId
+      email: undefined,
+      hasEAccess: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    });
   });
 });

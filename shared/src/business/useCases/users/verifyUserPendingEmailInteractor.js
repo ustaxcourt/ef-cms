@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -11,12 +14,75 @@ const { Practitioner } = require('../../entities/Practitioner');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
 
+const updateCaseEntityAndGenerateChange = async ({
+  applicationContext,
+  rawCaseData,
+  user,
+}) => {
+  const caseEntity = new Case(rawCaseData, {
+    applicationContext,
+  });
+
+  const petitionerObject = caseEntity.getPetitionerById(user.userId);
+  if (!petitionerObject) {
+    applicationContext.logger.error(
+      `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+    );
+    return;
+  }
+
+  const oldEmail = petitionerObject.email;
+  const newData = {
+    email: user.email,
+    name: petitionerObject.name,
+  };
+
+  const oldData = { email: oldEmail };
+  petitionerObject.email = user.email;
+
+  if (
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    )
+  ) {
+    petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+  }
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+  const documentType = applicationContext
+    .getUtilities()
+    .getDocumentTypeForAddressChange({ newData, oldData });
+
+  const privatePractitionersRepresentingContact =
+    caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      petitionerObject.contactId,
+    );
+
+  if (caseEntity.shouldGenerateNoticesForCase()) {
+    const { changeOfAddressDocketEntry } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        caseEntity,
+        documentType,
+        newData,
+        oldData,
+        privatePractitionersRepresentingContact,
+        servedParties,
+        user,
+      });
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+  }
+
+  return caseEntity.validate();
+};
+
 const updateCasesForPetitioner = async ({
   applicationContext,
   petitionerCases,
   user,
 }) => {
-  const casesToUpdate = await Promise.all(
+  const rawCasesToUpdate = await Promise.all(
     petitionerCases.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
@@ -25,41 +91,21 @@ const updateCasesForPetitioner = async ({
     ),
   );
 
-  const validatedCasesToUpdate = casesToUpdate
-    .map(caseToUpdate => {
-      const caseEntity = new Case(caseToUpdate, {
+  const validatedCasesToUpdateInPersistence = [];
+  for (let rawCaseData of rawCasesToUpdate) {
+    validatedCasesToUpdateInPersistence.push(
+      await updateCaseEntityAndGenerateChange({
         applicationContext,
-      });
-
-      const petitionerObject = caseEntity.getPetitionerById(user.userId);
-      if (!petitionerObject) {
-        applicationContext.logger.error(
-          `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
-        );
-        return;
-      }
-
-      petitionerObject.email = user.email;
-
-      if (
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-          petitionerObject.contactId,
-        )
-      ) {
-        petitionerObject.serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      }
-
-      const newCase = new Case(caseEntity, { applicationContext }).validate();
-      return newCase;
-    })
-    // if petitioner is not found on the case, function exits early and returns `undefined`.
-    // if this happens, continue with remaining cases and do not throw exception, but discard
-    // any undefined values by filtering for truthy objects.
-    .filter(Boolean);
+        rawCaseData,
+        user,
+      }),
+    );
+  }
+  const filteredCasesToUpdateInPersistence =
+    validatedCasesToUpdateInPersistence.filter(Boolean);
 
   return Promise.all(
-    validatedCasesToUpdate.map(caseToUpdate =>
+    filteredCasesToUpdateInPersistence.map(caseToUpdate =>
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,
         caseToUpdate,
@@ -83,9 +129,8 @@ exports.updateCasesForPetitioner = updateCasesForPetitioner;
 const updatePetitionerCases = async ({ applicationContext, user }) => {
   const petitionerCases = await applicationContext
     .getPersistenceGateway()
-    .getIndexedCasesForUser({
+    .getCasesForUser({
       applicationContext,
-      statuses: applicationContext.getConstants().CASE_STATUSES,
       userId: user.userId,
     });
 
@@ -186,6 +231,10 @@ exports.updatePractitionerCases = updatePractitionerCases;
 /**
  * verifyUserPendingEmailInteractor
  *
+ * this interactor is invoked when a petitioner logs into DAWSON
+ * and changes their email to a different email address and clicks the
+ * verify link that was sent to their new email address.
+ *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
@@ -240,7 +289,6 @@ exports.verifyUserPendingEmailInteractor = async (
   userEntity.pendingEmailVerificationToken = undefined;
 
   const updatedRawUser = userEntity.validate().toRawObject();
-
   await applicationContext.getPersistenceGateway().updateUser({
     applicationContext,
     user: updatedRawUser,
@@ -252,7 +300,7 @@ exports.verifyUserPendingEmailInteractor = async (
         applicationContext,
         user: updatedRawUser,
       });
-    } else {
+    } else if (userEntity.role === ROLES.privatePractitioner) {
       await updatePractitionerCases({
         applicationContext,
         user: updatedRawUser,

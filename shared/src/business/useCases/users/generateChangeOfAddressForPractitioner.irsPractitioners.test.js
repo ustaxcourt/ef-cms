@@ -49,6 +49,12 @@ describe('generateChangeOfAddress', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockImplementation(
+        ({ caseToUpdate }) => caseToUpdate,
+      );
+
+    applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([{ docketNumber }]);
 
@@ -79,8 +85,8 @@ describe('generateChangeOfAddress', () => {
     ).toHaveBeenCalled();
     expect(cases).toMatchObject([expect.objectContaining({ docketNumber })]);
     const changeOfAddressDocketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'NCA',
       );
     expect(changeOfAddressDocketEntry.partyIrsPractitioner).toEqual(true);
@@ -97,8 +103,8 @@ describe('generateChangeOfAddress', () => {
     });
 
     const changeOfAddressDocketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'NCA',
       );
     expect(changeOfAddressDocketEntry.partyIrsPractitioner).toBeUndefined();
@@ -170,8 +176,8 @@ describe('generateChangeOfAddress', () => {
     });
 
     const changeOfAddressDocketEntry = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'NCA',
       );
     expect(
