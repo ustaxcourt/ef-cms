@@ -43,12 +43,6 @@ const {
   deleteRecord,
 } = require('../../persistence/elasticsearch/deleteRecord');
 const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
   deleteWorkItem,
 } = require('../../persistence/dynamo/workitems/deleteWorkItem');
 const {
@@ -441,13 +435,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
+    deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteSectionOutboxRecord),
-    deleteUserOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
@@ -481,6 +470,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getOrderSearchEnabled: jest.fn(),
@@ -491,6 +481,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
+    incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
@@ -498,6 +489,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
+    setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),

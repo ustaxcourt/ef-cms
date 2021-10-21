@@ -19,6 +19,7 @@ data "archive_file" "zip_api" {
     "streams.js",
     "cognito-triggers.js",
     "cognito-authorizer.js",
+    "public-api-authorizer.js",
     "report.html" ]
 }
 
@@ -34,6 +35,7 @@ data "archive_file" "zip_triggers" {
     "cron.js",
     "streams.js",
     "cognito-authorizer.js",
+    "public-api-authorizer.js",
     "report.html"
   ]
 }
@@ -373,6 +375,7 @@ module "api-east-green" {
   environment               = var.environment
   dns_domain                = var.dns_domain
   authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   pool_arn                  = aws_cognito_user_pool.pool.arn
@@ -419,6 +422,7 @@ module "api-east-blue" {
   environment               = var.environment
   dns_domain                = var.dns_domain
   authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {

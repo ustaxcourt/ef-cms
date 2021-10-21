@@ -241,6 +241,7 @@ const {
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
   deleteKeyCount,
+  getLimiterByKey,
   incrementKeyCount,
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
@@ -250,9 +251,6 @@ const {
 const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
-const {
-  deleteSectionOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
 const {
   deleteTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
@@ -274,9 +272,6 @@ const {
 const {
   deleteUserFromCase,
 } = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
-const {
-  deleteUserOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
   deleteWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
@@ -1418,13 +1413,11 @@ const gatewayMethods = {
   deleteDocumentFromS3,
   deleteMessage,
   deleteRecord,
-  deleteSectionOutboxRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserCaseNote,
   deleteUserConnection,
   deleteUserFromCase,
-  deleteUserOutboxRecord,
   deleteWorkItem,
   getAllWebSocketConnections,
   getBlockedCases,
@@ -1456,6 +1449,7 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
   getInternalUsers,
+  getLimiterByKey,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
@@ -1585,7 +1579,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
     },
     getConstants: () => ({
-      CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      ADVANCED_DOCUMENT_LIMITER_KEY: 'document-search-limiter',
+      CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
+      // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
