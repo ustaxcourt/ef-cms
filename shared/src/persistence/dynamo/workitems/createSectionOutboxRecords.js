@@ -1,6 +1,6 @@
 const {
+  formatDateString,
   FORMATS,
-  prepareDateFromString,
 } = require('../../../business/utilities/DateHandler');
 const { put } = require('../../dynamodbClientService');
 const TIME_TO_EXIST = 60 * 60 * 24 * 8; // 8 days
@@ -30,7 +30,7 @@ const createSectionOutboxArchiveRecord = async ({
   Item,
   section,
 }) => {
-  const skMonth = prepareDateFromString(Item.sk).toFormat(FORMATS.YYYYMM);
+  const skMonth = formatDateString(Item.sk, FORMATS.YYYYMM);
 
   await put({
     Item: {
