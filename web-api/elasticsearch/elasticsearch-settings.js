@@ -54,7 +54,7 @@ module.exports = {
       },
       'mapping.total_fields.limit': '1000',
       max_result_window: 20000,
-      number_of_replicas: 1,
+      number_of_replicas: 2,
       number_of_shards: 1,
     },
   },
