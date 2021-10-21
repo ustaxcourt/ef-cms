@@ -37,7 +37,9 @@ describe('Case Search Public UI Smoketests', () => {
     searchForCaseByDocketNumber('104-20');
     const docketRecord = docketRecordTable();
     docketRecord.should('exist');
-    const petitionRow = docketRecord.get('tr').contains('Petition');
+    const petitionRow = docketRecord
+      .get('tr')
+      .contains('Petition', { matchCase: false });
     petitionRow.should('exist');
     petitionRow.find('button').should('not.exist');
   });
