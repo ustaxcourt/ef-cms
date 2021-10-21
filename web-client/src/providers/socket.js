@@ -12,11 +12,14 @@ export const socketProvider = ({ socketRouter }) => {
   let app;
   let applicationContext;
   let socket;
+  let pingInterval;
+  const PING_INTERVAL = 1000 * 60;
 
   const stopSocket = () => {
     if (socket) {
       socket.close();
       socket = null;
+      clearInterval(pingInterval);
     }
   };
 
@@ -37,6 +40,10 @@ export const socketProvider = ({ socketRouter }) => {
             setTimeout(() => {
               resolve();
             }, 300);
+
+            pingInterval = setInterval(() => {
+              socket.send('ping');
+            }, PING_INTERVAL);
           };
         } catch (e) {
           if (applicationContext) {
