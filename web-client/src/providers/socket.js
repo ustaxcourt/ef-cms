@@ -13,13 +13,14 @@ export const socketProvider = ({ socketRouter }) => {
   let applicationContext;
   let socket;
   let pingInterval;
-  const PING_INTERVAL = 1000 * 2;
+  // API Gateway is 10 minute idle timeout, so let's just do 1 minute ping interval
+  const PING_INTERVAL = 1000 * 60;
 
   const stopSocket = () => {
     if (socket) {
+      clearInterval(pingInterval);
       socket.close();
       socket = null;
-      clearInterval(pingInterval);
     }
   };
 
@@ -33,11 +34,6 @@ export const socketProvider = ({ socketRouter }) => {
           socket.onerror = error => {
             console.error(error);
             return reject(error);
-          };
-
-          // TODO: remove this, Mike already added logic, I just need to log something
-          socket.onclose = event => {
-            console.log('WebSocket is closed now.', event);
           };
 
           socket.onopen = () => {
