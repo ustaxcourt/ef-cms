@@ -1,6 +1,7 @@
 // this script is going to query and then delete records so we can perform a migration
 
 const {
+  formatDateString,
   FORMATS,
   prepareDateFromString,
 } = require('../../src/business/utilities/DateHandler');
@@ -27,7 +28,7 @@ const archiveWorkItem = async ({ section, workItem }) => {
     pk: workItem.pk,
     sk: workItem.sk,
   };
-  const skDate = prepareDateFromString(workItem.sk.S).format(FORMATS.YYYYMM);
+  const skDate = formatDateString(workItem.sk.S, FORMATS.YYYYMM);
 
   console.log(`Key to create section-outbox|${section}|${skDate}`);
   console.log(`Key to delete ${JSON.stringify(Key)}`);
