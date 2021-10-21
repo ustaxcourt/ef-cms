@@ -16,6 +16,9 @@ describe('socket', () => {
     webSocketStub = jest.fn();
     webSocketCloseStub = jest.fn();
 
+    jest.spyOn(global, 'setInterval');
+    jest.spyOn(global, 'clearInterval');
+
     ({
       initialize: initializeSocket,
       start: startSocket,
@@ -53,6 +56,7 @@ describe('socket', () => {
 
     expect(webSocketStub).toHaveBeenCalled();
     expect(webSocketCloseStub).toHaveBeenCalled();
+    expect(clearInterval).toHaveBeenCalled();
   });
 
   it('calling start twice returns the original socket rather than a second one', () => {
