@@ -1,6 +1,26 @@
 const client = require('../../dynamodbClientService');
 
 /**
+ * getLimiterByKey
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {string} providers.key the key for retrieving the correct rate limiter
+ * @returns {Promise<object>} an object containing the value of maxInvocations and windowTime
+ */
+exports.getLimiterByKey = async ({ applicationContext, key }) => {
+  const result = await client.getFromDeployTable({
+    Key: {
+      pk: key,
+      sk: key,
+    },
+    applicationContext,
+  });
+
+  return result;
+};
+
+/**
  * incrementKeyCount
  *
  * @param {object} providers the providers object
