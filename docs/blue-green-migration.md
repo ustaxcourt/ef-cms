@@ -57,32 +57,28 @@ The application kicks off a migration automatically if it detects migrations tha
 
 ## First Time Deployment
 
-If this is the first time running a blue/green deployment on the environment:
+If this is a new environment:
 
-1. Ensure you have `COGNITO_SUFFIX` environment variables properly set
+1. Ensure you have `COGNITO_SUFFIX`, `ZONE_NAME`, `EFCMS_DOMAIN` environment variables properly set.
 2. Run `npm run deploy:account-specific` if it has not already been run for the account.
-3. Ensure you have `ZONE_NAME` and `EFCMS_DOMAIN` environment variables properly set
-4. Run `npm run deploy:environment-specific <ENV>`
-5. Delete the environment's lambda S3 bucket and 4 UI S3 buckets:
-   - `<ENV>.<ZONE_NAME>.<ENV>.us-east-1.lambdas`
-   - `app.<ENV>.<ZONE_NAME>`,
-   - `<ENV>.<ZONE_NAME>`,
-   - `app-failover.<ENV>.<ZONE_NAME>`,
-   - `failover.<ENV>.<ZONE_NAME>`, and
-6. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run:
+3. Run `npm run deploy:environment-specific <ENV>`
+4. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api terraform step. In order to resolve the error, run:
    -  `./setup-s3-deploy-files.sh <ENV>`
    -  `./setup-s3-maintenance-file.sh <ENV>`
-7. Run the following command to set the environment's migrate flag to **true**:
+5. Run the following command to set the environment's migrate flag to **true**:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'```
-8. Run the following command to set the environment's initial version (`${VERSION}` being the current version of the migrations, which you can tell in [this terraform file](web-api/terraform/template/main.tf)):
-    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"${VERSION}"}}'```
-9. Run the following command to set the environment's migrate flag to **false** (for next time):
+6. Run the following command to set the environment's initial destination table version:
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"alpha"}}'```
+6. Run the following command to set the environment's initial destination table version:
+    ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'```
+7. Rerun the circle deploy from step 4
+8. Run the following command to set the environment's migrate flag to **false** (for next time):
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'```
-10. Run the following command to set the environment's maintenance-mode flag to **false**:
+9. Run the following command to set the environment's maintenance-mode flag to **false**:
     ```aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'```
-11. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
+10. Run the SES verification script for this environment (view the script and ensure your environment variables are configured correctly):
     ```./web-api/verify-ses-email.sh```
-12. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
+11. Run the switch colors script to configure the top-level DNS records appropriately (view the script and ensure your environment variables are configured correctly):
     ```./web-client/switch-colors.sh```
 
 
