@@ -1178,6 +1178,38 @@ Case.prototype.getPetitionerById = function (contactId) {
 };
 
 /**
+ * Retrieves the petitioner with email userEmail on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {Object} the contact object
+ */
+const getPetitionerByEmail = function (rawCase, userEmail) {
+  return rawCase.petitioners?.find(
+    petitioner => petitioner.email === userEmail,
+  );
+};
+
+/**
+ * checks if the case is eligible for service.
+ *
+ * @returns {boolean} if the case is eligible or not
+ */
+Case.prototype.shouldGenerateNoticesForCase = function () {
+  return shouldGenerateNoticesForCase(this);
+};
+
+/**
+ * gets the petitioner with email userEmail from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerByEmail = function (userEmail) {
+  return getPetitionerByEmail(this, userEmail);
+};
+/**
  * adds the petitioner to the petitioners array
  *
  * @params {object} petitioner the petitioner to add to the case
@@ -2284,7 +2316,19 @@ const canAllowDocumentServiceForCase = rawCase => {
   if (typeof rawCase.canAllowDocumentService !== 'undefined') {
     return rawCase.canAllowDocumentService;
   }
+  return CASE_STATUS_TYPES.new !== rawCase.status;
+};
 
+/**
+ * determines whether or not to file automatically generated notices for notice of change of address
+ *
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we should automatically generate notices for a change of address
+ */
+const shouldGenerateNoticesForCase = rawCase => {
+  if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
+    return rawCase.shouldGenerateNotices;
+  }
   const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
     rawCase.status,
   );
@@ -2295,7 +2339,6 @@ const canAllowDocumentServiceForCase = rawCase => {
   const isRecent =
     rawCase.closedDate &&
     dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
-
   return Boolean(isOpen || isRecent);
 };
 
@@ -2329,5 +2372,6 @@ module.exports = {
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  shouldGenerateNoticesForCase,
   updatePetitioner,
 };

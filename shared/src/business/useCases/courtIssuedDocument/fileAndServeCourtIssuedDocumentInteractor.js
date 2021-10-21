@@ -72,16 +72,16 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   if (docketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
-  } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        status: true,
-      });
   }
+
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      status: true,
+    });
 
   try {
     const user = await applicationContext
