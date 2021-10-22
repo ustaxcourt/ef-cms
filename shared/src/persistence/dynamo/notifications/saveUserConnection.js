@@ -12,20 +12,34 @@ const TIME_TO_EXIST = 60 * 60 * 24;
  * @param {string} providers.userId the user id
  * @returns {Promise} the promise of the call to persistence
  */
-exports.saveUserConnection = ({
+exports.saveUserConnection = async ({
   applicationContext,
   connectionId,
   endpoint,
   userId,
 }) =>
-  put({
-    Item: {
-      connectionId,
-      endpoint,
-      gsi1pk: 'connection',
-      pk: `user|${userId}`,
-      sk: `connection|${connectionId}`,
-      ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
-    },
-    applicationContext,
-  });
+  Promise.all([
+    put({
+      Item: {
+        connectionId,
+        endpoint,
+        gsi1pk: 'connection',
+        pk: `user|${userId}`,
+        sk: `connection|${connectionId}`,
+        ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
+        userId,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        connectionId,
+        endpoint,
+        pk: `connection|${connectionId}`,
+        sk: `connection|${connectionId}`,
+        ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
+        userId,
+      },
+      applicationContext,
+    }),
+  ]);

@@ -1,6 +1,5 @@
-const client = require('../persistence/dynamodbClientService');
-
 // eslint-disable-next-line spellcheck/spell-checker
+
 /**
  * retrySendNotificationToConnections
  *
@@ -17,14 +16,14 @@ exports.retrySendNotificationToConnections = async ({
 }) => {
   const maxRetries = 1;
 
-  for (let index = 0; index < connections.length; index++) {
+  for (let connection of connections) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
             applicationContext,
-            connection: connections[index],
+            connection,
             messageStringified,
           });
         break;
@@ -32,13 +31,19 @@ exports.retrySendNotificationToConnections = async ({
         if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
-            await client.delete({
-              applicationContext,
-              key: {
-                pk: connections[index].pk,
-                sk: connections[index].sk,
-              },
-            });
+            try {
+              await applicationContext
+                .getPersistenceGateway()
+                .deleteUserConnection({
+                  applicationContext,
+                  connectionId: connection.connectionId,
+                });
+            } catch (error) {
+              applicationContext.logger.error(
+                'An error occurred while attempting to clean up the connection, it will be cleared via the dynamo TTL',
+                { error },
+              );
+            }
           } else {
             applicationContext.logger.error(
               'An error occurred while attempting to send notification to user',
