@@ -1579,6 +1579,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
     },
     getConstants: () => ({
+      ADVANCED_DOCUMENT_IP_LIMITER_KEY: 'document-search-ip-limiter',
       ADVANCED_DOCUMENT_LIMITER_KEY: 'document-search-limiter',
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
