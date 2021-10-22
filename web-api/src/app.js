@@ -4,6 +4,7 @@ const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
+const { set } = require('lodash');
 
 const createApplicationContext = require('./applicationContext');
 const applicationContext = createApplicationContext();
@@ -23,6 +24,12 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+  }
+  next();
+});
 app.use(logger());
 
 const {
@@ -405,6 +412,7 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
+const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -493,6 +501,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.get(
     '/case-documents/opinion-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
     userIdLimiter('opinion-search'),
     advancedQueryLimiter({
       applicationContext,
@@ -502,6 +514,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.get(
     '/case-documents/order-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
     userIdLimiter('order-search'),
     advancedQueryLimiter({
       applicationContext,
