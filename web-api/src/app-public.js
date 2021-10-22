@@ -30,6 +30,7 @@ app.use(async (req, res, next) => {
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
+    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
     const {
       get,
     } = require('../../shared/src/persistence/dynamodbClientService.js');
@@ -85,6 +86,7 @@ const {
 const {
   orderPublicSearchLambda,
 } = require('./public-api/orderPublicSearchLambda');
+const { ipLimiter } = require('./middleware/ipLimiter');
 
 /**
  * public-api
@@ -99,6 +101,10 @@ app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 // Temporarily disabled for story 7387
 app.get(
   '/public-api/order-search',
+  ipLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+  }),
   advancedQueryLimiter({
     applicationContext,
     key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
@@ -107,6 +113,10 @@ app.get(
 );
 app.get(
   '/public-api/opinion-search',
+  ipLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+  }),
   advancedQueryLimiter({
     applicationContext,
     key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
