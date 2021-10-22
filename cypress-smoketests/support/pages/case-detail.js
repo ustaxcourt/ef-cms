@@ -9,7 +9,7 @@ const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 exports.goToCaseDetail = docketNumber => {
-  cy.get('#search-field').type(docketNumber);
+  cy.get('#search-field').clear().type(docketNumber);
   cy.get('.ustc-search-button').click();
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };

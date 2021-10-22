@@ -31,7 +31,7 @@ export const setupEditPetitionDetailFormAction = ({
       paymentDateWaivedDay,
     ] = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'YYYY-MM-DD')
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'YYYYMMDD')
       .split('-');
 
     store.set(state.form.paymentDateWaivedYear, paymentDateWaivedYear);
@@ -41,7 +41,7 @@ export const setupEditPetitionDetailFormAction = ({
     const [paymentDateYear, paymentDateMonth, paymentDateDay] =
       applicationContext
         .getUtilities()
-        .formatDateString(caseDetail.petitionPaymentDate, 'YYYY-MM-DD')
+        .formatDateString(caseDetail.petitionPaymentDate, 'YYYYMMDD')
         .split('-');
 
     store.set(state.form.paymentDateYear, paymentDateYear);
@@ -57,7 +57,7 @@ export const setupEditPetitionDetailFormAction = ({
   if (caseDetail.irsNoticeDate) {
     const [irsYear, irsMonth, irsDay] = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.irsNoticeDate, 'YYYY-MM-DD')
+      .formatDateString(caseDetail.irsNoticeDate, 'YYYYMMDD')
       .split('-');
 
     store.set(state.form.irsYear, irsYear);

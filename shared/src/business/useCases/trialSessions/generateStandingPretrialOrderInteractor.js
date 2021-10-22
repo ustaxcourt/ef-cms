@@ -60,7 +60,7 @@ exports.generateStandingPretrialOrderInteractor = async (
     trialSession.startTime,
     'HH:mm',
   );
-  const formattedStartTime = formatDateString(trialStartTimeIso, 'hh:mm A');
+  const formattedStartTime = formatDateString(trialStartTimeIso, 'TIME');
 
   const formattedServedDate = formatNow(FORMATS.MMDDYY);
 

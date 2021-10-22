@@ -30,6 +30,7 @@ const {
   createISODateString,
   dateStringsCompared,
   formatDateString,
+  FORMATS,
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -40,12 +41,9 @@ const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
@@ -55,6 +53,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { Petitioner } = require('../contacts/Petitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -734,6 +733,7 @@ Case.VALIDATION_RULES = {
     .try(
       JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid('Standalone Remote'),
     )
     .optional()
     .description(
@@ -1489,7 +1489,10 @@ Case.prototype.generateTrialSortTags = function () {
     casePrioritySymbol = 'C';
   }
 
-  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
+  const formattedFiledTime = formatDateString(
+    receivedAt,
+    FORMATS.TRIAL_SORT_TAG,
+  );
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [
