@@ -41,7 +41,7 @@ describe('computeFilingFormDateAction', () => {
     expect(result.state.form.filingDate).toBeUndefined();
   });
 
-  it('leaves leaves original state of filing date unchanged if some filing date input value is not present', async () => {
+  it('leaves original state of filing date unchanged if some filing date input value is not present', async () => {
     const result = await runAction(computeFilingFormDateAction, {
       modules: {
         presenter,
