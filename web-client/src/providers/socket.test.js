@@ -11,6 +11,7 @@ describe('socket', () => {
   let initializeSocket;
   let startSocket;
   let stopSocket;
+  let oncloseFn;
   let onopenFn;
 
   beforeEach(() => {
@@ -19,6 +20,8 @@ describe('socket', () => {
 
     jest.spyOn(global, 'setInterval');
     jest.spyOn(global, 'clearInterval');
+    // prevent errors from printing during unit tests
+    jest.spyOn(console, 'error').mockImplementation(() => null);
 
     ({
       initialize: initializeSocket,
@@ -39,6 +42,10 @@ describe('socket', () => {
 
       set onopen(value) {
         onopenFn = value;
+      }
+
+      set onclose(value) {
+        oncloseFn = value;
       }
     };
 
@@ -76,5 +83,18 @@ describe('socket', () => {
     startSocket();
     onopenFn();
     expect(global.setInterval).toHaveBeenCalled();
+  });
+
+  it('reconnects the websocket connection if disconnected with a non-normal error message', () => {
+    startSocket();
+    oncloseFn({ reason: 'something bad happened' });
+    expect(console.error).toHaveBeenCalled();
+    expect(webSocketStub).toBeCalledTimes(2);
+  });
+
+  it('does not reconnect the websocket when closed via a normal event', () => {
+    startSocket();
+    oncloseFn({ reason: 'Normal connection closure' });
+    expect(webSocketStub).toBeCalledTimes(1);
   });
 });
