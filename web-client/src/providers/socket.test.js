@@ -11,6 +11,7 @@ describe('socket', () => {
   let initializeSocket;
   let startSocket;
   let stopSocket;
+  let onopenFn;
 
   beforeEach(() => {
     webSocketStub = jest.fn();
@@ -35,6 +36,10 @@ describe('socket', () => {
       close() {
         webSocketCloseStub();
       }
+
+      set onopen(value) {
+        onopenFn = value;
+      }
     };
 
     const mockSequence = jest.fn();
@@ -56,7 +61,7 @@ describe('socket', () => {
 
     expect(webSocketStub).toHaveBeenCalled();
     expect(webSocketCloseStub).toHaveBeenCalled();
-    expect(clearInterval).toHaveBeenCalled();
+    expect(global.clearInterval).toHaveBeenCalled();
   });
 
   it('calling start twice returns the original socket rather than a second one', () => {
@@ -65,5 +70,11 @@ describe('socket', () => {
 
     expect(webSocketStub).toBeCalledTimes(1);
     expect(webSocketCloseStub).not.toHaveBeenCalled();
+  });
+
+  it('calling start should create an interval which sends a ping message to backend', () => {
+    startSocket();
+    onopenFn();
+    expect(global.setInterval).toHaveBeenCalled();
   });
 });
