@@ -2,7 +2,7 @@ const joi = require('joi');
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { Case, getContactPrimary, getContactSecondary } = require('./Case');
 const { CaseExternal } = require('./CaseExternal');
 const { ContactFactory } = require('../contacts/ContactFactory');

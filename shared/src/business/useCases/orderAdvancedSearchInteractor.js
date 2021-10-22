@@ -11,10 +11,9 @@ const {
 const {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { caseSearchFilter } = require('../utilities/caseFilter');
-const { formatNow } = require('../../business/utilities/DateHandler');
+const { formatNow, FORMATS } = require('../../business/utilities/DateHandler');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 /**
@@ -73,12 +72,12 @@ exports.orderAdvancedSearchInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
-      judgeType: ORDER_JUDGE_FIELD,
+      isOpinionSearch: false,
       omitSealed,
       ...rawSearch,
     });
 
-  const timestamp = formatNow('YYYY/MM/DD HH:mm:ss.SSS [ET]');
+  const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   await applicationContext.logger.info('advanced order search', {
     ...omit(rawSearch, 'entityName'),
     size: results.length,

@@ -1,22 +1,21 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   SESSION_TERMS,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { isEmpty } = require('lodash');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * constructor
@@ -59,16 +58,27 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
   this.password = rawSession.password;
   this.postalCode = rawSession.postalCode;
+  this.sessionScope =
+    rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
+  this.isClosed = rawSession.isClosed || false;
   this.startDate = rawSession.startDate;
-  this.startTime = rawSession.startTime || '10:00';
+  if (isStandaloneRemoteSession(rawSession.sessionScope)) {
+    this.startTime = '13:00';
+  } else {
+    this.startTime = rawSession.startTime || '10:00';
+  }
   this.state = rawSession.state;
   this.swingSession = rawSession.swingSession;
   this.swingSessionId = rawSession.swingSessionId;
   this.term = rawSession.term;
   this.termYear = rawSession.termYear;
-  this.trialLocation = rawSession.trialLocation;
-  this.proceedingType = rawSession.proceedingType;
+  this.trialLocation = isStandaloneRemoteSession(rawSession.sessionScope)
+    ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+    : rawSession.trialLocation;
+  this.proceedingType = isStandaloneRemoteSession(rawSession.sessionScope)
+    ? TRIAL_SESSION_PROCEEDING_TYPES.remote
+    : rawSession.proceedingType;
   this.trialSessionId =
     rawSession.trialSessionId || applicationContext.getUniqueId();
 
@@ -137,10 +147,14 @@ const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   then: joi.when('proceedingType', {
     is: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     otherwise: joi.allow('').optional(),
-    then: joi.when('sessionType', {
-      is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
-      otherwise: joi.required(),
-      then: joi.allow('').optional(),
+    then: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      otherwise: joi.optional(),
+      then: joi.when('sessionType', {
+        is: [SESSION_TYPES.special, SESSION_TYPES.motionHearing],
+        otherwise: joi.required(),
+        then: joi.allow('').optional(),
+      }),
     }),
   }),
 });
@@ -164,7 +178,11 @@ TrialSession.validationRules = {
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    maxCases: joi.number().greater(0).integer().required(),
+    maxCases: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      otherwise: joi.number().greater(0).integer().required(),
+      then: joi.optional(),
+    }),
     meetingId: stringRequiredForRemoteProceedings,
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
@@ -172,6 +190,9 @@ TrialSession.validationRules = {
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
+    ).required(),
+    sessionScope: JoiValidationConstants.STRING.valid(
+      ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
     ).required(),
     sessionType: JoiValidationConstants.STRING.valid(
       ...Object.values(SESSION_TYPES),
@@ -198,13 +219,17 @@ TrialSession.validationRules = {
         userId: JoiValidationConstants.UUID.required(),
       })
       .optional(),
-    trialLocation: joi
-      .alternatives()
-      .try(
-        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
-        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-      )
-      .required(),
+    trialLocation: joi.when('sessionScope', {
+      is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      otherwise: joi
+        .alternatives()
+        .try(
+          JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+          JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+        )
+        .required(),
+      then: joi.optional(),
+    }),
     trialSessionId: JoiValidationConstants.UUID.optional(),
   },
 };
@@ -272,6 +297,7 @@ TrialSession.prototype.generateSortKeyPrefix = function () {
     }[sessionType] || 'H';
 
   const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+
   const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
   return skPrefix;
@@ -422,4 +448,27 @@ TrialSession.prototype.setNoticesIssued = function () {
   return this;
 };
 
-module.exports = { TrialSession: validEntityDecorator(TrialSession) };
+/**
+ * Determines if the scope of the trial session is standalone remote
+ *
+ * @param {object} arguments.sessionScope the session scope
+ * @returns {Boolean} if the scope is a standalone remote session
+ */
+const isStandaloneRemoteSession = function (sessionScope) {
+  return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+};
+
+/**
+ * set as closed
+ *
+ * @returns {TrialSession} the trial session entity
+ */
+TrialSession.prototype.setAsClosed = function () {
+  this.isClosed = true;
+  return this;
+};
+
+module.exports = {
+  TrialSession: validEntityDecorator(TrialSession),
+  isStandaloneRemoteSession,
+};

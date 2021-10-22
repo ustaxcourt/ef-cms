@@ -16,7 +16,7 @@
 
 ENV=$1
 
-MIGRATE_FLAG=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"migrate"},"sk":{"S":"migrate"}}' | jq -r ".Item.current.S")
+MIGRATE_FLAG=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"migrate"},"sk":{"S":"migrate"}}' | jq -r ".Item.current.BOOL")
 [ -z "$MIGRATE_FLAG" ] && MIGRATE_FLAG="false"
 
 echo "${MIGRATE_FLAG}"

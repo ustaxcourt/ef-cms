@@ -11,6 +11,7 @@ exports.createBarNumber = async ({ applicationContext, initials }) => {
     key: 'barNumberCounter',
   });
   const padded = id.toString(10).padStart(3, '0');
-  const lastTwo = applicationContext.getUtilities().formatNow('YY');
+  const lastTwo = applicationContext.getUtilities().formatNow('YEAR_TWO_DIGIT');
+
   return `${initials}${lastTwo}${padded}`;
 };

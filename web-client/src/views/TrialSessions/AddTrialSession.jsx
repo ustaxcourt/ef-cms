@@ -45,7 +45,7 @@ export const AddTrialSession = connect(
               All fields required unless otherwise noted
             </p>
 
-            <SessionInformationForm />
+            <SessionInformationForm addingTrialSession={true} />
             <LocationInformationForm />
             <SessionAssignmentsForm />
 

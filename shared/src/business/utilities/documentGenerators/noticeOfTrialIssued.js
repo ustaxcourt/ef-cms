@@ -23,7 +23,7 @@ const noticeOfTrialIssued = async ({ applicationContext, data }) => {
   const footerHtml = reactTemplateGenerator({
     componentName: 'DateServedFooter',
     data: {
-      dateServed: applicationContext.getUtilities().formatNow('MM/DD/YY'),
+      dateServed: applicationContext.getUtilities().formatNow('MMDDYY'),
     },
   });
 

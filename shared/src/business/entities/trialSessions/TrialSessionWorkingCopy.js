@@ -1,12 +1,10 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { DOCKET_NUMBER_MATCHER } = require('../EntityConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * constructor

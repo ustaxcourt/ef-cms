@@ -6,9 +6,7 @@
  */
 
 exports.getOrderSearchEnabledInteractor = async applicationContext => {
-  const orderSearchEnabled = await applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .getOrderSearchEnabled({ applicationContext });
-
-  return orderSearchEnabled === 'true';
 };

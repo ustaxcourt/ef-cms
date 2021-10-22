@@ -1,7 +1,4 @@
-const {
-  createISODateString,
-  FORMATS,
-} = require('../business/utilities/DateHandler');
+const { createISODateString, FORMATS } = require('../utilities/DateHandler');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 describe('JoiValidationConstants', () => {

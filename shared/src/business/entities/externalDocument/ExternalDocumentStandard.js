@@ -4,15 +4,13 @@ const {
   externalDocumentDecorator,
 } = require('./ExternalDocumentBase');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  *

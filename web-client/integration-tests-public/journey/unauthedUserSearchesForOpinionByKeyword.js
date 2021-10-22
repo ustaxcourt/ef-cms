@@ -10,7 +10,7 @@ export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
     cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'osteodontolignikeratic',
-        startDate: '2001-01-01',
+        startDate: '01/01/2001',
       },
     });
 
@@ -25,7 +25,7 @@ export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'Memorandum Opinion',
-        startDate: '2001-01-01',
+        startDate: '01/01/2001',
       },
     });
 
@@ -41,7 +41,7 @@ export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
       opinionSearch: {
         keyword: 'opinion',
         opinionType: 'T.C. Opinion',
-        startDate: '2001-01-01',
+        startDate: '01/01/2001',
       },
     });
 

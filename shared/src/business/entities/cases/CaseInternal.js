@@ -8,17 +8,15 @@ const {
   ROLES,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { Case } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry } = require('../DocketEntry');
 const { getContactPrimary, getContactSecondary } = require('./Case');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { Statistic } = require('../Statistic');
 
 /**

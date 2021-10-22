@@ -9,12 +9,11 @@ const { genericHandler } = require('../genericHandler');
 exports.getPublicCaseLambda = event =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
-      return await applicationContext
+    ({ applicationContext }) =>
+      applicationContext
         .getUseCases()
         .getPublicCaseInteractor(applicationContext, {
           docketNumber: event.pathParameters.docketNumber,
-        });
-    },
+        }),
     { user: {} },
   );
