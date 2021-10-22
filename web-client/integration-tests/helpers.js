@@ -276,6 +276,31 @@ export const getCaseMessagesForCase = async cerebralTest => {
 
 const client = require('../../shared/src/persistence/dynamodbClientService');
 
+export const getConnectionsByUserId = userId => {
+  return client.query({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pk': `user|${userId}`,
+      ':prefix': 'connection',
+    },
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+};
+
+export const getConnection = connectionId => {
+  return client.get({
+    Key: {
+      pk: `connection|${connectionId}`,
+      sk: `connection|${connectionId}`,
+    },
+    applicationContext,
+  });
+};
+
 export const getUserRecordById = userId => {
   return client.get({
     Key: {

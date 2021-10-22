@@ -446,6 +446,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteSectionOutboxRecord: jest
       .fn()
       .mockImplementation(deleteSectionOutboxRecord),
+    deleteUserConnection: jest.fn(),
     deleteUserOutboxRecord: jest
       .fn()
       .mockImplementation(deleteUserOutboxRecord),
