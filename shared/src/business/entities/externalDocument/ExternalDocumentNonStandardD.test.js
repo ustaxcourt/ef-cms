@@ -25,7 +25,7 @@ describe('ExternalDocumentNonStandardD', () => {
     });
 
     it('should have error message for future date', () => {
-      const serviceDate = calculateISODate({ howMuch: 1, unit: 'days' });
+      const serviceDate = calculateISODate({ howMuch: 1, units: 'days' });
       const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
         documentTitle: 'Certificate of Service [Document Name] [Date]',

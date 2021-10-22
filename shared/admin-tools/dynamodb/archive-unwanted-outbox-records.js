@@ -1,8 +1,10 @@
 // this script is going to query and then delete records so we can perform a migration
 
 const {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+  formatDateString,
   FORMATS,
-  prepareDateFromString,
 } = require('../../src/business/utilities/DateHandler');
 const { DynamoDB } = require('aws-sdk');
 const { getVersion } = require('../util');
@@ -27,7 +29,7 @@ const archiveWorkItem = async ({ section, workItem }) => {
     pk: workItem.pk,
     sk: workItem.sk,
   };
-  const skDate = prepareDateFromString(workItem.sk.S).format(FORMATS.YYYYMM);
+  const skDate = formatDateString(workItem.sk.S, FORMATS.YYYYMM);
 
   console.log(`Key to create section-outbox|${section}|${skDate}`);
   console.log(`Key to delete ${JSON.stringify(Key)}`);
@@ -63,11 +65,11 @@ const archiveWorkItem = async ({ section, workItem }) => {
  */
 const moveOldRecords = async ({ LastEvaluatedKey = false, section }) => {
   const version = await getVersion(environmentName);
-  const afterDate = prepareDateFromString()
-    .startOf('day')
-    .subtract(7, 'd')
-    .utc()
-    .format();
+  const afterDate = calculateISODate({
+    dateString: createISODateAtStartOfDayEST(),
+    howMuch: -7,
+    units: 'days',
+  });
 
   // get all of the records older than 7 days
   const query = {

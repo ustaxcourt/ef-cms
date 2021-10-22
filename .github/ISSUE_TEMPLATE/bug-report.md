@@ -70,6 +70,19 @@ Workaround is available and easy
 Mostly related to an application’s UI
 Doesn't need a workaround, because it doesn't impact functionality
 
+## Definition of Ready for Bugs(Created 10-4-21)
+Definition used: A failure or flaw in the system which produces an incorrect or undesired result that deviates from the expected result or behavior. (Note: Expected results are use cases that have been documented in past user stories as acceptance criteria and test cases, and do not include strange behavior unrelated to use cases.)
+
+The following criteria must be met in order for the development team to begin work on the bug.
+
+The bug must:
+ - Be focused on solving a user problem
+ - Contain data for all fields in the bug template, so the team can pick it up and begin working immediately
+
+Process: If the unexpected results are new use cases that have been identified, but not yet built, new acceptance criteria and test cases should be captured in a new user story and prioritized by the product owner. 
+
+If the Court is not able to reproduce the bug, add the “Unable to reproduce” tag. This will provide visibility into the type of support that may be needed by the Court. In the event that the Court cannot reproduce the bug, the Court will work with Flexion to communicate what type of troubleshooting help may be needed.
+
 ## Definition of Done (Updated 4-14-21)
 **Product Owner**
  - [ ]  Bug fix has been validated in the Court's test environment

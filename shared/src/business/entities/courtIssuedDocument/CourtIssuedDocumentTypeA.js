@@ -9,12 +9,10 @@ const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**

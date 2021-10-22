@@ -14,9 +14,7 @@ mv storage/fixtures/efcms.json storage/fixtures/efcms-after.json
 cd storage/fixtures/
 node get-diffs.js efcms-before.json efcms-after.json > 107-19.json
 
-Then you can add storage/fixtures/155-22.json into the serverless-api.yml under seed sources
-
-Once done, you can halt the service and re-launch 'npm run start', thus re-seeding the database.
+Once done, you can halt the service and re-launch 'npm run seed:db', thus re-seeding the database.
 `;
 
 const files = [];

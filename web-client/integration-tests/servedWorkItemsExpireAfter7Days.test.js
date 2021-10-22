@@ -50,13 +50,13 @@ describe('verify old served work items do not show up in the outbox', () => {
 
     const CREATED_8_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -8, unit: 'days' });
+      .calculateISODate({ howMuch: -8, units: 'days' });
     const CREATED_7_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -7, unit: 'days' });
+      .calculateISODate({ howMuch: -7, units: 'days' });
     const CREATED_6_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -6, unit: 'days' });
+      .calculateISODate({ howMuch: -6, units: 'days' });
 
     workItemId6 = appContext.getUniqueId();
     workItemId7 = appContext.getUniqueId();

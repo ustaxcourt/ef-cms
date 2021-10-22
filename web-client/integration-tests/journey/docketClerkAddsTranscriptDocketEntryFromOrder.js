@@ -92,7 +92,7 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
       },
     );
 
-    const today = applicationContext.getUtilities().getMonthDayYearObj();
+    const today = applicationContext.getUtilities().getMonthDayYearInETObj();
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',

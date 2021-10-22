@@ -4,16 +4,14 @@ const {
   externalDocumentDecorator,
 } = require('./ExternalDocumentBase');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
-const { formatDateString } = require('../../utilities/DateHandler');
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 
 /**
@@ -36,7 +34,7 @@ ExternalDocumentNonStandardD.prototype.getDocumentTitle = function () {
       ? this.previousDocument.documentTitle ||
           this.previousDocument.documentType
       : '',
-    formatDateString(this.serviceDate, 'MM-DD-YYYY'),
+    formatDateString(this.serviceDate, FORMATS.MMDDYYYY_DASHED),
   );
 };
 

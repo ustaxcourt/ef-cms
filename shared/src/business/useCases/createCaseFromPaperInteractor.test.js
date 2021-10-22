@@ -23,7 +23,6 @@ describe('createCaseFromPaperInteractor', () => {
 
   beforeEach(() => {
     uuid.v4 = jest.fn().mockReturnValue(MOCK_CASE_ID);
-    window.Date.prototype.toISOString = jest.fn().mockReturnValue(DATE);
 
     applicationContext.docketNumberGenerator.createDocketNumber.mockResolvedValue(
       '00101-00',

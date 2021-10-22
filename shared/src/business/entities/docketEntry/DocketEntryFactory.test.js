@@ -54,7 +54,7 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should not allow received date be in the future', () => {
-    rawEntity.dateReceived = calculateISODate({ howMuch: 1, unit: 'days' });
+    rawEntity.dateReceived = calculateISODate({ howMuch: 1, units: 'days' });
     expect(errors().dateReceived).toEqual(
       VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
     );
@@ -154,7 +154,7 @@ describe('DocketEntryFactory', () => {
       it('should not allow certificate of service date be in the future', () => {
         rawEntity.certificateOfServiceDate = calculateISODate({
           howMuch: 1,
-          unit: 'days',
+          units: 'days',
         });
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,

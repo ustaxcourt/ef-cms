@@ -14,14 +14,24 @@ const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
 
+// mock out ONLY the 'createISODateString' function while allowing original implementations
+const { createISODateString } = require('../utilities/DateHandler');
+jest.mock('../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+  };
+});
+
 describe('createCaseFromPaperInteractor integration test', () => {
   const RECEIVED_DATE = '2019-02-01T22:54:06.000Z';
+  const RECEIVED_DATE_START_OF_DAY = '2019-02-01T05:00:00.000Z';
   const mockUserId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
 
   beforeAll(() => {
-    window.Date.prototype.toISOString = jest
-      .fn()
-      .mockReturnValue(RECEIVED_DATE);
+    createISODateString.mockReturnValue(RECEIVED_DATE);
 
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Alex Petitionsclerk',
@@ -81,7 +91,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Petr. Bob Jones',
-          receivedAt: RECEIVED_DATE,
+          receivedAt: RECEIVED_DATE_START_OF_DAY,
           workItem: {
             assigneeId: mockUserId,
             assigneeName: 'Alex Petitionsclerk',
@@ -104,7 +114,7 @@ describe('createCaseFromPaperInteractor integration test', () => {
           documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
           filedBy: 'Petr. Bob Jones',
-          receivedAt: RECEIVED_DATE,
+          receivedAt: RECEIVED_DATE_START_OF_DAY,
         },
       ],
       docketNumber: '101-19',

@@ -120,6 +120,9 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
+  closeTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
+const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
@@ -395,6 +398,9 @@ const {
 const {
   getCaseDeadlinesInteractor,
 } = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
+const {
+  getCaseExistsInteractor,
+} = require('../../shared/src/business/useCases/getCaseExistsInteractor');
 const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
@@ -1184,7 +1190,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { createLogger } = require('../../shared/src/utilities/createLogger');
+const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
@@ -1794,6 +1800,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         casePublicSearchInteractor,
         checkEmailAvailabilityInteractor,
         checkForReadyForTrialCasesInteractor,
+        closeTrialSessionInteractor,
         completeDocketEntryQCInteractor,
         completeMessageInteractor,
         completeWorkItemInteractor,
@@ -1836,6 +1843,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseDeadlinesInteractor,
+        getCaseExistsInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,

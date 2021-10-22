@@ -17,6 +17,7 @@ exports.MOCK_CASE = {
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '101-18',
   docketNumberWithSuffix: '101-18',
+  entityName: 'Case',
   filingType: 'Myself',
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
@@ -47,6 +48,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: mockDocketEntriesWithoutStipDecision,
   docketNumber: '101-18',
+  entityName: 'Case',
   filingType: 'Myself',
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
@@ -74,6 +76,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
 exports.MOCK_CASE_WITHOUT_NOTICE = {
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '101-18',
+  entityName: 'Case',
   filingType: 'Myself',
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
@@ -101,6 +104,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  entityName: 'Case',
   filingType: 'Myself',
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
@@ -209,6 +213,7 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '101-18',
   docketNumberWithSuffix: '101-18',
+  entityName: 'Case',
   filingType: 'Myself',
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,

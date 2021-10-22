@@ -11,6 +11,17 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { createCaseInteractor } = require('../useCases/createCaseInteractor');
 const { getCaseInteractor } = require('../useCases/getCaseInteractor');
 const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
+// mock out ONLY the 'createISODateString' function while allowing original implementations
+const { createISODateString, formatNow } = require('../utilities/DateHandler');
+jest.mock('../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+    formatNow: jest.fn().mockReturnValue('1999'), // must return a value for require stack
+  };
+});
 
 describe('createCase integration test', () => {
   const CREATED_DATE = '2019-03-01T22:54:06.000Z';
@@ -24,8 +35,8 @@ describe('createCase integration test', () => {
   };
 
   beforeAll(() => {
-    window.Date.prototype.toISOString = jest.fn().mockReturnValue(CREATED_DATE);
-    window.Date.prototype.getFullYear = jest.fn().mockReturnValue(CREATED_YEAR);
+    createISODateString.mockReturnValue(CREATED_DATE);
+    formatNow.mockReturnValue(CREATED_YEAR);
 
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext
