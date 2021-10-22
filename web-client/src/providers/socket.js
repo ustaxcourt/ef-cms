@@ -30,10 +30,20 @@ export const socketProvider = ({ socketRouter }) => {
       return new Promise((resolve, reject) => {
         try {
           socket = createWebSocketClient(token);
+
           socket.onmessage = socketRouter(app);
+
           socket.onerror = error => {
             console.error(error);
             return reject(error);
+          };
+
+          socket.onclose = err => {
+            stopSocket();
+            if (err && err.reason !== 'Normal connection closure') {
+              console.error(err);
+              start();
+            }
           };
 
           socket.onopen = () => {
