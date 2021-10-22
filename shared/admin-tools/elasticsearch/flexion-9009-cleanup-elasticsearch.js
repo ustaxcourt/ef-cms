@@ -11,7 +11,7 @@ const environmentName = process.argv[2] || 'exp1';
 const deleteUserCaseIndex = async () => {
   const client = await getClient({ environmentName });
 
-  const res = client.indices.delete({
+  const res = await client.indices.delete({
     index: 'efcms-user-case',
   });
   console.log('user-case index deleted');
