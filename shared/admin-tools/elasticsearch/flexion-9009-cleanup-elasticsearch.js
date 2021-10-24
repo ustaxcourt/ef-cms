@@ -86,17 +86,21 @@ const cleanUserIndex = async () => {
     .map(rec => rec.id);
 
   const chunks = chunk(toRemove, 1000);
+  console.log(`allRecords: ${allRecords.length}, removed: ${toRemove.length}`);
+  let done = 0;
 
   for (const ids of chunks) {
     await deleteUserIndexRecords(ids);
+    done += 1000;
+    console.log(
+      `${Math.round((done / toRemove.length) * 10000) / 100}% complete`,
+    );
     await sleep(3000);
   }
-
-  console.log(`allRecords: ${allRecords.length}, removed: ${toRemove.length}`);
 };
 
 (async () => {
-  if (environmentName === 'prod') return;
+  // if (environmentName === 'prod') return;
   await cleanUserIndex();
   await deleteUserCaseIndex();
 })();
