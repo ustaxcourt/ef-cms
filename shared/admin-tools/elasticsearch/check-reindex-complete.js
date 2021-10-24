@@ -8,11 +8,15 @@ const { getClient } = require('../../../web-api/elasticsearch/client');
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
 
-  const info = await esClient.indices.stats({
-    index: '_all',
-    level: 'indices',
-  });
-  return info;
+  const counts = {};
+  for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
+    const res = await esClient.count({
+      index: indexName,
+    });
+    counts[indexName] = res.count;
+  }
+
+  return counts;
 };
 
 exports.isReindexComplete = async environmentName => {
@@ -30,9 +34,8 @@ exports.isReindexComplete = async environmentName => {
   });
 
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
-    const countCurrent = currentInfo.indices[indexName].total.docs.count;
-    const countDestination =
-      destinationInfo.indices[indexName].total.docs.count;
+    const countCurrent = currentInfo[indexName];
+    const countDestination = destinationInfo[indexName];
 
     const diff = Math.abs(countCurrent - countDestination);
     diffTotal += diff;
