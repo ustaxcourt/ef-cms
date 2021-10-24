@@ -7,6 +7,10 @@ const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const getClusterStats = async ({ environmentName, version }) => {
   const esClient = await getClient({ environmentName, version });
+  const info = await esClient.indices.stats({
+    index: '_all',
+    level: 'indices',
+  });
 
   const counts = {};
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
@@ -16,7 +20,7 @@ const getClusterStats = async ({ environmentName, version }) => {
     counts[indexName] = res.count;
   }
 
-  return counts;
+  return { counts, info };
 };
 
 exports.isReindexComplete = async environmentName => {
@@ -24,18 +28,19 @@ exports.isReindexComplete = async environmentName => {
   const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
   let diffTotal = 0;
-  const currentInfo = await getClusterStats({
+  const { counts: currentCounts } = await getClusterStats({
     environmentName,
     version: currentVersion,
   });
-  let destinationInfo = await getClusterStats({
-    environmentName,
-    version: destinationVersion,
-  });
+  let { counts: destinationCounts, info: destinationInfo } =
+    await getClusterStats({
+      environmentName,
+      version: destinationVersion,
+    });
 
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
-    const countCurrent = currentInfo[indexName];
-    const countDestination = destinationInfo[indexName];
+    const countCurrent = currentCounts[indexName];
+    const countDestination = destinationCounts[indexName];
 
     const diff = Math.abs(countCurrent - countDestination);
     diffTotal += diff;
