@@ -58,7 +58,7 @@ exports.opinionAdvancedSearchInteractor = async (
     await applicationContext.getPersistenceGateway().advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      judgeType: 'judge',
+      isOpinionSearch: true,
       ...rawSearch,
     })
   ).results.slice(0, MAX_SEARCH_RESULTS);

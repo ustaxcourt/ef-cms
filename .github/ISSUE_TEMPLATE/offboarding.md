@@ -1,7 +1,11 @@
 ---
 name: Offboard a team member
-about: Used for employees of the U.S. Tax Court and vendor teams to revoke access to all relevant accounts and tools when an employee departs.
+about: Used for employees of the U.S. Tax Court and vendor teams to revoke access
+  to all relevant accounts and tools when an employee departs.
 title: Offboard [Person]
+labels: ''
+assignees: ''
+
 ---
 
 - [ ] All access is revoked to tools listed in [the onboarding template](https://github.com/ustaxcourt/ef-cms/blob/staging/.github/ISSUE_TEMPLATE/onboarding.md) (copy the relevant accounts to checklist items below).

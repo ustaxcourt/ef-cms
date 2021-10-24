@@ -1,7 +1,10 @@
 const {
   calculateDifferenceInDays,
   calculateISODate,
+  combineISOandEasternTime,
   createISODateString,
+  formatDateString,
+  FORMATS,
 } = require('./DateHandler');
 const {
   CASE_STATUS_TYPES,
@@ -62,8 +65,6 @@ const computeIsNotServedDocument = ({ formattedEntry }) => {
 
 const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
-
-  const { formatDateString } = applicationContext.getUtilities();
 
   formattedEntry.servedAtFormatted = formatDateString(
     formattedEntry.servedAt,
@@ -193,11 +194,14 @@ const getFilingsAndProceedings = formattedDocketEntry => {
 /**
  * formats trial session fields for display
  *
+ * @param {string} judgeName the name of the judge
+ * @param {string} trialDate ISO-8601 GMT timestamp
+ * @param {string} trialLocation location of the trial
+ * @param {string} trialTime eastern time zone string representing hours and minutes HH:mm
  * @returns formatted trial session fields
  */
 
 const formattedTrialSessionDetails = ({
-  applicationContext,
   judgeName,
   trialDate,
   trialLocation,
@@ -213,17 +217,10 @@ const formattedTrialSessionDetails = ({
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
   } else if (trialTime) {
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(trialDate, 'YYYY-MM-DD');
-    formattedTrialDate += `T${trialTime}:00`;
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedTrialDate, 'DATE_TIME');
+    const combinedDateTime = combineISOandEasternTime(trialDate, trialTime);
+    formattedTrialDate = formatDateString(combinedDateTime, FORMATS.DATE_TIME);
   } else {
-    formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(trialDate, 'MMDDYY');
+    formattedTrialDate = formatDateString(trialDate, FORMATS.MMDDYY);
   }
 
   return {
@@ -404,12 +401,12 @@ const formatCase = (applicationContext, caseDetail) => {
   if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
     paymentDate = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentDate, 'MM/DD/YY');
+      .formatDateString(caseDetail.petitionPaymentDate, 'MMDDYY');
     paymentMethod = caseDetail.petitionPaymentMethod;
   } else if (caseDetail.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     paymentDate = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MM/DD/YY');
+      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'MMDDYY');
   }
   result.filingFee = `${caseDetail.petitionPaymentStatus} ${paymentDate} ${paymentMethod}`;
 

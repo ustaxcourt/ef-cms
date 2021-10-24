@@ -90,13 +90,5 @@ describe('archiveDraftDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItem,
     ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteSectionOutboxRecord,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserOutboxRecord,
-    ).toHaveBeenCalled();
   });
 });

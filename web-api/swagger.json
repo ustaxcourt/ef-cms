@@ -1220,6 +1220,29 @@
           }
         ]
       },
+      "head": {
+        "tags": [
+          "cases"
+        ],
+        "summary": "get a case existence by docket number",
+        "description": "Get a case existence by docket number.\n",
+        "produces": [
+          "text/plain"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },      
       "put": {
         "tags": [
           "cases"

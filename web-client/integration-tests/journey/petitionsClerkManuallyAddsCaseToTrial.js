@@ -33,6 +33,13 @@ export const petitionsClerkManuallyAddsCaseToTrial = cerebralTest => {
       value: true,
     });
 
+    modalHelper = await runCompute(addToTrialSessionModalHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(modalHelper.trialSessionStatesSorted[0]).toEqual('Remote');
+    expect(modalHelper.trialSessionStatesSorted[1]).toEqual('Alabama');
+
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'trialSessionId',
       value: cerebralTest.trialSessionId,

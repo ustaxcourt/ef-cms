@@ -11,14 +11,12 @@ const {
   TRIAL_LOCATION_MATCHER,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { Case, getContactPrimary, getContactSecondary } = require('./Case');
 const { ContactFactory } = require('../contacts/ContactFactory');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * CaseExternal Entity

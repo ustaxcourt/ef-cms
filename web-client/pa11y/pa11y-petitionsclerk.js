@@ -415,6 +415,15 @@ module.exports = [
     notes: 'checks a11y of remote trial session add form',
     url: 'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
   },
+  // FEATURE FLAG: standalone_remote_session
+  // {
+  //   actions: [
+  //     'wait for #standaloneRemote-session-scope-label to be visible',
+  //     'click element #standaloneRemote-session-scope-label',
+  //   ],
+  //   notes: 'checks a11y of standalone remote trial session add form',
+  //   url: 'http://localhost:1234/mock-login?token=petitionsclerk&path=/add-a-trial-session&info=add-trial-session',
+  // },
   {
     actions: [
       'wait for #start-date-date to be visible',

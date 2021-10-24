@@ -9,14 +9,12 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const { cloneDeep } = require('lodash');
 const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const ContactFactory = {};
 

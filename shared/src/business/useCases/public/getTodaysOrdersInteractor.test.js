@@ -9,7 +9,6 @@ const {
 } = require('../../utilities/DateHandler');
 const {
   ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
   TODAYS_ORDERS_PAGE_SIZE,
 } = require('../../entities/EntityConstants');
 const { getTodaysOrdersInteractor } = require('./getTodaysOrdersInteractor');
@@ -89,17 +88,16 @@ describe('getTodaysOrdersInteractor', () => {
     ).toBe((mockCurrentPage - 1) * TODAYS_ORDERS_PAGE_SIZE);
   });
 
-  it('should make a call to advancedDocumentSearch with judgeType set to signedJudgeName', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {
-      page: 1,
-    });
+  it('should set isOpinionSearch as false', async () => {
+    await getTodaysOrdersInteractor(applicationContext, {});
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].judgeType,
-    ).toBe(ORDER_JUDGE_FIELD);
+        .calls[0][0],
+    ).toMatchObject({
+      isOpinionSearch: false,
+    });
   });
-
   it('should filter out order documents belonging to sealed cases', async () => {
     await getTodaysOrdersInteractor(applicationContext, {});
 

@@ -1,7 +1,6 @@
 .cache
 .dynamodb
 .nyc_output
-.serverless
 coverage
 dist
 node_modules

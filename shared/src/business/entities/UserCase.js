@@ -1,13 +1,11 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const { Case } = require('./cases/Case');
 const { createISODateString } = require('../utilities/DateHandler');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 
 /**
  * UserCase Entity

@@ -80,7 +80,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         formattedServedDate: expect.anything(),
         formattedStartDate: 'August 25, 2019',
         formattedStartDateWithDayOfWeek: 'Sunday, August 25, 2019',
-        formattedStartTime: '10:00 AM',
+        formattedStartTime: '10:00 am',
         formattedTrialLocation: 'Boise, Idaho',
         joinPhoneNumber: '3333',
         meetingId: '1111',

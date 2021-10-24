@@ -8,7 +8,9 @@ export const docketClerkServesDocument = (cerebralTest, draftOrderIndex) => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
+    const docketEntryId = cerebralTest.draftOrders
+      ? cerebralTest.draftOrders[draftOrderIndex].docketEntryId
+      : cerebralTest.docketEntryId;
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,

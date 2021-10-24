@@ -8,13 +8,13 @@ const formatCaseDeadline = (applicationContext, caseDeadline) => {
     .formatDateString(result.deadlineDate, 'MMDDYY');
 
   // use the app context utility function so the time zones match when comparing dates
-  const deadlineDateMomented = applicationContext
+  const deadlineDate = applicationContext
     .getUtilities()
     .prepareDateFromString(result.deadlineDate);
 
   const today = applicationContext.getUtilities().prepareDateFromString();
 
-  if (deadlineDateMomented.isBefore(today, 'day')) {
+  if (deadlineDate.isBefore(today, 'day')) {
     result.overdue = true;
   }
 

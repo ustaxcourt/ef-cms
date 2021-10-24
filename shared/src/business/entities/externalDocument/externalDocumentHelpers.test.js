@@ -2,9 +2,7 @@ const {
   addPropertyHelper,
   makeRequiredHelper,
 } = require('./externalDocumentHelpers');
-const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 describe('external document helpers', () => {
   describe('addPropertyHelper', () => {

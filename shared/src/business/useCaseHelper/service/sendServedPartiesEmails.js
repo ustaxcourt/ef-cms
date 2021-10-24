@@ -31,7 +31,7 @@ exports.sendServedPartiesEmails = async ({
 
   const currentDate = applicationContext
     .getUtilities()
-    .formatNow('MMMM D, YYYY');
+    .formatNow('MONTH_DAY_YEAR');
 
   //serve every document on IRS superuser if case has been served to the IRS
   if (caseEntity.status !== CASE_STATUS_TYPES.new) {

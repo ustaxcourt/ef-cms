@@ -44,30 +44,60 @@ describe('saveWorkItemForDocketClerkFilingExternalDocument', () => {
       applicationContext,
       workItem: {
         assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+        completedAt: '2021-03-30T17:25:38.186Z',
         docketNumber: '456-20',
         section: DOCKET_SECTION,
         workItemId: '123',
       },
     });
 
-    expect(putStub.mock.calls[0][0]).toMatchObject({
-      Item: {
-        pk: 'section-outbox|docket',
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[1][0]).toMatchObject({
-      Item: {
-        pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
-        workItemId: '123',
-      },
-    });
-    expect(putStub.mock.calls[2][0]).toMatchObject({
-      Item: {
-        gsi1pk: 'work-item|123',
-        pk: 'case|456-20',
-        sk: 'work-item|123',
-      },
-    });
+    expect(putStub.mock.calls).toEqual(
+      expect.arrayContaining([
+        // section outbox
+        expect.arrayContaining([
+          expect.objectContaining({
+            Item: expect.objectContaining({
+              gsi1pk: 'work-item|123',
+              pk: 'section-outbox|docket',
+              sk: '2021-03-30T17:25:38.186Z',
+              workItemId: '123',
+            }),
+          }),
+        ]),
+        // section outbox archive
+        expect.arrayContaining([
+          expect.objectContaining({
+            Item: expect.objectContaining({
+              gsi1pk: 'work-item|123',
+              pk: 'section-outbox|docket|2021-03',
+              sk: '2021-03-30T17:25:38.186Z',
+              workItemId: '123',
+            }),
+          }),
+        ]),
+        // user outbox
+        expect.arrayContaining([
+          expect.objectContaining({
+            Item: expect.objectContaining({
+              gsi1pk: 'work-item|123',
+              pk: 'user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416',
+              sk: '2021-03-30T17:25:38.186Z',
+              workItemId: '123',
+            }),
+          }),
+        ]),
+        // main work item associated with case
+        expect.arrayContaining([
+          expect.objectContaining({
+            Item: expect.objectContaining({
+              gsi1pk: 'work-item|123',
+              pk: 'case|456-20',
+              sk: 'work-item|123',
+              workItemId: '123',
+            }),
+          }),
+        ]),
+      ]),
+    );
   });
 });

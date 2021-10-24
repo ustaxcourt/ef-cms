@@ -3,7 +3,7 @@ data "archive_file" "migration_segments_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/migration-segments.js.zip"
   source_dir  = "${path.module}/lambdas/dist/"
-  excludes = ["${path.module}/lambdas/dist/migration.js"]
+  excludes = ["migration.js"]
 }
 
 resource "aws_lambda_function" "migration_segments_lambda" {
