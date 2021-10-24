@@ -65,7 +65,7 @@ describe('todaysOpinionsHelper', () => {
       .createISODateString();
     const formattedCurrentDate = applicationContextPublic
       .getUtilities()
-      .formatDateString(currentDate, 'MMMM D, YYYY');
+      .formatDateString(currentDate, 'MONTH_DAY_YEAR');
 
     expect(result.formattedCurrentDate).toEqual(formattedCurrentDate);
   });

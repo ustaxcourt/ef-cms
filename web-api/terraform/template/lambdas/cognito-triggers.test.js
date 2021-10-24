@@ -1,16 +1,40 @@
-import { applicationContext } from '../../../src/applicationContextTriggers';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { handler } from './cognito-triggers';
-import { setUserEmailFromPendingEmailInteractor } from '../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
-const { MOCK_CASE } = require('../../../../shared/src/test/mockCase');
+const mockCreatePetitionerAccountInteractor = jest.fn();
+const mockGetUserById = jest.fn();
+const mockSetUserEmailFromPendingEmailInteractor = jest.fn();
+const mockGetDocketNumbersByUser = jest.fn();
+const mockGetWebSocketConnectionsByUserId = jest.fn();
+const mockGetCaseByDocketNumber = jest.fn();
+const mockUpdateUser = jest.fn();
+jest.mock('../../../src/applicationContext', () =>
+  jest.fn().mockReturnValue({
+    getNotificationClient: () => ({
+      postToConnection: () => ({
+        promise: () => Promise.resolve(),
+      }),
+    }),
+    getPersistenceGateway: () => ({
+      getCaseByDocketNumber: mockGetCaseByDocketNumber,
+      getDocketNumbersByUser: mockGetDocketNumbersByUser,
+      getUserById: mockGetUserById,
+      getWebSocketConnectionsByUserId: mockGetWebSocketConnectionsByUserId,
+      updateUser: mockUpdateUser,
+    }),
+    getUseCases: () => ({
+      createPetitionerAccountInteractor: mockCreatePetitionerAccountInteractor,
+      setUserEmailFromPendingEmailInteractor:
+        mockSetUserEmailFromPendingEmailInteractor,
+    }),
+    logger: {
+      info: jest.fn(),
+    },
+  }),
+);
 
 describe('cognito-triggers', () => {
   describe('PostConfirmation_ConfirmSignUp', () => {
     it('should create a petitioner when the event trigger is  PostConfirmation_ConfirmSignUp', async () => {
-      const createPetitionerAccountInteractor = jest.fn();
-      applicationContext.getUseCases = () => ({
-        createPetitionerAccountInteractor,
-      });
-
       const mockEvent = {
         request: {
           userAttributes: {
@@ -24,15 +48,10 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(createPetitionerAccountInteractor).toHaveBeenCalled();
+      expect(mockCreatePetitionerAccountInteractor).toHaveBeenCalled();
     });
 
     it('should not create a petitioner when the event trigger is not PostConfirmation_ConfirmSignUp', async () => {
-      const createPetitionerAccountInteractor = jest.fn();
-      applicationContext.getUseCases = () => ({
-        createPetitionerAccountInteractor,
-      });
-
       const mockEvent = {
         request: {},
         triggerSource: 'PostConfirmation_ConfirmForgotPassword',
@@ -40,7 +59,7 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(createPetitionerAccountInteractor).not.toHaveBeenCalled();
+      expect(mockCreatePetitionerAccountInteractor).not.toHaveBeenCalled();
     });
   });
 
@@ -48,32 +67,6 @@ describe('cognito-triggers', () => {
     const mockUserId = '531c2772-fd45-4640-b60e-1bc06c28c693';
     const mockSub = '1234abc';
     const mockEmail = 'goodbye@example.com';
-    const getUserById = jest.fn();
-    const setUserEmailFromPendingEmailInteractorMock = jest.fn();
-    const getDocketNumbersByUser = jest.fn();
-    const getCaseByDocketNumber = jest.fn();
-    const updatePrivatePractitionerOnCase = jest.fn();
-    const getNotificationClient = jest.fn();
-    const updateCase = jest.fn();
-    const updateUser = jest.fn();
-    const getWebSocketConnectionsByUserId = jest.fn();
-
-    beforeEach(() => {
-      applicationContext.getPersistenceGateway = () => ({
-        getCaseByDocketNumber,
-        getDocketNumbersByUser,
-        getUserById,
-        getWebSocketConnectionsByUserId,
-        updateCase,
-        updatePrivatePractitionerOnCase,
-        updateUser,
-      });
-      applicationContext.getNotificationClient = getNotificationClient;
-      applicationContext.getUseCases = () => ({
-        setUserEmailFromPendingEmailInteractor:
-          setUserEmailFromPendingEmailInteractorMock,
-      });
-    });
 
     it('should retrieve the user from persistence with custom:userId when one is defined', async () => {
       const mockEvent = {
@@ -89,7 +82,7 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(getUserById.mock.calls[0][0].userId).toEqual(mockUserId);
+      expect(mockGetUserById.mock.calls[0][0].userId).toEqual(mockUserId);
     });
 
     it('should retrieve the user from persistence with sub as the userId when custom:userId is not defined', async () => {
@@ -106,12 +99,11 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(getUserById.mock.calls[0][0].userId).toEqual(mockSub);
+      expect(mockGetUserById.mock.calls[0][0].userId).toEqual(mockSub);
     });
 
     it('should call setUserEmailFromPendingEmailInteractor when the user from persistence has a pendingEmail that matches the email used to log in', async () => {
-      getUserById.mockReturnValue({ pendingEmail: mockEmail });
-
+      mockGetUserById.mockReturnValue({ pendingEmail: mockEmail });
       const mockEvent = {
         request: {
           userAttributes: {
@@ -126,12 +118,12 @@ describe('cognito-triggers', () => {
       await handler(mockEvent);
 
       expect(
-        setUserEmailFromPendingEmailInteractorMock.mock.calls[0][1].user,
+        mockSetUserEmailFromPendingEmailInteractor.mock.calls[0][1].user,
       ).toEqual({ pendingEmail: mockEmail });
     });
 
     it('should not call setUserEmailFromPendingEmailInteractor when the user from persistence does not have a pendingEmail', async () => {
-      getUserById.mockReturnValue({});
+      mockGetUserById.mockReturnValue({});
 
       const mockEvent = {
         request: {
@@ -146,11 +138,13 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(setUserEmailFromPendingEmailInteractorMock).not.toHaveBeenCalled();
+      expect(mockSetUserEmailFromPendingEmailInteractor).not.toHaveBeenCalled();
     });
 
     it('should not call setUserEmailFromPendingEmailInteractor when the user from persistence has a pendingEmail that does not match the email used to log in', async () => {
-      getUserById.mockReturnValue({ pendingEmail: 'mockEmail@example.com' });
+      mockGetUserById.mockReturnValue({
+        pendingEmail: 'mockEmail@example.com',
+      });
 
       const mockEvent = {
         request: {
@@ -165,7 +159,7 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(setUserEmailFromPendingEmailInteractorMock).not.toHaveBeenCalled();
+      expect(mockSetUserEmailFromPendingEmailInteractor).not.toHaveBeenCalled();
     });
 
     it('should send a notification email for each case updated', async () => {
@@ -202,32 +196,18 @@ describe('cognito-triggers', () => {
         sk: 'privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416',
         userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
       };
-      getUserById.mockReturnValue(mockPractitioner);
-
-      getDocketNumbersByUser.mockReturnValue(['101-19']);
-
-      getWebSocketConnectionsByUserId.mockReturnValue([
+      mockGetUserById.mockReturnValue(mockPractitioner);
+      mockGetDocketNumbersByUser.mockReturnValue(['101-19']);
+      mockGetWebSocketConnectionsByUserId.mockReturnValue([
         {
           connectionId: '123',
           endpoint: 'http://example.com',
         },
       ]);
-
-      getCaseByDocketNumber.mockReturnValue({
+      mockGetCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         privatePractitioners: [mockPractitioner],
       });
-
-      applicationContext.getUseCases = () => ({
-        setUserEmailFromPendingEmailInteractor,
-      });
-
-      getNotificationClient.mockReturnValue({
-        postToConnection: () => ({
-          promise: () => Promise.resolve(),
-        }),
-      });
-
       const mockEvent = {
         request: {
           userAttributes: {
@@ -241,7 +221,7 @@ describe('cognito-triggers', () => {
 
       await handler(mockEvent);
 
-      expect(updateUser).toHaveBeenCalled();
+      expect(mockSetUserEmailFromPendingEmailInteractor).toHaveBeenCalled();
     });
   });
 });

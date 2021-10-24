@@ -44,7 +44,7 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.showLoadMoreButton).toBeFalsy();
   });
 
-  it('should use only the formatted startDate in header if start and end date are on the same day', () => {
+  it('should use only the formatted startDate in header if start and end date are on the same day in ET', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
         caseDeadlineReport: { caseDeadlines },

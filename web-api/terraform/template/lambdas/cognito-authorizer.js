@@ -1,9 +1,7 @@
 const axios = require('axios');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
-const {
-  createLogger,
-} = require('../../../../shared/src/utilities/createLogger');
+const { createLogger } = require('../../../src/createLogger');
 const { transports } = require('winston');
 
 const transport = new transports.Console({

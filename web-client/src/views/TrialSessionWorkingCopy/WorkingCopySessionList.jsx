@@ -187,7 +187,7 @@ export const WorkingCopySessionList = connect(
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
-                    <td className="font-body-2xs no-wrap" colSpan="4">
+                    <td className="font-body-2xs" colSpan="4">
                       <span className="text-bold margin-right-1">
                         Calendar notes:
                       </span>

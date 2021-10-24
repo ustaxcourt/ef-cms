@@ -34,6 +34,9 @@ const {
   getMaintenanceModeLambda,
 } = require('./maintenance/getMaintenanceModeLambda');
 const {
+  getPublicCaseExistsLambda,
+} = require('./public-api/getPublicCaseExistsLambda');
+const {
   getPublicDocumentDownloadUrlLambda,
 } = require('./public-api/getPublicDocumentDownloadUrlLambda');
 const { getHealthCheckLambda } = require('./health/getHealthCheckLambda');
@@ -54,6 +57,10 @@ const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
  * public-api
  */
 app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
+app.head(
+  '/public-api/cases/:docketNumber',
+  lambdaWrapper(getPublicCaseExistsLambda),
+);
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
 // Temporarily disabled for story 7387

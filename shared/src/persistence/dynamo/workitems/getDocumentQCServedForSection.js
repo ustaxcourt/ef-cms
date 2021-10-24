@@ -1,14 +1,16 @@
 const {
-  prepareDateFromString,
+  calculateISODate,
+  createISODateAtStartOfDayEST,
 } = require('../../../business/utilities/DateHandler');
 const { queryFull } = require('../../dynamodbClientService');
 
 exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
-  const afterDate = prepareDateFromString()
-    .startOf('day')
-    .subtract(7, 'd')
-    .utc()
-    .format();
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: -7,
+    units: 'days',
+  });
 
   return queryFull({
     ExpressionAttributeNames: {

@@ -1,4 +1,4 @@
-const { createSectionOutboxRecord } = require('./createSectionOutboxRecord');
+const { createSectionOutboxRecords } = require('./createSectionOutboxRecords');
 const { createUserOutboxRecord } = require('./createUserOutboxRecord');
 
 exports.putWorkItemInUsersOutbox = async ({
@@ -13,7 +13,7 @@ exports.putWorkItemInUsersOutbox = async ({
       userId,
       workItem,
     }),
-    createSectionOutboxRecord({
+    createSectionOutboxRecords({
       applicationContext,
       section,
       workItem,

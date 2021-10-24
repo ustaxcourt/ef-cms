@@ -36,7 +36,7 @@ const anotherFirstName = faker.name.firstName(); // "Jones"
 const middleName = faker.name.firstName(); // "Trisha"
 const similarName = `${firstName}bby`; // "Bobby"
 
-const searchTerm = `${firstName} ${anotherFirstName}`;
+const searchTerm = `${firstName} ${lastName}`;
 
 const caseNamesToCreate = [
   `${firstName} ${lastName}`, // Bob Evans
@@ -82,7 +82,7 @@ function createCase(name) {
   });
 }
 
-describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => {
+describe(`Petitioner searches for partial name match ${searchTerm}`, () => {
   unauthedUserNavigatesToPublicSite(cerebralTest);
 
   it('returns search results we expect in the correct order', async () => {
@@ -102,24 +102,23 @@ describe.skip(`Petitioner searches for partial name match ${searchTerm}`, () => 
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
-    expect(searchResults.length).toBe(3);
+    expect(searchResults.length).toBe(2);
 
     expect(searchResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          contactPrimary: expect.objectContaining({
-            name: caseNamesToCreate[0],
-          }),
+          petitioners: [
+            expect.objectContaining({
+              name: caseNamesToCreate[0],
+            }),
+          ],
         }),
         expect.objectContaining({
-          contactPrimary: expect.objectContaining({
-            name: caseNamesToCreate[1],
-          }),
-        }),
-        expect.objectContaining({
-          contactPrimary: expect.objectContaining({
-            name: caseNamesToCreate[2],
-          }),
+          petitioners: [
+            expect.objectContaining({
+              name: caseNamesToCreate[2],
+            }),
+          ],
         }),
       ]),
     );
