@@ -22,7 +22,7 @@ export const JudgeSelect = connect(
         >
           <option value="">All judges</option>
           {judges.map(judge => (
-            <option key={judge.judgeFullName} value={judge.lastName}>
+            <option key={judge.judgeFullName} value={judge.judgeFullName}>
               {judge.name}
             </option>
           ))}

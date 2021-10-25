@@ -239,4 +239,30 @@ describe('docket clerk opinion advanced search', () => {
 
     expect(cerebralTest.getState('alertError')).not.toBeDefined();
   });
+
+  it('search for opinions with judge = "Mowry"', async () => {
+    //find me
+    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+      formType: 'opinionSearch',
+    });
+
+    await cerebralTest.runSequence(
+      'updateAdvancedOpinionSearchFormValueSequence',
+      {
+        key: 'judge',
+        value: 'Tia W. Mowry',
+      },
+    );
+
+    await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+    const searchResults = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+    );
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(searchResults).toEqual([]);
+    expect(
+      searchResults.find(r => r.signedJudgeName !== 'Tamara W. Ashford'),
+    ).toBeUndefined();
+  });
 });
