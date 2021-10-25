@@ -1,8 +1,4 @@
-import { fakeFile, loginAs, setupTest } from './helpers';
-import { petitionerChoosesCaseType } from './journey/petitionerChoosesCaseType';
-import { petitionerChoosesProcedureType } from './journey/petitionerChoosesProcedureType';
-import { petitionerCreatesNewCase } from './journey/petitionerCreatesNewCase';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsOrderToCase } from './journey/petitionsClerkAddsOrderToCase';
 import { petitionsClerkAppliesSignatureToDraftDocument } from './journey/petitionsClerkAppliesSignatureToDraftDocument';
 import { petitionsClerkClearsSignatureFromDraftDocument } from './journey/petitionsClerkClearsSignatureFromDraftDocument';
@@ -26,10 +22,11 @@ describe('Petitions Clerk Create Order Journey', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerChoosesProcedureType(cerebralTest);
-  petitionerChoosesCaseType(cerebralTest);
-  petitionerCreatesNewCase(cerebralTest, fakeFile);
-  petitionerViewsDashboard(cerebralTest);
+  it('login as a petitioner and create a case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(cerebralTest);

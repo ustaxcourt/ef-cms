@@ -5,7 +5,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { formatDateString } = require('../../utilities/DateHandler');
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { padStart } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -48,7 +48,7 @@ const batchDownloadTrialSessionInteractor = async (
 
   const trialDate = formatDateString(
     trialSessionDetails.startDate,
-    'MMMM_D_YYYY',
+    FORMATS.FILENAME_DATE,
   );
   const { trialLocation } = trialSessionDetails;
   let zipName = sanitize(`${trialDate}-${trialLocation}.zip`)
@@ -250,11 +250,11 @@ exports.generateValidDocketEntryFilename = ({
   filingDate,
   index,
 }) => {
-  const MAX_OVERALL_FILE_LENGTH = 200;
+  const MAX_OVERALL_FILE_LENGTH = 64;
   const EXTENSION = '.pdf';
   const VALID_FILE_NAME_MAX_LENGTH = MAX_OVERALL_FILE_LENGTH - EXTENSION.length;
 
-  const docDate = formatDateString(filingDate, 'YYYY-MM-DD');
+  const docDate = formatDateString(filingDate, FORMATS.YYYYMMDD);
   const docNum = padStart(`${index}`, 4, '0');
   let fileName = sanitize(`${docDate}_${docNum}_${documentTitle}`);
   if (fileName.length > VALID_FILE_NAME_MAX_LENGTH) {

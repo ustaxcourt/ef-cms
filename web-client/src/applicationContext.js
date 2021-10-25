@@ -6,6 +6,7 @@ const reduce = ImageBlobReduce({
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
+  canAllowDocumentServiceForCase,
   caseHasServedDocketEntries,
   caseHasServedPetition,
   getContactPrimary,
@@ -31,6 +32,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
+import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareISODateStrings,
   compareStrings,
@@ -51,6 +53,7 @@ import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFe
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
+import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
   getDocQcSectionForUser,
@@ -91,7 +94,7 @@ import {
   deconstructDate,
   formatDateString,
   formatNow,
-  getMonthDayYearObj,
+  getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromString,
@@ -157,6 +160,7 @@ import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getB
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
 import { getCaseDeadlinesForCaseInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesForCaseProxy';
 import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadline/getCaseDeadlinesProxy';
+import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import {
@@ -347,6 +351,7 @@ const allUseCases = {
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
   checkEmailAvailabilityInteractor,
+  closeTrialSessionInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
@@ -390,6 +395,7 @@ const allUseCases = {
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
+  getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
   getClosedCasesInteractor,
@@ -651,6 +657,7 @@ const applicationContext = {
     return {
       aggregatePartiesForService,
       calculateISODate,
+      canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,
       caseHasServedPetition,
       checkDate,
@@ -686,7 +693,7 @@ const applicationContext = {
       getFormattedCaseDetail,
       getFormattedPartiesNameAndTitle,
       getJudgeLastName,
-      getMonthDayYearObj,
+      getMonthDayYearInETObj,
       getOtherFilers,
       getPetitionDocketEntry,
       getPetitionerById,
@@ -701,6 +708,7 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isServed,
+      isStandaloneRemoteSession,
       isStringISOFormatted,
       isUserIdRepresentedByPrivatePractitioner,
       isValidDateString,

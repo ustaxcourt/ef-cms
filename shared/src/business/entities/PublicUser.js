@@ -2,7 +2,7 @@ const joi = require('joi');
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const { baseUserValidation: userValidation } = require('./User');
 const { ROLES } = require('./EntityConstants');
 

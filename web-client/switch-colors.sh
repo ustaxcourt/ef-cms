@@ -31,16 +31,14 @@ node ./web-client/switch-public-ui-colors.js
 node ./web-client/switch-ui-colors.js
 node ./web-client/switch-api-colors.js
 node ./web-client/switch-public-api-colors.js
+node ./web-api/switch-cognito-triggers-color.js
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'$DEPLOYING_COLOR'"}}'
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"S":"false"}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'
 
 DESTINATION_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"}}' | jq -r ".Item.current.S")
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"'$DESTINATION_TABLE_VERSION'"}}'
-
-# switch the cognito trigger env variable
-ENV=$ENV DESTINATION_TABLE_VERSION=$DESTINATION_TABLE_VERSION ./web-client/switch-cognito.sh
 
 # check if both streams are disabled
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
@@ -59,4 +57,4 @@ if [[ "${CURRENT_STATE}" == "\"Disabled\"" && "${DEPLOYING_STATE}" == "\"Disable
   exit 1;
 fi
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"pending-color-switch"},"sk":{"S":"pending-color-switch"},"current":{"S":"false"}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"pending-color-switch"},"sk":{"S":"pending-color-switch"},"current":{"BOOL":false}}'

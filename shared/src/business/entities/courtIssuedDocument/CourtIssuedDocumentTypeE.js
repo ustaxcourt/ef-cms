@@ -1,3 +1,4 @@
+const joi = require('joi');
 const {
   calculateISODate,
   createISODateString,
@@ -9,18 +10,16 @@ const {
   CourtIssuedDocumentDefault,
 } = require('./CourtIssuedDocumentDefault');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
-const yesterdayMoment = calculateISODate({ howMuch: -1, unit: 'days' });
+const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
 const yesterdayFormatted = formatDateString(
-  createISODateString(yesterdayMoment),
+  createISODateString(yesterdayISO),
   FORMATS.MMDDYYYY,
 );
 
@@ -32,19 +31,25 @@ const yesterdayFormatted = formatDateString(
 function CourtIssuedDocumentTypeE() {}
 CourtIssuedDocumentTypeE.prototype.init = function init(rawProps) {
   courtIssuedDocumentDecorator(this, rawProps);
+  this.createdAt = rawProps.createdAt;
   this.date = rawProps.date;
 };
 
 CourtIssuedDocumentTypeE.prototype.getDocumentTitle = function () {
   return replaceBracketed(
     this.documentTitle,
-    formatDateString(this.date, 'MM-DD-YYYY'),
+    formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
   );
 };
 
 CourtIssuedDocumentTypeE.schema = {
   ...CourtIssuedDocumentDefault.schema,
-  date: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+  date: joi.when('createdAt', {
+    is: joi.exist().not(null),
+    otherwise:
+      JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+    then: JoiValidationConstants.ISO_DATE.required(),
+  }),
 };
 
 joiValidationDecorator(

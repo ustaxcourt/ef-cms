@@ -1,8 +1,13 @@
 import {
+  BENCH_OPINION_EVENT_CODE,
+  DATE_RANGE_SEARCH_OPTIONS,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
   formatDocumentSearchResultRecord,
 } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
@@ -14,7 +19,20 @@ describe('advancedDocumentSearchHelper', () => {
     DOCKET_NUMBER_SUFFIXES,
     OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     ORDER_EVENT_CODES,
+    USER_ROLES,
   } = applicationContext.getConstants();
+
+  let globalUser = {
+    role: USER_ROLES.docketClerk,
+    userId: 'docketClerk',
+  };
+
+  const getBaseState = user => {
+    return {
+      advancedSearchTab: 'order',
+      permissions: getUserPermissions(user),
+    };
+  };
 
   const advancedDocumentSearchHelper = withAppContextDecorator(
     advancedDocumentSearchHelperComputed,
@@ -29,6 +47,64 @@ describe('advancedDocumentSearchHelper', () => {
       },
     },
   );
+
+  describe('showDateRangePicker', () => {
+    it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
+          },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeFalsy();
+    });
+
+    it('should be true when state.advancedSearchForm.orderSearch.dateRange is customDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            orderSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES },
+          },
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeTruthy();
+    });
+
+    it('should be false when state.advancedSearchForm.opinionSearch.dateRange is allDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            opinionSearch: { dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES },
+          },
+          advancedSearchTab: 'opinion',
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeFalsy();
+    });
+
+    it('should be true when state.advancedSearchForm.opinionSearch.dateRange is customDates', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: {
+          ...getBaseState(globalUser),
+          advancedSearchForm: {
+            opinionSearch: {
+              dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+            },
+          },
+          advancedSearchTab: 'opinion',
+        },
+      });
+
+      expect(result.showDateRangePicker).toBeTruthy();
+    });
+  });
 
   it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
@@ -48,6 +124,7 @@ describe('advancedDocumentSearchHelper', () => {
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
       manyResults: manyResultsOverride,
+      showDateRangePicker: false,
       showManyResultsMessage: false,
       showSealedIcon: false,
     });
@@ -71,6 +148,7 @@ describe('advancedDocumentSearchHelper', () => {
       documentTypeVerbiage: 'Order',
       isPublic: true,
       manyResults: manyResultsOverride,
+      showDateRangePicker: false,
       showManyResultsMessage: false,
       showSealedIcon: true,
     });
@@ -396,7 +474,21 @@ describe('advancedDocumentSearchHelper', () => {
       expect(result.formattedJudgeName).toEqual('Scott');
     });
 
-    it('sets formattedSignedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
+    it('sets formattedJudgeName to signedJudgeName when the search result is a bench opinion', () => {
+      const mockJudgeName = 'Michael G. Scott';
+      const mockResult = {
+        eventCode: BENCH_OPINION_EVENT_CODE,
+        signedJudgeName: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual('Scott');
+    });
+
+    it('sets formattedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
       const mockResult = {
         eventCode: ORDER_EVENT_CODES[0],
         signedJudgeName: undefined,
@@ -406,10 +498,10 @@ describe('advancedDocumentSearchHelper', () => {
         applicationContext,
       });
 
-      expect(result.formattedSignedJudgeName).toEqual('');
+      expect(result.formattedJudgeName).toEqual('');
     });
 
-    it('sets formattedSignedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
+    it('sets formattedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
       const mockJudgeName = 'Michael G. Scott';
       const mockResult = {
         eventCode: ORDER_EVENT_CODES[0],
@@ -420,7 +512,7 @@ describe('advancedDocumentSearchHelper', () => {
         applicationContext,
       });
 
-      expect(result.formattedSignedJudgeName).toEqual('Scott');
+      expect(result.formattedJudgeName).toEqual('Scott');
     });
 
     it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {

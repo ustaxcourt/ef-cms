@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
   SESSION_STATUS_GROUPS,
+  TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
@@ -321,11 +323,13 @@ describe('formattedTrialSessionDetails', () => {
             ...MOCK_CASE,
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '101-18W',
           },
           {
             ...MOCK_CASE,
             caseCaption: undefined,
             docketNumber: '103-19',
+            docketNumberWithSuffix: '103-19',
           },
           {
             ...MOCK_CASE,
@@ -388,6 +392,7 @@ describe('formattedTrialSessionDetails', () => {
             caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
             docketNumber: '102-17',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+            docketNumberWithSuffix: '102-17W',
           },
           {
             ...MOCK_CASE,
@@ -395,6 +400,7 @@ describe('formattedTrialSessionDetails', () => {
             disposition: 'omg',
             docketNumber: '101-16',
             docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+            docketNumberWithSuffix: '101-16S',
             removedFromTrial: true,
             removedFromTrialDate: '2019-03-01T21:40:46.415Z',
           },
@@ -486,7 +492,7 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('getTrialSessionStatus', () => {
-    it('returns `Closed` when all trial session cases are inactive / removed from trial', () => {
+    it('returns `Closed` when all trial session cases are inactive / removed from trial and sessionScope is locationBased', () => {
       const session = {
         caseOrder: [
           { docketNumber: '123-19', removedFromTrial: true },
@@ -497,6 +503,20 @@ describe('formattedTrialSessionDetails', () => {
       const results = getTrialSessionStatus({ applicationContext, session });
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
+    });
+
+    it('should not return `Closed` when all trial session cases are inactive / removed from trial and sessionScope is standaloneRemote', () => {
+      const session = {
+        caseOrder: [
+          { docketNumber: '123-19', removedFromTrial: true },
+          { docketNumber: '234-19', removedFromTrial: true },
+        ],
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      };
+
+      const results = getTrialSessionStatus({ applicationContext, session });
+
+      expect(results).not.toEqual(SESSION_STATUS_GROUPS.closed);
     });
 
     it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {

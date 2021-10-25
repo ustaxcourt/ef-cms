@@ -120,6 +120,9 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
+  closeTrialSessionInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
+const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
@@ -248,9 +251,6 @@ const {
   deleteRecord,
 } = require('../../shared/src/persistence/elasticsearch/deleteRecord');
 const {
-  deleteSectionOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
   deleteTrialSession,
 } = require('../../shared/src/persistence/dynamo/trialSessions/deleteTrialSession');
 const {
@@ -271,9 +271,6 @@ const {
 const {
   deleteUserFromCase,
 } = require('../../shared/src/persistence/dynamo/cases/deleteUserFromCase');
-const {
-  deleteUserOutboxRecord,
-} = require('../../shared/src/persistence/dynamo/workitems/deleteUserOutboxRecord');
 const {
   deleteWorkItem,
 } = require('../../shared/src/persistence/dynamo/workitems/deleteWorkItem');
@@ -328,6 +325,9 @@ const {
 const {
   forwardMessageInteractor,
 } = require('../../shared/src/business/useCases/messages/forwardMessageInteractor');
+const {
+  generateAndServeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/service/createChangeItems');
 const {
   generateCaseInventoryReportPdf,
 } = require('../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf');
@@ -399,6 +399,9 @@ const {
   getCaseDeadlinesInteractor,
 } = require('../../shared/src/business/useCases/getCaseDeadlinesInteractor');
 const {
+  getCaseExistsInteractor,
+} = require('../../shared/src/business/useCases/getCaseExistsInteractor');
+const {
   getCaseForPublicDocketSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor');
 const {
@@ -426,6 +429,9 @@ const {
 const {
   getCasesByUserId,
 } = require('../../shared/src/persistence/elasticsearch/getCasesByUserId');
+const {
+  getCasesForUser,
+} = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
@@ -530,9 +536,6 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
-const {
-  getIndexedCasesForUser,
-} = require('../../shared/src/persistence/elasticsearch/getIndexedCasesForUser');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -1187,7 +1190,7 @@ const {
   zipDocuments,
 } = require('../../shared/src/persistence/s3/zipDocuments');
 const { Case } = require('../../shared/src/business/entities/cases/Case');
-const { createLogger } = require('../../shared/src/utilities/createLogger');
+const { createLogger } = require('./createLogger');
 const { exec } = require('child_process');
 const { fallbackHandler } = require('./fallbackHandler');
 const { getDocument } = require('../../shared/src/persistence/s3/getDocument');
@@ -1409,13 +1412,11 @@ const gatewayMethods = {
   deleteDocumentFromS3,
   deleteMessage,
   deleteRecord,
-  deleteSectionOutboxRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserCaseNote,
   deleteUserConnection,
   deleteUserFromCase,
-  deleteUserOutboxRecord,
   deleteWorkItem,
   getAllWebSocketConnections,
   getBlockedCases,
@@ -1429,6 +1430,7 @@ const gatewayMethods = {
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
+  getCasesForUser,
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
@@ -1445,7 +1447,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
-  getIndexedCasesForUser,
   getInternalUsers,
   getMessageById,
   getMessageThreadByParentId,
@@ -1755,6 +1756,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fetchPendingItems,
         fetchPendingItemsByDocketNumber,
         formatAndSortConsolidatedCases,
+        generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
@@ -1798,6 +1800,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         casePublicSearchInteractor,
         checkEmailAvailabilityInteractor,
         checkForReadyForTrialCasesInteractor,
+        closeTrialSessionInteractor,
         completeDocketEntryQCInteractor,
         completeMessageInteractor,
         completeWorkItemInteractor,
@@ -1840,6 +1843,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCalendaredCasesForTrialSessionInteractor,
         getCaseDeadlinesForCaseInteractor,
         getCaseDeadlinesInteractor,
+        getCaseExistsInteractor,
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,

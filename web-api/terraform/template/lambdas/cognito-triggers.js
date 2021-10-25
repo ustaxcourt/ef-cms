@@ -1,117 +1,8 @@
-const AWS = require('aws-sdk');
-const {
-  createLogger,
-} = require('../../../../shared/src/utilities/createLogger');
-const {
-  createPetitionerAccountInteractor,
-} = require('../../../../shared/src/business/useCases/users/createPetitionerAccountInteractor');
-const {
-  getCaseByDocketNumber,
-} = require('../../../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getDocketNumbersByUser,
-} = require('../../../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser');
-const {
-  getUserById,
-} = require('../../../../shared/src/persistence/dynamo/users/getUserById');
-const {
-  getUserCaseMappingsByDocketNumber,
-} = require('../../../../shared/src/persistence/dynamo/cases/getUserCaseMappingsByDocketNumber');
-const {
-  getWebSocketConnectionsByUserId,
-} = require('../../../../shared/src/persistence/dynamo/notifications/getWebSocketConnectionsByUserId');
-const {
-  persistUser,
-} = require('../../../../shared/src/persistence/dynamo/users/persistUser');
-const {
-  retrySendNotificationToConnections,
-} = require('../../../../shared/src/notifications/retrySendNotificationToConnections');
-const {
-  sendNotificationToConnection,
-} = require('../../../../shared/src/notifications/sendNotificationToConnection');
-const {
-  sendNotificationToUser,
-} = require('../../../../shared/src/notifications/sendNotificationToUser');
-const {
-  setUserEmailFromPendingEmailInteractor,
-} = require('../../../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor');
-const {
-  updateCase,
-} = require('../../../../shared/src/persistence/dynamo/cases/updateCase');
-const {
-  updateCaseAndAssociations,
-} = require('../../../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations');
-const {
-  updateIrsPractitionerOnCase,
-  updatePrivatePractitionerOnCase,
-} = require('../../../../shared/src/persistence/dynamo/cases/updatePractitionerOnCase');
-const {
-  updateUser,
-} = require('../../../../shared/src/persistence/dynamo/users/updateUser');
-
-const { DynamoDB } = AWS;
-
-const logger = createLogger({
-  defaultMeta: {
-    environment: {
-      stage: process.env.STAGE || 'local',
-    },
-  },
-});
-
-const applicationContext = {
-  getCurrentUser: () => ({}),
-  getDocumentClient: () => {
-    return new DynamoDB.DocumentClient({
-      endpoint: process.env.DYNAMODB_ENDPOINT,
-      region: process.env.AWS_REGION,
-    });
-  },
-  getEnvironment: () => ({
-    dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
-    stage: process.env.STAGE,
-  }),
-  getNotificationClient: ({ endpoint }) => {
-    return new AWS.ApiGatewayManagementApi({
-      endpoint,
-      httpOptions: {
-        timeout: 900000, // 15 minutes
-      },
-    });
-  },
-  getNotificationGateway: () => ({
-    retrySendNotificationToConnections,
-    sendNotificationToConnection,
-    sendNotificationToUser,
-  }),
-  getPersistenceGateway: () => ({
-    getCaseByDocketNumber,
-    getDocketNumbersByUser,
-    getUserById,
-    getUserCaseMappingsByDocketNumber,
-    getWebSocketConnectionsByUserId,
-    persistUser,
-    updateCase,
-    updateIrsPractitionerOnCase,
-    updatePrivatePractitionerOnCase,
-    updateUser,
-  }),
-  getUseCaseHelpers: () => ({ updateCaseAndAssociations }),
-  getUseCases: () => ({
-    createPetitionerAccountInteractor,
-    setUserEmailFromPendingEmailInteractor,
-  }),
-  logger: {
-    debug: logger.debug.bind(logger),
-    error: logger.error.bind(logger),
-    info: logger.info.bind(logger),
-    warn: logger.warn.bind(logger),
-  },
-};
-
-exports.applicationContext = applicationContext;
+const createApplicationContext = require('../../../src/applicationContext');
 
 exports.handler = async event => {
+  const applicationContext = createApplicationContext({});
+
   if (event.triggerSource === 'PostConfirmation_ConfirmSignUp') {
     const { email, name, sub: userId } = event.request.userAttributes;
 
@@ -157,4 +48,27 @@ exports.handler = async event => {
   }
 
   return event;
+};
+
+exports.updatePetitionerCasesLambda = async event => {
+  const applicationContext = createApplicationContext({});
+
+  const { Records } = event;
+  const { body, receiptHandle } = Records[0];
+  const user = JSON.parse(body);
+  const address = `https://sqs.us-east-1.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/update_petitioner_cases_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`;
+  applicationContext.logger.info('updatePetitionerCasesLambda', event);
+
+  await applicationContext.getUseCases().updatePetitionerCasesInteractor({
+    applicationContext,
+    user,
+  });
+
+  await applicationContext
+    .getMessagingClient()
+    .deleteMessage({
+      QueueUrl: address,
+      ReceiptHandle: receiptHandle,
+    })
+    .promise();
 };

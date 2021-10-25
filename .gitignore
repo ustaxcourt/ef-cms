@@ -6,12 +6,14 @@
 .idea/
 .nova/
 .scannerwork/
-.serverless/
 .terraform.lock.hcl
 .terraform/
 .vscode
 **/*_.js
 /policy.json
+artillery/private-app-report.json
+artillery/tokens.csv
+artillery/private-advanced-order.json
 aws.json
 aws/lambdas/*.zip
 coverage/

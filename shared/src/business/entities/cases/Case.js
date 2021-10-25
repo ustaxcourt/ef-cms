@@ -26,8 +26,11 @@ const {
 } = require('../EntityConstants');
 const {
   calculateDifferenceInDays,
+  calculateISODate,
   createISODateString,
+  dateStringsCompared,
   formatDateString,
+  FORMATS,
   PATTERNS,
   prepareDateFromString,
 } = require('../../utilities/DateHandler');
@@ -38,12 +41,9 @@ const {
   getDocketNumberSuffix,
 } = require('../../utilities/getDocketNumberSuffix');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
 const {
   shouldGenerateDocketRecordIndex,
 } = require('../../utilities/shouldGenerateDocketRecordIndex');
@@ -53,6 +53,7 @@ const { ContactFactory } = require('../contacts/ContactFactory');
 const { Correspondence } = require('../Correspondence');
 const { DocketEntry, isServed } = require('../DocketEntry');
 const { IrsPractitioner } = require('../IrsPractitioner');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { Petitioner } = require('../contacts/Petitioner');
 const { PrivatePractitioner } = require('../PrivatePractitioner');
 const { Statistic } = require('../Statistic');
@@ -265,6 +266,9 @@ const assignFieldsForAllUsers = ({ obj, rawCase }) => {
 
   obj.docketNumberWithSuffix =
     obj.docketNumber + (obj.docketNumberSuffix || '');
+
+  obj.canAllowDocumentService = rawCase.canAllowDocumentService;
+  obj.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
 };
 
 const assignDocketEntries = ({
@@ -471,6 +475,8 @@ Case.VALIDATION_RULES = {
       then: joi.required(),
     })
     .meta({ tags: ['Restricted'] }),
+  canAllowDocumentService: joi.boolean().optional(),
+  canAllowPrintableDocketRecord: joi.boolean().optional(),
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
@@ -727,6 +733,7 @@ Case.VALIDATION_RULES = {
     .try(
       JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
       JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      JoiValidationConstants.STRING.valid('Standalone Remote'),
     )
     .optional()
     .description(
@@ -1171,6 +1178,38 @@ Case.prototype.getPetitionerById = function (contactId) {
 };
 
 /**
+ * Retrieves the petitioner with email userEmail on the case
+ *
+ * @param {object} arguments.rawCase the raw case
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {Object} the contact object
+ */
+const getPetitionerByEmail = function (rawCase, userEmail) {
+  return rawCase.petitioners?.find(
+    petitioner => petitioner.email === userEmail,
+  );
+};
+
+/**
+ * checks if the case is eligible for service.
+ *
+ * @returns {boolean} if the case is eligible or not
+ */
+Case.prototype.shouldGenerateNoticesForCase = function () {
+  return shouldGenerateNoticesForCase(this);
+};
+
+/**
+ * gets the petitioner with email userEmail from the petitioners array
+ *
+ * @params {object} params the params object
+ * @params {string} params.userEmail the email of the petitioner to retrieve
+ * @returns {object} the retrieved petitioner
+ */
+Case.prototype.getPetitionerByEmail = function (userEmail) {
+  return getPetitionerByEmail(this, userEmail);
+};
+/**
  * adds the petitioner to the petitioners array
  *
  * @params {object} petitioner the petitioner to add to the case
@@ -1450,7 +1489,10 @@ Case.prototype.generateTrialSortTags = function () {
     casePrioritySymbol = 'C';
   }
 
-  const formattedFiledTime = formatDateString(receivedAt, 'YYYYMMDDHHmmss');
+  const formattedFiledTime = formatDateString(
+    receivedAt,
+    FORMATS.TRIAL_SORT_TAG,
+  );
   const formattedTrialCity = preferredTrialCity.replace(/[\s.,]/g, '');
 
   const nonHybridSortKey = [
@@ -2267,8 +2309,59 @@ const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
 };
 
+/**
+ * determines if the case is in a state where documents can be served
+ *
+ * @param {Object} rawCase The Case we are using to determine whether we can allow document service
+ * @returns {Boolean} whether or not documents can be served on the case
+ */
+const canAllowDocumentServiceForCase = rawCase => {
+  if (typeof rawCase.canAllowDocumentService !== 'undefined') {
+    return rawCase.canAllowDocumentService;
+  }
+  return CASE_STATUS_TYPES.new !== rawCase.status;
+};
+
+/**
+ * determines whether or not to file automatically generated notices for notice of change of address
+ *
+ * @param {Object} rawCase the court case
+ * @returns {Boolean} whether or not we should automatically generate notices for a change of address
+ */
+const shouldGenerateNoticesForCase = rawCase => {
+  if (typeof rawCase.shouldGenerateNotices !== 'undefined') {
+    return rawCase.shouldGenerateNotices;
+  }
+  const isOpen = ![CASE_STATUS_TYPES.closed, CASE_STATUS_TYPES.new].includes(
+    rawCase.status,
+  );
+  const MAX_CLOSED_DATE = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+  const isRecent =
+    rawCase.closedDate &&
+    dateStringsCompared(rawCase.closedDate, MAX_CLOSED_DATE) >= 0;
+  return Boolean(isOpen || isRecent);
+};
+
+/**
+ *  determines whether or not we should show the printable docket record
+ *
+ * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @returns {Boolean} whether or not we should show the printable docket record
+ */
+const canAllowPrintableDocketRecord = rawCase => {
+  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+    return rawCase.canAllowPrintableDocketRecord;
+  }
+  return rawCase.status !== CASE_STATUS_TYPES.new;
+};
+
 module.exports = {
   Case: validEntityDecorator(Case),
+  canAllowDocumentServiceForCase,
+  canAllowPrintableDocketRecord,
   caseDecorator,
   caseHasServedDocketEntries,
   caseHasServedPetition,
@@ -2282,5 +2375,6 @@ module.exports = {
   isAssociatedUser,
   isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
+  shouldGenerateNoticesForCase,
   updatePetitioner,
 };

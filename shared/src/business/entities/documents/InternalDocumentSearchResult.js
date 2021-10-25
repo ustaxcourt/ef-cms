@@ -1,11 +1,9 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../../utilities/JoiValidationDecorator');
+} = require('../JoiValidationDecorator');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { ORDER_JUDGE_FIELD } = require('../EntityConstants');
 const { pick } = require('lodash');
 
@@ -56,10 +54,10 @@ InternalDocumentSearchResult.schema = joi.object().keys({
   eventCode: JoiValidationConstants.STRING,
   isSealed: joi.boolean(),
   isStricken: joi.boolean(),
-  judge: JoiValidationConstants.STRING.optional(),
+  judge: JoiValidationConstants.STRING.optional().allow(null),
   numberOfPages: joi.number().integer().optional().allow(null),
   sealedDate: JoiValidationConstants.ISO_DATE,
-  signedJudgeName: JoiValidationConstants.STRING.optional(),
+  signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
 });
 
 joiValidationDecorator(

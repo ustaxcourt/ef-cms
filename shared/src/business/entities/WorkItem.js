@@ -1,7 +1,7 @@
 const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('./EntityConstants');
 const { createISODateString } = require('../utilities/DateHandler');
 const { pick } = require('lodash');
