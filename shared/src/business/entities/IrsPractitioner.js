@@ -1,16 +1,14 @@
 const joi = require('joi');
 const {
-  JoiValidationConstants,
-} = require('../../utilities/JoiValidationConstants');
-const {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../../utilities/JoiValidationDecorator');
+} = require('./JoiValidationDecorator');
 const {
   USER_CONTACT_VALIDATION_RULES,
   userDecorator,
   VALIDATION_ERROR_MESSAGES,
 } = require('./User');
+const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { Practitioner } = require('./Practitioner');
 const { ROLES, SERVICE_INDICATOR_TYPES } = require('./EntityConstants');
 

@@ -1,6 +1,6 @@
 const client = require('../../dynamodbClientService');
 const {
-  getMonthDayYearObj,
+  getMonthDayYearInETObj,
 } = require('../../../business/utilities/DateHandler');
 /**
  * incrementCounter
@@ -13,7 +13,7 @@ const {
  */
 exports.incrementCounter = async ({ applicationContext, key, year }) => {
   if (!year) {
-    year = `${getMonthDayYearObj().year}`;
+    year = `${getMonthDayYearInETObj().year}`;
   }
 
   return (

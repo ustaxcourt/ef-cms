@@ -66,7 +66,7 @@ describe('ExternalDocumentInformationFactory', () => {
       it('should not allow certificate of service date to be in the future', () => {
         baseDoc.certificateOfServiceDate = calculateISODate({
           howMuch: 1,
-          unit: 'days',
+          units: 'days',
         });
         expect(errors().certificateOfServiceDate).toEqual(
           VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,

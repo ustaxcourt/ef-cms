@@ -9,7 +9,7 @@ describe('getOrderSearchEnabledInteractor', () => {
   it('persistence method returns true, and interactor returns true', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getOrderSearchEnabled.mockResolvedValue('true');
+      .getOrderSearchEnabled.mockResolvedValue(true);
 
     const result = await getOrderSearchEnabledInteractor(applicationContext);
 
@@ -19,7 +19,7 @@ describe('getOrderSearchEnabledInteractor', () => {
   it('persistence method returns false, and interactor returns false', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getOrderSearchEnabled.mockResolvedValue('false');
+      .getOrderSearchEnabled.mockResolvedValue(false);
 
     const result = await getOrderSearchEnabledInteractor(applicationContext);
 

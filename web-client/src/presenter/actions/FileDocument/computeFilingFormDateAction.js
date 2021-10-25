@@ -14,31 +14,16 @@ export const computeFilingFormDateAction = ({
   get,
   store,
 }) => {
-  let formDate = null;
-  const formMonth = get(state.form.filingDateMonth);
-  const formDay = get(state.form.filingDateDay);
-  const formYear = get(state.form.filingDateYear);
-  const filingDate = get(state.form.filingDate);
+  let filingDate = null;
+  const month = get(state.form.filingDateMonth);
+  const day = get(state.form.filingDateDay);
+  const year = get(state.form.filingDateYear);
 
-  if (formMonth && formDay && formYear) {
-    if (filingDate) {
-      const { DATE_FORMATS } = applicationContext.getConstants();
+  if (month && day && year) {
+    filingDate = applicationContext
+      .getUtilities()
+      .computeDate({ day, month, year });
 
-      let momentFilingDate = applicationContext
-        .getUtilities()
-        .prepareDateFromString(filingDate, DATE_FORMATS.ISO);
-
-      formDate = momentFilingDate
-        .year(formYear)
-        .month(formMonth - 1)
-        .date(formDay)
-        .toISOString();
-    } else {
-      formDate = applicationContext
-        .getUtilities()
-        .computeDate({ day: formDay, month: formMonth, year: formYear });
-    }
+    store.set(state.form.filingDate, filingDate);
   }
-
-  store.set(state.form.filingDate, formDate);
 };

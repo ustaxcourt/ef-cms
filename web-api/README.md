@@ -7,14 +7,11 @@
 
 ## Optional prerequisites, if setting up a local sandbox
 
-- `npm install -g serverless`
-- [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
+### Starting The Server
 
-### Starting Serverless-Offline
+`npm run start:api`
 
-`npm start`
-
-This will host a local service at http://localhost:3000.
+This will host a local server at http://localhost:5000.
 
 ### Running Unit Tests with Coverage
 

@@ -43,12 +43,6 @@ const {
   deleteRecord,
 } = require('../../persistence/elasticsearch/deleteRecord');
 const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
   deleteWorkItem,
 } = require('../../persistence/dynamo/workitems/deleteWorkItem');
 const {
@@ -136,6 +130,9 @@ const {
 const {
   incrementCounter,
 } = require('../../persistence/dynamo/helpers/incrementCounter');
+const {
+  isStandaloneRemoteSession,
+} = require('../entities/trialSessions/TrialSession');
 const {
   putWorkItemInOutbox,
 } = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
@@ -315,9 +312,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getMonthDayYearObj: jest
+    getMonthDayYearInETObj: jest
       .fn()
-      .mockImplementation(DateHandler.getMonthDayYearObj),
+      .mockImplementation(DateHandler.getMonthDayYearInETObj),
     getOtherFilers: jest.fn().mockImplementation(getOtherFilers),
     getPetitionDocketEntry: jest
       .fn()
@@ -335,6 +332,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
+    isStandaloneRemoteSession: jest
+      .fn()
+      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -436,12 +436,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteSectionOutboxRecord),
-    deleteUserOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest

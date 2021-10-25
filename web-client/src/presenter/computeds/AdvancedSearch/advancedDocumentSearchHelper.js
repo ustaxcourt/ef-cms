@@ -62,8 +62,11 @@ export const formatDocumentSearchResultRecord = (
   advancedSearchTab,
   { applicationContext },
 ) => {
-  const { OPINION_EVENT_CODES_WITH_BENCH_OPINION, ORDER_EVENT_CODES } =
-    applicationContext.getConstants();
+  const {
+    BENCH_OPINION_EVENT_CODE,
+    OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
+    ORDER_EVENT_CODES,
+  } = applicationContext.getConstants();
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
@@ -78,12 +81,15 @@ export const formatDocumentSearchResultRecord = (
     result.documentTitle = result.documentType;
   }
 
-  if (OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(result.eventCode)) {
+  if (OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION.includes(result.eventCode)) {
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';
-  } else if (ORDER_EVENT_CODES.includes(result.eventCode)) {
-    result.formattedSignedJudgeName = result.signedJudgeName
+  } else if (
+    ORDER_EVENT_CODES.includes(result.eventCode) ||
+    result.eventCode === BENCH_OPINION_EVENT_CODE
+  ) {
+    result.formattedJudgeName = result.signedJudgeName
       ? applicationContext
           .getUtilities()
           .getJudgeLastName(result.signedJudgeName)
