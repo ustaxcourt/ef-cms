@@ -4,24 +4,24 @@
   }
 
   @media only screen and (max-width: $medium-screen) {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .usa-navbar {
     display: flex;
     width: 100% !important;
-    flex-direction: row;
-    flex-wrap: nowrap;
+    flex-flow: row nowrap;
     align-items: flex-start;
     border-bottom: none !important;
 
     .usa-logo {
-      margin-top: 0px;
+      margin-top: 0;
     }
 
     .header-welcome-public {
       margin-left: 10px;
       line-height: 2em;
+
       @media only screen and (max-width: $medium-screen) {
         display: none;
       }
@@ -46,6 +46,7 @@
       margin-top: 25px;
       margin-left: auto;
       color: color($theme-color-primary);
+
       .account-menu-icon {
         font-size: 25px;
       }
@@ -56,9 +57,10 @@
 
       &.mobile {
         display: none;
+
         @media only screen and (max-width: $medium-screen) {
           display: block;
-          margin-top: 0px;
+          margin-top: 0;
         }
       }
     }
