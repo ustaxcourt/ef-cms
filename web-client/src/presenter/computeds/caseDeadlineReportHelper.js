@@ -49,7 +49,7 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
     caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
     formattedDeadline: applicationContext
       .getUtilities()
-      .formatDateString(d.deadlineDate, 'MMDDYY'), // TODO replace with DATE_FORMATS constant
+      .formatDateString(d.deadlineDate, 'MMDDYY'),
   }));
 
   return {
