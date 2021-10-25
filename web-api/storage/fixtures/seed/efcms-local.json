@@ -2010,6 +2010,18 @@
     "email": "judgeAshford@example.com"
   },
   {
+    "judgeTitle": "Judge",
+    "judgeFullName": "Tia W. Mowry",
+    "role": "judge",
+    "entityName": "User",
+    "sk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
+    "name": "Mowry",
+    "section": "mowryChambers",
+    "pk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
+    "userId": "09b7c6c9-2d9e-43a5-83a4-096ae5362725",
+    "email": "judgeMowry@example.com"
+  },
+  {
     "sk": "case|102-20",
     "pk": "case-by-docket-number|102-20"
   },
@@ -5983,6 +5995,10 @@
   {
     "sk": "user|dabbad01-18d0-43ec-bafb-654e83405416",
     "pk": "section|ashfordsChambers"
+  },
+  {
+    "sk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
+    "pk": "section|mowrysChambers"
   },
   {
     "sk": "user|3805d1ab-18d0-43ec-bafb-654e83405416",
@@ -14812,6 +14828,10 @@
   },
   {
     "sk": "user|659789b4-acc5-40b7-9318-3354e7eb8604",
+    "pk": "section|judge"
+  },
+  {
+    "sk": "user|09b7c6c9-2d9e-43a5-83a4-096ae5362725",
     "pk": "section|judge"
   },
   {
