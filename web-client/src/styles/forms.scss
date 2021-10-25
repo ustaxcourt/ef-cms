@@ -1,7 +1,7 @@
 .usa-form-group,
 .usa-fieldset {
   max-width: 30rem;
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: 35px;
 }
 
@@ -13,6 +13,7 @@
 .ustc-time-of-day {
   display: flex;
 }
+
 .ustc-time-of-day--hour,
 .ustc-time-of-day--minute {
   width: 3em;
@@ -20,6 +21,7 @@
   margin-right: 1rem;
   margin-bottom: 0;
 }
+
 .ustc-time-of-day--am-pm {
   position: absolute;
   bottom: 0;
@@ -45,9 +47,11 @@ legend {
   .usa-hint {
     margin: 0;
   }
+
   p.usa-hint {
     display: block;
   }
+
   &.with-hint {
     margin-bottom: 2px;
   }
@@ -69,6 +73,7 @@ input[type='text'],
 textarea,
 select {
   margin: 0;
+
   &:hover:not(:disabled) {
     border: 1px solid color($theme-color-primary);
     box-shadow: inset 0 0 0 1px color($theme-color-primary);
@@ -77,7 +82,7 @@ select {
 
   &::placeholder {
     color: color($theme-color-base-dark);
-    opacity: 1;
+    opacity: 100%;
   }
 }
 
@@ -87,8 +92,8 @@ select {
 
 .usa-select {
   margin: 0;
-  -webkit-appearance: none;
   appearance: none;
+
   &:disabled {
     border-color: color($theme-color-base-light);
     background-color: color($theme-color-base-lighter);
@@ -102,13 +107,16 @@ select {
   min-height: 24px;
   margin-bottom: 0;
   line-height: 24px;
+
   &::before {
     display: inline-block;
     box-shadow: 0 0 0 1px color($theme-color-base);
   }
+
   &:hover::before {
     box-shadow: 0 0 0 2px color($theme-color-primary);
   }
+
   &.inline-block {
     display: inline-block;
   }
@@ -118,6 +126,7 @@ select {
 .usa-radio {
   margin-bottom: 15px;
   background: transparent;
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -141,6 +150,7 @@ select {
       }
     }
   }
+
   + .usa-input:not([type='file']),
   + .usa-textarea,
   + .usa-select,
@@ -151,6 +161,7 @@ select {
     }
   }
 }
+
 .usa-input,
 .usa-textarea,
 .usa-select,
@@ -176,8 +187,10 @@ select.case-status {
 
 div.usa-radio.usa-radio__inline {
   display: inline;
+
   .usa-radio__label {
     padding-right: 2rem;
+
     &.smaller-padding-right {
       padding-right: 1rem;
     }
@@ -186,11 +199,10 @@ div.usa-radio.usa-radio__inline {
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
-  -webkit-appearance: none;
+  appearance: none;
 }
 
 input[type='number'] {
-  -moz-appearance: textfield;
   appearance: textfield;
 }
 
@@ -201,6 +213,7 @@ input:focus::placeholder {
 .ustc-vertical-option-list {
   padding: 0;
   margin: 0;
+
   li {
     display: block;
   }
@@ -212,6 +225,7 @@ div.ustc-hide-radio-button {
   input {
     display: none;
   }
+
   label {
     color: color($theme-color-primary);
     text-decoration: underline;
@@ -222,6 +236,7 @@ div.ustc-hide-radio-button {
   .only-large-screens {
     display: block;
   }
+
   .only-small-screens {
     display: none;
   }
@@ -231,6 +246,7 @@ div.ustc-hide-radio-button {
   .only-large-screens {
     display: none;
   }
+
   .only-small-screens {
     display: block;
   }
@@ -304,6 +320,7 @@ label.validated::after {
 
 .document-detail-one-third .blue-container {
   padding: 0;
+
   #change-email-hint {
     display: none;
   }
@@ -312,13 +329,16 @@ label.validated::after {
 .document-detail-one-third {
   max-height: 890px;
   overflow-y: auto;
+
   .phone-input {
     margin-bottom: 20px;
     clear: both;
   }
+
   .email-input {
     margin-bottom: 30px;
   }
+
   .ustc-form-group-city input,
   .ustc-form-group-state select {
     margin-bottom: 0;
@@ -351,11 +371,13 @@ label.validated::after {
   @media only screen and (min-width: $medium-screen) {
     max-width: units('desktop');
   }
+
   .contact-group {
     input,
     select {
       max-width: units('mobile') + 5;
     }
+
     .grid-row.grid-gap.state-and-city {
       max-width: units('mobile') + 7;
     }
@@ -381,6 +403,7 @@ label.validated::after {
       max-width: 100%;
     }
   }
+
   &.add-bottom-margin {
     margin-bottom: 20px;
   }
@@ -395,10 +418,12 @@ label.ustc-upload {
     display: none;
     color: $color-green;
   }
+
   &.validated {
     &::after {
       display: none;
     }
+
     .success-message {
       display: inline-block;
     }
@@ -411,11 +436,13 @@ label.ustc-upload {
     padding: 14px;
     margin: 10px;
     background-color: color($theme-color-base-lightest);
+
     button {
       min-width: 130px;
       margin-bottom: 5px;
     }
   }
+
   #docket-search-field {
     display: block;
     width: 150px;
@@ -430,6 +457,7 @@ label.ustc-upload {
     .usa-input-group {
       border-left: 4px solid transparent;
     }
+
     button[type='submit'] {
       width: 45px;
       background-image: none;
@@ -450,15 +478,18 @@ label.ustc-upload {
     padding-bottom: 4px;
     border: 1px solid color($theme-color-base);
     border-radius: 0;
+
     &:hover {
       border: 1px solid color($theme-color-primary);
       box-shadow: 0 0 0 1px color($theme-color-primary);
       cursor: pointer;
     }
+
     .select-react-element__value-container {
       &:focus {
         border: none;
       }
+
       .select-react-element__input input {
         border: none;
         margin-top: auto;
@@ -477,7 +508,8 @@ label.ustc-upload {
 .date-received,
 .service-date {
   .usa-form-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
+
     input[type='number'] {
       margin-bottom: 5px;
     }
