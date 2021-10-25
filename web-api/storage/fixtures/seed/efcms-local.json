@@ -6725,6 +6725,28 @@
     "isCalendared": false
   },
   {
+    "caseOrder": [],
+    "gsi1pk": "trial-session-catalog",
+    "trialLocation": "Standalone Remote",
+    "proceedingType": "Remote",
+    "createdAt": "2020-10-25T05:00:00.000Z",
+    "sk": "trial-session|111ac21b-99f9-4321-98c8-b95db00af96b",
+    "sessionType": "Regular",
+    "sessionScope": "Standalone Remote",
+    "termYear": "2020",
+    "startTime": "13:00",
+    "term": "Fall",
+    "pk": "trial-session|111ac21b-99f9-4321-98c8-b95db00af96b",
+    "judge": {
+      "name": "Colvin",
+      "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+    },
+    "startDate": "2020-11-25T05:00:00.000Z",
+    "maxCases": 100,
+    "trialSessionId": "111ac21b-99f9-4321-98c8-b95db00af96b",
+    "isCalendared": false
+  },
+  {
     "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
     "pk": "privatePractitioner|Lilah Gilbert"
   },

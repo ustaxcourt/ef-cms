@@ -93,20 +93,15 @@ export const trialSessionsModalHelper = ({
           ]),
       );
 
-      trialSessionStatesSorted = Object.keys(
-        trialSessionsFormattedByState,
-      ).sort((a, b) => {
-        if (a === trialSessionRemote) {
-          return -1;
-        }
-        if (a < b) {
-          return -1;
-        }
-        if (a > b) {
-          return 1;
-        }
-        return 0;
-      });
+      trialSessionStatesSorted = Object.keys(trialSessionsFormattedByState)
+        // sort alpha, but then always keep remote at the top!
+        .sort()
+        .sort(a => {
+          if (a === trialSessionRemote) {
+            return -1;
+          }
+          return 0;
+        });
 
       trialSessionStatesSorted.forEach(stateName => {
         trialSessionsFormattedByState[stateName] = sortBy(

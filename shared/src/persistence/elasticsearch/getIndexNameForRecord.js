@@ -17,7 +17,12 @@ const isRecordOfType = (record, type) => {
   }
 
   if (entityName) {
-    if (type === 'User' && userEntityNames.includes(entityName)) {
+    if (
+      type === 'User' &&
+      userEntityNames.includes(entityName) &&
+      record.pk.S.startsWith('user|') &&
+      record.sk.S.startsWith('user|')
+    ) {
       return true;
     }
 
@@ -48,8 +53,6 @@ exports.getIndexNameForRecord = record => {
     index = 'efcms-user';
   } else if (isRecordOfType(record, 'Message')) {
     index = 'efcms-message';
-  } else if (isRecordOfType(record, 'UserCase')) {
-    index = 'efcms-user-case';
   } else if (isRecordOfType(record, 'CaseDeadline')) {
     index = 'efcms-case-deadline';
   } else if (isRecordOfType(record, 'WorkItem')) {

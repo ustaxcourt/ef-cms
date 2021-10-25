@@ -55,6 +55,7 @@ const formatDocketEntryOnDocketRecord = (
     isPaper: record.isPaper,
     isStricken: record.isStricken,
     numberOfPages: record.numberOfPages || 0,
+    openInSameTab: !isTerminalUser,
     servedAtFormatted: record.servedAtFormatted,
     servedPartiesCode: record.servedPartiesCode,
     showDocumentDescriptionWithoutLink,

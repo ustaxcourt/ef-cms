@@ -28,6 +28,7 @@ describe('DateHandler', () => {
       TRIAL_TIME: '2018-07-02 3:56',
       YEAR: '2018',
       YEAR_TWO_DIGIT: '18',
+      YYYYMM: '2018-07',
       YYYYMMDD: '2018-07-02',
     };
 
