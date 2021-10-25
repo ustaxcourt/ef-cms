@@ -134,6 +134,7 @@
     "stylelint": "^14.0.0",
     "stylelint-config-idiomatic-order": "^8.1.0",
     "stylelint-config-standard": "^23.0.0",
+    "stylelint-config-standard-scss": "^2.0.0",
     "swagger-cli": "^4.0.4",
     "tmp": "^0.2.1",
     "uswds": "^2.12.1",
@@ -284,5 +285,6 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
     "underscore": "^1.13.1"
-  }
+  },
+  "devDependencies": {}
 }
