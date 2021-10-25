@@ -54,6 +54,12 @@ describe('getIndexNameForRecord', () => {
       entityName: {
         S: 'User',
       },
+      pk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+      sk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
     };
 
     const result = getIndexNameForRecord(record);
@@ -61,10 +67,34 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-user');
   });
 
+  it('should NOT return efcms-user when the record has a user entity name but the pk and sk are not "user"', () => {
+    const record = {
+      entityName: {
+        S: 'IrsPractitioner',
+      },
+      pk: {
+        S: 'case|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+      sk: {
+        S: 'irsPractitioner|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual(null);
+  });
+
   it('returns efcms-user for Practitioner records', () => {
     const record = {
       entityName: {
         S: 'Practitioner',
+      },
+      pk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+      sk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
       },
     };
 
@@ -78,6 +108,12 @@ describe('getIndexNameForRecord', () => {
       entityName: {
         S: 'PrivatePractitioner',
       },
+      pk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+      sk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
     };
 
     const result = getIndexNameForRecord(record);
@@ -89,6 +125,12 @@ describe('getIndexNameForRecord', () => {
     const record = {
       entityName: {
         S: 'IrsPractitioner',
+      },
+      pk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
+      },
+      sk: {
+        S: 'user|fed0e453-a60d-4d23-a214-bfa905f72c85',
       },
     };
 
@@ -107,18 +149,6 @@ describe('getIndexNameForRecord', () => {
     const result = getIndexNameForRecord(record);
 
     expect(result).toEqual('efcms-message');
-  });
-
-  it('returns efcms-user-case for UserCase records', () => {
-    const record = {
-      entityName: {
-        S: 'UserCase',
-      },
-    };
-
-    const result = getIndexNameForRecord(record);
-
-    expect(result).toEqual('efcms-user-case');
   });
 
   it('returns efcms-case-deadline for CaseDeadline records', () => {

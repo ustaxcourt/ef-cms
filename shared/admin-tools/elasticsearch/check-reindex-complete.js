@@ -29,12 +29,7 @@ exports.isReindexComplete = async environmentName => {
     version: destinationVersion,
   });
 
-  for (const indexName of [
-    'efcms-case',
-    'efcms-docket-entry',
-    'efcms-user',
-    'efcms-user-case',
-  ]) {
+  for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
     const countCurrent = currentInfo.indices[indexName].total.docs.count;
     const countDestination =
       destinationInfo.indices[indexName].total.docs.count;
