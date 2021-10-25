@@ -78,11 +78,12 @@ exports.orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('advanced order search', {
+  await applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     size: results.length,
     timestamp,
     userId: authorizedUser.userId,
+    userRole: authorizedUser.role,
   });
 
   const filteredResults = caseSearchFilter(results, authorizedUser).slice(
