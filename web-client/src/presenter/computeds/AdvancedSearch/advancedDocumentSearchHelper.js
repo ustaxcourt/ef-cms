@@ -21,6 +21,14 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let showSealedIcon = true;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
+  let formattedJudges = get(state.legacyAndCurrentJudges);
+
+  formattedJudges.forEach(judge => {
+    judge.lastName = applicationContext
+      .getUtilities()
+      .getJudgeLastName(judge.judgeFullName);
+  });
+
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
     showSealedIcon = false;
     documentTypeVerbiage = `${documentTypeVerbiage} Type`;
@@ -49,6 +57,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
     documentTypeVerbiage,
+    formattedJudges,
     isPublic,
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,
