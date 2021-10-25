@@ -30,8 +30,14 @@ describe('advancedDocumentSearchHelper', () => {
     return {
       advancedSearchTab: 'order',
       legacyAndCurrentJudges: [
-        { name: 'I am not a legacy judge', role: USER_ROLES.judge },
-        { name: 'I am a legacy judge', role: USER_ROLES.legacyJudge },
+        {
+          judgeFullName: 'George Foreman',
+          role: USER_ROLES.judge,
+        },
+        {
+          judgeFullName: 'Curious George',
+          role: USER_ROLES.legacyJudge,
+        },
       ],
       permissions: getUserPermissions(user),
     };
@@ -109,9 +115,31 @@ describe('advancedDocumentSearchHelper', () => {
     });
   });
 
+  it('returns formatted judges with a last name', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+      },
+    });
+
+    expect(result.formattedJudges).toEqual([
+      {
+        judgeFullName: 'George Foreman',
+        lastName: 'Foreman',
+        role: 'judge',
+      },
+      {
+        judgeFullName: 'Curious George',
+        lastName: 'George',
+        role: 'legacyJudge',
+      },
+    ]);
+  });
+
   it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
