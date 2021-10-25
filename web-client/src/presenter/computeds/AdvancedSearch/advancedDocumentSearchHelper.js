@@ -22,12 +22,13 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
   let formattedJudges = get(state.legacyAndCurrentJudges);
-
-  formattedJudges.forEach(judge => {
-    judge.lastName = applicationContext
-      .getUtilities()
-      .getJudgeLastName(judge.judgeFullName);
-  });
+  if (formattedJudges) {
+    formattedJudges.forEach(judge => {
+      judge.lastName = applicationContext
+        .getUtilities()
+        .getJudgeLastName(judge.judgeFullName);
+    });
+  }
 
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
     showSealedIcon = false;

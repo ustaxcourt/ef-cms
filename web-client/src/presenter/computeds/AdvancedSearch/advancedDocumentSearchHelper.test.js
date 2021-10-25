@@ -1,7 +1,4 @@
-import {
-  BENCH_OPINION_EVENT_CODE,
-  DATE_RANGE_SEARCH_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+/* eslint-disable max-lines */
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
   formatDocumentSearchResultRecord,
@@ -16,6 +13,8 @@ describe('advancedDocumentSearchHelper', () => {
   const manyResultsOverride = 4;
 
   const {
+    BENCH_OPINION_EVENT_CODE,
+    DATE_RANGE_SEARCH_OPTIONS,
     DOCKET_NUMBER_SUFFIXES,
     OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     ORDER_EVENT_CODES,
@@ -30,6 +29,10 @@ describe('advancedDocumentSearchHelper', () => {
   const getBaseState = user => {
     return {
       advancedSearchTab: 'order',
+      legacyAndCurrentJudges: [
+        { name: 'I am not a legacy judge', role: USER_ROLES.judge },
+        { name: 'I am a legacy judge', role: USER_ROLES.legacyJudge },
+      ],
       permissions: getUserPermissions(user),
     };
   };
@@ -120,7 +123,7 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       documentTypeVerbiage: 'Opinion Type',
       isPublic: true,
       manyResults: manyResultsOverride,
@@ -133,6 +136,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is order', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: {},
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
@@ -144,7 +148,7 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
-    expect(result).toEqual({
+    expect(result).toMatchObject({
       documentTypeVerbiage: 'Order',
       isPublic: true,
       manyResults: manyResultsOverride,
@@ -157,6 +161,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns showNoMatches true and showSearchResults false when searchResults are empty', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
@@ -174,6 +179,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns isPublic false if state.isPublic is not defined', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
@@ -187,6 +193,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns isPublic true if state.isPublic is true', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
@@ -201,6 +208,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
@@ -233,6 +241,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('returns showManyResultsMessage true if maximum number of results has been reached', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
@@ -292,6 +301,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('formats search results for an order search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
@@ -356,6 +366,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('formats search results for an opinion search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
@@ -421,6 +432,7 @@ describe('advancedDocumentSearchHelper', () => {
   it('does not show sealed case icon for public opinion search', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
+        ...getBaseState(globalUser),
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
         isPublic: true,
