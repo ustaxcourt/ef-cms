@@ -241,7 +241,6 @@ describe('docket clerk opinion advanced search', () => {
   });
 
   it('search for opinions with judge = "Mowry"', async () => {
-    //find me
     await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
       formType: 'opinionSearch',
     });
@@ -250,7 +249,7 @@ describe('docket clerk opinion advanced search', () => {
       'updateAdvancedOpinionSearchFormValueSequence',
       {
         key: 'judge',
-        value: 'Tia W. Mowry',
+        value: 'Mowry',
       },
     );
 
