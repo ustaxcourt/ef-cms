@@ -37,7 +37,7 @@ describe('TrialSession entity', () => {
       expect(trialSession.isValid()).toBe(true);
     });
 
-    it('should be true when a valid trial sesion with startDate in the past is provided', () => {
+    it('should be true when a valid trial session with startDate in the past is provided', () => {
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
@@ -247,7 +247,7 @@ describe('TrialSession entity', () => {
     });
 
     describe('proceedingType', () => {
-      it('should be false when proceedingType is invalid', () => {
+      it('should be invalid when proceedingType is invalid', () => {
         const trialSession = new TrialSession(
           {
             ...VALID_TRIAL_SESSION,
