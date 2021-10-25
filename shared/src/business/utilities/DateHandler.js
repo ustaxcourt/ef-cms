@@ -18,6 +18,7 @@ const FORMATS = {
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
   YEAR: 'yyyy',
   YEAR_TWO_DIGIT: 'yy',
+  YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
 };
 

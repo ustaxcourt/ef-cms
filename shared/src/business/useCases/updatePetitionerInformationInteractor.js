@@ -58,12 +58,12 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const isContactRepresented =
+  const privatePractitionersRepresentingContact =
     caseEntity.isUserIdRepresentedByPrivatePractitioner(
       petitionerOnCase.contactId,
     );
 
-  if (!isContactRepresented) {
+  if (!privatePractitionersRepresentingContact) {
     petitionerOnCase.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
@@ -78,9 +78,9 @@ const updateCaseEntityAndGenerateChange = async ({
         applicationContext,
         caseEntity,
         documentType,
-        isContactRepresented,
         newData,
         oldData,
+        privatePractitionersRepresentingContact,
         servedParties,
         user,
       });
@@ -209,7 +209,6 @@ const updatePetitionerInformationInteractor = async (
     !updatedCaseContact.isAddressSealed &&
     caseEntity.shouldGenerateNoticesForCase();
 
-  // shouldGenerateNoticesForCase(caseEntity)
   if (updateAddressOrPhone) {
     const privatePractitionersRepresentingContact =
       caseEntity.isUserIdRepresentedByPrivatePractitioner(

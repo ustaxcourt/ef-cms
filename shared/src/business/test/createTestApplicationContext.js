@@ -43,12 +43,6 @@ const {
   deleteRecord,
 } = require('../../persistence/elasticsearch/deleteRecord');
 const {
-  deleteSectionOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteSectionOutboxRecord');
-const {
-  deleteUserOutboxRecord,
-} = require('../../persistence/dynamo/workitems/deleteUserOutboxRecord');
-const {
   deleteWorkItem,
 } = require('../../persistence/dynamo/workitems/deleteWorkItem');
 const {
@@ -443,13 +437,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
-    deleteSectionOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteSectionOutboxRecord),
-    deleteUserConnection: jest.fn(),
-    deleteUserOutboxRecord: jest
-      .fn()
-      .mockImplementation(deleteUserOutboxRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
