@@ -20,6 +20,10 @@ exports.retrySendNotificationToConnections = async ({
   for (let index = 0; index < connections.length; index++) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
+        applicationContext.logger.info('calling sendNotificationToConnection', {
+          connection: connections[index],
+          messageStringified,
+        });
         await applicationContext
           .getNotificationGateway()
           .sendNotificationToConnection({
@@ -32,6 +36,13 @@ exports.retrySendNotificationToConnections = async ({
         if (retryCount >= maxRetries && deleteGoneConnections) {
           const AWSWebSocketConnectionGone = 410;
           if (err.statusCode === AWSWebSocketConnectionGone) {
+            applicationContext.logger.info(
+              'deleting connection due to 410 error',
+              {
+                pk: connections[index].pk,
+                sk: connections[index].sk,
+              },
+            );
             await client.delete({
               applicationContext,
               key: {
