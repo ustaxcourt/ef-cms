@@ -1,6 +1,4 @@
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
-
 import { state } from 'cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
@@ -12,7 +10,7 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     });
 
   if (formattedTrialSession) {
-    const { DATE_FORMATS, SESSION_STATUS_GROUPS } =
+    const { DATE_FORMATS, SESSION_STATUS_GROUPS, TRIAL_SESSION_SCOPE_TYPES } =
       applicationContext.getConstants();
 
     formattedTrialSession.showOpenCases =
