@@ -314,6 +314,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
   for (let calendaredCase of calendaredCases) {
     await setNoticeForCase(calendaredCase);
+    applicationContext.logger.info(
+      'calling setNoticeForCase',
+      calendaredCase.docketNumber,
+    );
   }
 
   // Prevent from being overwritten when generating notices for a manually-added
