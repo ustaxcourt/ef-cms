@@ -20,13 +20,9 @@ console.log(environmentName);
 
 const getCounts = async ({ indexName, version }) => {
   const esClient = await getClient({ environmentName, version });
-  const info = await esClient.count({
-    index: indexName,
-  });
+  const info = await esClient.indices.stats({ index: indexName });
 
-  console.log(info);
-
-  return info.count;
+  return info['_all'].total.docs.count;
 };
 
 (async () => {
