@@ -60,9 +60,11 @@ table,
       font-weight: $font-semibold;
       text-decoration: none;
     }
+
     .sortActive {
       border-bottom: 3px solid color($theme-color-primary);
     }
+
     &.small {
       max-width: $table-column-width-small;
     }
@@ -105,6 +107,7 @@ table,
         text-align: left;
       }
     }
+
     &.has-icon {
       width: 44px;
     }
@@ -120,8 +123,9 @@ table,
       min-width: 7rem;
     }
 
+    /* stylelint-disable value-no-vendor-prefix */
     .message-document-detail {
-      display: -webkit-box;
+      display: -webkit-box; /* todo: can this be done w/o vendor prefix? */
       overflow: hidden;
       height: 100%;
       max-height: 57px; /* fallback */
@@ -131,6 +135,7 @@ table,
       line-height: 19px; /* fallback */
       text-overflow: ellipsis;
     }
+    /* stylelint-enable value-no-vendor-prefix */
 
     label {
       margin: 0;
@@ -194,6 +199,7 @@ table,
           }
         }
       }
+
       &.queue-message {
         td {
           background-color: $color-primary-alt-lightest;
@@ -247,6 +253,7 @@ table,
       td {
         background: $color-yellow;
       }
+
       .fa-thumbtack {
         color: color($theme-color-warning);
       }
@@ -256,6 +263,7 @@ table,
       td {
         font-weight: $font-semibold;
       }
+
       .fa-star {
         color: color($theme-color-secondary-dark);
       }
@@ -366,6 +374,7 @@ table.dashboard {
   /* small only */
   @media only screen and (max-width: $medium-screen - 1px) {
     margin-bottom: 20px;
+
     td {
       padding-bottom: 0.5em;
     }
@@ -521,6 +530,7 @@ table.case-list tbody tr:nth-child(even) td {
       font-weight: $font-semibold;
     }
   }
+
   .smaller-column {
     width: 130px;
   }
@@ -591,6 +601,7 @@ table.case-list tbody tr:nth-child(even) td {
       color: $color-white;
       text-align: left;
       text-decoration: none;
+
       &:hover {
         color: $color-white;
         text-decoration: underline;

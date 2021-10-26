@@ -294,6 +294,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
           eventCode: 'P',
           index: 1,
+          openInSameTab: false,
           showLinkToDocument: true,
         },
         {
@@ -302,6 +303,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: 'af6f67db-3160-4562-ac36-5481ab091952',
           eventCode: 'RQT',
           index: 2,
+          openInSameTab: false,
           showLinkToDocument: true,
         },
         {
@@ -310,6 +312,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
           eventCode: 'ODD',
           index: 3,
+          openInSameTab: false,
           showLinkToDocument: true,
         },
         {
@@ -318,6 +321,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
           eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
           index: 4,
+          openInSameTab: false,
           showLinkToDocument: true,
         },
         {
@@ -325,6 +329,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: 'a456c942-9d19-491a-b764-e2eac34205b0',
           eventCode: 'SPTO',
           index: 5,
+          openInSameTab: false,
           showLinkToDocument: true,
         },
         {
@@ -332,6 +337,7 @@ describe('publicCaseDetailHelper', () => {
           docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
           eventCode: 'SPTO',
           index: 6,
+          openInSameTab: false,
           showLinkToDocument: false,
         },
       ]);
@@ -360,6 +366,7 @@ describe('publicCaseDetailHelper', () => {
         eventCode: 'P',
         filingDate: '2018-11-21T20:49:28.192Z',
         index: 4,
+        openInSameTab: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
       },
