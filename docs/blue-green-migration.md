@@ -58,22 +58,30 @@ The application kicks off a migration automatically if it detects migrations tha
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
     ```
-5. Setup the environment's source table version:
+5. Setup the environment's order search flag:
+    ```bash
+    ./scripts/setup-order-search-flag.sh <ENV>
+    ```
+6. Setup the environment's source table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"alpha"}}'
     ```
-6. Setup the environment's destination table version:
+7. Setup the environment's destination table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
     ```
-7. Set the environment's maintenance-mode flag to **false**:
+8. Set the environment's maintenance-mode flag to **false**:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
-8. Rerun the circle deploy from step 4
-9. (START HERE) Set the environment's migrate flag to **false** (for next time):
+9. Rerun the circle deploy from step 4
+10. If the environment is NOT prod, setup test users and judges so smoketests will pass:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'
+    node shared/admin-tools/user/setup-test-users.js
+    ```
+    ```bash
+    cd web-api/
+    ./bulk-import-judge-users.sh <ENV> judge_users.csv
     ```
 
 ## Errors You May Encounter
