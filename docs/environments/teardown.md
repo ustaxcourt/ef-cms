@@ -14,7 +14,7 @@ npm run destroy:migration <ENV>
 npm run destroy:migration-cron <ENV>
 ```
 
-## Known issues
+## Known Issues
 
 - Unable to delete the cognito user pool.
   - Cause: The cognito user pools have `lifecycle.prevent_destroy` set to true, so you have to manually delete them via the AWS console. You will have to delete both `efcms-<ENV>` and `efcms-irs-<ENV>` pools.
