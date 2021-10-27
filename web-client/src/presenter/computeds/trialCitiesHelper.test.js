@@ -22,6 +22,11 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
             city: 'Chicago',
             state: US_STATES.IL,
           },
+          {
+            city: 'Standalone Remote',
+            state: 'Standalone Remote',
+          },
+          { city: 'Oklahoma City', state: 'Oklahoma' },
         ],
         SMALL: [
           {
@@ -37,9 +42,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
 describe('trialCitiesHelper', () => {
   it('returns trialCitiesByState which is an object of state => city pairs', () => {
     const result = runCompute(trialCitiesHelper, {
-      state: {
-        getTrialCityName,
-      },
+      state: {},
     });
     const trialCitiesResult = result('Small');
     expect(trialCitiesResult).toMatchObject({
@@ -47,11 +50,24 @@ describe('trialCitiesHelper', () => {
     });
   });
 
+  it('returns trialCitiesByState with Standalone Remote as the first key and value', () => {
+    const result = runCompute(trialCitiesHelper);
+    const trialCitiesResult = JSON.stringify(result());
+
+    expect(trialCitiesResult).toEqual(
+      JSON.stringify({
+        trialCitiesByState: {
+          Illinois: ['Chicago, Illinois'],
+          Oklahoma: ['Oklahoma City, Oklahoma'],
+          'Standalone Remote': ['Standalone Remote'],
+        },
+      }),
+    );
+  });
+
   it('returns all trialCitiesByState if param is "All"', () => {
     const result = runCompute(trialCitiesHelper, {
-      state: {
-        getTrialCityName,
-      },
+      state: {},
     });
     const trialCitiesResult = result('All');
     expect(trialCitiesResult).toMatchObject({
