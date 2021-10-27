@@ -52,17 +52,19 @@ describe('trialCitiesHelper', () => {
 
   it('returns trialCitiesByState with Standalone Remote as the first key and value', () => {
     const result = runCompute(trialCitiesHelper);
+    //JSON.stringify to look for the order of the keys
     const trialCitiesResult = JSON.stringify(result());
-
+    /* eslint-disable */
     expect(trialCitiesResult).toEqual(
       JSON.stringify({
         trialCitiesByState: {
+          'Standalone Remote': ['Standalone Remote'],
           Illinois: ['Chicago, Illinois'],
           Oklahoma: ['Oklahoma City, Oklahoma'],
-          'Standalone Remote': ['Standalone Remote'],
         },
       }),
     );
+    /* eslint-enable */
   });
 
   it('returns all trialCitiesByState if param is "All"', () => {
