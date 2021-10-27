@@ -10,6 +10,7 @@ import { sortBy } from 'lodash';
  */
 export const trialCitiesHelper = (get, applicationContext) => procedureType => {
   const { TRIAL_CITIES } = applicationContext.getConstants();
+  const standaloneRemote = 'Standalone Remote';
   let trialCities;
   switch (procedureType) {
     case 'Small':
@@ -25,7 +26,7 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
   }
 
   trialCities = sortBy(trialCities, ['state', 'city']).sort(trialCity => {
-    if (trialCity.state === 'Standalone Remote') {
+    if (trialCity.state === standaloneRemote) {
       return -1;
     }
     return 0;
@@ -38,8 +39,8 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
     trialLocation =>
       (states[trialLocation.state] = [
         ...(states[trialLocation.state] || []),
-        trialLocation.city === 'Standalone Remote'
-          ? 'Standalone Remote'
+        trialLocation.city === standaloneRemote
+          ? standaloneRemote
           : getTrialCityName(trialLocation),
       ]),
   );
