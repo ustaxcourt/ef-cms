@@ -886,6 +886,10 @@ const COMMON_CITIES = [
   { city: 'Spokane', state: 'Washington' },
   { city: 'Charleston', state: 'West Virginia' },
   { city: 'Milwaukee', state: 'Wisconsin' },
+  {
+    state: 'Standalone Remote',
+    city: 'Standalone Remote',
+  },
 ];
 
 const SMALL_CITIES = [

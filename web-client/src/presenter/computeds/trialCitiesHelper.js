@@ -1,5 +1,4 @@
 import { sortBy } from 'lodash';
-import { state } from 'cerebral';
 
 /**
  * gets the trial cities based on procedureType
@@ -24,14 +23,24 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
       trialCities = TRIAL_CITIES.REGULAR;
       break;
   }
-  trialCities = sortBy(trialCities, ['state', 'city']);
-  const getTrialCityName = get(state.getTrialCityName);
+
+  trialCities = sortBy(trialCities, ['state', 'city']).sort(trialCity => {
+    if (trialCity.state === 'Standalone Remote') {
+      return -1;
+    }
+    return 0;
+  });
+
+  const getTrialCityName = trialLocation =>
+    `${trialLocation.city}, ${trialLocation.state}`;
   const states = {};
   trialCities.forEach(
-    trialCity =>
-      (states[trialCity.state] = [
-        ...(states[trialCity.state] || []),
-        getTrialCityName(trialCity),
+    trialLocation =>
+      (states[trialLocation.state] = [
+        ...(states[trialLocation.state] || []),
+        trialLocation.city === 'Standalone Remote'
+          ? 'Standalone Remote'
+          : getTrialCityName(trialLocation),
       ]),
   );
 
