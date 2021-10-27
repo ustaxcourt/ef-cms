@@ -4,13 +4,13 @@ export const petitionsClerkVerifyEligibleCase = cerebralTest => {
       trialSessionId: 'a1b04943-8ea8-422b-8990-dec3ca644c83',
     });
 
-    expect(
-      cerebralTest
-        .getState('trialSession.eligibleCases')
-        .find(
-          eligibleCase =>
-            eligibleCase.docketNumber === cerebralTest.docketNumber,
-        ),
-    ).toBeDefined();
+    const result = cerebralTest
+      .getState('trialSession.eligibleCases')
+      .find(
+        eligibleCase => eligibleCase.docketNumber === cerebralTest.docketNumber,
+      );
+
+    expect(result).toBeDefined();
+    expect(result.docketNumberWithSuffix).toBeDefined();
   });
 };
