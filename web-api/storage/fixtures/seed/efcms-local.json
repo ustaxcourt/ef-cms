@@ -6744,7 +6744,7 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 100,
     "trialSessionId": "111ac21b-99f9-4321-98c8-b95db00af96b",
-    "isCalendared": false
+    "isCalendared": true
   },
   {
     "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
