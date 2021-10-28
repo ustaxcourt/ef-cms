@@ -21,7 +21,7 @@ export const docketClerkViewsTrialSessionList = cerebralTest => {
 
     // disable eslint to keep order of keys
     /* eslint-disable */
-    const formattedCitiesWithStandalonOption = {
+    const formattedCitiesWithStandaloneOption = {
       'Standalone Remote': ['Standalone Remote'],
       Alabama: ['Birmingham, Alabama', 'Mobile, Alabama'],
       Alaska: ['Anchorage, Alaska'],
@@ -82,7 +82,7 @@ export const docketClerkViewsTrialSessionList = cerebralTest => {
     /* eslint-enable */
 
     expect(JSON.stringify(trialCitiesByState)).toEqual(
-      JSON.stringify(formattedCitiesWithStandalonOption),
+      JSON.stringify(formattedCitiesWithStandaloneOption),
     );
 
     const formatted = runCompute(formattedTrialSessions, {
