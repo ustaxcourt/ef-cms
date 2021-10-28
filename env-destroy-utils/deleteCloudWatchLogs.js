@@ -21,6 +21,8 @@ exports.deleteCloudWatchLogs = async ({ environment }) => {
   } while (logGroups.nextToken);
 
   for (const group of envToDestroyLogGroups) {
+    console.log('Deleting CloudWatch log group: ', group.logGroupName);
+
     await cloudWatchLogs
       .deleteLogGroup({ logGroupName: group.logGroupName })
       .promise();

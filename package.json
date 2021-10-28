@@ -190,7 +190,7 @@
     "deploy:migration": "cd web-api/migration-terraform/main && ../bin/deploy-app.sh",
     "deploy:migration-cron": "cd web-api/migration-cron-terraform/main && ../bin/deploy-app.sh",
     "deploy:ui": "cd web-client/terraform/main && ../bin/deploy-app.sh",
-    "destroy:env": "node env-destroy-utils/destroyEnvironment.js $ENVIRONMENT",
+    "destroy:env": "node env-destroy-utils/destroyEnvironment.js",
     "destroy:migration": "cd web-api/migration-terraform/main && ../bin/destroy-app.sh",
     "destroy:migration-cron": "cd web-api/migration-cron-terraform/main && ../bin/destroy-app.sh",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh",

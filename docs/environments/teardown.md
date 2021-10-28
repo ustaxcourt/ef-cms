@@ -8,10 +8,10 @@ To remove an environment, make sure your local development environment is config
 
 ```bash
 npm run destroy:env <ENV>
-npm run destroy:api
-npm run destroy:client
-npm run destroy:migration
-npm run destroy:migration-cron
+npm run destroy:api -- <ENV>
+npm run destroy:client -- <ENV>
+npm run destroy:migration -- <ENV>
+npm run destroy:migration-cron -- <ENV>
 ```
 
 ## Known Issues
@@ -20,6 +20,7 @@ npm run destroy:migration-cron
   - Cause: The cognito user pools have `lifecycle.prevent_destroy` set to true, so you have to manually delete them via the AWS console. You will have to delete both `efcms-<ENV>` and `efcms-irs-<ENV>` pools.
   - Solution: 
     - Go to Cognito
+    - Select "Manage User Pools"
     - Select the user pool 
     - Click on App Integration > Domain Name
     - Click 'Delete Domain'
