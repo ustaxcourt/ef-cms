@@ -98,6 +98,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
+      isFileAttached: false,
       isSealed: true,
       judge: null,
       numberOfPages: null,

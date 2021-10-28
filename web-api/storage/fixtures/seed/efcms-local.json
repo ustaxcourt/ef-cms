@@ -5145,7 +5145,6 @@
       "isMinuteEntry": false,
       "pending": false,
       "isDraft": false,
-      "isFileAttached": false,
       "workItem": {
         "associatedJudge": "Chief Judge",
         "inProgress": true,
@@ -5190,6 +5189,7 @@
       "relationship": "primaryDocument",
       "addToCoversheet": false,
       "draftOrderState": null,
+      "isFileAttached": true,
       "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
       "eventCode": "ODJ",
       "processingStatus": "complete",
