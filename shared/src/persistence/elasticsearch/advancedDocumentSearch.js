@@ -33,6 +33,7 @@ exports.advancedDocumentSearch = async ({
     'eventCode',
     'filingDate',
     'irsPractitioners',
+    'isFileAttached',
     'isSealed',
     'isStricken',
     'judge',
@@ -50,6 +51,7 @@ exports.advancedDocumentSearch = async ({
       },
     },
     { terms: { 'eventCode.S': documentEventCodes } },
+    { term: { 'isFileAttached.BOOL': true } },
   ];
 
   const docketEntryQueryParams = [];
