@@ -70,7 +70,9 @@ describe('genericHandler', () => {
   it('defaults the options param to an empty object if not provided', async () => {
     const callback = () => null;
 
-    await genericHandler({ ...MOCK_EVENT }, callback);
+    await genericHandler({ ...MOCK_EVENT }, callback, {
+      applicationContext,
+    });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
