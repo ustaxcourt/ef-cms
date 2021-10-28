@@ -67,7 +67,7 @@ exports.orderAdvancedSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -80,8 +80,8 @@ exports.orderAdvancedSearchInteractor = async (
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   await applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
-    size: results.length,
     timestamp,
+    totalCount,
     userId: authorizedUser.userId,
     userRole: authorizedUser.role,
   });
