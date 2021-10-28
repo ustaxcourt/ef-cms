@@ -45,6 +45,16 @@
   },
   {
     "role": "judge",
+    "judgeTitle": "Judge",
+    "judgeFullName": "Tia W. Mowry",
+    "name": "Mowry",
+    "section": "mowryChambers",
+    "userId": "09b7c6c9-2d9e-43a5-83a4-096ae5362725",
+    "email": "judgeMowry@example.com",
+    "entityName": "User"
+  },
+  {
+    "role": "judge",
     "name": "Ashford",
     "section": "ashfordsChambers",
     "userId": "dabbad01-18d0-43ec-bafb-654e83405416",
