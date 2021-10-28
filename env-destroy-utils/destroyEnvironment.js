@@ -4,7 +4,7 @@ const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
 
-const environmentName = process.argv[2] || 'exp1';
+const environmentName = process.argv[1] || 'exp1';
 
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   console.error(
@@ -59,11 +59,15 @@ const teardownEnvironment = async () => {
     await clearS3Buckets({ environment: environmentEast });
     await clearS3Buckets({ environment: environmentWest });
   } catch (e) {
-    console.error('Error while deleting s3 bucket: ', e);
+    console.error('Error while clearing s3 bucket: ', e);
   }
 
-  await deleteCloudWatchLogs({ environment: environmentEast });
-  await deleteCloudWatchLogs({ environment: environmentWest });
+  try {
+    await deleteCloudWatchLogs({ environment: environmentEast });
+    await deleteCloudWatchLogs({ environment: environmentWest });
+  } catch (e) {
+    console.error('Error while deleting cloudwatch logs: ', e);
+  }
 };
 
 teardownEnvironment();
