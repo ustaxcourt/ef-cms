@@ -44,8 +44,6 @@ then
   IS_DYNAMSOFT_ENABLED="1"
 fi
 
-#deploying color
-#disable emails
 export TF_PLUGIN_CACHE_DIR=./terraform-cache
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
