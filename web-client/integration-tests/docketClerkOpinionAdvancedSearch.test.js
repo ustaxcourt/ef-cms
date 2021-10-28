@@ -239,4 +239,73 @@ describe('docket clerk opinion advanced search', () => {
 
     expect(cerebralTest.getState('alertError')).not.toBeDefined();
   });
+
+  describe("Elasticsearch does not match on judge's middle initials", () => {
+    it('search for opinions with judge = "Tia W. Mowry" should not return results for "Tamara W. Ashford"', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key: 'judge',
+          value: 'Mowry',
+        },
+      );
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      const searchResults = cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      );
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(searchResults).toEqual([]);
+      expect(
+        searchResults.find(r => r.judge !== 'Tamara W. Ashford'),
+      ).toBeUndefined();
+    });
+
+    it('search for opinions with judge = "Tamara W. Ashford" should ONLY return results for "Tamara W. Ashford"', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key: 'judge',
+          value: 'Ashford',
+        },
+      );
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      const searchResults = cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      );
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(searchResults).toEqual([
+        {
+          caseCaption: 'Hanae Guerrero, Petitioner',
+          docketEntryId: 'd085a9da-b4a6-41d2-aa40-f933fe2d4188',
+          docketNumber: '313-21',
+          docketNumberWithSuffix: '313-21',
+          documentTitle: 'Summary Opinion Judge Ashford An opinion for testing',
+          documentType: 'Summary Opinion',
+          entityName: 'InternalDocumentSearchResult',
+          eventCode: 'SOP',
+          filingDate: '2021-10-25T18:57:31.742Z',
+          isSealed: false,
+          isStricken: false,
+          judge: 'Tamara W. Ashford',
+          numberOfPages: 1,
+          signedJudgeName: 'Maurice B. Foley',
+        },
+      ]);
+      expect(
+        searchResults.find(r => r.judge !== 'Tamara W. Ashford'),
+      ).toBeUndefined();
+    });
+  });
 });
