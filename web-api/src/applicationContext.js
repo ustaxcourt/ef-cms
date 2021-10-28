@@ -1672,7 +1672,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return sass;
     },
     getNotificationClient: ({ endpoint }) => {
-      if (endpoint.indexOf('localhost') !== -1) {
+      if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
       return new AWS.ApiGatewayManagementApi({

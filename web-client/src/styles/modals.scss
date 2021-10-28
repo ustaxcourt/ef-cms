@@ -10,7 +10,7 @@
   width: 100%;
   height: 100%;
   padding: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgb(0 0 0 / 40%);
   pointer-events: all;
   touch-action: auto;
 
@@ -42,6 +42,7 @@
     background: #faf3d1 !important;
   }
 }
+
 .modal-dialog {
   position: relative;
   display: block;
@@ -58,6 +59,7 @@
     overflow-y: auto;
     transform: translateY(-50%);
   }
+
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1px) {
     top: 0;
@@ -97,6 +99,7 @@
   .usa-button--outline {
     display: none;
   }
+
   padding: 60px 0;
   background-color: color($theme-color-warning);
   font-size: 30px;
@@ -291,6 +294,7 @@ button {
       top: 0;
       color: $color-white;
       text-decoration: none;
+
       .svg-inline--fa {
         color: $color-white;
         vertical-align: 0;
@@ -351,6 +355,7 @@ button {
       background-image: none;
     }
   }
+
   .usa-input {
     height: 34px;
   }
