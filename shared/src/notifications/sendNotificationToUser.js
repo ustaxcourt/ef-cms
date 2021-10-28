@@ -12,22 +12,12 @@ exports.sendNotificationToUser = async ({
   message,
   userId,
 }) => {
-  applicationContext.logger.info('sendNotificationToUser called', {
-    message,
-    userId,
-  });
-
   const connections = await applicationContext
     .getPersistenceGateway()
     .getWebSocketConnectionsByUserId({
       applicationContext,
       userId,
     });
-
-  applicationContext.logger.info(
-    `found these connections associated with ${userId}`,
-    connections,
-  );
 
   const messageStringified = JSON.stringify(message);
 
