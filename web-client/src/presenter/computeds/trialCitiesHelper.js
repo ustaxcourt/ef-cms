@@ -25,6 +25,11 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
       break;
   }
 
+  trialCities = trialCities.concat({
+    city: standaloneRemote,
+    state: standaloneRemote,
+  });
+
   trialCities = sortBy(trialCities, ['state', 'city']).sort(trialCity => {
     if (trialCity.state === standaloneRemote) {
       return -1;

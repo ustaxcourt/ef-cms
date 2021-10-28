@@ -1,5 +1,4 @@
 import { applicationContext } from '../../applicationContext';
-import { getTrialCityName } from './formattedTrialCity';
 import { runCompute } from 'cerebral/test';
 import { trialCitiesHelper as trialCitiesHelperComputed } from './trialCitiesHelper';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -22,10 +21,6 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
             city: 'Chicago',
             state: US_STATES.IL,
           },
-          {
-            city: 'Standalone Remote',
-            state: 'Standalone Remote',
-          },
           { city: 'Oklahoma City', state: 'Oklahoma' },
         ],
         SMALL: [
@@ -41,19 +36,24 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
 
 describe('trialCitiesHelper', () => {
   it('returns trialCitiesByState which is an object of state => city pairs', () => {
-    const result = runCompute(trialCitiesHelper, {
-      state: {},
-    });
-    const trialCitiesResult = result('Small');
-    expect(trialCitiesResult).toMatchObject({
-      trialCitiesByState: { Tennessee: ['Chattanooga, Tennessee'] },
-    });
+    const result = runCompute(trialCitiesHelper);
+    //JSON.stringify to look for the order of the keys
+    const trialCitiesResult = JSON.stringify(result('Small'));
+    expect(trialCitiesResult).toEqual(
+      JSON.stringify({
+        trialCitiesByState: {
+          'Standalone Remote': ['Standalone Remote'],
+          Tennessee: ['Chattanooga, Tennessee'],
+        },
+      }),
+    );
   });
 
   it('returns trialCitiesByState with Standalone Remote as the first key and value', () => {
     const result = runCompute(trialCitiesHelper);
     //JSON.stringify to look for the order of the keys
     const trialCitiesResult = JSON.stringify(result());
+    // disable eslint to keep order of keys
     /* eslint-disable */
     expect(trialCitiesResult).toEqual(
       JSON.stringify({
@@ -68,36 +68,51 @@ describe('trialCitiesHelper', () => {
   });
 
   it('returns all trialCitiesByState if param is "All"', () => {
-    const result = runCompute(trialCitiesHelper, {
-      state: {},
-    });
-    const trialCitiesResult = result('All');
-    expect(trialCitiesResult).toMatchObject({
-      trialCitiesByState: { Tennessee: ['Chattanooga, Tennessee'] },
-    });
+    const result = runCompute(trialCitiesHelper);
+    //JSON.stringify to look for the order of the keys
+    const trialCitiesResult = JSON.stringify(result('All'));
+    expect(trialCitiesResult).toEqual(
+      JSON.stringify({
+        trialCitiesByState: {
+          'Standalone Remote': ['Standalone Remote'],
+          Tennessee: ['Chattanooga, Tennessee'],
+        },
+      }),
+    );
   });
 
   it('returns regular trialCitiesByState if param is "Regular"', () => {
-    const result = runCompute(trialCitiesHelper, {
-      state: {
-        getTrialCityName,
-      },
-    });
-    const trialCitiesResult = result('Regular');
-    expect(trialCitiesResult).toMatchObject({
-      trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
-    });
+    const result = runCompute(trialCitiesHelper);
+    //JSON.stringify to look for the order of the keys
+
+    const trialCitiesResult = JSON.stringify(result('Regular'));
+    /* eslint-disable */
+    expect(trialCitiesResult).toEqual(
+      JSON.stringify({
+        trialCitiesByState: {
+          'Standalone Remote': ['Standalone Remote'],
+          Illinois: ['Chicago, Illinois'],
+          Oklahoma: ['Oklahoma City, Oklahoma'],
+        },
+      }),
+    );
+    /* eslint-enable */
   });
 
   it('returns regular trialCitiesByState by default if param is not "small" or "all"', () => {
-    const result = runCompute(trialCitiesHelper, {
-      state: {
-        getTrialCityName,
-      },
-    });
-    const trialCitiesResult = result('not small or all');
-    expect(trialCitiesResult).toMatchObject({
-      trialCitiesByState: { Illinois: ['Chicago, Illinois'] },
-    });
+    const result = runCompute(trialCitiesHelper);
+    //JSON.stringify to look for the order of the keys
+    const trialCitiesResult = JSON.stringify(result('not small or all'));
+    /* eslint-disable */
+    expect(trialCitiesResult).toEqual(
+      JSON.stringify({
+        trialCitiesByState: {
+          'Standalone Remote': ['Standalone Remote'],
+          Illinois: ['Chicago, Illinois'],
+          Oklahoma: ['Oklahoma City, Oklahoma'],
+        },
+      }),
+    );
+    /* eslint-enable */
   });
 });
