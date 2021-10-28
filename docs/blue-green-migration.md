@@ -58,6 +58,10 @@ The application kicks off a migration automatically if it detects migrations tha
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
     ```
+4. Setup the environment's current color:
+    ```bash
+    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
+    ```
 5. Setup the environment's order search flag:
     ```bash
     ./scripts/setup-order-search-flag.sh <ENV>
