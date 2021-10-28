@@ -17,4 +17,14 @@ describe('EligibleCase', () => {
     expect(eligibleCase.irsPractitioners.length).toBeTruthy();
     expect(eligibleCase.privatePractitioners.length).toEqual(0);
   });
+
+  it('creates the docketNumberWithSuffix field correctly', () => {
+    const eligibleCase = new EligibleCase({
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      docketNumberSuffix: 'S',
+    });
+
+    expect(eligibleCase.getFormattedValidationErrors()).toBe(null);
+    expect(eligibleCase.docketNumberWithSuffix).toBe('109-19S');
+  });
 });
