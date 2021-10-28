@@ -33,7 +33,7 @@ module "ui-green" {
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
-  private_certificate    = aws_acm_certificate.private_certificate
+  private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -51,7 +51,7 @@ module "ui-blue" {
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
-  private_certificate    = aws_acm_certificate.private_certificate
+  private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1

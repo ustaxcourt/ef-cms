@@ -109,7 +109,7 @@ resource "aws_route53_record" "route53_record_west" {
   allow_overwrite = true
 }
 
-resource "aws_acm_certificate_validation" "dns_validation" {
+resource "aws_acm_certificate_validation" "dns_validation_west" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_west.arn
   validation_record_fqdns = [for record in aws_route53_record.route53_record_west : record.fqdn]
 }
