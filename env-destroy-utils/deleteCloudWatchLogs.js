@@ -1,4 +1,4 @@
-const { getCloudWatch } = require('./getS3');
+const { getCloudWatch } = require('./getCloudWatch');
 
 exports.deleteCloudWatchLogs = async ({ environment }) => {
   const cloudWatchLogs = getCloudWatch({ environment });
