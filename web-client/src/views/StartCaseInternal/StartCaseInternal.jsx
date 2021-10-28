@@ -5,7 +5,7 @@ import { ErrorNotification } from './../ErrorNotification';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormCancelModalDialog } from './../FormCancelModalDialog';
-import { IRSNotice } from './IRSNotice';
+import { IRSNotice } from '../IRSNotice';
 import { Parties } from './Parties';
 import { ScanBatchPreviewer } from './../ScanBatchPreviewer';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
