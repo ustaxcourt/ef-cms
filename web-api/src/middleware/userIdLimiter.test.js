@@ -125,7 +125,7 @@ describe('userIdLimiter', () => {
     expect(next).toBeCalled();
   });
 
-  it('should delete the limiter key if expires at is passed', async () => {
+  it('should reset the limiter counter if the current time is greater than expiresAt', async () => {
     const next = jest.fn();
     incrementKeyCountMock.mockReturnValue({
       expiresAt: Date.now() - 1e6,
