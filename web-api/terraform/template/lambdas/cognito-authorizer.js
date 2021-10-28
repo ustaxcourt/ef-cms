@@ -32,6 +32,8 @@ const getToken = event => {
     return event.queryStringParameters.token;
   } else if (event.authorizationToken) {
     return event.authorizationToken.substring(7);
+  } else if (event.headers?.authorization) {
+    return event.headers.authorization.substring(7);
   }
 };
 
@@ -65,17 +67,37 @@ const verify = (key, token) =>
     });
   });
 
+const throw401GatewayError = () => {
+  throw new Error('Unauthorized');
+};
+
 exports.handler = async (event, context) => {
   const logger = getLogger(context);
-  const token = getToken(event);
+
+  let token;
+  try {
+    token = getToken(event);
+  } catch (error) {
+    logger.info('An error occured trying to get the token out of the event');
+    throw401GatewayError();
+  }
 
   if (!token) {
     logger.info('No authorizationToken found in the header');
-
-    throw new Error('Unauthorized'); // Magic string to return 401
+    throw401GatewayError();
   }
 
-  const { iss, kid } = decodeToken(token);
+  let iss, kid;
+
+  try {
+    const decodedToken = decodeToken(token);
+    ({ iss, kid } = decodedToken);
+  } catch (error) {
+    logger.info(
+      'The token provided in the header could not be decoded successfully',
+    );
+    throw401GatewayError();
+  }
 
   let keys;
   try {
@@ -85,8 +107,7 @@ exports.handler = async (event, context) => {
       'Could not fetch keys for token issuer, considering request unauthorized',
       error,
     );
-
-    throw new Error('Unauthorized'); // Magic string to return 401
+    throw401GatewayError();
   }
 
   const key = keys.find(k => k.kid === kid);
@@ -100,8 +121,7 @@ exports.handler = async (event, context) => {
         requestedKeyId: kid,
       },
     );
-
-    throw new Error('Unauthorized'); // Magic string to return 401
+    throw401GatewayError();
   }
 
   let payload;
@@ -112,8 +132,7 @@ exports.handler = async (event, context) => {
       'The token is not valid, considering request unauthorized',
       error,
     );
-
-    throw new Error('Unauthorized'); // Magic string to return 401
+    throw401GatewayError();
   }
 
   const policy = {
