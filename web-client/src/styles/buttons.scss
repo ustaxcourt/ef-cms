@@ -26,6 +26,7 @@
 
   .svg-inline--fa {
     margin-right: 10px;
+
     &.fa-1x {
       font-size: 14.5px;
     }
@@ -48,12 +49,15 @@
 
   &.usa-button--unstyled {
     padding: 2px;
+
     &.no-underline {
       text-decoration: none;
     }
+
     &:disabled {
       color: color($theme-color-base);
     }
+
     /* little screens */
     @media only screen and (max-width: $medium-screen) {
       line-height: 1.4em;
@@ -64,6 +68,7 @@
     padding: 0.75rem 0;
     line-height: normal;
     text-align: center;
+
     &.padding-top-0 {
       padding-top: 0;
     }
@@ -129,6 +134,7 @@ table.ustc-table .ustc-button--unstyled {
   margin-bottom: 20px;
   float: left;
   font-family: $font-serif;
+
   svg {
     color: color($theme-color-warning);
   }
@@ -151,7 +157,7 @@ table.ustc-table .ustc-button--unstyled {
 
 .button-icon {
   border: none;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgb(0 0 0 / 0%);
 }
 
 .add-deficiency-statistics-form .calculate-penalties {
