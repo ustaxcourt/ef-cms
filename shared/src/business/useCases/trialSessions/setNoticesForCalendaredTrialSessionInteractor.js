@@ -316,10 +316,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
   for (let calendaredCase of calendaredCases) {
     await setNoticeForCase(calendaredCase);
     processedCases++;
-    applicationContext.logger.info(
-      'calling setNoticeForCase',
-      calendaredCase.docketNumber,
-    );
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
