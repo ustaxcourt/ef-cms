@@ -51,7 +51,11 @@ wsServer.on('request', function (request) {
       domainName: `ws://localhost:${PORT}`,
     },
   });
-  connection.on('message', function () {});
+  connection.on('message', function (message) {
+    if (message.utf8Data === 'ping') {
+      connection.send(JSON.stringify({ data: { action: 'pong' } }));
+    }
+  });
   connection.on('close', function () {
     delete connections[connectionId];
 

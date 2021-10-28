@@ -12,6 +12,8 @@ module.exports = {
     cron: './web-api/terraform/template/lambdas/cron.js',
     'maintenance-notify':
       './web-api/terraform/template/lambdas/maintenance-notify.js',
+    'public-api-authorizer':
+      './web-api/terraform/template/lambdas/public-api-authorizer.js',
     streams: './web-api/terraform/template/lambdas/streams.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
