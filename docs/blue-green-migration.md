@@ -64,7 +64,7 @@ The application kicks off a migration automatically if it detects migrations tha
     ```
 6. Setup the environment's source table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"alpha"}}'
+    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
     ```
 7. Setup the environment's destination table version:
     ```bash
@@ -74,8 +74,10 @@ The application kicks off a migration automatically if it detects migrations tha
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
-9. Rerun the circle deploy from step 4
-10. If the environment is NOT prod, setup test users and judges so smoketests will pass:
+9. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
+10. Delete the destination ElasticSearch cluster from us-east-1.
+11. Rerun the circle deploy from step 4
+12. If the environment is NOT prod, setup test users and judges so smoketests will pass:
     ```bash
     node shared/admin-tools/user/setup-test-users.js
     ```
