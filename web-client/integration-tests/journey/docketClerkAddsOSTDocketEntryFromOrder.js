@@ -1,7 +1,7 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
 import { updateForm } from '../helpers';
+import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsOSTDocketEntryFromOrder = (
   cerebralTest,
@@ -35,31 +35,14 @@ export const docketClerkAddsOSTDocketEntryFromOrder = (
         'Order of Service of Transcript (Bench Opinion) [Anything]',
       documentType: 'Order of Service of Transcript (Bench Opinion)',
       eventCode: 'OST',
+      freeText: 'Some order content',
       scenario: 'Type A',
     };
 
-    // for (let [key, value] of Object.entries(updateKeyValues)) {
-    //   await cerebralTest.runSequence(
-    //     'updateCourtIssuedDocketEntryFormValueSequence',
-    //     {
-    //       key,
-    //       value,
-    //     },
-    //   );
-    // }
-
-    updateForm(
+    await updateForm(
       cerebralTest,
       updateKeyValues,
       'updateCourtIssuedDocketEntryFormValueSequence',
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'freeText',
-        value: 'something',
-      },
     );
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
