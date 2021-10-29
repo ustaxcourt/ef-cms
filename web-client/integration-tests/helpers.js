@@ -900,13 +900,18 @@ export const updateOpinionForm = async (cerebralTest, formValues) => {
     formType: 'opinionSearch',
   });
 
+  exports.updateForm(
+    cerebralTest,
+    formValues,
+    'updateAdvancedOpinionSearchFormValueSequence',
+  );
+};
+
+export const updateForm = async (cerebralTest, formValues, sequence) => {
   for (let [key, value] of Object.entries(formValues)) {
-    await cerebralTest.runSequence(
-      'updateAdvancedOpinionSearchFormValueSequence',
-      {
-        key,
-        value,
-      },
-    );
+    await cerebralTest.runSequence(sequence, {
+      key,
+      value,
+    });
   }
 };

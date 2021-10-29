@@ -15,6 +15,7 @@ export const ErrorFactory = {
     if (403 == responseCode) {
       newError = new UnauthorizedRequestError(e);
     } else if (404 == responseCode) {
+      console.log('eeeeeee', e);
       newError = new NotFoundError(e);
     } else if (401 == responseCode) {
       newError = new UnidentifiedUserError();
