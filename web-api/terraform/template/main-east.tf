@@ -189,9 +189,10 @@ resource "aws_route53_record" "route53_record_east" {
   allow_overwrite = true
 }
 
-resource "aws_acm_certificate_validation" "dns_validation_east" {
+resource "aws_acm_certificate_validation" "wildcard_dns_validation_east" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_east.arn
   validation_record_fqdns = [for record in aws_route53_record.route53_record_east : record.fqdn]
+  provider                = aws.us-east-1
 }
 
 
