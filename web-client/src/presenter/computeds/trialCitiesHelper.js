@@ -1,4 +1,4 @@
-import { sortBy } from 'lodash';
+import { findIndex, sortBy } from 'lodash';
 
 /**
  * gets the trial cities based on procedureType
@@ -25,30 +25,37 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
       break;
   }
 
-  trialCities = trialCities.concat({
-    city: standaloneRemote,
-    state: standaloneRemote,
-  });
+  trialCities = sortBy(trialCities, ['state', 'city']);
 
-  trialCities = sortBy(trialCities, ['state', 'city']).sort(trialCity => {
-    if (trialCity.state === standaloneRemote) {
-      return -1;
-    }
-    return 0;
-  });
-
-  const getTrialCityName = trialLocation =>
+  const getTrialLocationName = trialLocation =>
     `${trialLocation.city}, ${trialLocation.state}`;
-  const states = {};
-  trialCities.forEach(
-    trialLocation =>
-      (states[trialLocation.state] = [
-        ...(states[trialLocation.state] || []),
-        trialLocation.city === standaloneRemote
-          ? standaloneRemote
-          : getTrialCityName(trialLocation),
-      ]),
-  );
+  let states = [];
+
+  const convertCityTypeFromStringToArray = trialCities.map(trialLocation => {
+    return trialLocation !== standaloneRemote
+      ? {
+          ...trialLocation,
+          city: [getTrialLocationName(trialLocation)],
+        }
+      : trialLocation;
+  });
+
+  convertCityTypeFromStringToArray.forEach(loc => {
+    const foundIndexOfState = findIndex(states, { state: loc.state });
+    if (foundIndexOfState < 0) {
+      states.push({
+        cities: [...loc.city],
+        state: loc.state,
+      });
+    } else {
+      states[foundIndexOfState] = {
+        ...states[foundIndexOfState],
+        cities: [...states[foundIndexOfState].cities, ...loc.city],
+      };
+    }
+  });
+
+  states.unshift(standaloneRemote);
 
   return {
     trialCitiesByState: states,
