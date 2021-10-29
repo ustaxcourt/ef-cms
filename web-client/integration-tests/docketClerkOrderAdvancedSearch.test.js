@@ -207,10 +207,7 @@ describe('Docket clerk advanced order search', () => {
 
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: docketNumberWithOrderWithoutFileAttached,
-          keyword: 'dismissal',
-          startDate: '01/01/2001',
         },
       });
 

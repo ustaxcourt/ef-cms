@@ -896,6 +896,10 @@ export const embedWithLegalIpsumText = (phrase = '') => {
 };
 
 export const updateOpinionForm = async (cerebralTest, formValues) => {
+  await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+    formType: 'opinionSearch',
+  });
+
   for (let [key, value] of Object.entries(formValues)) {
     await cerebralTest.runSequence(
       'updateAdvancedOpinionSearchFormValueSequence',
