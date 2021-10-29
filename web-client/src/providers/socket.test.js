@@ -11,10 +11,17 @@ describe('socket', () => {
   let initializeSocket;
   let startSocket;
   let stopSocket;
+  let oncloseFn;
+  let onopenFn;
 
   beforeEach(() => {
     webSocketStub = jest.fn();
     webSocketCloseStub = jest.fn();
+
+    jest.spyOn(global, 'setInterval');
+    jest.spyOn(global, 'clearInterval');
+    // prevent errors from printing during unit tests
+    jest.spyOn(console, 'error').mockImplementation(() => null);
 
     ({
       initialize: initializeSocket,
@@ -31,6 +38,14 @@ describe('socket', () => {
 
       close() {
         webSocketCloseStub();
+      }
+
+      set onopen(value) {
+        onopenFn = value;
+      }
+
+      set onclose(value) {
+        oncloseFn = value;
       }
     };
 
@@ -53,6 +68,7 @@ describe('socket', () => {
 
     expect(webSocketStub).toHaveBeenCalled();
     expect(webSocketCloseStub).toHaveBeenCalled();
+    expect(global.clearInterval).toHaveBeenCalled();
   });
 
   it('calling start twice returns the original socket rather than a second one', () => {
@@ -61,5 +77,24 @@ describe('socket', () => {
 
     expect(webSocketStub).toBeCalledTimes(1);
     expect(webSocketCloseStub).not.toHaveBeenCalled();
+  });
+
+  it('calling start should create an interval which sends a ping message to backend', () => {
+    startSocket();
+    onopenFn();
+    expect(global.setInterval).toHaveBeenCalled();
+  });
+
+  it('reconnects the websocket connection if disconnected with a non-normal error message', () => {
+    startSocket();
+    oncloseFn({ reason: 'something bad happened' });
+    expect(console.error).toHaveBeenCalled();
+    expect(webSocketStub).toBeCalledTimes(2);
+  });
+
+  it('does not reconnect the websocket when closed via a normal event', () => {
+    startSocket();
+    oncloseFn({ reason: 'Normal connection closure' });
+    expect(webSocketStub).toBeCalledTimes(1);
   });
 });

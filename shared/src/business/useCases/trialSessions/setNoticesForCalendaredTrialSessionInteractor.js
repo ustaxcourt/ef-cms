@@ -312,8 +312,19 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     }
   };
 
+  let processedCases = 0;
   for (let calendaredCase of calendaredCases) {
     await setNoticeForCase(calendaredCase);
+    processedCases++;
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'notice_generation_update_progress',
+        processedCases,
+        totalCases: calendaredCases.length,
+      },
+      userId: user.userId,
+    });
   }
 
   // Prevent from being overwritten when generating notices for a manually-added
