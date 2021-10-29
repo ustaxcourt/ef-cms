@@ -296,6 +296,7 @@ describe('docket clerk opinion advanced search', () => {
           entityName: 'InternalDocumentSearchResult',
           eventCode: 'SOP',
           filingDate: '2021-10-25T18:57:31.742Z',
+          isFileAttached: true,
           isSealed: false,
           isStricken: false,
           judge: 'Tamara W. Ashford',
