@@ -12873,7 +12873,7 @@
     "addToCoversheet": false,
     "draftOrderState": null,
     "index": 3,
-    "isFileAttached": true,
+    "isFileAttached": false,
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "OSC",
     "processingStatus": "complete",
