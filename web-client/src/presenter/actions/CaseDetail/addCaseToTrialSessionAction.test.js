@@ -35,6 +35,7 @@ describe('addCaseToTrialSessionAction', () => {
           calendarNotes: 'Test',
           trialSessionId: '234',
         },
+        trialSessions: [],
       },
     });
 
@@ -58,6 +59,41 @@ describe('addCaseToTrialSessionAction', () => {
     });
   });
 
+  it('should set success message to "Case set for trial."', async () => {
+    applicationContext
+      .getUseCases()
+      .addCaseToTrialSessionInteractor.mockReturnValue(MOCK_CASE);
+
+    await runAction(addCaseToTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketNumber: '101-19',
+        },
+        modal: {
+          calendarNotes: 'Test',
+          trialSessionId: '234',
+        },
+        trialSessions: [
+          {
+            isCalendared: true,
+            trialSessionId: '234',
+          },
+        ],
+      },
+    });
+
+    expect(presenter.providers.path.success).toHaveBeenCalled();
+    expect(presenter.providers.path.error).not.toHaveBeenCalled();
+    expect(successMock.mock.calls[0][0]).toMatchObject({
+      alertSuccess: {
+        message: 'Case set for trial.',
+      },
+    });
+  });
+
   it('should take the error path if errors are found', async () => {
     applicationContext
       .getUseCases()
@@ -77,6 +113,12 @@ describe('addCaseToTrialSessionAction', () => {
           calendarNotes: 'Test',
           trialSessionId: '234',
         },
+        trialSessions: [
+          {
+            isCalendared: true,
+            trialSessionId: '234',
+          },
+        ],
       },
     });
 
