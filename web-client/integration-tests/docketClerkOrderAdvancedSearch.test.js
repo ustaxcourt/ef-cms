@@ -24,8 +24,10 @@ import {
 
 describe('Docket clerk advanced order search', () => {
   const cerebralTest = setupTest();
+
   const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, SERVICE_INDICATOR_TYPES } =
     applicationContext.getConstants();
+
   const seedData = {
     caseCaption: 'Hanan Al Hroub, Petitioner',
     contactPrimary: {
@@ -200,7 +202,7 @@ describe('Docket clerk advanced order search', () => {
       ).toEqual([]);
     });
 
-    it('when searching by docket number that is present in a served order but the order does not have an attached file', async () => {
+    it('when searching by docket number that is present in a served order but the order does NOT have an attached file', async () => {
       const docketNumberWithOrderWithoutFileAttached = '101-16';
 
       cerebralTest.setState('advancedSearchForm', {
