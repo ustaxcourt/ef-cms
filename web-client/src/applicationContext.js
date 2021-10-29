@@ -23,8 +23,8 @@ import {
   getServedPartiesCode,
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
+  ERROR_MAP_429,
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
@@ -32,6 +32,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareISODateStrings,
@@ -543,9 +544,10 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
-  getConstants(),
-);
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+  ...getConstants(),
+  ERROR_MAP_429,
+});
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
