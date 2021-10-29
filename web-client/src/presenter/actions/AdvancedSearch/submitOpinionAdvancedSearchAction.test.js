@@ -77,6 +77,13 @@ describe('submitOpinionAdvancedSearchAction', () => {
       .getUseCases()
       .opinionAdvancedSearchInteractor.mockImplementation(() => {
         const e = new Error();
+        e.originalError = {
+          response: {
+            data: {
+              type: 'ip-limiter',
+            },
+          },
+        };
         e.responseCode = 429;
         throw e;
       });
