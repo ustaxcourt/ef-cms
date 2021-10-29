@@ -34,7 +34,7 @@ module.exports = {
     },
     'ip-limiter': {
       message: 'Please wait 1 minute before trying your search again.',
-      title: "You've reached your search limit.",
+      title: "You've reached your search limit",
     },
     'user-id-limiter': {
       message: 'Please wait 1 minute before trying your search again',
