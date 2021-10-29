@@ -1,5 +1,16 @@
 [
   {
+    "pk": "document-search-limiter-configuration",
+    "sk": "document-search-limiter-configuration",
+    "windowTime": 1000,
+    "maxInvocations": 9999
+  },
+  {
+    "pk": "allowed-terminal-ips",
+    "sk": "allowed-terminal-ips",
+    "ips": []
+  },
+  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Las Vegas, Nevada",
@@ -3544,11 +3555,6 @@
   {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "pk": "irsPractitioner|MS8888"
-  },
-  {
-    "sk": "allowed-terminal-ips",
-    "ips": [],
-    "pk": "allowed-terminal-ips"
   },
   {
     "docketNumberSuffix": "S",
@@ -7131,16 +7137,6 @@
     "docketNumber": "315-21",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2021-10-29T13:39:45.831Z"
-  },
-  {
-    "role": "admin",
-    "entityName": "User",
-    "sk": "user|86c3f87b-350b-477d-92c3-43bd095cb006",
-    "name": "Test Admin",
-    "section": "admin",
-    "pk": "user|86c3f87b-350b-477d-92c3-43bd095cb006",
-    "userId": "86c3f87b-350b-477d-92c3-43bd095cb006",
-    "email": "admin@example.com"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -18818,12 +18814,6 @@
     "trialSessionId": "7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
     "isCalendared": false,
     "status": "Closed"
-  },
-  {
-    "sk": "document-search-limiter-configuration",
-    "windowTime": 1000,
-    "pk": "document-search-limiter-configuration",
-    "maxInvocations": 9999
   },
   {
     "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
