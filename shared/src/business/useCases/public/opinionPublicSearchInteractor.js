@@ -49,7 +49,7 @@ exports.opinionPublicSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -61,8 +61,8 @@ exports.opinionPublicSearchInteractor = async (
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   await applicationContext.logger.info('public opinion search', {
     ...omit(rawSearch, 'entityName'),
-    size: results.length,
     timestamp,
+    totalCount,
   });
 
   const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
