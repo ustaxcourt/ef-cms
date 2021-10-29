@@ -9546,14 +9546,6 @@
     "pk": "section|foleysChambers"
   },
   {
-    "sk": "connection|8044e0f8-e6eb-44cd-91b9-0e8e78bacbe4",
-    "connectionId": "8044e0f8-e6eb-44cd-91b9-0e8e78bacbe4",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|8044e0f8-e6eb-44cd-91b9-0e8e78bacbe4",
-    "ttl": 1635599204,
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "sk": "user|0a03718f-595e-4e2e-bde0-e0b3c3c5ae16",
     "pk": "section|general"
   },
@@ -15630,14 +15622,6 @@
   {
     "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "privatePractitioner|Test Private Practitioner"
-  },
-  {
-    "sk": "connection|5e4c78e2-cf5a-4f84-a900-95a1cb7a068a",
-    "connectionId": "5e4c78e2-cf5a-4f84-a900-95a1cb7a068a",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|5e4c78e2-cf5a-4f84-a900-95a1cb7a068a",
-    "ttl": 1635599131,
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "sk": "user|9fbae83a-a55b-4132-96df-e04a8ee675e3",
