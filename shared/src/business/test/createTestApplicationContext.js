@@ -169,6 +169,7 @@ const {
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
+const { ERROR_MAP_429 } = require('../../sharedAppContext');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -557,7 +558,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
-    getConstants: jest.fn().mockImplementation(getConstants),
+    getConstants: jest.fn().mockImplementation(() => {
+      return {
+        ...getConstants(),
+        ERROR_MAP_429,
+      };
+    }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
