@@ -35,7 +35,7 @@ describe('slowDownLimiter', () => {
       expiresAt: Date.now() + 1e6,
       id: 1,
     });
-    await slowDownLimiter('document-search-limiter')(
+    await slowDownLimiter('limiter-key')(
       {
         applicationContext: {
           getPersistenceGateway: () => ({
@@ -57,7 +57,7 @@ describe('slowDownLimiter', () => {
       expiresAt: Date.now() + 1e6,
       id: 100,
     });
-    await slowDownLimiter('document-search-limiter')(
+    await slowDownLimiter('limiter-key')(
       {
         applicationContext: {
           getPersistenceGateway: () => ({
@@ -80,7 +80,7 @@ describe('slowDownLimiter', () => {
       expiresAt: Date.now() - 1e6,
       id: 30,
     });
-    await slowDownLimiter('order-search')(
+    await slowDownLimiter('limiter-key')(
       {
         applicationContext: {
           getPersistenceGateway: () => ({

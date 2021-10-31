@@ -33,7 +33,7 @@ const baseContact = {
 
 const createdDocketNumbers = [];
 
-const searchTerm = `${firstName}`;
+const searchTerm = firstName;
 
 /**
  * add a case with the contactSecondary.name provided
@@ -103,7 +103,7 @@ describe('Petitioner searches for exact name match', () => {
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
 
-    expect(searchResults.length).toBe(5);
+    expect(searchResults.length).not.toBeLessThan(5);
     expect(searchResults[0]).toMatchObject({
       docketNumber: createdDocketNumbers[4], // case with contactPrimary name match should be first
     });
