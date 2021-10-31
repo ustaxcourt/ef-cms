@@ -38,6 +38,7 @@ export const state = {
     showUsaBannerDetails: false,
   },
   isPublic: true,
+  isTerminalUser: false,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,

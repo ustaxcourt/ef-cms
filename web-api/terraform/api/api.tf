@@ -119,6 +119,7 @@ resource "aws_api_gateway_method" "api_method_head" {
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
+
 resource "aws_api_gateway_authorizer" "custom_authorizer" {
   name                   = "custom_authorizer_${var.environment}_${var.current_color}"
   rest_api_id            = aws_api_gateway_rest_api.gateway_for_api.id

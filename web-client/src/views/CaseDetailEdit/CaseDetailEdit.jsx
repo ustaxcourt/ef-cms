@@ -1,7 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInfo } from './CaseInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IRSNotice } from './IRSNotice';
+import { IRSNotice } from '../IRSNotice';
 import { PartyInformation } from './PartyInformation';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';

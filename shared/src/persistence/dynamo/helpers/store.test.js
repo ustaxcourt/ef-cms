@@ -2,7 +2,7 @@ const client = require('../../dynamodbClientService');
 const {
   applicationContext,
 } = require('../../../business/test/createTestApplicationContext');
-const { incrementKeyCount, setExpiresAt } = require('./store');
+const { getLimiterByKey, incrementKeyCount, setExpiresAt } = require('./store');
 
 describe('incrementKeyCount', () => {
   beforeEach(() => {
@@ -55,6 +55,33 @@ describe('setExpiresAt', () => {
         sk: 'limiter',
       },
       UpdateExpression: 'SET #expiresAt = :value, #id = :id',
+    });
+  });
+});
+
+describe('getLimiterByKey', () => {
+  beforeEach(() => {
+    client.getFromDeployTable = jest
+      .fn()
+      .mockReturnValue({ maxInvocations: 5, windowTime: 1000 });
+  });
+
+  it('should call getFromDeployTable with the correct key', async () => {
+    const result = await getLimiterByKey({
+      applicationContext,
+      key: 'advanced-document-search',
+    });
+
+    expect(client.getFromDeployTable.mock.calls[0][0]).toMatchObject({
+      Key: {
+        pk: 'advanced-document-search',
+        sk: 'advanced-document-search',
+      },
+    });
+
+    expect(result).toMatchObject({
+      maxInvocations: 5,
+      windowTime: 1000,
     });
   });
 });
