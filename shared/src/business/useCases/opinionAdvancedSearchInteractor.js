@@ -56,7 +56,7 @@ exports.opinionAdvancedSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -68,8 +68,8 @@ exports.opinionAdvancedSearchInteractor = async (
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   await applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
-    size: results.length,
     timestamp,
+    totalCount,
     userId: authorizedUser.userId,
     userRole: authorizedUser.role,
   });
