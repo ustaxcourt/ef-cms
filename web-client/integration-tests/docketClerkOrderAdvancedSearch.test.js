@@ -22,37 +22,37 @@ import {
   uploadPetition,
 } from './helpers';
 
-describe('Docket clerk advanced order search', () => {
-  const cerebralTest = setupTest();
+const cerebralTest = setupTest();
 
-  const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+const { COUNTRY_TYPES, DOCKET_NUMBER_SUFFIXES, SERVICE_INDICATOR_TYPES } =
+  applicationContext.getConstants();
 
-  const seedData = {
-    caseCaption: 'Hanan Al Hroub, Petitioner',
-    contactPrimary: {
-      address1: '123 Teachers Way',
-      city: 'Haifa',
-      country: 'Palestine',
-      countryType: COUNTRY_TYPES.INTERNATIONAL,
-      name: 'Hanan Al Hroub',
-      postalCode: '123456',
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    },
-    contactSecondary: {},
-    docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-    docketNumber: '104-20',
-    docketNumberSuffix:
-      DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION,
-    documentContents:
-      'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
-    documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
-    filingDate: '2020-04-14T03:01:15.215Z',
-    signedJudgeName: 'Maurice B. Foley',
-  };
+const seedData = {
+  caseCaption: 'Hanan Al Hroub, Petitioner',
+  contactPrimary: {
+    address1: '123 Teachers Way',
+    city: 'Haifa',
+    country: 'Palestine',
+    countryType: COUNTRY_TYPES.INTERNATIONAL,
+    name: 'Hanan Al Hroub',
+    postalCode: '123456',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  },
+  contactSecondary: {},
+  docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+  docketNumber: '104-20',
+  docketNumberSuffix:
+    DOCKET_NUMBER_SUFFIXES.DECLARATORY_JUDGEMENTS_FOR_RETIREMENT_PLAN_REVOCATION,
+  documentContents:
+    'Déjà vu, this is a seed order filed on Apr 13 at 11:01pm ET',
+  documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+  filingDate: '2020-04-14T03:01:15.215Z',
+  signedJudgeName: 'Maurice B. Foley',
+};
+const signedByJudge = 'Maurice B. Foley';
+let caseDetail;
 
-  let caseDetail;
-
+describe('docket clerk order advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
@@ -62,9 +62,8 @@ describe('Docket clerk advanced order search', () => {
     cerebralTest.closeSocket();
   });
 
-  describe('create orders to search for', () => {
+  describe('performing data entry', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
-
     it('create case', async () => {
       caseDetail = await uploadPetition(cerebralTest);
       expect(caseDetail).toBeDefined();
@@ -110,63 +109,69 @@ describe('Docket clerk advanced order search', () => {
     docketClerkSealsCase(cerebralTest);
   });
 
-  it('go to advanced order search tab', async () => {
-    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+  describe('search form default behavior', () => {
+    it('go to advanced order search tab', async () => {
+      await refreshElasticsearchIndex();
 
-    const judges = cerebralTest.getState('legacyAndCurrentJudges');
-    expect(judges.length).toBeGreaterThan(0);
+      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-    const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
-    expect(legacyJudge).toBeTruthy();
+      const judges = cerebralTest.getState('legacyAndCurrentJudges');
+      expect(judges.length).toBeGreaterThan(0);
 
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+      const legacyJudge = judges.find(judge => judge.role === 'legacyJudge');
+      expect(legacyJudge).toBeTruthy();
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+    });
+
+    it('clears search fields', async () => {
+      cerebralTest.setState('advancedSearchForm', {
+        orderSearch: {
+          caseTitleOrPetitioner: caseDetail.caseCaption,
+          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+          docketNumber: caseDetail.docketNumber,
+          keyword: 'dismissal',
+          startDate: '01/01/2001',
+        },
+      });
+
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'orderSearch',
+      });
+
+      expect(cerebralTest.getState('advancedSearchForm.orderSearch')).toEqual({
+        keyword: '',
+      });
+    });
+
+    it('clears validation errors when switching tabs', async () => {
+      cerebralTest.setState('advancedSearchForm', {
+        orderSearch: {
+          dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+          startDate: '01/01/3001',
+        },
+      });
+
+      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('alertError')).toEqual({
+        messages: [
+          'Start date cannot be in the future. Enter valid start date.',
+        ],
+        title: 'Please correct the following errors:',
+      });
+
+      await cerebralTest.runSequence('advancedSearchTabChangeSequence');
+
+      expect(cerebralTest.getState('alertError')).not.toBeDefined();
+    });
   });
 
-  it('should clear search fields when "Clear Search" is clicked', async () => {
-    cerebralTest.setState('advancedSearchForm', {
-      orderSearch: {
-        caseTitleOrPetitioner: caseDetail.caseCaption,
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        docketNumber: caseDetail.docketNumber,
-        keyword: 'dismissal',
-        startDate: '01/01/2001',
-      },
-    });
-
-    await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
-      formType: 'orderSearch',
-    });
-
-    expect(cerebralTest.getState('advancedSearchForm.orderSearch')).toEqual({
-      keyword: '',
-    });
-  });
-
-  it('should clear validation errors when advanced search tabs are changed', async () => {
-    cerebralTest.setState('advancedSearchForm', {
-      orderSearch: {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        startDate: '01/01/3001',
-      },
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    expect(cerebralTest.getState('alertError')).toEqual({
-      messages: ['Start date cannot be in the future. Enter valid start date.'],
-      title: 'Please correct the following errors:',
-    });
-
-    await cerebralTest.runSequence('advancedSearchTabChangeSequence');
-
-    expect(cerebralTest.getState('alertError')).not.toBeDefined();
-  });
-
-  describe('should not return results', () => {
-    it('when searching by keyword that is not present in any served orders', async () => {
+  describe('search for things that should not be found', () => {
+    it('search for a keyword that is not present in any served order', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -183,14 +188,14 @@ describe('Docket clerk advanced order search', () => {
       ).toEqual([]);
     });
 
-    it('when searching by docket number that is not present in any served orders', async () => {
+    it('search for a docket number that is not present in any served orders', async () => {
       const docketNumberNoOrders = '999-99';
 
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
           docketNumber: docketNumberNoOrders,
-          keyword: 'show cause',
+          keyword: 'dismissal',
           startDate: '01/01/2001',
         },
       });
@@ -202,23 +207,7 @@ describe('Docket clerk advanced order search', () => {
       ).toEqual([]);
     });
 
-    it('when searching by docket number that is present in a served order but the order does NOT have an attached file', async () => {
-      const docketNumberWithOrderWithoutFileAttached = '101-16';
-
-      cerebralTest.setState('advancedSearchForm', {
-        orderSearch: {
-          docketNumber: docketNumberWithOrderWithoutFileAttached,
-        },
-      });
-
-      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-      ).toEqual([]);
-    });
-
-    it('when searching by case title that is not present in any served orders', async () => {
+    it('search for a case title that is not present in any served orders', async () => {
       const caseCaptionNoOrders = 'abcdefghijk';
 
       cerebralTest.setState('advancedSearchForm', {
@@ -237,7 +226,7 @@ describe('Docket clerk advanced order search', () => {
       ).toEqual([]);
     });
 
-    it('when searching by date range that does not contain any served orders', async () => {
+    it('search for a date range that does not contain served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -254,7 +243,7 @@ describe('Docket clerk advanced order search', () => {
       ).toEqual([]);
     });
 
-    it('when searching by a judge that has not signed any served orders', async () => {
+    it('search for a judge that has not signed any served orders', async () => {
       const invalidJudge = 'Judge Exotic';
 
       cerebralTest.setState('advancedSearchForm', {
@@ -274,8 +263,8 @@ describe('Docket clerk advanced order search', () => {
     });
   });
 
-  describe('should return results', () => {
-    it('when searching for orders without a keyword', async () => {
+  describe('search for things that should be found', () => {
+    it('searches for orders without a keyword', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {},
       });
@@ -288,7 +277,7 @@ describe('Docket clerk advanced order search', () => {
       ).toBeGreaterThanOrEqual(cerebralTest.draftOrders.length);
     });
 
-    it('when searching by keyword that is present in served orders', async () => {
+    it('search for a keyword that is present in served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -320,7 +309,7 @@ describe('Docket clerk advanced order search', () => {
       );
     });
 
-    it('when searching by docket number that is present in served orders', async () => {
+    it('search for a docket number that is present in served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -352,7 +341,7 @@ describe('Docket clerk advanced order search', () => {
       );
     });
 
-    it('when searching by case title that is present in served orders', async () => {
+    it('search for a case title that is present in served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           caseTitleOrPetitioner: caseDetail.caseCaption,
@@ -384,7 +373,7 @@ describe('Docket clerk advanced order search', () => {
       );
     });
 
-    it('when searching by date range that contains served orders', async () => {
+    it('search for a date range that contains served orders', async () => {
       const endDateISO = createISODateString(); // right now
       const endDate = formatDateString(endDateISO, FORMATS.MMDDYYYY);
 
@@ -428,11 +417,11 @@ describe('Docket clerk advanced order search', () => {
       );
     });
 
-    it('when searching by a judge that has signed served orders', async () => {
+    it('search for a judge that has signed served orders', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          judge: 'Maurice B. Foley',
+          judge: signedByJudge,
           startDate: '01/01/1000',
         },
       });
@@ -456,10 +445,8 @@ describe('Docket clerk advanced order search', () => {
         ]),
       );
     });
-  });
 
-  describe('search results table', () => {
-    it('should include the number of pages present in each document', async () => {
+    it('includes the number of pages present in each document in the search results', async () => {
       cerebralTest.setState('advancedSearchForm', {
         orderSearch: {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
