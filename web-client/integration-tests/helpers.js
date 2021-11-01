@@ -895,14 +895,23 @@ export const embedWithLegalIpsumText = (phrase = '') => {
   As a condition to exercising the rights set forth in the documentation and/or other rights consistent with the Work can be reasonably considered independent and separate works in conjunction with the library. If this is to make arrangements wholly outside of your status as Current Maintainer. If the Recipient shall meet all of the initial Contributor, the initial Contributor, the initial grant or subsequently acquired, any and all related documents be drafted in English.`;
 };
 
-export const updateOpinionForm = async (cerebralTest, formValues) => {
+export const updateForm = async (cerebralTest, formValues, sequenceName) => {
   for (let [key, value] of Object.entries(formValues)) {
-    await cerebralTest.runSequence(
-      'updateAdvancedOpinionSearchFormValueSequence',
-      {
-        key,
-        value,
-      },
-    );
+    await cerebralTest.runSequence(sequenceName, {
+      key,
+      value,
+    });
   }
+};
+
+export const updateOpinionForm = async (cerebralTest, formValues) => {
+  await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+    formType: 'opinionSearch',
+  });
+
+  await updateForm(
+    cerebralTest,
+    formValues,
+    'updateAdvancedOpinionSearchFormValueSequence',
+  );
 };
