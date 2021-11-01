@@ -31,14 +31,14 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
     `${trialLocation.city}, ${trialLocation.state}`;
   let states = [];
 
-  const convertCityTypeFromStringToArray = trialCities.map(trialLocation => {
-    return trialLocation !== standaloneRemote
-      ? {
+  const convertCityTypeFromStringToArray = trialCities.map(trialLocation =>
+    trialLocation === standaloneRemote
+      ? trialLocation
+      : {
           ...trialLocation,
           city: [getTrialLocationName(trialLocation)],
-        }
-      : trialLocation;
-  });
+        },
+  );
 
   convertCityTypeFromStringToArray.forEach(loc => {
     const foundIndexOfState = findIndex(states, { state: loc.state });
