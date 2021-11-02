@@ -19,6 +19,7 @@ export const TrialCity = connect(
   function TrialCity({
     label,
     onChange,
+    shouldAddStandalone,
     showDefaultOption,
     showHint,
     showRegularTrialCitiesHint,
@@ -64,33 +65,24 @@ export const TrialCity = connect(
           onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}
+          {shouldAddStandalone && (
+            <option key="Standalone Remote" value="Standalone Remote">
+              {'Standalone Remote'}
+            </option>
+          )}
           {trialCitiesByState.map(locationGroup => {
-            if (locationGroup.state) {
-              return (
-                <optgroup
-                  key={`TrialCityOptions-${locationGroup.state}`}
-                  label={locationGroup.state}
-                >
-                  {locationGroup.cities.map(cityName => (
-                    <option
-                      key={`TrialCityOptions-${cityName}`}
-                      value={cityName}
-                    >
-                      {cityName}
-                    </option>
-                  ))}
-                </optgroup>
-              );
-            } else {
-              return (
-                <option
-                  key={`TrialCityOptions-${locationGroup}`}
-                  value={locationGroup}
-                >
-                  {locationGroup}
-                </option>
-              );
-            }
+            return (
+              <optgroup
+                key={`TrialCityOptions-${locationGroup.state}`}
+                label={locationGroup.state}
+              >
+                {locationGroup.cities.map(cityName => (
+                  <option key={`TrialCityOptions-${cityName}`} value={cityName}>
+                    {cityName}
+                  </option>
+                ))}
+              </optgroup>
+            );
           })}
         </select>
       </FormGroup>
