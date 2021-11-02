@@ -131,7 +131,6 @@ export const CaseInformation = connect(
             </label>
           </div>
         </FormGroup>
-        procedure type {form.procedureType}
         <TrialCity
           label="Trial location"
           showDefaultOption={true}
