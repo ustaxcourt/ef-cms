@@ -157,6 +157,9 @@ export const CaseInfo = connect(
         {form.isPaper && (
           <TrialCity
             label="Trial location"
+            shouldAddStandalone={
+              trialCitiesHelper(form.procedureType).shouldAddStandalone
+            }
             showDefaultOption={true}
             showHint={false}
             showRegularTrialCitiesHint={false}
