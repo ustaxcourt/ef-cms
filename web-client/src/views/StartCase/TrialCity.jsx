@@ -64,18 +64,34 @@ export const TrialCity = connect(
           onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}
-          {Object.keys(trialCitiesByState).map(stateName => (
-            <optgroup key={`TrialCity-${stateName}`} label={stateName}>
-              {trialCitiesByState[stateName].map(trialCity => (
-                <option
-                  key={`TrialCity-${trialCity}-${stateName}`}
-                  value={trialCity}
+          {trialCitiesByState.map(locationGroup => {
+            if (locationGroup.state) {
+              return (
+                <optgroup
+                  key={`TrialCityOptions-${locationGroup.state}`}
+                  label={locationGroup.state}
                 >
-                  {trialCity}
+                  {locationGroup.cities.map(cityName => (
+                    <option
+                      key={`TrialCityOptions-${cityName}`}
+                      value={cityName}
+                    >
+                      {cityName}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            } else {
+              return (
+                <option
+                  key={`TrialCityOptions-${locationGroup}`}
+                  value={locationGroup}
+                >
+                  {locationGroup}
                 </option>
-              ))}
-            </optgroup>
-          ))}
+              );
+            }
+          })}
         </select>
       </FormGroup>
     );
