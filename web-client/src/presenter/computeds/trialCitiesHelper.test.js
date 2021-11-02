@@ -19,6 +19,11 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
             city: 'New York City',
             state: US_STATES.NY,
           },
+          { city: 'Oklahoma City', state: US_STATES.OK },
+          {
+            city: 'Orange County',
+            state: US_STATES.NJ,
+          },
         ],
         REGULAR: [
           {
@@ -32,19 +37,40 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
             city: 'Chattanooga',
             state: US_STATES.TN,
           },
+          {
+            city: 'Orange County',
+            state: US_STATES.NJ,
+          },
         ],
       },
     };
   },
 });
 
-describe('trialCitiesHelper', () => {
-  it('returns trialCitiesByState if param is "Small"', () => {
+describe('trialCitiesHelper should return a lists of trial cities ("Standalone Remote" optional) in an alphabetical order', () => {
+  it('returns all the trial cities with Standalone Remote as the first option', () => {
+    const result = runCompute(trialCitiesHelper);
+    const trialCitiesResult = result('AllPlusStandalone');
+    expect(trialCitiesResult).toEqual({
+      trialCitiesByState: [
+        'Standalone Remote',
+        { cities: [`Orange County, ${US_STATES.NJ}`], state: US_STATES.NJ },
+        { cities: [`New York City, ${US_STATES.NY}`], state: US_STATES.NY },
+        { cities: [`Oklahoma City, ${US_STATES.OK}`], state: US_STATES.OK },
+        { cities: [`Chattanooga, ${US_STATES.TN}`], state: US_STATES.TN },
+      ],
+    });
+  });
+
+  it('returns all the trial cities to correspond to the "Small" parameter', () => {
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('Small');
     expect(trialCitiesResult).toEqual({
       trialCitiesByState: [
-        'Standalone Remote',
+        {
+          cities: ['Orange County, New Jersey'],
+          state: US_STATES.NJ,
+        },
         { cities: ['Chattanooga, Tennessee'], state: US_STATES.TN },
       ],
     });
@@ -55,9 +81,10 @@ describe('trialCitiesHelper', () => {
     const trialCitiesResult = result('All');
     expect(trialCitiesResult).toEqual({
       trialCitiesByState: [
-        'Standalone Remote',
-        { cities: ['New York City, New York'], state: US_STATES.NY },
-        { cities: ['Chattanooga, Tennessee'], state: US_STATES.TN },
+        { cities: [`Orange County, ${US_STATES.NJ}`], state: US_STATES.NJ },
+        { cities: [`New York City, ${US_STATES.NY}`], state: US_STATES.NY },
+        { cities: [`Oklahoma City, ${US_STATES.OK}`], state: US_STATES.OK },
+        { cities: [`Chattanooga, ${US_STATES.TN}`], state: US_STATES.TN },
       ],
     });
   });
@@ -67,7 +94,6 @@ describe('trialCitiesHelper', () => {
     const trialCitiesResult = result('Regular');
     expect(trialCitiesResult).toEqual({
       trialCitiesByState: [
-        'Standalone Remote',
         { cities: ['Chicago, Illinois'], state: US_STATES.IL },
         { cities: ['Oklahoma City, Oklahoma'], state: US_STATES.OK },
       ],
@@ -79,7 +105,6 @@ describe('trialCitiesHelper', () => {
     const trialCitiesResult = result('not small or all');
     expect(trialCitiesResult).toEqual({
       trialCitiesByState: [
-        'Standalone Remote',
         { cities: ['Chicago, Illinois'], state: US_STATES.IL },
         { cities: ['Oklahoma City, Oklahoma'], state: US_STATES.OK },
       ],

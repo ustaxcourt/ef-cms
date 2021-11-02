@@ -9,31 +9,36 @@ export const TrialCityOptions = connect(
   function TrialCityOptions({ trialCitiesHelper }) {
     return (
       <>
-        {trialCitiesHelper('All').trialCitiesByState.map(locationGroup => {
-          if (locationGroup.state) {
-            return (
-              <optgroup
-                key={`TrialCityOptions-${locationGroup.state}`}
-                label={locationGroup.state}
-              >
-                {locationGroup.cities.map(cityName => (
-                  <option key={`TrialCityOptions-${cityName}`} value={cityName}>
-                    {cityName}
-                  </option>
-                ))}
-              </optgroup>
-            );
-          } else {
-            return (
-              <option
-                key={`TrialCityOptions-${locationGroup}`}
-                value={locationGroup}
-              >
-                {locationGroup}
-              </option>
-            );
-          }
-        })}
+        {trialCitiesHelper('AllPlusStandalone').trialCitiesByState.map(
+          locationGroup => {
+            if (locationGroup.state) {
+              return (
+                <optgroup
+                  key={`TrialCityOptions-${locationGroup.state}`}
+                  label={locationGroup.state}
+                >
+                  {locationGroup.cities.map(cityName => (
+                    <option
+                      key={`TrialCityOptions-${cityName}`}
+                      value={cityName}
+                    >
+                      {cityName}
+                    </option>
+                  ))}
+                </optgroup>
+              );
+            } else {
+              return (
+                <option
+                  key={`TrialCityOptions-${locationGroup}`}
+                  value={locationGroup}
+                >
+                  {locationGroup}
+                </option>
+              );
+            }
+          },
+        )}
       </>
     );
   },
