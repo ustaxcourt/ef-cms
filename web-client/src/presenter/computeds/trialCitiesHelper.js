@@ -12,11 +12,16 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
   const { TRIAL_CITIES } = applicationContext.getConstants();
   const standaloneRemote = 'Standalone Remote';
   let trialCities;
+  let shouldAddStandalone = false;
   switch (procedureType) {
     case 'Small':
       trialCities = TRIAL_CITIES.SMALL;
       break;
     case 'All':
+      trialCities = TRIAL_CITIES.ALL;
+      break;
+    case 'AllPlusStandalone':
+      shouldAddStandalone = true;
       trialCities = TRIAL_CITIES.ALL;
       break;
     case 'Regular': //fall-through
@@ -34,10 +39,7 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
   const convertCityTypeFromStringToArray = trialCities.map(trialLocation =>
     trialLocation === standaloneRemote
       ? trialLocation
-      : {
-          ...trialLocation,
-          city: [getTrialLocationName(trialLocation)],
-        },
+      : { ...trialLocation, city: [getTrialLocationName(trialLocation)] },
   );
 
   convertCityTypeFromStringToArray.forEach(loc => {
@@ -55,8 +57,7 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
     }
   });
 
-  states.unshift(standaloneRemote);
-
+  if (shouldAddStandalone) states.unshift(standaloneRemote);
   return {
     trialCitiesByState: states,
   };
