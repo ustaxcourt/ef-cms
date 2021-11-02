@@ -62,9 +62,9 @@ describe('retrySendNotificationToConnections', () => {
       messageStringified: mockMessageStringified,
     });
 
-    expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledTimes(
-      mockConnections.length,
-    );
+    expect(
+      applicationContext.getPersistenceGateway().deleteUserConnection,
+    ).toHaveBeenCalledTimes(mockConnections.length);
   });
 
   it('does not call client.delete if deleteGoneConnections is false', async () => {

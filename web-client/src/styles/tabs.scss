@@ -17,7 +17,7 @@
   &.ustc-ui-tabs--right-link-button {
     position: absolute;
     top: 24px;
-    right: 0px;
+    right: 0;
   }
 
   ul.ustc-ui-tabs {
@@ -173,6 +173,7 @@
             padding: 10px 27px 15px;
             margin-right: 0;
             color: $color-white;
+
             .button-text {
               font-size: 17px;
               text-align: center;
@@ -222,6 +223,7 @@
   &.tab-button-h2 {
     > nav ul {
       margin-bottom: 20px;
+
       li button .button-text {
         font-size: 24px;
       }

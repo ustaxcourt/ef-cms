@@ -45,16 +45,19 @@
           width: 200px;
           height: 34px;
         }
+
         .usa-button {
           &.ustc-search-button {
             min-width: 50px;
             height: 34px;
             padding-right: 20px;
           }
+
           .usa-search-submit-text {
             display: none;
           }
         }
+
         .usa-link.advanced {
           margin-top: 0.25rem;
         }
@@ -96,7 +99,7 @@
         width: 46px;
         max-width: 46px;
         margin-top: 2px;
-        margin-left: 0px;
+        margin-left: 0;
       }
 
       nav.ustc-nav {
@@ -114,15 +117,18 @@
       [role='search'] {
         max-width: unset;
       }
+
       .usa-input {
         width: 200px;
         height: 34px;
       }
+
       .usa-button {
         &.ustc-search-button {
           min-width: 46px;
           height: 34px;
         }
+
         .usa-search-submit-text {
           display: none;
         }
@@ -131,6 +137,7 @@
           display: none;
         }
       }
+
       .usa-link.advanced {
         display: inline-block;
         padding: 0.5em;
@@ -173,6 +180,7 @@
 
       .ustc-navigation-items {
         display: block;
+
         .usa-nav__primary-item:not(.nav-medium) {
           display: inline-block;
         }
@@ -253,6 +261,7 @@
           }
         }
       }
+
       .usa-search.ustc-search {
         .usa-button {
           &.ustc-search-button {

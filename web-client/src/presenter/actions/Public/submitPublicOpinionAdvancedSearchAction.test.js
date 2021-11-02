@@ -64,4 +64,40 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
       },
     });
   });
+
+  it('should set an alert if a 429 error is thrown', async () => {
+    applicationContext
+      .getUseCases()
+      .opinionPublicSearchInteractor.mockImplementation(() => {
+        const e = new Error();
+        e.originalError = {
+          response: {
+            data: {
+              type: 'ip-limiter',
+            },
+          },
+        };
+        e.responseCode = 429;
+        throw e;
+      });
+
+    const { state } = await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            docketNumber: '105-20L',
+            keyword: 'a',
+          },
+        },
+      },
+    });
+
+    expect(state.alertError).toEqual({
+      message: 'Please wait 1 minute before trying your search again.',
+      title: "You've reached your search limit",
+    });
+  });
 });

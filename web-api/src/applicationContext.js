@@ -523,6 +523,9 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
+  getExternalOrderSearchEnabledInteractor,
+} = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
+const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
 const {
@@ -1672,7 +1675,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return sass;
     },
     getNotificationClient: ({ endpoint }) => {
-      if (endpoint.indexOf('localhost') !== -1) {
+      if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
       return new AWS.ApiGatewayManagementApi({
@@ -1863,6 +1866,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getExternalOrderSearchEnabledInteractor: applicationContext =>
+          environment.stage === 'local'
+            ? true
+            : getExternalOrderSearchEnabledInteractor(applicationContext),
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,

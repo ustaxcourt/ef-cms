@@ -11,9 +11,9 @@ import {
   updateOpinionForm,
 } from './helpers';
 
-const cerebralTest = setupTest();
+describe('Docket clerk opinion advanced search', () => {
+  const cerebralTest = setupTest();
 
-describe('docket clerk opinion advanced search', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -43,151 +43,7 @@ describe('docket clerk opinion advanced search', () => {
     });
   });
 
-  describe('search for things that should not be found', () => {
-    it('search for a keyword that is not present in any served opinion', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'osteodontolignikeratic',
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual([]);
-    });
-
-    it('search for an opinion type that is not present in any served opinion', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'opinion',
-        opinionTypes: {
-          [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
-        },
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual([]);
-    });
-
-    it('search without selecting any opinionTypes', async () => {
-      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
-        formType: 'opinionSearch',
-      });
-
-      await updateOpinionForm(cerebralTest, {
-        keyword: 'opinion',
-        opinionTypes: {},
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual([]);
-    });
-  });
-
-  describe('search for things that should be found', () => {
-    it('search for a keyword that is present in a served opinion', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'sunglasses',
-        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-            documentTitle:
-              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-          }),
-        ]),
-      );
-    });
-
-    it('search for a keyword and docket number that is present in a served opinion', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        docketNumber: '105-20',
-        keyword: 'sunglasses',
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-            documentTitle:
-              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-          }),
-        ]),
-      );
-    });
-
-    it('includes the number of pages present in each document in the search results', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'sunglasses',
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            numberOfPages: 1,
-          }),
-        ]),
-      );
-    });
-
-    it('search for an opinion type that is present in any served opinion', async () => {
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'opinion',
-        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
-        startDate: '08/03/1995',
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-            documentTitle:
-              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-          }),
-        ]),
-      );
-    });
-  });
-
-  it('clears search fields', async () => {
+  it('should clear search fields when "Clear Search" is clicked', async () => {
     await cerebralTest.runSequence(
       'updateAdvancedOpinionSearchFormValueSequence',
       {
@@ -211,7 +67,7 @@ describe('docket clerk opinion advanced search', () => {
     });
   });
 
-  it('clears validation errors when switching tabs', async () => {
+  it('should clear validation errors when advanced search tabs are changed', async () => {
     await cerebralTest.runSequence(
       'updateAdvancedOpinionSearchFormValueSequence',
       {
@@ -238,5 +94,235 @@ describe('docket clerk opinion advanced search', () => {
     await cerebralTest.runSequence('advancedSearchTabChangeSequence');
 
     expect(cerebralTest.getState('alertError')).not.toBeDefined();
+  });
+
+  describe('should not return results', () => {
+    it('when searching by keyword that is not present in any served opinions', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'osteodontolignikeratic',
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+
+    it('when searching by an opinion type that is not present in any served opinions', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'opinion',
+        opinionTypes: {
+          [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
+        },
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+
+    it('when searching without selecting any opinion types', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm(cerebralTest, {
+        keyword: 'opinion',
+        opinionTypes: {},
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+
+    it('when searching by docket number that is present in a served opinion but the opinion does NOT have an attached file', async () => {
+      const docketNumberWithOpinionWithoutFileAttached = '101-11';
+
+      await updateOpinionForm(cerebralTest, {
+        docketNumber: docketNumberWithOpinionWithoutFileAttached,
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+  });
+
+  describe('should return results', () => {
+    it('when searching by keyword that is present in a served opinion', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'sunglasses',
+        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          }),
+        ]),
+      );
+    });
+
+    it('when searching by a keyword and docket number that is present in a served opinion', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        docketNumber: '105-20',
+        keyword: 'sunglasses',
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          }),
+        ]),
+      );
+    });
+
+    it('when searching by opinion type that is present in a served opinion', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'opinion',
+        opinionTypes: { [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true },
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe('search results table', () => {
+    it('should include the number of pages present in each document', async () => {
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        keyword: 'sunglasses',
+        startDate: '08/03/1995',
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            numberOfPages: 1,
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe('filtering by judge', () => {
+    it('when searching for opinions with judge "Tia W. Mowry" should not return results for "Tamara W. Ashford"', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key: 'judge',
+          value: 'Mowry',
+        },
+      );
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      const searchResults = cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      );
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(searchResults).toEqual([]);
+      expect(
+        searchResults.find(r => r.judge !== 'Tamara W. Ashford'),
+      ).toBeUndefined();
+    });
+
+    it('when searching for opinions with judge "Tamara W. Ashford" should ONLY return results for "Tamara W. Ashford"', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await cerebralTest.runSequence(
+        'updateAdvancedOpinionSearchFormValueSequence',
+        {
+          key: 'judge',
+          value: 'Ashford',
+        },
+      );
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      const searchResults = cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      );
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+      expect(searchResults).toEqual([
+        {
+          caseCaption: 'Hanae Guerrero, Petitioner',
+          docketEntryId: 'd085a9da-b4a6-41d2-aa40-f933fe2d4188',
+          docketNumber: '313-21',
+          docketNumberWithSuffix: '313-21',
+          documentTitle: 'Summary Opinion Judge Ashford An opinion for testing',
+          documentType: 'Summary Opinion',
+          entityName: 'InternalDocumentSearchResult',
+          eventCode: 'SOP',
+          filingDate: '2021-10-25T18:57:31.742Z',
+          isFileAttached: true,
+          isSealed: false,
+          isStricken: false,
+          judge: 'Tamara W. Ashford',
+          numberOfPages: 1,
+          signedJudgeName: 'Maurice B. Foley',
+        },
+      ]);
+      expect(
+        searchResults.find(r => r.judge !== 'Tamara W. Ashford'),
+      ).toBeUndefined();
+    });
   });
 });

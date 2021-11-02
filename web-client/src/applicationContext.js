@@ -23,8 +23,8 @@ import {
   getServedPartiesCode,
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
+  ERROR_MAP_429,
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
@@ -32,6 +32,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareISODateStrings,
@@ -176,6 +177,7 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
+import { getExternalOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getExternalOrderSearchEnabledProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
@@ -409,6 +411,7 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getExternalOrderSearchEnabledInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
@@ -543,9 +546,10 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
-  getConstants(),
-);
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+  ...getConstants(),
+  ERROR_MAP_429,
+});
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {

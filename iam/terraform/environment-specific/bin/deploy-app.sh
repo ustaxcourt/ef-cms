@@ -7,8 +7,8 @@ ENVIRONMENT=$1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 tf_version=$(terraform --version)
-if [[ ${tf_version} != *"1.0.7"* ]]; then
-  echo "Please set your terraform version to 1.0.7 before deploying."
+if [[ ${tf_version} != *"1.0.9"* ]]; then
+  echo "Please set your terraform version to 1.0.9 before deploying."
   exit 1
 fi
 
