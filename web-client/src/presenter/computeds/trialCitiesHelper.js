@@ -58,9 +58,8 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
     }
   });
 
-  if (shouldAddStandalone)
-    states.unshift(TRIAL_SESSION_SCOPE_TYPES.standaloneRemote);
   return {
+    shouldAddStandalone,
     trialCitiesByState: states,
   };
 };

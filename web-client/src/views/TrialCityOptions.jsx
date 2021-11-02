@@ -7,38 +7,29 @@ export const TrialCityOptions = connect(
     trialCitiesHelper: state.trialCitiesHelper,
   },
   function TrialCityOptions({ procedureType, trialCitiesHelper }) {
+    const { shouldAddStandalone, trialCitiesByState } =
+      trialCitiesHelper(procedureType);
     return (
       <>
-        {trialCitiesHelper(procedureType).trialCitiesByState.map(
-          locationGroup => {
-            if (locationGroup.state) {
-              return (
-                <optgroup
-                  key={`TrialCityOptions-${locationGroup.state}`}
-                  label={locationGroup.state}
-                >
-                  {locationGroup.cities.map(cityName => (
-                    <option
-                      key={`TrialCityOptions-${cityName}`}
-                      value={cityName}
-                    >
-                      {cityName}
-                    </option>
-                  ))}
-                </optgroup>
-              );
-            } else {
-              return (
-                <option
-                  key={`TrialCityOptions-${locationGroup}`}
-                  value={locationGroup}
-                >
-                  {locationGroup}
-                </option>
-              );
-            }
-          },
+        {shouldAddStandalone && (
+          <option key="Standalone Remote" value="Standalone Remote">
+            {'Standalone Remote'}
+          </option>
         )}
+        {trialCitiesByState.map(locationGroup => {
+          return (
+            <optgroup
+              key={`TrialCityOptions-${locationGroup.state}`}
+              label={locationGroup.state}
+            >
+              {locationGroup.cities.map(cityName => (
+                <option key={`TrialCityOptions-${cityName}`} value={cityName}>
+                  {cityName}
+                </option>
+              ))}
+            </optgroup>
+          );
+        })}
       </>
     );
   },
