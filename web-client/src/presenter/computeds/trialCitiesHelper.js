@@ -9,10 +9,11 @@ import { findIndex, sortBy } from 'lodash';
  * @returns {object} trialCitiesByState
  */
 export const trialCitiesHelper = (get, applicationContext) => procedureType => {
-  const { TRIAL_CITIES } = applicationContext.getConstants();
-  const standaloneRemote = 'Standalone Remote';
+  const { TRIAL_CITIES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
   let trialCities;
   let shouldAddStandalone = false;
+
   switch (procedureType) {
     case 'Small':
       trialCities = TRIAL_CITIES.SMALL;
@@ -37,7 +38,7 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
   let states = [];
 
   const convertCityTypeFromStringToArray = trialCities.map(trialLocation =>
-    trialLocation === standaloneRemote
+    trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
       ? trialLocation
       : { ...trialLocation, city: [getTrialLocationName(trialLocation)] },
   );
@@ -57,7 +58,8 @@ export const trialCitiesHelper = (get, applicationContext) => procedureType => {
     }
   });
 
-  if (shouldAddStandalone) states.unshift(standaloneRemote);
+  if (shouldAddStandalone)
+    states.unshift(TRIAL_SESSION_SCOPE_TYPES.standaloneRemote);
   return {
     trialCitiesByState: states,
   };

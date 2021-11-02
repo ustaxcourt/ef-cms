@@ -3,7 +3,8 @@ import { runCompute } from 'cerebral/test';
 import { trialCitiesHelper as trialCitiesHelperComputed } from './trialCitiesHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { US_STATES } = applicationContext.getConstants();
+const { TRIAL_SESSION_SCOPE_TYPES, US_STATES } =
+  applicationContext.getConstants();
 
 const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
   ...applicationContext,
@@ -43,6 +44,7 @@ const trialCitiesHelper = withAppContextDecorator(trialCitiesHelperComputed, {
           },
         ],
       },
+      TRIAL_SESSION_SCOPE_TYPES,
     };
   },
 });
