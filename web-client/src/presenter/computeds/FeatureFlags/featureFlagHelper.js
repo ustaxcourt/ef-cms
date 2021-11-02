@@ -1,16 +1,15 @@
 import { state } from 'cerebral';
 
 export const featureFlagHelper = (get, applicationContext) => {
-  const isOrderSearchEnabled = get(state.isOrderSearchEnabled);
-
   const { role } = get(state.user);
-  const isSearchEnabled =
-    isOrderSearchEnabled &&
-    applicationContext.getUtilities().isInternalUser(role);
+
+  const isUserInternal = applicationContext.getUtilities().isInternalUser(role);
+  const isOrderSearchEnabled = get(state.isOrderSearchEnabled);
+  const isInternalOrderSearchEnabled = isOrderSearchEnabled && isUserInternal;
 
   const isOpinionSearchEnabled = applicationContext.isFeatureEnabled(
     'advanced_opinion_search',
   );
 
-  return { isOpinionSearchEnabled, isSearchEnabled };
+  return { isInternalOrderSearchEnabled, isOpinionSearchEnabled };
 };

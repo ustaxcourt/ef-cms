@@ -12,7 +12,7 @@ describe('featureFlagHelper', () => {
     role: ROLES.petitioner,
   };
 
-  describe('isSearchEnabled', () => {
+  describe('isInternalOrderSearchEnabled', () => {
     it('should be true when the user is internal and state.isOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(true);
 
@@ -28,7 +28,7 @@ describe('featureFlagHelper', () => {
       });
 
       expect(result).toMatchObject({
-        isSearchEnabled: true,
+        isInternalOrderSearchEnabled: true,
       });
     });
 
@@ -47,7 +47,7 @@ describe('featureFlagHelper', () => {
       });
 
       expect(result).toMatchObject({
-        isSearchEnabled: false,
+        isInternalOrderSearchEnabled: false,
       });
     });
 
@@ -66,7 +66,7 @@ describe('featureFlagHelper', () => {
       });
 
       expect(result).toMatchObject({
-        isSearchEnabled: false,
+        isInternalOrderSearchEnabled: false,
       });
     });
   });

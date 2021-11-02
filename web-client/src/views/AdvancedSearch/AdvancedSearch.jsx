@@ -95,12 +95,14 @@ export const AdvancedSearch = connect(
                 <SearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isSearchEnabled}
+                disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
                 id="tab-order"
                 tabName={searchTabs.ORDER}
                 title={
                   'Order' +
-                  (!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : '')
+                  (featureFlagHelper.isInternalOrderSearchEnabled
+                    ? ''
+                    : ' (Coming Soon)')
                 }
               >
                 <OrderSearchForm
@@ -116,9 +118,9 @@ export const AdvancedSearch = connect(
                 tabName={searchTabs.OPINION}
                 title={
                   'Opinion' +
-                  (!featureFlagHelper.isOpinionSearchEnabled
-                    ? ' (Coming Soon)'
-                    : '')
+                  (featureFlagHelper.isOpinionSearchEnabled
+                    ? ''
+                    : ' (Coming Soon)')
                 }
               >
                 <OpinionSearchForm
@@ -164,20 +166,22 @@ export const AdvancedSearch = connect(
               >
                 <option value={searchTabs.CASE}>Case</option>
                 <option
-                  disabled={!featureFlagHelper.isSearchEnabled}
+                  disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
                   value={searchTabs.ORDER}
                 >
                   Order
-                  {!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : ''}
+                  {featureFlagHelper.isInternalOrderSearchEnabled
+                    ? ''
+                    : ' (Coming Soon)'}
                 </option>
                 <option
                   disabled={!featureFlagHelper.isOpinionSearchEnabled}
                   value={searchTabs.OPINION}
                 >
                   Opinion
-                  {!featureFlagHelper.isOpinionSearchEnabled
-                    ? ' (Coming Soon)'
-                    : ''}
+                  {featureFlagHelper.isOpinionSearchEnabled
+                    ? ''
+                    : ' (Coming Soon)'}
                 </option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
