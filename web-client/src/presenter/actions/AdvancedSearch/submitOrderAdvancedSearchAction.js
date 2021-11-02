@@ -33,10 +33,11 @@ export const submitOrderAdvancedSearchAction = async ({
     return { searchResults };
   } catch (err) {
     if (err.responseCode === 429) {
-      store.set(state.alertError, {
-        message: 'Please wait 1 minute before trying your search again.',
-        title: "You've reached your search limit.",
-      });
+      const message =
+        applicationContext.getConstants().ERROR_MAP_429[
+          err.originalError.response.data.type
+        ];
+      store.set(state.alertError, message);
       return { searchResults: [] };
     } else {
       throw err;
