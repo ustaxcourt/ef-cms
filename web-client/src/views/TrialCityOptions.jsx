@@ -6,10 +6,10 @@ export const TrialCityOptions = connect(
   {
     trialCitiesHelper: state.trialCitiesHelper,
   },
-  function TrialCityOptions({ trialCitiesHelper }) {
+  function TrialCityOptions({ procedureType, trialCitiesHelper }) {
     return (
       <>
-        {trialCitiesHelper('AllPlusStandalone').trialCitiesByState.map(
+        {trialCitiesHelper(procedureType).trialCitiesByState.map(
           locationGroup => {
             if (locationGroup.state) {
               return (
