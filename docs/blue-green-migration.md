@@ -83,6 +83,9 @@ The application kicks off a migration automatically if it detects migrations tha
 11. Rerun the circle deploy from step 4
 12. If the environment is NOT prod, setup test users and judges so smoketests will pass:
     ```bash
+    node shared/admin-tools/user/setup-admin.js
+    ```
+    ```bash
     node shared/admin-tools/user/setup-test-users.js
     ```
     ```bash
