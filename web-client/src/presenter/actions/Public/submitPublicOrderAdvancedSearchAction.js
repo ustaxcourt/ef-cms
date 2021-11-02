@@ -13,6 +13,7 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 export const submitPublicOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
   const searchParams = clone(get(state.advancedSearchForm.orderSearch));
 
@@ -23,11 +24,23 @@ export const submitPublicOrderAdvancedSearchAction = async ({
     );
   }
 
-  const searchResults = await applicationContext
-    .getUseCases()
-    .orderPublicSearchInteractor(applicationContext, {
-      searchParams,
-    });
-
-  return { searchResults };
+  try {
+    const searchResults = await applicationContext
+      .getUseCases()
+      .orderPublicSearchInteractor(applicationContext, {
+        searchParams,
+      });
+    return { searchResults };
+  } catch (err) {
+    if (err.responseCode === 429) {
+      const message =
+        applicationContext.getConstants().ERROR_MAP_429[
+          err.originalError.response.data.type
+        ];
+      store.set(state.alertError, message);
+      return { searchResults: [] };
+    } else {
+      throw err;
+    }
+  }
 };

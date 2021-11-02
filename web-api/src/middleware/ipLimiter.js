@@ -28,12 +28,15 @@ exports.ipLimiter =
       count = 1;
     }
 
+    const windowTimeSecs = parseInt(WINDOW_TIME / 1000);
+
     if (count > MAX_COUNT) {
       return res
-        .set('Retry-After', WINDOW_TIME)
+        .set('Retry-After', windowTimeSecs)
         .status(429)
         .json({
-          message: `you are only allowed ${MAX_COUNT} requests a minute`,
+          message: `you are only allowed ${MAX_COUNT} requests in a ${windowTimeSecs} second window time`,
+          type: 'ip-limiter',
         });
     }
 
