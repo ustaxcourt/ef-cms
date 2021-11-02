@@ -8549,7 +8549,7 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 100,
     "trialSessionId": "111ac21b-99f9-4321-98c8-b95db00af96b",
-    "isCalendared": false
+    "isCalendared": true
   },
   {
     "judgeTitle": "Chief Judge",
