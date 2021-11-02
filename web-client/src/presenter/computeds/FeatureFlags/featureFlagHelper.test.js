@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('featureFlagHelper', () => {
   describe('isSearchEnabled', () => {
-    it('returns isSearchEnabled true when the advanced_document_search feature is enabled and state.isOrderSearchEnabled is true', () => {
+    it('returns isSearchEnabled true when the user is internal and state.isOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(true);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -24,7 +24,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled and state.isOrderSearchEnabled is true', () => {
+    it('returns isSearchEnabled false when the user is NOT internal and state.isOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -43,7 +43,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('returns isSearchEnabled false when the advanced_document_search is NOT enabled and state.isOrderSearchEnabled is false', () => {
+    it('returns isSearchEnabled false when the user is NOT internal and state.isOrderSearchEnabled is false', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
