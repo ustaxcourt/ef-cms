@@ -1,7 +1,6 @@
 import { formattedTrialSessions as formattedTrialSessionsComputed } from '../../src/presenter/computeds/formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { trialSessionsHelper as trialSessionsHelperComputed } from '../../src/presenter/computeds/trialSessionsHelper';
-
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessions = withAppContextDecorator(
