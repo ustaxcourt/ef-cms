@@ -198,6 +198,9 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
+  getExternalOrderSearchEnabledLambda,
+} = require('./search/getExternalOrderSearchEnabledLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -899,6 +902,12 @@ app.get(
   app.get(
     '/search/order-search-enabled',
     lambdaWrapper(getOrderSearchEnabledLambda),
+  );
+}
+{
+  app.get(
+    '/search/external-order-search-enabled',
+    lambdaWrapper(getExternalOrderSearchEnabledLambda),
   );
 }
 
