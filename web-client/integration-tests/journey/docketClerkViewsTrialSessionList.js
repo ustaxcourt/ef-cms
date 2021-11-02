@@ -17,19 +17,10 @@ export const docketClerkViewsTrialSessionList = cerebralTest => {
       withAppContextDecorator(trialCitiesHelperComputed),
     )('AllPlusStandalone');
 
-    // const result = await runCompute(trialCitiesHelperComputed)(
-    //   'AllPlusStandalone',
-    // );
-
-    console.log('result', result);
-
-    // const { trialCitiesByState } = result();
-
-    // console.log('trialCitiesByState', trialCitiesByState);
-
-    // trialCitiesByState
-
-    // expect(trialCitiesByState).toEqual(formattedCitiesWithStandaloneOption);
+    expect(result.trialCitiesByState[0]).toEqual('Standalone Remote');
+    expect(
+      result.trialCitiesByState[result.trialCitiesByState.length - 1],
+    ).toEqual({ cities: ['Cheyenne, Wyoming'], state: 'Wyoming' });
 
     const formatted = runCompute(formattedTrialSessions, {
       state: cerebralTest.getState(),
