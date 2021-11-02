@@ -71,6 +71,42 @@ describe('featureFlagHelper', () => {
     });
   });
 
+  describe('isExternalOrderSearchEnabled', () => {
+    it('should be true when state.isExternalOrderSearchEnabled is true', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(true);
+
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const { isExternalOrderSearchEnabled } = runCompute(featureFlagHelper, {
+        state: { isExternalOrderSearchEnabled: true, user: mockExternalUser },
+      });
+
+      expect(isExternalOrderSearchEnabled).toBe(true);
+    });
+
+    it('should be false when state.isExternalOrderSearchEnabled is false', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(false);
+
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const { isExternalOrderSearchEnabled } = runCompute(featureFlagHelper, {
+        state: { isExternalOrderSearchEnabled: false, user: mockExternalUser },
+      });
+
+      expect(isExternalOrderSearchEnabled).toBe(false);
+    });
+  });
+
   describe('isOpinionSearchEnabled', () => {
     it('should be true when the advanced_opinion_search feature is enabled', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(true);
