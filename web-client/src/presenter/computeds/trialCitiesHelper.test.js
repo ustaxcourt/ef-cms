@@ -54,8 +54,8 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('AllPlusStandalone');
     expect(trialCitiesResult).toEqual({
+      shouldAddStandalone: true,
       trialCitiesByState: [
-        'Standalone Remote',
         { cities: [`Orange County, ${US_STATES.NJ}`], state: US_STATES.NJ },
         { cities: [`New York City, ${US_STATES.NY}`], state: US_STATES.NY },
         { cities: [`Oklahoma City, ${US_STATES.OK}`], state: US_STATES.OK },
@@ -68,6 +68,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('Small');
     expect(trialCitiesResult).toEqual({
+      shouldAddStandalone: false,
       trialCitiesByState: [
         {
           cities: ['Orange County, New Jersey'],
@@ -82,6 +83,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('All');
     expect(trialCitiesResult).toEqual({
+      shouldAddStandalone: false,
       trialCitiesByState: [
         { cities: [`Orange County, ${US_STATES.NJ}`], state: US_STATES.NJ },
         { cities: [`New York City, ${US_STATES.NY}`], state: US_STATES.NY },
@@ -95,6 +97,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('Regular');
     expect(trialCitiesResult).toEqual({
+      shouldAddStandalone: false,
       trialCitiesByState: [
         { cities: ['Chicago, Illinois'], state: US_STATES.IL },
         { cities: ['Oklahoma City, Oklahoma'], state: US_STATES.OK },
@@ -106,6 +109,7 @@ describe('trialCitiesHelper should return a lists of trial cities ("Standalone R
     const result = runCompute(trialCitiesHelper);
     const trialCitiesResult = result('not small or all');
     expect(trialCitiesResult).toEqual({
+      shouldAddStandalone: false,
       trialCitiesByState: [
         { cities: ['Chicago, Illinois'], state: US_STATES.IL },
         { cities: ['Oklahoma City, Oklahoma'], state: US_STATES.OK },
