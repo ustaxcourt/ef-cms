@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Sets the order search enabled flag to "true" in the dynamo deploy table (story #8544)
+# Sets the order search enabled flag to "true" in the dynamo deploy table
 
 # Usage
 #   ./setup-order-search-flag.sh dev
