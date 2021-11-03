@@ -7,9 +7,15 @@ export const featureFlagHelper = (get, applicationContext) => {
   const isOrderSearchEnabled = get(state.isOrderSearchEnabled);
   const isInternalOrderSearchEnabled = isOrderSearchEnabled && isUserInternal;
 
+  const isExternalOrderSearchEnabled = get(state.isExternalOrderSearchEnabled);
+
   const isOpinionSearchEnabled = applicationContext.isFeatureEnabled(
     'advanced_opinion_search',
   );
 
-  return { isInternalOrderSearchEnabled, isOpinionSearchEnabled };
+  return {
+    isExternalOrderSearchEnabled,
+    isInternalOrderSearchEnabled,
+    isOpinionSearchEnabled,
+  };
 };

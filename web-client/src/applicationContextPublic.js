@@ -30,6 +30,7 @@ import {
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
 import { User } from '../../shared/src/business/entities/User';
@@ -46,7 +47,9 @@ import {
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getExternalOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getExternalOrderSearchEnabledProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
@@ -75,6 +78,7 @@ const allUseCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
+  getExternalOrderSearchEnabledInteractor,
   getHealthCheckInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
@@ -161,6 +165,9 @@ const applicationContextPublic = {
       isInternalUser: User.isInternalUser,
       sortDocketEntries,
     };
+  },
+  isFeatureEnabled: featureName => {
+    return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
   },
 };
 
