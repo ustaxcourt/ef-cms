@@ -29,7 +29,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'dismissed',
+        keyword: 'dismissal',
         startDate: '01/01/1000',
       },
     });

@@ -10,6 +10,7 @@ import {
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserInvalidSearchForOrder } from './journey/unauthedUserInvalidSearchForOrder';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
@@ -49,6 +50,9 @@ describe('Petitioner creates case', () => {
     cerebralTest.docketNumber = caseDetail.docketNumber;
     testClient.docketNumber = caseDetail.docketNumber;
   });
+
+  loginAs(testClient, 'petitionsclerk1@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
 });
 
 describe('Docket clerk creates orders to search for', () => {
