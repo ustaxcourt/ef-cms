@@ -17,4 +17,8 @@ export const gotoPublicSearchSequence = [
   setOpinionTypesAction,
   setCurrentPageAction('PublicSearch'),
   getExternalOrderSearchEnabledAction,
+  {
+    no: [],
+    yes: [],
+  },
 ];
