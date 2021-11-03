@@ -10,8 +10,8 @@ const client = require('../../dynamodbClientService');
 exports.getExternalOrderSearchEnabled = async ({ applicationContext }) => {
   const result = await client.getFromDeployTable({
     Key: {
-      pk: 'external-order-search-enabled ',
-      sk: 'external-order-search-enabled ',
+      pk: 'external-order-search-enabled',
+      sk: 'external-order-search-enabled',
     },
     applicationContext,
   });

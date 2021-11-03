@@ -10,8 +10,8 @@ const client = require('../../dynamodbClientService');
 exports.getInternalOrderSearchEnabled = async ({ applicationContext }) => {
   const result = await client.getFromDeployTable({
     Key: {
-      pk: 'internal-order-search-enabled ',
-      sk: 'internal-order-search-enabled ',
+      pk: 'internal-order-search-enabled',
+      sk: 'internal-order-search-enabled',
     },
     applicationContext,
   });
