@@ -21,10 +21,13 @@ const testClient = setupTestClient();
 testClient.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-// To be enabled once public has permission to search for orders
-describe.skip('Petitioner creates case', () => {
+describe('Petitioner creates case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    testClient.closeSocket();
   });
 
   loginAs(testClient, 'petitioner@example.com');
@@ -48,7 +51,11 @@ describe.skip('Petitioner creates case', () => {
   });
 });
 
-describe.skip('Docket clerk creates orders to search for', () => {
+describe('Docket clerk creates orders to search for', () => {
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(testClient, {
     documentTitle: 'Order',
@@ -78,21 +85,30 @@ describe.skip('Docket clerk creates orders to search for', () => {
   docketClerkAddsDocketEntryFromOrderOfDismissal(testClient, 2);
 });
 
-// Temporarily disabled for story 7387
-describe.skip('Unauthed user searches for an order by keyword', () => {
+describe('Unauthed user searches for an order by keyword', () => {
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(cerebralTest);
   unauthedUserInvalidSearchForOrder(cerebralTest);
   unauthedUserSearchesForOrderByKeyword(cerebralTest, testClient);
 });
 
-// Temporarily disabled for story 7387
-describe.skip('Docket clerk seals case', () => {
+describe('Docket clerk seals case', () => {
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
   loginAs(testClient, 'docketclerk@example.com');
   docketClerkSealsCase(testClient);
 });
 
-// Temporarily disabled for story 7387
-describe.skip('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
+describe('Unauthed user searches for an order by keyword and does not see sealed cases', () => {
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
   unauthedUserNavigatesToPublicSite(cerebralTest);
   unauthedUserSearchesForSealedCaseOrderByKeyword(cerebralTest, testClient);
 });
