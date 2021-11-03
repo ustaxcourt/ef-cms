@@ -276,8 +276,10 @@ describe('Docket clerk advanced order search', () => {
 
   describe('should return results', () => {
     it('when searching for orders without a keyword', async () => {
-      cerebralTest.setState('advancedSearchForm', {
-        orderSearch: {},
+      await refreshElasticsearchIndex();
+
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'orderSearch',
       });
 
       await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
