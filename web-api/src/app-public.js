@@ -142,7 +142,7 @@ app.get(
 );
 
 app.get(
-  '/search/external-order-search-enabled',
+  '/search/external-internal-order-search-enabled ',
   lambdaWrapper(getExternalOrderSearchEnabledLambda),
 );
 

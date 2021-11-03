@@ -3,7 +3,7 @@
 # Sets the order search enabled flag to "true" in the dynamo deploy table
 
 # Usage
-#   ./setup-order-search-flag.sh dev
+#   ./setup-internal-order-search-flag.sh dev
 
 # Arguments
 #   - $1 - the environment to set the flag
@@ -12,5 +12,5 @@
 
 ENV=$1
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"order-search-enabled"},"sk":{"S":"order-search-enabled"},"current":{"BOOL":true}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"internal-order-search-enabled "},"sk":{"S":"internal-order-search-enabled "},"current":{"BOOL":true}}'
 

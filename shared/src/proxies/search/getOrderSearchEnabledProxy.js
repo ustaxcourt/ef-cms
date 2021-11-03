@@ -9,6 +9,6 @@ const { get } = require('../requests');
 exports.getOrderSearchEnabledInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/search/order-search-enabled',
+    endpoint: '/search/internal-order-search-enabled ',
   });
 };
