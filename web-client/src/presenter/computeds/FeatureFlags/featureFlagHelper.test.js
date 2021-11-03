@@ -78,7 +78,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be true when there is no state.user, state.isOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
+    it('should be true when the user is public, state.isOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
