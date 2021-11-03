@@ -4,11 +4,11 @@ export const featureFlagHelper = (get, applicationContext) => {
   const { role } = get(state.user);
 
   const isUserInternal = applicationContext.getUtilities().isInternalUser(role);
-  const isOrderSearchEnabled = get(state.isOrderSearchEnabled);
+  const isInternalOrderSearchEnabled = get(state.isInternalOrderSearchEnabled);
 
   let isOrderSearchEnabledForRole = false;
   if (role && isUserInternal) {
-    isOrderSearchEnabledForRole = isOrderSearchEnabled;
+    isOrderSearchEnabledForRole = isInternalOrderSearchEnabled;
   } else {
     isOrderSearchEnabledForRole = get(state.isExternalOrderSearchEnabled);
   }

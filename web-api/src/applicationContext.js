@@ -541,6 +541,12 @@ const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
 const {
+  getInternalOrderSearchEnabled,
+} = require('../../shared/src/persistence/dynamo/deployTable/getInternalOrderSearchEnabled');
+const {
+  getInternalOrderSearchEnabledInteractor,
+} = require('../../shared/src/business/useCases/search/getInternalOrderSearchEnabledInteractor');
+const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
 const {
@@ -582,12 +588,6 @@ const {
 const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
-const {
-  getOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled');
-const {
-  getOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getOrderSearchEnabledInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -1451,13 +1451,13 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
+  getInternalOrderSearchEnabled,
   getInternalUsers,
   getLimiterByKey,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
-  getOrderSearchEnabled,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1873,6 +1873,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
+        getInternalOrderSearchEnabledInteractor: applicationContext =>
+          environment.stage === 'local'
+            ? false
+            : getInternalOrderSearchEnabledInteractor(applicationContext),
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,
@@ -1882,10 +1886,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
-        getOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? false
-            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,

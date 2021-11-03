@@ -3,7 +3,7 @@
 # Rename order-search-enabled flag to internal-order-search-enabled
 
 # Usage
-#   ./setup-internal-order-search-flag.sh dev
+#   ./rename-order-search-flag-to-internal.sh dev
 
 # Arguments
 #   - $1 - the environment to set the flag
