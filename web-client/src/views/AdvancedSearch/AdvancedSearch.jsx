@@ -95,12 +95,12 @@ export const AdvancedSearch = connect(
                 <SearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
+                disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
                 id="tab-order"
                 tabName={searchTabs.ORDER}
                 title={
                   'Order' +
-                  (featureFlagHelper.isInternalOrderSearchEnabled
+                  (featureFlagHelper.isOrderSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)')
                 }
@@ -166,11 +166,11 @@ export const AdvancedSearch = connect(
               >
                 <option value={searchTabs.CASE}>Case</option>
                 <option
-                  disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
+                  disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
                   value={searchTabs.ORDER}
                 >
                   Order
-                  {featureFlagHelper.isInternalOrderSearchEnabled
+                  {featureFlagHelper.isOrderSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
