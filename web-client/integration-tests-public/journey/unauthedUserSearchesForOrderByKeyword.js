@@ -1,4 +1,7 @@
-import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  ADVANCED_SEARCH_TABS,
+  DATE_RANGE_SEARCH_OPTIONS,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../../integration-tests/helpers';
 
 export const unauthedUserSearchesForOrderByKeyword = (
@@ -10,6 +13,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'osteodontolignikeratic',
         startDate: '01/01/1000',
       },
@@ -24,6 +28,7 @@ export const unauthedUserSearchesForOrderByKeyword = (
 
     cerebralTest.setState('advancedSearchForm', {
       orderSearch: {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'dismissed',
         startDate: '01/01/1000',
       },
