@@ -900,13 +900,13 @@ app.get(
  */
 {
   app.get(
-    '/search/internal-order-search-enabled ',
+    '/search/internal-order-search-enabled',
     lambdaWrapper(getInternalOrderSearchEnabledLambda),
   );
 }
 {
   app.get(
-    '/search/external-order-search-enabled ',
+    '/search/external-order-search-enabled',
     lambdaWrapper(getExternalOrderSearchEnabledLambda),
   );
 }
