@@ -12,5 +12,5 @@
 
 ENV=$1
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"external-internal-order-search-enabled "},"sk":{"S":"external-internal-order-search-enabled "},"current":{"BOOL":true}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"external-order-search-enabled "},"sk":{"S":"external-order-search-enabled "},"current":{"BOOL":true}}'
 

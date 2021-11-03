@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getOrderSearchEnabledAction } from './getOrderSearchEnabledAction';
+import { getInternalOrderSearchEnabledAction } from './getInternalOrderSearchEnabledAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getOrderSearchEnabledAction', () => {
+describe('getInternalOrderSearchEnabledAction', () => {
   let pathYesStub;
   let pathNoStub;
 
@@ -18,26 +18,26 @@ describe('getOrderSearchEnabledAction', () => {
     };
   });
 
-  it('should set state.isOrderSearchEnabled to the value returned from the interactor', async () => {
+  it('should set state.isInternalOrderSearchEnabled to the value returned from the interactor', async () => {
     applicationContext
       .getUseCases()
-      .getOrderSearchEnabledInteractor.mockResolvedValue(true);
+      .getInternalOrderSearchEnabledInteractor.mockResolvedValue(true);
 
-    const result = await runAction(getOrderSearchEnabledAction, {
+    const result = await runAction(getInternalOrderSearchEnabledAction, {
       modules: {
         presenter,
       },
     });
 
-    expect(result.state.isOrderSearchEnabled).toEqual(true);
+    expect(result.state.isInternalOrderSearchEnabled).toEqual(true);
   });
 
   it('should return path.yes() if the interactor returns true', async () => {
     applicationContext
       .getUseCases()
-      .getOrderSearchEnabledInteractor.mockResolvedValue(true);
+      .getInternalOrderSearchEnabledInteractor.mockResolvedValue(true);
 
-    await runAction(getOrderSearchEnabledAction, {
+    await runAction(getInternalOrderSearchEnabledAction, {
       modules: {
         presenter,
       },
@@ -49,9 +49,9 @@ describe('getOrderSearchEnabledAction', () => {
   it('should return path.no() with alert warning if the interactor returns false', async () => {
     applicationContext
       .getUseCases()
-      .getOrderSearchEnabledInteractor.mockResolvedValue(false);
+      .getInternalOrderSearchEnabledInteractor.mockResolvedValue(false);
 
-    await runAction(getOrderSearchEnabledAction, {
+    await runAction(getInternalOrderSearchEnabledAction, {
       modules: {
         presenter,
       },

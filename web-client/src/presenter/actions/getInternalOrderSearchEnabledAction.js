@@ -1,23 +1,23 @@
 import { state } from 'cerebral';
 
 /**
- * Determines if order search is enabled
+ * Determines if internal order search is enabled
  *
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.path the cerebral path object
  * @param {object} providers.store the cerebral store object
  * @returns {object} next path in sequence based on if order search is enabled or not
  */
-export const getOrderSearchEnabledAction = async ({
+export const getInternalOrderSearchEnabledAction = async ({
   applicationContext,
   path,
   store,
 }) => {
   const orderSearchEnabled = await applicationContext
     .getUseCases()
-    .getOrderSearchEnabledInteractor(applicationContext);
+    .getInternalOrderSearchEnabledInteractor(applicationContext);
 
-  store.set(state.isOrderSearchEnabled, orderSearchEnabled);
+  store.set(state.isInternalOrderSearchEnabled, orderSearchEnabled);
 
   if (orderSearchEnabled) {
     return path.yes();
