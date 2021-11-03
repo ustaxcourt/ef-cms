@@ -74,12 +74,12 @@ export const PublicSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled={!featureFlagHelper.isExternalOrderSearchEnabled}
+              disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
               id="tab-order"
               tabName="order"
               title={
                 'Order' +
-                (featureFlagHelper.isExternalOrderSearchEnabled
+                (featureFlagHelper.isOrderSearchEnabledForRole
                   ? ''
                   : ' (Coming Soon)')
               }
