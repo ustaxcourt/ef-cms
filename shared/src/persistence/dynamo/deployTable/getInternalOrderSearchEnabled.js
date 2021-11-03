@@ -5,7 +5,7 @@ const client = require('../../dynamodbClientService');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @returns {Promise<string>} the value of the internal-order-search-enabled  flag on the dynamodb deploy table
+ * @returns {Promise<string>} the value of the internal-order-search-enabled flag on the dynamodb deploy table
  */
 exports.getInternalOrderSearchEnabled = async ({ applicationContext }) => {
   const result = await client.getFromDeployTable({

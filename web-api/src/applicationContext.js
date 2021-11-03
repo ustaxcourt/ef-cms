@@ -1875,7 +1875,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getInboxMessagesForUserInteractor,
         getInternalOrderSearchEnabledInteractor: applicationContext =>
           environment.stage === 'local'
-            ? false
+            ? true
             : getInternalOrderSearchEnabledInteractor(applicationContext),
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
