@@ -20,7 +20,7 @@ printf "\n${GREEN}Verify these env variables seem correct:${NC}\n"
 # # print all expected env variables
 for EXPECTED_ENV_VAR in "$@"
 do
-  if [[ ${EXPECTED_ENV_VAR} == *"AWS"* ]]; then
+  if [[ ${EXPECTED_ENV_VAR} == *"AWS"* ]] || [[ ${EXPECTED_ENV_VAR} == *"PASS"* ]]; then
     echo "- $EXPECTED_ENV_VAR=*******"
   else
     echo "- $EXPECTED_ENV_VAR=${!EXPECTED_ENV_VAR}"
