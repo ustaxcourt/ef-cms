@@ -3,7 +3,6 @@ import { defaultAdvancedSearchFormAction } from '../../actions/AdvancedSearch/de
 import { getExternalOrderSearchEnabledAction } from '../../actions/getExternalOrderSearchEnabledAction';
 import { getOpinionTypesAction } from '../../actions/getOpinionTypesAction';
 import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesAction';
-import { setAlertWarningAction } from '../../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../../actions/setOpinionTypesAction';
@@ -18,8 +17,4 @@ export const gotoPublicSearchSequence = [
   setOpinionTypesAction,
   setCurrentPageAction('PublicSearch'),
   getExternalOrderSearchEnabledAction,
-  {
-    no: [setAlertWarningAction],
-    yes: [],
-  },
 ];
