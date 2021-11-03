@@ -55,7 +55,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be false when the user is NOT internal and state.isOrderSearchEnabled is false', () => {
+    it('should be true when the user is external, state.isOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -66,34 +66,19 @@ describe('featureFlagHelper', () => {
       );
 
       const result = runCompute(featureFlagHelper, {
-        state: { isOrderSearchEnabled: false, user: mockExternalUser },
+        state: {
+          isExternalOrderSearchEnabled: true,
+          isOrderSearchEnabled: false,
+          user: mockExternalUser,
+        },
       });
 
       expect(result).toMatchObject({
-        isInternalOrderSearchEnabled: false,
+        isOrderSearchEnabledForRole: true,
       });
     });
-  });
 
-  describe('isExternalOrderSearchEnabled', () => {
-    it('should be true when state.isExternalOrderSearchEnabled is true', () => {
-      applicationContext.isFeatureEnabled.mockReturnValue(true);
-
-      const featureFlagHelper = withAppContextDecorator(
-        featureFlagHelperComputed,
-        {
-          ...applicationContext,
-        },
-      );
-
-      const { isExternalOrderSearchEnabled } = runCompute(featureFlagHelper, {
-        state: { isExternalOrderSearchEnabled: true, user: mockExternalUser },
-      });
-
-      expect(isExternalOrderSearchEnabled).toBe(true);
-    });
-
-    it('should be false when state.isExternalOrderSearchEnabled is false', () => {
+    it('should be true when there is no state.user, state.isOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -103,11 +88,40 @@ describe('featureFlagHelper', () => {
         },
       );
 
-      const { isExternalOrderSearchEnabled } = runCompute(featureFlagHelper, {
-        state: { isExternalOrderSearchEnabled: false, user: mockExternalUser },
+      const result = runCompute(featureFlagHelper, {
+        state: {
+          isExternalOrderSearchEnabled: true,
+          isOrderSearchEnabled: false,
+          user: {},
+        },
       });
 
-      expect(isExternalOrderSearchEnabled).toBe(false);
+      expect(result).toMatchObject({
+        isOrderSearchEnabledForRole: true,
+      });
+    });
+
+    it('should be false when the user is internal, state.isOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is false', () => {
+      applicationContext.isFeatureEnabled.mockReturnValue(false);
+
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const result = runCompute(featureFlagHelper, {
+        state: {
+          isExternalOrderSearchEnabled: false,
+          isOrderSearchEnabled: false,
+          user: mockInternalUser,
+        },
+      });
+
+      expect(result).toMatchObject({
+        isOrderSearchEnabledForRole: false,
+      });
     });
   });
 
