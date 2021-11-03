@@ -1,9 +1,11 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
+import { getExternalOrderSearchEnabledAction } from '../actions/getExternalOrderSearchEnabledAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getOrderSearchEnabledAction } from '../actions/getOrderSearchEnabledAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
+import { isInternalUserAction } from '../actions/isInternalUserAction';
 import { setAdvancedSearchPropsOnFormAction } from '../actions/AdvancedSearch/setAdvancedSearchPropsOnFormAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
@@ -23,9 +25,21 @@ export const gotoAdvancedSearchSequence =
     setOpinionTypesAction,
     setAdvancedSearchPropsOnFormAction,
     setCurrentPageAction('AdvancedSearch'),
-    getOrderSearchEnabledAction,
+    isInternalUserAction,
     {
-      no: [setAlertWarningAction],
-      yes: [],
+      no: [
+        getExternalOrderSearchEnabledAction,
+        {
+          no: [setAlertWarningAction],
+          yes: [],
+        },
+      ],
+      yes: [
+        getOrderSearchEnabledAction,
+        {
+          no: [setAlertWarningAction],
+          yes: [],
+        },
+      ],
     },
   ]);
