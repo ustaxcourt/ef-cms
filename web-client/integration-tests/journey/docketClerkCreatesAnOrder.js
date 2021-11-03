@@ -55,8 +55,6 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    console.log('----', cerebralTest.docketNumber);
-
     const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
