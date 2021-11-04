@@ -178,9 +178,29 @@ Solution:
     ```bash
     npm run build:lambda:api
     ```
+
+
 ## Error deleting Lambda@Edge function
 Problem: 
 - Replicas are still deleting
 
 Solution: 
 - Wait an hour and then try again
+
+
+## User not found in persistence
+Problem: 
+- Smoketests are failing, when inspecting the network tab, the request to /users fails with error message 
+  ```
+  User <UUID> not found in persistence.
+  ```
+
+Solution: 
+- This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
+    ```bash
+    node shared/admin-tools/user/setup-test-users.js
+    ```
+    ```bash
+    cd web-api/
+    ./bulk-import-judge-users.sh <ENV> judge_users.csv
+    ```
