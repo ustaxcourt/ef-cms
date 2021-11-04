@@ -12,8 +12,10 @@ describe('featureFlagHelper', () => {
     role: ROLES.petitioner,
   };
 
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+
   describe('isOrderSearchEnabledForRole', () => {
-    it('should be true when the user is internal and state.isInternalOrderSearchEnabled is true', () => {
+    it('should be true when the user is internal and state.internal-order-search-enabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(true);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -24,7 +26,12 @@ describe('featureFlagHelper', () => {
       );
 
       const result = runCompute(featureFlagHelper, {
-        state: { isInternalOrderSearchEnabled: true, user: mockInternalUser },
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key]: true,
+          },
+          user: mockInternalUser,
+        },
       });
 
       expect(result).toMatchObject({
@@ -32,7 +39,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be false when the user is external, state.isInternalOrderSearchEnabled is true, and state.isExternalOrderSearchEnabled is false', () => {
+    it('should be false when the user is external, state.internal-order-search-enabled is true, and state.external-order-search-enabled is false', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -44,8 +51,10 @@ describe('featureFlagHelper', () => {
 
       const result = runCompute(featureFlagHelper, {
         state: {
-          isExternalOrderSearchEnabled: false,
-          isInternalOrderSearchEnabled: true,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key]: false,
+          },
           user: mockExternalUser,
         },
       });
@@ -55,7 +64,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be true when the user is external, state.isInternalOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
+    it('should be true when the user is external, state.internal-order-search-enabled is false and state.external-order-search-enabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -67,8 +76,10 @@ describe('featureFlagHelper', () => {
 
       const result = runCompute(featureFlagHelper, {
         state: {
-          isExternalOrderSearchEnabled: true,
-          isInternalOrderSearchEnabled: false,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key]: false,
+            [ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key]: true,
+          },
           user: mockExternalUser,
         },
       });
@@ -78,7 +89,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be true when the user is public, state.isInternalOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is true', () => {
+    it('should be true when the user is public, state.internal-order-search-enabled is false and state.external-order-search-enabled is true', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -90,8 +101,10 @@ describe('featureFlagHelper', () => {
 
       const result = runCompute(featureFlagHelper, {
         state: {
-          isExternalOrderSearchEnabled: true,
-          isInternalOrderSearchEnabled: false,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key]: false,
+            [ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key]: true,
+          },
           user: {},
         },
       });
@@ -101,7 +114,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be false when the user is internal, state.isInternalOrderSearchEnabled is false and state.isExternalOrderSearchEnabled is false', () => {
+    it('should be false when the user is internal, state.internal-order-search-enabled is false and state.external-order-search-enabled is false', () => {
       applicationContext.isFeatureEnabled.mockReturnValue(false);
 
       const featureFlagHelper = withAppContextDecorator(
@@ -113,8 +126,10 @@ describe('featureFlagHelper', () => {
 
       const result = runCompute(featureFlagHelper, {
         state: {
-          isExternalOrderSearchEnabled: false,
-          isInternalOrderSearchEnabled: false,
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key]: false,
+            [ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key]: false,
+          },
           user: mockInternalUser,
         },
       });
