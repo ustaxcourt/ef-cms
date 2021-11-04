@@ -12,13 +12,17 @@ exports.getFeatureFlagValueInteractor = async (
   applicationContext,
   { featureFlag },
 ) => {
-  if (Object.values(ALLOWLIST_FEATURE_FLAGS).includes(featureFlag)) {
-    return await applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue({ applicationContext, featureFlag });
-  } else {
-    throw new UnauthorizedError(
-      `Unauthorized: ${featureFlag} is not included in the allowlist`,
-    );
+  const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS);
+
+  for (let i = 0; i < allowlistFeatures.length; i++) {
+    if (allowlistFeatures[i].key === featureFlag) {
+      return await applicationContext
+        .getPersistenceGateway()
+        .getFeatureFlagValue({ applicationContext, featureFlag });
+    }
   }
+
+  throw new UnauthorizedError(
+    `Unauthorized: ${featureFlag} is not included in the allowlist`,
+  );
 };

@@ -28,7 +28,8 @@ export const getFeatureFlagValueFactoryAction =
 
     return path.no({
       alertWarning: {
-        message: FEATURE_FLAG_DISABLED_MESSAGES[featureFlagName],
+        message:
+          FEATURE_FLAG_DISABLED_MESSAGES[featureFlagName].disabledMessage,
       },
     });
   };

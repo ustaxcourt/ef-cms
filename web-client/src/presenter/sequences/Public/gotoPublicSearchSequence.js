@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { defaultAdvancedSearchFormAction } from '../../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
+import { getConstants } from '../../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../../actions/getOpinionTypesAction';
 import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesAction';
@@ -16,7 +17,9 @@ export const gotoPublicSearchSequence = [
   getOpinionTypesAction,
   setOpinionTypesAction,
   setCurrentPageAction('PublicSearch'),
-  getFeatureFlagValueFactoryAction('external-order-search-enabled'),
+  getFeatureFlagValueFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+  ),
   {
     no: [],
     yes: [],

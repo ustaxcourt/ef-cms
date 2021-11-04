@@ -14,7 +14,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
     const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
     });
 
     expect(
