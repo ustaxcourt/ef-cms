@@ -53,6 +53,11 @@ const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
+const FEATURE_FLAG_DISABLED_MESSAGES = {
+  internalOrderSearch:
+    "Order search has been disabled. You'll be notified when it's back up.",
+};
+
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
 const SERVICE_INDICATOR_TYPES = {
@@ -1220,6 +1225,7 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
+  FEATURE_FLAG_DISABLED_MESSAGES,
   US_STATES,
   US_STATES_OTHER,
   filter8684CategoryMap,
