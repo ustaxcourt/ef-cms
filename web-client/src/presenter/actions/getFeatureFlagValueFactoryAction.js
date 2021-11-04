@@ -9,15 +9,18 @@ import { state } from 'cerebral';
  * @returns {object} next path in sequence based on if order search is enabled or not
  */
 export const getFeatureFlagValueFactoryAction =
-  featureFlagObject =>
+  featureFlagNameConfig =>
   async ({ applicationContext, path, store }) => {
     const featureFlagEnabled = await applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor(applicationContext, {
-        featureFlag: featureFlagObject.key,
+        featureFlag: featureFlagNameConfig.key,
       });
 
-    store.set(state.featureFlags[featureFlagObject.key], featureFlagEnabled);
+    store.set(
+      state.featureFlags[featureFlagNameConfig.key],
+      featureFlagEnabled,
+    );
 
     if (featureFlagEnabled) {
       return path.yes();
@@ -25,7 +28,7 @@ export const getFeatureFlagValueFactoryAction =
 
     return path.no({
       alertWarning: {
-        message: featureFlagObject.disabledMessage,
+        message: featureFlagNameConfig.disabledMessage,
       },
     });
   };
