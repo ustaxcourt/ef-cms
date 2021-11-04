@@ -4,25 +4,42 @@ const {
 const {
   getFeatureFlagValueInteractor,
 } = require('./getFeatureFlagValueInteractor');
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 
 describe('getFeatureFlagValueInteractor', () => {
-  it('persistence method returns true, and interactor returns true', async () => {
+  it('should return true when the persistence method returns true', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getInternalOrderSearchEnabled.mockResolvedValue(true);
+      .getFeatureFlagValue.mockResolvedValue(true);
 
-    const result = await getFeatureFlagValueInteractor(applicationContext);
+    const result = await getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+    });
 
     expect(result).toBe(true);
   });
 
-  it('persistence method returns false, and interactor returns false', async () => {
+  it('should return false when the persistence method returns false', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getInternalOrderSearchEnabled.mockResolvedValue(false);
+      .getFeatureFlagValue.mockResolvedValue(false);
 
-    const result = await getFeatureFlagValueInteractor(applicationContext);
+    const result = await getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+    });
 
     expect(result).toBe(false);
+  });
+
+  it.skip('should throw an unauthorized error when the feature flag is not included in the allowlist', async () => {
+    const mockFeatureFlagDenied = 'woopsies';
+
+    const result = await getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: mockFeatureFlagDenied,
+    });
+
+    await expect(result).rejects.toThrow(
+      `Unauthorized: ${mockFeatureFlagDenied} is not included in the allowlist`,
+    );
   });
 });
