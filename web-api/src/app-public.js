@@ -64,8 +64,8 @@ const {
   getCaseForPublicDocketSearchLambda,
 } = require('./public-api/getCaseForPublicDocketSearchLambda');
 const {
-  getExternalOrderSearchEnabledLambda,
-} = require('./search/getExternalOrderSearchEnabledLambda');
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
 const {
   getMaintenanceModeLambda,
 } = require('./maintenance/getMaintenanceModeLambda');
@@ -141,11 +141,6 @@ app.get(
   lambdaWrapper(getCaseForPublicDocketSearchLambda),
 );
 
-app.get(
-  '/search/external-order-search-enabled',
-  lambdaWrapper(getExternalOrderSearchEnabledLambda),
-);
-
 app.post(
   '/public-api/cases/:docketNumber/generate-docket-record',
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
@@ -160,6 +155,12 @@ app.get(
   '/public-api/maintenance-mode',
   cors({ exposedHeaders: ['X-Terminal-User'] }),
   lambdaWrapper(getMaintenanceModeLambda),
+);
+
+// look here dummy
+app.get(
+  '/public-api/feature-flag/:featureFlag',
+  lambdaWrapper(getFeatureFlagValueLambda),
 );
 
 exports.app = app;
