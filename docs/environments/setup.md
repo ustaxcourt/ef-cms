@@ -154,4 +154,4 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ./bulk-import-judge-users.sh <ENV> judge_users.csv
     ```
 
-See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
+See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
