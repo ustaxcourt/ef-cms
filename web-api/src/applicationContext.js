@@ -523,6 +523,9 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
+  getExternalOrderSearchEnabled,
+} = require('../../shared/src/persistence/dynamo/deployTable/getExternalOrderSearchEnabled');
+const {
   getExternalOrderSearchEnabledInteractor,
 } = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
 const {
@@ -1372,6 +1375,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getExternalOrderSearchEnabled,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
