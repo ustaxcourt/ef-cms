@@ -53,9 +53,17 @@ const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
+// todo should these two entity constant objects be combined into one?
 const FEATURE_FLAG_DISABLED_MESSAGES = {
+  externalOrderSearch:
+    "Order search has been disabled. You'll be notified when it's back up.",
   internalOrderSearch:
     "Order search has been disabled. You'll be notified when it's back up.",
+};
+
+const FEATURE_FLAGS = {
+  EXTERNAL_ORDER_SEARCH: 'externalOrderSearch',
+  INTERNAL_ORDER_SEARCH: 'internalOrderSearch',
 };
 
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
@@ -1226,6 +1234,7 @@ module.exports = deepFreeze({
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
   FEATURE_FLAG_DISABLED_MESSAGES,
+  FEATURE_FLAGS,
   US_STATES,
   US_STATES_OTHER,
   filter8684CategoryMap,

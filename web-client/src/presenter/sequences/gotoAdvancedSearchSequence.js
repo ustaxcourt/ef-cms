@@ -1,8 +1,8 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
-import { getExternalOrderSearchEnabledAction } from '../actions/getExternalOrderSearchEnabledAction';
-import { getInternalOrderSearchEnabledAction } from '../actions/getInternalOrderSearchEnabledAction';
+import { getConstants } from '../../getConstants';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isInternalUserAction } from '../actions/isInternalUserAction';
@@ -12,6 +12,8 @@ import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesA
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+
+const { FEATURE_FLAGS } = getConstants();
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -28,14 +30,14 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getExternalOrderSearchEnabledAction,
+        getFeatureFlagValueFactoryAction(FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getInternalOrderSearchEnabledAction,
+        getFeatureFlagValueFactoryAction(FEATURE_FLAGS.INTERNAL_ORDER_SEARCH),
         {
           no: [setAlertWarningAction],
           yes: [],
