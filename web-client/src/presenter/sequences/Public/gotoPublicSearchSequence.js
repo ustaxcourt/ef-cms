@@ -18,7 +18,7 @@ export const gotoPublicSearchSequence = [
   setOpinionTypesAction,
   setCurrentPageAction('PublicSearch'),
   getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
   ),
   {
     no: [],
