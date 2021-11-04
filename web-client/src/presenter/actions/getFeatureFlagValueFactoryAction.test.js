@@ -7,9 +7,8 @@ describe('getFeatureFlagValueFactoryAction', () => {
   let pathYesStub;
   let pathNoStub;
 
-  const mockFeatureFlagName = 'internalOrderSearch';
-  const { ALLOWLIST_FEATURE_FLAGS, FEATURE_FLAG_DISABLED_MESSAGES } =
-    applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const mockFeatureFlagObject = ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH;
 
   beforeAll(() => {
     pathYesStub = jest.fn();
@@ -23,13 +22,13 @@ describe('getFeatureFlagValueFactoryAction', () => {
   });
 
   it('should set the value of state.featureFlags.<feature_flag_name> to the value returned from the interactor', async () => {
-    for (const featureFlag of Object.values(ALLOWLIST_FEATURE_FLAGS)) {
+    for (const feature of Object.values(ALLOWLIST_FEATURE_FLAGS)) {
       applicationContext
         .getUseCases()
         .getFeatureFlagValueInteractor.mockResolvedValue(true);
 
       const result = await runAction(
-        getFeatureFlagValueFactoryAction(featureFlag),
+        getFeatureFlagValueFactoryAction(feature),
         {
           modules: {
             presenter,
@@ -37,7 +36,7 @@ describe('getFeatureFlagValueFactoryAction', () => {
         },
       );
 
-      expect(result.state.featureFlags[featureFlag]).toEqual(true);
+      expect(result.state.featureFlags[feature.key]).toEqual(true);
     }
   });
 
@@ -46,7 +45,7 @@ describe('getFeatureFlagValueFactoryAction', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockResolvedValue(true);
 
-    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagName), {
+    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagObject), {
       modules: {
         presenter,
       },
@@ -60,7 +59,7 @@ describe('getFeatureFlagValueFactoryAction', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockResolvedValue(false);
 
-    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagName), {
+    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagObject), {
       modules: {
         presenter,
       },
@@ -75,14 +74,14 @@ describe('getFeatureFlagValueFactoryAction', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockResolvedValue(false);
 
-    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagName), {
+    await runAction(getFeatureFlagValueFactoryAction(mockFeatureFlagObject), {
       modules: {
         presenter,
       },
     });
 
     expect(pathNoStub.mock.calls[0][0].alertWarning.message).toEqual(
-      FEATURE_FLAG_DISABLED_MESSAGES[mockFeatureFlagName],
+      mockFeatureFlagObject.disabledMessage,
     );
   });
 });

@@ -15,7 +15,7 @@ import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/val
 
 export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
   getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key,
+    getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
   ),
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
