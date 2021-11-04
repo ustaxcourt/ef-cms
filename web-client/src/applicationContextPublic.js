@@ -48,7 +48,7 @@ import {
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
-import { getExternalOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getExternalOrderSearchEnabledProxy';
+import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
@@ -79,7 +79,7 @@ const allUseCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
-  getExternalOrderSearchEnabledInteractor,
+  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,

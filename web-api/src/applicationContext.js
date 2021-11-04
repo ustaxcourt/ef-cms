@@ -523,11 +523,11 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
-  getExternalOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getExternalOrderSearchEnabled');
+  getFeatureFlagValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
 const {
-  getExternalOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
+  getFeatureFlagValueInteractor,
+} = require('../../shared/src/business/useCases/featureFlag/getFeatureFlagValueInteractor');
 const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
@@ -543,12 +543,6 @@ const {
 const {
   getInboxMessagesForUserInteractor,
 } = require('../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor');
-const {
-  getInternalOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getInternalOrderSearchEnabled');
-const {
-  getInternalOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getInternalOrderSearchEnabledInteractor');
 const {
   getInternalUsers,
 } = require('../../shared/src/persistence/dynamo/users/getInternalUsers');
@@ -1375,7 +1369,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
-    getExternalOrderSearchEnabled,
+    getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1455,7 +1449,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
-  getInternalOrderSearchEnabled,
   getInternalUsers,
   getLimiterByKey,
   getMessageById,
@@ -1870,17 +1863,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
-        getExternalOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getExternalOrderSearchEnabledInteractor(applicationContext),
+        getFeatureFlagValueInteractor,
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
-        getInternalOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getInternalOrderSearchEnabledInteractor(applicationContext),
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
         getJudgeForUserChambersInteractor,

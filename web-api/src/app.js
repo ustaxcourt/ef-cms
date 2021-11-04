@@ -198,9 +198,6 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
-  getExternalOrderSearchEnabledLambda,
-} = require('./search/getExternalOrderSearchEnabledLambda');
-const {
   getFeatureFlagValueLambda,
 } = require('./featureFlag/getFeatureFlagValueLambda');
 const {
@@ -209,9 +206,6 @@ const {
 const {
   getInboxMessagesForUserLambda,
 } = require('./messages/getInboxMessagesForUserLambda');
-const {
-  getInternalOrderSearchEnabledLambda,
-} = require('./search/getInternalOrderSearchEnabledLambda');
 const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
@@ -895,22 +889,6 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
-  );
-}
-
-/**
- * search
- */
-{
-  app.get(
-    '/search/internal-order-search-enabled',
-    lambdaWrapper(getInternalOrderSearchEnabledLambda),
-  );
-}
-{
-  app.get(
-    '/search/external-order-search-enabled',
-    lambdaWrapper(getExternalOrderSearchEnabledLambda),
   );
 }
 

@@ -1,7 +1,6 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
-import { getConstants } from '../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
@@ -12,8 +11,6 @@ import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesA
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
-
-const { ALLOWLIST_FEATURE_FLAGS } = getConstants();
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -30,18 +27,14 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getFeatureFlagValueFactoryAction(
-          ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
-        ),
+        getFeatureFlagValueFactoryAction('external-order-search'),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getFeatureFlagValueFactoryAction(
-          ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
-        ),
+        getFeatureFlagValueFactoryAction('internal-order-search'),
         {
           no: [setAlertWarningAction],
           yes: [],
