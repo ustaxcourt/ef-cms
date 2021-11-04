@@ -207,6 +207,9 @@ const {
   getInboxMessagesForUserLambda,
 } = require('./messages/getInboxMessagesForUserLambda');
 const {
+  getInternalOrderSearchEnabledLambda,
+} = require('./search/getInternalOrderSearchEnabledLambda');
+const {
   getIrsPractitionersBySearchKeyLambda,
 } = require('./users/getIrsPractitionersBySearchKeyLambda');
 const {
@@ -218,9 +221,6 @@ const {
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
-const {
-  getOrderSearchEnabledLambda,
-} = require('./search/getOrderSearchEnabledLambda');
 const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
@@ -900,8 +900,8 @@ app.get(
  */
 {
   app.get(
-    '/search/order-search-enabled',
-    lambdaWrapper(getOrderSearchEnabledLambda),
+    '/search/internal-order-search-enabled',
+    lambdaWrapper(getInternalOrderSearchEnabledLambda),
   );
 }
 {

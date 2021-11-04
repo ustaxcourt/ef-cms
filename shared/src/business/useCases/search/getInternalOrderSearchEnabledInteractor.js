@@ -1,12 +1,12 @@
 /**
- * getOrderSearchEnabledInteractor
+ * getInternalOrderSearchEnabledInteractor
  *
  * @param {object} applicationContext the application context
  * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
  */
 
-exports.getOrderSearchEnabledInteractor = async applicationContext => {
+exports.getInternalOrderSearchEnabledInteractor = async applicationContext => {
   return await applicationContext
     .getPersistenceGateway()
-    .getOrderSearchEnabled({ applicationContext });
+    .getInternalOrderSearchEnabled({ applicationContext });
 };

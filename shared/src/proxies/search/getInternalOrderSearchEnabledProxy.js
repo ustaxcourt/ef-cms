@@ -1,14 +1,14 @@
 const { get } = require('../requests');
 
 /**
- * getOrderSearchEnabledInteractor
+ * getInternalOrderSearchEnabledInteractor
  *
  * @param {object} applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getOrderSearchEnabledInteractor = applicationContext => {
+exports.getInternalOrderSearchEnabledInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/search/order-search-enabled',
+    endpoint: '/search/internal-order-search-enabled',
   });
 };
