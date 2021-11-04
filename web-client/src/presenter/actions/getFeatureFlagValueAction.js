@@ -8,27 +8,25 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {object} next path in sequence based on if order search is enabled or not
  */
-export const getFeatureFlagValueAction = async ({
-  applicationContext,
-  path,
-  store,
-}) => {
-  const featureFlagEnabled = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext);
+export const getFeatureFlagValueAction =
+  featureFlagName =>
+  async ({ applicationContext, path, store }) => {
+    const { FEATURE_FLAG_DISABLED_MESSAGES } =
+      applicationContext.getConstants();
 
-  // todo: update this to an object that contains each feature flag name
-  store.set(state.isInternalOrderSearchEnabled, featureFlagEnabled);
+    const featureFlagEnabled = await applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor(applicationContext);
 
-  if (featureFlagEnabled) {
-    return path.yes();
-  }
+    store.set(state.featureFlags[featureFlagName], featureFlagEnabled);
 
-  // todo: pass in a message specific to which feature flag
-  return path.no({
-    alertWarning: {
-      message:
-        "Order search has been disabled. You'll be notified when it's back up.",
-    },
-  });
-};
+    if (featureFlagEnabled) {
+      return path.yes();
+    }
+
+    return path.no({
+      alertWarning: {
+        message: FEATURE_FLAG_DISABLED_MESSAGES[featureFlagName],
+      },
+    });
+  };
