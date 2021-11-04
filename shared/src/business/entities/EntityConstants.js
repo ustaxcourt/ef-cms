@@ -53,16 +53,17 @@ const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-const FEATURE_FLAG_DISABLED_MESSAGES = {
-  externalOrderSearch:
-    "Order search has been disabled. You'll be notified when it's back up.",
-  internalOrderSearch:
-    "Order search has been disabled. You'll be notified when it's back up.",
-};
-
 const ALLOWLIST_FEATURE_FLAGS = {
-  EXTERNAL_ORDER_SEARCH: 'external-order-search-enabled',
-  INTERNAL_ORDER_SEARCH: 'internal-order-search-enabled',
+  EXTERNAL_ORDER_SEARCH: {
+    disabledMessage:
+      "Order search has been disabled. You'll be notified when it's back up.",
+    key: 'external-order-search-enabled',
+  },
+  INTERNAL_ORDER_SEARCH: {
+    disabledMessage:
+      "Order search has been disabled. You'll be notified when it's back up.",
+    key: 'internal-order-search-enabled',
+  },
 };
 
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
@@ -1232,7 +1233,6 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
-  FEATURE_FLAG_DISABLED_MESSAGES,
   ALLOWLIST_FEATURE_FLAGS,
   US_STATES,
   US_STATES_OTHER,

@@ -1,6 +1,7 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
+import { getConstants } from '../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
@@ -27,14 +28,18 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getFeatureFlagValueFactoryAction('external-order-search-enabled'),
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+        ),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getFeatureFlagValueFactoryAction('internal-order-search-enabled'),
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key,
+        ),
         {
           no: [setAlertWarningAction],
           yes: [],
