@@ -172,7 +172,7 @@
         }
       }
     },
-    "/search/order-search-enabled": {
+    "/search/internal-order-search-enabled": {
       "get": {
         "tags": [],
         "summary": "get order search enabled flag value",
