@@ -151,3 +151,34 @@ Problem:
 
 Solution: 
 - When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
+
+
+## Unable to delete cognito user pool
+Problem: 
+- The cognito user pools have `lifecycle.prevent_destroy` set to true, so you have to manually delete them via the AWS console. You will have to delete both `efcms-<ENV>` and `efcms-irs-<ENV>` pools.
+
+Solution: 
+- Go to Cognito
+- Select "Manage User Pools"
+- Select the user pool 
+- Click on App Integration > Domain Name
+- Click 'Delete Domain'
+- Go back to 'General Settings' for the cognito pool 
+- Click 'Delete Pool'
+
+
+## Error archiving file /template/lambdas/dist/<some-file.js>
+Problem: 
+- Files built by webpack during the deploy are not available
+
+Solution: 
+- Run the web-api webpack build to bundle the files into the expected folder
+    ```bash
+    npm run build:lambda:api
+    ```
+## Error deleting Lambda@Edge function
+Problem: 
+- Replicas are still deleting
+
+Solution: 
+- Wait an hour and then try again
