@@ -1,7 +1,7 @@
 [Return to Directory](./README.md)
 
 #### Account Passwords
-The password is set to the environment variable found in the [setup documentation](../docs/environments/setup.md).
+The password is set to the environment variable found in the [setup documentation](../environments/setup.md).
 
 ### Petitioner
 petitioner1@example.com – petitioner5@example.com
