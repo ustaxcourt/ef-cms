@@ -11,6 +11,16 @@
     "ips": []
   },
   {
+    "pk": "external-order-search-enabled",
+    "sk": "external-order-search-enabled",
+    "current": true
+  },
+  {
+    "pk": "internal-order-search-enabled",
+    "sk": "internal-order-search-enabled",
+    "current": true
+  },
+  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Las Vegas, Nevada",

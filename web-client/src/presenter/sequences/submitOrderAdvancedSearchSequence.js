@@ -13,7 +13,7 @@ import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submi
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
-  getFeatureFlagValueFactoryAction('internal-order-search'),
+  getFeatureFlagValueFactoryAction('internal-order-search-enabled'),
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [
