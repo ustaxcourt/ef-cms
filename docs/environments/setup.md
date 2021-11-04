@@ -87,25 +87,30 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
 EF-CMS currently has both the concept of a deployment at a domain as well as a named environment (stg, mig, prod, test). This section refers to the latter.
 
 1. Choose a name for the branch which will be used for deployments (henceforth `$BRANCH`). Examples are 'prod', 'develop', 'staging'.
-2. Choose a name for this environment (henceforth `$ENVIRONMENT`). Examples are 'prod', 'dev', 'stg'.
-3. Add CircleCI badge link to the README.md according to `$BRANCH`
-4. Create a new .sh in the `./env-for-circle` directory and follow the other file structures
-5. Add mention of your environment, if appropriate, to `SETUP.md`
-    - to create Lambda roles & policies:
-      - e.g. `cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh $ENVIRONMENT`
-    - mention your `DYNAMSOFT_PRODUCT_KEYS_$ENVIRONMENT`
-7. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
-8. Update CircleCI to have all the new environment variables needed.
 
-6. Setup account specific infrastructure if it has not already been run for the account.
+2. Choose a name for this environment (henceforth `$ENVIRONMENT`). Examples are 'prod', 'dev', 'stg'.
+
+3. Add CircleCI badge link to the README.md according to `$BRANCH`.
+
+4. Create a new .sh in the `./env-for-circle` directory and follow the other file structures.
+
+5. Add mention of your environment, if appropriate, to `setup.md`.
+
+6. Modify `.circleci/config.yml` to add `$ENVIRONMENT` to every step under `build-and-deploy` where you want it to be built and deployed.
+
+7. Update CircleCI to have all the new environment variables needed.
+
+8. Setup account specific infrastructure if it has not already been run for the account.
     ```bash
     npm run deploy:account-specific
     ```
-7. Setup environment specific infrastructure.
+
+9. Setup environment specific infrastructure.
     ```bash
     npm run deploy:environment-specific <ENVIRONMENT>
     ```
-8. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api step. In order to resolve the error, run:
+
+10. Attempt to run a deploy on circle. The deploy will fail on the deploy web-api step. In order to resolve the error, run:
     ```bash
     ./setup-s3-deploy-files.sh <ENVIRONMENT>
     ```
@@ -113,36 +118,46 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ./setup-s3-maintenance-file.sh <ENVIRONMENT>
     ```
     ```bash
-   ./web-api/verify-ses-email.sh
+    ./web-api/verify-ses-email.sh
     ```
-9. Setup the environment's migrate flag:
+
+11. Setup the environment's migrate flag:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
     ```
-10. Setup the environment's current color:
+
+12. Setup the environment's current color:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
     ```
-11. Setup the environment's order search flag:
+
+13. Setup the environment's order search flag:
     ```bash
     ./scripts/setup-order-search-flag.sh <ENVIRONMENT>
     ```
-12. Setup the environment's source table version:
+
+14. Setup the environment's source table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
     ```
-13. Setup the environment's destination table version:
+
+15. Setup the environment's destination table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
     ```
-8. Set the environment's maintenance-mode flag to **false**:
+
+16. Set the environment's maintenance-mode flag to **false**:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
-9. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
-10. Delete the destination ElasticSearch cluster from us-east-1.
-11. Rerun the circle deploy from step 8.
-12. If the environment is a test environment, setup test users and judges so smoketests will pass:
+
+17. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
+
+18. Delete the destination ElasticSearch cluster from us-east-1.
+
+19. Rerun the circle deploy from step 10.
+
+20. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
     node shared/admin-tools/user/setup-admin.js
     ```
