@@ -157,7 +157,6 @@ app.get(
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
-// look here dummy
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;
