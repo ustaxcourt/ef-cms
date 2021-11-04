@@ -92,8 +92,6 @@ else
   SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
 fi
 
-#s3 state bucket
-#s3 state key
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
