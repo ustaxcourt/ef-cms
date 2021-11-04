@@ -13,3 +13,5 @@ npm run destroy:client -- <ENV>
 npm run destroy:migration -- <ENV>
 npm run destroy:migration-cron -- <ENV>
 ```
+
+See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during the teardown process.

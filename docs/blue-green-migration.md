@@ -33,4 +33,5 @@ The application kicks off a migration automatically if it detects migrations tha
 1. Change the `destination-table-version` to the alternate of `alpha` or `beta` depending on whatever the `source-table-version` is in the `efcms-ENV-deploy` table. For instance, if the application is currently running on `alpha`, both the `source-table-version` and `destination-table-version` would be `alpha`. In this case, change the `destination-table-version` to `beta`.
 2. Change the value of the database record with the key of `migrate` to `true`. The system will automatically change this back to `false` after completing the migration.
 3. Perform the steps above for an [automated migration](#automated-migration-steps).
- 
+
+See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during the migration process.
