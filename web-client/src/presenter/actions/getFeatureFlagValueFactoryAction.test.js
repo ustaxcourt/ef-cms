@@ -8,7 +8,7 @@ describe('getFeatureFlagValueFactoryAction', () => {
   let pathNoStub;
 
   const mockFeatureFlagName = 'internalOrderSearch';
-  const { FEATURE_FLAG_DISABLED_MESSAGES, FEATURE_FLAGS } =
+  const { ALLOWLIST_FEATURE_FLAGS, FEATURE_FLAG_DISABLED_MESSAGES } =
     applicationContext.getConstants();
 
   beforeAll(() => {
@@ -23,7 +23,7 @@ describe('getFeatureFlagValueFactoryAction', () => {
   });
 
   it('should set the value of state.featureFlags.<feature_flag_name> to the value returned from the interactor', async () => {
-    for (const featureFlag of Object.values(FEATURE_FLAGS)) {
+    for (const featureFlag of Object.values(ALLOWLIST_FEATURE_FLAGS)) {
       applicationContext
         .getUseCases()
         .getFeatureFlagValueInteractor.mockResolvedValue(true);
