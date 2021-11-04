@@ -13,7 +13,7 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
-const { FEATURE_FLAGS } = getConstants();
+const { ALLOWLIST_FEATURE_FLAGS } = getConstants();
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -30,14 +30,18 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getFeatureFlagValueFactoryAction(FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH),
+        getFeatureFlagValueFactoryAction(
+          ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+        ),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getFeatureFlagValueFactoryAction(FEATURE_FLAGS.INTERNAL_ORDER_SEARCH),
+        getFeatureFlagValueFactoryAction(
+          ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
+        ),
         {
           no: [setAlertWarningAction],
           yes: [],

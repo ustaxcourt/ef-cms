@@ -6,11 +6,20 @@
  * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
  */
 
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
+const { UnauthorizedError } = require('../../../errors/errors');
+
 exports.getFeatureFlagValueInteractor = async (
   applicationContext,
   { featureFlag },
 ) => {
-  return await applicationContext
-    .getPersistenceGateway()
-    .getFeatureFlagValue({ applicationContext, featureFlag });
+  if (Object.values(ALLOWLIST_FEATURE_FLAGS).includes(featureFlag)) {
+    return await applicationContext
+      .getPersistenceGateway()
+      .getFeatureFlagValue({ applicationContext, featureFlag });
+  } else {
+    throw new UnauthorizedError(
+      `Unauthorized: ${featureFlag} is not included in the allowlist`,
+    );
+  }
 };

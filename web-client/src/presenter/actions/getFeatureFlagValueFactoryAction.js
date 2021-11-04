@@ -16,7 +16,9 @@ export const getFeatureFlagValueFactoryAction =
 
     const featureFlagEnabled = await applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext);
+      .getFeatureFlagValueInteractor(applicationContext, {
+        featureFlag: featureFlagName,
+      });
 
     store.set(state.featureFlags[featureFlagName], featureFlagEnabled);
 
