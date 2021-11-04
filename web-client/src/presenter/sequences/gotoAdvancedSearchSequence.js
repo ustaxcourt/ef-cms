@@ -27,14 +27,14 @@ export const gotoAdvancedSearchSequence =
     isInternalUserAction,
     {
       no: [
-        getFeatureFlagValueFactoryAction('external-order-search'),
+        getFeatureFlagValueFactoryAction('external-order-search-enabled'),
         {
           no: [setAlertWarningAction],
           yes: [],
         },
       ],
       yes: [
-        getFeatureFlagValueFactoryAction('internal-order-search'),
+        getFeatureFlagValueFactoryAction('internal-order-search-enabled'),
         {
           no: [setAlertWarningAction],
           yes: [],

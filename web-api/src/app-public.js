@@ -158,9 +158,6 @@ app.get(
 );
 
 // look here dummy
-app.get(
-  '/public-api/feature-flag/:featureFlag',
-  lambdaWrapper(getFeatureFlagValueLambda),
-);
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

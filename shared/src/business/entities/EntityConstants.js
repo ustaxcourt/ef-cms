@@ -61,8 +61,8 @@ const FEATURE_FLAG_DISABLED_MESSAGES = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
-  EXTERNAL_ORDER_SEARCH: 'external-order-search',
-  INTERNAL_ORDER_SEARCH: 'internal-order-search',
+  EXTERNAL_ORDER_SEARCH: 'external-order-search-enabled',
+  INTERNAL_ORDER_SEARCH: 'internal-order-search-enabled',
 };
 
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
