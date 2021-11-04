@@ -118,3 +118,36 @@ Solution:
 
 * https://github.com/aws/chalice/issues/1103
 * https://github.com/terraform-providers/terraform-provider-aws/issues/6352
+
+## Route53 Record Already Exists
+Problem: 
+```
+Error: [ERR]: Error building changeset: InvalidChangeBatch: [Tried to create resource record set [name='_243f260ea635a6dffe0db2c6cc1c1158.*************************.', type='CNAME'] but it already exists]
+```
+    
+Solution: 
+- Manually delete the Route53 record and rerun the deploy.
+
+
+## IAM Role already exists
+Problem:
+```
+Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role with name 		migration_role_<ENV> already exists.
+		status code: 409, request id: ***********
+
+	on migration.tf line 1, in resource "aws_iam_role" "migration_role":
+	1: resource "aws_iam_role" "migration_role" {
+```
+Solution: 
+- Delete the role in the AWS IAM console and rerun: 
+	```bash
+	npm run deploy:environment-specific <ENV>
+	````
+
+
+## Failing smoketests
+Problem:
+- Smoketests are failing on Circle
+
+Solution: 
+- When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
