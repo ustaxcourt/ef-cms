@@ -7,38 +7,30 @@ const {
 const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 
 describe('getFeatureFlagValueInteractor', () => {
-  it('should return true when the persistence method returns true', async () => {
+  it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {
+    const mockFeatureFlagValue = true;
     applicationContext
       .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(true);
+      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
     const result = await getFeatureFlagValueInteractor(applicationContext, {
       featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
     });
 
-    expect(result).toBe(true);
+    expect(
+      applicationContext.getPersistenceGateway().getFeatureFlagValue,
+    ).toHaveBeenCalled();
+    expect(result).toBe(mockFeatureFlagValue);
   });
 
-  it('should return false when the persistence method returns false', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(false);
-
-    const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
-    });
-
-    expect(result).toBe(false);
-  });
-
-  it.skip('should throw an unauthorized error when the feature flag is not included in the allowlist', async () => {
+  it('should throw an unauthorized error when the feature flag is not included in the allowlist', async () => {
     const mockFeatureFlagDenied = 'woopsies';
 
-    const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: mockFeatureFlagDenied,
-    });
-
-    await expect(result).rejects.toThrow(
+    await expect(
+      getFeatureFlagValueInteractor(applicationContext, {
+        featureFlag: mockFeatureFlagDenied,
+      }),
+    ).rejects.toThrow(
       `Unauthorized: ${mockFeatureFlagDenied} is not included in the allowlist`,
     );
   });

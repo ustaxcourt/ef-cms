@@ -1,3 +1,6 @@
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
+const { UnauthorizedError } = require('../../../errors/errors');
+
 /**
  * getFeatureFlagValueInteractor
  *
@@ -5,10 +8,6 @@
  * @param {string} providers.featureFlag the feature flag to get the value for
  * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
  */
-
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-
 exports.getFeatureFlagValueInteractor = async (
   applicationContext,
   { featureFlag },
