@@ -201,6 +201,9 @@ const {
   getExternalOrderSearchEnabledLambda,
 } = require('./search/getExternalOrderSearchEnabledLambda');
 const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -1093,5 +1096,10 @@ app.get(
  * maintenance-mode
  */
 app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+
+/**
+ * feature-flag
+ */
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;
