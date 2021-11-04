@@ -22,36 +22,37 @@ Problem:
 
 Solution:
 - It's likely that the IAM permissions within that environment have not been updated. Do so like such, substituting the environment in question for `stg`:
-```
-cd iam/terraform/account-specific/main && ../bin/deploy-app.sh && cd ../../environment-specific/main && ../bin/deploy-app.sh stg
-```
+
+  ```
+  cd iam/terraform/account-specific/main && ../bin/deploy-app.sh && cd ../../environment-specific/main && ../bin/deploy-app.sh stg
+  ```
 
 
 ## Issues with terraform deploy - first time
 Problem:
-```
-Error: Error applying plan:
+  ```
+  Error: Error applying plan:
 
-2 error(s) occurred:
+  2 error(s) occurred:
 
-* module.environment.aws_cloudfront_distribution.public_distribution: 1 error(s) occurred:
+  * module.environment.aws_cloudfront_distribution.public_distribution: 1 error(s) occurred:
 
-* aws_cloudfront_distribution.public_distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
+  * aws_cloudfront_distribution.public_distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
 	status code: 400, request id: 88163d5d-bb9b-43db-abd7-57ba923cb103
-* module.environment.aws_cloudfront_distribution.distribution: 1 error(s) occurred:
+  * module.environment.aws_cloudfront_distribution.distribution: 1 error(s) occurred:
 
-* aws_cloudfront_distribution.distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
+  * aws_cloudfront_distribution.distribution: error creating CloudFront Distribution: InvalidViewerCertificate: The specified SSL certificate doesn't exist, isn't in us-east-1 region, isn't valid, or doesn't include a valid certificate chain.
 	status code: 400, request id: 8fb7c31a-8e7a-4608-ac7b-10d118deae59
-```
+  ```
 Solution: 
 - Rerun the build.
 
 
 ## Issues with deleting lambdas during environment teardown
 Problem:
-```
-Error: Error deleting replication function:security_header_function_exp2
-```
+  ```
+  Error: Error deleting replication function:security_header_function_exp2
+  ```
 
 Solution: 
 - The lambda function is replicated to all edge locations and the deletion has to propagate throughout. Manually delete the specified lambda(s) in AWS OR wait about an hour and try running the teardown again.
@@ -67,13 +68,13 @@ Solution:
 
 ## Removing Cognito user pool during environment destruction
 Problem: 
-```
-Web API Terraform stderr:  	* module.ef-cms_apis.aws_cognito_user_pool_domain.main (destroy): 1 error occurred:
+  ```
+  Web API Terraform stderr:  	* module.ef-cms_apis.aws_cognito_user_pool_domain.main (destroy): 1 error occurred:
 
-Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParameter: 1 validation error(s) found.
+  Web API Terraform stderr:  	* aws_cognito_user_pool_domain.main: InvalidParameter: 1 validation error(s) found.
 
-Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
-```
+  Web API Terraform stderr:  - minimum field size of 1, DeleteUserPoolDomainInput.UserPoolId.
+  ```
 
 Solution:
 - If this error is seen during environment destruction, run `terraform state rm module.ef-cms_apis.aws_cognito_user_pool_domain.main` to delete the terraform state associated with that resource.
@@ -81,13 +82,13 @@ Solution:
 
 ## Terraform Deploy: Provided certificate does not exist
 Problem: 
-```
-Error: Error applying plan:
+  ```
+  Error: Error applying plan:
 
-1 error occurred:
+  1 error occurred:
 	* module.ef-cms_apis.aws_apigatewayv2_domain_name.websockets_domain: 1 error occurred:
 	* aws_apigatewayv2_domain_name.websockets_domain: error creating API Gateway v2 domain name: BadRequestException: The provided certificate does not exist.
-```
+  ```
 
 Solution:
 - This error happens due to the time it takes for AWS to get their certificates synchronized / checked. When this happens, re-run the deploy.
@@ -96,11 +97,11 @@ Solution:
 ## Create Cognito Users (CI deploy)
 Problem: 
 - When updating the environment variables, `ZONE_NAME` and `EFCMS_DOMAIN`, we ran into this error:
-```
-An error occurred (UsernameExistsException) when calling the SignUp operation: An account with the given email already exists.
-An error occurred (NotAuthorizedException) when calling the AdminConfirmSignUp operation: User cannot be confirmed. Current status is CONFIRMED
-curl: (3) URL using bad/illegal format or missing URL
-```
+  ```
+  An error occurred (UsernameExistsException) when calling the SignUp operation: An account with the given email already exists.
+  An error occurred (NotAuthorizedException) when calling the AdminConfirmSignUp operation: User cannot be confirmed. Current status is CONFIRMED
+  curl: (3) URL using bad/illegal format or missing URL
+  ```
 
 Solution: 
 - This happened when duplicate API gateways (i.e., `gateway_api_$ENV`) were created due to a Terraform state sync problem.
@@ -109,21 +110,20 @@ Solution:
 Problem:
 - We were observing errors in the `LogsToElasticSearch_info` Lambda monitoring tab; however, we weren't seeing any errors getting logged. Created a test function in the console in order to call the Lambda and observed this error:
 - Calling the invoke API action failed with this message:
-```
-Lambda was unable to decrypt the environment variables because KMS access was denied. Please check the function’s KMS key settings. KMS Exception: AccessDeniedExceptionKMS Message: The ciphertext refers to a customer master key that does not exist, does not exist in this region, or you are not allowed to access.
-```
+  ```
+  Lambda was unable to decrypt the environment variables because KMS access was denied. Please check the function’s KMS key settings. KMS Exception: AccessDeniedExceptionKMS Message: The ciphertext refers to a customer master key that does not exist, does not exist in this region, or you are not allowed to access.
+  ```
 
 Solution: 
 - Found these references of this being an open and unsolved issue, with the only solution that has worked being to delete the app (in this case deleting the Lambda Function) and redeploying.
-
-* https://github.com/aws/chalice/issues/1103
-* https://github.com/terraform-providers/terraform-provider-aws/issues/6352
+  * https://github.com/aws/chalice/issues/1103
+  * https://github.com/terraform-providers/terraform-provider-aws/issues/6352
 
 ## Route53 Record Already Exists
 Problem: 
-```
-Error: [ERR]: Error building changeset: InvalidChangeBatch: [Tried to create resource record set [name='_243f260ea635a6dffe0db2c6cc1c1158.*************************.', type='CNAME'] but it already exists]
-```
+  ```
+  Error: [ERR]: Error building changeset: InvalidChangeBatch: [Tried to create resource record set [name='_243f260ea635a6dffe0db2c6cc1c1158.*************************.', type='CNAME'] but it already exists]
+  ```
     
 Solution: 
 - Manually delete the Route53 record and rerun the deploy.
@@ -131,15 +131,16 @@ Solution:
 
 ## IAM Role already exists
 Problem:
-```
-Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role with name 		migration_role_<ENV> already exists.
+  ```
+  Error: Error creating IAM Role migration_role_<ENV>: EntityAlreadyExists: Role with name 		migration_role_<ENV> already exists.
 		status code: 409, request id: ***********
 
 	on migration.tf line 1, in resource "aws_iam_role" "migration_role":
 	1: resource "aws_iam_role" "migration_role" {
-```
+  ```
 Solution: 
-- Delete the role in the AWS IAM console and rerun: 
+- Delete the role in the AWS IAM console and rerun:
+
 	```bash
 	npm run deploy:environment-specific <ENV>
 	````
@@ -173,6 +174,7 @@ Problem:
 
 Solution: 
 - Run the web-api webpack build to bundle the files into the expected folder
+
     ```bash
     npm run build:lambda:api
     ```
