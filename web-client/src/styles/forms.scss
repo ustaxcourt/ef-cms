@@ -499,6 +499,10 @@ label.ustc-upload {
     }
   }
 
+  .select-react-element__placeholder {
+    color: #767676;
+  }
+
   .select-react-element__control--menu-is-open {
     outline: 2px dotted color($theme-color-base-light) !important;
     outline-offset: 3px;
