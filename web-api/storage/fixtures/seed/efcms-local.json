@@ -21,6 +21,11 @@
     "current": true
   },
   {
+    "pk": "internal-opinion-search-enabled",
+    "sk": "internal-opinion-search-enabled",
+    "current": true
+  },
+  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Las Vegas, Nevada",

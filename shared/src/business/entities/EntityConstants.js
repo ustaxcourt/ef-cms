@@ -59,6 +59,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
       "Order search has been disabled. You'll be notified when it's back up.",
     key: 'external-order-search-enabled',
   },
+  INTERNAL_OPINION_SEARCH: {
+    disabledMessage:
+      "Opinion search has been disabled. You'll be notified when it's back up.",
+    key: 'internal-opinion-search-enabled',
+  },
   INTERNAL_ORDER_SEARCH: {
     disabledMessage:
       "Order search has been disabled. You'll be notified when it's back up.",
