@@ -201,6 +201,5 @@ Solution:
     node shared/admin-tools/user/setup-test-users.js
     ```
     ```bash
-    cd web-api/
-    ./bulk-import-judge-users.sh <ENV> judge_users.csv
+    ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
     ```
