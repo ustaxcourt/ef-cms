@@ -92,6 +92,29 @@ resource "aws_acm_certificate" "api_gateway_cert_west" {
   }
 }
 
+resource "aws_route53_record" "route53_record_west" {
+  for_each = {
+    for dvo in aws_acm_certificate.api_gateway_cert_west.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  name            = each.value.name
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.zone.zone_id
+  records         = [each.value.record]
+  ttl             = 60
+  allow_overwrite = true
+}
+
+resource "aws_acm_certificate_validation" "wildcard_dns_validation_west" {
+  certificate_arn         = aws_acm_certificate.api_gateway_cert_west.arn
+  validation_record_fqdns = [for record in aws_route53_record.route53_record_west : record.fqdn]
+  provider                = aws.us-west-1
+}
+
 data "aws_s3_bucket_object" "api_public_blue_west_object" {
   depends_on = [null_resource.api_public_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id

@@ -6,7 +6,6 @@ provider "aws" {
   alias = "us-west-1"
 }
 
-
 module "ui-public-certificate" {
   source = "../../../iam/terraform/shared/certificates"
 
@@ -19,15 +18,8 @@ module "ui-public-certificate" {
   product_domain            = "EFCMS"
 }
 
-module "ui-certificate" {
-  source = "../../../iam/terraform/shared/certificates"
-
-  domain_name               = "*.${var.dns_domain}"
-  hosted_zone_name          = "${var.zone_name}."
-  certificate_name          = "wildcard.${var.dns_domain}"
-  environment               = var.environment
-  description               = "Certificate for wildcard.${var.dns_domain}"
-  product_domain            = "EFCMS"
+data "aws_acm_certificate" "private_certificate" {
+  domain = "*.${var.dns_domain}"
 }
 
 module "ui-green" {
@@ -41,7 +33,7 @@ module "ui-green" {
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
-  private_certificate    = module.ui-certificate
+  private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -59,7 +51,7 @@ module "ui-blue" {
   header_security_arn    = aws_lambda_function.header_security_lambda.qualified_arn
   strip_basepath_arn     = aws_lambda_function.strip_basepath_lambda.qualified_arn
   public_certificate     = module.ui-public-certificate
-  private_certificate    = module.ui-certificate
+  private_certificate    = data.aws_acm_certificate.private_certificate
   providers = {
     aws.us-east-1 = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
