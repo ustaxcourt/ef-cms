@@ -854,12 +854,12 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-pa11y-public:
           <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-smoketests-local:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
       # - deploy:
       #     requires:
       #       - build-client-integration
