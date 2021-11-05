@@ -1,19 +1,19 @@
 module.exports = [
-  // {
-  //   actions: [
-  //     'wait for #tab-case to be visible',
-  //     'set field #docket-number to 103-20',
-  //     'click element button#docket-search-button',
-  //     'wait for table.ustc-table to be visible',
-  //   ],
-  //   notes: 'checks a11y of advanced case search',
-  //   url: 'http://localhost:5678/',
-  // },
-  // {
-  //   actions: ['wait for .todays-orders to be visible'],
-  //   notes: 'checks a11y of todays orders',
-  //   url: 'http://localhost:5678/todays-orders',
-  // },
+  {
+    actions: [
+      'wait for #tab-case to be visible',
+      'set field #docket-number to 103-20',
+      'click element button#docket-search-button',
+      'wait for table.ustc-table to be visible',
+    ],
+    notes: 'checks a11y of advanced case search',
+    url: 'http://localhost:5678/',
+  },
+  {
+    actions: ['wait for .todays-orders to be visible'],
+    notes: 'checks a11y of todays orders',
+    url: 'http://localhost:5678/todays-orders',
+  },
   {
     actions: [
       'wait for #tab-order to be visible',
@@ -21,7 +21,8 @@ module.exports = [
       'wait for #order-search to be visible',
       'set field #order-search to dismissal',
       'wait for #order-date-range to be visible',
-      'set field  #order-date-range to customDates',
+      'set field #order-date-range to customDates',
+      'check field #order-date-range',
       'wait for #startDate-date-start to be visible',
       'set field #startDate-date-start to 08/01/2001',
       'check field #startDate-date-start',
@@ -29,9 +30,9 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced order search',
-    only: true,
     url: 'http://localhost:5678/',
   },
+  // todo, fix this one as well - requires having a check field #order-date-range
   // {
   //   actions: [
   //     'wait for #tab-order to be visible',
@@ -60,11 +61,11 @@ module.exports = [
   //   notes: 'checks a11y of advanced opinion search with results on sealed case',
   //   url: 'http://localhost:5678/',
   // },
-  // 'http://localhost:5678/todays-opinions',
-  // 'http://localhost:5678/health',
-  // 'http://localhost:5678/contact',
-  // 'http://localhost:5678/privacy',
-  // 'http://localhost:5678/email-verification-success',
-  // 'http://localhost:5678/email-verification-instructions',
-  // 'http://localhost:5678/maintenance',
+  'http://localhost:5678/todays-opinions',
+  'http://localhost:5678/health',
+  'http://localhost:5678/contact',
+  'http://localhost:5678/privacy',
+  'http://localhost:5678/email-verification-success',
+  'http://localhost:5678/email-verification-instructions',
+  'http://localhost:5678/maintenance',
 ];
