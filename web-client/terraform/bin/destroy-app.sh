@@ -2,14 +2,13 @@
 
 ENVIRONMENT=$1
 
-[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as a command line argument 1" && exit 1
-[ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
-[ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
-echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
-echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
+echo "  - ZONE_NAME=${ZONE_NAME}"
 
 tf_version=$(terraform --version)
 
@@ -19,7 +18,7 @@ if [[ ${tf_version} != *"1.0.9"* ]]; then
 fi
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="migrations-cron-${ENVIRONMENT}.tfstate"
+KEY="ui-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
@@ -38,23 +37,23 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-npm run build:assets
+DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
 
-set -eo pipefail
-npm run build:lambda:migration-cron
+if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
+then
+  IS_DYNAMSOFT_ENABLED="1"
+fi
 
-STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
-
-export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
-export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
-export TF_VAR_deploying_color=$DEPLOYING_COLOR
-export TF_VAR_destination_table=$DESTINATION_TABLE
+export TF_PLUGIN_CACHE_DIR=./terraform-cache
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
+export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
+export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_migrate_flag=$MIGRATE_FLAG
-export TF_VAR_source_table=$SOURCE_TABLE
-export TF_VAR_stream_arn=$STREAM_ARN
+export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
+export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
+export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan
-terraform apply -auto-approve
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve
