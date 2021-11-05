@@ -9,8 +9,7 @@ ENV=[ENV] FILE_NAME=[csv file path] ./scripts/bulk-import-judge-users.sh
 Locally:
 
 ```
-cd web-api
-ENV=local node bulkImportJudgeUsers.js [csv file name]
+ENV=local node ./scripts/data-import/judge/bulkImportJudgeUsers.js [csv file name]
 ```
 
 A CSV file is included in the repo: [judge_users.csv](../web-api/judge_users.csv). The data fields should be in the same order as the provided CSV file.
