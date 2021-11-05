@@ -214,6 +214,7 @@ export const OrderSearchForm = connect(
             <Button
               link
               className="padding-0 margin-top-2 text-center"
+              id="clear-search"
               onClick={e => {
                 e.preventDefault();
                 clearAdvancedSearchFormSequence({
