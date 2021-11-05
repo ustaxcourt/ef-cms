@@ -62,6 +62,7 @@ module.exports = [
     notes: 'checks a11y of advanced order search with no results',
     url: 'http://localhost:5678/',
   },
+  // TODO: Add back in when 8990 is complete
   // {
   //   actions: [
   //     'wait for #tab-opinion to be visible',
