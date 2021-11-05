@@ -56,7 +56,7 @@ const PARTY_VIEW_TABS = {
 const ALLOWLIST_FEATURE_FLAGS = {
   EXTERNAL_ORDER_SEARCH: {
     disabledMessage:
-      "Order search has been disabled. You'll be notified when it's back up.",
+      'Order search has been temporarily disabled. Please try again later.',
     key: 'external-order-search-enabled',
   },
   INTERNAL_OPINION_SEARCH: {
@@ -66,7 +66,7 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
   INTERNAL_ORDER_SEARCH: {
     disabledMessage:
-      "Order search has been disabled. You'll be notified when it's back up.",
+      'Order search has been temporarily disabled. Please try again later.',
     key: 'internal-order-search-enabled',
   },
 };
