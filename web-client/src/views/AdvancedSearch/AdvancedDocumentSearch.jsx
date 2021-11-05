@@ -108,6 +108,7 @@ export const AdvancedDocumentSearch = connect(
                   Judge
                 </label>
                 <BindedSelect
+                  aria-label="order-judge"
                   bind={`advancedSearchForm.${formType}.judge`}
                   className="usa-input"
                   id="order-judge"
