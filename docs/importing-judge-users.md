@@ -3,8 +3,7 @@
 To import judge users into the system in bulk:
 
 ```
-cd web-api
-./bulk-import-judge-users.sh [ENV] [csv file name]
+ENV=[ENV] FILE_NAME=[csv file path] ./scripts/bulk-import-judge-users.sh
 ```
 
 Locally:

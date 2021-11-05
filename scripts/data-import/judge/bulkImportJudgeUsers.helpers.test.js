@@ -1,6 +1,6 @@
 const { CSV_HEADERS, init } = require('./bulkImportJudgeUsers.helpers');
 
-jest.mock('./importHelpers', () => ({
+jest.mock('../../../web-api/importHelpers', () => ({
   getServices: jest.fn().mockResolvedValue({
     gateway_api: 'http://example.com',
   }),
@@ -10,7 +10,7 @@ jest.mock('./importHelpers', () => ({
 jest.mock('axios');
 
 const axios = require('axios');
-const { readCsvFile } = require('./importHelpers');
+const { readCsvFile } = require('../../../web-api/importHelpers');
 
 let mockLegacyJudge;
 let mockCurrentJudge;
