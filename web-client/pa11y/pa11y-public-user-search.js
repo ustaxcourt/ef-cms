@@ -6,8 +6,14 @@ module.exports = [
       'click element button#docket-search-button',
       'wait for table.ustc-table to be visible',
     ],
+    log: {
+      debug: console.log,
+      error: console.error,
+      info: console.info,
+    },
     notes: 'checks a11y of advanced case search',
     url: 'http://localhost:5678/',
+    wait: 15000,
   },
   {
     actions: [
