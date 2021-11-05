@@ -8,7 +8,7 @@ module.exports = {
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
   setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   verbose: false,
 };
