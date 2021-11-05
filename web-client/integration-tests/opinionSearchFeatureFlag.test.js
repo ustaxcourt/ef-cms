@@ -12,7 +12,7 @@ import {
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
 
-describe.skip('verify opinion search is disabled when feature flag is turned off', () => {
+describe('verify opinion search is disabled when feature flag is turned off', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
