@@ -1,10 +1,12 @@
 const { get } = require('lodash');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
+    const currentInvoke = getCurrentInvoke();
     // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
-      get(req, 'apiGateway.event.requestContext.authorizer.isTerminalUser') ===
+      get(currentInvoke, 'event.requestContext.authorizer.isTerminalUser') ===
       'true';
 
     const event = {

@@ -1,4 +1,6 @@
 const { lambdaWrapper } = require('./lambdaWrapper');
+jest.mock('@vendia/serverless-express');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 describe('lambdaWrapper', () => {
   let req, res;
@@ -139,9 +141,9 @@ describe('lambdaWrapper', () => {
   });
 
   it('sets X-Terminal-User if it was set in api gateway event context', async () => {
-    req.apiGateway = {
+    getCurrentInvoke.mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
-    };
+    });
     await lambdaWrapper(() => {
       return {
         body: 'hello world',
