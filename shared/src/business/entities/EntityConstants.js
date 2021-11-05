@@ -61,7 +61,7 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
   INTERNAL_OPINION_SEARCH: {
     disabledMessage:
-      "Opinion search has been disabled. You'll be notified when it's back up.",
+      'Opinion search has been temporarily disabled. Please try again later.',
     key: 'internal-opinion-search-enabled',
   },
   INTERNAL_ORDER_SEARCH: {
