@@ -65,6 +65,7 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -248,6 +249,14 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
   });
 };
 
+const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
+
+export const getFeatureFlagHelper = cerebralTest => {
+  return runCompute(featureFlagHelperComputed, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const getFormattedDocketEntriesForTest = async cerebralTest => {
   await cerebralTest.runSequence('gotoCaseDetailSequence', {
     docketNumber: cerebralTest.docketNumber,
@@ -317,6 +326,17 @@ export const setWhitelistIps = ips => {
       ips,
       pk: 'allowed-terminal-ips',
       sk: 'allowed-terminal-ips',
+    },
+    applicationContext,
+  });
+};
+
+export const setOpinionSearchEnabled = isEnabled => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: 'internal-opinion-search-enabled',
+      sk: 'internal-opinion-search-enabled',
     },
     applicationContext,
   });
