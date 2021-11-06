@@ -59,6 +59,11 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'Order search has been temporarily disabled. Please try again later.',
     key: 'external-order-search-enabled',
   },
+  INTERNAL_OPINION_SEARCH: {
+    disabledMessage:
+      'Opinion search has been temporarily disabled. Please try again later.',
+    key: 'internal-opinion-search-enabled',
+  },
   INTERNAL_ORDER_SEARCH: {
     disabledMessage:
       'Order search has been temporarily disabled. Please try again later.',

@@ -21,6 +21,11 @@
     "current": true
   },
   {
+    "pk": "internal-opinion-search-enabled",
+    "sk": "internal-opinion-search-enabled",
+    "current": true
+  },
+  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Las Vegas, Nevada",
@@ -15646,6 +15651,19 @@
     "pk": "user|b3e1941f-230a-47bb-80ec-6b561c1765cd",
     "userId": "b3e1941f-230a-47bb-80ec-6b561c1765cd",
     "email": "petitioner4@example.com"
+  },
+  {
+    "role": "petitioner",
+    "address2": "Blandtowne, AK 90210",
+    "phone": "234-234-2345",
+    "address1": "123 Domestic Bliss Lane",
+    "entityName": "User",
+    "name": "Test Petitioner 9",
+    "sk": "user|b2d1941f-230a-47bb-80ec-6b561c1765cd",
+    "section": "petitioner",
+    "pk": "user|b2d1941f-230a-47bb-80ec-6b561c1765cd",
+    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd",
+    "email": "petitioner9@example.com"
   },
   {
     "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
