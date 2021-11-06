@@ -18,7 +18,7 @@ describe('verify opinion search is disabled when feature flag is turned off', ()
   });
 
   afterAll(async () => {
-    await cerebralTest.closeSocket();
+    cerebralTest.closeSocket();
     await setOpinionSearchEnabled(true);
   });
 
