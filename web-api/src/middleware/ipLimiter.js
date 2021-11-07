@@ -1,11 +1,19 @@
+const { get } = require('lodash');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
+
 exports.ipLimiter =
   ({ applicationContext, key }) =>
   async (req, res, next) => {
+    const currentInvoke = getCurrentInvoke();
+
     const MAX_COUNT = parseInt(process.env.IP_LIMITER_THRESHOLD ?? '15');
     const WINDOW_TIME = parseInt(
       process.env.IP_LIMITER_WINDOW ?? `${60 * 1000}`,
     );
-    const { sourceIp } = req.apiGateway.event.requestContext.identity;
+    const sourceIp = get(
+      currentInvoke,
+      'event.requestContext.identity.sourceIp',
+    );
     const KEY = `ip-limiter-${key}|${sourceIp}`;
 
     const limiterCache = await applicationContext
