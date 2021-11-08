@@ -38,13 +38,15 @@ module.exports = [
       info: console.info,
     },
     notes: 'checks a11y of advanced order search',
-    timeout: 40001,
+    timeout: 80000,
     url: 'http://localhost:5678/',
   },
   {
     actions: [
       'wait for #tab-order to be visible',
       'click element #tab-order',
+      'wait for #clear-search to be visible',
+      'click element #clear-search',
       'wait for #clear-search to be visible',
       'click element #clear-search',
       'wait for #order-search to be visible',
@@ -59,7 +61,7 @@ module.exports = [
       info: console.info,
     },
     notes: 'checks a11y of advanced order search with no results',
-    timeout: 40000,
+    timeout: 80000,
     url: 'http://localhost:5678/',
   },
   // TODO: Add back in when 8990 is complete
