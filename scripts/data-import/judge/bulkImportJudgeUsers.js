@@ -1,11 +1,7 @@
 const { init } = require('./bulkImportJudgeUsers.helpers');
 
-if (!process.env.ENV) {
-  process.env.ENV = process.argv[1];
-}
-
 const main = async () => {
-  const file = process.argv[2];
+  const file = process.env.FILE_NAME;
   if (file) {
     const outputMap = {};
     await init(file, outputMap);
@@ -14,3 +10,4 @@ const main = async () => {
 };
 
 main();
+exports.main = main;

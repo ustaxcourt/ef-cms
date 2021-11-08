@@ -16,6 +16,17 @@ let mockLegacyJudge;
 let mockCurrentJudge;
 
 describe('bulkImportJudgeUsers helpers', () => {
+  const OLD_ENV = process.env;
+
+  beforeEach(() => {
+    jest.resetModules();
+    process.env = { ...OLD_ENV };
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
+  });
+
   beforeAll(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
     mockLegacyJudge = {
@@ -51,7 +62,9 @@ describe('bulkImportJudgeUsers helpers', () => {
       `;
 
     readCsvFile.mockReturnValue(csvOutput);
-    axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
+    axios.post.mockImplementation(() =>
+      Promise.resolve({ data: { userId: 123 }, status: 200 }),
+    );
   });
 
   describe('init', () => {
@@ -62,6 +75,18 @@ describe('bulkImportJudgeUsers helpers', () => {
 
     it('calls the endpoint to create a new jduge user record in persistence', async () => {
       await init({});
+      expect(axios.post).toHaveBeenCalledTimes(2);
+    });
+
+    it('invokes the local running service if env is local', async () => {
+      process.env.ENV = 'local';
+      await init({});
+      expect(axios.post).toHaveBeenCalledTimes(2);
+    });
+
+    it('logs an error if post request returns non 200 status code', async () => {
+      await init({});
+      axios.post.mockImplementation(() => Promise.resolve({ status: 200 }));
       expect(axios.post).toHaveBeenCalledTimes(2);
     });
   });
