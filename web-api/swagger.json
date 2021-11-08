@@ -172,19 +172,11 @@
         }
       }
     },
-    "/feature-flag/{featureFlag}": {
-      "parameters": [
-        {
-          "name": "featureFlag",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
+    "/search/order-search-enabled": {
       "get": {
         "tags": [],
-        "summary": "get feature flag value",
-        "description": "get feature flag value.\n",
+        "summary": "get order search enabled flag value",
+        "description": "get order search enabled flag value.\n",
         "produces": [
           "application/json"
         ],

@@ -8,13 +8,12 @@ import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const PublicSearch = connect(
   {
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
-    featureFlagHelper: state.featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence:
@@ -26,7 +25,6 @@ export const PublicSearch = connect(
   },
   function PublicSearch({
     advancedSearchTabChangeSequence,
-    featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
@@ -74,15 +72,10 @@ export const PublicSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
+              disabled
               id="tab-order"
               tabName="order"
-              title={
-                'Order' +
-                (featureFlagHelper.isOrderSearchEnabledForRole
-                  ? ''
-                  : ' (Coming Soon)')
-              }
+              title="Order (Coming Soon)"
             >
               <OrderSearchForm
                 submitAdvancedSearchSequence={

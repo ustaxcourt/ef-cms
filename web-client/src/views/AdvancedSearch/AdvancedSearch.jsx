@@ -95,12 +95,12 @@ export const AdvancedSearch = connect(
                 <SearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
+                disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
                 id="tab-order"
                 tabName={searchTabs.ORDER}
                 title={
                   'Order' +
-                  (featureFlagHelper.isOrderSearchEnabledForRole
+                  (featureFlagHelper.isInternalOrderSearchEnabled
                     ? ''
                     : ' (Coming Soon)')
                 }
@@ -113,12 +113,12 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                disabled={!featureFlagHelper.isOpinionSearchEnabled}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={
                   'Opinion' +
-                  (featureFlagHelper.isInternalOpinionSearchEnabled
+                  (featureFlagHelper.isOpinionSearchEnabled
                     ? ''
                     : ' (Coming Soon)')
                 }
@@ -166,20 +166,20 @@ export const AdvancedSearch = connect(
               >
                 <option value={searchTabs.CASE}>Case</option>
                 <option
-                  disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
+                  disabled={!featureFlagHelper.isInternalOrderSearchEnabled}
                   value={searchTabs.ORDER}
                 >
                   Order
-                  {featureFlagHelper.isOrderSearchEnabledForRole
+                  {featureFlagHelper.isInternalOrderSearchEnabled
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
                 <option
-                  disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                  disabled={!featureFlagHelper.isOpinionSearchEnabled}
                   value={searchTabs.OPINION}
                 >
                   Opinion
-                  {featureFlagHelper.isInternalOpinionSearchEnabled
+                  {featureFlagHelper.isOpinionSearchEnabled
                     ? ''
                     : ' (Coming Soon)'}
                 </option>

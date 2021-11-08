@@ -91,7 +91,8 @@ describe('unauthed user sees stricken docket entry', () => {
     unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
   });
 
-  describe('Unauthed user searches for stricken order', () => {
+  // To be enabled once public has permission to search for orders
+  describe.skip('Unauthed user searches for stricken order', () => {
     unauthedUserNavigatesToPublicSite(cerebralTest);
     unauthedUserSearchesForStrickenOrder(cerebralTest);
   });

@@ -157,7 +157,6 @@ export const CaseInfo = connect(
         {form.isPaper && (
           <TrialCity
             label="Trial location"
-            procedureType={form.procedureType}
             showDefaultOption={true}
             showHint={false}
             showRegularTrialCitiesHint={false}

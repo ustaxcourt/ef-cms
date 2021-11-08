@@ -1,11 +1,9 @@
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
-import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
+import { getOrderSearchEnabledAction } from '../actions/getOrderSearchEnabledAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
-import { isInternalUserAction } from '../actions/isInternalUserAction';
 import { setAdvancedSearchPropsOnFormAction } from '../actions/AdvancedSearch/setAdvancedSearchPropsOnFormAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
@@ -25,32 +23,9 @@ export const gotoAdvancedSearchSequence =
     setOpinionTypesAction,
     setAdvancedSearchPropsOnFormAction,
     setCurrentPageAction('AdvancedSearch'),
-    isInternalUserAction,
+    getOrderSearchEnabledAction,
     {
-      no: [
-        getFeatureFlagValueFactoryAction(
-          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
-        ),
-        {
-          no: [setAlertWarningAction],
-          yes: [],
-        },
-      ],
-      yes: [
-        getFeatureFlagValueFactoryAction(
-          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
-        ),
-        {
-          no: [setAlertWarningAction],
-          yes: [],
-        },
-        getFeatureFlagValueFactoryAction(
-          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH,
-        ),
-        {
-          no: [setAlertWarningAction],
-          yes: [],
-        },
-      ],
+      no: [setAlertWarningAction],
+      yes: [],
     },
   ]);

@@ -48,7 +48,7 @@ export const TrialSessionsTable = connect(
                   name="trialLocation"
                 >
                   <option value="">-Location-</option>
-                  <TrialCityOptions procedureType="AllPlusStandalone" />
+                  <TrialCityOptions />
                 </BindedSelect>
               </div>
               <div className="grid-col-3">

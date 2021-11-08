@@ -20,7 +20,6 @@ export const KeywordSearchField = connect(
         </p>
         <input
           aria-describedby="search-orders-header search-description"
-          aria-label="order-search"
           className="usa-input maxw-tablet-lg"
           id="order-search"
           name="keyword"

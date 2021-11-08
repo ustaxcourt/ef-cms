@@ -25,6 +25,7 @@ export const NonstandardForm = connect(
     helper,
     level,
     namespace,
+    trialCitiesHelper,
     updateSequence,
     validateSequence,
     validationErrors,
@@ -151,10 +152,12 @@ export const NonstandardForm = connect(
           <FormGroup errorText={validationErrors?.trialLocation}>
             <TrialCity
               label={helper[level].textInputLabel}
-              procedureType={caseDetail.procedureType}
               showDefaultOption={true}
               showRegularTrialCitiesHint={false}
               showSmallTrialCitiesHint={false}
+              trialCitiesByState={
+                trialCitiesHelper(caseDetail.procedureType).trialCitiesByState
+              }
               value={get(form, `${namespace}trialLocation`, '')}
               onChange={e => {
                 updateSequence({

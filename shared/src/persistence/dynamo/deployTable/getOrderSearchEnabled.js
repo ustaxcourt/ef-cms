@@ -1,19 +1,17 @@
 const client = require('../../dynamodbClientService');
 
 /**
- * getFeatureFlagValue
+ * getOrderSearchEnabled
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.featureFlag the feature flag to get
- * @returns {boolean} the boolean of the feature flag value
+ * @returns {Promise<string>} the value of the order-search-enabled flag on the dynamodb deploy table
  */
-
-exports.getFeatureFlagValue = async ({ applicationContext, featureFlag }) => {
+exports.getOrderSearchEnabled = async ({ applicationContext }) => {
   const result = await client.getFromDeployTable({
     Key: {
-      pk: featureFlag,
-      sk: featureFlag,
+      pk: 'order-search-enabled',
+      sk: 'order-search-enabled',
     },
     applicationContext,
   });

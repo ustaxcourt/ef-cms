@@ -38,6 +38,7 @@ export const StartCaseStep4 = connect(
     showModal,
     startCaseHelper,
     toggleCaseDifferenceSequence,
+    trialCitiesHelper,
     updateFormValueSequence,
     validateStartCaseWizardSequence,
   }) {
@@ -129,7 +130,6 @@ export const StartCaseStep4 = connect(
             <div className="blue-container">
               <TrialCity
                 label="Select a preferred trial location"
-                procedureType={form.procedureType}
                 showDefaultOption={true}
                 showHint={true}
                 showRegularTrialCitiesHint={
@@ -137,6 +137,9 @@ export const StartCaseStep4 = connect(
                 }
                 showSmallTrialCitiesHint={
                   startCaseHelper.showSmallTrialCitiesHint
+                }
+                trialCitiesByState={
+                  trialCitiesHelper(form.procedureType).trialCitiesByState
                 }
                 value={form.preferredTrialCity || ''}
                 onChange={e => {

@@ -1,14 +1,14 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * gets the value of the provided feature flag
+ * gets the external order search enabled flag
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getFeatureFlagValueLambda = event =>
+exports.getExternalOrderSearchEnabledLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext, event.pathParameters);
+      .getExternalOrderSearchEnabledInteractor(applicationContext);
   });

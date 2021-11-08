@@ -1,5 +1,4 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { props, state } from 'cerebral';
 import React from 'react';
@@ -20,11 +19,11 @@ export const TrialCity = connect(
   function TrialCity({
     label,
     onChange,
-    procedureType,
     showDefaultOption,
     showHint,
     showRegularTrialCitiesHint,
     showSmallTrialCitiesHint,
+    trialCitiesByState,
     validationErrors,
     value,
   }) {
@@ -65,7 +64,18 @@ export const TrialCity = connect(
           onChange={onChange}
         >
           {showDefaultOption && <option value="">-- Select --</option>}
-          <TrialCityOptions procedureType={procedureType} />
+          {Object.keys(trialCitiesByState).map(stateName => (
+            <optgroup key={`TrialCity-${stateName}`} label={stateName}>
+              {trialCitiesByState[stateName].map(trialCity => (
+                <option
+                  key={`TrialCity-${trialCity}-${stateName}`}
+                  value={trialCity}
+                >
+                  {trialCity}
+                </option>
+              ))}
+            </optgroup>
+          ))}
         </select>
       </FormGroup>
     );

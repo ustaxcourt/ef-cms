@@ -1,8 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { getConstants } from '../../getConstants';
-import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { getOrderSearchEnabledAction } from '../actions/getOrderSearchEnabledAction';
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
@@ -14,9 +13,7 @@ import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submi
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
-  ),
+  getOrderSearchEnabledAction,
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [

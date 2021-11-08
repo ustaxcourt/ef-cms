@@ -1,6 +1,5 @@
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
@@ -14,7 +13,6 @@ const helpers = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
-  featureFlagHelper,
   loadingHelper,
   menuHelper,
   publicCaseDetailHeaderHelper,
