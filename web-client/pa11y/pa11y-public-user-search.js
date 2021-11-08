@@ -47,8 +47,6 @@ module.exports = [
       'click element #tab-order',
       'wait for #clear-search to be visible',
       'click element #clear-search',
-      'wait for #clear-search to be visible',
-      'click element #clear-search',
       'wait for #order-search to be visible',
       'set field #order-search to meow',
       'wait for button#advanced-search-button to be visible',
