@@ -1,6 +1,7 @@
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -19,6 +20,7 @@ import {
   TODAYS_ORDERS_SORTS,
   TODAYS_ORDERS_SORT_DEFAULT,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -30,6 +32,7 @@ import {
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
+  getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext.js';
 import { User } from '../../shared/src/business/entities/User';
@@ -46,7 +49,9 @@ import {
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
@@ -75,6 +80,7 @@ const allUseCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getDocumentDownloadUrlInteractor,
+  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
@@ -92,6 +98,7 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -110,6 +117,7 @@ const frozenConstants = deepFreeze({
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRANSCRIPT_EVENT_CODE,
+  TRIAL_SESSION_SCOPE_TYPES,
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
@@ -161,6 +169,9 @@ const applicationContextPublic = {
       isInternalUser: User.isInternalUser,
       sortDocketEntries,
     };
+  },
+  isFeatureEnabled: featureName => {
+    return getIsFeatureEnabled(featureName, {}, getEnvironment().stage);
   },
 };
 

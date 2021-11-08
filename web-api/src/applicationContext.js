@@ -523,8 +523,11 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
-  getExternalOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getExternalOrderSearchEnabledInteractor');
+  getFeatureFlagValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
+const {
+  getFeatureFlagValueInteractor,
+} = require('../../shared/src/business/useCases/featureFlag/getFeatureFlagValueInteractor');
 const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
@@ -582,12 +585,6 @@ const {
 const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
-const {
-  getOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled');
-const {
-  getOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getOrderSearchEnabledInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -1372,6 +1369,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1457,7 +1455,6 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
-  getOrderSearchEnabled,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1866,10 +1863,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
-        getExternalOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getExternalOrderSearchEnabledInteractor(applicationContext),
+        getFeatureFlagValueInteractor,
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
@@ -1882,10 +1876,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
-        getOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,

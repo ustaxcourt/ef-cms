@@ -798,7 +798,7 @@ jobs:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
       - store_artifacts:
-          path: /root/project/cypress-smoketests-readonly/videos/
+          path: /root/project/cypress-readonly/videos/
 
   switch-colors:
     docker:
