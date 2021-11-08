@@ -1,18 +1,18 @@
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
+const { json, urlencoded } = require('body-parser');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { set } = require('lodash');
 
 const applicationContext = createApplicationContext();
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
