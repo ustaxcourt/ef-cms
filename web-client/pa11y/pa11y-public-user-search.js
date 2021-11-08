@@ -38,7 +38,7 @@ module.exports = [
       info: console.info,
     },
     notes: 'checks a11y of advanced order search',
-    timeout: 80000,
+    timeout: 120000,
     url: 'http://localhost:5678/',
   },
   {
@@ -61,7 +61,7 @@ module.exports = [
       info: console.info,
     },
     notes: 'checks a11y of advanced order search with no results',
-    timeout: 80000,
+    timeout: 120000,
     url: 'http://localhost:5678/',
   },
   // TODO: Add back in when 8990 is complete

@@ -21,7 +21,7 @@ const defaults = {
   'include-notices': true,
   'include-warnings': true,
   standard: 'WCAG2AA',
-  timeout: 120000,
+  timeout: 60000,
   wait: 10000,
 };
 
