@@ -18,7 +18,7 @@ export const lambdaWrapper = lambda => {
     };
 
     setTimeout(() => {
-      return res.status(504).send('Request timed out.');
+      return res.status(503).send('Response timeout.');
     }, 20 * 60 * 1000); // 20 minute timeout (for async lambdas)
 
     const response = await lambda({
