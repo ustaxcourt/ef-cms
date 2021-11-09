@@ -73,4 +73,16 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
         .key,
     ).toEqual(mockDocument.key);
   });
+
+  it.skip('sanitizes the provided document', async () => {
+    await uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: mockDocument,
+      onUploadProgress: () => {},
+    });
+
+    expect(
+      applicationContext.getUseCases().sanitizePdfInteractor.mock.calls[0][0]
+        .key,
+    ).toEqual(mockDocument.key);
+  });
 });
