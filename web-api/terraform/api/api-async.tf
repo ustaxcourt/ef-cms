@@ -121,7 +121,7 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
   request_templates = {
     "application/json" = <<EOF
 {
-"body" : $input.json('$'),
+"body" : "$input.body",
 "path" : "$context.path",
 "httpMethod" : "$context.httpMethod",
 "headers" : {
