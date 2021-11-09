@@ -33,49 +33,33 @@ exports.uploadExternalDocumentsInteractor = async (
 
   const docketEntryIdsAdded = [];
 
-  /**
-   * uploads a document and then immediately processes it to scan for viruses and validate the document
-   *
-   * @param {string} documentLabel the string identifying which documentFile and progressFunction
-   * @returns {Promise<string>} the key returned from a successful upload
-   */
-  const uploadDocumentAndMakeSafeInteractor = async documentLabel => {
-    const key = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient({
-        applicationContext,
-        document: documentFiles[documentLabel],
-        onUploadProgress: progressFunctions[documentLabel],
-      });
-
-    await applicationContext
-      .getUseCases()
-      .getStatusOfVirusScanInteractor(applicationContext, {
-        key,
-      });
-    await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
-        key,
-      });
-
-    return key;
-  };
-
-  documentMetadata.primaryDocumentId =
-    await uploadDocumentAndMakeSafeInteractor('primary');
+  documentMetadata.primaryDocumentId = applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: documentFiles['primary'],
+      onUploadProgress: progressFunctions['primary'],
+    });
   docketEntryIdsAdded.push(documentMetadata.primaryDocumentId);
 
   if (documentFiles.secondary) {
-    documentMetadata.secondaryDocument.docketEntryId =
-      await uploadDocumentAndMakeSafeInteractor('secondary');
+    documentMetadata.secondaryDocument.docketEntryId = await applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: documentFiles['secondary'],
+        onUploadProgress: progressFunctions['secondary'],
+      });
     docketEntryIdsAdded.push(documentMetadata.secondaryDocument.docketEntryId);
   }
 
   if (documentMetadata.hasSupportingDocuments) {
     for (let i = 0; i < documentMetadata.supportingDocuments.length; i++) {
       documentMetadata.supportingDocuments[i].docketEntryId =
-        await uploadDocumentAndMakeSafeInteractor(`primarySupporting${i}`);
+        await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+            document: documentFiles[`primarySupporting${i}`],
+            onUploadProgress: progressFunctions[`primarySupporting${i}`],
+          });
       docketEntryIdsAdded.push(
         documentMetadata.supportingDocuments[i].docketEntryId,
       );
@@ -89,7 +73,12 @@ exports.uploadExternalDocumentsInteractor = async (
       i++
     ) {
       documentMetadata.secondarySupportingDocuments[i].docketEntryId =
-        await uploadDocumentAndMakeSafeInteractor(`secondarySupporting${i}`);
+        await applicationContext
+          .getUseCases()
+          .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+            document: documentFiles[`secondarySupporting${i}`],
+            onUploadProgress: progressFunctions[`secondarySupporting${i}`],
+          });
       docketEntryIdsAdded.push(
         documentMetadata.secondarySupportingDocuments[i].docketEntryId,
       );

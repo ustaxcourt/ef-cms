@@ -2,12 +2,21 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  uploadDocumentAndMakeSafeInteractor,
+} = require('../uploadDocumentAndMakeSafeInteractor');
+const {
   uploadExternalDocumentsInteractor,
 } = require('./uploadExternalDocumentsInteractor');
 const { ROLES } = require('../../entities/EntityConstants');
 
 describe('uploadExternalDocumentsInteractor', () => {
   beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor.mockImplementation(
+        uploadDocumentAndMakeSafeInteractor,
+      );
+
     applicationContext
       .getUseCases()
       .fileExternalDocumentForConsolidatedInteractor.mockReturnValue({});
