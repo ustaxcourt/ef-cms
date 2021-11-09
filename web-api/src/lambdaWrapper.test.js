@@ -126,20 +126,6 @@ describe('lambdaWrapper', () => {
     );
   });
 
-  it('sets request timeout to 20 minutes', async () => {
-    await lambdaWrapper(() => {
-      return {
-        body: 'hello world',
-        headers: {
-          'Content-Type': 'application/pdf',
-        },
-      };
-    })(req, res);
-
-    expect(req.setTimeout).toHaveBeenCalled();
-    expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
-  });
-
   it('sets X-Terminal-User if it was set in api gateway event context', async () => {
     getCurrentInvoke.mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
