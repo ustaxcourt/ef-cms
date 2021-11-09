@@ -8,8 +8,11 @@ const year = process.argv[3] || d.getFullYear();
 let nextYear = year;
 const month = (process.argv[4] || d.getMonth() + 1 + '').padStart(2, '0');
 let nextMonth = (parseInt(month) + 1) % 12;
-if (nextMonth === 1) {
+if (nextMonth === 0) {
+  nextMonth = 12;
+} else if (nextMonth === 1) {
   nextYear++;
+  nextMonth++;
 }
 nextMonth = (nextMonth + '').padStart(2, '0');
 
