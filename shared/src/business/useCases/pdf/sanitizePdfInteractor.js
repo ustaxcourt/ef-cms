@@ -1,5 +1,3 @@
-const { StringDecoder } = require('string_decoder');
-
 /**
  * sanitizePdfInteractor
  *
@@ -20,7 +18,16 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
+  const form = pdfDoc.getForm();
+  form.flatten();
+  const pdfBytes = await pdfDoc.save();
 
-  // TODO: sanitize pdf document
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: pdfBytes,
+    key,
+    useTempBucket: false,
+  });
+
   return true;
 };
