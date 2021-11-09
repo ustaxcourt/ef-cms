@@ -55,53 +55,53 @@ describe('Create and serve a case to search for', () => {
   });
 });
 
-// describe('Case Advanced Search', () => {
-//   before(async () => {
-//     const results = await getUserToken(
-//       'docketclerk1@example.com',
-//       DEFAULT_ACCOUNT_PASS,
-//     );
-//     token = results.AuthenticationResult.IdToken;
-//   });
+describe('Case Advanced Search', () => {
+  before(async () => {
+    const results = await getUserToken(
+      'docketclerk1@example.com',
+      DEFAULT_ACCOUNT_PASS,
+    );
+    token = results.AuthenticationResult.IdToken;
+  });
 
-//   it('should be able to login', () => {
-//     login(token);
-//   });
+  it('should be able to login', () => {
+    login(token);
+  });
 
-//   it('should be able to search for case by petitioner name', () => {
-//     gotoAdvancedSearch();
-//     searchByPetitionerName(testData.testPetitionerName);
-//   });
+  it('should be able to search for case by petitioner name', () => {
+    gotoAdvancedSearch();
+    searchByPetitionerName(testData.testPetitionerName);
+  });
 
-//   it('should be able to search for case by docket number', () => {
-//     gotoAdvancedSearch();
-//     searchByDocketNumber(testData.createdPaperDocketNumber);
-//   });
-// });
+  it('should be able to search for case by docket number', () => {
+    gotoAdvancedSearch();
+    searchByDocketNumber(testData.createdPaperDocketNumber);
+  });
+});
 
-// describe('Practitioner Search', () => {
-//   before(async () => {
-//     const results = await getUserToken(
-//       'docketclerk1@example.com',
-//       DEFAULT_ACCOUNT_PASS,
-//     );
-//     token = results.AuthenticationResult.IdToken;
-//   });
+describe('Practitioner Search', () => {
+  before(async () => {
+    const results = await getUserToken(
+      'docketclerk1@example.com',
+      DEFAULT_ACCOUNT_PASS,
+    );
+    token = results.AuthenticationResult.IdToken;
+  });
 
-//   it('should be able to login', () => {
-//     login(token);
-//   });
+  it('should be able to login', () => {
+    login(token);
+  });
 
-//   it('should be able to search for a practitioner by name', () => {
-//     gotoAdvancedPractitionerSearch();
-//     searchByPractitionerName();
-//   });
+  it('should be able to search for a practitioner by name', () => {
+    gotoAdvancedPractitionerSearch();
+    searchByPractitionerName();
+  });
 
-//   it('should be able to search for for a practitioner by bar number', () => {
-//     gotoAdvancedPractitionerSearch();
-//     searchByPractitionerbarNumber(barNumberToSearchBy);
-//   });
-// });
+  it('should be able to search for for a practitioner by bar number', () => {
+    gotoAdvancedPractitionerSearch();
+    searchByPractitionerbarNumber(barNumberToSearchBy);
+  });
+});
 
 describe('Opinion Search', () => {
   before(async () => {

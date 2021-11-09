@@ -1,5 +1,4 @@
 const faker = require('faker');
-const { selectDocumentType } = require('./petitioner-dashboard');
 
 faker.seed(faker.datatype.number());
 
@@ -70,12 +69,9 @@ exports.addDocketEntryAndServeOpinion = testData => {
   cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('div.select-react-element__control').clear();
-  cy.get('#document-type').children().first().click();
-  cy.get('div.select-react-element__menu-list')
-    .find('div')
-    .contains('Memorandum Opinion')
-    .click();
+  cy.get('.select-react-element__clear-indicator').click();
+  cy.get('div#document-type').type('Memorandum Opinion{enter}');
+
   cy.get('#judge').select('Foley');
 
   testData.documentDescription = faker.company.catchPhrase();
