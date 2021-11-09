@@ -883,32 +883,32 @@ workflows:
                 - experimental5
                 - dawson
                 - migration
-      - migrate:
-          requires:
-            - deploy
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
-      - wait-for-reindex:
-          type: approval
-          requires:
-            - migrate
-      - disable-reindex-cron:
-          requires:
-            - wait-for-reindex
+      # - migrate:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - wait-for-reindex:
+      #     type: approval
+      #     requires:
+      #       - migrate
+      # - disable-reindex-cron:
+      #     requires:
+      #       - wait-for-reindex
       - smoketests:
           requires:
-            - disable-reindex-cron
+            - deploy
           filters:
             branches:
               only:

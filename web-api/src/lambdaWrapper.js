@@ -17,10 +17,6 @@ export const lambdaWrapper = lambda => {
       queryStringParameters: req.query,
     };
 
-    setTimeout(() => {
-      return res.status(504).send('Request timed out.');
-    }, 20 * 60 * 1000); // 20 minute timeout (for async lambdas)
-
     const response = await lambda({
       ...event,
       body: JSON.stringify(req.body),
