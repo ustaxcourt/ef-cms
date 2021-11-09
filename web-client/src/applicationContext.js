@@ -224,6 +224,7 @@ import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
+import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { saveCalendarNoteInteractor } from '../../shared/src/proxies/trialSessions/saveCalendarNoteProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
@@ -297,7 +298,6 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
-import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
