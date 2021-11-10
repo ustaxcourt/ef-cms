@@ -37,6 +37,8 @@ export const openCaseDocumentDownloadUrlAction = async ({
 
     if (isForIFrame) {
       store.set(state.iframeSrc, url);
+    } else if (useSameTab) {
+      window.location.href = url;
     } else {
       openedPdfWindow.location.href = url;
     }

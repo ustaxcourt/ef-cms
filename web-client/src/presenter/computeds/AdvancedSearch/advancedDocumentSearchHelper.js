@@ -11,9 +11,9 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     applicationContext.getConstants();
   const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
 
-  //   Clicking the Docket link from the Order Search results list for a case navigates the user to the public, non-logged in user view of the Docket Record in the same tab
-  // Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is not associated navigates the user to the public, non-logged in user view of the Docket Record in the same tab
-  // Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is associated navigates the user to the private practitioner view of the Docket Record in the same tab
+  //  yes Clicking the Docket link from the Order Search results list for a case navigates the user to the public, non-logged in user view of the Docket Record in the same tab
+  // wrong case view, opened in new tab \  Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is not associated navigates the user to the public, non-logged in user view of the Docket Record in the same tab
+  //correct case view, but opened in new tab Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is associated navigates the user to the private practitioner view of the Docket Record in the same tab
 
   // const useSameTabForCaseLink = isPublic || !isInternalUser;
   const dateRangeType = get(
