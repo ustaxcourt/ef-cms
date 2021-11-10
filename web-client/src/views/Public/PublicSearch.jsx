@@ -3,6 +3,7 @@ import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
 import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
 import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
 import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
+import { SearchBoilerplateText } from './SearchBoilerplateText';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -46,19 +47,7 @@ export const PublicSearch = connect(
             }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
-              <p className="margin-top-0">
-                Anyone can search for a case in our system for cases filed{' '}
-                <span className="text-semibold">on or after May 1, 1986</span>.
-              </p>
-              <ul>
-                <li>
-                  {' '}
-                  If you aren’t affiliated with a case, you will only see
-                  limited information about that case.
-                </li>
-                <li>Sealed cases will not display in search results.</li>
-              </ul>
-
+              <SearchBoilerplateText />
               <CaseSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicCaseAdvancedSearchSequence
@@ -75,6 +64,7 @@ export const PublicSearch = connect(
               tabName="order"
               title="Order (Coming Soon)"
             >
+              <SearchBoilerplateText />
               <OrderSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOrderAdvancedSearchSequence

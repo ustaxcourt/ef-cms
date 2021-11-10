@@ -7,6 +7,7 @@ import { OpinionSearchForm } from './OpinionSearchForm';
 import { OrderSearchForm } from './OrderSearchForm';
 import { PractitionerSearchForm } from './PractitionerSearchForm';
 import { PractitionerSearchResults } from './PractitionerSearchResults';
+import { SearchBoilerplateText } from '../Public/SearchBoilerplateText';
 import { SearchResults } from './SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -70,19 +71,7 @@ export const AdvancedSearch = connect(
               }}
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
-                <p className="margin-top-0">
-                  Anyone can search for a case in our system for cases filed{' '}
-                  <span className="text-semibold">on or after May 1, 1986</span>
-                  .
-                </p>
-                <ul>
-                  <li>
-                    {' '}
-                    If you aren’t affiliated with a case, you will only see
-                    limited information about that case.
-                  </li>
-                  <li>Sealed cases will not display in search results.</li>
-                </ul>
+                <SearchBoilerplateText />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
@@ -103,6 +92,7 @@ export const AdvancedSearch = connect(
                   (!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : '')
                 }
               >
+                <SearchBoilerplateText />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
@@ -184,19 +174,7 @@ export const AdvancedSearch = connect(
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (
               <>
-                <p className="margin-top-0">
-                  Anyone can search for a case in our system for cases filed{' '}
-                  <span className="text-semibold">on or after May 1, 1986</span>
-                  .
-                </p>
-                <ul>
-                  <li>
-                    {' '}
-                    If you aren’t affiliated with a case, you will only see
-                    limited information about that case.
-                  </li>
-                  <li>Sealed cases will not display in search results.</li>
-                </ul>
+                <SearchBoilerplateText />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
