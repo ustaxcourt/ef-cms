@@ -92,6 +92,7 @@ export const AdvancedSearch = connect(
                   (!featureFlagHelper.isSearchEnabled ? ' (Coming Soon)' : '')
                 }
               >
+                <SearchBoilerplateText />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence

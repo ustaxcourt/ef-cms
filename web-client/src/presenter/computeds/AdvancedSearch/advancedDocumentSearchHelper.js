@@ -5,20 +5,16 @@ import { state } from 'cerebral';
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const isPublic = get(state.isPublic);
-  const user = get(state.user);
-  const isInternalUser = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const { ADVANCED_SEARCH_TABS, DATE_RANGE_SEARCH_OPTIONS } =
     applicationContext.getConstants();
   const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
+
   //   Clicking the Docket link from the Order Search results list for a case navigates the user to the public, non-logged in user view of the Docket Record in the same tab
   // Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is not associated navigates the user to the public, non-logged in user view of the Docket Record in the same tab
   // Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is associated navigates the user to the private practitioner view of the Docket Record in the same tab
 
-  const useSameTabForDocumentLink = !isPublic && !isInternalUser;
   // const useSameTabForCaseLink = isPublic || !isInternalUser;
   const dateRangeType = get(
     state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
@@ -71,7 +67,6 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     showDateRangePicker,
     showManyResultsMessage,
     showSealedIcon,
-    useSameTabForDocumentLink,
   };
 };
 
