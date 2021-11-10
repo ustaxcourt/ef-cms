@@ -25,7 +25,7 @@ describe('Admissions Clerk modified petitioner address and email', () => {
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
 
-  it('blah', async () => {
+  it('updates petitioner address from domestic to international', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -61,7 +61,7 @@ describe('Admissions Clerk modified petitioner address and email', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  it('blah', async () => {
+  it('updates peitioner contact info to add email address', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
