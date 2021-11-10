@@ -1,9 +1,9 @@
+const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 const { set } = require('lodash');
@@ -22,14 +22,13 @@ app.use((req, res, next) => {
   }
   return next();
 });
-
+app.use(awsServerlessExpressMiddleware.eventContext());
 app.use(async (req, res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
-    const currentInvoke = getCurrentInvoke();
-    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
+    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
     const {
       get,
     } = require('../../shared/src/persistence/dynamodbClientService.js');
@@ -44,8 +43,8 @@ app.use(async (req, res, next) => {
 
     if (ips.includes('localhost')) {
       set(
-        currentInvoke,
-        'event.requestContext.authorizer.isTerminalUser',
+        req,
+        'apiGateway.event.requestContext.authorizer.isTerminalUser',
         'true',
       );
     }
