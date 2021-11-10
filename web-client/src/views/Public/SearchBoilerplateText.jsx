@@ -14,7 +14,10 @@ export const SearchBoilerplateText = connect(function SearchBoilerplateText() {
           If you aren’t affiliated with a case, you will only see limited
           information about that case.
         </li>
-        <li>Sealed cases and affiliated documents will not display in search results.</li>
+        <li>
+          Sealed cases and affiliated documents will not display in search
+          results.
+        </li>
       </ul>
     </>
   );
