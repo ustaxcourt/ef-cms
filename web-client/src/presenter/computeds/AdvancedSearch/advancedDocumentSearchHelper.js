@@ -19,7 +19,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   // Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is associated navigates the user to the private practitioner view of the Docket Record in the same tab
 
   const useSameTabForDocumentLink = !isPublic && !isInternalUser;
-  const useSameTabForCaseLink = isPublic || !isInternalUser;
+  // const useSameTabForCaseLink = isPublic || !isInternalUser;
   const dateRangeType = get(
     state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
   );
