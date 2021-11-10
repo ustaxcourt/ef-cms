@@ -199,7 +199,6 @@ module.exports = [
     ],
 
     notes: 'checks a11y of opinion search',
-    only: true,
     url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result-sunglasses',
   },
   'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
