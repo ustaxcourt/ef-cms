@@ -1,11 +1,7 @@
 const joi = require('joi');
 const {
   CONTACT_TYPES,
-  COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-  STATE_NOT_AVAILABLE,
-  US_STATES,
-  US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
   joiValidationDecorator,
