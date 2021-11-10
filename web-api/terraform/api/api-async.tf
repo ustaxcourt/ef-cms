@@ -93,7 +93,7 @@ request_templates = {
   "httpMethod" : "$context.httpMethod",
   "headers" : {
     "Authorization": "$input.params('Authorization')",
-    "Content-Type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -146,7 +146,7 @@ request_templates = {
   "httpMethod" : "$context.httpMethod",
   "headers" : {
     "Authorization": "$input.params('Authorization')",
-    "Content-Type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",
@@ -199,7 +199,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   "httpMethod" : "$context.httpMethod",
   "headers" : {
     "Authorization": "$input.params('Authorization')",
-    "Content-Type": "$input.params('Content-Type')"
+    "content-type": "$input.params('Content-Type')"
   },
   "requestContext" : {
     "account-id" : "$context.identity.accountId",

@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-const compression = require('compression');
 const cors = require('cors');
 const createApplicationContext = require('./applicationContext');
 const express = require('express');
@@ -11,7 +10,6 @@ const applicationContext = createApplicationContext();
 
 const app = express();
 
-app.use(compression());
 app.use(cors());
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
