@@ -1,8 +1,6 @@
 const fs = require('fs');
 const logger = require('./logger');
 const { transports } = require('winston');
-jest.mock('@vendia/serverless-express');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 describe('logger', () => {
   let req, res, NODE_ENV;
@@ -113,7 +111,7 @@ describe('logger', () => {
     process.env.NODE_ENV = 'production';
 
     // set by aws-serverless-express.getCurrentInvoke()
-    getCurrentInvoke.mockReturnValueOnce({
+    req.apiGateway = {
       context: {
         awsRequestId: 'c840522b-1e43-4d03-995c-014d199fa237',
       },
@@ -122,7 +120,7 @@ describe('logger', () => {
           requestId: '11ff704e-b35b-4472-8280-29be3fb957ca',
         },
       },
-    });
+    };
 
     req.get.mockImplementation(key => {
       if (key === 'x-amzn-trace-id') {
@@ -147,40 +145,39 @@ describe('logger', () => {
   it('doesn’t choke if request IDs are missing in production', async () => {
     process.env.NODE_ENV = 'production';
 
-    const mockReturnValues = [
-      { apiGateway: {} },
-      {
-        apiGateway: {
-          context: {},
-          event: {},
-        },
-      },
-      {
-        apiGateway: {
-          context: {},
-          event: {
-            requestContext: {},
+    await Promise.all(
+      [
+        { apiGateway: {} },
+        {
+          apiGateway: {
+            context: {},
+            event: {},
           },
         },
-      },
-    ];
+        {
+          apiGateway: {
+            context: {},
+            event: {
+              requestContext: {},
+            },
+          },
+        },
+      ].map(async partialConfig => {
+        const request = { ...req, ...partialConfig };
 
-    for (const apiGateway of mockReturnValues) {
-      getCurrentInvoke.mockReturnValueOnce(apiGateway);
-      const request = { ...req };
+        await subject(request, res);
 
-      await subject(request, res);
-
-      expect(request.locals.logger.defaultMeta.requestId).toBeDefined();
-      expect(
-        request.locals.logger.defaultMeta.requestId.apiGateway,
-      ).not.toBeDefined();
-      expect(
-        request.locals.logger.defaultMeta.requestId.applicationLoadBalancer,
-      ).not.toBeDefined();
-      expect(
-        request.locals.logger.defaultMeta.requestId.lambda,
-      ).not.toBeDefined();
-    }
+        expect(request.locals.logger.defaultMeta.requestId).toBeDefined();
+        expect(
+          request.locals.logger.defaultMeta.requestId.apiGateway,
+        ).not.toBeDefined();
+        expect(
+          request.locals.logger.defaultMeta.requestId.applicationLoadBalancer,
+        ).not.toBeDefined();
+        expect(
+          request.locals.logger.defaultMeta.requestId.lambda,
+        ).not.toBeDefined();
+      }),
+    );
   });
 });
