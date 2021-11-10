@@ -88,7 +88,7 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
 request_templates = {
     "application/json" = <<EOF
 {
-  "body" : "$input.body",
+  "body" : $input.json('$'),
   "path" : "$context.path",
   "httpMethod" : "$context.httpMethod",
   "headers" : {
@@ -141,7 +141,7 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
 request_templates = {
     "application/json" = <<EOF
 {
-  "body" : "$input.body",
+  "body" : $input.json('$'),
   "path" : "$context.path",
   "httpMethod" : "$context.httpMethod",
   "headers" : {
@@ -194,7 +194,7 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   request_templates = {
     "application/json" = <<EOF
 {
-  "body" : "$input.body",
+  "body" : $input.json('$'),
   "path" : "$context.path",
   "httpMethod" : "$context.httpMethod",
   "headers" : {
