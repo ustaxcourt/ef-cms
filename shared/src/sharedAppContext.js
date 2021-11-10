@@ -12,6 +12,7 @@ const getCognitoLoginUrl = () => {
 };
 
 const getEnvironment = () => ({
+  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   stage: process.env.STAGE || 'local',
 });
 
@@ -27,6 +28,20 @@ const chiefJudgeNameForSigning = 'Maurice B. Foley';
 const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
 module.exports = {
+  ERROR_MAP_429: {
+    'advanced-query-limiter': {
+      message: 'Please wait 1 minute before trying your search again',
+      title: 'Search is experiencing high traffic',
+    },
+    'ip-limiter': {
+      message: 'Please wait 1 minute before trying your search again.',
+      title: "You've reached your search limit",
+    },
+    'user-id-limiter': {
+      message: 'Please wait 1 minute before trying your search again',
+      title: 'Search is experiencing high traffic',
+    },
+  },
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,

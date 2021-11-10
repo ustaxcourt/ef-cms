@@ -33,7 +33,7 @@ export const SelectCriteria = connect(
               }}
             >
               <option value="">-- Select --</option>
-              <TrialCityOptions />
+              <TrialCityOptions procedureType="All" />
             </select>
           </div>
         </div>

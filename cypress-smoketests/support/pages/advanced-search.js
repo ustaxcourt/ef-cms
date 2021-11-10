@@ -52,7 +52,7 @@ exports.searchOrderByKeyword = keyword => {
 };
 
 exports.searchOpinionByKeyword = keyword => {
-  cy.get('input#opinion-search').type(keyword);
+  cy.get('input#order-search').type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
@@ -61,9 +61,7 @@ exports.createOpinion = () => {
   cy.get('#case-detail-menu-button').click();
   cy.get('#menu-button-upload-pdf').click();
   cy.get('#upload-description').type('A Smoketest Opinion');
-  cy.get('inputprimary-document-file').attachFile(
-    '../../fixtures/w3-dummy.pdf',
-  );
+  cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#save-uploaded-pdf-button').scrollIntoView().click();
 };
 
@@ -71,11 +69,9 @@ exports.addDocketEntryAndServeOpinion = testData => {
   cy.get('div.document-viewer--documents-list:last-child').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('#document-type').children().first().click();
-  cy.get('div.select-react-element__menu-list')
-    .find('div')
-    .contains('Memorandum Opinion')
-    .click();
+  cy.get('.select-react-element__clear-indicator').click();
+  cy.get('div#document-type').type('Memorandum Opinion{enter}');
+
   cy.get('#judge').select('Foley');
 
   testData.documentDescription = faker.company.catchPhrase();
