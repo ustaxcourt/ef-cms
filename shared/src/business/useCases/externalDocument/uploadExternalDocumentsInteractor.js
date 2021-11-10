@@ -9,11 +9,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {Array} providers.docketNumbersForFiling array of docket numbers for filing
  * @param {Array} providers.documentFiles array of file objects
  * @param {object} providers.documentMetadata metadata associated with the documents/cases
  * @param {string} providers.leadDocketNumber optional docket number representing the lead case in a consolidated set
  * @param {string} providers.progressFunctions callback functions for updating the progress indicator during file upload
- * @returns {Promise<Array>} the case(s) with the uploaded document(s) attached
+ * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
 exports.uploadExternalDocumentsInteractor = async (
   applicationContext,
@@ -33,7 +34,7 @@ exports.uploadExternalDocumentsInteractor = async (
 
   const docketEntryIdsAdded = [];
 
-  documentMetadata.primaryDocumentId = applicationContext
+  documentMetadata.primaryDocumentId = await applicationContext
     .getUseCases()
     .uploadDocumentAndMakeSafeInteractor(applicationContext, {
       document: documentFiles['primary'],
