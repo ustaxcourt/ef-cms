@@ -60,5 +60,5 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Acceptance criteria for the story has been met
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
- - [ ] Deployed to any Flexion environment for UX Review
+ - [ ] Deployed to any Flexion environment for Engineering Review
  - [ ] Deployed to the Court's migration environment

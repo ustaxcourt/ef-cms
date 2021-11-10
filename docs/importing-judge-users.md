@@ -3,15 +3,13 @@
 To import judge users into the system in bulk:
 
 ```
-cd web-api
-./bulk-import-judge-users.sh [ENV] [csv file name]
+ENV=[ENV] FILE_NAME=[csv file path] ./scripts/bulk-import-judge-users.sh
 ```
 
 Locally:
 
 ```
-cd web-api
-ENV=local node bulkImportJudgeUsers.js [csv file name]
+ENV=local FILE_NAME=[csv file name] node ./scripts/data-import/judge/bulkImportJudgeUsers.js 
 ```
 
 A CSV file is included in the repo: [judge_users.csv](../web-api/judge_users.csv). The data fields should be in the same order as the provided CSV file.

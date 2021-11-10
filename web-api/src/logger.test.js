@@ -110,7 +110,7 @@ describe('logger', () => {
   it('passes request IDs to event if set in production', async () => {
     process.env.NODE_ENV = 'production';
 
-    // set by aws-serverless-express.eventContext()
+    // set by aws-serverless-express.getCurrentInvoke()
     req.apiGateway = {
       context: {
         awsRequestId: 'c840522b-1e43-4d03-995c-014d199fa237',
