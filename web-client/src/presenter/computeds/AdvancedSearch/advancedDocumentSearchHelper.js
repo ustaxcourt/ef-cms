@@ -5,17 +5,18 @@ import { state } from 'cerebral';
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const isPublic = get(state.isPublic);
+  const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  const { ADVANCED_SEARCH_TABS, DATE_RANGE_SEARCH_OPTIONS } =
-    applicationContext.getConstants();
-  const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
+  
+  const { MAX_SEARCH_RESULTS, ADVANCED_SEARCH_TABS, DATE_RANGE_SEARCH_OPTIONS } = applicationContext.getConstants();
+
+  const isInternalUser = applicationContext.getUtilities().isInternalUser(role);
 
   //  yes Clicking the Docket link from the Order Search results list for a case navigates the user to the public, non-logged in user view of the Docket Record in the same tab
   // wrong case view, opened in new tab \  Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is not associated navigates the user to the public, non-logged in user view of the Docket Record in the same tab
   //correct case view, but opened in new tab Clicking the Docket link from the Order Search results list for a case to which the private/IRS practitioner is associated navigates the user to the private practitioner view of the Docket Record in the same tab
 
-  // const useSameTabForCaseLink = isPublic || !isInternalUser;
   const dateRangeType = get(
     state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
   );
@@ -63,6 +64,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     documentTypeVerbiage,
     formattedJudges,
     isPublic,
+    isInternalUser,
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
