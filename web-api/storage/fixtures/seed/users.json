@@ -531,6 +531,17 @@
     "entityName": "User"
   },
   {
+    "role": "petitioner",
+    "name": "Test Petitioner 9",
+    "section": "petitioner",
+    "userId": "b2d1941f-230a-47bb-80ec-6b561c1765cd",
+    "email": "petitioner9@example.com",
+    "address1": "123 Domestic Bliss Lane",
+    "address2": "Blandtowne, AK 90210",
+    "phone": "234-234-2345",
+    "entityName": "User"
+  },
+  {
     "role": "admissionsclerk",
     "name": "Test Admissions Clerk",
     "section": "admissions",

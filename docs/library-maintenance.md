@@ -3,6 +3,7 @@
 ## JavaScript Libraries
 
 `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
+  * NOTE: Do NOT update @vendia/serverless-express to >= 4.0.0, it currently has a bug in the way it calculates the content length of a request leading to malformed body objects in requests.
 
 `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
 

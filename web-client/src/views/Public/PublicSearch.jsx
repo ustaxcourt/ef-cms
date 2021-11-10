@@ -1,18 +1,21 @@
 import { BigHeader } from '../BigHeader';
 import { CaseSearchForm } from '../AdvancedSearch/CaseSearchForm';
 import { DocumentSearchResults } from '../AdvancedSearch/DocumentSearchResults';
+import { ErrorNotification } from '../ErrorNotification';
 import { OpinionSearchForm } from '../AdvancedSearch/OpinionSearchForm';
 import { OrderSearchForm } from '../AdvancedSearch/OrderSearchForm';
+import { SearchBoilerplateText } from './SearchBoilerplateText';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PublicSearch = connect(
   {
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
+    featureFlagHelper: state.featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence:
@@ -24,6 +27,7 @@ export const PublicSearch = connect(
   },
   function PublicSearch({
     advancedSearchTabChangeSequence,
+    featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
@@ -34,6 +38,7 @@ export const PublicSearch = connect(
         <BigHeader text="Search" />
 
         <section className="usa-section grid-container advanced-search">
+          <ErrorNotification />
           <SuccessNotification />
 
           <Tabs
@@ -46,19 +51,7 @@ export const PublicSearch = connect(
             }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
-              <p className="margin-top-0">
-                Anyone can search for a case in our system for cases filed{' '}
-                <span className="text-semibold">on or after May 1, 1986</span>.
-              </p>
-              <ul>
-                <li>
-                  {' '}
-                  If you aren’t affiliated with a case, you will only see
-                  limited information about that case.
-                </li>
-                <li>Sealed cases will not display in search results.</li>
-              </ul>
-
+              <SearchBoilerplateText />
               <CaseSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicCaseAdvancedSearchSequence
@@ -70,11 +63,17 @@ export const PublicSearch = connect(
               <SearchResults />
             </Tab>
             <Tab
-              disabled
+              disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
               id="tab-order"
               tabName="order"
-              title="Order (Coming Soon)"
+              title={
+                'Order' +
+                (featureFlagHelper.isOrderSearchEnabledForRole
+                  ? ''
+                  : ' (Coming Soon)')
+              }
             >
+              <SearchBoilerplateText />
               <OrderSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOrderAdvancedSearchSequence
