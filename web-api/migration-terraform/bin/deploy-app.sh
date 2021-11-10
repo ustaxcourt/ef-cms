@@ -6,10 +6,10 @@ ENVIRONMENT=$1
 [ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You set DESTINATION_TABLE as an environment variable" && exit 1
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="migrations-${ENVIRONMENT}.tfstate"
-LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+echo "Running terraform with the following environment configs:"
+echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
+echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 
 tf_version=$(terraform --version)
 
@@ -18,7 +18,13 @@ if [[ ${tf_version} != *"1.0.9"* ]]; then
   exit 1
 fi
 
+BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="migrations-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
 rm -rf .terraform
+
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
@@ -34,19 +40,17 @@ fi
 
 npm run build:assets
 
-# exit on any failure
 set -eo pipefail
 npm run build:lambda:migration
 
-# get the stream arn
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_stream_arn=$STREAM_ARN
-export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_source_table=$SOURCE_TABLE
+export TF_VAR_stream_arn=$STREAM_ARN
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan
