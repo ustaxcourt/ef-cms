@@ -932,6 +932,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  sendUpdatePetitionerCasesMessage,
+} = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
+const {
   serveCaseDocument,
 } = require('../../shared/src/business/utilities/serveCaseDocument');
 const {
@@ -1097,6 +1100,9 @@ const {
 const {
   updateOtherStatisticsInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor');
+const {
+  updatePetitionerCasesInteractor,
+} = require('../../shared/src/business/useCases/users/updatePetitionerCasesInteractor');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -1660,6 +1666,24 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
+    getMessageGateway: () => ({
+      sendUpdatePetitionerCasesMessage: ({
+        applicationContext: appContext,
+        user: userToSendTo,
+      }) => {
+        if (environment.stage === 'local') {
+          updatePetitionerCasesInteractor({
+            applicationContext: appContext,
+            user: userToSendTo,
+          });
+        } else {
+          sendUpdatePetitionerCasesMessage({
+            applicationContext: appContext,
+            user: userToSendTo,
+          });
+        }
+      },
+    }),
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -1950,6 +1974,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateDeficiencyStatisticInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
+        updatePetitionerCasesInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updateQcCompleteForTrialInteractor,
