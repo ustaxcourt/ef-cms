@@ -89,8 +89,6 @@ export const DocumentSearchResults = connect(
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
                               isPublic: advancedDocumentSearchHelper.isPublic,
-                              useSameTab:
-                                advancedDocumentSearchHelper.useSameTabForDocumentLink,
                             });
                           }}
                         >
