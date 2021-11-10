@@ -875,6 +875,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  sanitizePdfInteractor,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
 const {
@@ -1178,9 +1181,6 @@ const {
 const {
   validatePdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/validatePdfInteractor');
-const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 const {
   verifyCaseForUser,
 } = require('../../shared/src/persistence/dynamo/cases/verifyCaseForUser');
