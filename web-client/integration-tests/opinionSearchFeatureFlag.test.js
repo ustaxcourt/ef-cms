@@ -24,8 +24,6 @@ describe('verify opinion search is disabled when feature flag is turned off', ()
     loginAs(cerebralTest, 'docketclerk1@example.com');
 
     it('turns feature flag off to verify alert shows up', async () => {
-      expect(true).toBeTruthy();
-
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
       cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
