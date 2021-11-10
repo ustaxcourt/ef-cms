@@ -40,6 +40,7 @@ describe('advancedDocumentSearchHelper', () => {
         },
       ],
       permissions: getUserPermissions(user),
+      user,
     };
   };
 
@@ -56,6 +57,33 @@ describe('advancedDocumentSearchHelper', () => {
       },
     },
   );
+
+  describe('isInternalUser', () => {
+    it('should return true if the user is an internal user', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: getBaseState(globalUser),
+      });
+      expect(result.isInternalUser).toEqual(true);
+    });
+
+    it('should return false if the user is not an internal user', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: getBaseState({
+          role: USER_ROLES.privatePractitioner,
+        }),
+      });
+      expect(result.isInternalUser).toEqual(false);
+    });
+
+    it('should return false if there is no user because the user is public', () => {
+      const result = runCompute(advancedDocumentSearchHelper, {
+        state: getBaseState({
+          user: {},
+        }),
+      });
+      expect(result.isInternalUser).toEqual(false);
+    });
+  });
 
   describe('showDateRangePicker', () => {
     it('should be false when state.advancedSearchForm.orderSearch.dateRange is allDates', () => {

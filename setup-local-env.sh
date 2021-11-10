@@ -12,3 +12,5 @@ export TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
 export QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1
 export AWS_REGION=us-east-1
 export DYNAMODB_TABLE_NAME=efcms-local
+export USER_LIMITER_THRESHOLD='5000'
+export IP_LIMITER_THRESHOLD='5000'
