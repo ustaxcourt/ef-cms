@@ -193,6 +193,67 @@ jobs:
       - store_artifacts:
           path: /tmp/pa11y
 
+  e2e-pa11y-public-search:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+      - image: amazon/dynamodb-local
+        command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
+        environment:
+          discovery.type: single-node
+          JAVA_OPTS: '-Xms512m -Xmx512m'
+      - image: elastic/elasticsearch:7.8.1
+        environment:
+          discovery.type: single-node
+          ES_JAVA_OPTS: '-Xms512m -Xmx512m'
+    resource_class: large
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+      - run:
+          name: NPM - Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
+      - run:
+          name: Create Pa11y Artifacts Directory
+          command: mkdir /tmp/pa11y
+      - run:
+          name: Pa11y
+          environment:
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+          command: |
+            npm run build:all
+            npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            ./wait-until-services.sh
+            ./wait-until.sh http://localhost:5000/ 404
+            sleep 10
+            npm run test:pa11y:public-search --node-flags --max-old-space-size=1024
+      - store_artifacts:
+          path: /root/project/web-client/pa11y/pa11y-screenshots
+      - store_artifacts:
+          path: /tmp/pa11y
+
   e2e-cypress:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
@@ -798,7 +859,7 @@ jobs:
           name: 'Cypress Public Readonly Smoke Tests'
           command: npm run cypress:readonly:public
       - store_artifacts:
-          path: /root/project/cypress-smoketests-readonly/videos/
+          path: /root/project/cypress-readonly/videos/
 
   switch-colors:
     docker:
@@ -854,6 +915,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-pa11y-public:
           <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
       - e2e-cypress:
           <<: *build-and-deploy-defaults
       - e2e-cypress-smoketests-local:
@@ -865,6 +928,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
+            - e2e-pa11y-public-search
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
@@ -964,6 +1028,8 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-pa11y-public:
           <<: *build-and-deploy-with-context-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-with-context-defaults
       - e2e-cypress:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-smoketests-local:
@@ -976,6 +1042,7 @@ workflows:
             - build-client-integration
             - e2e-pa11y
             - e2e-pa11y-public
+            - e2e-pa11y-public-search
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
