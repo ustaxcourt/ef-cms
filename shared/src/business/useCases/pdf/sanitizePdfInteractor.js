@@ -19,15 +19,19 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
-  form.flatten();
-  const pdfBytes = await pdfDoc.save();
+  const fieldCount = form.getFields().length;
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: pdfBytes,
-    key,
-    useTempBucket: false,
-  });
+  if (fieldCount > 0) {
+    form.flatten();
+    const pdfBytes = await pdfDoc.save();
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: pdfBytes,
+      key,
+      useTempBucket: false,
+    });
+  }
 
   return true;
 };
