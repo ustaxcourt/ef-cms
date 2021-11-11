@@ -1,7 +1,6 @@
 version: 2.1
 commands:
   getsourcecode:
-    description: blah blah blah
     steps:
       - restore_cache:
           name: Source - Restoring Cache
