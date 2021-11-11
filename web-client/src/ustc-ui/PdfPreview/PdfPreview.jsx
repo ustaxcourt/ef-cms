@@ -47,6 +47,7 @@ export const PdfPreview = connect(
 
     const isPdfJs = true;
 
+    // warning: PDFPreviewModal uses scroll=false.  find out why, see what we can do to support it when using pdfjs here.
     if (isPdfJs) {
       return <PdfViewer src={pdfPreviewUrl} />;
     } else {
