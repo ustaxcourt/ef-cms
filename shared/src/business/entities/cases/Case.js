@@ -2162,12 +2162,13 @@ Case.prototype.setAsSealed = function () {
 };
 
 /**
- * sets isSealed to false on a case
+ * sets isSealed to false and sealedDate to null on a case
  *
  * @returns {Case} this case entity
  */
 Case.prototype.setAsUnsealed = function () {
   this.isSealed = false;
+  this.sealedDate = null;
   return this;
 };
 
