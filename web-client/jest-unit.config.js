@@ -31,7 +31,7 @@ module.exports = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   //this is to ignore imported html files
   transform: {
     '^.+\\.html?$': './htmlLoader.js',
