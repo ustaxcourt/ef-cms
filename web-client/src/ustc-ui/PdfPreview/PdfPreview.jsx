@@ -1,3 +1,4 @@
+import { PdfViewer } from './PdfViewer';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React, { useEffect } from 'react';
@@ -44,6 +45,12 @@ export const PdfPreview = connect(
       return noDocumentText || '';
     }
 
-    return <PdfPreviewComponent scroll={scroll} />;
+    const isPdfJs = true;
+
+    if (isPdfJs) {
+      return <PdfViewer />;
+    } else {
+      return <PdfPreviewComponent scroll={scroll} />;
+    }
   },
 );
