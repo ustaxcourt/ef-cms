@@ -61,6 +61,24 @@ const CaseDetails = ({
           </Button>
         </div>
       )}
+
+      {/* todo: use ConfirmModal instead here? */}
+      {caseInformationHelper.showUnsealCaseButton && (
+        <div className="grid-col-6">
+          <Button
+            link
+            className="red-warning"
+            icon="unlock"
+            onClick={() => {
+              openCleanModalSequence({
+                showModal: 'UnsealCaseModal',
+              });
+            }}
+          >
+            Unseal Case
+          </Button>
+        </div>
+      )}
     </div>
   </React.Fragment>
 );
