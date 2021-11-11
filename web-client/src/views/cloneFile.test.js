@@ -1,4 +1,3 @@
-import { JSDOM } from 'jsdom';
 import { cloneFile } from './cloneFile';
 
 describe('cloneFile', () => {
@@ -10,17 +9,6 @@ describe('cloneFile', () => {
   });
 
   beforeEach(() => {
-    const dom = new JSDOM(`<!DOCTYPE html>
-<body>
-  <input type="file" />
-</body>`);
-
-    const {
-      window: { File: FileJS, FileReader: FileReaderJS },
-    } = dom;
-
-    global.File = FileJS;
-    global.FileReader = FileReaderJS;
     jest.clearAllMocks();
 
     jest.spyOn(global, 'FileReader').mockImplementation(() => ({
