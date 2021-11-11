@@ -146,28 +146,33 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ./scripts/setup-internal-opinion-search-flag.sh <ENVIRONMENT>
     ```
 
-16. Setup the environment's source table version:
+16. Setup the environment's document search limiter information:
+    ```bash
+    ./scripts/setup-document-search-limiter.sh <ENVIRONMENT>
+    ```
+
+17. Setup the environment's source table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
     ```
 
-17. Setup the environment's destination table version:
+18. Setup the environment's destination table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
     ```
 
-18. Set the environment's maintenance-mode flag to **false**:
+19. Set the environment's maintenance-mode flag to **false**:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
 
-19. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
+20. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
 
-20. Delete the destination ElasticSearch cluster from us-east-1.
+21. Delete the destination ElasticSearch cluster from us-east-1.
 
-21. Rerun the circle deploy from step 10.
+22. Rerun the circle deploy from step 10.
 
-22. If the environment is a test environment, setup test users and judges so smoketests will pass:
+23. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
     node shared/admin-tools/user/setup-admin.js
     ```
