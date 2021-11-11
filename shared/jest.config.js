@@ -25,6 +25,5 @@ module.exports = {
       statements: 98.25,
     },
   },
-  testEnvironment: 'node',
   verbose: false,
 };
