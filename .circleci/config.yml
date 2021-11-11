@@ -14,6 +14,12 @@ commands:
           key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
           paths:
             - '.git'
+  npm-install:
+    steps:
+      command: |
+        npm set progress=false
+        npm ci
+        npm rebuild
 
 jobs:
   build-client-integration:
@@ -35,12 +41,7 @@ jobs:
     parallelism: 8
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -92,12 +93,7 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -144,12 +140,7 @@ jobs:
     resource_class: large
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -194,12 +185,7 @@ jobs:
     resource_class: large
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -244,12 +230,7 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -298,12 +279,7 @@ jobs:
     resource_class: xlarge
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -352,12 +328,7 @@ jobs:
     resource_class: large
     steps:
       - checkout-and-cache-source-code
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -727,12 +698,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -763,12 +729,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -809,12 +770,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
