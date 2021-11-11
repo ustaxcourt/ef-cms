@@ -2,7 +2,7 @@ import { CaseDeadlinesInternal } from './CaseDeadlinesInternal';
 import { CaseDetailHeader } from './CaseDetailHeader';
 import { CaseDetailPendingReportList } from './CaseDetailPendingReportList';
 import { CaseDetailSubnavTabs } from './CaseDetailSubnavTabs';
-import { CaseInformationInternal } from './CaseInformationInternal';
+import { CaseInformationInternal } from './CaseInformation/CaseInformationInternal';
 import { CaseNotes } from './CaseNotes';
 import { Correspondence } from '../Correspondence/Correspondence';
 import { DocketRecord } from '../DocketRecord/DocketRecord';
