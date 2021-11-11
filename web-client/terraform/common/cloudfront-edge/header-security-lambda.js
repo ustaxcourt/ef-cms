@@ -51,7 +51,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
     `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
     `font-src ${applicationUrl} ${subdomainsUrl}`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
-    "frame-ancestors 'none'",
+    "frame-ancestors 'self'",
   ];
   headers['content-security-policy'] = [
     {

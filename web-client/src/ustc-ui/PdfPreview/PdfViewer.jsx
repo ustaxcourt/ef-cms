@@ -1,22 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 import WebViewer from '@pdftron/pdfjs-express-viewer';
 
-export const PdfViewer = function PdfViewer({ src }) {
-  const ref = useRef(null);
+const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
+
+export const PdfViewer = function PdfViewer({ id, scrolling, src, title }) {
+  const webviewer = useRef(null);
+  const viewerProps = { id, scrolling, title };
 
   useEffect(() => {
     WebViewer(
       {
+        extension: 'pdf',
         initialDoc: src,
-        licenseKey: 'OjkUB41bl1hJg6jvUEfn',
-        path: './pdfjsexpress',
+        licenseKey: PDF_EXPRESS_LICENSE_KEY,
+        path: '/pdfjsexpress',
       },
-      ref.current,
-    ).then(instance => {
-      const { Core } = instance;
-      const { documentViewer } = Core;
-
-      instance.UI.setHeaderItems(header => {
+      webviewer.current,
+    ).then(({ Core: { documentViewer }, UI }) => {
+      UI.setHeaderItems(header => {
         header.push({
           img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
           onClick: async () => {
@@ -25,19 +26,16 @@ export const PdfViewer = function PdfViewer({ src }) {
             const documentStream = await documentViewer
               .getDocument()
               .getFileData({});
-
             const fileName = await documentViewer.getDocument().getFilename();
-
             const documentBlob = new Blob([documentStream], {
               type: 'application/pdf',
             });
-            const blobUrl = URL.createObjectURL(documentBlob);
-
             const link = window.document.createElement('a');
-            link.href = blobUrl;
-            link.download = `${fileName}`;
+            link.href = URL.createObjectURL(documentBlob);
+            link.download = `${fileName}.pdf`;
             link.click();
           },
+          title: 'Download',
           type: 'actionButton',
         });
       });
@@ -48,5 +46,7 @@ export const PdfViewer = function PdfViewer({ src }) {
     return '';
   }
 
-  return <div className="express-pdf-viewer" ref={ref}></div>;
+  return (
+    <div {...viewerProps} className="express-pdf-viewer" ref={webviewer}></div>
+  );
 };
