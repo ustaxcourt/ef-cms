@@ -1,4 +1,21 @@
 version: 2.1
+commands:
+  getsourcecode:
+    description: blah blah blah
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+
 jobs:
   build-client-integration:
     docker:
@@ -18,18 +35,7 @@ jobs:
     resource_class: large
     parallelism: 8
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
+      - getsourcecode
       - run:
           name: NPM - Install
           command: |
@@ -909,8 +915,8 @@ workflows:
 
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
       # - e2e-pa11y:
       #     <<: *build-and-deploy-defaults
       # - e2e-pa11y-public:
@@ -924,14 +930,14 @@ workflows:
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
       - deploy:
-          # requires:
-          # - build-client-integration
-          # - e2e-pa11y
-          # - e2e-pa11y-public
-          # - e2e-pa11y-public-search
-          # - e2e-cypress
-          # - e2e-cypress-smoketests-local
-          # - e2e-cypress-public
+          requires:
+            - build-client-integration
+            # - e2e-pa11y
+            # - e2e-pa11y-public
+            # - e2e-pa11y-public-search
+            # - e2e-cypress
+            # - e2e-cypress-smoketests-local
+            # - e2e-cypress-public
           filters:
             branches:
               only:
@@ -947,32 +953,32 @@ workflows:
                 - experimental5
                 - dawson
                 - migration
-      # - migrate:
-      # requires:
-      # - deploy
-      # filters:
-      # branches:
-      # only:
-      # - develop
-      # - irs
-      # - staging
-      # - test
-      # - experimental1
-      # - experimental2
-      # - experimental3
-      # - experimental4
-      # - experimental5
-      # - migration
-      # - wait-for-reindex:
-      # type: approval
-      # requires:
-      # - migrate
-      # - disable-reindex-cron:
-      # requires:
-      # - wait-for-reindex
-      - smoketests:
+      - migrate:
           requires:
             - deploy
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - wait-for-reindex:
+          type: approval
+          requires:
+            - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
           filters:
             branches:
               only:

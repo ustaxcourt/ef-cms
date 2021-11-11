@@ -131,33 +131,43 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
     ```
 
-13. Setup the environment's order search flag:
+13. Setup the environment's internal order search flag:
     ```bash
-    ./scripts/setup-order-search-flag.sh <ENVIRONMENT>
+    ./scripts/setup-internal-order-search-flag.sh <ENVIRONMENT>
     ```
 
-14. Setup the environment's source table version:
+14. Setup the environment's external order search flag:
+    ```bash
+    ./scripts/setup-external-order-search-flag.sh <ENVIRONMENT>
+    ```
+
+15. Setup the environment's internal opinion search flag:
+    ```bash
+    ./scripts/setup-interal-opinion-search-flag.sh <ENVIRONMENT>
+    ```
+
+16. Setup the environment's source table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
     ```
 
-15. Setup the environment's destination table version:
+17. Setup the environment's destination table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
     ```
 
-16. Set the environment's maintenance-mode flag to **false**:
+18. Set the environment's maintenance-mode flag to **false**:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
 
-17. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
+19. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
 
-18. Delete the destination ElasticSearch cluster from us-east-1.
+20. Delete the destination ElasticSearch cluster from us-east-1.
 
-19. Rerun the circle deploy from step 10.
+21. Rerun the circle deploy from step 10.
 
-20. If the environment is a test environment, setup test users and judges so smoketests will pass:
+22. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
     node shared/admin-tools/user/setup-admin.js
     ```
@@ -165,7 +175,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     node shared/admin-tools/user/setup-test-users.js
     ```
     ```bash
-    ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
+    ENV=exp5 FILE_NAME=./scripts/data-import/judge/judge_users.csv ./scripts/data-import/judge/bulk-import-judge-users.sh
     ```
 
 See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
