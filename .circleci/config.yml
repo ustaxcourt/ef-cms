@@ -16,7 +16,7 @@ commands:
             - '.git'
   npm-install:
     steps:
-      -run:
+      - run:
         command: |
           npm set progress=false
           npm ci
