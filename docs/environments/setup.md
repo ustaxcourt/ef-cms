@@ -143,7 +143,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 15. Setup the environment's internal opinion search flag:
     ```bash
-    ./scripts/setup-interal-opinion-search-flag.sh <ENVIRONMENT>
+    ./scripts/setup-internal-opinion-search-flag.sh <ENVIRONMENT>
     ```
 
 16. Setup the environment's source table version:
