@@ -68,6 +68,10 @@ module.exports = {
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'web-client/src/favicons', to: '.' },
         { from: 'web-client/src/site.webmanifest', to: '.' },
+        {
+          from: './node_modules/@pdftron/pdfjs-express-viewer/public',
+          to: './pdfjsexpress',
+        },
       ],
     }),
   ],
