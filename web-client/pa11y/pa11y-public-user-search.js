@@ -6,11 +6,6 @@ module.exports = [
       'click element button#docket-search-button',
       'wait for table.ustc-table to be visible',
     ],
-    log: {
-      debug: console.log,
-      error: console.error,
-      info: console.info,
-    },
     notes: 'checks a11y of advanced case search',
     url: 'http://localhost:5678/',
   },
@@ -32,13 +27,8 @@ module.exports = [
       'click element button#advanced-search-button',
       'wait for table.search-results to be visible',
     ],
-    log: {
-      debug: console.log,
-      error: console.error,
-      info: console.info,
-    },
     notes: 'checks a11y of advanced order search',
-    timeout: 120000,
+    timeout: 80001,
     url: 'http://localhost:5678/',
   },
   {
@@ -55,13 +45,8 @@ module.exports = [
       'click element button#advanced-search-button',
       'wait for #no-search-results to be visible',
     ],
-    log: {
-      debug: console.log,
-      error: console.error,
-      info: console.info,
-    },
     notes: 'checks a11y of advanced order search with no results',
-    timeout: 120000,
+    timeout: 80000,
     url: 'http://localhost:5678/',
   },
   // TODO: Add back in when 8990 is complete

@@ -1,7 +1,14 @@
 const axios = require('axios');
 const parse = require('csv-parse');
-const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
-const { getServices, getToken, readCsvFile } = require('./importHelpers');
+const {
+  gatherRecords,
+  getCsvOptions,
+} = require('../../../shared/src/tools/helpers');
+const {
+  getServices,
+  getToken,
+  readCsvFile,
+} = require('../../../web-api/importHelpers');
 
 const CSV_HEADERS = [
   'name',
@@ -11,10 +18,6 @@ const CSV_HEADERS = [
   'role',
   'section',
 ];
-
-if (!process.env.ENV) {
-  process.env.ENV = process.argv[1];
-}
 
 const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
@@ -49,16 +52,10 @@ const init = async (csvFile, outputMap) => {
               },
             },
           );
-          if (result.status === 200) {
-            console.log(`SUCCESS ${row.name}`);
-
-            const lowerCaseName = row.name.toLowerCase();
-            const { userId } = result.data;
-            outputMap[lowerCaseName] = userId;
-          } else {
-            console.log(`ERROR ${row.name}`);
-            console.log(result);
-          }
+          console.log(`SUCCESS ${row.name}`);
+          const lowerCaseName = row.name.toLowerCase();
+          const { userId } = result.data;
+          outputMap[lowerCaseName] = userId;
         } catch (err) {
           console.log(`ERROR ${row.name}`);
           console.log(err);

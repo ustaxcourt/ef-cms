@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Deletes existing cases from DynamoDB and ElasticSearch
 
@@ -16,19 +16,14 @@
 #   - $2 - the dynamo table name to clear
 #   - $3 - the elasticsearch endpoint to clear
 
-[ -z "$1" ] && echo "The branch name to check must be provided as the \$1 argument." && exit 1
-[ -z "$2" ] && echo "The dynamo table name to clear must be provided as the \$2 argument." && exit 1
-[ -z "$3" ] && echo "The elasticsearch endpoint to clear must be provided as the \$3 argument." && exit 1
-[ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
-[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
-[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
-[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
-
-ENV=$1
-DYNAMODB_TABLE_NAME=$2
-ELASTICSEARCH_ENDPOINT=$3
-
-export ELASTICSEARCH_ENDPOINT
+./check-env-variables.sh \
+  "USTC_ADMIN_PASS" \
+  "AWS_ACCESS_KEY_ID" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "DEFAULT_ACCOUNT_PASS" \
+  "ENV" \
+  "DYNAMODB_TABLE_NAME" \
+  "ELASTICSEARCH_ENDPOINT"
 
 $(which terraform) > /dev/null
 if [[ "$?" == "1" ]]; then
@@ -42,5 +37,5 @@ fi
 pushd web-api
 node clear-dynamodb-table.js $DYNAMODB_TABLE_NAME
 ./setup-cognito-users.sh $ENV
-./setup-court-users.sh $ENV
+node shared/admin-tools/user/setup-test-users.js
 popd
