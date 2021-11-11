@@ -48,7 +48,7 @@ export const PdfPreview = connect(
     const isPdfJs = true;
 
     if (isPdfJs) {
-      return <PdfViewer />;
+      return <PdfViewer src={pdfPreviewUrl} />;
     } else {
       return <PdfPreviewComponent scroll={scroll} />;
     }
