@@ -4,10 +4,9 @@
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.key the key of the document to sanitize
- * @returns {boolean} true if successfully sanitized
  */
 exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
-  let { Body: pdfData } = await applicationContext
+  const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -32,6 +31,4 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
       useTempBucket: false,
     });
   }
-
-  return true;
 };

@@ -1,17 +1,8 @@
-const {
-  uploadDocumentAndMakeSafeInteractor,
-} = require('./uploadDocumentAndMakeSafeInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { filePetitionInteractor } = require('./filePetitionInteractor');
 const { ROLES } = require('../entities/EntityConstants');
 
 beforeAll(() => {
-  applicationContext
-    .getUseCases()
-    .uploadDocumentAndMakeSafeInteractor.mockImplementation(
-      uploadDocumentAndMakeSafeInteractor,
-    );
-
   applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient.mockResolvedValue(
