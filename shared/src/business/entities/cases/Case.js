@@ -2160,6 +2160,17 @@ Case.prototype.setAsSealed = function () {
   this.isSealed = true;
   return this;
 };
+
+/**
+ * sets isSealed to false on a case
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsUnsealed = function () {
+  this.isSealed = false;
+  return this;
+};
+
 /**
  * generates the case confirmation pdf file name
  *
