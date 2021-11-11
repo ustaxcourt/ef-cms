@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 if [ -z "$ZONE_NAME" ]; then
   echo "Please export the ZONE_NAME variable in your shell"
@@ -25,12 +25,7 @@ if [ -z "$COGNITO_SUFFIX" ]; then
   exit 1
 fi
 
-tf_version=$(terraform --version)
-
-if [[ ${tf_version} != *"1.0.9"* ]]; then
-  echo "Please set your terraform version to 1.0.9 before deploying."
-  exit 1
-fi
+../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-account.tfstate"
