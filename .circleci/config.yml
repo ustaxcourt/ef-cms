@@ -16,10 +16,11 @@ commands:
             - '.git'
   npm-install:
     steps:
-      command: |
-        npm set progress=false
-        npm ci
-        npm rebuild
+      -run:
+        command: |
+          npm set progress=false
+          npm ci
+          npm rebuild
 
 jobs:
   build-client-integration:
