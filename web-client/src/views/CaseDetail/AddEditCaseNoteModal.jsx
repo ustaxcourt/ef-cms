@@ -27,6 +27,7 @@ export const AddEditCaseNoteModal = connect(
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
+        {JSON.stringify(modal)}!!!
         <h5 className="margin-bottom-4">
           {`Docket ${modal.docketNumber}: ${modal.caseTitle}`}
         </h5>
