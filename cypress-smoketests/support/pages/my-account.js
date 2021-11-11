@@ -17,4 +17,8 @@ exports.updateAddress1 = () => {
 
 exports.saveContactInformation = () => {
   cy.get('button.usa-button').contains('Save').click();
+
+  cy.get('.progress-indicator').should('not.exist');
+  cy.get('.progress-user-contact-edit').should('not.exist');
+  cy.get('.usa-alert--success').should('exist');
 };
