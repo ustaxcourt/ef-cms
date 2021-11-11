@@ -557,10 +557,6 @@ jobs:
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
           name: Deploy Migration Cron Lambda
           command: |
             docker run \
@@ -676,10 +672,6 @@ jobs:
             cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
       - run:
           name: Disable Check Reindex Status Cron
           command: |
