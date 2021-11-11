@@ -32,10 +32,12 @@ describe('sanitizePdfInteractor', () => {
     getFieldsMock.mockReturnValueOnce(['button', 'checkbox']);
 
     const mockKey = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-    const result = await sanitizePdfInteractor(applicationContext, {
-      key: mockKey,
-    });
-    expect(result).toBeTruthy();
+    await expect(
+      sanitizePdfInteractor(applicationContext, {
+        key: mockKey,
+      }),
+    ).resolves.not.toBeDefined();
+
     expect(saveMock).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -45,10 +47,11 @@ describe('sanitizePdfInteractor', () => {
 
   it('does not attempt to save a PDF that has no form fields', async () => {
     const mockKey = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-    const result = await sanitizePdfInteractor(applicationContext, {
-      key: mockKey,
-    });
-    expect(result).toBeTruthy();
+    await expect(
+      sanitizePdfInteractor(applicationContext, {
+        key: mockKey,
+      }),
+    ).resolves.not.toBeDefined();
     expect(saveMock).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
