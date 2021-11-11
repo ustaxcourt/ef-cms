@@ -18,7 +18,7 @@
     "@fortawesome/react-fontawesome": "^0.1.16",
     "@hapi/joi-date": "^2.0.1",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
-    "@vendia/serverless-express": "^3.4.0",
+    "@vendia/serverless-express": "^4.5.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.5",
     "archiver": "^5.3.0",
     "artillery": "^2.0.0-4",
