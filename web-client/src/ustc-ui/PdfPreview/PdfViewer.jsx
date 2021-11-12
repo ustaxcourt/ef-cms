@@ -18,7 +18,7 @@ export const PdfViewer = connect(
     }
   },
 );
-
+// FIXME skip ci
 const PdfViewerComponent = function PdfViewerComponent({
   id,
   scrolling,
