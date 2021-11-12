@@ -27,14 +27,17 @@ do
   fi
 done
 
-printf  "${YELLOW}Are you sure you want to continue? (press y to confirm)${NC}\n\n"
-read -p "continue? (press y to confirm)" -n 1 -r
+if [ -z ${CI} ]; then
+  printf  "${YELLOW}Are you sure you want to continue? (press y to confirm)${NC}\n\n"
+  read -p "continue? (press y to confirm)" -n 1 -r
 
-echo    # (optional) move to a new line
-if [[ !($REPLY =~ ^[Yy]$) ]]
-then
-  echo "Aborted..."
-  exit 1;
-else
-  echo "Continuing..."
+  echo    # (optional) move to a new line
+  if [[ !($REPLY =~ ^[Yy]$) ]]
+  then
+    echo "Aborted..."
+    exit 1;
+  else
+    echo "Continuing..."
+  fi
 fi
+

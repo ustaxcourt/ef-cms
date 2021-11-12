@@ -1,12 +1,17 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # This script waits for the migration queue to be empty
 
 # Usage
 #   wait-for-migration-to-finish.sh
 
-# Requirements
-#   - aws must be installed on your machine
+( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
+
+./check-env-variables.sh \
+  "AWS_ACCOUNT_ID" \
+  "ENV" \
+  "AWS_ACCESS_KEY_ID" \
+  "AWS_SECRET_ACCESS_KEY"
 
 get_total () {
   response=$(aws sqs get-queue-attributes --attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible ApproximateNumberOfMessagesDelayed --queue-url="https://sqs.us-east-1.amazonaws.com/${AWS_ACCOUNT_ID}/migration_segments_queue_${ENV}" --region us-east-1 --query "Attributes" --output=text)

@@ -8,6 +8,7 @@ module.exports = {
     '!coverage/**',
     '!set-maintenance-mode-locally.js',
     '!data-import/judge/bulkImportJudgeUsers.js',
+    '!irs-super-user.js',
   ],
   coverageThreshold: {
     global: {
