@@ -1,12 +1,11 @@
 /* eslint-disable max-lines */
-const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const cors = require('cors');
+const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const { set } = require('lodash');
-
-const createApplicationContext = require('./applicationContext');
 const applicationContext = createApplicationContext();
 
 const app = express();
@@ -23,10 +22,10 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(awsServerlessExpressMiddleware.eventContext());
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
-    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+    const currentInvoke = getCurrentInvoke();
+    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
   }
   next();
 });

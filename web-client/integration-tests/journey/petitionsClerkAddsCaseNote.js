@@ -8,9 +8,7 @@ export const petitionsClerkAddsCaseNote = cerebralTest => {
 
     await cerebralTest.runSequence('openAddEditCaseNoteModalSequence');
 
-    expect(cerebralTest.getState('modal')).toMatchObject({
-      notes: undefined,
-    });
+    expect(cerebralTest.getState('modal').notes).toBeUndefined();
 
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'modal.notes',

@@ -228,7 +228,21 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration.api_integration_put,
       aws_api_gateway_integration.api_integration_delete,
       aws_api_gateway_integration.api_integration_options,
-      aws_api_gateway_authorizer.custom_authorizer
+      aws_api_gateway_method.api_async_method_post,
+      aws_api_gateway_method.api_async_method_put,
+      aws_api_gateway_method.api_async_method_get,
+      aws_api_gateway_method.api_async_method_options,
+      aws_api_gateway_integration.api_async_integration_post,
+      aws_api_gateway_integration.api_async_integration_put,
+      aws_api_gateway_integration.api_async_integration_get,
+      aws_api_gateway_integration.api_async_integration_options,
+      aws_api_gateway_method_response.async_method_response_post,
+      aws_api_gateway_integration_response.async_response_post,
+      aws_api_gateway_method_response.async_method_response_put,
+      aws_api_gateway_integration_response.async_response_put,
+      aws_api_gateway_method_response.async_method_response_get,
+      aws_api_gateway_integration_response.async_response_get,
+      aws_api_gateway_authorizer.custom_authorizer,
     ]))
   }
 

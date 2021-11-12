@@ -40,7 +40,7 @@ describe('advancedDocumentSearchHelper', () => {
         },
       ],
       permissions: getUserPermissions(user),
-      user: user,
+      user,
     };
   };
 
