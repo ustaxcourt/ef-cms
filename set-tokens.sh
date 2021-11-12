@@ -1,16 +1,19 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Returns a petitionsclerk JWT token that is used for smoketests
 
 # Usage
 #   ./set-tokens.sh
 
-# Requirements
-#   - aws cli must be installed on your machine
-#   - aws credentials must be installed on your machine
-
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
+( ! command -v aws > /dev/null ) && echo "aws must be installed on your machine." && exit 1
+
+./check-env-variables.sh \
+  "ENV" \
+  "DEFAULT_ACCOUNT_PASS" \
+  "AWS_ACCOUNT_ID" \
+  "AWS_ACCESS_KEY_ID" \
+  "AWS_SECRET_ACCESS_KEY"
 
 REGION="us-east-1"
 

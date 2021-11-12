@@ -1,32 +1,30 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # This script waits for a specified service to come online
 
 # Usage
-#   wait-until.sh http://localhost:4000/api/swagger
+#   URL=http://localhost:4000/api/swagger wait-until.sh
 
-# Requirements
-#   - curl must be installed on your machine
+./check-env-variables.sh \
+  "URL"
 
-# Arguments
-#   - $1 - the http service to check
-
-[ -z "$1" ] && echo "The http service to check must be provided as the \$1 argument." && exit 1
-
-url=$1
+( ! command -v curl > /dev/null ) && echo "Curl was not found on your path. Please install curl." && exit 1
 max_tries=900
 try_count=0
-check_code=${2:-"200"}
-is_ws=${3:-"false"}
+check_code=${CHECK_CODE:-"200"}
+is_ws=${IS_WS:-"false"}
+
 while true
 do
+  set +e
   if [ "$is_ws" = "true" ]; then
-    code=$(curl -sL -w "%{http_code}\\n" -o /dev/null --include --no-buffer --header "Connection: Upgrade" --header "Upgrade: websocket" --header "Host: $url" --header "Origin: $url" --header "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" --header "Sec-WebSocket-Version: 13" "$url")
+    code=$(curl -sL -w "%{http_code}\\n" -o /dev/null --include --no-buffer --header "Connection: Upgrade" --header "Upgrade: websocket" --header "Host: $URL" --header "Origin: $URL" --header "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" --header "Sec-WebSocket-Version: 13" "$URL")
   else
-    code=$(curl -sL -w "%{http_code}\\n" "$url" -o /dev/null)
+    code=$(curl -sL -w "%{http_code}\\n" "$URL" -o /dev/null)
   fi
+  set -e
 
-  echo -e "\nWaiting for $url to be hosted...\n"
+  echo -e "\nWaiting for $URL to be hosted...\n"
   if [ "x$code" = "x$check_code" ]
   then
     break

@@ -5,17 +5,6 @@
 # Usage
 #   ./clear-env.sh $ENV
 
-# Requirements
-#   - terraform must be installed on your machine
-#   - aws cli must be installed on your machine
-#   - aws credentials must be setup on your machine
-#   - node must be setup on your machine
-
-# Arguments
-#   - $1 - the environment to clear
-#   - $2 - the dynamo table name to clear
-#   - $3 - the elasticsearch endpoint to clear
-
 ./check-env-variables.sh \
   "USTC_ADMIN_PASS" \
   "AWS_ACCESS_KEY_ID" \
@@ -29,11 +18,9 @@
   "USTC_ADMIN_USER" \
   "DEPLOYING_COLOR"
 
-$(command -v terraform > /dev/null)
-if [[ "$?" == "1" ]]; then
-  echo "Terraform was not found on your path. Please install terraform."
-  exit 1
-fi
+( ! command -v terraform > /dev/null ) && echo "Terraform was not found on your path. Please install terraform." && exit 1
+( ! command -v node > /dev/null ) && echo "node was not found on your path. Please install node." && exit 1
+( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
 
 ./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
 ./web-api/setup-elasticsearch-index.sh $ENV
