@@ -1,13 +1,19 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
-[ -z "${AWS_ACCOUNT_ID}" ] && echo "You must have AWS_ACCOUNT_ID set in your environment" && exit 1
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
+./check-env-variables.sh \
+  "ENV" \
+  "EFCMS_DOMAIN" \
+  "ZONE_NAME" \
+  "AWS_ACCOUNT_ID" \
+  "AWS_ACCESS_KEY_ID" \
+  "AWS_SECRET_ACCESS_KEY"
+
+set +e
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
+set -e
 
 if [[ "${SKIP_MIGRATION}" == "1" ]]; then
   exit 0
