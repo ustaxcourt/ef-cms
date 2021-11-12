@@ -1,4 +1,28 @@
 version: 2.1
+commands:
+  checkout-and-cache-source-code:
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+  npm-install:
+    steps:
+      - run:
+          name: NPM Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
+
 jobs:
   build-client-integration:
     docker:
@@ -18,24 +42,8 @@ jobs:
     resource_class: large
     parallelism: 8
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
@@ -86,24 +94,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -149,24 +141,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -210,24 +186,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -271,24 +231,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -336,24 +280,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -401,24 +329,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: large
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -647,10 +559,6 @@ jobs:
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
           name: Deploy Migration Cron Lambda
           command: |
             docker run \
@@ -767,10 +675,6 @@ jobs:
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
           name: Disable Check Reindex Status Cron
           command: |
             docker run \
@@ -788,12 +692,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -824,12 +723,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -870,12 +764,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
