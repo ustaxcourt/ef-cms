@@ -8,11 +8,10 @@ const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
 export const PdfViewer = connect(
   {
     featureFlagHelper: state.featureFlagHelper,
-    pdfJsEnabled: state.featureFlag.pdfJsEnabled,
+    isPdfJsEnabled: state.featureFlag.isPdfJsEnabled,
   },
   ({ featureFlagHelper, ...pdfProps }) => {
-    if (featureFlagHelper.pdfJsEnabled) {
-      // return pdf
+    if (featureFlagHelper.isPdfJsEnabled) {
       return <PdfViewerComponent {...pdfProps} />;
     } else {
       return <iframe {...pdfProps} />;
