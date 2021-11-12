@@ -1,9 +1,30 @@
+import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
 import WebViewer from '@pdftron/pdfjs-express-viewer';
 
 const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
 
-export const PdfViewer = function PdfViewer({ id, scrolling, src, title }) {
+export const PdfViewer = connect(
+  {
+    featureFlagHelper: state.featureFlagHelper,
+  },
+  ({ featureFlagHelper, id, scrolling, src, title }) => {
+    const pdfProps = { id, scrolling, src, title };
+    if (featureFlagHelper.isPdfJsEnabled) {
+      return <PdfViewerComponent {...pdfProps} />;
+    } else {
+      return <iframe {...pdfProps} />;
+    }
+  },
+);
+
+const PdfViewerComponent = function PdfViewerComponent({
+  id,
+  scrolling,
+  src,
+  title,
+}) {
   const webviewer = useRef(null);
   const viewerProps = { id, scrolling, title };
 
