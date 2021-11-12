@@ -23,9 +23,13 @@
   "DEFAULT_ACCOUNT_PASS" \
   "ENV" \
   "DYNAMODB_TABLE_NAME" \
-  "ELASTICSEARCH_ENDPOINT"
+  "ELASTICSEARCH_ENDPOINT" \
+  "FILE_NAME" \
+  "REGION" \
+  "USTC_ADMIN_USER" \
+  "DEPLOYING_COLOR"
 
-$(which terraform) > /dev/null
+$(command -v terraform > /dev/null)
 if [[ "$?" == "1" ]]; then
   echo "Terraform was not found on your path. Please install terraform."
   exit 1
@@ -34,8 +38,6 @@ fi
 ./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
 ./web-api/setup-elasticsearch-index.sh $ENV
 
-pushd web-api
-node clear-dynamodb-table.js $DYNAMODB_TABLE_NAME
-./setup-cognito-users.sh $ENV
+node ./web-api/clear-dynamodb-table.js $DYNAMODB_TABLE_NAME
 node shared/admin-tools/user/setup-test-users.js
-popd
+./scripts/data-import/judge/bulk-import-judge-users.sh
