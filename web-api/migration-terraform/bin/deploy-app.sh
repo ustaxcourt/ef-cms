@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
 
@@ -11,12 +11,7 @@ echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 
-tf_version=$(terraform --version)
-
-if [[ ${tf_version} != *"1.0.9"* ]]; then
-  echo "Please set your terraform version to 1.0.9 before deploying."
-  exit 1
-fi
+../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="migrations-${ENVIRONMENT}.tfstate"
