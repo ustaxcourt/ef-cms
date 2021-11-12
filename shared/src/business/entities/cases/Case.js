@@ -2168,7 +2168,7 @@ Case.prototype.setAsSealed = function () {
  */
 Case.prototype.setAsUnsealed = function () {
   this.isSealed = false;
-  this.sealedDate = null;
+  this.sealedDate = undefined;
   return this;
 };
 
