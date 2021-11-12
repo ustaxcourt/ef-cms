@@ -2,6 +2,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getConstants } from '../../getConstants';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
@@ -39,6 +40,10 @@ const goToDashboard = [
   setUserAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  getFeatureFlagValueFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER,
+    true,
+  ),
   getMaintenanceModeAction,
   {
     maintenanceOff: [
