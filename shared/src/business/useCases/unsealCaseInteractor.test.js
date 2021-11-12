@@ -30,6 +30,6 @@ describe('unsealCaseInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(result.isSealed).toBe(false);
-    expect(result.sealedDate).toBe(null);
+    expect(result.sealedDate).toBe(undefined);
   });
 });
