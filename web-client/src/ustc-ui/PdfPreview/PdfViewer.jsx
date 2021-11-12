@@ -8,9 +8,9 @@ const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
 export const PdfViewer = connect(
   {
     featureFlagHelper: state.featureFlagHelper,
-    isPdfJsEnabled: state.featureFlag.isPdfJsEnabled,
   },
-  ({ featureFlagHelper, ...pdfProps }) => {
+  ({ featureFlagHelper, id, scrolling, src, title }) => {
+    const pdfProps = { id, scrolling, src, title };
     if (featureFlagHelper.isPdfJsEnabled) {
       return <PdfViewerComponent {...pdfProps} />;
     } else {
@@ -18,7 +18,7 @@ export const PdfViewer = connect(
     }
   },
 );
-// FIXME skip ci
+
 const PdfViewerComponent = function PdfViewerComponent({
   id,
   scrolling,
