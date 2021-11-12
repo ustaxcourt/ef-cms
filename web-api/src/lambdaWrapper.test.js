@@ -1,4 +1,6 @@
 const { lambdaWrapper } = require('./lambdaWrapper');
+jest.mock('@vendia/serverless-express');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 describe('lambdaWrapper', () => {
   let req, res;
@@ -124,24 +126,10 @@ describe('lambdaWrapper', () => {
     );
   });
 
-  it('sets request timeout to 20 minutes', async () => {
-    await lambdaWrapper(() => {
-      return {
-        body: 'hello world',
-        headers: {
-          'Content-Type': 'application/pdf',
-        },
-      };
-    })(req, res);
-
-    expect(req.setTimeout).toHaveBeenCalled();
-    expect(req.setTimeout).toHaveBeenCalledWith(20 * 60 * 1000);
-  });
-
   it('sets X-Terminal-User if it was set in api gateway event context', async () => {
-    req.apiGateway = {
+    getCurrentInvoke.mockReturnValue({
       event: { requestContext: { authorizer: { isTerminalUser: 'true' } } },
-    };
+    });
     await lambdaWrapper(() => {
       return {
         body: 'hello world',
