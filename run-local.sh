@@ -10,7 +10,7 @@ if [[ -z "$CIRCLECI" ]]; then
   echo "starting dynamo"
   ./web-api/start-dynamo.sh &
   DYNAMO_PID=$!
-  ./wait-until.sh http://localhost:8000/shell
+  URL=http://localhost:8000/shell ./wait-until.sh
 
   echo "killing elasticsearch if already running"
   pkill -f elasticsearch
@@ -18,7 +18,7 @@ if [[ -z "$CIRCLECI" ]]; then
   echo "starting elasticsearch"
   ./web-api/start-elasticsearch.sh &
   ESEARCH_PID=$!
-  ./wait-until.sh http://localhost:9200/ 200
+  URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
 fi
 
 npm run build:assets
@@ -33,7 +33,7 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-./wait-until.sh http://localhost:9000/ 200
+URL=http://localhost:9000/ CHECK_CODE=200 ./wait-until.sh
 npm run seed:s3
 
 if [ ! -z "$RESUME" ]; then
