@@ -56,10 +56,11 @@ module.exports = {
       },
     },
   ],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 9,
     jsx: true,
+    requireConfigFile: false,
     sourceType: 'module',
   },
   plugins: [

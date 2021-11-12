@@ -27,12 +27,15 @@ exports.advancedQueryLimiter =
       count = 1;
     }
 
+    const windowTimeSecs = parseInt(windowTime / 1000);
+
     if (count > maxInvocations) {
       return res
-        .set('Retry-After', parseInt(windowTime / 1000))
+        .set('Retry-After', windowTimeSecs)
         .status(429)
         .json({
-          message: `you are only allowed ${maxInvocations} requests per ${windowTime}ms`,
+          message: `you are only allowed ${maxInvocations} requests in a ${windowTimeSecs} second window time`,
+          type: 'advanced-query-limiter',
         });
     }
 

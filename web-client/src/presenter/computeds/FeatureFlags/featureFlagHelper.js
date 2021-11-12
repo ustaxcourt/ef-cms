@@ -1,14 +1,28 @@
 import { state } from 'cerebral';
 
 export const featureFlagHelper = (get, applicationContext) => {
-  const isOrderSearchEnabled = get(state.isOrderSearchEnabled);
-  const isSearchEnabled =
-    isOrderSearchEnabled &&
-    applicationContext.isFeatureEnabled('advanced_document_search');
+  const { role } = get(state.user);
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 
-  const isOpinionSearchEnabled = applicationContext.isFeatureEnabled(
-    'advanced_opinion_search',
+  const isUserInternal = applicationContext.getUtilities().isInternalUser(role);
+  const isInternalOrderSearchEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key],
+  );
+  const isInternalOpinionSearchEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.key],
   );
 
-  return { isOpinionSearchEnabled, isSearchEnabled };
+  let isOrderSearchEnabledForRole = false;
+  if (role && isUserInternal) {
+    isOrderSearchEnabledForRole = isInternalOrderSearchEnabled;
+  } else {
+    isOrderSearchEnabledForRole = get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key],
+    );
+  }
+
+  return {
+    isInternalOpinionSearchEnabled,
+    isOrderSearchEnabledForRole,
+  };
 };

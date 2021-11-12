@@ -198,6 +198,9 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -215,9 +218,6 @@ const {
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
-const {
-  getOrderSearchEnabledLambda,
-} = require('./search/getOrderSearchEnabledLambda');
 const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
@@ -893,16 +893,6 @@ app.get(
 }
 
 /**
- * search
- */
-{
-  app.get(
-    '/search/order-search-enabled',
-    lambdaWrapper(getOrderSearchEnabledLambda),
-  );
-}
-
-/**
  * sections
  */
 app.get(
@@ -1084,5 +1074,10 @@ app.get(
  * maintenance-mode
  */
 app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+
+/**
+ * feature-flag
+ */
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

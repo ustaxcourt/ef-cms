@@ -28,6 +28,7 @@ describe('advancedDocumentSearch', () => {
       'eventCode',
       'filingDate',
       'irsPractitioners',
+      'isFileAttached',
       'isSealed',
       'isStricken',
       'judge',
@@ -50,6 +51,7 @@ describe('advancedDocumentSearch', () => {
         'eventCode.S': [orderEventCodes[0], orderEventCodes[1]],
       },
     },
+    { term: { 'isFileAttached.BOOL': true } },
   ];
 
   const opinionQueryParams = [
