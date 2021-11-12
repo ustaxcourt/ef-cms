@@ -694,7 +694,7 @@ jobs:
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./enable-reindex-cron.sh "
+               --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
 
   disable-reindex-cron:
     machine:
