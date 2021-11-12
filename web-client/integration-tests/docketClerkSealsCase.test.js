@@ -11,7 +11,7 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { unassociatedUserAdvancedSearchForCase } from './journey/unassociatedUserAdvancedSearchForSealedCase';
+import { unassociatedUserAdvancedSearchForSealedCase } from './journey/unassociatedUserAdvancedSearchForSealedCase';
 import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassociatedUserViewsCaseDetailForSealedCase';
 
 const cerebralTest = setupTest();
@@ -82,10 +82,10 @@ describe('Docket Clerk seals a case', () => {
   //unassociated users
   loginAs(cerebralTest, 'privatePractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  unassociatedUserAdvancedSearchForCase(cerebralTest);
+  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
   externalUserSearchesForAnOrderOnSealedCase(cerebralTest);
 
   loginAs(cerebralTest, 'irsPractitioner3@example.com');
   unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  unassociatedUserAdvancedSearchForCase(cerebralTest);
+  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
 });
