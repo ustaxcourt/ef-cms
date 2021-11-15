@@ -19,51 +19,50 @@ export const PdfViewer = connect(
   },
 );
 
-let viewer;
+const loadDocument = ({ src, viewer }) => {
+  const { UI } = viewer;
+  UI.loadDocument(src, { extension: 'pdf' });
+};
 
 const setupViewer = async ({ node, src }) => {
-  if (viewer) {
-    const { UI } = viewer;
-    UI.loadDocument(src, { extension: 'pdf' });
-  } else {
-    console.log('I AM SETTING UP VIEWER');
-    viewer = await new WebViewer(
-      {
-        extension: 'pdf',
-        initialDoc: src,
-        licenseKey: PDF_EXPRESS_LICENSE_KEY,
-        path: '/pdfjsexpress',
+  const newViewer = await WebViewer(
+    {
+      extension: 'pdf',
+      initialDoc: src,
+      licenseKey: PDF_EXPRESS_LICENSE_KEY,
+      path: '/pdfjsexpress',
+    },
+    node,
+  );
+
+  const {
+    Core: { documentViewer },
+    UI,
+  } = newViewer;
+
+  UI.setHeaderItems(header => {
+    header.push({
+      img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
+      onClick: async () => {
+        // must wait for the document to be loaded before you can save the file
+        const documentStream = await documentViewer
+          .getDocument()
+          .getFileData({});
+        const fileName = await documentViewer.getDocument().getFilename();
+        const documentBlob = new Blob([documentStream], {
+          type: 'application/pdf',
+        });
+        const link = window.document.createElement('a');
+        link.href = URL.createObjectURL(documentBlob);
+        link.download = `${fileName}.pdf`;
+        link.click();
       },
-      node,
-    );
-
-    const {
-      Core: { documentViewer },
-      UI,
-    } = viewer;
-
-    UI.setHeaderItems(header => {
-      header.push({
-        img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
-        onClick: async () => {
-          // must wait for the document to be loaded before you can save the file
-          const documentStream = await documentViewer
-            .getDocument()
-            .getFileData({});
-          const fileName = await documentViewer.getDocument().getFilename();
-          const documentBlob = new Blob([documentStream], {
-            type: 'application/pdf',
-          });
-          const link = window.document.createElement('a');
-          link.href = URL.createObjectURL(documentBlob);
-          link.download = `${fileName}.pdf`;
-          link.click();
-        },
-        title: 'Download',
-        type: 'actionButton',
-      });
+      title: 'Download',
+      type: 'actionButton',
     });
-  }
+  });
+
+  return newViewer;
 };
 
 /**
@@ -72,36 +71,24 @@ const setupViewer = async ({ node, src }) => {
 function useHookWithRefCallback({ src }) {
   const ref = useRef();
 
-  const setRef = useCallback(
-    node => {
-      if (ref.current) {
-        // tear down of WebViewer
-        console.log('I AM TEARING DOWN, SO READ ME');
-        console.log('viewer IN REF CURRENT', viewer);
-        ref.current = undefined;
-      }
+  const setRef = useCallback(node => {
+    if (!node && ref.current) {
+      ref.current.dispose();
+      return;
+    }
 
-      if (node) {
-        setupViewer({ node, src });
-      }
-
-      // Save a reference to the node
-      ref.current = node;
-    },
-    [src],
-  );
+    if (node) {
+      setupViewer({ node, src }).then(viewer => {
+        ref.current = viewer;
+      });
+    }
+  }, []);
 
   useEffect(() => {
-    // initial rendering
-    console.log('ADDING PDF VIEWER');
-    return () => {
-      console.log('TEARDOWN');
-      console.log('viewer', viewer);
-      viewer.UI.dispose();
-      // deleting UI element here
-      viewer = undefined;
-    };
-  }, []);
+    if (ref.current && src) {
+      loadDocument({ src, viewer: ref.current });
+    }
+  }, [src, ref.current]);
 
   return setRef;
 }
