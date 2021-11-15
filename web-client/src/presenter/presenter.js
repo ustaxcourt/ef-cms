@@ -383,6 +383,7 @@ import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
+import { unsealCaseSequence } from './sequences/unsealCaseSequence';
 import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
@@ -866,6 +867,7 @@ export const presenter = {
     unblockCaseFromTrialSequence,
     unidentifiedUserErrorSequence,
     unprioritizeCaseSequence,
+    unsealCaseSequence,
     updateAddDeficiencyFormValueSequence,
     updateAdvancedOpinionSearchFormValueSequence,
     updateAdvancedOrderSearchFormValueSequence,

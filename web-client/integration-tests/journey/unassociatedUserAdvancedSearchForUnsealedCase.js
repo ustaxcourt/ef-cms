@@ -1,8 +1,8 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { refreshElasticsearchIndex } from '../helpers';
 
-export const associatedUserAdvancedSearchForSealedCase = cerebralTest => {
-  return it('associated user performs an advanced search by name for a sealed case', async () => {
+export const unassociatedUserAdvancedSearchForUnsealedCase = cerebralTest => {
+  return it('unassociated user performs an advanced search by name for an unsealed case', async () => {
     await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
