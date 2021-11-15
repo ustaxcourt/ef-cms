@@ -1016,6 +1016,9 @@ const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
 const {
+  unsealCaseInteractor,
+} = require('../../shared/src/business/useCases/unsealCaseInteractor');
+const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
 const {
@@ -1962,6 +1965,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        unsealCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseDetailsInteractor,

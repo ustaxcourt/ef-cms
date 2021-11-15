@@ -1,24 +1,23 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForCase';
-import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { externalUserSearchesForAnOrderOnSealedCase } from './journey/externalUserSearchesForAnOrderOnSealedCase';
+import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { unassociatedUserAdvancedSearchForSealedCase } from './journey/unassociatedUserAdvancedSearchForSealedCase';
-import { unassociatedUserViewsCaseDetailForSealedCase } from './journey/unassociatedUserViewsCaseDetailForSealedCase';
+import { unassociatedUserAdvancedSearchForUnsealedCase } from './journey/unassociatedUserAdvancedSearchForUnsealedCase';
+import { unassociatedUserViewsCaseDetailForUnsealedCase } from './journey/unassociatedUserViewsCaseDetailForUnsealedCase';
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-describe('Docket Clerk seals a case', () => {
+describe('Docket Clerk unseals a case', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -61,30 +60,14 @@ describe('Docket Clerk seals a case', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
+  docketClerkUnsealsCase(cerebralTest);
 
   //verify that an internal user can still find this case via advanced search by name
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   associatedUserAdvancedSearchForCase(cerebralTest);
 
-  //associated users
-  loginAs(cerebralTest, 'petitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  associatedUserAdvancedSearchForCase(cerebralTest);
-
-  loginAs(cerebralTest, 'irsPractitioner@example.com');
-  associatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  associatedUserAdvancedSearchForCase(cerebralTest);
-
-  //unassociated users
+  //unassociated user can still find the case
   loginAs(cerebralTest, 'privatePractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
-  externalUserSearchesForAnOrderOnSealedCase(cerebralTest);
-
-  loginAs(cerebralTest, 'irsPractitioner3@example.com');
-  unassociatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  unassociatedUserAdvancedSearchForSealedCase(cerebralTest);
+  unassociatedUserViewsCaseDetailForUnsealedCase(cerebralTest);
+  unassociatedUserAdvancedSearchForUnsealedCase(cerebralTest);
 });
