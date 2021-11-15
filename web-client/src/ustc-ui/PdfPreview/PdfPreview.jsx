@@ -1,57 +1,22 @@
 import { PdfViewer } from './PdfViewer';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
-import React, { useEffect } from 'react';
-
-const PdfPreviewComponent = connect(
-  {
-    clearPdfPreviewUrlSequence: sequences.clearPdfPreviewUrlSequence,
-    pdfPreviewUrl: state.pdfPreviewUrl,
-  },
-  function PdfPreviewComponent({
-    clearPdfPreviewUrlSequence,
-    pdfPreviewUrl,
-    scroll = true,
-  }) {
-    // always renders. use life-cycle hooks here.
-
-    const onRemove = () => {
-      clearPdfPreviewUrlSequence();
-    };
-
-    useEffect(() => {
-      return onRemove;
-    }, []);
-    const setScroll = scroll ? 'yes' : 'no';
-    return (
-      <iframe
-        id="pdf-preview-iframe"
-        scrolling={setScroll}
-        src={pdfPreviewUrl}
-        title="PDF Preview"
-      />
-    );
-  },
-);
+import { props, state } from 'cerebral';
+import React from 'react';
 
 export const PdfPreview = connect(
   {
     noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ noDocumentText, pdfPreviewUrl, scroll = true }) {
+  function PdfPreview({ noDocumentText, pdfPreviewUrl, scrolling = 'true' }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return noDocumentText || '';
     }
 
-    const isPdfJs = true;
+    const pdfProps = { scrolling, src: pdfPreviewUrl };
 
     // warning: PDFPreviewModal uses scroll=false.  find out why, see what we can do to support it when using pdfjs here.
-    if (isPdfJs) {
-      return <PdfViewer src={pdfPreviewUrl} />;
-    } else {
-      return <PdfPreviewComponent scroll={scroll} />;
-    }
+    return <PdfViewer {...pdfProps} />;
   },
 );
