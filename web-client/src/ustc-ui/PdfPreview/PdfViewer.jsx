@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import WebViewer from '@pdftron/pdfjs-express-viewer';
 
 const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
@@ -19,23 +19,15 @@ export const PdfViewer = connect(
   },
 );
 
-/**
- *
- */
 let viewer;
 
-/**
- *
- */
-
 const setupViewer = async ({ node, src }) => {
-  // Make sure to cleanup any events/references added to the last instance
   if (viewer) {
-    viewer.then(({ UI }) => {
-      UI.loadDocument(src, { extension: 'pdf' });
-    });
+    const { UI } = viewer;
+    UI.loadDocument(src, { extension: 'pdf' });
   } else {
-    viewer = WebViewer(
+    console.log('I AM SETTING UP VIEWER');
+    viewer = await new WebViewer(
       {
         extension: 'pdf',
         initialDoc: src,
@@ -43,30 +35,33 @@ const setupViewer = async ({ node, src }) => {
         path: '/pdfjsexpress',
       },
       node,
-    ).then(({ Core: { documentViewer }, UI }) => {
-      UI.setHeaderItems(header => {
-        header.push({
-          img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
-          onClick: async () => {
-            // must wait for the document to be loaded before you can save the file
-            // documentViewer.addEventListener('documentLoaded', async () => {
-            const documentStream = await documentViewer
-              .getDocument()
-              .getFileData({});
-            const fileName = await documentViewer.getDocument().getFilename();
-            const documentBlob = new Blob([documentStream], {
-              type: 'application/pdf',
-            });
-            const link = window.document.createElement('a');
-            link.href = URL.createObjectURL(documentBlob);
-            link.download = `${fileName}.pdf`;
-            link.click();
-          },
-          title: 'Download',
-          type: 'actionButton',
-        });
+    );
+
+    const {
+      Core: { documentViewer },
+      UI,
+    } = viewer;
+
+    UI.setHeaderItems(header => {
+      header.push({
+        img: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>',
+        onClick: async () => {
+          // must wait for the document to be loaded before you can save the file
+          const documentStream = await documentViewer
+            .getDocument()
+            .getFileData({});
+          const fileName = await documentViewer.getDocument().getFilename();
+          const documentBlob = new Blob([documentStream], {
+            type: 'application/pdf',
+          });
+          const link = window.document.createElement('a');
+          link.href = URL.createObjectURL(documentBlob);
+          link.download = `${fileName}.pdf`;
+          link.click();
+        },
+        title: 'Download',
+        type: 'actionButton',
       });
-      return { UI };
     });
   }
 };
@@ -81,6 +76,9 @@ function useHookWithRefCallback({ src }) {
     node => {
       if (ref.current) {
         // tear down of WebViewer
+        console.log('I AM TEARING DOWN, SO READ ME');
+        console.log('viewer IN REF CURRENT', viewer);
+        ref.current = undefined;
       }
 
       if (node) {
@@ -92,6 +90,18 @@ function useHookWithRefCallback({ src }) {
     },
     [src],
   );
+
+  useEffect(() => {
+    // initial rendering
+    console.log('ADDING PDF VIEWER');
+    return () => {
+      console.log('TEARDOWN');
+      console.log('viewer', viewer);
+      viewer.UI.dispose();
+      // deleting UI element here
+      viewer = undefined;
+    };
+  }, []);
 
   return setRef;
 }
