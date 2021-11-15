@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForSealedCase';
+import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -41,7 +41,6 @@ describe('Docket Clerk seals a case', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    console.log('new case docket#', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
