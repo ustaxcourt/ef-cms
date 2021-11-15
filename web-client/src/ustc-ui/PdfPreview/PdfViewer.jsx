@@ -3,8 +3,6 @@ import { state } from 'cerebral';
 import React, { useCallback, useEffect, useRef } from 'react';
 import WebViewer from '@pdftron/pdfjs-express-viewer';
 
-const PDF_EXPRESS_LICENSE_KEY = 'OjkUB41bl1hJg6jvUEfn';
-
 export const PdfViewer = connect(
   {
     featureFlagHelper: state.featureFlagHelper,
@@ -24,12 +22,20 @@ const loadDocument = ({ src, viewer }) => {
   UI.loadDocument(src, { extension: 'pdf' });
 };
 
+/**
+ * Sets up new pdfViewer instance and adds a download button to the header
+ *
+ * @param {object} args - arguments
+ * @param {Element} args.node -  the DOM element to attach the viewer to
+ * @param {string} args.src - the url of the pdf to load
+ * @returns {Promise} - a promise that resolves to the pdfViewer instance
+ */
 const setupViewer = async ({ node, src }) => {
   const newViewer = await WebViewer(
     {
       extension: 'pdf',
       initialDoc: src,
-      licenseKey: PDF_EXPRESS_LICENSE_KEY,
+      licenseKey: process.env.PDF_EXPRESS_LICENSE_KEY,
       path: '/pdfjsexpress',
     },
     node,
@@ -66,7 +72,11 @@ const setupViewer = async ({ node, src }) => {
 };
 
 /**
+ * Creates hooks for the pdf viewer
  *
+ * @param {object} args - arguments
+ * @param {string} args.src - the url of the pdf to load
+ * @returns {object} - the DOM reference
  */
 function useHookWithRefCallback({ src }) {
   const ref = useRef();
@@ -99,7 +109,7 @@ const PdfViewerComponent = function PdfViewerComponent({
   src,
   title,
 }) {
-  const webviewer = useHookWithRefCallback({ src });
+  const webViewer = useHookWithRefCallback({ src });
   const viewerProps = { id, scrolling, title };
 
   if (!src || process.env.CI) {
@@ -107,6 +117,6 @@ const PdfViewerComponent = function PdfViewerComponent({
   }
 
   return (
-    <div {...viewerProps} className="express-pdf-viewer" ref={webviewer}></div>
+    <div {...viewerProps} className="express-pdf-viewer" ref={webViewer}></div>
   );
 };

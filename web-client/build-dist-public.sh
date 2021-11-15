@@ -18,4 +18,11 @@ CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_I
 
 COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 
-STAGE="${CLIENT_STAGE}" COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" CIRCLE_SHA1="${CIRCLE_SHA1}" SESSION_TIMEOUT=3300000 API_URL="${API_URL}" PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" npm run build:public
+STAGE="${CLIENT_STAGE}" \
+ COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" \
+ CIRCLE_SHA1="${CIRCLE_SHA1}" \
+ SESSION_TIMEOUT=3300000 \ 
+ API_URL="${API_URL}" \
+ PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
+ PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" \ 
+ npm run build:public
