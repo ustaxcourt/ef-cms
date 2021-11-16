@@ -187,7 +187,7 @@ describe('featureFlagHelper', () => {
   });
 
   describe('isPdfJsEnabled', () => {
-    it('should be true when the pfjs-express-viewer-enabled feature is enabled', () => {
+    it('should be true when the pdfjs-express-viewer-enabled feature is enabled', () => {
       const featureFlagHelper = withAppContextDecorator(
         featureFlagHelperComputed,
         {
@@ -209,7 +209,7 @@ describe('featureFlagHelper', () => {
       });
     });
 
-    it('should be false when the pfjs-express-viewer-enabled feature is disabled', () => {
+    it('should be false when the pdfjs-express-viewer-enabled feature is disabled', () => {
       const featureFlagHelper = withAppContextDecorator(
         featureFlagHelperComputed,
         {
