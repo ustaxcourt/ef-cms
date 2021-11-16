@@ -8,15 +8,12 @@ export const PdfPreview = connect(
     noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ noDocumentText, pdfPreviewUrl, scrolling = 'true' }) {
+  function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return noDocumentText || '';
     }
 
-    const pdfProps = { scrolling, src: pdfPreviewUrl };
-
-    // warning: PDFPreviewModal uses scroll=false.  find out why, see what we can do to support it when using pdfjs here.
-    return <PdfViewer {...pdfProps} />;
+    return <PdfViewer src={pdfPreviewUrl} />;
   },
 );
