@@ -71,7 +71,7 @@ export const AdvancedSearch = connect(
               }}
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
-                <SearchBoilerplateText />
+                <SearchBoilerplateText formTypeText="a case" />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
@@ -94,7 +94,7 @@ export const AdvancedSearch = connect(
                     : ' (Coming Soon)')
                 }
               >
-                <SearchBoilerplateText />
+                <SearchBoilerplateText formTypeText="an order" />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
@@ -178,7 +178,7 @@ export const AdvancedSearch = connect(
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (
               <>
-                <SearchBoilerplateText />
+                <SearchBoilerplateText formTypeText="a case" />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
