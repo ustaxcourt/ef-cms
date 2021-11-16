@@ -72,7 +72,6 @@ export const AdvancedSearch = connect(
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
                 <SearchBoilerplateText formTypeText="a case" />
-
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
                     submitCaseAdvancedSearchSequence
