@@ -12,7 +12,7 @@ export const PdfViewer = connect(
     if (featureFlagHelper.isPdfJsEnabled) {
       return <PdfViewerComponent {...pdfProps} />;
     } else {
-      return <iframe {...pdfProps} />;
+      return <iframe className="viewer-iframe" {...pdfProps} />;
     }
   },
 );
