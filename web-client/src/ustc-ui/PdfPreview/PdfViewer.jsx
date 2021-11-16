@@ -1,6 +1,6 @@
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import WebViewer from '@pdftron/pdfjs-express-viewer';
 
 export const PdfViewer = connect(
@@ -79,8 +79,15 @@ const setupViewer = async ({ node, src }) => {
  * @returns {object} - the DOM reference
  */
 function useHookWithRefCallback({ src }) {
+  // this is needed to keep track of the node when the component is destroyed
   const ref = useRef();
+  // we need this state reference for the useEffect that listens for src changes
+  // useEffect is not able to listen for ref.current, so we have another state variable
+  // to trigger the effect.
+  const [viewer, setViewer] = useState();
 
+  // this useCallback ref is called when the dom node is created and destroyed,
+  // such as when we leave the page that had the pdf viewer
   const setRef = useCallback(node => {
     if (!node && ref.current) {
       ref.current.dispose();
@@ -88,17 +95,20 @@ function useHookWithRefCallback({ src }) {
     }
 
     if (node) {
-      setupViewer({ node, src }).then(viewer => {
-        ref.current = viewer;
+      setupViewer({ node, src }).then(v => {
+        setViewer(v);
+        ref.current = v;
       });
     }
   }, []);
 
   useEffect(() => {
-    if (ref.current && src) {
-      loadDocument({ src, viewer: ref.current });
+    // ref.current is sometimes never defined when it should be on this initial call; therefore,
+    // we use a viewer state hook.
+    if (viewer && src) {
+      loadDocument({ src, viewer });
     }
-  }, [src, ref.current]);
+  }, [src, viewer]);
 
   return setRef;
 }
