@@ -26,7 +26,7 @@ const router = {
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => router.route(path || '/');
 
-    app.getSequence('setupPublicConfigSequence')();
+    app.getSequence('setupConfigSequence')();
 
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);

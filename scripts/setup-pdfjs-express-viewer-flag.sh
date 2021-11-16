@@ -12,4 +12,4 @@
 
 ENV=$1
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"pfjs-express-viewer-enabled"},"sk":{"S":"pfjs-express-viewer-enabled"},"current":{"BOOL":true}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"pdfjs-express-viewer-enabled"},"sk":{"S":"pdfjs-express-viewer-enabled"},"current":{"BOOL":true}}'
