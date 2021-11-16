@@ -79,8 +79,6 @@ const router = {
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
-    app.getSequence('setupConfigSequence')();
-
     registerRoute(
       '/',
       ifHasAccess({ app }, () => {

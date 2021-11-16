@@ -163,6 +163,17 @@ const app = {
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
 
+    if (token) {
+      // the token was in localstorage, and the user didn't need to login
+      await applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor(applicationContext, {
+          featureFlag:
+            applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
+              .PDFJS_EXPRESS_VIEWER.key,
+        });
+    }
+
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     presenter.state.constants = applicationContext.getConstants();
