@@ -177,6 +177,8 @@ describe('creation form', () => {
 
   it('reviews information before filing', () => {
     cy.get('button#submit-case').click();
+    cy.get('button#pdf-preview-button').click();
+    cy.get('div.pdf-preview-modal').should('have.length', 1);
   });
 
   it('submits forms and redirects to the file petition success page', () => {
