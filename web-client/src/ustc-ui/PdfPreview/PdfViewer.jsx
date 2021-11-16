@@ -7,8 +7,8 @@ export const PdfViewer = connect(
   {
     featureFlagHelper: state.featureFlagHelper,
   },
-  ({ featureFlagHelper, id, scrolling, src, title }) => {
-    const pdfProps = { id, scrolling, src, title };
+  ({ featureFlagHelper, id, src, title }) => {
+    const pdfProps = { id, src, title };
     if (featureFlagHelper.isPdfJsEnabled) {
       return <PdfViewerComponent {...pdfProps} />;
     } else {
@@ -113,14 +113,9 @@ function useHookWithRefCallback({ src }) {
   return setRef;
 }
 
-const PdfViewerComponent = function PdfViewerComponent({
-  id,
-  scrolling,
-  src,
-  title,
-}) {
+const PdfViewerComponent = function PdfViewerComponent({ id, src, title }) {
   const webViewer = useHookWithRefCallback({ src });
-  const viewerProps = { id, scrolling, title };
+  const viewerProps = { id, title };
 
   if (!src || process.env.CI) {
     return '';
