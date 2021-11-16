@@ -70,7 +70,7 @@ const ALLOWLIST_FEATURE_FLAGS = {
     key: 'internal-order-search-enabled',
   },
   PDFJS_EXPRESS_VIEWER: {
-    key: 'pfjs-express-viewer-enabled',
+    key: 'pdfjs-express-viewer-enabled',
   },
 };
 
