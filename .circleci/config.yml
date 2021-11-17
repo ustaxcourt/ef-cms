@@ -975,7 +975,7 @@ workflows:
             - wait-for-reindex
       - smoketests:
           requires:
-            - deploy
+            - disable-reindex-cron
           filters:
             branches:
               only:
@@ -1007,7 +1007,7 @@ workflows:
                 - migration
       - switch-colors:
           requires:
-            - deploy
+            - smoketests-readonly
           filters:
             branches:
               only:
