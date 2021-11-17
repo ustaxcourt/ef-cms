@@ -45,6 +45,8 @@ describe('submitPaperFilingAction', () => {
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
+    expect(applicationContext.getUseCases().sanitizePdfInteractor).toBeCalled();
+
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toHaveBeenCalled();
