@@ -174,7 +174,9 @@ const app = {
           featureFlag: pdfFlagKey,
         });
 
-      presenter.state.featureFlags[pdfFlagKey] = isFlagOn;
+      presenter.state.featureFlags = {
+        [pdfFlagKey]: isFlagOn,
+      };
     }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
