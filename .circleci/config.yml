@@ -121,6 +121,7 @@ jobs:
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
