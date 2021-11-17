@@ -164,6 +164,9 @@ const {
   updateUserRecords,
 } = require('../../persistence/dynamo/users/updateUserRecords');
 const {
+  uploadDocumentAndMakeSafeInteractor,
+} = require('../useCases/uploadDocumentAndMakeSafeInteractor');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -366,6 +369,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     post: jest.fn(),
   };
+
+  const mockGetUseCases = appContextProxy({
+    uploadDocumentAndMakeSafeInteractor: jest
+      .fn()
+      .mockImplementation(uploadDocumentAndMakeSafeInteractor),
+  });
 
   const mockGetUseCaseHelpers = appContextProxy({
     appendPaperServiceAddressPageToPdf: jest
@@ -613,7 +622,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
-    getUseCases: emptyAppContextProxy,
+    getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
     logger: {
