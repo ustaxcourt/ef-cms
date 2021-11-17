@@ -225,6 +225,7 @@ import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
+import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { saveCalendarNoteInteractor } from '../../shared/src/proxies/trialSessions/saveCalendarNoteProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
@@ -249,6 +250,7 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
+import { unsealCaseInteractor } from '../../shared/src/proxies/unsealCaseProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
@@ -460,6 +462,7 @@ const allUseCases = {
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
+  sanitizePdfInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
@@ -481,6 +484,7 @@ const allUseCases = {
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
   unprioritizeCaseInteractor,
+  unsealCaseInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,

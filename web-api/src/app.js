@@ -415,6 +415,7 @@ const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
+const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
@@ -423,6 +424,7 @@ const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
+const { unsealCaseLambda } = require('./cases/unsealCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
@@ -659,6 +661,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(updateQcCompleteForTrialLambda),
   );
   app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
+  app.put('/case-meta/:docketNumber/unseal', lambdaWrapper(unsealCaseLambda));
   app.put(
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
@@ -777,6 +780,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  */
 {
   app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.put('/documents/:key/sanitize', lambdaWrapper(sanitizePdfLambda));
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
