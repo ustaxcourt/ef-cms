@@ -26,6 +26,11 @@
     "current": true
   },
   {
+    "pk": "pdfjs-express-viewer-enabled",
+    "sk": "pdfjs-express-viewer-enabled",
+    "current": true
+  },
+  {
     "caseOrder": [],
     "gsi1pk": "trial-session-catalog",
     "trialLocation": "Las Vegas, Nevada",
