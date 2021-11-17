@@ -1,11 +1,7 @@
 const joi = require('joi');
 const {
   CONTACT_TYPES,
-  COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-  STATE_NOT_AVAILABLE,
-  US_STATES,
-  US_STATES_OTHER,
 } = require('../EntityConstants');
 const {
   joiValidationDecorator,
@@ -13,6 +9,7 @@ const {
 } = require('../JoiValidationDecorator');
 const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
+const { USER_CONTACT_VALIDATION_RULES } = require('../User');
 
 /**
  * constructor
@@ -53,25 +50,13 @@ Petitioner.prototype.init = function init(rawContact, { applicationContext }) {
 };
 
 Petitioner.VALIDATION_RULES = {
+  ...USER_CONTACT_VALIDATION_RULES,
   additionalName: JoiValidationConstants.STRING.max(600).optional(),
-  address1: JoiValidationConstants.STRING.max(100).required(),
-  address2: JoiValidationConstants.STRING.max(100).optional().allow(null),
-  address3: JoiValidationConstants.STRING.max(100).optional().allow(null),
-  city: JoiValidationConstants.STRING.max(100).required(),
   contactId: JoiValidationConstants.UUID.required().description(
     'Unique contact ID only used by the system.',
   ),
   contactType: JoiValidationConstants.STRING.valid(
     ...Object.values(CONTACT_TYPES),
-  ).required(),
-  country: JoiValidationConstants.STRING.when('countryType', {
-    is: COUNTRY_TYPES.INTERNATIONAL,
-    otherwise: joi.optional().allow(null),
-    then: joi.required(),
-  }),
-  countryType: JoiValidationConstants.STRING.valid(
-    COUNTRY_TYPES.DOMESTIC,
-    COUNTRY_TYPES.INTERNATIONAL,
   ).required(),
   email: JoiValidationConstants.EMAIL.when('hasEAccess', {
     is: true,
@@ -87,23 +72,10 @@ Petitioner.VALIDATION_RULES = {
   inCareOf: JoiValidationConstants.STRING.max(100).optional(),
   isAddressSealed: joi.boolean().required(),
   name: JoiValidationConstants.STRING.max(100).required(),
-  phone: JoiValidationConstants.STRING.max(100).required(),
-  postalCode: joi.when('countryType', {
-    is: COUNTRY_TYPES.INTERNATIONAL,
-    otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
-    then: JoiValidationConstants.STRING.max(100).required(),
-  }),
   sealedAndUnavailable: joi.boolean().optional(),
   serviceIndicator: JoiValidationConstants.STRING.valid(
     ...Object.values(SERVICE_INDICATOR_TYPES),
   ).required(),
-  state: JoiValidationConstants.STRING.when('countryType', {
-    is: COUNTRY_TYPES.INTERNATIONAL,
-    otherwise: joi
-      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
-      .required(),
-    then: joi.optional().allow(null),
-  }),
   title: JoiValidationConstants.STRING.max(100).optional(),
 };
 
