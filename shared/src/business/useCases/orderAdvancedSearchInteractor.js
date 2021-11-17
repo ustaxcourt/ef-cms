@@ -48,8 +48,21 @@ exports.orderAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const isAssociated = await applicationContext
+    .getPersistenceGateway()
+    .verifyCaseForUser({
+      applicationContext,
+      docketNumber,
+      userId: authorizedUser.userId,
+    });
+
+  const canViewSealedCase = isAuthorized(
+    authorizedUser,
+    ROLE_PERMISSIONS.VIEW_SEALED_CASE,
+  );
+
   let omitSealed = false;
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE)) {
+  if (!canViewSealedCase && !isAssociated) {
     omitSealed = true;
   }
 
