@@ -900,41 +900,41 @@ workflows:
       - disable-reindex-cron:
           requires:
             - wait-for-reindex
-      - smoketests:
-          requires:
-            - disable-reindex-cron
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
-      - smoketests-readonly:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
+      # - smoketests:
+      #     requires:
+      #       - disable-reindex-cron
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - smoketests-readonly:
+      #     requires:
+      #       - smoketests
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
       - switch-colors:
           requires:
-            - migrate
+            - disable-reindex-cron
           filters:
             branches:
               only:
