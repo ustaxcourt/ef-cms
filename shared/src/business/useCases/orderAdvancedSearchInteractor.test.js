@@ -60,6 +60,10 @@ describe('orderAdvancedSearchInteractor', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
+
     await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
@@ -106,6 +110,10 @@ describe('orderAdvancedSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
 
     const result = await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
