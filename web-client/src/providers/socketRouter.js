@@ -75,6 +75,7 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         await app.getSequence('disengageAppMaintenanceSequence')({
           ...message,
           maintenanceMode: false,
+          path: '/',
         });
         break;
     }
