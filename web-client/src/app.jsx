@@ -142,11 +142,6 @@ const app = {
       presenter.state.permissions = userPermissions;
     }
 
-    const maintenanceMode = await applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'maintenanceMode' });
-    presenter.state.maintenanceMode = maintenanceMode;
-
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
@@ -164,19 +159,22 @@ const app = {
     applicationContext.setCurrentUserToken(token);
 
     if (token) {
+      const maintenanceMode = await applicationContext
+        .getUseCases()
+        .getMaintenanceModeInteractor(applicationContext);
+      presenter.state.maintenanceMode = maintenanceMode;
+    }
+
+    if (token && !presenter.state.maintenanceMode) {
       const pdfFlagKey =
         applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
           .PDFJS_EXPRESS_VIEWER.key;
       let isFlagOn = false;
-      try {
-        isFlagOn = await applicationContext
-          .getUseCases()
-          .getFeatureFlagValueInteractor(applicationContext, {
-            featureFlag: pdfFlagKey,
-          });
-      } catch (err) {
-        // this will happen if maintenance mode is on
-      }
+      isFlagOn = await applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor(applicationContext, {
+          featureFlag: pdfFlagKey,
+        });
       presenter.state.featureFlags = {
         [pdfFlagKey]: isFlagOn,
       };
