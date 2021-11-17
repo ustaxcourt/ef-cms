@@ -167,13 +167,16 @@ const app = {
       const pdfFlagKey =
         applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
           .PDFJS_EXPRESS_VIEWER.key;
-
-      const isFlagOn = await applicationContext
-        .getUseCases()
-        .getFeatureFlagValueInteractor(applicationContext, {
-          featureFlag: pdfFlagKey,
-        });
-
+      let isFlagOn = false;
+      try {
+        isFlagOn = await applicationContext
+          .getUseCases()
+          .getFeatureFlagValueInteractor(applicationContext, {
+            featureFlag: pdfFlagKey,
+          });
+      } catch (err) {
+        // this will happen if maintenance mode is on
+      }
       presenter.state.featureFlags = {
         [pdfFlagKey]: isFlagOn,
       };
