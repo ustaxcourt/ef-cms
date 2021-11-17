@@ -9,13 +9,12 @@ const { genericHandler } = require('../genericHandler');
 exports.getFeatureFlagValueLambda = event =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
-      return await applicationContext
+    ({ applicationContext }) =>
+      applicationContext
         .getUseCases()
         .getFeatureFlagValueInteractor(
           applicationContext,
           event.pathParameters,
-        );
-    },
+        ),
     { bypassMaintenanceCheck: true },
   );
