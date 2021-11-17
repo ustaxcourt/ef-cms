@@ -7,8 +7,14 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getFeatureFlagValueLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext, event.pathParameters);
-  });
+  genericHandler(
+    event,
+    ({ applicationContext }) =>
+      applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor(
+          applicationContext,
+          event.pathParameters,
+        ),
+    { bypassMaintenanceCheck: true },
+  );

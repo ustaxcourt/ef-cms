@@ -38,20 +38,21 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const localWebsocketUrl = 'ws://127.0.0.1:*';
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
+  const pdfjsExpressUrl = 'https://*.pdfjs.express';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl}`,
+    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
     `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
-    'worker-src blob:',
+    `worker-src blob: ${subdomainsUrl}`,
     `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
     `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
-    `font-src ${applicationUrl} ${subdomainsUrl}`,
+    `font-src ${applicationUrl} ${subdomainsUrl} data:`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,
-    "frame-ancestors 'none'",
+    "frame-ancestors 'self'",
   ];
   headers['content-security-policy'] = [
     {
