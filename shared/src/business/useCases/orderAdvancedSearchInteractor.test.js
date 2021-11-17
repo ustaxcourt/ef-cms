@@ -55,7 +55,11 @@ describe('orderAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('omits results from sealed cases when the current user is not an internal user', async () => {
+  it('omits results from sealed cases when the current user is not an internal user and is not associated with the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.privatePractitioner,
     });
@@ -72,7 +76,45 @@ describe('orderAdvancedSearchInteractor', () => {
     ).toBe(true);
   });
 
-  it('returns results with an authorized user role (petitionsclerk)', async () => {
+  it('returns results for a user who is authorized to view a sealed case (petitionsclerk)', async () => {
+    const result = await orderAdvancedSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+      keyword: 'candy',
+      startDate: '01/01/2001',
+    });
+
+    expect(result).toMatchObject([
+      {
+        caseCaption: 'Samson Workman, Petitioner',
+        docketNumber: '103-19',
+        documentTitle: 'Order for More Candy',
+        eventCode: 'ODD',
+        signedJudgeName: 'Guy Fieri',
+      },
+      {
+        caseCaption: 'Samson Workman, Petitioner',
+        docketNumber: '103-19',
+        documentTitle: 'Order for KitKats',
+        eventCode: 'ODD',
+        signedJudgeName: 'Guy Fieri',
+      },
+    ]);
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].omitSealed,
+    ).toBe(false);
+  });
+
+  it('returns sealed results for an external user who is associated with the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(true);
+
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
+
     const result = await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
