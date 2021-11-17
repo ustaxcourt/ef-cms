@@ -70,6 +70,4 @@ describe('Docket Clerk Document QC Journey', () => {
   // Bug 6934 - Bug was caused when the work item was marked as read,
   // causing the link to change for the work item.
   docketClerkViewsAssignedWorkItemEditLink(cerebralTest);
-
-  docketClerkViewsAssignedWorkItemEditLink(cerebralTest);
 });
