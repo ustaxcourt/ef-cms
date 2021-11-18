@@ -273,14 +273,14 @@ describe('genericHandler', () => {
       );
     });
 
-    it('should throw an error if maintenance mode is true', async () => {
+    it('should NOT throw an error if maintenance mode is undefined', async () => {
       applicationContext
         .getPersistenceGateway()
         .getMaintenanceMode.mockReturnValue(undefined);
 
-      await expect(checkMaintenanceMode({ applicationContext })).resolves.toBe(
-        false,
-      );
+      await expect(
+        checkMaintenanceMode({ applicationContext }),
+      ).resolves.not.toThrow();
     });
   });
 });

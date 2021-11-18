@@ -41,6 +41,8 @@ const checkMaintenanceMode = async ({ applicationContext }) => {
   if (maintenanceMode) {
     throw new Error('Maintenance mode is enabled');
   }
+
+  return maintenanceMode;
 };
 
 exports.checkMaintenanceMode = checkMaintenanceMode;
