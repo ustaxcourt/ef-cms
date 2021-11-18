@@ -15,3 +15,4 @@
 ./scripts/rename-order-search-flag-to-internal.sh $1
 ./scripts/setup-document-search-limiter-limits.sh $1
 ./scripts/setup-terminal-ip-allowlist.sh $1
+./scripts/setup-maintenance-mode-flag.sh $1
