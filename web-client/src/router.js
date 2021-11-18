@@ -53,7 +53,7 @@ const ifHasAccess = (
   cb,
 ) => {
   return function () {
-    if (!app.getState('user')) {
+    if (!app.getState('token')) {
       return redirect.gotoLoginPage(app);
     } else if (app.getState('maintenanceMode')) {
       return redirect.gotoMaintenancePage(app);
@@ -78,8 +78,6 @@ const router = {
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
-
-    app.getSequence('setupConfigSequence')();
 
     registerRoute(
       '/',
