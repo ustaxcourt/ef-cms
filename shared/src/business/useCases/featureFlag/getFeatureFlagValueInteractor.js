@@ -22,7 +22,9 @@ exports.getFeatureFlagValueInteractor = async (
     );
   }
 
-  return await applicationContext
+  const result = await applicationContext
     .getPersistenceGateway()
     .getFeatureFlagValue({ applicationContext, featureFlag });
+
+  return !!(result && result.current);
 };
