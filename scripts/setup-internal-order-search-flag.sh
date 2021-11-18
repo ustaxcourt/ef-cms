@@ -13,4 +13,3 @@
 ENV=$1
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"internal-order-search-enabled"},"sk":{"S":"internal-order-search-enabled"},"current":{"BOOL":true}}'
-
