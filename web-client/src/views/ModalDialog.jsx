@@ -120,7 +120,6 @@ export const ModalDialog = ({
                       link
                       className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
                       icon="times-circle"
-                      id="close-modal-button"
                       onClick={
                         useRunConfirmSequence
                           ? runConfirmSequence

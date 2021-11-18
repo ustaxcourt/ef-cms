@@ -13,10 +13,6 @@ exports.onConnectInteractor = async (
   { connectionId, endpoint },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  if (!authorizedUser) {
-    // silence local development errors
-    return;
-  }
 
   await applicationContext.getPersistenceGateway().saveUserConnection({
     applicationContext,

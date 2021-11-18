@@ -73,7 +73,6 @@ export const StartCaseStep5 = connect(
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
                                     file={form.petitionFile}
-                                    id="petition-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
                                     title="Petition"
@@ -136,7 +135,6 @@ export const StartCaseStep5 = connect(
                               <div className="grid-col flex-auto">
                                 <PDFPreviewButton
                                   file={form.stinFile}
-                                  id="stin-preview-button"
                                   shouldAbbreviateTitle={false}
                                   shouldWrapText={true}
                                   title="Statement of Taxpayer Identification"
@@ -159,7 +157,6 @@ export const StartCaseStep5 = connect(
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
                                     file={form.ownershipDisclosureFile}
-                                    id="ods-preview-button"
                                     shouldAbbreviateTitle={false}
                                     shouldWrapText={true}
                                     title="Ownership Disclosure Statement"

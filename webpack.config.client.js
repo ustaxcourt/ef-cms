@@ -48,7 +48,6 @@ module.exports = {
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
       NO_SCANNER: null,
-      PDF_EXPRESS_LICENSE_KEY: null,
       PUBLIC_SITE_URL: null,
       SCANNER_RESOURCE_URI: null,
       SESSION_MODAL_TIMEOUT: null,
@@ -69,10 +68,6 @@ module.exports = {
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'web-client/src/favicons', to: '.' },
         { from: 'web-client/src/site.webmanifest', to: '.' },
-        {
-          from: './node_modules/@pdftron/pdfjs-express-viewer/public',
-          to: './pdfjsexpress',
-        },
       ],
     }),
   ],

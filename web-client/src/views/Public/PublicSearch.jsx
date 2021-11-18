@@ -51,7 +51,7 @@ export const PublicSearch = connect(
             }}
           >
             <Tab id="tab-case" tabName="case" title="Case">
-              <SearchBoilerplateText formTypeText="a case" />
+              <SearchBoilerplateText />
               <CaseSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicCaseAdvancedSearchSequence
@@ -73,7 +73,7 @@ export const PublicSearch = connect(
                   : ' (Coming Soon)')
               }
             >
-              <SearchBoilerplateText formTypeText="an order" />
+              <SearchBoilerplateText />
               <OrderSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOrderAdvancedSearchSequence

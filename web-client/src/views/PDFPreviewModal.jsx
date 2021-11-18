@@ -62,7 +62,7 @@ export const PDFPreviewModal = connect(
         </Mobile>
         <div>
           <div className="pdf-preview-content">
-            <PdfPreview />
+            <PdfPreview scroll={false} />
           </div>
         </div>
       </ModalDialog>
