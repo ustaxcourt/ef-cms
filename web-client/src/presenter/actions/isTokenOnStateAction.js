@@ -8,11 +8,6 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method
  * @returns {object} the list of section work items
  */
-export const isTokenOnState = ({ get, path }) => {
-  const token = get(state.token);
-  if (token) {
-    return path.yes();
-  } else {
-    return path.no();
-  }
+export const isTokenOnStateAction = ({ get, path }) => {
+  return get(state.token) ? path.yes() : path.no();
 };
