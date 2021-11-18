@@ -256,7 +256,7 @@ describe('genericHandler', () => {
     it('should throw an error if maintenance mode is true', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getMaintenanceMode.mockReturnValue(true);
+        .getMaintenanceMode.mockReturnValue({ current: true });
 
       await expect(
         checkMaintenanceMode({ applicationContext }),
@@ -266,11 +266,21 @@ describe('genericHandler', () => {
     it('should not throw an error if maintenance mode is false', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getMaintenanceMode.mockReturnValue(false);
+        .getMaintenanceMode.mockReturnValue({ current: false });
 
-      await expect(
-        checkMaintenanceMode({ applicationContext }),
-      ).resolves.not.toThrow();
+      await expect(checkMaintenanceMode({ applicationContext })).resolves.toBe(
+        false,
+      );
+    });
+
+    it('should throw an error if maintenance mode is true', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getMaintenanceMode.mockReturnValue(undefined);
+
+      await expect(checkMaintenanceMode({ applicationContext })).resolves.toBe(
+        false,
+      );
     });
   });
 });
