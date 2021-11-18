@@ -120,6 +120,16 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
+    // if /log-in page, delete local storage?
+    if (window.location.href.includes('/log-in?code')) {
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'token' });
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'user' });
+    }
+
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -150,6 +160,9 @@ const app = {
       return value;
     });
 
+    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    presenter.state.constants = applicationContext.getConstants();
+
     const token =
       (await applicationContext
         .getUseCases()
@@ -159,10 +172,14 @@ const app = {
     applicationContext.setCurrentUserToken(token);
 
     if (token) {
-      const maintenanceMode = await applicationContext
-        .getUseCases()
-        .getMaintenanceModeInteractor(applicationContext);
-      presenter.state.maintenanceMode = maintenanceMode;
+      try {
+        const maintenanceMode = await applicationContext
+          .getUseCases()
+          .getMaintenanceModeInteractor(applicationContext);
+        presenter.state.maintenanceMode = maintenanceMode;
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
     }
 
     if (token && !presenter.state.maintenanceMode) {
@@ -179,10 +196,6 @@ const app = {
         [pdfFlagKey]: isFlagOn,
       };
     }
-
-    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
-
-    presenter.state.constants = applicationContext.getConstants();
 
     config.autoAddCss = false;
     library.add(
