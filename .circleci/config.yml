@@ -124,9 +124,9 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 10
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1536
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1536
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -187,7 +187,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -248,7 +248,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
-            npm run test:pa11y:public-search --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
