@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Sets the pdfjs-express-viewer-enabled flag to "true" in the dynamo deploy table
+# Sets the value for the request limit of the IP limiter
 
 # Usage
-#   ./setup-pdfjs-express-viewer-flag.sh dev
+#   ./setup-document-search-limiter-limits.sh dev
 
 # Arguments
 #   - $1 - the environment to set the flag
@@ -14,15 +14,18 @@ ENV=$1
 
 ITEM=$(cat <<-END
 {
-    "pk": {
-        "S": "pdfjs-express-viewer-enabled"
-    },
-    "sk":{
-        "S": "pdfjs-express-viewer-enabled"
-    },
-    "current": {
-        "BOOL": true
-    }
+  "maxInvocations": {
+    "N": "5"
+  },
+  "pk": {
+    "S": "document-search-limiter-configuration"
+  },
+  "sk": {
+    "S": "document-search-limiter-configuration"
+  },
+  "windowTime": {
+    "N": "1000"
+  }
 }
 END
 )

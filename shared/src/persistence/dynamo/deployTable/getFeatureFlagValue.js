@@ -18,5 +18,5 @@ exports.getFeatureFlagValue = async ({ applicationContext, featureFlag }) => {
     applicationContext,
   });
 
-  return result.current;
+  return !!(result && result.current);
 };

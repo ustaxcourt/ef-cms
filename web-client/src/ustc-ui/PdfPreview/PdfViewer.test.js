@@ -5,6 +5,17 @@ import App from 'cerebral';
 import React from 'react';
 
 describe('PdfViewer', () => {
+  const OLD_ENV = process.env;
+
+  beforeEach(() => {
+    jest.resetModules(); // Most important - it clears the cache
+    process.env = { ...OLD_ENV }; // Make a copy
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV; // Restore old environment
+  });
+
   it('should render an iframe if isPdfJsEnabled if false', () => {
     const testModule = {
       state: {
@@ -25,6 +36,8 @@ describe('PdfViewer', () => {
   });
 
   it('should render the PdfViwer if isPdfJsEnabled if true', () => {
+    process.env.CI = '';
+
     const testModule = {
       state: {
         featureFlagHelper: {
