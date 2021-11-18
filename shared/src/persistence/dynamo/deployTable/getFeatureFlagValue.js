@@ -9,14 +9,11 @@ const client = require('../../dynamodbClientService');
  * @returns {boolean} the boolean of the feature flag value
  */
 
-exports.getFeatureFlagValue = async ({ applicationContext, featureFlag }) => {
-  const result = await client.getFromDeployTable({
+exports.getFeatureFlagValue = ({ applicationContext, featureFlag }) =>
+  client.getFromDeployTable({
     Key: {
       pk: featureFlag,
       sk: featureFlag,
     },
     applicationContext,
   });
-
-  return !!(result && result.current);
-};
