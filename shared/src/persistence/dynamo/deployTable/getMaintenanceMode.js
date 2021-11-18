@@ -7,14 +7,11 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @returns {Promise<string>} the value of the maintenance-mode flag on the dynamodb deploy table
  */
-exports.getMaintenanceMode = async ({ applicationContext }) => {
-  const result = await client.getFromDeployTable({
+exports.getMaintenanceMode = ({ applicationContext }) =>
+  client.getFromDeployTable({
     Key: {
       pk: 'maintenance-mode',
       sk: 'maintenance-mode',
     },
     applicationContext,
   });
-
-  return result.current;
-};
