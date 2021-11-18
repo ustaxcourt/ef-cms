@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -95,7 +94,7 @@ export const CorrespondenceViewerCorrespondence = connect(
             </div>
 
             {!process.env.CI && (
-              <PdfViewer
+              <iframe
                 src={iframeSrc}
                 title={viewerCorrespondenceToDisplay.documentTitle}
               />

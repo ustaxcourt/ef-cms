@@ -163,22 +163,6 @@ const app = {
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
 
-    if (token) {
-      const pdfFlagKey =
-        applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
-          .PDFJS_EXPRESS_VIEWER.key;
-
-      const isFlagOn = await applicationContext
-        .getUseCases()
-        .getFeatureFlagValueInteractor(applicationContext, {
-          featureFlag: pdfFlagKey,
-        });
-
-      presenter.state.featureFlags = {
-        [pdfFlagKey]: isFlagOn,
-      };
-    }
-
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     presenter.state.constants = applicationContext.getConstants();
