@@ -38,6 +38,9 @@ describe('gotoDocketEntryQcSequence', () => {
       docketEntries: [mockDocketEntry],
       docketNumber: mockDocketNumber,
     });
+
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should set up state for qcing docket entry', async () => {
