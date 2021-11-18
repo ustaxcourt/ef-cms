@@ -130,6 +130,7 @@ exports.fileExternalDocumentInteractor = async (
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseToUpdate.associatedJudge,
+          caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
