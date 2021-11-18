@@ -116,6 +116,7 @@ exports.editPaperFilingInteractor = async (
         Object.assign(workItem, {
           assigneeId: null,
           assigneeName: null,
+          caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
@@ -172,6 +173,7 @@ exports.editPaperFilingInteractor = async (
         Object.assign(workItem, {
           assigneeId: null,
           assigneeName: null,
+          caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseToUpdate.status,
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
@@ -212,6 +214,7 @@ exports.editPaperFilingInteractor = async (
       Object.assign(workItem, {
         assigneeId: null,
         assigneeName: null,
+        caseIsInProgress: caseEntity.inProgress,
         caseStatus: caseToUpdate.status,
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
