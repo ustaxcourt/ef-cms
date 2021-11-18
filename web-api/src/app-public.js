@@ -64,6 +64,9 @@ const {
   getCaseForPublicDocketSearchLambda,
 } = require('./public-api/getCaseForPublicDocketSearchLambda');
 const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
+const {
   getMaintenanceModeLambda,
 } = require('./maintenance/getMaintenanceModeLambda');
 const {
@@ -82,11 +85,11 @@ const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 // const {
 //   opinionPublicSearchLambda,
 // } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
-// const { ipLimiter } = require('./middleware/ipLimiter');
-// const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
+const { ipLimiter } = require('./middleware/ipLimiter');
 
 /**
  * public-api
@@ -98,19 +101,20 @@ app.head(
 );
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
+app.get(
+  '/public-api/order-search',
+  ipLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+  }),
+  advancedQueryLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+  }),
+  lambdaWrapper(orderPublicSearchLambda),
+);
+
 // Temporarily disabled for story 7387
-// app.get(
-//   '/public-api/order-search',
-//   ipLimiter({
-//     applicationContext,
-//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-//   }),
-//   advancedQueryLimiter({
-//     applicationContext,
-//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-//   }),
-//   lambdaWrapper(orderPublicSearchLambda),
-// );
 // app.get(
 //   '/public-api/opinion-search',
 //   ipLimiter({
@@ -136,6 +140,7 @@ app.get(
   '/public-api/docket-number-search/:docketNumber',
   lambdaWrapper(getCaseForPublicDocketSearchLambda),
 );
+
 app.post(
   '/public-api/cases/:docketNumber/generate-docket-record',
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
@@ -151,5 +156,7 @@ app.get(
   cors({ exposedHeaders: ['X-Terminal-User'] }),
   lambdaWrapper(getMaintenanceModeLambda),
 );
+
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

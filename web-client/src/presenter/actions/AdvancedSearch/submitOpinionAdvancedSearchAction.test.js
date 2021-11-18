@@ -77,6 +77,13 @@ describe('submitOpinionAdvancedSearchAction', () => {
       .getUseCases()
       .opinionAdvancedSearchInteractor.mockImplementation(() => {
         const e = new Error();
+        e.originalError = {
+          response: {
+            data: {
+              type: 'ip-limiter',
+            },
+          },
+        };
         e.responseCode = 429;
         throw e;
       });
@@ -98,7 +105,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
 
     expect(state.alertError).toEqual({
       message: 'Please wait 1 minute before trying your search again.',
-      title: "You've reached your search limit.",
+      title: "You've reached your search limit",
     });
   });
 
