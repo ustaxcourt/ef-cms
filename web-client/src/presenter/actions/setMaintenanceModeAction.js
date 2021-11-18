@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} props the cerebral props object
  * @param {object} store the cerebral store
  */
-export const setMaintenanceModeAction = async ({ props, store }) => {
+export const setMaintenanceModeAction = ({ props, store }) => {
   store.set(state.maintenanceMode, props.maintenanceMode);
 };

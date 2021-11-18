@@ -1,14 +1,14 @@
 import { clearModalSequence } from './clearModalSequence';
 import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { isTokenOnState } from '../actions/isTokenOnState';
+import { isTokenOnStateAction } from '../actions/isTokenOnStateAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { navigateToPathSequence } from './navigateToPathSequence';
 import { setMaintenanceModeAction } from '../actions/setMaintenanceModeAction';
 import { setUserAction } from '../actions/setUserAction';
 
 export const disengageAppMaintenanceSequence = [
-  isTokenOnState,
+  isTokenOnStateAction,
   {
     no: [],
     yes: [getUserAction, setUserAction],
