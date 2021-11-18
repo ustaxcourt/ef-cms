@@ -131,11 +131,10 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
     ```
 
-13. Setup the environment's order search flag:
+13. Setup the environment's internal order search flag:
     ```bash
-    ./scripts/setup-order-search-flag.sh <ENVIRONMENT>
+    ./scripts/setup-all-env-configuration.sh <ENVIRONMENT>
     ```
-
 14. Setup the environment's source table version:
     ```bash
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
@@ -165,7 +164,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     node shared/admin-tools/user/setup-test-users.js
     ```
     ```bash
-    ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
+    ENV=exp5 FILE_NAME=./scripts/data-import/judge/judge_users.csv ./scripts/data-import/judge/bulk-import-judge-users.sh
     ```
 
 See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
