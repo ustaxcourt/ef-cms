@@ -192,25 +192,6 @@ describe('formatWorkItem', () => {
     expect(result.showUnreadStatusIcon).toEqual(false);
   });
 
-  it('should set showComplete and showSendTo to true when isInitializeCase is false', () => {
-    const workItem = {
-      ...baseWorkItem,
-      isInitializeCase: false,
-    };
-
-    let result = formatWorkItem({ applicationContext, workItem });
-
-    expect(result.showComplete).toEqual(true);
-    expect(result.showSendTo).toEqual(true);
-
-    workItem.isInitializeCase = true;
-
-    result = formatWorkItem({ applicationContext, workItem });
-
-    expect(result.showComplete).toEqual(false);
-    expect(result.showSendTo).toEqual(false);
-  });
-
   it('should return showUnassignedIcon as true when assigneeName is falsy and highPriority is false', () => {
     const workItem = {
       ...baseWorkItem,
